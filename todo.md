@@ -1,0 +1,23 @@
+# Project TODO
+
+- [x] Design system: dark-mode-first with deep navy/slate base, bioluminescent green/cyan accents
+- [x] Google Fonts setup (Inter + Space Grotesk)
+- [x] Clean top navigation with smooth scroll behavior
+- [x] Hero landing section with concise value proposition (no fluff)
+- [x] Database schema for supplements, pathways, synergies
+- [x] Seed supplement data (10+ compounds with full details)
+- [x] tRPC routers for supplements, pathways, synergies, quiz, and AI analysis
+- [x] Supplement Library with searchable, filterable cards
+- [x] Evidence Tier badges (A/B/C) prominently on each card
+- [x] Aging hallmark filter on supplement library
+- [x] Supplement detail page (mechanism, pathways, dosing, synergies, evidence)
+- [x] Aging Pathways / Hallmarks of Aging explainer section (12 hallmarks mapped to supplements)
+- [x] Synergy Matrix (visual/tabular guide of supplement combinations)
+- [x] Protocol Builder quiz (streamlined 3-step flow)
+- [x] LLM-powered supplement stack analysis (live feature, not placeholder)
+- [x] Future feature teaser: AI health prognostication module with waitlist CTA
+- [x] Responsive design across all breakpoints
+- [x] Vitest tests for key backend procedures
+- [x] Add Drizzle tables for supplements and waitlist; generate/apply migrations
+- [x] Implement tRPC query procedures for supplements, pathways, synergies
+- [x] Working notify-me/waitlist flow for prognostication teaser
