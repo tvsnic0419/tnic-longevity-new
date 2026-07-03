@@ -21,8 +21,3 @@
 - [x] Add Drizzle tables for supplements and waitlist; generate/apply migrations
 - [x] Implement tRPC query procedures for supplements, pathways, synergies
 - [x] Working notify-me/waitlist flow for prognostication teaser
-- [x] Add ~35 new supplement compounds with full data (mechanism, tier, synergies, dosing)
-- [x] Include PubMed citations (PMID references) for each compound
-- [x] Update synergy pairs for new compounds
-- [x] Update aging hallmark mappings for new compounds
-- [x] Add PubMed citation display to supplement detail pages

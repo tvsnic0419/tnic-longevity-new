@@ -1,7 +1,7 @@
 import Navigation from "@/components/Navigation";
 import TierBadge from "@/components/TierBadge";
 import { Link, useParams } from "wouter";
-import { ArrowLeft, Beaker, Target, Pill, Network, BookOpen, ExternalLink } from "lucide-react";
+import { ArrowLeft, Beaker, Target, Pill, Network, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SUPPLEMENTS, AGING_HALLMARKS, SYNERGY_PAIRS } from "@shared/supplements";
 
@@ -188,36 +188,6 @@ export default function SupplementDetail() {
                 {supplement.evidence}
               </p>
             </section>
-
-            {/* PubMed Citations */}
-            {supplement.citations && supplement.citations.length > 0 && (
-              <section className="p-6 rounded-xl bg-card border border-border/50">
-                <div className="flex items-center gap-2 mb-4">
-                  <ExternalLink className="w-4 h-4 text-accent" />
-                  <h2 className="font-semibold text-foreground">Published References</h2>
-                </div>
-                <div className="space-y-3">
-                  {supplement.citations.map((cite, i) => (
-                    <a
-                      key={i}
-                      href={`https://pubmed.ncbi.nlm.nih.gov/${cite.pmid}/`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block p-3 rounded-lg bg-background/50 border border-border/30 hover:border-primary/30 transition-colors group"
-                    >
-                      <p className="text-sm text-foreground/85 group-hover:text-primary transition-colors leading-snug">
-                        {cite.title}
-                      </p>
-                      <div className="flex items-center gap-3 mt-1.5">
-                        <span className="text-[10px] font-mono text-muted-foreground">PMID: {cite.pmid}</span>
-                        <span className="text-[10px] text-muted-foreground">{cite.journal} ({cite.year})</span>
-                        <ExternalLink className="w-3 h-3 text-muted-foreground group-hover:text-primary ml-auto" />
-                      </div>
-                    </a>
-                  ))}
-                </div>
-              </section>
-            )}
           </div>
         </div>
       </div>
