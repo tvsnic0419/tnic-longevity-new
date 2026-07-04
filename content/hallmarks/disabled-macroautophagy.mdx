@@ -1,0 +1,137 @@
+---
+title: Disabled Macroautophagy
+hallmark: 12
+evidence_tier: A
+last_updated: 2026-06-16
+---
+
+> **TL;DR** — mTOR and AMPK nutrient-sensing kinases bias toward growth and away from repair with age. Caloric moderation and fasting are the oldest lifespan interventions; resveratrol activates AMPK, NMN restores SIRT1/mTOR balance. Track fasting insulin and eating window — execution lives in [Hallmark 5 autophagy](/library/hallmarks/disabled-autophagy).
+
+## What this hallmark means
+
+**Nutrient sensing** is the master switch between **growth** (mTOR, insulin/IGF-1) and **repair** (AMPK, autophagy, sirtuins). Aging shifts the balance toward chronic mTOR dominance — cells stay in build mode even when they should be cleaning up.
+
+**Macroautophagy** is the large-scale recycling pathway controlled by this switch. Rapamycin (mTOR inhibitor) is the most replicated lifespan drug in mice — but it is prescription-only with immunosuppressive risks.
+
+| Failure mode | What changes | What you feel |
+| --- | --- | --- |
+| **mTOR hyperactivation** | Constant nutrient surplus → growth lock | Weight gain, insulin resistance |
+| **AMPK decline** | Energy-sensing cleanup signal weakens | Metabolic inflexibility, no "fasted clarity" |
+| **IGF-1 elevation** | Growth hormone axis stays anabolic | Visceral fat, elevated cancer-risk signaling |
+| **SIRT1/NAD+ loss** | Counterbalance to mTOR removed | See [H5 autophagy](/library/hallmarks/disabled-autophagy) |
+
+:::hallmark type="nutrient" title="Hallmark 12 · Disabled macroautophagy"
+A **primary hallmark** — the upstream controller of [Hallmark 5 · Autophagy](/library/hallmarks/disabled-autophagy). mTOR/AMPK imbalance explains why caloric restriction works. Lifestyle triggers repair; compounds modulate the kinases.
+:::
+
+:::pathway title="mTOR ↔ AMPK nutrient sensing" nodes="Nutrient surplus|Glucose/insulin|rose,mTOR|Growth mode|amber,AMPK|Repair mode|emerald,Resveratrol|AMPK activator|cyan,NMN|SIRT1 brake|violet,Macroautophagy|H5 execution|cyan" edges="Nutrient surplus->mTOR|activates,mTOR->Macroautophagy|suppresses,AMPK->Macroautophagy|activates,Resveratrol->AMPK|mimics deficit,NMN->mTOR|counterbalances via SIRT1"
+:::
+
+## Why this matters for your protocol
+
+This hallmark explains **why fasting works** and **why constant snacking ages cells**. TNiC stacks target the enzymatic legs (AMPK, SIRT1) but cannot override a 14-hour daily feeding window.
+
+**Intervention hierarchy (evidence-weighted):**
+
+1. **Caloric moderation / fasting** — oldest mammalian lifespan intervention; mTOR suppression is the mechanism
+2. **Resveratrol → AMPK** — mimics energy deficit; promotes autophagy and mitochondrial biogenesis
+3. **NMN → SIRT1/mTOR balance** — sirtuins counterbalance mTOR; NAD+ decline removes this brake
+4. **Metformin (AMPK activator)** — TAME trial; prescription (PMID 26579537)
+5. **Rapamycin (mTOR inhibitor)** — PEARL trial; prescription-only, immunosuppressive risks (PMID 19587683)
+
+:::evidence tier="A"
+Caloric restriction consistently extends lifespan in mammals via mTOR suppression and AMPK activation. Human time-restricted eating trials improve insulin sensitivity and inflammatory markers — the accessible consumer protocol for nutrient sensing reset.
+:::
+
+## Practical intervention map
+
+| Lever | Mechanism | Evidence | TNiC resource |
+| --- | --- | --- | --- |
+| Caloric moderation / TRE | mTOR ↓, AMPK ↑ | Tier A | [Nutrition](/library/lifestyle/nutrition) |
+| Resveratrol PM | AMPK mimetic | Tier B | [Resveratrol](/library/compounds/resveratrol) |
+| NMN AM | SIRT1 → mTOR counterbalance | Tier B | [NMN](/library/compounds/nmn) |
+| Zone 2 + resistance | AMPK + glucose disposal | Tier A | [Exercise](/library/lifestyle/exercise) |
+| Autophagy execution | Macroautophagy flux | Tier A | [H5 Autophagy](/library/hallmarks/disabled-autophagy) |
+
+:::practical title="Your 90-day nutrient sensing protocol"
+**Weeks 1–4:** Log daily eating window. Target 16:8 minimum. Reduce refined sugar and late-night eating.
+
+**Weeks 5–8:** Add protein timing (larger meals earlier, lighter PM). Retest fasting insulin at week 8.
+
+**Weeks 9–12:** Add [SIRT1 pair](/library/synergies/nmn-resveratrol-sirt1) if TRE ≥85% and glucose stable.
+
+**Decision point at week 12:** Fasting insulin ↓ or stable in optimal range → continue 6 more months. Rising → audit visceral fat and alcohol before compounds.
+:::
+
+:::decision title="Which nutrient sensing path first?"
+node | Fasting insulin above optimal OR HbA1c ≥5.7%?
+yes | node | Already on metformin or GLP-1 agonist?
+  yes | redflag | Physician coordination — do not stack high-dose resveratrol without drug interaction review
+  no | TRE 16:8 + Zone 2 for 8 weeks → retest → add SIRT1 pair if flat
+no | node | Eating window >12 hours daily?
+  yes | [Nutrition](/library/lifestyle/nutrition) window sprint 4 weeks before any compound
+  no | Maintain TRE; optional NMN if age 45+ and NAD+ low
+redflag | Type 1 diabetes, pregnancy, or BMI <18.5 — physician-led program only; no unsupervised fasting
+:::
+
+## What to measure
+
+| Signal | Type | Frequency | Success looks like |
+| --- | --- | --- | --- |
+| Fasting insulin | Lab | Baseline, 8 wk, 6 mo | Lower quartile for age |
+| IGF-1 | Lab | Baseline, 6 mo | Age-appropriate, not elevated |
+| Fasting glucose / HbA1c | Lab | Baseline, 12 wk | Glucose <100; HbA1c <5.7% |
+| Ketone bodies (optional) | Home | Weekly AM | Brief elevation in extended fasts |
+| Eating window | Log | Daily | ≥16h fasted |
+
+:::compare title="12-week nutrient sensing profile" before="Baseline" after="12-week target" summary="Insulin and eating window are primary — AMPK compounds are secondary"
+Fasting insulin (μIU/mL)|Elevated|Optimal range for age
+Daily fast (hours)|<12|≥16
+HbA1c (%)|5.7–6.0|<5.7
+:::
+
+:::cta href="/labs" title="Track nutrient sensing labs" label="Open Labs hub"
+Log fasting insulin, glucose, and optional IGF-1 at baseline and week 12.
+:::
+
+## Red flags — when to pause or escalate
+
+:::redflag title="Stop and consult before intensifying"
+- **Rapamycin or immunosuppressants** — mTOR inhibition requires specialist oversight; never self-source
+- **Type 1 diabetes or insulin therapy** — fasting and AMPK activators risk hypoglycemia
+- **Active infection or immunocompromise** — mTOR is required for immune function; pause aggressive restriction
+:::
+
+## Synergies worth knowing
+
+| Stack | Covers | Best for |
+| --- | --- | --- |
+| [H5 Autophagy](/library/hallmarks/disabled-autophagy) | Execution pathway | Always pair with H12 |
+| [SIRT1 pair](/library/synergies/nmn-resveratrol-sirt1) | NAD+ + AMPK | Post-TRE foundation |
+| [NAD+ Mito Stack](/library/synergies/nad-mito-stack) | Full mito + sensing axis | Age 50+ with metabolic drift |
+
+:::cta href="/stacks" title="Build your stack" label="Open Stack Architect"
+Nutrient sensing scores highest when TRE and exercise pillars are enabled — compounds layer on after lifestyle registers.
+:::
+
+## Personal results template
+
+:::personal title="My nutrient sensing log"
+
+| Date | Week | Fast window (h) | Fasting insulin | Fasting glucose | NMN AM | Resv PM | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| YYYY-MM-DD | 0 | — | — | — | — | — | Baseline |
+| YYYY-MM-DD | 8 | — | — | — | — | — | Lab checkpoint |
+| YYYY-MM-DD | 12 | — | — | — | — | — | Primary endpoint |
+
+**Personal response criteria:**
+- **Meaningful:** Fasting insulin improved or stable-optimal + ≥16h fast 6+ days/week
+- **Plateau:** Tighten eating window or add 24h monthly fast before dose escalation
+- **Adverse:** Hypoglycemia, menstrual disruption, or weight loss >5% unintentional → stop, physician consult
+:::
+
+## Further reading
+
+- Lamming et al. — rapamycin and mTOR in aging (PMID 19587683)
+- Barzilai — TAME metformin trial framework (PMID 26579537)
+- [Hallmark 5: Disabled Autophagy](/library/hallmarks/disabled-autophagy) — macroautophagy execution

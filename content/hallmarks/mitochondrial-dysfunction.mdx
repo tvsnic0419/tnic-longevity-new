@@ -1,0 +1,140 @@
+---
+title: Mitochondrial Dysfunction
+hallmark: 6
+evidence_tier: A
+last_updated: 2026-06-16
+---
+
+> **TL;DR** — Aging mitochondria produce less ATP, leak more ROS, and fail to clear damage. NAD+ decline is the central bottleneck. Track energy + resting heart rate; intervene with NAD+ restoration, mitophagy support, and antioxidant substrate — in that order of leverage.
+
+## What this hallmark means
+
+Mitochondria are not static batteries. They **fuse, divide, export metabolites, and get recycled** through mitophagy. With age, three failures compound:
+
+| Failure mode | What changes | What you feel |
+| --- | --- | --- |
+| **NAD+ depletion** | ~50% drop between ages 40–60; starves SIRT3, PARP, and CD38 | Afternoon crashes, slower recovery |
+| **Biogenesis stall** | PGC-1α signaling weakens; fewer new mitochondria | Endurance plateaus despite training |
+| **Mitophagy backlog** | Damaged organelles accumulate; membrane potential drops | Brain fog, elevated resting HR |
+
+The metabolic signature: **less oxidative phosphorylation, more glycolysis** — even in well-oxygenated tissue. Cells run "dirty" energy production.
+
+:::hallmark type="mito" title="Hallmark 6 · Mitochondrial dysfunction"
+Both a primary hallmark and an **amplifier** — poor mito output increases ROS, which accelerates genomic instability (H1), proteostasis collapse (H4), and chronic inflammation (H10).
+:::
+
+:::pathway title="NAD+ → Sirtuin → Mitophagy axis" nodes="NAD+ pool|Substrate|cyan,SIRT3|Quality control|emerald,PINK1/Parkin|Clearance|violet,Damaged mito|Problem|rose" edges="NAD+ pool->SIRT3|activates,SIRT3->PINK1/Parkin|deacetylates,PINK1/Parkin->Damaged mito|tags"
+:::
+
+## Why this matters for your protocol
+
+This is the hallmark with the **highest TNiC stack coverage (95%)** because core compounds directly target the NAD+ → sirtuin → mitophagy axis — not peripheral symptoms.
+
+**Intervention hierarchy (evidence-weighted):**
+
+1. **Lifestyle foundation** — Zone 2 cardio and sleep are the only interventions with mortality data at scale
+2. **NAD+ substrate** — NMN/NR restores the coenzyme pool that powers SIRT3-mediated mitophagy
+3. **Antioxidant substrate** — GlyNAC protects existing mitochondria from ROS while biogenesis catches up
+4. **Biogenesis signal** — Resveratrol → SIRT1 → PGC-1α (weaker standalone human data; stronger as stack leg)
+
+:::evidence tier="A"
+Rajman et al. *Cell Metabolism* 2018 — NAD+ intermediates restore mitochondrial function in aged tissue. López-Otín et al. *Cell* 2023 — mitochondrial dysfunction remains a core, actionable hallmark in the updated framework.
+:::
+
+## Practical intervention map
+
+| Lever | Mechanism | Evidence | TNiC resource |
+| --- | --- | --- | --- |
+| NMN / NR | ↑ NAD+ → SIRT3 → mitophagy | Tier A (human NAD+ elevation) | [NMN compound guide](/library/compounds/nmn) |
+| GlyNAC | Mito GSH pool protects Complex I/III | Tier A (24-wk RCT) | [GlyNAC guide](/library/compounds/glynac) |
+| Ca-AKG | TCA cycle flux + epigenetic support | Tier A preclinical / B human | [NAD+ Mito Stack](/library/synergies/nad-mito-stack) |
+| Zone 2 exercise | PGC-1α biogenesis (free) | Tier A (mortality) | [Exercise protocol](/library/lifestyle/exercise) |
+| Sleep optimization | Mitophagy peaks in deep sleep | Tier A (mortality) | [Sleep protocol](/library/lifestyle/sleep) |
+
+:::practical title="Your 90-day mitochondrial protocol"
+**Weeks 1–4 (foundation):** Log morning energy (1–10) and resting HR. Add 150 min/week Zone 2. Fix sleep timing before any supplement spend.
+
+**Weeks 5–12 (substrate):** Add NMN 250–500 mg AM fasted. Optional GlyNAC 600/600 if oxidative stress markers elevated.
+
+**Weeks 13–24 (stack):** Layer [NAD+ Mito Stack](/library/synergies/nad-mito-stack) or [NRF2 Defense Triad](/library/synergies/glynac-nrf2-triad) based on biomarker gaps — not both on day one.
+
+**Decision point at week 12:** NAD+ index up + energy ↑2 points → continue. Flat biomarkers + flat energy → audit compliance and sleep before escalating dose.
+:::
+
+:::decision title="Which mito intervention first?"
+node | Are sleep (7+ hrs) and Zone 2 (150 min/wk) consistent for 4+ weeks?
+yes | node | Is NAD+ index below 80 OR energy score ≤5/10?
+  yes | Start NMN 250 mg AM fasted → retest NAD+ at week 4
+  no | node | Are GSH or hs-CRP off-target?
+    yes | Add GlyNAC 600/600 → consider NRF2 triad at week 12
+    no | Maintain lifestyle; retest quarterly
+no | Fix sleep + exercise first → supplements are low-leverage until foundation is stable
+redflag | Chest pain, unexplained syncope, or rhabdomyolysis history → physician clearance before NAD+ or exercise escalation
+:::
+
+## What to measure
+
+| Signal | Type | Frequency | Success looks like |
+| --- | --- | --- | --- |
+| Morning energy | Subjective (1–10) | Daily | ↑2 points sustained over 4 weeks |
+| Resting heart rate | Wearable proxy | Daily | ↓2–5 bpm over 12 weeks |
+| NAD+ index | Lab | Baseline, 4 wk, 12 wk | 80–100 range |
+| Fasting glucose | Lab | 3 months | <100 mg/dL |
+| hs-CRP | Lab | 12 wk | <1.0 mg/L (inflammation-mito link) |
+
+:::compare title="Mitochondrial health signals" before="Baseline" after="12-week target" summary="Wearables + one lab panel beat guessing."
+Subjective energy|5/10|7/10
+Resting HR|68 bpm|63 bpm
+NAD+ index|62|85+
+Recovery score (wearable)|Low|Moderate+
+:::
+
+:::cta href="/labs" title="Track mito biomarkers" label="Open Labs hub"
+Log NAD+, glucose, and hs-CRP to see optimal/watch/critical status over time.
+:::
+
+## Red flags — when to pause or escalate to a physician
+
+:::redflag title="Stop and consult before intensifying"
+- **Unexplained muscle pain or weakness** worsening with exercise or NMN — rule out metabolic myopathy
+- **Resting HR rising** despite improved fitness — arrhythmia or thyroid; don't mask with more supplements
+- **Fasting glucose rising** on NAD+ precursors — paradoxical insulin resistance; physician review
+- **Active cancer treatment** — NAD+ and antioxidant stacks may interfere; oncologist clearance required
+- **Pregnancy or breastfeeding** — insufficient safety data for most mito interventions
+:::
+
+## Synergies worth knowing
+
+| Stack | Covers | Best for |
+| --- | --- | --- |
+| [NAD+ Mito Stack](/library/synergies/nad-mito-stack) | Biogenesis + NAD+ + mitophagy | Primary mito hallmark coverage |
+| [NRF2 Defense Triad](/library/synergies/glynac-nrf2-triad) | Antioxidant + gene induction | Elevated oxidative stress / GSH low |
+| GlyNAC + NMN | Orthogonal axes (GSH + NAD+) | Full redox + repair coverage |
+
+:::cta href="/stacks" title="Build your mito stack" label="Open Stack Architect"
+Toggle NMN, GlyNAC, and resveratrol — synergy score updates with contraindication checks.
+:::
+
+## Personal results template
+
+:::personal title="My mitochondrial dysfunction log"
+Copy into your notes app or Labs hub. Update weekly for subjective metrics; labs at baseline, week 12, week 24.
+
+| Date | Week | Energy (1–10) | RHR | Sleep (hrs) | Zone 2 (min/wk) | NAD+ | Glucose | hs-CRP | Stack notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| YYYY-MM-DD | 0 | — | — | — | — | — | — | — | Baseline only |
+| YYYY-MM-DD | 4 | — | — | — | — | — | — | — | Post-NMN start |
+| YYYY-MM-DD | 12 | — | — | — | — | — | — | — | Primary endpoint |
+| YYYY-MM-DD | 24 | — | — | — | — | — | — | — | Maintenance review |
+
+**Personal response criteria:**
+- **Meaningful:** Energy ↑2+ AND (NAD+ in range OR RHR ↓3 bpm)
+- **Plateau:** Flat at week 12 → audit sleep compliance before adding compounds
+- **Adverse:** RHR rising or glucose worsening → pause stack, physician consult
+:::
+
+## Further reading
+
+- López-Otín et al. *Cell* 2023 — Updated hallmarks framework
+- Rajman et al. *Cell Metabolism* 2018 — Therapeutic approaches to NAD+ restoration
+- Picard & McEwen. *Cell Metabolism* 2018 — Mitochondrial allostatic load and stress

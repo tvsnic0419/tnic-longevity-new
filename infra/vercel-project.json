@@ -1,0 +1,32 @@
+{
+  "$schema": "./vercel-project.schema.json",
+  "team": {
+    "name": "TNIC Project",
+    "slug": "tnic-projects",
+    "id": "team_HC4fnCVpV9NCDbZMHHl1Pk5r"
+  },
+  "project": {
+    "name": "tnic-help",
+    "id": "prj_SMGpRy7Dgmk3UOyjgxdKqwBkvtcU",
+    "framework": "nextjs",
+    "nodeVersion": "24.x",
+    "region": "iad1"
+  },
+  "domains": {
+    "canonical": "tnic.help",
+    "aliases": ["www.tnic.help"],
+    "registrar": "vercel",
+    "nameservers": ["ns1.vercel-dns.com", "ns2.vercel-dns.com"]
+  },
+  "git": {
+    "remote": "https://github.com/tvsnic0419/tnic-help.git",
+    "productionBranch": "main"
+  },
+  "cron": [
+    {
+      "path": "/api/cron/brief",
+      "schedule": "0 9 * * 1",
+      "description": "Weekly Protocol Brief digest (Mondays 09:00 UTC)"
+    }
+  ]
+}
