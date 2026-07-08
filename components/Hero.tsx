@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { ClipboardList, LayoutDashboard, ArrowRight, Sparkles } from 'lucide-react';
 import { usePlatform } from '@/context/PlatformContext';
 import { getHeroPersonalization } from '@/lib/homepage-personalization';
-import { ContextRail } from '@/components/ui/ContextRail';
 import { HeroNetworkCanvas } from '@/components/ui/HeroNetworkCanvas';
 import { StarterQuiz } from '@/components/sections/StarterQuiz';
+import { HeroOfferingRail } from '@/components/sections/HeroOfferingRail';
 
 export function Hero() {
   const { quizResult } = usePlatform();
@@ -101,15 +101,8 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Context Rail */}
-        <div className="mt-16 max-w-4xl mx-auto lg:mx-0">
-          <ContextRail
-            theme="cyan"
-            what="An evidence-graded longevity platform — stack builder, lab hub, and 12-hallmark library in one place."
-            why="Every compound is Tier A/B/C from human trials, scored by a transparent mechanistic engine — you see the reasoning, not just a number."
-            next="Take the 3-minute quiz to build your first evidence-matched stack."
-          />
-        </div>
+        {/* Offering rail — surfaces the core capabilities up front, Library first */}
+        <HeroOfferingRail />
       </div>
     </section>
   );
