@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import type { SVGProps } from 'react';
 
 interface LogoProps {
@@ -9,12 +8,16 @@ interface LogoProps {
   alt?: string;
 }
 
-const lockupDims: Record<NonNullable<LogoProps['size']>, { w: number; h: number }> = {
-  nav:  { w: 160, h: 90  },
-  sm:   { w: 140, h: 79  },
-  md:   { w: 200, h: 113 },
-  lg:   { w: 260, h: 146 },
-  hero: { w: 400, h: 225 },
+/** Crisp vector lockup sizing: emblem tile + wordmark type scale, per size. */
+const lockupScale: Record<
+  NonNullable<LogoProps['size']>,
+  { tile: string; letter: string; word: string; gap: string }
+> = {
+  nav:  { tile: 'w-8 h-8',   letter: 'text-base', word: 'text-xl',                    gap: 'gap-2' },
+  sm:   { tile: 'w-7 h-7',   letter: 'text-sm',   word: 'text-lg',                    gap: 'gap-2' },
+  md:   { tile: 'w-9 h-9',   letter: 'text-lg',   word: 'text-2xl',                   gap: 'gap-2.5' },
+  lg:   { tile: 'w-11 h-11', letter: 'text-xl',   word: 'text-3xl',                   gap: 'gap-3' },
+  hero: { tile: 'w-12 h-12', letter: 'text-2xl',  word: 'text-4xl md:text-5xl',       gap: 'gap-3' },
 };
 
 function EmblemSvg(props: SVGProps<SVGSVGElement>) {
@@ -76,26 +79,30 @@ export function Logo({
   variant = 'emblem',
   size = 'md',
   className = '',
-  priority,
   alt,
 }: LogoProps) {
   const altText = alt || (variant === 'lockup' ? 'TNiC – Longevity OS' : 'TNiC emblem');
 
   if (variant === 'lockup') {
-    const { w, h } = lockupDims[size];
+    const s = lockupScale[size];
     return (
-      <div className={`inline-flex items-center ${className}`} role="img" aria-label={altText}>
-        <div className="relative" style={{ width: w, height: h }}>
-          <Image
-            src="/tnic-logo.jpg"
-            alt={altText}
-            fill
-            sizes={`${w}px`}
-            className="object-contain"
-            style={{ mixBlendMode: 'screen' }}
-            priority={priority}
-          />
-        </div>
+      <div
+        className={`inline-flex items-center ${s.gap} ${className}`}
+        role="img"
+        aria-label={altText}
+      >
+        <span
+          className={`${s.tile} shrink-0 rounded-xl bg-gradient-to-br from-[var(--accent-cyan)] to-[var(--accent-emerald)] flex items-center justify-center shadow-lg shadow-[color:var(--accent-cyan)]/20`}
+          aria-hidden="true"
+        >
+          <span className={`font-bold leading-none text-[#020811] ${s.letter}`}>T</span>
+        </span>
+        <span
+          className={`font-semibold leading-none tracking-tighter text-[var(--color-text-primary)] ${s.word}`}
+          aria-hidden="true"
+        >
+          TN<span className="text-[var(--accent-cyan)]">i</span>C
+        </span>
       </div>
     );
   }

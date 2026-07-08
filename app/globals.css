@@ -1490,20 +1490,23 @@ body::after {
 
 /* ── Gradient sweep text (more dramatic than shimmer-text) ── */
 .gradient-sweep-text {
+  /* Saturated brand tones only — every stop is high-luminance so the
+     animated sweep stays a confident, readable cyan/teal/emerald against
+     the near-black hero. Matching teal edges keep the tile seamless. */
   background: linear-gradient(
     90deg,
-    var(--color-text-primary) 0%,
-    var(--accent-cyan) 20%,
-    var(--accent-emerald) 45%,
-    var(--accent-violet) 70%,
-    var(--accent-cyan) 85%,
-    var(--color-text-primary) 100%
+    #5eead4 0%,
+    #22d3ee 25%,
+    #34d399 50%,
+    #22d3ee 75%,
+    #5eead4 100%
   );
-  background-size: 300% auto;
+  background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: gradient-sweep 7s linear infinite;
+  filter: drop-shadow(0 2px 16px rgba(34, 211, 238, 0.3));
 }
 
 @keyframes gradient-sweep {

@@ -1,7 +1,6 @@
 import Link from 'next/link';
-import Image from 'next/image';
+import { Logo } from '@/components/ui/Logo';
 import {
-  Dna,
   Shield,
   BookOpen,
   Layers,
@@ -57,15 +56,12 @@ export function Footer() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-10 mb-10">
           <div className="sm:col-span-2 lg:col-span-1">
-            <Link href="/" className="focus-ring inline-flex items-center mb-4 rounded-xl group">
-              <Image
-                src="/brand/tnic-wordmark-wide.png"
-                alt="TNiC"
-                width={2048}
-                height={550}
-                sizes="160px"
-                className="h-10 w-auto max-w-[160px] rounded-xl border border-white/10 bg-black/80 object-contain shadow-lg shadow-accent-emerald/10 transition-transform group-hover:scale-[1.02]"
-              />
+            <Link
+              href="/"
+              aria-label="TNiC home"
+              className="focus-ring inline-flex items-center mb-4 rounded-xl group transition-transform hover:scale-[1.02]"
+            >
+              <Logo variant="lockup" size="md" alt="TNiC – Longevity OS" />
             </Link>
             <p className="text-body-sm max-w-xs">
               Independent longevity intelligence. Evidence-graded compounds,
