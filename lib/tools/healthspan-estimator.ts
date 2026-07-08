@@ -98,12 +98,28 @@ export function estimateHealthspan(input: HealthspanInput): HealthspanEstimate {
   };
 
   const gain = weeklyGain(input.stackIds);
-  const score12 = Math.min(98, Math.round(currentHealthspanScore + gain * 12));
-  const score24 = Math.min(98, Math.round(currentHealthspanScore + gain * 20));
+
+  // Benefits are front-loaded and plateau — they do not accrue linearly forever.
+  // Model the trajectory as an exponential approach to an asymptote with a ~9-week
+  // time constant: most of the gain lands by week 12, then diminishing returns.
+  // This matches published intervention timelines (NAD+ metabolites rise by week
+  // 2-4, functional/biomarker gains consolidate by 12-24 weeks).
+  const TAU_WEEKS = 9;
+  const saturate = (week: number) => 1 - Math.exp(-week / TAU_WEEKS);
+  const maxHealthspanGain = gain * 22; // asymptotic ceiling the weekly momentum trends toward
+  const maxBioAgeImprovement = gain * 2.2; // asymptotic years-younger ceiling
+
+  const healthspanAt = (week: number) =>
+    Math.min(98, Math.round(currentHealthspanScore + maxHealthspanGain * saturate(week)));
 
   const bioAgeNow = defense.biologicalAge;
-  const bioAge12 = Math.round(bioAgeNow - gain * 12 * 0.08);
-  const bioAge24 = Math.round(bioAgeNow - gain * 20 * 0.1);
+  const bioAgeAt = (week: number) =>
+    Math.round(bioAgeNow - maxBioAgeImprovement * saturate(week));
+
+  const score12 = healthspanAt(12);
+  const score24 = healthspanAt(24);
+  const bioAge12 = bioAgeAt(12);
+  const bioAge24 = bioAgeAt(24);
 
   const ageDelta = input.age - bioAgeNow;
   const projectedAgeDelta12w = input.age - bioAge12;
@@ -119,7 +135,7 @@ export function estimateHealthspan(input: HealthspanInput): HealthspanEstimate {
 
   const projections: ProjectionPoint[] = [
     { week: 0, label: 'Now', healthspanScore: currentHealthspanScore, biologicalAge: bioAgeNow, confidence: 'high' },
-    { week: 4, label: 'Week 4', healthspanScore: Math.round(currentHealthspanScore + gain * 3), biologicalAge: Math.round(bioAgeNow - gain * 3 * 0.05), confidence: 'medium' },
+    { week: 4, label: 'Week 4', healthspanScore: healthspanAt(4), biologicalAge: bioAgeAt(4), confidence: 'medium' },
     { week: 12, label: 'Week 12', healthspanScore: score12, biologicalAge: bioAge12, confidence: 'medium' },
     { week: 24, label: 'Week 24', healthspanScore: score24, biologicalAge: bioAge24, confidence: dataConfidence >= 60 ? 'medium' : 'low' },
   ];
