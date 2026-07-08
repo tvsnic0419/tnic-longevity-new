@@ -8,6 +8,7 @@ import { getHeroPersonalization } from '@/lib/homepage-personalization';
 import { HeroNetworkCanvas } from '@/components/ui/HeroNetworkCanvas';
 import { StarterQuiz } from '@/components/sections/StarterQuiz';
 import { HeroOfferingRail } from '@/components/sections/HeroOfferingRail';
+import { Logo } from '@/components/ui/Logo';
 
 export function Hero() {
   const { quizResult } = usePlatform();
@@ -24,16 +25,7 @@ export function Hero() {
           {/* Left Column */}
           <div className="lg:col-span-7 text-center lg:text-left">
             <div className="flex items-center justify-center lg:justify-start gap-4 mb-6">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--accent-cyan)] to-[var(--accent-emerald)] flex items-center justify-center">
-                  <span className="text-[#020811] font-bold text-xl">T</span>
-                </div>
-                <div>
-                  <span className="text-4xl md:text-5xl font-semibold tracking-tighter">TN</span>
-                  <span className="text-4xl md:text-5xl font-semibold tracking-tighter text-[var(--accent-cyan)]">i</span>
-                  <span className="text-4xl md:text-5xl font-semibold tracking-tighter">C</span>
-                </div>
-              </div>
+              <Logo variant="lockup" size="hero" />
               <div className="badge-live">
                 <span className="badge-live-dot" /> Platform Active
               </div>

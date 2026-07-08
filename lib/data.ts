@@ -69,7 +69,6 @@ export const compounds: Compound[] = [
       { title: 'Sulforaphane activates Nrf2 and protects against oxidative stress', journal: 'Oncogene', year: 2008, pmid: '18454171' },
       { title: 'Broccoli sprouts activate NRF2 in human airway epithelial cells', journal: 'Clin Immunol', year: 2016, pmid: '27356680' },
       { title: 'Sulforaphane upregulates the mRNA expression of NRF2 and NQO1 in non-dialysis patients with chronic kidney disease', journal: 'Free Radic Biol Med', year: 2024, pmid: '38772511' },
-      { title: 'Sulforaphane upregulates the mRNA expression of NRF2 and NQO1 in non-dialysis patients with chronic kidney disease', journal: 'Free Radic Biol Med', year: 2024, pmid: '38772511' },
     ],
   },
   {
@@ -693,7 +692,7 @@ export const researchFeed = [
     date: 'Jun 2023',
     tag: 'Amino Acids',
     summary: 'Landmark multi-species Science study found taurine levels decline 80% with age in humans, mice, and monkeys. Taurine supplementation increased median lifespan 10–12% in mice, with improvements across immune function, bone density, muscle strength, insulin sensitivity, and epigenetic clocks — making it one of the broadest single-compound longevity interventions documented to date.',
-    pmid: '37289930',
+    pmid: '37289866',
     impact: 'breakthrough' as const,
     relatedHrefs: [
       { label: 'Mitochondrial Dysfunction', href: '/library/mitochondrial-dysfunction' },

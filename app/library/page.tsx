@@ -45,6 +45,9 @@ export default function LibraryPage() {
 
   return (
     <>
+      {/* Lead with the page title and context, then the tools to act on it */}
+      <AntiAgingLibrary asPageTitle />
+
       <Suspense fallback={<div className="h-12 animate-pulse bg-white/5" />}>
         <LibrarySearch />
       </Suspense>
@@ -54,8 +57,6 @@ export default function LibraryPage() {
           <LibraryFacetFilters />
         </Suspense>
       </div>
-
-      <AntiAgingLibrary asPageTitle />
 
       <div className="container-page pb-12">
         <RecommendedNextSteps context="library" />

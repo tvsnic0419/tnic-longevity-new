@@ -2,11 +2,11 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ArrowRight, ClipboardList, Menu, Search, ShoppingBag, X } from 'lucide-react';
 import { navLinks } from '@/lib/data';
+import { Logo } from '@/components/ui/Logo';
 import { SiteSearch } from '@/components/SiteSearch';
 import { COMMAND_PALETTE_EVENT } from '@/components/os/CommandPalette';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
@@ -81,16 +81,12 @@ export function Nav() {
         className={`absolute inset-0 nav-glass ${scrolled ? 'nav-glass-scrolled' : ''}`}
       />
       <div className="relative container-page py-3 md:py-4 flex justify-between items-center gap-4">
-        <Link href="/" className="focus-ring interactive flex items-center rounded-xl shrink-0 group">
-          <Image
-            src="/brand/tnic-wordmark-wide.png"
-            alt="TNiC"
-            width={2048}
-            height={550}
-            priority
-            sizes="(min-width: 768px) 156px, 132px"
-            className="h-9 w-auto max-w-[132px] rounded-xl border border-white/10 bg-black/80 object-contain shadow-lg shadow-accent-cyan/10 transition-transform group-hover:scale-[1.02] md:h-10 md:max-w-[156px]"
-          />
+        <Link
+          href="/"
+          aria-label="TNiC home"
+          className="focus-ring interactive flex items-center rounded-xl shrink-0 group transition-transform hover:scale-[1.02]"
+        >
+          <Logo variant="lockup" size="nav" alt="TNiC – Longevity OS" />
         </Link>
 
         <div className="hidden lg:flex gap-0.5 xl:gap-1">

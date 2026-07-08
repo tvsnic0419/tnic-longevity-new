@@ -73,15 +73,24 @@ function buildTrendSeries(entries: LabEntry[], markerId: string): MarkerTrendSer
 
 function generateForecastPoints(
   startValue: number,
-  markerId: string,
-  weeklyDelta: number,
+  baselineWeeklyDelta: number,
+  interventionTotalDelta: number,
   horizonWeeks: number,
   uncertainty: number,
 ): ForecastPoint[] {
+  // Natural (untreated) drift from aging is ~linear over a 3–9 month window, so
+  // the baseline component stays linear. An intervention's effect is NOT linear:
+  // it moves the marker toward a new steady-state and plateaus. Model it as an
+  // exponential approach normalised so the full expected delta is reached at the
+  // horizon — front-loaded early, diminishing returns late.
+  const tau = Math.max(3, horizonWeeks / 3);
+  const norm = 1 - Math.exp(-horizonWeeks / tau);
   const points: ForecastPoint[] = [];
   for (let w = 0; w <= horizonWeeks; w += horizonWeeks <= 12 ? 2 : 4) {
-    const drift = weeklyDelta * w;
-    const value = Math.max(0, startValue + drift);
+    const naturalDrift = baselineWeeklyDelta * w;
+    const interventionEffect =
+      norm > 0 ? interventionTotalDelta * ((1 - Math.exp(-w / tau)) / norm) : 0;
+    const value = Math.max(0, startValue + naturalDrift + interventionEffect);
     const band = uncertainty * Math.sqrt(w / 4 + 1);
     points.push({
       week: w,
@@ -115,8 +124,8 @@ function buildForecasts(
     expectedDelta: Math.round(baselineSlope * horizonWeeks * 4.33 * 100) / 100,
     timeframeWeeks: horizonWeeks,
     disclaimer: FORECAST_DISCLAIMER,
-    baseline: generateForecastPoints(startValue, series.markerId, baselineSlope, horizonWeeks, 0.15),
-    projected: generateForecastPoints(startValue, series.markerId, baselineSlope, horizonWeeks, 0.2),
+    baseline: generateForecastPoints(startValue, baselineSlope, 0, horizonWeeks, 0.15),
+    projected: generateForecastPoints(startValue, baselineSlope, 0, horizonWeeks, 0.2),
   });
 
   const topInterventions = [...impact.interventions, ...impact.lifestyleModifiers]
@@ -145,11 +154,11 @@ function buildForecasts(
       expectedDelta: Math.round(effectiveDelta * horizonWeeks * 100) / 100,
       timeframeWeeks: horizonWeeks,
       disclaimer: FORECAST_DISCLAIMER,
-      baseline: generateForecastPoints(startValue, series.markerId, baselineSlope, horizonWeeks, 0.15),
+      baseline: generateForecastPoints(startValue, baselineSlope, 0, horizonWeeks, 0.15),
       projected: generateForecastPoints(
         startValue,
-        series.markerId,
-        baselineSlope + effectiveDelta,
+        baselineSlope,
+        effectiveDelta * horizonWeeks,
         horizonWeeks,
         0.25 * impactMultiplier,
       ),

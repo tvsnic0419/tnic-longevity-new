@@ -141,7 +141,7 @@ const curatedCitations: SourceCitation[] = [
     authors: 'Singh P et al.',
     journal: 'Science',
     year: 2023,
-    pmid: '37289930',
+    pmid: '37289866',
     type: 'preclinical',
     summary: 'Multi-species study: taurine declines ~80% with age; supplementation extended median lifespan 10–12% in mice with broad healthspan gains. Human data is associative — not yet an interventional RCT.',
   },
