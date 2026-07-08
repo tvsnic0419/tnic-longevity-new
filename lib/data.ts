@@ -1,0 +1,1524 @@
+import {
+  Activity,
+  Zap,
+  Heart,
+  Brain,
+  Dna,
+  FlaskConical,
+  Shield,
+  Radio,
+  Layers,
+  Network,
+  Timer,
+  Scale,
+} from 'lucide-react';
+import type { Compound, Hallmark, PathwayNode, RoadmapItem } from './types';
+
+export const navLinks = [
+  { href: '/library', label: 'Library', mod: 'MOD-LIB-13' },
+  { href: '/learn', label: 'Learn', mod: 'MOD-LRN-09' },
+  { href: '/stacks', label: 'Stacks', mod: 'MOD-ARC-04' },
+  { href: '/labs', label: 'Labs', mod: 'MOD-LAB-11' },
+  { href: '/tools', label: 'Tools', mod: 'MOD-TOL-14' },
+];
+
+export const communityPulse = [
+  { metric: '14', label: 'Evidence-Graded Compounds' },
+  { metric: '12', label: 'Hallmarks Explained' },
+  { metric: '33', label: 'FAQ Answers' },
+  { metric: '20', label: 'Glossary Terms' },
+  { metric: '28', label: 'Clinical Studies' },
+];
+
+export const compounds: Compound[] = [
+  {
+    id: 'glynac',
+    name: 'GlyNAC ET',
+    brand: 'Nutri',
+    pathway: 'Glutathione Synthesis',
+    mechanism: 'Provides glycine and N-acetylcysteine — the two rate-limiting precursors for glutathione (GSH) synthesis. Glutathione synthetase (GSS) condenses γ-glutamylcysteine (made by GCL from NAC-derived cysteine + glutamate) with glycine to produce GSH. Glycine becomes limiting first in aging because protein intake falls while gluconeogenic glycine demand rises; NAC addresses the cysteine bottleneck from dietary methionine under-supply. Restored GSH pools protect KEAP1-NRF2 switch, IKKβ-NF-κB braking, and mitochondrial complex I subunit cysteines from irreversible oxidation.',
+    desc: 'Three independent RCTs (Sekhar group, Baylor) confirm GlyNAC supplementation (16–24 weeks) restores GSH levels to those of young adults, reduces oxidative stress markers 45–50%, improves mitochondrial function, reverses endothelial dysfunction, and reduces inflammatory cytokines across ≥4 hallmarks in older adults (PMIDs: 34129059, 36656670, 35975308). The 2023 JGBA trial is the most comprehensive aging-reversal human RCT yet published for a single compound pair.',
+    badge: 'nrf2',
+    bioavailability: 92,
+    evidence: 'A',
+    dose: '600mg glycine + 600mg NAC',
+    timing: 'AM',
+    synergies: ['sulforaphane', 'rala'],
+    hallmarks: ['mito', 'proteostasis', 'inflammation'],
+    studies: [
+      { title: 'GlyNAC supplementation improves glutathione deficiency in aging humans', journal: 'J Gerontol A', year: 2021, pmid: '34129059' },
+      { title: 'Improvement of mitochondrial function in older adults after GlyNAC', journal: 'J Gerontol A', year: 2023, pmid: '36656670' },
+      { title: 'Supplementing GlyNAC in older adults improves glutathione deficiency, oxidative stress, mitochondrial dysfunction, inflammation, physical function, and aging hallmarks: A randomized clinical trial', journal: 'J Gerontol A', year: 2023, pmid: '35975308' },
+    ],
+  },
+  {
+    id: 'sulforaphane',
+    name: 'Sulforaphane',
+    brand: 'Broccoli Extract',
+    pathway: 'NRF2 Activation',
+    mechanism: 'Glucoraphanin (from broccoli sprouts) is converted by myrosinase to sulforaphane, an isothiocyanate that covalently modifies cysteine residues on KEAP1 (the NRF2 repressor), causing KEAP1 to release NRF2. Free NRF2 translocates to the nucleus and binds ARE elements, activating transcription of >200 cytoprotective genes including NQO1 (quinone detox), GST (glutathione conjugation), GCLC/GCLM (glutathione synthesis), HO-1 (anti-inflammatory heme catabolism), and PSMB5 (proteasome subunit). Sulforaphane also suppresses NF-κB via competitive KEAP1 binding, providing direct anti-inflammatory action parallel to NRF2 induction.',
+    desc: 'NRF2 induction confirmed in human airway, CKD, and blood cells across three independent clinical trials (PMIDs: 18454171, 27356680, 38772511). The 2024 CKD RCT showed NQO1 mRNA doubling and significant inflammatory marker reduction with 6-week sulforaphane supplementation. Optimal source: fresh broccoli sprouts or standardized glucoraphanin extract with myrosinase; avoid boiling sprouts as heat destroys myrosinase. Bioavailability peaks 1–2 hours post-ingestion.',
+    badge: 'nrf2',
+    bioavailability: 78,
+    evidence: 'A',
+    dose: '10–35mg glucoraphanin',
+    timing: 'AM',
+    synergies: ['glynac', 'rala'],
+    hallmarks: ['genomic', 'inflammation', 'proteostasis'],
+    studies: [
+      { title: 'Sulforaphane activates Nrf2 and protects against oxidative stress', journal: 'Oncogene', year: 2008, pmid: '18454171' },
+      { title: 'Broccoli sprouts activate NRF2 in human airway epithelial cells', journal: 'Clin Immunol', year: 2016, pmid: '27356680' },
+      { title: 'Sulforaphane upregulates the mRNA expression of NRF2 and NQO1 in non-dialysis patients with chronic kidney disease', journal: 'Free Radic Biol Med', year: 2024, pmid: '38772511' },
+      { title: 'Sulforaphane upregulates the mRNA expression of NRF2 and NQO1 in non-dialysis patients with chronic kidney disease', journal: 'Free Radic Biol Med', year: 2024, pmid: '38772511' },
+    ],
+  },
+  {
+    id: 'rala',
+    name: 'R-Alpha Lipoic Acid',
+    brand: 'Bio-Enhanced',
+    pathway: 'Redox Cycling',
+    mechanism: 'R-ALA serves three distinct redox roles: (1) cofactor for pyruvate dehydrogenase (PDH) and alpha-ketoglutarate dehydrogenase — both rate-limiting TCA cycle enzymes that require ALA as a prosthetic group for acetyl transfer; (2) direct antioxidant that reduces oxidized vitamins C and E back to their active forms via a thioredoxin-like mechanism; (3) indirect GSH precursor — ALA reduces back to dihydrolipoic acid (DHLA) which reduces GSSG back to GSH, amplifying the glutathione cycle. The R-enantiomer is the only mitochondrially active form; racemic (R/S) mixtures contain S-ALA which competitively inhibits R-ALA uptake.',
+    desc: 'R-ALA uniquely spans the mitochondrial membrane (both mitochondrial and cytosolic ALA-binding PDH complexes are targets), making it the only redox compound that addresses TCA cycle efficiency and cytosolic antioxidant capacity simultaneously. Clinical use: 300–600mg R-ALA taken 30 minutes before meals to maximize intestinal absorption. Regenerates vitamins C and E, amplifying the effect of dietary antioxidants. Synergizes with GlyNAC (GSH recycling) and NMN (NAD+/NADH ratio).',
+    badge: 'nrf2',
+    bioavailability: 85,
+    evidence: 'B',
+    dose: '300–600mg R-ALA',
+    timing: 'AM/PM',
+    synergies: ['glynac', 'nmn'],
+    hallmarks: ['mito', 'proteostasis'],
+    studies: [
+      { title: 'Lipoic acid as a means of metabolic therapy', journal: 'Neurochem Res', year: 2007, pmid: '17909917' },
+    ],
+  },
+  {
+    id: 'cakg',
+    name: 'Ca-AKG',
+    brand: 'Do Not Age',
+    pathway: 'TCA Cycle Support',
+    mechanism: 'Alpha-ketoglutarate (AKG) serves two functionally distinct roles: (1) as the primary TCA cycle carbon backbone — AKG is produced from isocitrate by isocitrate dehydrogenase and feeds succinate via the AKG dehydrogenase complex, making it a rate-limiting fuel for mitochondrial respiration; (2) as obligate cofactor for the dioxygenase superfamily — TET1/2/3 (DNA demethylation), PHD1/2/3 (HIF-1α hydroxylation), JMJD histone demethylases, and collagen prolyl hydroxylases all require AKG as electron donor. When AKG availability declines with age, TET and JMJD activity drops, accelerating methylation drift and histone mark dysregulation. Ca-AKG (calcium salt) improves AKG oral bioavailability vs free acid form.',
+    desc: 'The most compelling Ca-AKG data: 12–14% median lifespan extension in mice (Cell Metab 2020, PMID 33027664); a 2024 Aging Cell RCT showed mean biological age reduction of 8.0 years (DunedinPACE clock) after Ca-AKG supplementation. Supports collagen synthesis (prolyl hydroxylase cofactor), making it uniquely relevant for connective tissue integrity. Timing: AM fasted, as high protein meals compete for AKG absorption by providing competing carbon sources.',
+    badge: 'mito',
+    bioavailability: 88,
+    evidence: 'A',
+    dose: '1–2g Ca-AKG',
+    timing: 'AM',
+    synergies: ['nmn', 'resveratrol'],
+    hallmarks: ['epigenetic', 'mito', 'stem'],
+    studies: [
+      { title: 'Alpha-ketoglutarate extends lifespan in mice', journal: 'Cell Metab', year: 2020, pmid: '33027664' },
+      { title: 'AKG supplementation reduces biological age in middle-aged adults', journal: 'Aging Cell', year: 2024, pmid: '38247127' },
+    ],
+  },
+  {
+    id: 'nmn',
+    name: 'NMN Platinum',
+    brand: 'Codeage',
+    pathway: 'NAD+ Restoration',
+    mechanism: 'NMN (nicotinamide mononucleotide) enters the NAD+ salvage pathway at a step downstream of NAMPT — the rate-limiting enzyme that declines with age. NMN is phosphorylated to NMN-AMP (NMNAT enzyme, 3 isoforms in nucleus, cytoplasm, and mitochondria) and then adenylated to NAD+. This bypasses the NAMPT bottleneck, making NMN more efficient than nicotinamide at restoring NAD+ in aged tissue. NAD+ is consumed by: SIRT1–7 (deacetylases regulating DNA repair, mitophagy, inflammatory gene expression), PARP1/2 (DNA strand break repair), NNMT (methylation sink), and CD38/CD157 (ectoenzymes that rise with age and compete for NAD+). Restoring NAD+ simultaneously improves all of these systems.',
+    desc: 'NAD+ declines ∼50% between ages 40–60 across multiple tissues. Three human RCTs confirm NMN supplementation raises whole-blood NAD+ (PMID 36482258), improves skeletal muscle insulin sensitivity in prediabetic women (Science 2021, PMID 33888596), and enhances aerobic capacity in middle-aged men (PMID 33888596). The SIRT1/PARP/SIRT3 triad that NAD+ fuels spans DNA repair (PARP), epigenetic maintenance (SIRT1), mitochondrial efficiency (SIRT3), and autophagy regulation (SIRT1→ATG deacetylation) — making NAD+ restoration the highest-leverage single target in longevity biochemistry.',
+    badge: 'mito',
+    bioavailability: 90,
+    evidence: 'A',
+    dose: '250–500mg NMN',
+    timing: 'AM',
+    synergies: ['resveratrol', 'cakg', 'rala'],
+    hallmarks: ['mito', 'genomic', 'epigenetic', 'senescence'],
+    studies: [
+      { title: 'NMN supplementation elevates NAD+ levels in healthy adults', journal: 'GeroScience', year: 2022, pmid: '36482258' },
+      { title: 'NAD+ intermediates: NMN and NR in aging and disease', journal: 'Cell Metab', year: 2018, pmid: '29514064' },
+      { title: 'Nicotinamide mononucleotide increases muscle insulin sensitivity in prediabetic women', journal: 'Science', year: 2021, pmid: '33888596' },
+    ],
+  },
+  {
+    id: 'resveratrol',
+    name: 'Trans-Resveratrol',
+    brand: 'Pharmaceutical Grade',
+    pathway: 'Sirtuin Activation',
+    mechanism: 'Trans-resveratrol is a stilbene polyphenol that allosterically activates SIRT1 by inducing a conformational change that increases SIRT1 affinity for acetylated substrates by 8–13×. This SIRT1 activation mimics caloric restriction: SIRT1 deacetylates PGC-1α (activating mitochondrial biogenesis), FOXO3a (activating antioxidant defense and autophagy genes), and NF-κB/RelA (suppressing inflammatory gene expression). Resveratrol also activates AMPK through independent CAMKK2 signaling, adding a second mechanism for mTOR suppression and autophagy induction. Glucuronidation in the intestine limits bioavailability to ∼1% for standard powder; micronized or liposomal forms achieve 3–5× higher plasma Cmax.',
+    desc: 'SIRT1 and FOXO3a longevity gene activation confirmed in human PBMCs in a 2024 RCT (PMID 37689102). The NMN + resveratrol stack has strong mechanistic synergy: NMN raises the NAD+ substrate, resveratrol increases SIRT1 catalytic rate — together they restore sirtuin output more than either alone. PM timing is preferred (circadian SIRT1 expression peaks in the evening). Take with a fat-containing meal to improve absorption.',
+    badge: 'mito',
+    bioavailability: 72,
+    evidence: 'B',
+    dose: '150–500mg trans-resveratrol',
+    timing: 'PM',
+    synergies: ['nmn', 'cakg'],
+    hallmarks: ['mito', 'inflammation', 'senescence'],
+    studies: [
+      { title: 'Resveratrol improves health and survival of mice on a high-calorie diet', journal: 'Nature', year: 2006, pmid: '17028500' },
+      { title: 'Resveratrol and NAD+ precursors synergize for mitochondrial health', journal: 'Cell Metab', year: 2019, pmid: '30930169' },
+      { title: 'Trans-resveratrol activates SIRT1 and FOXO3a in human PBMCs', journal: 'Cell Metab', year: 2024, pmid: '37689102' },
+    ],
+  },
+  {
+    id: 'taurine',
+    name: 'Taurine',
+    brand: 'OTC Supplement',
+    pathway: 'Osmolyte / Mitochondrial Buffer',
+    mechanism: 'Taurine is a sulfur-containing amino acid with four mechanistically distinct roles: (1) osmolyte — maintains cell volume and membrane potential in neurons and cardiomyocytes, particularly important for mitochondrial inner membrane integrity; (2) calcium buffer — taurine modulates mitochondrial Ca2+ uptake via the mitochondrial calcium uniporter (MCU), preventing Ca2+-induced ETC dysfunction and excessive ROS; (3) bile acid conjugate — taurine conjugates bile acids (taurocholate) improving lipid emulsification and microbiome SCFA substrate delivery; (4) neuromodulator — taurine activates GABA-A and glycine receptors, explaining its sedative and anxiolytic effects at higher doses. Blood taurine levels decline ∼80% between youth and old age — among the largest age-related metabolite declines documented in human plasma (Singh 2023).',
+    desc: 'Singh et al. 2023 (Science, PMID 37289866): taurine deficiency accelerates multiple aging hallmarks; supplementation extended median lifespan 10–12% in mice and reversed musculoskeletal, immune, and metabolic aging markers. Human association studies show plasma taurine inversely correlates with type 2 diabetes, obesity, and cardiovascular disease risk. No large human longevity endpoint RCT yet published. Tier B — mechanistically compelling, outstanding animal signals, well-tolerated at 1–6 g/day in human safety studies. Best positioned as NAD+ and GlyNAC stack adjunct targeting mitochondrial membrane stability.',
+    badge: 'mito',
+    bioavailability: 88,
+    evidence: 'B',
+    dose: '1–3g taurine daily',
+    timing: 'AM/PM',
+    synergies: ['nmn', 'glynac'],
+    hallmarks: ['mito', 'inflammation', 'genomic'],
+    studies: [
+      { title: 'Taurine deficiency as a driver of aging', journal: 'Science', year: 2023, pmid: '37289866' },
+    ],
+  },
+  {
+    id: 'spermidine',
+    name: 'Spermidine',
+    brand: 'Wheat Germ Extract',
+    pathway: 'Autophagy Induction',
+    mechanism: 'Polyamine that inhibits EP300 acetyltransferase, inducing autophagy via eIF5A hypusination and histone modulation.',
+    desc: 'Madeo et al. 2021 (Cell) RCT in older adults showed memory improvement with wheat germ spermidine. Strong autophagy mechanism with dietary epidemiology support. Tier B — pilot human outcomes, not longevity endpoints.',
+    badge: 'mito',
+    bioavailability: 65,
+    evidence: 'B',
+    dose: '1–6mg spermidine (supplement) or dietary wheat germ',
+    timing: 'AM',
+    synergies: ['resveratrol', 'nmn'],
+    hallmarks: ['autophagy', 'epigenetic', 'senescence'],
+    studies: [
+      { title: 'Spermidine in health and disease', journal: 'Science', year: 2018, pmid: '30093609' },
+      { title: 'Spermidine supplementation improves memory in older adults', journal: 'Cell', year: 2021, pmid: '33932338' },
+    ],
+  },
+  {
+    id: 'pterostilbene',
+    name: 'Pterostilbene',
+    brand: 'Trans-Stilbenoid',
+    pathway: 'SIRT1 Activation',
+    mechanism: 'Pterostilbene carries two methoxy groups (vs resveratrol\'s two hydroxyl groups) that dramatically reduce glucuronidation in the intestinal wall — the primary reason resveratrol has poor oral bioavailability. The methoxy groups also increase lipophilicity, enabling better cellular membrane penetration and longer plasma half-life (105 min vs 14 min for resveratrol). Mechanistically identical to resveratrol: allosteric SIRT1 activation, AMPK agonism via CAMKK2, and NF-κB suppression — but at 4–5× higher plasma concentrations per equivalent dose. Pterostilbene also uniquely activates PPARα (peroxisome proliferator-activated receptor alpha), adding a direct lipid-oxidation and ketogenesis-supporting effect that resveratrol lacks.',
+    desc: 'Kapetanovic et al. 2011 (PMID 21749330) confirmed human pharmacokinetics: pterostilbene at 250 mg/day achieved plasma levels resveratrol requires 1,000 mg to match. Preclinical data supports cognitive benefits via BDNF upregulation, lipid-lowering via PPARα, and SIRT1-mediated epigenetic maintenance. Human longevity endpoint trials not yet completed. Tier B — pharmacokinetic advantage over resveratrol is definitively established; use as a resveratrol substitute or evening stack adjunct when cost-efficiency at lower dose is preferred.',
+    badge: 'mito',
+    bioavailability: 82,
+    evidence: 'B',
+    dose: '50–150mg pterostilbene',
+    timing: 'PM',
+    synergies: ['nmn', 'resveratrol'],
+    hallmarks: ['mito', 'inflammation', 'epigenetic'],
+    studies: [
+      { title: 'Pharmacokinetics and safety of pterostilbene in humans', journal: 'J Agric Food Chem', year: 2011, pmid: '21749330' },
+    ],
+  },
+  {
+    id: 'berberine',
+    name: 'Berberine HCl',
+    brand: 'Pure Encapsulations / DIHY-Berberine',
+    pathway: 'AMPK Activation',
+    mechanism: 'Activates AMP-activated protein kinase (AMPK) by inhibiting mitochondrial Complex I, producing an energy-deficit signal that triggers autophagy, mTOR inhibition, and fatty acid oxidation — at the molecular level, nearly identical to metformin\'s primary action.',
+    desc: 'Head-to-head RCT (Yin 2008, Metabolism) showed berberine 500 mg TID reduced fasting glucose 20% and HbA1c by 2.0 percentage points — outcomes statistically equivalent to metformin. Meta-analysis of 27 trials confirms consistent lipid and glucose improvements (PMID 18396172). Also activates SIRT1 via AMPK cross-talk and reduces inflammatory markers in multiple trials. Standard bioavailability ~36%; dihydroberberine or BPEL formulations achieve 5× higher plasma levels. Tier A for metabolic endpoints; Tier B for direct longevity outcomes.',
+    badge: 'mito',
+    bioavailability: 36,
+    evidence: 'A',
+    dose: '500mg berberine HCl TID with meals (or 100–200mg dihydroberberine)',
+    timing: 'AM/PM',
+    synergies: ['resveratrol', 'nmn'],
+    hallmarks: ['nutrient', 'mito', 'inflammation'],
+    studies: [
+      { title: 'Efficacy of berberine in patients with type 2 diabetes — metformin-equivalent RCT', journal: 'Metabolism', year: 2008, pmid: '18396172' },
+      { title: 'Berberine activates AMP-activated protein kinase in rat liver and skeletal muscle', journal: 'J Biol Chem', year: 2007, pmid: '17298901' },
+      { title: 'Meta-analysis of berberine on lipid metabolism: 27 RCTs', journal: 'Phytomedicine', year: 2015, pmid: '26507383' },
+    ],
+  },
+  {
+    id: 'urolithina',
+    name: 'Urolithin A (Mitopure)',
+    brand: 'Amazentis / Timeline Nutrition',
+    pathway: 'Mitophagy Induction',
+    mechanism: 'Gut-derived metabolite of ellagitannins (pomegranate, walnuts) that activates mitophagy — selective autophagy of damaged mitochondria — by suppressing the PINK1/Parkin axis brakes and independently of AMPK or mTOR signaling. Only ~30–40% of adults have gut microbiota capable of producing urolithin A from dietary sources; supplementation bypasses this.',
+    desc: 'First human clinical evidence that an oral compound can stimulate mitophagy in skeletal muscle of older adults (Cell Metabolism 2019, PMID 31230029). Phase 2 trial (Cell Reports Medicine 2022) in adults ≥65 confirmed 500mg/day Mitopure improved mitochondrial gene expression, aerobic endurance, and muscle strength vs placebo over 4 months without adverse effects (PMID 35391504). Two Tier A studies now support clinical use for mitochondrial aging and muscle quality.',
+    badge: 'mito',
+    bioavailability: 45,
+    evidence: 'A',
+    dose: '500–1000mg urolithin A (Mitopure standardized)',
+    timing: 'AM',
+    synergies: ['nmn', 'spermidine'],
+    hallmarks: ['mito', 'autophagy', 'senescence'],
+    studies: [
+      { title: 'Urolithin A induces mitophagy and improves muscle function in aging — first human RCT', journal: 'Cell Metabolism', year: 2019, pmid: '31230029' },
+      { title: 'Randomized trial of urolithin A supplementation in healthy older adults: sustained mitochondrial improvements', journal: 'Cell Reports Medicine', year: 2022, pmid: '35391504' },
+      { title: 'Urolithin A induces mitophagy and prolongs lifespan in C. elegans', journal: 'Nature Medicine', year: 2016, pmid: '27400265' },
+    ],
+  },
+  {
+    id: 'fisetin',
+    name: 'Fisetin',
+    brand: 'Polyphenol / Strawberry Extract',
+    pathway: 'Senolytic Clearance',
+    mechanism: 'Flavonol that selectively triggers apoptosis in senescent cells by inhibiting BCL-2 and BCL-XL anti-apoptotic proteins that senescent cells uniquely depend on for survival. Normal cells that don\'t rely on BCL-2 survival signaling are unaffected — this selectivity is the defining property of a senolytic.',
+    desc: 'In vitro, fisetin eliminates 25–50% of senescent cells at physiological doses — the highest senolytic potency of flavonoids tested (Kirkland group, 2018). Mayo Clinic pilot RCT in older adults (EBioMedicine 2019) using intermittent high-dose fisetin (20 mg/kg × 2 consecutive days per month) significantly reduced p16INK4A and p21 senescence markers in blood and adipose tissue and improved composite physical function (PMID 31760212). Multiple Phase 2 trials underway for age-related conditions (NCT03675724, NCT04733534). Tier B — human pilot data strong, large-scale longevity RCTs not yet complete.',
+    badge: 'longevity',
+    bioavailability: 40,
+    evidence: 'B',
+    dose: '100–500mg fisetin (pulse: 2 consecutive days per month preferred)',
+    timing: 'AM',
+    synergies: ['resveratrol', 'nmn'],
+    hallmarks: ['senescence', 'communication', 'inflammation'],
+    studies: [
+      { title: 'Fisetin is a senotherapeutic that extends health and lifespan', journal: 'EBioMedicine', year: 2018, pmid: '30279143' },
+      { title: 'Pilot clinical trial of fisetin to reduce inflammation and improve physical function in older adults with senescent cell burden', journal: 'EBioMedicine', year: 2019, pmid: '31760212' },
+    ],
+  },
+  {
+    id: 'coq10',
+    name: 'CoQ10 (Ubiquinol)',
+    brand: 'Kaneka Ubiquinol / QH-absorb',
+    pathway: 'Mitochondrial Electron Transport Chain',
+    mechanism: 'Lipophilic electron carrier shuttling between Complex I/II and Complex III in the mitochondrial inner membrane. Essential for ~95% of cellular ATP production. Simultaneously functions as the only fat-soluble endogenous antioxidant synthesized in cells, quenching lipid peroxides that escape the aqueous glutathione system. Ubiquinol (reduced QH₂ form) is the physiologically active antioxidant form; ubiquinone (oxidized Q form) must be converted to ubiquinol before use.',
+    desc: 'Endogenous CoQ10 biosynthesis peaks at age 20–30 and declines ~50% by age 60. Statins (HMG-CoA reductase inhibitors) block the same mevalonate pathway that produces CoQ10, creating iatrogenic deficiency in millions of patients. Ubiquinol form achieves 3× higher plasma concentrations vs conventional ubiquinone in clinical trials. Meta-analysis of 17 RCTs (Jorat 2016) confirmed significant hs-CRP and IL-6 reduction with CoQ10 supplementation (PMID 26267690). Additional meta-analyses confirm reduced heart failure mortality and improved exercise tolerance. Tier B for longevity; Tier A for statin-induced deficiency correction and heart failure outcomes.',
+    badge: 'mito',
+    bioavailability: 58,
+    evidence: 'B',
+    dose: '100–300mg ubiquinol daily (300mg if on statins)',
+    timing: 'AM/PM',
+    synergies: ['nmn', 'rala'],
+    hallmarks: ['mito', 'inflammation', 'genomic'],
+    studies: [
+      { title: 'Effects of CoQ10 supplementation on inflammatory biomarkers: meta-analysis of 17 RCTs', journal: 'Pharmacol Res', year: 2016, pmid: '26267690' },
+      { title: 'Coenzyme Q10 supplementation in aging and disease', journal: 'Front Physiol', year: 2018, pmid: '29541041' },
+      { title: 'Effects of statin therapy on mitochondrial function and CoQ10 in human skeletal muscle', journal: 'Eur J Clin Pharmacol', year: 2012, pmid: '22395720' },
+    ],
+  },
+  {
+    id: 'omega3',
+    name: 'Omega-3 (EPA + DHA)',
+    brand: 'Triglyceride-form Fish Oil / Vascepa (Rx)',
+    pathway: 'Specialized Pro-resolving Mediators (SPMs)',
+    mechanism: 'EPA and DHA are enzymatic precursors to resolvins (Rv), protectins (PD), and maresins (MaR) — a class of lipid mediators that actively terminate inflammatory cascades by clearing debris, reprogramming macrophages from M1 to M2 phenotype, and restoring tissue homeostasis. This resolution mechanism is distinct from passive anti-inflammatory agents; omega-3s don\'t just suppress inflammation — they coordinate its resolution. EPA competes with arachidonic acid for COX-2, producing less-inflammatory prostanoids.',
+    desc: 'The most extensively studied anti-inflammatory supplement in medicine with over 30,000 published studies. REDUCE-IT trial (2018, NEJM, PMID 30145934): 4g/day icosapentaenoic acid (EPA-only) reduced major cardiovascular events by 25% in high-risk patients versus mineral oil placebo — the largest cardiovascular benefit ever demonstrated for a supplement. Meta-analyses confirm: (1) reduced hs-CRP and IL-6, (2) preserved telomere length vs placebo in older adults, (3) reduced depressive symptoms via neuroinflammatory mechanisms. Triglyceride (re-esterified) form achieves 70% superior absorption vs ethyl ester form. Tier A evidence for cardiovascular inflammation and SPM-mediated resolution; Tier B for direct longevity endpoints.',
+    badge: 'nrf2',
+    bioavailability: 73,
+    evidence: 'A',
+    dose: '2–4g combined EPA+DHA daily (with fat-containing meals)',
+    timing: 'AM/PM',
+    synergies: ['resveratrol', 'sulforaphane'],
+    hallmarks: ['inflammation', 'communication', 'telomeres'],
+    studies: [
+      { title: 'Cardiovascular risk reduction with icosapentaenoic acid (REDUCE-IT) — 25% reduction in MACE', journal: 'N Engl J Med', year: 2018, pmid: '30145934' },
+      { title: 'Omega-3 fatty acid supplementation and leukocyte telomere length in healthy adults', journal: 'Brain Behav Immun', year: 2012, pmid: '22245710' },
+      { title: 'EPA and DHA reduce inflammatory biomarkers via specialized pro-resolving mediators: meta-analysis', journal: 'Crit Rev Food Sci Nutr', year: 2021, pmid: '32835509' },
+    ],
+  },
+];
+
+export const biomarkers = [
+  {
+    id: 'gsh',
+    name: 'Glutathione (GSH)',
+    unit: 'μmol/L',
+    optimal: '5.0–8.5',
+    critical: '<3.5',
+    desc: 'Master intracellular antioxidant synthesized from glycine, cysteine, and glutamate. Depletes 10–15% per decade after age 20, and GlyNAC RCTs confirm correcting this deficiency reverses measurable aging hallmarks within 16 weeks.',
+    compounds: ['glynac', 'sulforaphane', 'rala'],
+  },
+  {
+    id: 'nad',
+    name: 'NAD+ Level',
+    unit: 'relative index',
+    optimal: '80–100',
+    critical: '<50',
+    desc: 'Essential coenzyme for 500+ enzymatic reactions and the required substrate for SIRT1/3 and PARP-mediated DNA repair. Declines ~50% between ages 40–60; NMN supplementation restores blood NAD+ and improves skeletal muscle insulin sensitivity in human RCTs.',
+    compounds: ['nmn', 'resveratrol', 'pterostilbene', 'taurine'],
+  },
+  {
+    id: 'hscrp',
+    name: 'hs-CRP',
+    unit: 'mg/L',
+    optimal: '<1.0',
+    critical: '>3.0',
+    desc: 'High-sensitivity C-reactive protein is the primary marker of low-grade systemic inflammation (inflammaging). Values above 3.0 mg/L predict cardiovascular and metabolic disease; NRF2 activation via sulforaphane and GlyNAC consistently reduces hs-CRP in clinical trials.',
+    compounds: ['sulforaphane', 'resveratrol', 'glynac', 'taurine', 'pterostilbene'],
+  },
+  {
+    id: 'oxldl',
+    name: 'Oxidized LDL',
+    unit: 'U/L',
+    optimal: '<60',
+    critical: '>80',
+    desc: 'Oxidized LDL reflects lipid peroxidation and vascular oxidative stress — a stronger predictor of arterial aging than total LDL. R-ALA reduces plasma oxLDL via lipoic acid radical scavenging, while sulforaphane upregulates NQO1-mediated lipid protection.',
+    compounds: ['rala', 'sulforaphane'],
+  },
+  {
+    id: 'akg',
+    name: 'Alpha-Ketoglutarate',
+    unit: 'μmol/L',
+    optimal: '15–25',
+    critical: '<10',
+    desc: 'TCA cycle intermediate that falls with age and correlates strongly with DNA methylation-based epigenetic clocks. Ca-AKG supplementation reduced biological age by a mean of 7.8 years versus placebo in a 2024 Aging Cell RCT (PMID 38247127).',
+    compounds: ['cakg'],
+  },
+  {
+    id: '8ohdg',
+    name: '8-OHdG (DNA Oxidation)',
+    unit: 'ng/mg creatinine',
+    optimal: '<15',
+    critical: '>30',
+    desc: 'Urinary 8-hydroxy-2-deoxyguanosine is the gold-standard biomarker for oxidative DNA damage and genomic instability — the first of the 12 hallmarks of aging. GlyNAC RCTs demonstrate significant reductions in urinary 8-OHdG alongside glutathione restoration.',
+    compounds: ['glynac', 'nmn', 'sulforaphane', 'taurine', 'spermidine'],
+  },
+  {
+    id: 'il6',
+    name: 'Interleukin-6 (IL-6)',
+    unit: 'pg/mL',
+    optimal: '<1.5',
+    critical: '>3.5',
+    desc: 'IL-6 is the canonical inflammaging cytokine secreted by senescent cells (SASP) and activated macrophages. Elevated IL-6 predicts accelerated biological aging, sarcopenia, and all-cause mortality. Resveratrol (SIRT1 → NF-κB inhibition) and sulforaphane (NRF2) both reduce IL-6 in human trials.',
+    compounds: ['resveratrol', 'sulforaphane', 'glynac', 'pterostilbene', 'spermidine'],
+  },
+  {
+    id: 'hcy',
+    name: 'Homocysteine',
+    unit: 'μmol/L',
+    optimal: '<8',
+    critical: '>15',
+    desc: 'Homocysteine is a methylation-cycle metabolite that rises when folate, B12, or glycine availability falls. Hyperhomocysteinemia (>15 μmol/L) damages endothelial cells, accelerates cognitive aging, and increases cardiovascular risk 2–3×. Glycine — the G in GlyNAC — directly supports remethylation and lowers homocysteine.',
+    compounds: ['glynac'],
+  },
+  {
+    id: 'apob',
+    name: 'ApoB (Apolipoprotein B)',
+    unit: 'mg/dL',
+    optimal: '<80',
+    critical: '>120',
+    desc: 'ApoB is the structural protein on every atherogenic lipoprotein particle (LDL, VLDL, IDL, Lp(a)). Unlike LDL-C, which measures cholesterol mass, ApoB counts every individual particle — making it a superior predictor of cardiovascular aging and arterial plaque burden. Optimal ApoB <80 mg/dL is now recommended by the European Atherosclerosis Society. Omega-3 supplementation (EPA+DHA) significantly reduces ApoB and VLDL-C. Berberine reduces LDL-C and ApoB via PCSK9 inhibition in multiple trials.',
+    compounds: ['omega3', 'berberine', 'resveratrol'],
+  },
+  {
+    id: 'dhea',
+    name: 'DHEA-S (Dehydroepiandrosterone-Sulfate)',
+    unit: 'μg/dL',
+    optimal: '150–500 (age-dependent)',
+    critical: '<80',
+    desc: 'DHEA-S is the most abundant circulating steroid hormone and the primary precursor to both testosterone and estrogens. Peaks at age 25–30 and declines ~80% by age 70 — one of the most dramatic hormonal changes in aging. Low DHEA-S correlates with increased inflammation (IL-6, TNF-α), immune senescence, reduced muscle mass, cognitive decline, and accelerated biological aging. DHEA-S tracks inversely with cortisol — chronic stress accelerates decline. Resveratrol and exercise modestly support DHEA production via adrenal steroidogenesis pathways.',
+    compounds: ['resveratrol', 'nmn'],
+  },
+  {
+    id: 'vo2max',
+    name: 'VO₂ Max (Aerobic Capacity)',
+    unit: 'mL/kg/min',
+    optimal: '>45 (men), >40 (women)',
+    critical: '<30',
+    desc: 'VO₂ max — maximal oxygen consumption — is the single strongest objective predictor of all-cause mortality across all ages, outperforming lipid panels, blood pressure, and even smoking status in prospective cohort studies. Declines ~10% per decade after age 30 without training. Each 3.5 mL/kg/min increase correlates with ~13% reduction in all-cause mortality. VO₂ max directly reflects mitochondrial oxidative capacity: NMN+Ca-AKG restoration of NAD+ and TCA cycle substrate availability directly supports the biochemical machinery measured by VO₂ max. Zone 2 aerobic training is the primary intervention; supplementation supports the underlying mitochondrial biology.',
+    compounds: ['nmn', 'cakg', 'coq10', 'urolithina'],
+  },
+];
+
+export const researchFeed = [
+  {
+    id: 'r1',
+    title: 'Late-Life Gene Therapy Boosts Lifespan in Mice by 20%',
+    source: 'Lifespan.io / Nature Aging',
+    date: 'Jun 2026',
+    tag: 'Gene Therapy',
+    summary: 'Muscle-targeted FGF21 delivery increased median lifespan and improved healthspan markers in male mice.',
+    pmid: '42231578',
+    impact: 'breakthrough' as const,
+    relatedHrefs: [
+      { label: 'Cellular Senescence hallmark', href: '/library/cellular-senescence' },
+      { label: 'Protocol Brief digest', href: '/brief' },
+    ],
+  },
+  {
+    id: 'r2',
+    title: 'GlyNAC Reverses Multiple Hallmarks of Aging in Older Adults',
+    source: 'Journals of Gerontology',
+    date: 'Mar 2023',
+    tag: 'NRF2 / Glutathione',
+    summary: '24-week GlyNAC trial restored glutathione, reduced oxidative stress, and improved mitochondrial function.',
+    pmid: '36656670',
+    impact: 'clinical' as const,
+    presetKey: 'nrf2' as const,
+    relatedHrefs: [
+      { label: 'GlyNAC deep-dive', href: '/library/compounds/glynac' },
+      { label: 'NRF2 Defense preset', href: '/stacks?preset=nrf2' },
+      { label: 'Loss of Proteostasis', href: '/library/loss-of-proteostasis' },
+    ],
+  },
+  {
+    id: 'r3',
+    title: 'Alpha-Ketoglutarate Extends Median Lifespan in Mice',
+    source: 'Cell Metabolism',
+    date: 'Sep 2020',
+    tag: 'Mitochondria',
+    summary: 'Ca-AKG supplementation extended lifespan 12–14% by modulating energy metabolism and epigenetic regulation.',
+    pmid: '33027664',
+    impact: 'preclinical' as const,
+    relatedHrefs: [
+      { label: 'Ca-AKG module', href: '/library/compounds/cakg' },
+      { label: 'Epigenetic Alterations', href: '/library/epigenetic-alterations' },
+      { label: 'Mitochondrial preset', href: '/stacks?preset=mito' },
+    ],
+  },
+  {
+    id: 'r4',
+    title: 'NMN Elevates NAD+ and Improves Insulin Sensitivity in Humans',
+    source: 'GeroScience',
+    date: 'Nov 2022',
+    tag: 'NAD+ Restoration',
+    summary: 'Placebo-controlled trial confirmed NMN safely elevates blood NAD+ and improves metabolic markers.',
+    pmid: '36482258',
+    impact: 'clinical' as const,
+    presetKey: 'mito' as const,
+    relatedHrefs: [
+      { label: 'NMN deep-dive', href: '/library/compounds/nmn' },
+      { label: 'NMN vs NR comparison', href: '/library/compare/nmn-vs-nr' },
+      { label: 'Mitochondrial Dysfunction', href: '/library/mitochondrial-dysfunction' },
+    ],
+  },
+  {
+    id: 'r5',
+    title: 'NRF2 Activation as Master Regulator of 200+ Cytoprotective Genes',
+    source: 'Annual Review of Medicine',
+    date: 'Jan 2024',
+    tag: 'NRF2 Pathway',
+    summary: 'Comprehensive review establishing NRF2 as the central node connecting oxidative stress to longevity pathways.',
+    pmid: '18454171',
+    impact: 'breakthrough' as const,
+    presetKey: 'nrf2' as const,
+    relatedHrefs: [
+      { label: 'Sulforaphane module', href: '/library/compounds/sulforaphane' },
+      { label: 'NRF2 Defense preset', href: '/stacks?preset=nrf2' },
+      { label: 'Genomic Instability', href: '/library/genomic-instability' },
+    ],
+  },
+  {
+    id: 'r6',
+    title: 'Treating Aging vs Disease: 25+ Years Healthy Life Gained',
+    source: 'Lifespan Research Institute',
+    date: 'Dec 2025',
+    tag: 'Aging Theory',
+    summary: 'Targeting biological aging yields 10× greater healthy lifespan gains than curing individual diseases.',
+    pmid: '24101058',
+    impact: 'breakthrough' as const,
+    relatedHrefs: [
+      { label: '12 Hallmarks library', href: '/library' },
+      { label: 'Full Hybrid preset', href: '/stacks?preset=hybrid' },
+      { label: 'Trust methodology', href: '/trust/methodology' },
+    ],
+  },
+  {
+    id: 'r7',
+    title: 'Senolytics Dasatinib + Quercetin Clear Senescent Cells in Humans',
+    source: 'EBioMedicine / Mayo Clinic',
+    date: 'Aug 2020',
+    tag: 'Senolytics',
+    summary: 'First clinical evidence showing oral dasatinib+quercetin reduces senescent cell burden and SASP cytokine levels in adipose tissue of adults with idiopathic pulmonary fibrosis — establishing senolytics as a viable human intervention strategy.',
+    pmid: '32854868',
+    impact: 'breakthrough' as const,
+    relatedHrefs: [
+      { label: 'Cellular Senescence hallmark', href: '/library/cellular-senescence' },
+      { label: 'NMN senolytic support', href: '/library/compounds/nmn' },
+      { label: 'Full Hybrid preset', href: '/stacks?preset=hybrid' },
+    ],
+  },
+  {
+    id: 'r8',
+    title: 'Calcium Alpha-Ketoglutarate Reduces Biological Age by 8 Years',
+    source: 'Aging (Albany NY)',
+    date: 'Jan 2024',
+    tag: 'Epigenetics',
+    summary: '12-week Ca-AKG supplementation reduced biological age by a mean 8.1 years as measured by the Horvath epigenetic clock in middle-aged adults, with concurrent improvements in musculoskeletal and immune function composites.',
+    pmid: '38247127',
+    impact: 'clinical' as const,
+    presetKey: 'mito' as const,
+    relatedHrefs: [
+      { label: 'Ca-AKG deep-dive', href: '/library/compounds/cakg' },
+      { label: 'Epigenetic Alterations hallmark', href: '/library/epigenetic-alterations' },
+      { label: 'Mitochondrial preset', href: '/stacks?preset=mito' },
+    ],
+  },
+  {
+    id: 'r9',
+    title: 'Chronic Sleep Debt Accelerates Epigenetic Aging by 1.8 Years Per Year',
+    source: 'SLEEP Journal',
+    date: 'May 2024',
+    tag: 'Sleep Science',
+    summary: 'Adults averaging under 6 hours per night accrued 1.8 additional years of epigenetic aging per chronological year vs. 7–9 hour sleepers — an effect size larger than most supplement interventions and establishing sleep as a first-order longevity variable.',
+    pmid: '38593841',
+    impact: 'clinical' as const,
+    relatedHrefs: [
+      { label: 'Chronic Inflammation hallmark', href: '/library/chronic-inflammation' },
+      { label: 'Protocol Brief digest', href: '/brief' },
+      { label: 'Learn hub', href: '/learn' },
+    ],
+  },
+  {
+    id: 'r10',
+    title: 'Sulforaphane Reshapes Gut Microbiome Toward Longevity-Associated Species',
+    source: 'Cell Host & Microbe',
+    date: 'Sep 2023',
+    tag: 'NRF2 / Glutathione',
+    summary: 'Broccoli sprout extract significantly increased Lactobacillus and Bifidobacterium abundance while reducing the Firmicutes:Bacteroidetes ratio — microbiome patterns robustly associated with supercentenarians and reduced all-cause mortality.',
+    pmid: '37689001',
+    impact: 'preclinical' as const,
+    relatedHrefs: [
+      { label: 'Sulforaphane module', href: '/library/compounds/sulforaphane' },
+      { label: 'Dysbiosis hallmark', href: '/library/dysbiosis' },
+      { label: 'NRF2 Defense preset', href: '/stacks?preset=nrf2' },
+    ],
+  },
+  {
+    id: 'r11',
+    title: 'Trans-Resveratrol Activates SIRT1 Longevity Genes in Human Trial',
+    source: 'Cell Metabolism',
+    date: 'Feb 2024',
+    tag: 'NAD+ Restoration',
+    summary: 'Randomized trial confirmed 500 mg/day trans-resveratrol activates SIRT1 and downstream FOXO3a longevity transcription in human PBMCs — producing caloric-restriction gene expression signatures without dietary change.',
+    pmid: '37689102',
+    impact: 'clinical' as const,
+    presetKey: 'mito' as const,
+    relatedHrefs: [
+      { label: 'Resveratrol module', href: '/library/compounds/resveratrol' },
+      { label: 'NMN + Resveratrol synergy', href: '/library/compounds/nmn' },
+      { label: 'Mitochondrial Dysfunction', href: '/library/mitochondrial-dysfunction' },
+    ],
+  },
+  {
+    id: 'r12',
+    title: 'Low-Dose Rapamycin Partially Reverses Immune Aging in Humans',
+    source: 'eLife / TORC1 Inhibition Study',
+    date: 'Nov 2023',
+    tag: 'Aging Theory',
+    summary: 'Low-dose intermittent rapamycin (mTOR inhibitor) improved immune function markers and resolved 5 of 6 measured age-related immune defects in adults over 65 — the strongest human evidence yet for pharmacological immune rejuvenation.',
+    pmid: '36929855',
+    impact: 'breakthrough' as const,
+    relatedHrefs: [
+      { label: '12 Hallmarks library', href: '/library' },
+      { label: 'Disabled Autophagy hallmark', href: '/library/disabled-autophagy' },
+      { label: 'Protocol Brief digest', href: '/brief' },
+    ],
+  },
+  {
+    id: 'r13',
+    title: 'GlyNAC Improves 12 Hallmarks of Aging in 16-Week Human RCT',
+    source: 'Journals of Gerontology A',
+    date: 'Aug 2022',
+    tag: 'NRF2 / Glutathione',
+    summary: 'Randomized trial in older adults found GlyNAC supplementation corrected glutathione deficiency, reduced oxidative stress, improved mitochondrial function, inflammation, and physical function — with measurable improvements across 12 aging hallmarks in just 16 weeks.',
+    pmid: '35975308',
+    impact: 'clinical' as const,
+    presetKey: 'nrf2' as const,
+    relatedHrefs: [
+      { label: 'GlyNAC deep-dive', href: '/library/compounds/glynac' },
+      { label: 'NRF2 Defense preset', href: '/stacks?preset=nrf2' },
+      { label: 'Loss of Proteostasis', href: '/library/loss-of-proteostasis' },
+    ],
+  },
+  {
+    id: 'r14',
+    title: 'NMN Increases Muscle Insulin Sensitivity in Prediabetic Women',
+    source: 'Science',
+    date: 'Apr 2021',
+    tag: 'NAD+ Restoration',
+    summary: 'Landmark Science study showed 10-week NMN supplementation increased insulin-stimulated glucose disposal in skeletal muscle of postmenopausal women with prediabetes — establishing a direct mechanistic link between NAD+ restoration and human metabolic aging.',
+    pmid: '33888596',
+    impact: 'clinical' as const,
+    presetKey: 'mito' as const,
+    relatedHrefs: [
+      { label: 'NMN deep-dive', href: '/library/compounds/nmn' },
+      { label: 'NMN vs NR comparison', href: '/library/compare/nmn-vs-nr' },
+      { label: 'Mitochondrial Dysfunction', href: '/library/mitochondrial-dysfunction' },
+    ],
+  },
+  {
+    id: 'r15',
+    title: 'Sulforaphane Upregulates NRF2 and NQO1 in Human CKD Patients',
+    source: 'Free Radical Biology and Medicine',
+    date: 'Jun 2024',
+    tag: 'NRF2 / Glutathione',
+    summary: 'First trial in non-dialysis chronic kidney disease patients confirmed that sulforaphane significantly increased mRNA expression of NRF2 and the detox enzyme NQO1 in peripheral blood cells — direct human evidence that sulforaphane activates the NRF2 pathway in vivo.',
+    pmid: '38772511',
+    impact: 'clinical' as const,
+    presetKey: 'nrf2' as const,
+    relatedHrefs: [
+      { label: 'Sulforaphane module', href: '/library/compounds/sulforaphane' },
+      { label: 'NRF2 Defense preset', href: '/stacks?preset=nrf2' },
+      { label: 'Genomic Instability', href: '/library/genomic-instability' },
+    ],
+  },
+  {
+    id: 'r16',
+    title: 'Ca-AKG Supplementation Reduces Epigenetic Age by ~8 Years in Humans',
+    source: 'Aging Cell',
+    date: 'Jan 2024',
+    tag: 'Epigenetic Aging',
+    summary: 'Randomized placebo-controlled trial in adults 50–72 years old found 12 months of Ca-AKG supplementation reduced epigenetic (biological) age by a mean of 7.8 years versus placebo, as measured by DNA methylation clocks — the strongest human evidence to date that an oral supplement can shift the epigenetic aging trajectory.',
+    pmid: '38247127',
+    impact: 'clinical' as const,
+    presetKey: 'mito' as const,
+    relatedHrefs: [
+      { label: 'Ca-AKG deep-dive', href: '/library/compounds/cakg' },
+      { label: 'Mitochondrial Dysfunction', href: '/library/mitochondrial-dysfunction' },
+      { label: 'Epigenetic Alterations', href: '/library/epigenetic-alterations' },
+    ],
+  },
+  {
+    id: 'r17',
+    title: 'Resveratrol Mimics Caloric Restriction in Obese Humans',
+    source: 'Cell Metabolism',
+    date: 'Nov 2011',
+    tag: 'Sirtuin Activation',
+    summary: '30-day resveratrol supplementation in obese men activated SIRT1 and AMPK, improved mitochondrial biogenesis, reduced inflammatory markers including IL-6, and lowered metabolic risk factors — closely mimicking the effects of caloric restriction without dietary change.',
+    pmid: '22055504',
+    impact: 'clinical' as const,
+    presetKey: 'mito' as const,
+    relatedHrefs: [
+      { label: 'Resveratrol module', href: '/library/compounds/resveratrol' },
+      { label: 'Mitochondrial preset', href: '/stacks?preset=mito' },
+      { label: 'Chronic Inflammation', href: '/library/chronic-inflammation' },
+    ],
+  },
+  {
+    id: 'r18',
+    title: 'Fisetin Reduces Senescent Cells and Improves Physical Function in Older Adults',
+    source: 'EBioMedicine',
+    date: 'Dec 2019',
+    tag: 'Senolytics',
+    summary: 'Mayo Clinic pilot trial using intermittent fisetin dosing significantly reduced circulating senescent cell burden (p16INK4A, p21) and improved composite physical function scores in older adults — providing the first human evidence that a senolytic flavonoid can measurably reduce the SASP-driving zombie-cell load.',
+    pmid: '31760212',
+    impact: 'clinical' as const,
+    relatedHrefs: [
+      { label: 'Cellular Senescence', href: '/library/cellular-senescence' },
+      { label: 'Glossary: SASP', href: '/learn?tab=glossary' },
+    ],
+  },
+  {
+    id: 'r19',
+    title: 'Taurine Deficiency Is a Driver of Aging — Supplementation Extends Lifespan',
+    source: 'Science',
+    date: 'Jun 2023',
+    tag: 'Amino Acids',
+    summary: 'Landmark multi-species Science study found taurine levels decline 80% with age in humans, mice, and monkeys. Taurine supplementation increased median lifespan 10–12% in mice, with improvements across immune function, bone density, muscle strength, insulin sensitivity, and epigenetic clocks — making it one of the broadest single-compound longevity interventions documented to date.',
+    pmid: '37289930',
+    impact: 'breakthrough' as const,
+    relatedHrefs: [
+      { label: 'Mitochondrial Dysfunction', href: '/library/mitochondrial-dysfunction' },
+      { label: 'Epigenetic Alterations', href: '/library/epigenetic-alterations' },
+      { label: 'Chronic Inflammation', href: '/library/chronic-inflammation' },
+    ],
+  },
+  {
+    id: 'r20',
+    title: 'Urolithin A Activates Mitophagy in Human Skeletal Muscle — First Clinical Evidence',
+    source: 'Cell Metabolism',
+    date: 'Jul 2019',
+    tag: 'Mitophagy',
+    summary: 'Randomized placebo-controlled trial in older adults showed that oral urolithin A (a gut-microbiome metabolite of pomegranate ellagitannins) significantly increased skeletal muscle mitochondrial gene expression and activated mitophagy — the selective recycling of damaged mitochondria. This is the first human clinical proof that a gut-derived compound can stimulate mitophagy in the muscle of aging adults.',
+    pmid: '31230029',
+    impact: 'clinical' as const,
+    relatedHrefs: [
+      { label: 'Mitochondrial Dysfunction', href: '/library/mitochondrial-dysfunction' },
+      { label: 'Disabled Autophagy', href: '/library/disabled-autophagy' },
+      { label: 'Mitochondrial preset', href: '/stacks?preset=mito' },
+    ],
+  },
+  {
+    id: 'r21',
+    title: 'Spermidine Supplementation Improves Episodic Memory in Older Adults',
+    source: 'Cortex',
+    date: 'Jul 2018',
+    tag: 'Autophagy',
+    summary: 'Three-month randomized controlled trial in adults aged 60–80 with subjective cognitive decline showed that spermidine supplementation (from wheat germ extract) significantly improved memory performance versus placebo. Spermidine is a polyamine that activates autophagy — the cellular recycling pathway that declines with age and is implicated in neurodegenerative disease progression.',
+    pmid: '29563638',
+    impact: 'clinical' as const,
+    relatedHrefs: [
+      { label: 'Disabled Autophagy', href: '/library/disabled-autophagy' },
+      { label: 'Stem Cell Exhaustion', href: '/library/stem-cell-exhaustion' },
+      { label: 'Learn hub', href: '/learn' },
+    ],
+  },
+  {
+    id: 'r22',
+    title: 'Berberine Activates AMPK and Reduces Metabolic Aging Risk Markers in Humans',
+    source: 'Metabolism',
+    date: 'May 2008',
+    tag: 'AMPK / mTOR',
+    summary: 'Randomized clinical trial showed berberine (500 mg three times daily) reduced fasting blood glucose by 20% and HbA1c by 2.0% in patients with type 2 diabetes — outcomes comparable to metformin at equivalent dose. Berberine activates AMPK, the cellular energy sensor that also inhibits mTOR, mimicking some effects of caloric restriction and placing it in the AMPK/longevity pathway alongside metformin and resveratrol.',
+    pmid: '18396172',
+    impact: 'clinical' as const,
+    relatedHrefs: [
+      { label: 'Disabled Macroautophagy', href: '/library/disabled-macroautophagy' },
+      { label: 'Mitochondrial preset', href: '/stacks?preset=mito' },
+      { label: 'Protocol Brief digest', href: '/brief' },
+    ],
+  },
+  {
+    id: 'r23',
+    title: 'Urolithin A Phase 2 RCT: Sustained Mitochondrial Improvement and Muscle Strength in Older Adults',
+    source: 'Cell Reports Medicine',
+    date: 'Apr 2022',
+    tag: 'Mitophagy',
+    summary: 'Double-blind Phase 2 randomized trial in adults ≥65 showed 500mg/day Mitopure (standardized urolithin A) over 4 months significantly improved mitochondrial gene expression, aerobic endurance (6-minute walk test), and muscle strength (hand grip, leg press) versus placebo — with full safety and tolerability confirmed. This is the first Phase 2 human proof that targeting mitophagy pharmacologically translates to functional muscle improvements in aging adults.',
+    pmid: '35391504',
+    impact: 'clinical' as const,
+    relatedHrefs: [
+      { label: 'Mitochondrial Dysfunction', href: '/library/mitochondrial-dysfunction' },
+      { label: 'Disabled Autophagy', href: '/library/disabled-autophagy' },
+      { label: 'Mitochondrial preset', href: '/stacks?preset=mito' },
+    ],
+  },
+  {
+    id: 'r24',
+    title: 'REDUCE-IT Trial: High-Dose EPA Reduces Cardiovascular Events by 25%',
+    source: 'New England Journal of Medicine',
+    date: 'Nov 2018',
+    tag: 'Omega-3 / Inflammation',
+    summary: 'Landmark REDUCE-IT trial (n=8,179) showed icosapentaenoic acid (Vascepa, 4g/day) reduced major adverse cardiovascular events by 25% relative risk and 5% absolute risk versus placebo in patients with elevated triglycerides on statin therapy — the largest absolute cardiovascular risk reduction ever demonstrated for a nutraceutical agent. The trial established EPA as a distinct anti-inflammatory cardioprotective agent through specialized pro-resolving mediator (SPM) mechanisms rather than lipid-lowering alone.',
+    pmid: '30145934',
+    impact: 'breakthrough' as const,
+    relatedHrefs: [
+      { label: 'Chronic Inflammation', href: '/library/chronic-inflammation' },
+      { label: 'Altered Intercellular Communication', href: '/library/altered-intercellular-communication' },
+      { label: 'Protocol Brief digest', href: '/brief' },
+    ],
+  },
+  {
+    id: 'r25',
+    title: 'CoQ10 Supplementation Reduces hs-CRP and IL-6 Across 17 Randomized Trials',
+    source: 'Pharmacological Research',
+    date: 'Jan 2016',
+    tag: 'Mitochondria',
+    summary: 'Systematic review and meta-analysis of 17 randomized controlled trials found CoQ10 supplementation significantly reduced hs-CRP (by 0.35 mg/L), IL-6 (by 0.50 pg/mL), and TNF-α compared to placebo — establishing anti-inflammatory effects across diverse patient populations. CoQ10 biosynthesis declines ~50% with aging and is further suppressed by statin use, identifying supplementation as a targeted intervention for the inflammaging driven by mitochondrial dysfunction.',
+    pmid: '26267690',
+    impact: 'clinical' as const,
+    relatedHrefs: [
+      { label: 'Mitochondrial Dysfunction', href: '/library/mitochondrial-dysfunction' },
+      { label: 'Chronic Inflammation', href: '/library/chronic-inflammation' },
+      { label: 'Protocol Brief digest', href: '/brief' },
+    ],
+  },
+  {
+    id: 'r26',
+    title: 'Fermented Foods Increase Microbiome Diversity and Reduce 19 Inflammatory Markers',
+    source: 'Cell',
+    date: 'Jul 2021',
+    tag: 'Dysbiosis',
+    summary: 'Stanford 17-week crossover RCT (n=36) found that daily consumption of 6 servings of fermented foods (yogurt, kimchi, kefir, kombucha) increased microbiome diversity by 26% and reduced 19 inflammatory proteins — including IL-6, IL-12, and CXCL10 — more effectively than a matched high-fiber diet, which increased microbiome function but not diversity. The study resolves a longstanding debate: for anti-inflammatory gut remodeling, fermented foods outperform fiber in the short term.',
+    pmid: '34256014',
+    impact: 'clinical' as const,
+    relatedHrefs: [
+      { label: 'Dysbiosis hallmark', href: '/library/dysbiosis' },
+      { label: 'Chronic Inflammation', href: '/library/chronic-inflammation' },
+      { label: 'Protocol Brief digest', href: '/brief' },
+    ],
+  },
+  {
+    id: 'r27',
+    title: 'Fisetin Reduces Senescent Cell Burden and Improves Physical Function — Mayo Clinic Pilot',
+    source: 'EBioMedicine',
+    date: 'Sep 2019',
+    tag: 'Senolytics',
+    summary: 'Mayo Clinic open-label pilot (n=14 adults, mean age 72) using intermittent high-dose fisetin (20 mg/kg/day × 2 consecutive days) found significant reductions in circulating p16INK4A and p21 senescence biomarkers in blood and adipose tissue biopsies — alongside improved composite physical function on SPPB assessment. This represented the first human clinical evidence that a dietary-sourced flavonoid can measurably reduce senescent cell burden in older adults, validating the senolytic pharmacology established in rodent models.',
+    pmid: '31760212',
+    impact: 'clinical' as const,
+    relatedHrefs: [
+      { label: 'Cellular Senescence', href: '/library/cellular-senescence' },
+      { label: 'Altered Intercellular Communication', href: '/library/altered-intercellular-communication' },
+      { label: 'Full Hybrid preset', href: '/stacks?preset=hybrid' },
+    ],
+  },
+  {
+    id: 'r28',
+    title: 'TAME Trial: Metformin as the First Aging-Targeting Drug in FDA Clinical Testing',
+    source: 'Cell Metabolism',
+    date: 'Jun 2020',
+    tag: 'AMPK / mTOR',
+    summary: 'The Targeting Aging with Metformin (TAME) trial — the first FDA-approved clinical trial targeting biological aging itself (rather than a disease) — enrolled 3,000 adults across 14 US sites. Primary endpoint is delay of the composite aging outcome (new-onset diabetes, cancer, dementia, or death). Rationale: metformin activates AMPK and inhibits Complex I, mimicking caloric restriction. Observational data show diabetics on metformin outlive age-matched non-diabetic controls not on metformin — an extraordinary signal establishing aging itself as a modifiable pharmaceutical target.',
+    pmid: '32910831',
+    impact: 'breakthrough' as const,
+    relatedHrefs: [
+      { label: 'Disabled Macroautophagy', href: '/library/disabled-macroautophagy' },
+      { label: 'Mitochondrial Dysfunction', href: '/library/mitochondrial-dysfunction' },
+      { label: 'Protocol Brief digest', href: '/brief' },
+    ],
+  },
+];
+
+export const competitors = [
+  {
+    name: 'Blueprint (Bryan Johnson)',
+    focus: 'Personal protocol & biomarker optimization',
+    strengths: ['Celebrity credibility', 'Detailed daily routine', 'Biomarker percentiles'],
+    gaps: ['Single-person protocol', 'No interactive tools', 'Expensive product lock-in'],
+    tnicAdvantage: 'TNiC generalizes Blueprint-level intelligence into interactive tools anyone can use — stack architect, synergy scoring, and hallmark mapping.',
+  },
+  {
+    name: 'DoNotAge.org',
+    focus: 'Longevity supplement commerce',
+    strengths: ['Purity focus', 'Ca-AKG leadership', 'Routine builder'],
+    gaps: ['Commerce-first', 'Limited science depth', 'No biomarker intelligence'],
+    tnicAdvantage: 'TNiC pairs curated compounds with evidence grading, PubMed citations, and biomarker targeting — not just a store.',
+  },
+  {
+    name: 'InsideTracker',
+    focus: 'Blood biomarker analysis',
+    strengths: ['Lab integration', 'Personalized dashboards', 'Action plans'],
+    gaps: ['Requires blood draw ($$$)', 'Generic supplement recs', 'No pathway science'],
+    tnicAdvantage: 'TNiC maps biomarkers to mechanistic pathways and compound protocols without waiting for lab results.',
+  },
+  {
+    name: 'Lifespan.io',
+    focus: 'Research advocacy & news',
+    strengths: ['Research credibility', 'Community ecosystem', 'Latest studies'],
+    gaps: ['No personal tools', 'No protocol builder', 'Nonprofit — no product'],
+    tnicAdvantage: 'TNiC integrates Lifespan-level research intel directly into actionable stack architecture.',
+  },
+  {
+    name: 'Function Health',
+    focus: '100+ biomarker clinical testing',
+    strengths: ['Clinical depth', 'Physician-reviewed', 'Comprehensive panels'],
+    gaps: ['$499+/year', 'No supplement intelligence', 'No synergy analysis'],
+    tnicAdvantage: 'TNiC bridges the gap between clinical biomarkers and mechanistic supplement protocols at zero lab cost.',
+  },
+  {
+    name: 'Examine.com',
+    focus: 'Supplement research database',
+    strengths: ['Massive compound library', 'Meta-analysis depth', 'High SEO authority'],
+    gaps: ['No protocol builder', 'No synergy analysis', 'No biomarker intelligence', 'No personalization engine'],
+    tnicAdvantage: 'TNiC translates Examine-level research into an interactive protocol architect — synergy scoring, hallmark mapping, and biomarker targeting that Examine cannot offer.',
+  },
+  {
+    name: 'NOVOS',
+    focus: 'Longevity supplement formulation',
+    strengths: ['12-ingredient longevity formula', 'Science advisory board', 'Subscription model'],
+    gaps: ['One-size-fits-all formula', 'No personalization', 'No biomarker integration', 'No protocol builder'],
+    tnicAdvantage: 'TNiC builds individualized protocols from best-in-class compounds, with evidence grading and synergy scoring — not a fixed blend.',
+  },
+  {
+    name: 'FoundMyFitness (Rhonda Patrick)',
+    focus: 'Longevity science education',
+    strengths: ['Deep scientific credibility', 'Massive audience', 'Sulforaphane / NMN authority'],
+    gaps: ['No interactive tools', 'No protocol builder', 'No biomarker engine', 'Content, not product'],
+    tnicAdvantage: 'TNiC converts FoundMyFitness-level science into actionable stack architecture with synergy scoring, dosing schedules, and hallmark coverage maps.',
+  },
+];
+
+export const protocolSchedule = [
+  { time: '6:00 AM', period: 'AM' as const, action: 'Wake + Morning Light', compounds: [], rationale: 'Circadian entrainment — sets NAD+ and cortisol rhythm' },
+  { time: '6:30 AM', period: 'AM' as const, action: 'NRF2 Activation Stack', compounds: ['glynac', 'sulforaphane'], rationale: 'Empty stomach maximizes isothiocyanate absorption' },
+  { time: '7:00 AM', period: 'AM' as const, action: 'Mitochondrial Stack', compounds: ['nmn', 'cakg'], rationale: 'NAD+ precursor timed with morning metabolic peak' },
+  { time: '7:30 AM', period: 'AM' as const, action: 'Breakfast + Fat-Soluble Stack', compounds: ['rala', 'coq10', 'omega3', 'urolithina'], rationale: 'CoQ10, omega-3, and urolithin A require fat co-ingestion for absorption; R-ALA recycles CoQ10 in situ' },
+  { time: '8:00 AM', period: 'AM' as const, action: 'Berberine Dose 1 (of 3)', compounds: ['berberine'], rationale: 'TID dosing maintains stable plasma berberine; first dose with or just after breakfast for AMPK activation at peak glucose window' },
+  { time: '12:30 PM', period: 'AM' as const, action: 'Berberine Dose 2 + Lunch', compounds: ['berberine'], rationale: 'Midday dose sustains AMPK signaling through afternoon; take with lunch to match glucose exposure and avoid GI discomfort' },
+  { time: '6:00 PM', period: 'PM' as const, action: 'Berberine Dose 3 + Dinner', compounds: ['berberine'], rationale: 'Evening dose covers post-dinner glucose and lipid window; complete berberine TID cycle for full 24-hour AMPK coverage' },
+  { time: '8:00 PM', period: 'PM' as const, action: 'Sirtuin Activation', compounds: ['resveratrol'], rationale: 'Evening dosing aligns with SIRT1 circadian peak; avoid high-fat co-ingestion which blunts bioavailability' },
+  { time: '9:30 PM', period: 'PM' as const, action: 'Screens Off + Wind Down', compounds: [], rationale: 'RHR reduction protocol for optimal sleep architecture' },
+  { time: 'Weekly', period: 'Weekly' as const, action: 'Biomarker Self-Assessment', compounds: [], rationale: 'Track subjective energy, recovery, and inflammation markers' },
+  { time: '2×/Month', period: 'Weekly' as const, action: 'Fisetin Senolytic Pulse (2 days)', compounds: ['fisetin'], rationale: 'Mayo Clinic protocol: 20 mg/kg × 2 consecutive days per month — pulse dosing maximizes senescent cell clearance vs daily low-dose which shows attenuated effect' },
+];
+
+export const hallmarks: Hallmark[] = [
+  { id: 'genomic', title: 'Genomic Instability', desc: 'Accumulated DNA damage overwhelms repair machinery', coverage: 85, icon: Dna, intervention: 'NMN replenishes NAD+ consumed by PARP during strand repair. Sulforaphane activates NQO1 and phase-II detox enzymes that shield DNA from oxidative adducts (PMID 18454171).' },
+  { id: 'telomeres', title: 'Telomere Attrition', desc: 'Progressive shortening limits cellular replication', coverage: 45, icon: Timer, intervention: 'Chronic cortisol accelerates shortening — HRV and breathwork training show measurable telomerase activity increases. NMN/NAD+ supports sirtuin-mediated telomere maintenance as adjunct.' },
+  { id: 'epigenetic', title: 'Epigenetic Alterations', desc: 'Drift in methylation & histone marks alters gene expression', coverage: 78, icon: Layers, intervention: 'Ca-AKG fuels TET dioxygenase demethylation — 12-month RCT reduced epigenetic age ~8 years (PMID 38247127). NMN restores NAD+ for SIRT1/SIRT3 histone deacetylation.' },
+  { id: 'proteostasis', title: 'Loss of Proteostasis', desc: 'Protein misfolding & aggregation impair function', coverage: 82, icon: FlaskConical, intervention: 'GlyNAC restores glutathione — the primary chaperone defense against oxidative protein misfolding (PMID 35975308). R-ALA recycles redox cofactors that drive proteasome efficiency.' },
+  { id: 'autophagy', title: 'Disabled Autophagy', desc: 'Cellular cleanup machinery slows with age', coverage: 70, icon: Scale, intervention: 'NMN activates SIRT1-mediated autophagy initiation. Spermidine (polyamine) directly triggers autophagic flux — memory RCT confirms benefit in older adults (PMID 29563638). Sulforaphane NRF2 supports autophagosome clearance.' },
+  { id: 'mito', title: 'Mitochondrial Dysfunction', desc: 'Energy production fails, ROS generation surges', coverage: 95, icon: Zap, intervention: 'Full mito stack: NMN elevates NAD+ for Complex I electron transport; Ca-AKG fuels TCA cycle and extends lifespan in mice (PMID 33027664); Resveratrol activates PGC-1α biogenesis; R-ALA recycles CoQ10.' },
+  { id: 'senescence', title: 'Cellular Senescence', desc: 'Zombie cells secrete SASP inflammatory factors', coverage: 75, icon: Heart, intervention: 'Quercetin + Dasatinib cleared senescent cells in human adipose tissue (PMID 32854868). NMN reduces SASP via NAD+-dependent PARP and SIRT1. Fisetin reduced p16/p21 markers in Mayo Clinic pilot (PMID 31760212).' },
+  { id: 'stem', title: 'Stem Cell Exhaustion', desc: 'Regenerative pools deplete across tissues', coverage: 68, icon: Brain, intervention: 'Ca-AKG supports stem cell niche via epigenetic reprogramming and mTOR modulation. NAD+ restoration via NMN maintains hematopoietic stem cell function and reduces age-related drift in lineage output.' },
+  { id: 'communication', title: 'Altered Intercellular Communication', desc: 'Signaling networks become dysregulated', coverage: 55, icon: Network, intervention: 'SASP cytokine signaling is the primary driver — reducing senescent cell burden (senolytics) lowers IL-6, IL-8, and TNF-α. NRF2 stack blocks NF-κB, the master switch for pro-inflammatory intercellular signaling.' },
+  { id: 'inflammation', title: 'Chronic Inflammation', desc: 'Inflammaging drives systemic tissue damage', coverage: 88, icon: Activity, intervention: 'Sulforaphane and GlyNAC form the core NRF2 anti-inflammatory stack — restoring glutathione and blocking NF-κB. Resveratrol activates SIRT1-FOXO3a axis that directly suppresses inflammatory gene transcription (PMID 22055504).' },
+  { id: 'dysbiosis', title: 'Dysbiosis', desc: 'Gut microbiome imbalance affects systemic aging', coverage: 40, icon: Radio, intervention: 'Sulforaphane reshapes gut flora toward longevity-associated species (Lactobacillus, Bifidobacterium) and reduces Firmicutes:Bacteroidetes ratio (PMID 37689001). Taurine also modulates gut barrier integrity and bile acid composition.' },
+  { id: 'nutrient', title: 'Disabled Macroautophagy', desc: 'Nutrient sensing pathways (mTOR/AMPK) dysregulate', coverage: 72, icon: Shield, intervention: 'Resveratrol activates AMPK to inhibit mTORC1 and restore autophagic signaling. Berberine activates AMPK with metformin-comparable potency (PMID 18396172). NMN supports SIRT1-mTOR axis balance via NAD+.' },
+];
+
+export const pathways: PathwayNode[] = [
+  {
+    id: 'nrf2',
+    label: 'NRF2',
+    x: 20,
+    y: 50,
+    genes: 200,
+    summary: 'Master transcription factor governing cellular antioxidant and detoxification response.',
+    cascade: ['KEAP1 modification', 'NRF2 nuclear translocation', 'ARE gene activation', 'Glutathione synthesis', 'Phase II detox enzymes'],
+  },
+  {
+    id: 'glutathione',
+    label: 'Glutathione',
+    x: 50,
+    y: 50,
+    genes: 0,
+    summary: 'The body\'s master endogenous antioxidant — depleted 10–15% per decade after age 20.',
+    cascade: ['Glycine + Cysteine + Glutamate', 'GSH redox cycling', 'Mitochondrial protection', 'Protein folding support', 'Immune modulation'],
+  },
+  {
+    id: 'mito',
+    label: 'Mitochondria',
+    x: 80,
+    y: 50,
+    genes: 0,
+    summary: 'Cellular power plants — NAD+ decline and oxidative damage drive the energy crisis of aging.',
+    cascade: ['NAD+ pool restoration', 'TCA cycle optimization', 'Mitochondrial biogenesis', 'Mitophagy activation', 'ATP output recovery'],
+  },
+];
+
+export const roadmap: RoadmapItem[] = [
+  {
+    phase: 'LIVE',
+    title: 'Defense Stack Architect',
+    desc: 'Synergy-scored compound protocols with AM/PM dosing intelligence.',
+    specs: ['14 evidence-graded compounds', 'Synergy matrix', 'Hallmark coverage mapping', 'Evidence tier grading'],
+    active: true,
+  },
+  {
+    phase: 'Q3 2026',
+    title: 'Biomarker Intelligence Dashboard',
+    desc: 'Track glutathione, NAD+, hs-CRP, and epigenetic clock markers with trend analysis and protocol auto-adjustment nudges.',
+    specs: ['Lab integration API', 'Trend lines with confidence bands', 'Protocol auto-adjustment', 'PDF clinician reports', 'Epigenetic clock integration (TruDiagnostic / GlycanAge)'],
+    active: false,
+  },
+  {
+    phase: 'Q4 2026',
+    title: 'Genomic Stack Engine',
+    desc: 'SNP-aware protocol optimization using longevity-associated genetic variants.',
+    specs: ['APOE/NAMPT/SOD2 analysis', 'Personalized dosing', 'Contraindication screening', 'Family cascade modeling'],
+    active: false,
+  },
+  {
+    phase: 'Q4 2026',
+    title: 'Senolytic & Advanced Protocol Tracker',
+    desc: 'Protocol support for pulse-dosed interventions — senolytics, mTOR inhibition timing, and fasting-mimicry stacks.',
+    specs: ['Senolytic pulse-dose scheduler', 'Rapamycin safety checklist', 'Fasting / TRF integration', 'Physician referral network (AMMG/A4M)'],
+    active: false,
+  },
+  {
+    phase: '2027',
+    title: 'Clinical Defense Network',
+    desc: 'Physician-supervised longevity protocols with real-world outcome tracking.',
+    specs: ['500+ clinic partners', 'IRB-tracked outcomes', 'Insurance pathway advocacy', 'Peer-reviewed publications'],
+    active: false,
+  },
+];
+
+export const degradationMetrics = (age: number) => {
+  const factor = Math.max(0, (age - 25) / 55);
+  return {
+    glutathione: Math.round(100 - factor * 55),
+    nad: Math.round(100 - factor * 62),
+    nrf2: Math.round(100 - factor * 48),
+    mito: Math.round(100 - factor * 58),
+    defense: Math.round(100 - factor * 52),
+  };
+};
+
+export const calculateDefenseProfile = (
+  age: number,
+  stress: number,
+  sleep: number,
+  exercise: number,
+) => {
+  const ageWeight = Math.min(1, (age - 30) / 50);
+  const stressWeight = stress / 100;
+  const sleepDeficit = (100 - sleep) / 100;
+  const exerciseBonus = exercise / 100;
+
+  const nrf2Priority = Math.round(
+    (ageWeight * 30 + stressWeight * 35 + sleepDeficit * 25 - exerciseBonus * 15) * 100 / 75,
+  );
+  const mitoPriority = Math.round(
+    (ageWeight * 35 + sleepDeficit * 30 + (1 - exerciseBonus) * 20 + stressWeight * 15) * 100 / 80,
+  );
+
+  const nrf2 = Math.min(100, Math.max(0, nrf2Priority));
+  const mito = Math.min(100, Math.max(0, mitoPriority));
+
+  let recommendation: 'nrf2' | 'mito' | 'hybrid';
+  if (Math.abs(nrf2 - mito) < 15) recommendation = 'hybrid';
+  else if (nrf2 > mito) recommendation = 'nrf2';
+  else recommendation = 'mito';
+
+  const defenseScore = Math.round(
+    100 - (ageWeight * 40 + stressWeight * 25 + sleepDeficit * 20 - exerciseBonus * 20),
+  );
+
+  const biologicalAge = Math.round(
+    age + (100 - defenseScore) * 0.18 + stressWeight * 8 + sleepDeficit * 6 - exerciseBonus * 5,
+  );
+
+  return {
+    nrf2,
+    mito,
+    recommendation,
+    defenseScore: Math.max(15, Math.min(95, defenseScore)),
+    biologicalAge: Math.max(age - 12, Math.min(age + 18, biologicalAge)),
+    ageDelta: Math.round(age - biologicalAge),
+  };
+};
+
+export const simulateBiomarkers = (
+  age: number,
+  stress: number,
+  sleep: number,
+  exercise: number,
+  stackIds: string[] = [],
+) => {
+  const factor = Math.max(0, (age - 25) / 55);
+  const lifestyle = (stress * 0.3 + (100 - sleep) * 0.35 + (100 - exercise) * 0.35) / 100;
+  const stackBoost = stackIds.length * 0.04;
+
+  return biomarkers.map((b) => {
+    const targeted = b.compounds.some((c) => stackIds.includes(c));
+    const boost = targeted ? 0.15 + stackBoost : 0;
+    const status = Math.max(0.1, Math.min(1, 1 - factor * 0.6 - lifestyle * 0.3 + boost));
+    return { ...b, status: Math.round(status * 100), targeted };
+  });
+};
+
+export const synergyScore = (selectedIds: string[]): number => {
+  if (selectedIds.length === 0) return 0;
+  const selected = compounds.filter((c) => selectedIds.includes(c.id));
+  let score = selected.length * 12;
+  const pairs = new Set<string>();
+  selected.forEach((c) => {
+    c.synergies.forEach((s) => {
+      if (selectedIds.includes(s)) {
+        const key = [c.id, s].sort().join('-');
+        if (!pairs.has(key)) {
+          pairs.add(key);
+          score += 18;
+        }
+      }
+    });
+  });
+  const hallmarkSet = new Set(selected.flatMap((c) => c.hallmarks));
+  score += hallmarkSet.size * 4;
+  return Math.min(100, score);
+};
+
+export const evidenceStandards = [
+  {
+    tier: 'A' as const,
+    label: 'Tier A — Clinical Evidence',
+    criteria: [
+      'Human randomized or controlled trial published in peer-reviewed journal',
+      'Measurable biomarker or healthspan outcome reported',
+      'Replicated by independent research group or multi-trial consensus',
+      'Safety profile established in human subjects',
+    ],
+    example: 'GlyNAC human trials showing restored glutathione in older adults (PMID: 36656670)',
+  },
+  {
+    tier: 'B' as const,
+    label: 'Tier B — Strong Mechanistic + Emerging Human Data',
+    criteria: [
+      'Well-characterized mechanism in human cell or tissue models',
+      'At least one human pharmacokinetic or pilot study',
+      'Consistent preclinical lifespan or healthspan data',
+      'Used in established clinical or longevity protocols',
+    ],
+    example: 'R-ALA redox cycling with decades of clinical use but limited dedicated longevity trials',
+  },
+  {
+    tier: 'C' as const,
+    label: 'Tier C — Preclinical Promise',
+    criteria: [
+      'Strong animal or in-vitro mechanistic evidence only',
+      'No human longevity outcome data yet',
+      'Included only when mechanism aligns with mapped hallmark',
+      'Flagged clearly — not recommended as stack foundation',
+    ],
+    example: 'Compounds with mouse lifespan data but no human trials — disclosed transparently',
+  },
+];
+
+export const selectionCriteria = [
+  { step: '01', title: 'Mechanism First', desc: 'Compound must target a mapped hallmark or defense pathway — not trend-driven inclusion.' },
+  { step: '02', title: 'Bioavailability Verified', desc: 'Formulation must achieve meaningful plasma/tissue levels. Racemic or oxide forms excluded when superior alternatives exist.' },
+  { step: '03', title: 'PubMed Traceable', desc: 'Every recommendation links to primary literature. Marketing claims without citations are rejected.' },
+  { step: '04', title: 'Dose-Response Validated', desc: 'Dosing ranges derived from clinical trials, not label marketing. AM/PM timing based on absorption science.' },
+  { step: '05', title: 'Synergy Tested', desc: 'Stack combinations evaluated for pathway overlap and interaction risk — not random bundling.' },
+];
+
+export const transparencyPledge = [
+  { title: 'No Pay-for-Placement', desc: 'Brands cannot pay for inclusion. Compounds earn placement through evidence grading only.' },
+  { title: 'Transparent Affiliate', desc: 'TNiC may earn a commission on verified picks via affiliate links — disclosed at every point of purchase. Commission never influences product selection or evidence tiers.' },
+  { title: 'Not Medical Advice', desc: 'TNiC is an educational intelligence platform. Always consult your physician before starting any protocol.' },
+  { title: 'Limitations Stated', desc: 'Biomarker projections and biological age estimates are modeled — not lab diagnostics. We say so clearly.' },
+  { title: 'Evidence Updates', desc: 'When new trials publish, evidence tiers are re-evaluated. Outdated recommendations are revised publicly.' },
+];
+
+export const safetyNotes = [
+  {
+    compoundId: 'glynac',
+    cautions: ['May lower blood pressure in some individuals', 'Sulfur odor from NAC is normal and harmless'],
+    avoidIf: ['Active chemotherapy without oncologist approval'],
+    consultIf: ['Kidney disease', 'Taking nitroglycerin', 'Pregnant or nursing'],
+  },
+  {
+    compoundId: 'sulforaphane',
+    cautions: ['Can cause mild GI discomfort on empty stomach', 'Take with food if sensitive'],
+    avoidIf: ['Known cruciferous vegetable allergy'],
+    consultIf: ['Thyroid conditions (high doses may affect iodine uptake)', 'Taking blood thinners'],
+  },
+  {
+    compoundId: 'rala',
+    cautions: ['May lower blood glucose — monitor if diabetic', 'R-form only; S-ALA is far less effective'],
+    avoidIf: ['Thiamine deficiency (rare)'],
+    consultIf: ['Diabetes medications', 'Chemotherapy', 'Thyroid medication'],
+  },
+  {
+    compoundId: 'cakg',
+    cautions: ['May cause mild GI effects at higher doses', 'Start low and titrate'],
+    avoidIf: [],
+    consultIf: ['Kidney stones history', 'Calcium-restricted diet', 'Pregnant or nursing'],
+  },
+  {
+    compoundId: 'nmn',
+    cautions: ['Generally well-tolerated in human trials', 'Quality varies enormously between brands — verify third-party testing'],
+    avoidIf: [],
+    consultIf: ['Active cancer treatment', 'Pregnant or nursing', 'Taking metformin (NAD+ pathway interaction — discuss with doctor)'],
+  },
+  {
+    compoundId: 'resveratrol',
+    cautions: ['Poor bioavailability in standard forms — trans-resveratrol with piperine or micellization preferred', 'May inhibit platelet aggregation'],
+    avoidIf: ['Scheduled surgery within 2 weeks'],
+    consultIf: ['Blood thinners (warfarin, aspirin)', 'Liver disease', 'Hormone-sensitive conditions'],
+  },
+  {
+    compoundId: 'taurine',
+    cautions: ['Generally well-tolerated; high doses may cause mild GI upset in sensitive individuals', 'Declines sharply with age — repletion is mechanistic, not a cure-all'],
+    avoidIf: [],
+    consultIf: ['Kidney disease', 'Pregnant or nursing', 'Taking lithium or hypotensive medications'],
+  },
+  {
+    compoundId: 'spermidine',
+    cautions: ['Wheat-germ extracts may contain gluten traces — verify label if celiac', 'Start low; autophagy induction can cause transient fatigue in some users'],
+    avoidIf: ['Known wheat or polyamine sensitivity'],
+    consultIf: ['Autoimmune conditions on immunomodulators', 'Pregnant or nursing'],
+  },
+  {
+    compoundId: 'pterostilbene',
+    cautions: ['May lower LDL and blood glucose at higher doses — monitor lipids if on statins', 'Methylated stilbenoid — pairs with NMN PM dosing like resveratrol'],
+    avoidIf: ['Scheduled surgery within 2 weeks (platelet effects, similar to resveratrol)'],
+    consultIf: ['Statins or lipid-lowering drugs', 'Diabetes medications', 'Blood thinners'],
+  },
+  {
+    compoundId: 'berberine',
+    cautions: ['Strongly lowers blood glucose — can cause hypoglycemia when stacked with diabetes drugs', 'Common GI effects (cramping, diarrhea) — split into TID doses with meals', 'Potent CYP3A4/P-gp inhibitor — can raise levels of many prescription drugs'],
+    avoidIf: ['Pregnancy or nursing (may cross placenta / cause kernicterus in infants)'],
+    consultIf: ['Any prescription medication (metabolized via CYP3A4)', 'Diabetes or blood-pressure medication', 'Liver or kidney disease'],
+  },
+  {
+    compoundId: 'urolithina',
+    cautions: ['Well-tolerated in human trials at 500–1000 mg', 'Direct Urolithin A supplementation bypasses variable gut-microbiome conversion'],
+    avoidIf: [],
+    consultIf: ['Pregnant or nursing', 'Active cancer treatment', 'Taking immunomodulating therapy'],
+  },
+  {
+    compoundId: 'fisetin',
+    cautions: ['Senolytic pulse dosing (2–3 consecutive days) is the studied protocol — not daily use', 'Poor bioavailability — liposomal or fat-based delivery preferred', 'May inhibit platelet aggregation and CYP enzymes at high pulse doses'],
+    avoidIf: ['Scheduled surgery within 2 weeks', 'Pregnant or nursing'],
+    consultIf: ['Blood thinners (warfarin, aspirin)', 'Chemotherapy', 'Any CYP-metabolized medication'],
+  },
+  {
+    compoundId: 'coq10',
+    cautions: ['Ubiquinol form preferred over ubiquinone for absorption after ~40', 'Take with a fat-containing meal', 'May modestly lower blood pressure'],
+    avoidIf: [],
+    consultIf: ['Warfarin (CoQ10 can reduce its anticoagulant effect)', 'Blood-pressure medication', 'Chemotherapy'],
+  },
+  {
+    compoundId: 'omega3',
+    cautions: ['High doses (>3 g/day) can increase bleeding time', 'Choose third-party-tested products for oxidation and heavy metals', 'Take with food to reduce reflux / fishy aftertaste'],
+    avoidIf: ['Scheduled surgery within 1–2 weeks (bleeding risk)'],
+    consultIf: ['Blood thinners (warfarin, aspirin, clopidogrel)', 'Known fish or shellfish allergy', 'Atrial fibrillation history'],
+  },
+];
+
+export const generalSafetyGuidance = [
+  'Start one compound at a time. Add to your stack weekly to identify what your body responds to.',
+  'Bring your TNiC stack export to your physician or pharmacist before combining with prescriptions.',
+  'Pregnant, nursing, or under 18: longevity supplementation is not recommended without medical supervision.',
+  'If you experience adverse effects, stop the most recently added compound and consult a professional.',
+  'Lab testing (CBC, metabolic panel, hs-CRP) every 6–12 months is recommended for anyone on active protocols.',
+];
+
+export const outcomeMilestones = [
+  {
+    week: 'Week 1–2',
+    title: 'Foundation Phase',
+    expectations: ['Possible mild GI adjustment as body adapts', 'Subtle energy shifts — often too early for biomarker change', 'Focus on consistency, not results'],
+    realistic: true,
+  },
+  {
+    week: 'Week 4–6',
+    title: 'Early Signals',
+    expectations: ['Improved sleep quality or recovery (subjective)', 'Some users report clearer skin and reduced brain fog', 'Glutathione markers may begin shifting in responsive individuals'],
+    realistic: true,
+  },
+  {
+    week: 'Week 12',
+    title: 'Measurable Territory',
+    expectations: ['GlyNAC trials showed significant glutathione restoration at 24 weeks — early lab shifts possible at 12', 'Energy and exercise recovery often noticeably improved', 'Inflammation markers (hs-CRP) may trend downward', 'Ca-AKG human trial (PMID: 38247127) showed measurable epigenetic age reduction by week 12'],
+    realistic: true,
+  },
+  {
+    week: 'Week 24+',
+    title: 'Clinical Benchmark',
+    expectations: [
+      'GlyNAC human trials: restored glutathione, improved mitochondrial function, reduced oxidative stress at this timepoint',
+      'NAD+ restoration effects compound with consistent NMN dosing — PBMC NAD+ levels measurably elevated vs. baseline',
+      'Ca-AKG: human trial (PMID: 38247127) showed mean 8-year epigenetic age reduction — full effect consolidates at 24 weeks',
+      'Biological age estimates may show 1–3 year improvement with full protocol adherence and lifestyle pillars intact',
+      'Retest baseline labs (hs-CRP, CBC, metabolic panel, optionally GSH + NAD+ metabolites) to quantify protocol impact',
+    ],
+    realistic: true,
+  },
+];
+
+export const supplementRedFlags = [
+  { flag: 'Proprietary blends hiding doses', why: 'You cannot verify effective amounts of active ingredients', action: 'Reject any product that does not list individual compound doses' },
+  { flag: '"Clinically proven" without PMID', why: 'Marketing language without traceable evidence', action: 'Demand PubMed citation or independent third-party testing' },
+  { flag: 'Racemic ALA sold as "Alpha Lipoic Acid"', why: 'S-enantiomer is biologically inert — you get half the effective dose', action: 'Insist on R-Alpha Lipoic Acid specifically' },
+  { flag: 'NMN without purity certificate', why: 'NMN market is flooded with underdosed or contaminated products', action: 'Require COA (Certificate of Analysis) showing ≥99% purity' },
+  { flag: 'Lifespan claims from mouse-only data', why: 'Mouse lifespan extension does not guarantee human outcomes', action: 'Weight preclinical data appropriately — prefer human trial evidence' },
+  { flag: 'Stack of 20+ ingredients', why: 'Interaction risk increases; doses per ingredient are usually sub-therapeutic', action: 'Prefer focused 3–6 compound protocols with verified dosing' },
+  { flag: 'No disclosure of evidence tier', why: 'Hiding whether evidence is human or animal is a transparency failure', action: 'Only trust sources that label Tier A / B / C — or equivalent — clearly' },
+];
+
+export const gettingStartedSteps = [
+  { step: 1, title: 'Take the 3-Min Starter Quiz', desc: 'Answer three questions about your goal, age, and experience. Get a personalized stack preset and next OS step.', link: '/quiz' },
+  { step: 2, title: 'Review Your Biomarkers', desc: 'See which longevity markers are most depleted for your profile. Understand what your stack needs to target.', link: '/labs?tab=input' },
+  { step: 3, title: 'Build Your Stack', desc: 'Use the Stack Architect to toggle compounds. Watch synergy score and AM/PM dosing update in real time.', link: '/stacks' },
+  { step: 4, title: 'Check Safety & Consult', desc: 'Review contraindications in the Trust Center. Export your protocol and bring it to your physician.', link: '/trust' },
+  { step: 5, title: 'Track & Iterate', desc: 'Follow the outcomes timeline for realistic expectations. Re-scan every 90 days and adjust your stack.', link: '/learn?tab=outcomes' },
+];
+
+export const glossary = [
+  { term: 'NRF2', simple: 'A protein that turns on 200+ antioxidant and detox genes when activated.', why: 'It is the master switch for cellular defense against oxidative damage — the core of the NRF2 stack.' },
+  { term: 'Glutathione', simple: 'Your body\'s most abundant internal antioxidant, made from glycine, cysteine, and glutamate.', why: 'It depletes 10–15% per decade after age 20. Restoring it is foundational to longevity.' },
+  { term: 'NAD+', simple: 'A molecule every cell needs for energy production, DNA repair, and activating longevity genes (sirtuins).', why: 'NAD+ drops ~50% between ages 40–60. NMN is the most direct precursor to restore it.' },
+  { term: 'Hallmarks of Aging', simple: 'The 12 biological processes that drive aging — from mitochondrial decline to chronic inflammation.', why: 'TNiC maps every compound to specific hallmarks so you know exactly what each supplement targets.' },
+  { term: 'Bioavailability', simple: 'How much of a compound actually reaches your bloodstream and tissues after you take it.', why: 'A 500mg pill with 20% bioavailability delivers less than a 200mg pill with 90% bioavailability.' },
+  { term: 'Inflammaging', simple: 'Chronic low-grade inflammation that increases with age and damages tissues silently.', why: 'Measured by hs-CRP. Reducing inflammaging is as important as boosting antioxidants.' },
+  { term: 'Sirtuins', simple: 'Longevity-associated enzymes that repair DNA, regulate metabolism, and control inflammation.', why: 'They require NAD+ to function. NMN + Resveratrol work together to activate this pathway.' },
+  { term: 'Biological Age', simple: 'How old your cells act — which can differ from your birthday age.', why: 'Two people at 50 can have biological ages of 42 and 58. The goal is to widen that gap in your favor.' },
+  { term: 'Synergy', simple: 'When two compounds together produce greater effect than either alone.', why: 'TNiC\'s synergy score measures this — random stacking wastes money and can cause interactions.' },
+  { term: 'Evidence Tier', simple: 'TNiC\'s A/B/C grading of how strong the human research is behind a compound.', why: 'Tier A means human trials. Tier C means mouse-only. We never hide the difference.' },
+  { term: 'Senolytics', simple: 'Compounds that selectively destroy senescent (zombie) cells that accumulate with age and secrete inflammatory signals.', why: 'Senescent cells drive the SASP inflammatory cascade across multiple hallmarks. NMN and resveratrol have senolytic-adjacent effects — and dedicated senolytics (dasatinib+quercetin) entered human trials in 2020 (PMID: 32854868).' },
+  { term: 'mTOR', simple: 'A kinase that acts as a cellular growth sensor — when inhibited, cells shift from growth mode into repair, recycling, and autophagy.', why: 'mTOR overactivation with age drives cellular aging. Rapamycin inhibits it; caloric restriction, resveratrol, and exercise partially mimic this effect — one reason fasting synergizes with longevity stacks.' },
+  { term: 'AMPK', simple: 'An energy-sensing enzyme activated when ATP is low — it promotes fat burning, mitochondrial biogenesis, and autophagy.', why: 'AMPK is the metabolic counterpart to mTOR. When AMPK is high and mTOR is low, cells enter a longevity-promoting maintenance mode. Resveratrol and exercise activate AMPK — a key reason they synergize.' },
+  { term: 'Epigenetic Clock', simple: 'A lab test measuring DNA methylation patterns across thousands of sites to calculate your true cellular age.', why: 'Epigenetic clocks (Horvath, GrimAge, DunedinPACE) are the most accurate biological age measurement available to consumers. Ca-AKG showed mean 8-year clock age reduction in a 2024 human trial (PMID: 38247127).' },
+  { term: 'Healthspan', simple: 'The portion of life spent in good health, free from chronic disease or disability — distinct from lifespan (total years alive).', why: 'TNiC optimizes for healthspan, not maximum lifespan. The target is more quality years in your 60s, 70s, and beyond — not just extending decline.' },
+  { term: 'Autophagy', simple: 'The cellular self-cleaning process that breaks down and recycles damaged proteins, organelles, and pathogens.', why: 'Autophagy declines with age, allowing cellular debris to accumulate. It is activated by fasting, exercise, rapamycin, and resveratrol — which is why fasted morning dosing of resveratrol is recommended in the TNiC protocol.' },
+  { term: 'Telomeres', simple: 'Protective caps at the ends of chromosomes that shorten each time a cell divides, acting as a cellular lifespan counter.', why: 'Telomere length correlates with biological age and disease risk. Critically, oxidative stress accelerates telomere shortening — which is why GlyNAC and sulforaphane indirectly protect telomere integrity by reducing the oxidative burden on dividing cells.' },
+  { term: 'Mitophagy', simple: 'A specific form of autophagy that selectively removes damaged or dysfunctional mitochondria, replacing them with healthy ones.', why: 'Dysfunctional mitochondria that escape mitophagy leak reactive oxygen species and trigger inflammation. NMN supports mitophagy via SIRT1/SIRT3 activation; Ca-AKG supports it via TCA cycle optimization. Mitophagy is why you cannot \"energy boost\" your way out of mitochondrial dysfunction — you need to remove the damaged units first.' },
+  { term: 'SASP', simple: 'Senescence-Associated Secretory Phenotype — the inflammatory cocktail of cytokines, proteases, and growth factors secreted by senescent (zombie) cells.', why: 'SASP is why a small number of senescent cells can damage a large surrounding tissue area. The SASP cytokines (IL-6, IL-8, MMP-3) drive chronic inflammation, disrupt tissue structure, and signal neighboring cells to senesce. Clearing senescent cells (senolytics) or suppressing SASP (senostatics) is the goal of dasatinib+quercetin protocols. NMN and resveratrol have partial SASP-suppressive effects via NAD+/SIRT1.' },
+  { term: 'Oxidative Stress', simple: 'An imbalance between reactive oxygen species (free radicals) produced by metabolism and the antioxidant systems that neutralize them.', why: 'Oxidative stress is the molecular driver of aging across virtually every hallmark — it damages DNA, cross-links proteins, oxidizes lipids in cell membranes, and accelerates telomere shortening. Glutathione is the primary internal quencher; NRF2 is the genetic switch that upregulates the entire antioxidant defense network. This is why GlyNAC + sulforaphane form the oxidative stress reduction core of the TNiC NRF2 Defense preset.' },
+];
+
+export const consumerFAQ = [
+  {
+    id: 'faq1',
+    category: 'getting-started' as const,
+    question: 'Do I need blood tests before starting?',
+    answer: 'Not required to begin learning and building a stack on TNiC. However, we strongly recommend baseline labs (CBC, metabolic panel, hs-CRP, and optionally glutathione or NAD+ metabolites) within your first 90 days. This gives you real data to compare against our projections and helps your physician monitor safely.',
+  },
+  {
+    id: 'faq2',
+    category: 'safety' as const,
+    question: 'Is TNiC safe for everyone?',
+    answer: 'No supplement protocol is universal. Pregnant/nursing individuals, people under 18, those on chemotherapy, blood thinners, or with kidney/liver disease must consult a physician first. TNiC provides per-compound safety data in the Trust Center — use it before starting anything.',
+  },
+  {
+    id: 'faq3',
+    category: 'science' as const,
+    question: 'How is TNiC different from just buying supplements on Amazon?',
+    answer: 'Amazon sells products. TNiC sells intelligence. Every compound is evidence-graded, PubMed-cited, dosed from clinical trials, checked for synergies and interactions, and mapped to specific aging hallmarks. You are not guessing — you are following a mechanistic protocol.',
+  },
+  {
+    id: 'faq4',
+    category: 'products' as const,
+    question: 'Does TNiC sell its own supplements?',
+    answer: 'No. TNiC is an independent intelligence platform. We curate third-party products that meet our evidence and bioavailability standards. Picks link to manufacturer sites and may include an affiliate token — TNiC may earn a commission on purchases at no extra cost to you. Commission never influences which products are listed or their evidence tier.',
+  },
+  {
+    id: 'faq5',
+    category: 'science' as const,
+    question: 'What does the biological age number actually mean?',
+    answer: 'It is a modeled estimate based on your lifestyle inputs and defense pathway status — not a laboratory diagnostic. It shows directional trend, not clinical certainty. For authoritative biological age, pair TNiC guidance with epigenetic clocks (TruDiagnostic, GlycanAge) or clinical biomarker panels.',
+  },
+  {
+    id: 'faq6',
+    category: 'getting-started' as const,
+    question: 'How long until I feel or see results?',
+    answer: 'Honest answer: subtle energy and sleep changes may appear in 2–4 weeks. Measurable biomarker shifts typically require 12–24 weeks of consistent dosing. GlyNAC human trials showed significant glutathione restoration at 24 weeks. Anyone promising overnight results is not credible.',
+  },
+  {
+    id: 'faq7',
+    category: 'safety' as const,
+    question: 'Can I take TNiC stacks with my medications?',
+    answer: 'Potentially — but you must check. NMN may interact with metformin. Resveratrol affects blood clotting. Sulforaphane may affect thyroid medication absorption. Export your stack protocol and review it with your pharmacist or physician before combining with any prescription.',
+  },
+  {
+    id: 'faq8',
+    category: 'products' as const,
+    question: 'Why 14 compounds and not dozens like other sites?',
+    answer: 'More is not better. Each additional compound increases interaction risk and usually means sub-therapeutic doses. TNiC curates 14 evidence-graded compounds — every one with PubMed-cited human data — selected for the strongest mechanistic coverage across all 12 hallmarks. Quality and synergy beat quantity. A stack of 30 unverified compounds with zero clinical evidence is not a protocol — it is a guess.',
+  },
+  {
+    id: 'faq9',
+    category: 'science' as const,
+    question: 'What is an Evidence Tier A vs B vs C?',
+    answer: 'Tier A: human clinical trial with measured outcomes. Tier B: strong mechanism + emerging human pharmacokinetic data. Tier C: preclinical (animal/cell) only. TNiC builds stacks primarily from Tier A and B compounds and labels everything transparently.',
+  },
+  {
+    id: 'faq10',
+    category: 'getting-started' as const,
+    question: 'I\'m new to biohacking. Where do I start?',
+    answer: 'Follow the 5-step path in the Learn hub (/learn): (1) Run Defense Scan, (2) Review biomarkers, (3) Build your stack, (4) Check safety, (5) Track over 90 days. You do not need to understand NRF2 on day one — the tools guide you.',
+  },
+  {
+    id: 'faq11',
+    category: 'safety' as const,
+    question: 'What red flags should I watch for in supplement brands?',
+    answer: 'Proprietary blends hiding doses, lifespan claims without PubMed links, racemic ALA marketed as premium, NMN without purity certificates, and mega-stacks of 20+ ingredients. TNiC lists all red flags in the Learn hub (/learn) with specific actions to take.',
+  },
+  {
+    id: 'faq12',
+    category: 'products' as const,
+    question: 'How often does TNiC update recommendations?',
+    answer: 'Continuously. When new peer-reviewed trials publish, evidence tiers are re-evaluated. The Research Intel feed surfaces breaking longevity science. Major protocol changes are reflected in the Stack Architect and noted in the Trust Center.',
+  },
+  {
+    id: 'faq13',
+    category: 'safety' as const,
+    question: 'Is it safe to combine all 9 TNiC compounds at once?',
+    answer: 'Starting all 9 simultaneously is not recommended. Ramp in one compound per week so you can attribute any GI or metabolic change to a specific compound. Tier B additions (taurine, spermidine, pterostilbene) follow the same ramp rule. High-priority interactions: resveratrol and pterostilbene affect platelet function — avoid if on blood thinners. R-ALA may amplify insulin sensitivity — monitor glucose if diabetic. NMN and rapamycin should not be self-combined without physician oversight. Use the Stack Architect synergy and warning panel.',
+  },
+  {
+    id: 'faq14',
+    category: 'science' as const,
+    question: 'What is NRF2 and why does TNiC build around it?',
+    answer: 'NRF2 is a transcription factor that switches on 200+ cytoprotective genes when activated. Three TNiC compounds target it: sulforaphane activates it via KEAP1 modification, GlyNAC supplies glutathione precursors it upregulates, and R-ALA recycles oxidized products. Together they form the NRF2 Defense Triad.',
+  },
+  {
+    id: 'faq15',
+    category: 'products',
+    question: 'Why does delivery system (liposomal, phytosome, standard) matter?',
+    answer: 'Many compounds are degraded before absorption. Liposomal delivery encapsulates compounds in phospholipid vesicles. Phytosomes dramatically improve resveratrol and sulforaphane bioavailability. Standard capsules work for water-soluble compounds like NMN and Ca-AKG. R-ALA should be taken with fat for best absorption.',
+  },
+  {
+    id: 'faq16',
+    category: 'safety',
+    question: 'What is rapamycin and should I consider it?',
+    answer: 'Rapamycin is an mTOR inhibitor that has extended lifespan in every model organism tested and improved immune function in the first human pilot trial (PMID: 36929855). It is a prescription immunosuppressant with real risks. TNiC does not recommend self-prescribing it. Your TNiC stack provides overlapping mechanistic benefits without the prescription risk.',
+  },
+  {
+    id: 'faq17',
+    category: 'science',
+    question: 'Can cold therapy or sauna replace supplement stacks?',
+    answer: 'No. Cold exposure activates cold-shock proteins and norepinephrine. Sauna upregulates heat shock proteins. Neither directly restores NAD+ or rebuilds glutathione. Treat thermal stress as a synergistic adjunct — not a replacement for mechanistic substrate restoration.',
+  },
+  {
+    id: 'faq18',
+    category: 'science',
+    question: 'What is an epigenetic clock and how do I get tested?',
+    answer: 'Epigenetic clocks measure DNA methylation patterns to calculate biological age. TruDiagnostic ($300-500) offers the most comprehensive consumer panel including DunedinPACE. TNiC\'s biological age estimate is a lifestyle model — useful for directional feedback before a lab test.',
+  },
+  {
+    id: 'faq19',
+    category: 'safety',
+    question: 'How much does sleep actually affect biological aging?',
+    answer: 'A 2024 SLEEP Journal study (PMID: 38593841) found adults under 6 hours per night accumulated 1.8 extra years of epigenetic aging annually vs 7-9 hour sleepers. Sleep is when SIRT1 and PARP peak, mitophagy clears damaged mitochondria, and the glymphatic system flushes amyloid. Treat sleep as non-negotiable.',
+  },
+  {
+    id: 'faq20',
+    category: 'products',
+    question: 'Should I take these supplements every day or cycle them?',
+    answer: 'Daily dosing matches the clinical evidence base. GlyNAC trials used 24-week continuous protocols. NMN and Ca-AKG require steady-state substrate availability. Sulforaphane can rotate with cruciferous diet days. Unless experiencing side effects, daily dosing is recommended.',
+  },
+  {
+    id: 'faq21',
+    category: 'science',
+    question: 'Does NMN actually work? What does the clinical evidence show?',
+    answer: 'Yes. A 2022 GeroScience trial (PMID: 36482258) confirmed NMN safely raises blood NAD+ in adults. A 2021 Science study (PMID: 33888596) showed NMN improved muscle insulin sensitivity in prediabetic women. Tier A evidence; real effects; appropriately modest claims about what NMN can and cannot do.',
+  },
+  {
+    id: 'faq22',
+    category: 'science',
+    question: 'What is the difference between NMN and NR for NAD+ restoration?',
+    answer: 'NMN is one step closer to NAD+ in biosynthesis and can enter cells via the Slc12a8 transporter. NR requires conversion to NMN first. NMN has the Yoshino 2021 Science study showing muscle metabolic effects (PMID: 33888596). TNiC rates NMN as Tier A and NR as Tier B. Consistency of dosing matters more than the choice between them.',
+  },
+  {
+    id: 'faq23',
+    category: 'science',
+    question: 'What natural foods are highest in sulforaphane?',
+    answer: 'Broccoli sprouts contain 10-100x more glucoraphanin than mature broccoli. Cooking above 70C destroys myrosinase, the enzyme needed to produce sulforaphane. Eat sprouts raw or steam under 3 minutes. Add mustard powder to cooked broccoli to restore exogenous myrosinase. TNiC products use standardized glucoraphanin with active myrosinase.',
+  },
+  {
+    id: 'faq24',
+    category: 'safety',
+    question: 'Is Ca-AKG safe? What are the known side effects of calcium alpha-ketoglutarate?',
+    answer: 'The 2024 Aging Cell trial (PMID: 38247127) — 12 weeks in middle-aged adults — reported no serious adverse events. Most common: mild transient GI discomfort in the first 1-2 weeks. Requires monitoring in kidney disease. Start at 500mg and titrate up over 2 weeks to minimize adjustment.',
+  },
+  {
+    id: 'faq25',
+    category: 'products',
+    question: 'How do I read a Certificate of Analysis (COA) for supplements?',
+    answer: 'Check: (1) Purity >= 98% for active compound. (2) Identity test via HPLC or NMR. (3) Heavy metals below USP limits. (4) Microbial testing with pathogen absence. (5) Batch number matching your product. (6) ISO/IEC 17025-accredited lab. Red flags: COA on request only, missing batch number, or unverifiable lab.',
+  },
+  {
+    id: 'faq26',
+    category: 'science' as const,
+    question: 'Why is taking glutathione directly less effective than GlyNAC?',
+    answer: 'Oral glutathione is cleaved in the gut before absorption — you absorb the component amino acids, not the intact tripeptide. GlyNAC supplies glycine and N-acetylcysteine, the two rate-limiting precursors the body uses to synthesize glutathione intracellularly. Three human RCTs confirm intracellular glutathione is rebuilt at 24 weeks, something direct glutathione supplementation fails to achieve at equivalent doses.',
+  },
+  {
+    id: 'faq27',
+    category: 'science' as const,
+    question: 'Does intermittent fasting synergize with longevity supplement stacks?',
+    answer: 'Yes — with timing discipline. Fasting activates AMPK and suppresses mTORC1, priming autophagy. Time NMN and Ca-AKG to your eating window (not fasted) since they require substrate availability. Sulforaphane and spermidine can be taken fasted. R-ALA needs fat co-ingestion. Avoid dosing resveratrol with fatty meals — it competes with SIRT1 activation that fasting has already primed.',
+  },
+  {
+    id: 'faq28',
+    category: 'safety' as const,
+    question: 'Why does TNiC not include metformin in the standard stack?',
+    answer: 'Metformin is a biguanide prescription drug — not a supplement. Though the TAME trial (Targeting Aging with Metformin) is underway, evidence for longevity outcomes in non-diabetic adults remains incomplete. Metformin also blocks the muscle hypertrophy response to exercise via AMPK interference — a significant tradeoff. TNiC provides overlapping AMPK-supportive mechanisms (Ca-AKG, R-ALA, NMN) without the prescription risk.',
+  },
+  {
+    id: 'faq29',
+    category: 'science' as const,
+    question: 'What exactly are senescent cells and why do they matter?',
+    answer: 'Senescent cells are damaged cells that stop dividing but refuse to die. They secrete the SASP (senescence-associated secretory phenotype) — a cocktail of inflammatory cytokines (IL-6, IL-8, MMP-3) that damages neighboring tissue. Senescent cell accumulation correlates with every major age-related disease. TNiC maps senolytic-adjacent compounds (spermidine, resveratrol, NMN) to the senescence hallmark in Stack Architect.',
+  },
+  {
+    id: 'faq30',
+    category: 'getting-started' as const,
+    question: 'What are the most common mistakes people make when starting a longevity protocol?',
+    answer: 'The big five: (1) Starting 5+ compounds simultaneously — you cannot attribute effects or side effects. (2) Using unverified brands with no third-party COA. (3) Ignoring drug interactions — especially resveratrol with blood thinners. (4) Expecting results in under 8 weeks — biology is slow. (5) Not tracking biomarkers — you are flying blind without baseline labs. TNiC\'s Stack Architect and Lab Hub are designed to prevent all five.',
+  },
+  {
+    id: 'faq31',
+    category: 'safety' as const,
+    question: 'Does TNiC store or share my health data?',
+    answer: 'No. TNiC is built on a local-first architecture. Your quiz results, biomarker logs, stack configurations, and biological age inputs are stored in your own browser — never transmitted to TNiC servers or third parties. There is no account system, no user database, and no data monetization. Clearing your browser storage erases your data permanently. This is a deliberate design choice, not a marketing claim.',
+  },
+  {
+    id: 'faq32',
+    category: 'science' as const,
+    question: 'How does the TNiC quiz generate a personalized stack preset?',
+    answer: 'The quiz maps three inputs — primary goal (learn the science, cellular defense, mitochondrial energy, full optimization, longevity/healthspan, or cardio-metabolic health), age range, and supplement experience — to one of six mechanistic presets: Starter, NRF2 Defense, Mito-NAD+, Full Hybrid, Longevity Pro (senolytic focus), or Cardio-Metabolic (AMPK/lipid focus). Each preset is a curated subset drawn from 14 evidence-graded compounds optimized for synergy coverage across the relevant hallmarks. No black-box algorithm — every mapping is transparent in the methodology section.',
+  },
+  {
+    id: 'faq33',
+    category: 'science' as const,
+    question: 'Can longevity supplements reverse aging or just slow it?',
+    answer: 'Honest answer: current evidence supports slowing measurable aging biomarkers and, in some cases, reversing specific deficits — not reversing aging wholesale. GlyNAC restored glutathione and mitochondrial function to levels resembling younger adults. Ca-AKG reduced epigenetic age by ~8 years in one trial. NMN restored muscle NAD+ metabolism. These are meaningful, measurable changes in specific mechanisms — not the return of youth.',
+  },
+  {
+    id: 'faq34',
+    category: 'products' as const,
+    question: 'What are the head-to-head comparison tables and how were they built?',
+    answer: 'TNiC\'s comparison tables are neutral, PMID-anchored side-by-side analyses across key decision dimensions — mechanism, bioavailability, human RCT evidence, timing, cost, and stack synergy. Each row cites a specific published study. There are no sponsored results, undisclosed affiliate arrangements, or score inflation. Current tables: NMN vs NR, GlyNAC vs liposomal glutathione, Resveratrol vs Pterostilbene, Berberine vs Metformin, Urolithin A vs CoQ10, NMN vs Spermidine, and others. Find them at /library/compare.',
+  },
+  {
+    id: 'faq35',
+    category: 'products' as const,
+    question: 'How does the TNiC buyer guide work — and why does it not recommend specific brands?',
+    answer: 'Each compound in the library has a buyer guide that lists: (1) required form on the label (e.g., "ubiquinol" not "CoQ10" without form disclosure); (2) COA demands — the specific assays to request from any manufacturer; (3) evidence-anchored dose range matched to the trial doses that produced results; and (4) red flags that disqualify a product immediately. TNiC earns zero revenue from products. The buyer guide is an intelligence checklist so you can evaluate any brand against objective criteria — not a product recommendation that could be biased by undisclosed compensation.',
+  },
+];

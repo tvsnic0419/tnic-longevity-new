@@ -1,0 +1,1 @@
+export { EvidenceBadge as default, EvidenceBadge } from '@/components/trust/EvidenceBadge';

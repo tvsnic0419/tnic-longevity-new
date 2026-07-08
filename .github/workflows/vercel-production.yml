@@ -1,0 +1,75 @@
+name: Vercel Production Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: vercel-production-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate deployment credentials
+        shell: bash
+        run: |
+          if [ -n "$VERCEL_DEPLOY_HOOK_URL" ]; then
+            echo "Using Vercel deploy hook."
+            exit 0
+          fi
+
+          missing=()
+          [ -z "$VERCEL_TOKEN" ] && missing+=("VERCEL_TOKEN")
+          [ -z "$VERCEL_ORG_ID" ] && missing+=("VERCEL_ORG_ID")
+          [ -z "$VERCEL_PROJECT_ID" ] && missing+=("VERCEL_PROJECT_ID")
+
+          if [ "${#missing[@]}" -gt 0 ]; then
+            echo "::error::Missing Vercel deployment secret(s): ${missing[*]}. Add either VERCEL_DEPLOY_HOOK_URL, or all of VERCEL_TOKEN, VERCEL_ORG_ID, and VERCEL_PROJECT_ID."
+            exit 1
+          fi
+
+      - name: Trigger Vercel deploy hook
+        if: env.VERCEL_DEPLOY_HOOK_URL != ''
+        shell: bash
+        run: |
+          curl --fail --silent --show-error --request POST "$VERCEL_DEPLOY_HOOK_URL"
+
+      - name: Setup Node
+        if: env.VERCEL_DEPLOY_HOOK_URL == ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        if: env.VERCEL_DEPLOY_HOOK_URL == ''
+        run: npm ci
+
+      - name: Link Vercel project
+        if: env.VERCEL_DEPLOY_HOOK_URL == ''
+        shell: bash
+        run: |
+          mkdir -p .vercel
+          printf '{"orgId":"%s","projectId":"%s"}\n' "$VERCEL_ORG_ID" "$VERCEL_PROJECT_ID" > .vercel/project.json
+
+      - name: Pull Vercel environment
+        if: env.VERCEL_DEPLOY_HOOK_URL == ''
+        run: npx vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+
+      - name: Build for Vercel
+        if: env.VERCEL_DEPLOY_HOOK_URL == ''
+        run: npx vercel build --prod --token="$VERCEL_TOKEN"
+
+      - name: Deploy to Vercel production
+        if: env.VERCEL_DEPLOY_HOOK_URL == ''
+        run: npx vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"

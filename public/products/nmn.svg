@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 400" fill="none">
+  <defs>
+    <linearGradient id="nmn-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#312e81"/>
+    </linearGradient>
+    <linearGradient id="nmn-bottle" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#6d28d9"/>
+    </linearGradient>
+  </defs>
+  <rect width="320" height="400" rx="24" fill="url(#nmn-bg)"/>
+  <ellipse cx="160" cy="360" rx="70" ry="12" fill="#000" fill-opacity="0.25"/>
+  <rect x="118" y="72" width="84" height="28" rx="8" fill="#1e293b" stroke="#a78bfa" stroke-width="2"/>
+  <path d="M130 100 L130 120 Q130 130 140 130 L180 130 Q190 130 190 120 L190 100 Z" fill="#334155"/>
+  <rect x="105" y="130" width="110" height="210" rx="18" fill="url(#nmn-bottle)" stroke="#c4b5fd" stroke-width="2"/>
+  <rect x="125" y="165" width="70" height="120" rx="10" fill="#f5f3ff" fill-opacity="0.95"/>
+  <text x="160" y="200" text-anchor="middle" font-family="system-ui,sans-serif" font-size="28" font-weight="800" fill="#5b21b6">NMN</text>
+  <text x="160" y="228" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="600" fill="#6d28d9">250–500 mg</text>
+  <text x="160" y="248" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#7c3aed">NAD+ Precursor</text>
+  <circle cx="160" cy="48" r="18" fill="#a78bfa" fill-opacity="0.2" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="160" y="53" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#a78bfa">A</text>
+</svg>
