@@ -43,7 +43,6 @@ export interface QuizRecord {
   completedAt: string;
 }
 
-const DEFAULT_STACK = stackPresets.starter.ids;
 
 export interface Profile {
   age: number;
@@ -105,7 +104,10 @@ function readStackFromUrl(): string[] | null {
 }
 
 export function PlatformProvider({ children }: { children: ReactNode }) {
-  const [selected, setSelectedState] = useState<string[]>([...DEFAULT_STACK]);
+  // First-run visitors start with a clean slate — no pre-built stack, no fake
+  // synergy score or hallmark coverage. State is populated only from a shared
+  // URL or the visitor's own saved data during hydration below.
+  const [selected, setSelectedState] = useState<string[]>([]);
   const [saved, setSaved] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const [profile, setProfileState] = useState<Profile>(DEFAULT_PROFILE);
@@ -379,7 +381,7 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
 
   const handlePurgeAll = useCallback(() => {
     purgeAllHealthData();
-    setSelectedState([...DEFAULT_STACK]);
+    setSelectedState([]);
     setProfileState(DEFAULT_PROFILE);
     setLabs([]);
     setChecklist([]);
