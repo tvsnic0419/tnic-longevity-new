@@ -37,7 +37,7 @@ function applyTheme(resolved: 'dark' | 'light') {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<ThemeMode>('system');
+  const [theme, setThemeState] = useState<ThemeMode>('dark');
   const [resolved, setResolved] = useState<'dark' | 'light'>('dark');
 
   const resolve = useCallback((mode: ThemeMode) => {
@@ -49,7 +49,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY) as ThemeMode | null;
-      const initial = stored ?? 'system';
+      // Dark-first: the homepage and hubs are designed dark. Match ThemeScript,
+      // which only honors an explicit stored 'light'. Absent a saved choice we
+      // default to dark rather than following the OS, which would flip the
+      // dark-designed surfaces to an unreadable light rendering.
+      const initial = stored ?? 'dark';
       setThemeState(initial);
       resolve(initial);
     } catch {
