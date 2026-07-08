@@ -8,6 +8,8 @@ import {
   ClipboardList,
   Lightbulb,
   OctagonX,
+  ListTree,
+  BookMarked,
 } from 'lucide-react';
 import type { EvidenceTier } from '@/lib/types';
 import type { HallmarkVisualType } from '@/lib/hallmark-visuals';
@@ -19,12 +21,188 @@ import {
   LifestyleDecisionTree,
   parseDecisionNodes,
 } from '@/components/library/LifestyleDecisionTree';
+import { citationRegistry } from '@/lib/trust';
 
-function renderInline(text: string) {
-  return text
+const PMID_PATTERN = /\bPMID:?\s?(\d{7,8})\b/g;
+const LINK_CLASS =
+  'text-accent-cyan hover:text-accent-emerald underline underline-offset-2 decoration-accent-cyan/40 hover:decoration-accent-emerald transition-colors';
+const PMID_CLASS =
+  'text-accent-emerald hover:text-accent-cyan font-medium no-underline hover:underline underline-offset-2';
+
+function pubmedUrl(pmid: string): string {
+  return `https://pubmed.ncbi.nlm.nih.gov/${pmid}/`;
+}
+
+/**
+ * Inline markdown → HTML. Handles links and PMID citations in addition to
+ * emphasis/code. Links are tokenized out first so later regexes (emphasis,
+ * PMID auto-linking) never rewrite characters inside an href.
+ */
+function renderInline(text: string): string {
+  const tokens: string[] = [];
+  const stash = (html: string): string => {
+    tokens.push(html);
+    return `\uE000T${tokens.length - 1}\uE000`;
+  };
+
+  let out = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m, label: string, href: string) => {
+    const external = /^https?:\/\//.test(href);
+    const rel = external ? ' target="_blank" rel="noopener noreferrer"' : '';
+    return stash(`<a href="${href}"${rel} class="${LINK_CLASS}">${label}</a>`);
+  });
+
+  out = out
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
     .replace(/`(.+?)`/g, '<code class="text-accent-cyan bg-muted/50 px-1 rounded text-xs">$1</code>');
+
+  out = out.replace(PMID_PATTERN, (_m, id: string) =>
+    stash(
+      `<a href="${pubmedUrl(id)}" target="_blank" rel="noopener noreferrer" class="${PMID_CLASS}">PMID ${id}</a>`,
+    ),
+  );
+
+  return out.replace(/\uE000T(\d+)\uE000/g, (_m, i: string) => tokens[Number(i)] ?? '');
+}
+
+/** Strip inline markdown (links/emphasis/code) down to its visible text. */
+function stripMarkdown(text: string): string {
+  return text
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/\*(.+?)\*/g, '$1')
+    .replace(/`(.+?)`/g, '$1');
+}
+
+function slugify(text: string): string {
+  return stripMarkdown(text)
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+}
+
+interface Heading {
+  id: string;
+  text: string;
+  level: 2 | 3;
+}
+
+/** Collect h2/h3 headings from prose blocks (directive bodies are excluded). */
+function extractHeadings(content: string): Heading[] {
+  const headings: Heading[] = [];
+  const seen = new Map<string, number>();
+  let insideDirective = false;
+
+  for (const raw of content.split('\n')) {
+    if (raw.startsWith(':::')) {
+      insideDirective = !insideDirective;
+      continue;
+    }
+    if (insideDirective) continue;
+
+    const match = raw.match(/^(#{2,3})\s+(.*)$/);
+    if (!match) continue;
+    const level = match[1].length as 2 | 3;
+    const rawText = match[2].trim();
+    let id = slugify(rawText);
+    const count = seen.get(id) ?? 0;
+    seen.set(id, count + 1);
+    if (count > 0) id = `${id}-${count}`;
+    headings.push({ id, text: stripMarkdown(rawText), level });
+  }
+  return headings;
+}
+
+/** Ordered, de-duplicated PMIDs cited anywhere in the prose or directives. */
+function extractPmids(content: string): string[] {
+  const seen = new Set<string>();
+  const ordered: string[] = [];
+  for (const match of content.matchAll(PMID_PATTERN)) {
+    const pmid = match[1];
+    if (!seen.has(pmid)) {
+      seen.add(pmid);
+      ordered.push(pmid);
+    }
+  }
+  return ordered;
+}
+
+const citationByPmid = new Map(citationRegistry.map((c) => [c.pmid, c]));
+
+function TableOfContents({ headings }: { headings: Heading[] }) {
+  return (
+    <nav
+      aria-label="On this page"
+      className="not-prose mb-8 rounded-xl border border-border bg-muted/20 p-5"
+    >
+      <div className="mb-3 flex items-center gap-2">
+        <ListTree className="h-4 w-4 text-accent-cyan" aria-hidden="true" />
+        <p className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+          On this page
+        </p>
+      </div>
+      <ul className="space-y-1.5">
+        {headings.map((h) => (
+          <li key={h.id} className={h.level === 3 ? 'ml-4' : ''}>
+            <a
+              href={`#${h.id}`}
+              className="focus-ring rounded text-sm text-muted-foreground transition-colors hover:text-accent-cyan"
+            >
+              {h.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
+function ReferencesSection({ pmids }: { pmids: string[] }) {
+  return (
+    <section aria-labelledby="references-heading" className="mt-12 border-t border-border pt-6">
+      <div className="mb-4 flex items-center gap-2">
+        <BookMarked className="h-4 w-4 text-accent-emerald" aria-hidden="true" />
+        <h2 id="references-heading" className="text-lg font-semibold text-foreground">
+          References
+        </h2>
+      </div>
+      <ol className="list-decimal space-y-3 pl-5 text-sm text-muted-foreground">
+        {pmids.map((pmid) => {
+          const cite = citationByPmid.get(pmid);
+          return (
+            <li key={pmid} className="leading-relaxed">
+              {cite ? (
+                <>
+                  {cite.authors ? (
+                    <span>{cite.authors.replace(/\.\s*$/, '')}. </span>
+                  ) : null}
+                  <span className="text-foreground/90">
+                    {cite.title.replace(/\.\s*$/, '')}.
+                  </span>{' '}
+                  <em>{cite.journal}</em>
+                  {cite.year ? <span> ({cite.year})</span> : null}.{' '}
+                </>
+              ) : null}
+              <a
+                href={pubmedUrl(pmid)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={PMID_CLASS}
+              >
+                PMID {pmid}
+              </a>
+            </li>
+          );
+        })}
+      </ol>
+      <p className="mt-4 text-xs text-muted-foreground/70">
+        Links open PubMed. TNiC does not sell supplements; citations support education, not medical
+        advice.
+      </p>
+    </section>
+  );
 }
 
 function parseAttrs(attrString: string): Record<string, string> {
@@ -333,19 +511,27 @@ function renderMarkdownBlock(content: string, blockKey: number) {
     }
 
     if (trimmed.startsWith('## ')) {
+      const text = trimmed.slice(3);
       elements.push(
-        <h2 key={key} className="text-xl font-bold mt-8 mb-3 text-foreground">
-          {trimmed.slice(3)}
-        </h2>,
+        <h2
+          key={key}
+          id={slugify(text)}
+          className="scroll-mt-24 text-xl font-bold mt-8 mb-3 text-foreground"
+          dangerouslySetInnerHTML={{ __html: renderInline(text) }}
+        />,
       );
       return;
     }
 
     if (trimmed.startsWith('### ')) {
+      const text = trimmed.slice(4);
       elements.push(
-        <h3 key={key} className="text-lg font-semibold mt-6 mb-2 text-foreground">
-          {trimmed.slice(4)}
-        </h3>,
+        <h3
+          key={key}
+          id={slugify(text)}
+          className="scroll-mt-24 text-lg font-semibold mt-6 mb-2 text-foreground"
+          dangerouslySetInnerHTML={{ __html: renderInline(text) }}
+        />,
       );
       return;
     }
@@ -375,9 +561,8 @@ function renderMarkdownBlock(content: string, blockKey: number) {
                       key={ci}
                       scope="col"
                       className="py-2 px-3 text-left text-[10px] font-mono text-muted-foreground uppercase"
-                    >
-                      {cell}
-                    </th>
+                      dangerouslySetInnerHTML={{ __html: renderInline(cell) }}
+                    />
                   ))}
                 </tr>
               </thead>
@@ -388,9 +573,11 @@ function renderMarkdownBlock(content: string, blockKey: number) {
                 return (
                   <tr key={ri} className="border-b border-border">
                     {cells.map((cell, ci) => (
-                      <td key={ci} className="py-2 px-3 text-left text-muted-foreground">
-                        {cell}
-                      </td>
+                      <td
+                        key={ci}
+                        className="py-2 px-3 text-left text-muted-foreground"
+                        dangerouslySetInnerHTML={{ __html: renderInline(cell) }}
+                      />
                     ))}
                   </tr>
                 );
@@ -438,7 +625,15 @@ function renderMarkdownBlock(content: string, blockKey: number) {
   return <>{elements}</>;
 }
 
-export function MdxRenderer({ content }: { content: string }) {
+export function MdxRenderer({
+  content,
+  showToc = true,
+  showReferences = true,
+}: {
+  content: string;
+  showToc?: boolean;
+  showReferences?: boolean;
+}) {
   const blocks = parseBlocks(content);
   const elements: ReactNode[] = [];
 
@@ -450,5 +645,14 @@ export function MdxRenderer({ content }: { content: string }) {
     }
   });
 
-  return <article className="max-w-none">{elements}</article>;
+  const headings = showToc ? extractHeadings(content) : [];
+  const pmids = showReferences ? extractPmids(content) : [];
+
+  return (
+    <article className="max-w-none">
+      {headings.length >= 3 && <TableOfContents headings={headings} />}
+      {elements}
+      {pmids.length > 0 && <ReferencesSection pmids={pmids} />}
+    </article>
+  );
 }
