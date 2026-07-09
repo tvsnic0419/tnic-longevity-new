@@ -69,6 +69,8 @@ export function Nav() {
   }, [mobileOpen]);
 
   useEffect(() => {
+    // Close the mobile menu on route change, including back/forward navigation.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMobileOpen(false);
   }, [pathname]);
 

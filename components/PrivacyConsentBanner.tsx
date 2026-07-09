@@ -12,6 +12,9 @@ export function PrivacyConsentBanner() {
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
+    // Client-only: sessionStorage is unavailable during SSR, so the dismissed
+    // flag can only be read after mount.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDismissed(sessionStorage.getItem(DISMISS_KEY) === '1');
   }, []);
 

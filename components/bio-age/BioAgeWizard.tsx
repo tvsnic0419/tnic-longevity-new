@@ -95,6 +95,9 @@ function AgeControl({
   const [draft, setDraft] = useState(String(value));
 
   useEffect(() => {
+    // Keep the editable draft in sync when the value changes externally — e.g.
+    // the range slider or the +/- steppers below update the numeric value.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDraft(String(value));
   }, [value]);
 
