@@ -22,10 +22,13 @@ export function HallmarkNotesPanel({ hallmark }: { hallmark: HallmarkLibraryEntr
 
       <div className="mb-5">
         <div className="flex justify-between mb-2">
-          <label className="text-xs text-muted-foreground">Personal status (how this hallmark feels for you)</label>
+          <label htmlFor={`hallmark-status-${hallmark.id}`} className="text-xs text-muted-foreground">
+            Personal status (how this hallmark feels for you)
+          </label>
           <span className="font-mono text-sm text-accent-emerald">{entry.status}%</span>
         </div>
         <input
+          id={`hallmark-status-${hallmark.id}`}
           type="range"
           min={0}
           max={100}
@@ -40,8 +43,11 @@ export function HallmarkNotesPanel({ hallmark }: { hallmark: HallmarkLibraryEntr
       </div>
 
       <div className="mb-5">
-        <label className="text-xs text-muted-foreground block mb-2">Private notes (saved locally)</label>
+        <label htmlFor={`hallmark-notes-${hallmark.id}`} className="text-xs text-muted-foreground block mb-2">
+          Private notes (saved locally)
+        </label>
         <textarea
+          id={`hallmark-notes-${hallmark.id}`}
           value={entry.notes}
           onChange={(e) => setHallmarkNote(hallmark.id, { notes: e.target.value })}
           placeholder="Lab results, symptoms, protocol changes, physician feedback…"

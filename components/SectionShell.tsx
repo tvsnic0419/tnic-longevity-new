@@ -23,6 +23,14 @@ interface SectionShellProps {
   children: ReactNode;
   className?: string;
   mesh?: boolean;
+  /**
+   * Heading level for the section title. Defaults to 'h2' — correct when the
+   * shell is one section among several under a page-level <h1>. Pages that use
+   * a single SectionShell as their *only* heading (e.g. /about) should pass
+   * 'h1' so the page isn't left without a top-level heading (a WCAG 1.3.1 /
+   * SEO defect).
+   */
+  headingLevel?: 'h1' | 'h2';
 }
 
 export function SectionShell({
@@ -36,6 +44,7 @@ export function SectionShell({
   children,
   className = '',
   mesh = false,
+  headingLevel: HeadingTag = 'h2',
 }: SectionShellProps) {
   const t = themes[theme];
 
@@ -72,7 +81,7 @@ export function SectionShell({
                   {badge}
                 </span>
               </div>
-              <h2 id={`${id}-heading`} className="heading-section mb-3">{title}</h2>
+              <HeadingTag id={`${id}-heading`} className="heading-section mb-3">{title}</HeadingTag>
               <p className="text-body">{subtitle}</p>
             </div>
           </div>

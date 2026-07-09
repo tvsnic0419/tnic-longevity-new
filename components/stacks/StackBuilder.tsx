@@ -127,7 +127,10 @@ export function StackBuilder({
     <div className={cn('max-w-6xl mx-auto', className)}>
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-6 mb-8">
         <div>
-          <h1 className="heading-page text-3xl md:text-4xl">{title}</h1>
+          {/* h2, not h1: this builder always renders beneath a page-level
+              PageHeader <h1> (the /stacks hub), so a second <h1> would give the
+              page two top-level headings — a WCAG 1.3.1 / SEO defect. */}
+          <h2 className="heading-page text-3xl md:text-4xl">{title}</h2>
           <p className="text-body-sm text-muted-foreground mt-2">
             Real-time synergy scoring · Evidence-based recommendations · Syncs across TNiC
           </p>
