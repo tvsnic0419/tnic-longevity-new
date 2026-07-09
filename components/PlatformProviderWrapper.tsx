@@ -3,8 +3,7 @@
 import { MotionConfig } from 'framer-motion';
 import { PlatformProvider } from '@/context/PlatformContext';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
-import { CommandPalette } from '@/components/os/CommandPalette';
-import { ExportKitModal } from '@/components/os/ExportKitModal';
+import { OsOverlays } from '@/components/os/OsOverlays';
 import type { ReactNode } from 'react';
 
 export function PlatformProviderWrapper({ children }: { children: ReactNode }) {
@@ -16,8 +15,7 @@ export function PlatformProviderWrapper({ children }: { children: ReactNode }) {
     <MotionConfig reducedMotion="user">
       <ThemeProvider>
         <PlatformProvider>
-          <CommandPalette />
-          <ExportKitModal />
+          <OsOverlays />
           {children}
         </PlatformProvider>
       </ThemeProvider>

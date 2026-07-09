@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { ArrowRight, ChevronRight, Layers, FlaskConical, Activity, Download, MapPin, RotateCcw } from 'lucide-react';
 import { toast } from 'sonner';
-import { EXPORT_KIT_EVENT } from './ExportKitModal';
+import { EXPORT_KIT_EVENT } from './os-events';
 import { usePlatform } from '@/context/PlatformContext';
 import { analyzeStack } from '@/lib/stack-analysis';
 import { HallmarkCoverageRing } from './HallmarkCoverageRing';

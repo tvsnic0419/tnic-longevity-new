@@ -1,13 +1,14 @@
 import type { ThemeAccent } from './design-system';
 import { getHubContext, hubContexts, type HubContextEntry } from './hub-context';
-import { hallmarkLibrary } from './hallmarks-library';
+import type { LibraryModuleCategory } from './library-modules';
+import type { ToolId } from './registry';
 import {
-  libraryModules,
-  libraryCategoryMeta,
-  type LibraryModuleCategory,
-} from './library-modules';
-import { evidenceComparisons } from './comparisons';
-import { getToolById, type ToolId } from './registry';
+  comparisonTitles,
+  hallmarkTitles,
+  libraryModuleTitles,
+  libraryCategoryLabels,
+  toolLabels,
+} from './breadcrumb-titles';
 
 export type HubKey = keyof typeof hubContexts;
 
@@ -103,13 +104,12 @@ export function buildRouteBreadcrumbs(pathname: string, searchTab?: string | nul
   const parts = pathname.split('/').filter(Boolean);
 
   if (parts[0] === 'library' && parts[1] === 'compare' && parts[2]) {
-    const comp = evidenceComparisons.find((c) => c.slug === parts[2]);
     return [
       ...crumbs,
       { label: 'Library', href: '/library' },
       { label: 'Comparisons', href: '/library/compare' },
       {
-        label: comp?.title ?? titleCase(parts[2]),
+        label: comparisonTitles[parts[2]] ?? titleCase(parts[2]),
         href: `/library/compare/${parts[2]}`,
       },
     ];
@@ -121,23 +121,22 @@ export function buildRouteBreadcrumbs(pathname: string, searchTab?: string | nul
     ['compounds', 'synergies', 'lifestyle', 'guides'].includes(parts[1])
   ) {
     const category = parts[1] as LibraryModuleCategory;
-    const mod = libraryModules.find((m) => m.category === category && m.slug === parts[2]);
-    const catLabel = libraryCategoryMeta[category]?.label ?? titleCase(parts[1]);
+    const catLabel = libraryCategoryLabels[category] ?? titleCase(parts[1]);
     return [
       ...crumbs,
       { label: 'Library', href: '/library' },
       { label: catLabel, href: `/library/${parts[1]}` },
-      { label: mod?.title ?? titleCase(parts[2]), href: pathname },
+      { label: libraryModuleTitles[`${category}/${parts[2]}`] ?? titleCase(parts[2]), href: pathname },
     ];
   }
 
   if (parts[0] === 'library' && parts.length === 2) {
-    const hall = hallmarkLibrary.find((h) => h.slug === parts[1]);
-    if (hall) {
+    const hallTitle = hallmarkTitles[parts[1]];
+    if (hallTitle) {
       return [
         ...crumbs,
         { label: 'Library', href: '/library' },
-        { label: hall.title, href: pathname },
+        { label: hallTitle, href: pathname },
       ];
     }
   }
@@ -160,9 +159,9 @@ export function buildRouteBreadcrumbs(pathname: string, searchTab?: string | nul
   }
 
   if (pathname.startsWith('/tools') && searchTab) {
-    const tool = getToolById(searchTab as ToolId);
-    if (tool) {
-      crumbs.push({ label: tool.label, href: `/tools?tab=${searchTab}` });
+    const toolLabel = toolLabels[searchTab as ToolId];
+    if (toolLabel) {
+      crumbs.push({ label: toolLabel, href: `/tools?tab=${searchTab}` });
     }
   }
 

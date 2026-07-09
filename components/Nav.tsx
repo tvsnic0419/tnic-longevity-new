@@ -8,7 +8,7 @@ import { ArrowRight, ClipboardList, Menu, Search, ShoppingBag, X } from 'lucide-
 import { navLinks } from '@/lib/data';
 import { Logo } from '@/components/ui/Logo';
 import { SiteSearch } from '@/components/SiteSearch';
-import { COMMAND_PALETTE_EVENT } from '@/components/os/CommandPalette';
+import { COMMAND_PALETTE_EVENT } from '@/components/os/os-events';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
 
 export function Nav() {

@@ -7,8 +7,6 @@ import { downloadExport, type ExportFormat } from '@/lib/export-kit';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 
-export const EXPORT_KIT_EVENT = 'tnic:export-kit-open';
-
 const formats: {
   id: ExportFormat;
   label: string;
@@ -41,12 +39,11 @@ const formats: {
   },
 ];
 
-export function ExportKitModal() {
+export function ExportKitModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { selected, profile, labs, checklist, hallmarkNotes, milestones } = usePlatform();
-  const [open, setOpen] = useState(false);
   const [lastFormat, setLastFormat] = useState<ExportFormat | null>(null);
 
-  const close = useCallback(() => setOpen(false), []);
+  const close = useCallback(() => onClose(), [onClose]);
 
   const runExport = useCallback(
     (format: ExportFormat) => {
@@ -63,12 +60,6 @@ export function ExportKitModal() {
     },
     [selected, profile, labs, checklist, hallmarkNotes, milestones, close],
   );
-
-  useEffect(() => {
-    const onOpen = () => setOpen(true);
-    window.addEventListener(EXPORT_KIT_EVENT, onOpen);
-    return () => window.removeEventListener(EXPORT_KIT_EVENT, onOpen);
-  }, []);
 
   useEffect(() => {
     if (!open) return;

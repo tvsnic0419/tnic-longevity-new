@@ -13,21 +13,22 @@ import { getPaletteResults, paletteKindLabels } from '@/lib/command-palette-cont
 import type { PaletteItem } from '@/lib/command-palette-index';
 import { readRecentModules } from '@/lib/recent-modules';
 import { cn } from '@/lib/utils';
-import { EXPORT_KIT_EVENT } from './ExportKitModal';
+import { EXPORT_KIT_EVENT } from './os-events';
 
-export const COMMAND_PALETTE_EVENT = 'tnic:command-palette-open';
-
-export function CommandPalette() {
+/**
+ * Controlled command palette. Visibility and focus restoration are owned by the
+ * parent launcher (OsOverlays); this component only renders and handles
+ * in-palette interaction while `open` is true.
+ */
+export function CommandPalette({ open, onClose }: { open: boolean; onClose: () => void }) {
   const router = useRouter();
   const pathname = usePathname();
   const { exportAll, selected } = usePlatform();
-  const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
   const [recentModules, setRecentModules] = useState(readRecentModules);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
-  const returnFocusRef = useRef<HTMLElement | null>(null);
 
   const palette = useMemo(
     () =>
@@ -45,11 +46,8 @@ export function CommandPalette() {
   const hasQuery = query.trim().length > 0;
 
   const close = useCallback(() => {
-    setOpen(false);
-    setQuery('');
-    setActiveIndex(0);
-    requestAnimationFrame(() => returnFocusRef.current?.focus());
-  }, []);
+    onClose();
+  }, [onClose]);
 
   const runItem = useCallback(
     (item: PaletteItem) => {
@@ -80,20 +78,13 @@ export function CommandPalette() {
   );
 
   useEffect(() => {
-    const onOpen = () => {
-      returnFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-      setRecentModules(readRecentModules());
-      setOpen(true);
-    };
-    window.addEventListener(COMMAND_PALETTE_EVENT, onOpen);
-    return () => window.removeEventListener(COMMAND_PALETTE_EVENT, onOpen);
-  }, []);
-
-  useEffect(() => {
     if (open) {
       setActiveIndex(0);
       setRecentModules(readRecentModules());
       requestAnimationFrame(() => inputRef.current?.focus());
+    } else {
+      setQuery('');
+      setActiveIndex(0);
     }
   }, [open]);
 
@@ -102,27 +93,8 @@ export function CommandPalette() {
   }, [query]);
 
   useEffect(() => {
+    if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      const meta = e.metaKey || e.ctrlKey;
-
-      if (meta && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        setOpen((v) => !v);
-        return;
-      }
-
-      if (!open) {
-        if (
-          e.key === '/' &&
-          !(e.target instanceof HTMLInputElement) &&
-          !(e.target instanceof HTMLTextAreaElement)
-        ) {
-          e.preventDefault();
-          setOpen(true);
-        }
-        return;
-      }
-
       if (e.key === 'Escape') {
         e.preventDefault();
         close();
