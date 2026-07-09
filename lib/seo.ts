@@ -5,6 +5,42 @@ import { SITE, LONGEVITY_KEYWORDS, SOCIAL_PROFILES } from './site';
 import type { SourceCitation } from './types';
 import { citationRegistry } from './trust';
 
+/**
+ * Route segments that ship their own `opengraph-image` file (see
+ * `find app -name opengraph-image.tsx`). For these, we must NOT set
+ * `openGraph.images` in the metadata object: in this Next.js setup an explicit
+ * metadata image wins over the colocated file, so setting one would replace the
+ * page's custom social image with the generic default. Every other page gets
+ * the brand-default image below so it still has a link preview.
+ */
+const SEGMENTS_WITH_OWN_OG_IMAGE = new Set([
+  '/',
+  '/brief',
+  '/elite-8',
+  '/faq',
+  '/labs',
+  '/learn',
+  '/library',
+  '/products',
+  '/quiz',
+  '/shop',
+  '/stacks',
+  '/tools',
+  '/trust',
+]);
+
+function hasOwnOgImage(path: string): boolean {
+  const p = path || '/';
+  if (SEGMENTS_WITH_OWN_OG_IMAGE.has(p)) return true;
+  // Dynamic/nested segments with their own opengraph-image files.
+  return (
+    p.startsWith('/library/') ||
+    p.startsWith('/quiz/share/') ||
+    p.startsWith('/club/') ||
+    p.startsWith('/scorecard/')
+  );
+}
+
 export function buildPageMetadata({
   title,
   description,
@@ -19,6 +55,8 @@ export function buildPageMetadata({
   noIndex?: boolean;
 }): Metadata {
   const url = `${SITE.url}${path}`;
+  const ogImage = `${SITE.url}/opengraph-image`;
+  const useDefaultImage = !hasOwnOgImage(path);
   return {
     title,
     description,
@@ -31,11 +69,15 @@ export function buildPageMetadata({
       siteName: SITE.fullName,
       locale: SITE.locale,
       type: 'website',
+      ...(useDefaultImage
+        ? { images: [{ url: ogImage, width: 1200, height: 630, alt: SITE.fullName }] }
+        : {}),
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      ...(useDefaultImage ? { images: [ogImage] } : {}),
     },
     robots: noIndex ? { index: false, follow: false } : { index: true, follow: true },
   };

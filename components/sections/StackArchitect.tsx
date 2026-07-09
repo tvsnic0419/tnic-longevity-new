@@ -160,7 +160,7 @@ export function StackArchitect() {
               <div className="rounded-xl border border-border/60 bg-background/50 p-4">
                 <p className="text-sm font-semibold text-foreground mb-1">Select compounds to reveal relationships.</p>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  TNIC will summarize evidence mix, hallmark coverage, synergy links, and timing load as your stack changes.
+                  TNiC will summarize evidence mix, hallmark coverage, synergy links, and timing load as your stack changes.
                 </p>
               </div>
             ) : (
@@ -201,7 +201,7 @@ export function StackArchitect() {
                 </div>
 
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Score reflects overlap and complementarity in the current TNIC compound map. It is a systems
+                  Score reflects overlap and complementarity in the current TNiC compound map. It is a systems
                   coherence signal, not a safety clearance or medical recommendation.
                 </p>
               </div>
