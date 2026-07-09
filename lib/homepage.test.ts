@@ -23,6 +23,44 @@ describe('getQuizPreset', () => {
     expect(getQuizPreset({})).toBe('starter');
     expect(getQuizPreset({ goal: 'nonsense' })).toBe('starter');
   });
+
+  it('never broadens a brand-new user past their goal-specific base, regardless of age', () => {
+    expect(getQuizPreset({ goal: 'defense', age: '60+', experience: 'new' })).toBe('nrf2');
+    expect(getQuizPreset({ goal: 'metabolic', age: '60+', experience: 'new' })).toBe('metabolic');
+  });
+
+  it('never broadens the learn goal — it stays on fundamentals regardless of age/experience', () => {
+    expect(getQuizPreset({ goal: 'learn', age: '60+', experience: 'advanced' })).toBe('starter');
+  });
+
+  it('takes the softer hybrid rung for a two-rung goal on a single readiness signal', () => {
+    // Some experience alone (young age) isn't enough to broaden...
+    expect(getQuizPreset({ goal: 'defense', age: '30-40', experience: 'some' })).toBe('nrf2');
+    // ...but some experience *and* an accelerated-decline age band is.
+    expect(getQuizPreset({ goal: 'defense', age: '60+', experience: 'some' })).toBe('hybrid');
+    expect(getQuizPreset({ goal: 'energy', age: '51-60', experience: 'some' })).toBe('hybrid');
+  });
+
+  it('takes the full rung for a two-rung goal only when both signals are strongest', () => {
+    expect(getQuizPreset({ goal: 'defense', age: '60+', experience: 'advanced' })).toBe('full');
+    expect(getQuizPreset({ goal: 'energy', age: '51-60', experience: 'advanced' })).toBe('full');
+    // Advanced alone (young age) only earns the softer rung.
+    expect(getQuizPreset({ goal: 'energy', age: '30-40', experience: 'advanced' })).toBe('hybrid');
+  });
+
+  it('only broadens a single-rung goal (metabolic, longevity) on the strongest combined signal', () => {
+    // Advanced experience alone isn't enough — there's no gentle mid-tier for these goals.
+    expect(getQuizPreset({ goal: 'metabolic', age: '30-40', experience: 'advanced' })).toBe('metabolic');
+    expect(getQuizPreset({ goal: 'longevity', age: '60+', experience: 'some' })).toBe('longevity');
+    // Advanced + accelerated age together jump straight to the full spectrum.
+    expect(getQuizPreset({ goal: 'metabolic', age: '60+', experience: 'advanced' })).toBe('full');
+    expect(getQuizPreset({ goal: 'longevity', age: '51-60', experience: 'advanced' })).toBe('full');
+  });
+
+  it('lets the complete-protocol goal reach full spectrum via age, not just experience', () => {
+    expect(getQuizPreset({ goal: 'full', age: '60+', experience: 'some' })).toBe('full');
+    expect(getQuizPreset({ goal: 'full', age: '30-40', experience: 'some' })).toBe('hybrid');
+  });
 });
 
 describe('getQuizResult', () => {
@@ -53,5 +91,18 @@ describe('getQuizResult', () => {
   it('routes the complete-protocol goal to a stack sized to experience', () => {
     expect(getQuizResult({ goal: 'full', experience: 'new' }).stack).toBe(stackPresets.starter);
     expect(getQuizResult({ goal: 'full', experience: 'advanced' }).stack).toBe(stackPresets.full);
+  });
+
+  it('explains it in the insight when age/experience broadened the stack beyond the goal base', () => {
+    const broadened = getQuizResult({ goal: 'defense', age: '60+', experience: 'advanced' });
+    expect(broadened.preset).toBe('full');
+    expect(broadened.insight).toContain('broadened');
+    expect(broadened.insight).toContain('NRF2 Defense');
+  });
+
+  it('says nothing about broadening when the user stayed on the goal-specific base', () => {
+    const unbroadened = getQuizResult({ goal: 'defense', age: '30-40', experience: 'new' });
+    expect(unbroadened.preset).toBe('nrf2');
+    expect(unbroadened.insight).not.toContain('broadened');
   });
 });

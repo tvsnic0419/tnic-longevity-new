@@ -28,12 +28,14 @@ const goalAccent: Record<string, string> = {
   full:      'var(--accent-cyan)',
 };
 
-function LiveStackPreview({ goal }: { goal: string }) {
-  // Reuse the quiz engine's goal→preset resolution so the preview can never
-  // drift from the stack the completed quiz actually recommends.
-  const presetKey = getQuizPreset({ goal });
+function LiveStackPreview({ answers }: { answers: QuizAnswers }) {
+  // Reuse the quiz engine's resolution so the preview can never drift from the
+  // stack the completed quiz actually recommends. Age can broaden the result
+  // (see getQuizPreset), so once it's answered the preview reflects that too —
+  // only experience (answered last) remains unknown at preview time.
+  const presetKey = getQuizPreset(answers);
   const preset = stackPresets[presetKey];
-  const accent = goalAccent[goal] ?? 'var(--accent-cyan)';
+  const accent = goalAccent[answers.goal ?? ''] ?? 'var(--accent-cyan)';
   const compoundNames = preset.ids.map((id) => {
     const c = compounds.find((x) => x.id === id);
     return c?.name.split(' ')[0] ?? id;
@@ -189,7 +191,7 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
 
       {/* Live stack preview — visible on steps 2+ once goal is answered */}
       {!done && step > 0 && answers.goal && (
-        <LiveStackPreview goal={answers.goal} />
+        <LiveStackPreview answers={answers} />
       )}
 
       <AnimatePresence mode="wait">
