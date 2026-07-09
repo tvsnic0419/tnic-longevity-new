@@ -342,7 +342,9 @@ export function computeBioAge(inputs: BioAgeInputs): BioAgeResult {
         allCompounds.set(name, {
           compound: c.split(' ').slice(0, -1).join(' ') || c,
           dose: c.includes('mg') || c.includes('IU') ? c.split(/\s+/).filter(x => /\d/.test(x))[0] ?? '' : '',
-          mechanism: domainKey(domainName),
+          // Specific, compound-level "why" at the point of recommendation — falls
+          // back to the domain label only for anything without a mechanism note.
+          mechanism: compoundMechanism[name] ?? domainKey(domainName),
           domain: domain.name,
           priority: i === 0 ? p : 'moderate',
         });
@@ -380,3 +382,25 @@ function domainKey(key: string): string {
   };
   return map[key] ?? key;
 }
+
+/**
+ * Compound-specific mechanism shown at the point of recommendation, keyed by the
+ * first token of each compound string used in the domain scorers. Every line is a
+ * concise, mechanistically accurate "why this compound" — recommendations should
+ * teach, not just assert. Evidence strength is flagged where a human RCT exists.
+ */
+const compoundMechanism: Record<string, string> = {
+  NMN: 'Bypasses the age-impaired NAMPT salvage step to rebuild NAD⁺ for sirtuins (SIRT1/3) and PARP-mediated DNA repair. Human RCTs confirm NAD⁺ elevation.',
+  GlyNAC: 'Glycine + NAC restore glutathione — the master antioxidant — correcting age-related redox and mitochondrial decline. Tier A human RCTs (Baylor).',
+  Berberine: 'Activates AMPK, improving insulin-mediated glucose uptake and mitochondrial efficiency — mimics calorie-restriction signaling.',
+  'R-Alpha': 'Mitochondrial cofactor for pyruvate and α-ketoglutarate dehydrogenase; regenerates vitamins C/E and recycles glutathione.',
+  Chromium: 'Potentiates insulin-receptor signaling to support glucose disposal — adjunctive, modest effect.',
+  Fisetin: 'Senolytic flavonoid — clears senescent cells and lowers the SASP inflammatory secretome (preclinical; human trials ongoing).',
+  Quercetin: 'Senolytic and NF-κB inhibitor — reduces inflammatory cytokine transcription; pairs with fisetin.',
+  'Omega-3': 'EPA/DHA resolve inflammation via specialized pro-resolving mediators (resolvins) and stabilize cell membranes. Strong CV outcome data.',
+  Spermidine: 'Induces autophagy via EP300 inhibition, restoring the cellular self-clearance that declines with age.',
+  Vitamin: 'Vitamin D3 is a nuclear-receptor ligand tuning immune tone and calcium homeostasis; K2 directs calcium to bone, not arteries.',
+  Magnesium: 'Cofactor for 300+ enzymes including ATP synthesis and GABAergic signaling that supports deep sleep.',
+  Ashwagandha: 'Adaptogen that lowers cortisol and HPA-axis stress load, improving sleep quality and recovery (human RCTs).',
+  Glycine: 'Improves sleep quality via core-temperature drop and supplies substrate for glutathione and collagen synthesis.',
+};
