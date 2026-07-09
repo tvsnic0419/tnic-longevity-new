@@ -28,14 +28,25 @@ function ProductCard({ pick }: { pick: ProductPick }) {
   const hallmarkTargets = compound?.hallmarks?.slice(0, 3) ?? [];
 
   return (
-    <a
-      href={`/api/go/${pick.compoundId}`}
-      target="_blank"
-      rel="noopener noreferrer sponsored"
-      className="group card-premium glow-hover-emerald rounded-2xl border border-border/80 overflow-hidden flex flex-col focus-ring h-full"
-      aria-label={`Buy ${pick.productName} from ${pick.brand} — opens manufacturer site`}
-    >
-      <div className="relative flex items-center justify-center bg-white/[0.03] h-48 overflow-hidden border-b border-border/50">
+    <div className="group relative card-premium glow-hover-emerald rounded-2xl border border-border/80 overflow-hidden flex flex-col h-full">
+      {/*
+        Whole-card "stretched link" to the affiliate offer, layered *behind*
+        the card content instead of wrapping it. The card also needs the
+        nested "Read evidence module" link below — nesting an <a> inside an
+        <a> is invalid HTML (browsers silently reparent it, which broke that
+        inner link's clicks and caused a hydration mismatch). The content
+        wrappers are `pointer-events-none` so every click on them falls
+        through to this overlay; the one link that must stay independently
+        clickable punches back through with `pointer-events-auto`.
+      */}
+      <a
+        href={`/api/go/${pick.compoundId}`}
+        target="_blank"
+        rel="noopener noreferrer sponsored"
+        className="absolute inset-0 z-0 rounded-2xl focus-ring"
+        aria-label={`Buy ${pick.productName} from ${pick.brand} — opens manufacturer site`}
+      />
+      <div className="relative pointer-events-none flex items-center justify-center bg-white/[0.03] h-48 overflow-hidden border-b border-border/50">
         <Image
           src={pick.imageSrc}
           alt={`${pick.brand} ${pick.productName}`}
@@ -54,7 +65,7 @@ function ProductCard({ pick }: { pick: ProductPick }) {
         </span>
       </div>
 
-      <div className="p-5 flex flex-col flex-1">
+      <div className="relative pointer-events-none p-5 flex flex-col flex-1">
         <p className="text-[11px] font-semibold text-accent-emerald uppercase tracking-widest mb-1">
           {pick.brand}
         </p>
@@ -94,13 +105,12 @@ function ProductCard({ pick }: { pick: ProductPick }) {
         )}
         <Link
           href={`/library/compounds/${pick.compoundId}`}
-          onClick={(e) => e.stopPropagation()}
-          className="mt-3 text-[11px] font-semibold text-accent-violet hover:underline"
+          className="relative z-10 pointer-events-auto mt-3 inline-block text-[11px] font-semibold text-accent-violet hover:underline"
         >
           Read {pick.compoundName} evidence module →
         </Link>
       </div>
-    </a>
+    </div>
   );
 }
 

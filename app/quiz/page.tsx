@@ -53,7 +53,7 @@ function buildQuizSchemas() {
 
 export default function QuizPage() {
   return (
-    <SubPageLayout>
+    <SubPageLayout hideContextBar>
       <StructuredData schemas={buildQuizSchemas()} />
       <QuizPageContent />
     </SubPageLayout>
