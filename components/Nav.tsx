@@ -112,19 +112,19 @@ export function Nav() {
           )}
         </div>
 
-        <div className="hidden md:flex items-center gap-2 shrink-0">
+        <div className="hidden lg:flex items-center gap-2 shrink-0">
           <ThemeToggle compact />
           <SiteSearch />
           <Link
             href="/quiz"
-            className="focus-ring hidden lg:inline-flex items-center gap-1.5 glass glass-hover px-4 py-2 rounded-full text-sm font-semibold text-muted-foreground hover:text-foreground"
+            className="focus-ring inline-flex items-center gap-1.5 glass glass-hover px-4 py-2 rounded-full text-sm font-semibold text-muted-foreground hover:text-foreground"
           >
             <ClipboardList className="w-4 h-4 text-accent-violet" aria-hidden="true" />
             Quiz
           </Link>
           <Link
             href="/shop"
-            className="focus-ring hidden lg:inline-flex items-center gap-1.5 glass glass-hover px-4 py-2 rounded-full text-sm font-semibold text-muted-foreground hover:text-foreground"
+            className="focus-ring inline-flex items-center gap-1.5 glass glass-hover px-4 py-2 rounded-full text-sm font-semibold text-muted-foreground hover:text-foreground"
           >
             <ShoppingBag className="w-4 h-4 text-accent-amber" aria-hidden="true" />
             Shop
@@ -135,7 +135,7 @@ export function Nav() {
           </Link>
         </div>
 
-        <div className="flex items-center gap-1 md:hidden">
+        <div className="flex items-center gap-1 lg:hidden">
           <ThemeToggle compact />
           <button
             onClick={() => window.dispatchEvent(new Event(COMMAND_PALETTE_EVENT))}
