@@ -1,4 +1,4 @@
-import { stackPresets } from './presets';
+import { stackPresets, type PresetKey } from './presets';
 import { researchFeed } from './data';
 import { platformStats } from './platform-stats';
 
@@ -48,39 +48,95 @@ export type QuizAnswers = {
   experience?: string;
 };
 
+type QuizNextStep = { title: string; href: string; cta: string };
+
+// The goal answer is the top-priority signal: it selects the mechanism family
+// the recommended stack is built around. Age and experience refine it from there.
+const GOAL_PRESET: Record<string, PresetKey> = {
+  learn: 'starter',
+  defense: 'nrf2',
+  energy: 'mito',
+  longevity: 'longevity',
+  metabolic: 'metabolic',
+  full: 'hybrid',
+};
+
+// The open-ended "build a complete protocol" goal scales its breadth to the
+// user's experience, so a first-timer isn't handed 14 compounds and an advanced
+// user isn't capped at five.
+const FULL_GOAL_BY_EXPERIENCE: Record<string, PresetKey> = {
+  new: 'starter',
+  some: 'hybrid',
+  advanced: 'full',
+};
+
+// Where each goal sends the user next, independent of which stack is loaded.
+const GOAL_NEXT_STEP: Record<string, QuizNextStep> = {
+  learn: { title: 'Search the library', href: '/library', cta: 'Open Library' },
+  defense: { title: 'Run your Defense Scan', href: '/tools?tab=healthspan', cta: 'Defense Scan' },
+  energy: { title: 'Explore mitochondrial pathways', href: '/library?q=mitochondrial', cta: 'View Science' },
+  longevity: { title: 'Open Longevity Pro in Stack Architect', href: '/stacks', cta: 'Open Stack Architect' },
+  metabolic: { title: 'Open Cardio-Metabolic in Stack Architect', href: '/stacks', cta: 'Open Stack Architect' },
+  full: { title: 'Open your Personal Dashboard', href: '/dashboard', cta: 'Go to Dashboard' },
+};
+
+// One lead sentence per preset. Each names the compounds actually in that stack,
+// so the insight can never describe a protocol the user wasn't given.
+const PRESET_INSIGHT: Record<PresetKey, string> = {
+  starter:
+    'Your Foundation stack leads with GlyNAC, sulforaphane, and NMN — Tier-A glutathione, NRF2, and NAD+ support in the three most-studied entry compounds.',
+  nrf2:
+    "Your NRF2 Defense stack — GlyNAC, sulforaphane, and R-ALA — activates the body's master antioxidant switch and rebuilds glutathione, the core of oxidative-stress defense.",
+  mito:
+    'Your Mitochondrial stack — NMN, Ca-AKG, and resveratrol — rebuilds NAD+ and drives sirtuin signaling, the energy-production and cellular-repair axis.',
+  longevity:
+    'Your Longevity Pro stack centers on urolithin A (Phase 2 mitophagy RCT) and fisetin (Mayo Clinic senolytic pilot), with omega-3, NMN, and resveratrol — aimed squarely at senescent-cell clearance and mitochondrial cleanup.',
+  metabolic:
+    'Your Cardio-Metabolic stack — berberine (head-to-head vs metformin, PMID 18396172), omega-3 (REDUCE-IT), CoQ10, and R-ALA — stacks AMPK, lipid, and ETC support, Tier A across the board.',
+  hybrid:
+    'Your Full Hybrid stack spans GlyNAC, sulforaphane, NMN, Ca-AKG, and R-ALA — NRF2 activation, mitochondrial substrate restoration, and glutathione support in the broadest five-compound protocol TNiC offers.',
+  full:
+    'Your Full-Spectrum protocol loads all 14 evidence-graded compounds across every mechanism family — NRF2, NAD+, senolytic, and cardio-metabolic — built for side-by-side comparison and synergy tuning.',
+};
+
+// A closing sentence tuned to the remaining answers (stated goal, then age, then
+// experience) so both the stack and the guidance reflect everything the user told us.
+function personalizationNote(answers: QuizAnswers): string {
+  if (answers.goal === 'learn') {
+    return 'Since you came to understand the science first, open the Library alongside it — every compound is mapped to a hallmark mechanism, evidence tier, and human trial before it reaches your stack.';
+  }
+  if (answers.age === '60+') {
+    return 'At 60+, NAD+ has typically fallen 40–60% from peak (Cell Metab, 2018), so lead with the NAD+ and mitochondrial elements and layer the rest in over your first month.';
+  }
+  if (answers.age === '51-60') {
+    return 'In your 50s, antioxidant reserve and NAD+ decline accelerate — this stack front-loads the pathways under the most pressure now.';
+  }
+  if (answers.experience === 'new') {
+    return 'As a first protocol, phase these in one at a time over two to three weeks and log how you respond before adding the next.';
+  }
+  if (answers.experience === 'advanced') {
+    return 'You know the terrain — load it in Stack Architect and tune the synergy scoring and dosing from there.';
+  }
+  return 'Load it in Stack Architect to check the synergy score, then adjust dosing to fit your routine.';
+}
+
+/**
+ * Resolve the stack preset for a set of quiz answers. Goal is the primary driver;
+ * the "complete protocol" goal additionally scales with experience. Exported so
+ * the live preview and the final result share a single source of truth.
+ */
+export function getQuizPreset(answers: QuizAnswers): PresetKey {
+  if (answers.goal === 'full') {
+    return FULL_GOAL_BY_EXPERIENCE[answers.experience ?? ''] ?? 'hybrid';
+  }
+  return GOAL_PRESET[answers.goal ?? ''] ?? 'starter';
+}
+
 export function getQuizResult(answers: QuizAnswers) {
-  const preset =
-    answers.goal === 'energy' ? 'mito'
-      : answers.goal === 'defense' ? 'nrf2'
-        : answers.goal === 'longevity' ? 'longevity'
-          : answers.goal === 'metabolic' ? 'metabolic'
-            : answers.goal === 'full' ? 'hybrid'
-              : 'starter';
-
-  const paths = {
-    learn: { title: 'Search the library', href: '/library', cta: 'Open Library' },
-    defense: { title: 'Run your Defense Scan', href: '/tools?tab=healthspan', cta: 'Defense Scan' },
-    energy: { title: 'Explore mitochondrial pathways', href: '/library?q=mitochondrial', cta: 'View Science' },
-    longevity: { title: 'Open Longevity Pro in Stack Architect', href: '/stacks', cta: 'Open Stack Architect' },
-    metabolic: { title: 'Open Cardio-Metabolic in Stack Architect', href: '/stacks', cta: 'Open Stack Architect' },
-    full: { title: 'Open your Personal Dashboard', href: '/dashboard', cta: 'Go to Dashboard' },
-  };
-
-  const primary = paths[answers.goal as keyof typeof paths] ?? paths.learn;
+  const preset = getQuizPreset(answers);
   const stack = stackPresets[preset];
-
-  const insight =
-    answers.goal === 'learn'
-      ? "Good starting point. TNiC maps every compound to a specific hallmark mechanism, evidence tier, and human trial before it enters the library — you'll know exactly what each one targets and why before you spend a dollar."
-      : answers.goal === 'longevity'
-        ? 'Your profile maps to Longevity Pro — urolithin A (Phase 2 mitophagy RCT), fisetin (Mayo Clinic senolytic pilot), and omega-3 (REDUCE-IT, SPM resolution axis). Targets the senescent cell accumulation and cellular cleanup hallmarks directly. Load it and adjust synergy scoring from there.'
-        : answers.goal === 'metabolic'
-          ? 'Your profile maps to Cardio-Metabolic — berberine (head-to-head vs metformin, PMID 18396172), omega-3 (REDUCE-IT 25% CV event reduction), and CoQ10 (17-RCT meta-analysis, hs-CRP reduction). AMPK, lipid, and ETC stack — Tier A across all three.'
-          : answers.age === '60+'
-            ? 'At 60+, NAD+ has typically fallen 40–60% from peak (Cell Metab, 2018). Dual-pathway coverage — NRF2 defense restoration plus mitochondrial substrate support — produces the highest modeled defense index at this stage. Your preset stacks both.'
-            : answers.experience === 'new'
-              ? 'Starting with GlyNAC is the evidence-first move: 24-week human trials showed restored glutathione, improved mitochondrial function, and reduced oxidative stress in older adults (J Gerontol A, 2023, PMID 36656670). Tier A for a reason.'
-              : 'Your profile aligns with the Hybrid preset — 5 Tier-A/B compounds spanning NRF2 activation, mitochondrial substrate restoration, and sirtuin pathway support. The broadest evidence-graded coverage TNiC offers. Load it in Stack Architect and adjust synergy scoring from there.';
+  const primary = GOAL_NEXT_STEP[answers.goal ?? ''] ?? GOAL_NEXT_STEP.learn;
+  const insight = `${PRESET_INSIGHT[preset]} ${personalizationNote(answers)}`;
 
   return { preset, stack, primary, insight };
 }

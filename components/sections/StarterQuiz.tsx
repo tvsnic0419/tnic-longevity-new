@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BookOpen, Shield, Zap, Layers, Check } from 'lucide-react';
-import { quizSteps, getQuizResult, type QuizAnswers } from '@/lib/homepage';
+import { quizSteps, getQuizResult, getQuizPreset, type QuizAnswers } from '@/lib/homepage';
 import { stackPresets } from '@/lib/presets';
 import { compounds } from '@/lib/data';
 import { QuizResultPanel } from '@/components/quiz/QuizResultPanel';
@@ -28,17 +28,10 @@ const goalAccent: Record<string, string> = {
   full:      'var(--accent-cyan)',
 };
 
-const goalPreset: Record<string, keyof typeof stackPresets> = {
-  energy:    'mito',
-  defense:   'nrf2',
-  longevity: 'longevity',
-  metabolic: 'metabolic',
-  full:      'hybrid',
-  learn:     'starter',
-};
-
 function LiveStackPreview({ goal }: { goal: string }) {
-  const presetKey = goalPreset[goal] ?? 'starter';
+  // Reuse the quiz engine's goal→preset resolution so the preview can never
+  // drift from the stack the completed quiz actually recommends.
+  const presetKey = getQuizPreset({ goal });
   const preset = stackPresets[presetKey];
   const accent = goalAccent[goal] ?? 'var(--accent-cyan)';
   const compoundNames = preset.ids.map((id) => {
@@ -249,7 +242,7 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
                         className="shrink-0 text-[9px] font-semibold font-mono opacity-0 group-hover:opacity-100 transition-opacity"
                         style={{ color: optAccent }}
                       >
-                        {stackPresets[goalPreset[opt.id] ?? 'starter']?.label}
+                        {stackPresets[getQuizPreset({ goal: opt.id })].label}
                       </span>
                     )}
                   </button>
