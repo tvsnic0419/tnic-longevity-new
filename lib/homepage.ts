@@ -50,25 +50,86 @@ export type QuizAnswers = {
 
 type QuizNextStep = { title: string; href: string; cta: string };
 
-// The goal answer is the top-priority signal: it selects the mechanism family
-// the recommended stack is built around. Age and experience refine it from there.
+// The goal answer picks the mechanism family — this is the base/anchor preset
+// for that goal before age or experience are taken into account.
 const GOAL_PRESET: Record<string, PresetKey> = {
   learn: 'starter',
   defense: 'nrf2',
   energy: 'mito',
   longevity: 'longevity',
   metabolic: 'metabolic',
-  full: 'hybrid',
 };
 
-// The open-ended "build a complete protocol" goal scales its breadth to the
-// user's experience, so a first-timer isn't handed 14 compounds and an advanced
-// user isn't capped at five.
-const FULL_GOAL_BY_EXPERIENCE: Record<string, PresetKey> = {
-  new: 'starter',
-  some: 'hybrid',
-  advanced: 'full',
+/**
+ * A goal's upgrade path beyond its base preset: one rung (only the strongest
+ * combined signal unlocks it — no gentle mid-tier exists) or two (a softer
+ * rung, then the strongest). resolveRung()'s indexing only holds for exactly
+ * these two shapes; capping the type here means extending a goal to a third
+ * rung is a compile error, not a silent misresolution.
+ */
+type UpgradeRungs = readonly [PresetKey] | readonly [PresetKey, PresetKey];
+
+// Goals that can broaden beyond their base preset once experience + age signal
+// the user is ready for more. Listed weakest→strongest rung. 'hybrid' is a
+// strict superset of the NRF2 and NAD+ families; 'full' is a strict superset
+// of every preset — so broadening never drops a compound the stated goal
+// promised. 'learn' has no ladder: it's about understanding fundamentals
+// first, not maximizing stack size, so it always stays on 'starter'.
+const GOAL_UPGRADE_RUNGS: Partial<Record<string, UpgradeRungs>> = {
+  defense: ['hybrid', 'full'],
+  energy: ['hybrid', 'full'],
+  metabolic: ['full'],
+  longevity: ['full'],
 };
+
+/** '51-60' and '60+' are where the quiz's own copy says decline accelerates. */
+function isAcceleratedAge(age?: string): boolean {
+  return age === '51-60' || age === '60+';
+}
+
+/**
+ * How far up a goal's ladder to climb, 0–2. A brand-new user always stays at
+ * rung 0 regardless of age — "start with fundamentals" is a promise, not a
+ * suggestion. Age only matters once experience says the user is ready to act
+ * on it, matching the quiz's own option copy ("Advanced: Compare & stack").
+ */
+function ladderStep(age: string | undefined, experience: string | undefined): 0 | 1 | 2 {
+  if (experience === 'advanced') return isAcceleratedAge(age) ? 2 : 1;
+  if (experience === 'some') return isAcceleratedAge(age) ? 1 : 0;
+  return 0;
+}
+
+/**
+ * Resolve a ladder step against a goal's available rungs, counting from the
+ * strongest rung backward. A single-rung goal (metabolic, longevity — there's
+ * no gentle mid-tier for them) only activates on the strongest combined
+ * signal (step 2: advanced + accelerated age); a lone step-1 nudge isn't
+ * enough to justify jumping straight to the 14-compound Full-Spectrum stack.
+ * A two-rung goal (defense, energy — bridged by 'hybrid') can take the softer
+ * step first. See UpgradeRungs — this indexing is only valid for 1–2 rungs.
+ */
+function resolveRung(rungs: UpgradeRungs, step: 1 | 2): PresetKey | null {
+  const index = rungs.length - (3 - step);
+  return index >= 0 ? rungs[index] : null;
+}
+
+// The open-ended "build a complete protocol" goal scales its breadth to the
+// user's experience (and, once experience shows readiness, to age) so a
+// first-timer isn't handed 14 compounds and an advanced user in an
+// accelerated-decline age band isn't capped at five. Age is only consulted
+// once experience is affirmatively 'some' — an *unanswered* experience must
+// stay on the same neutral 'hybrid' default as a totally blank quiz, not
+// silently borrow the age signal. This matters beyond the final result: the
+// live quiz preview (see StarterQuiz.tsx) calls this mid-flow with age known
+// but experience not yet picked — if age alone could push it to 'full' here,
+// the preview would promise Full-Spectrum 14 and then drop to Foundation the
+// instant the user picked "Brand new".
+function resolveFullGoalPreset(age?: string, experience?: string): PresetKey {
+  if (experience === 'new') return 'starter';
+  if (experience === 'advanced') return 'full';
+  if (experience === 'some') return isAcceleratedAge(age) ? 'full' : 'hybrid';
+  return 'hybrid';
+}
 
 // Where each goal sends the user next, independent of which stack is loaded.
 const GOAL_NEXT_STEP: Record<string, QuizNextStep> = {
@@ -121,22 +182,44 @@ function personalizationNote(answers: QuizAnswers): string {
 }
 
 /**
- * Resolve the stack preset for a set of quiz answers. Goal is the primary driver;
- * the "complete protocol" goal additionally scales with experience. Exported so
- * the live preview and the final result share a single source of truth.
+ * Resolve the stack preset for a set of quiz answers. Goal picks the mechanism
+ * family; age and experience can then broaden it up that goal's ladder (see
+ * GOAL_UPGRADE_RUNGS) so two people with the same goal but different readiness
+ * signals aren't handed an identical stack. Exported so the live preview and
+ * the final result share a single source of truth.
  */
 export function getQuizPreset(answers: QuizAnswers): PresetKey {
   if (answers.goal === 'full') {
-    return FULL_GOAL_BY_EXPERIENCE[answers.experience ?? ''] ?? 'hybrid';
+    return resolveFullGoalPreset(answers.age, answers.experience);
   }
-  return GOAL_PRESET[answers.goal ?? ''] ?? 'starter';
+  const base = GOAL_PRESET[answers.goal ?? ''];
+  if (!base) return 'starter';
+
+  const rungs = GOAL_UPGRADE_RUNGS[answers.goal ?? ''];
+  if (!rungs) return base;
+
+  const step = ladderStep(answers.age, answers.experience);
+  if (step === 0) return base;
+  return resolveRung(rungs, step) ?? base;
+}
+
+/** The base preset for a goal, ignoring any age/experience broadening — used to detect and explain when a broadening actually happened. */
+function baseGoalPreset(goal: string | undefined): PresetKey | null {
+  return goal && goal !== 'full' ? (GOAL_PRESET[goal] ?? null) : null;
+}
+
+function broadeningNote(answers: QuizAnswers, preset: PresetKey): string | null {
+  const base = baseGoalPreset(answers.goal);
+  if (!base || base === preset) return null;
+  return `Your experience level and age band signaled you're ready for more than the standard ${stackPresets[base].label} preset, so this was broadened to ${stackPresets[preset].label} for fuller pathway coverage.`;
 }
 
 export function getQuizResult(answers: QuizAnswers) {
   const preset = getQuizPreset(answers);
   const stack = stackPresets[preset];
   const primary = GOAL_NEXT_STEP[answers.goal ?? ''] ?? GOAL_NEXT_STEP.learn;
-  const insight = `${PRESET_INSIGHT[preset]} ${personalizationNote(answers)}`;
+  const broadening = broadeningNote(answers, preset);
+  const insight = `${PRESET_INSIGHT[preset]}${broadening ? ` ${broadening}` : ''} ${personalizationNote(answers)}`;
 
   return { preset, stack, primary, insight };
 }
