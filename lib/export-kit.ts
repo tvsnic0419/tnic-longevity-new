@@ -4,6 +4,8 @@ import { analyzeStack, hallmarkDisplayNames } from './stack-analysis';
 import type { Profile } from '@/context/PlatformContext';
 import type { HallmarkNotesMap } from './hallmark-notes';
 import type { UserMilestone } from './milestone-engine';
+import { trackEvent } from './analytics';
+import { ANALYTICS_EVENTS } from './analytics-events';
 
 export type ExportFormat = 'json' | 'csv' | 'stack-text' | 'physician-md';
 
@@ -181,4 +183,5 @@ export function downloadExport(format: ExportFormat, payload: ExportKitPayload):
   a.download = buildExportFilename(format);
   a.click();
   URL.revokeObjectURL(url);
+  trackEvent(ANALYTICS_EVENTS.stackExported, { format, compounds: payload.stack.length });
 }
