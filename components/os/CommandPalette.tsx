@@ -13,15 +13,16 @@ import { getPaletteResults, paletteKindLabels } from '@/lib/command-palette-cont
 import type { PaletteItem } from '@/lib/command-palette-index';
 import { readRecentModules } from '@/lib/recent-modules';
 import { cn } from '@/lib/utils';
-import { EXPORT_KIT_EVENT } from './ExportKitModal';
+import { COMMAND_PALETTE_EVENT, EXPORT_KIT_EVENT } from '@/lib/os-events';
 
-export const COMMAND_PALETTE_EVENT = 'tnic:command-palette-open';
+// Compatibility re-export while dispatch sites migrate to '@/lib/os-events'.
+export { COMMAND_PALETTE_EVENT };
 
-export function CommandPalette() {
+export function CommandPalette({ initialOpen = false }: { initialOpen?: boolean }) {
   const router = useRouter();
   const pathname = usePathname();
   const { exportAll, selected } = usePlatform();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(initialOpen);
   const [query, setQuery] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
   const [recentModules, setRecentModules] = useState(readRecentModules);
@@ -80,6 +81,13 @@ export function CommandPalette() {
   );
 
   useEffect(() => {
+    // When mounted on demand with initialOpen (first ⌘K / search click), the
+    // opening event fired before this listener existed — capture the trigger
+    // element now so Escape still returns focus to it.
+    if (initialOpen && returnFocusRef.current === null) {
+      returnFocusRef.current =
+        document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    }
     const onOpen = () => {
       returnFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       setRecentModules(readRecentModules());
@@ -87,7 +95,7 @@ export function CommandPalette() {
     };
     window.addEventListener(COMMAND_PALETTE_EVENT, onOpen);
     return () => window.removeEventListener(COMMAND_PALETTE_EVENT, onOpen);
-  }, []);
+  }, [initialOpen]);
 
   useEffect(() => {
     if (open) {
