@@ -60,13 +60,22 @@ const GOAL_PRESET: Record<string, PresetKey> = {
   metabolic: 'metabolic',
 };
 
+/**
+ * A goal's upgrade path beyond its base preset: one rung (only the strongest
+ * combined signal unlocks it — no gentle mid-tier exists) or two (a softer
+ * rung, then the strongest). resolveRung()'s indexing only holds for exactly
+ * these two shapes; capping the type here means extending a goal to a third
+ * rung is a compile error, not a silent misresolution.
+ */
+type UpgradeRungs = readonly [PresetKey] | readonly [PresetKey, PresetKey];
+
 // Goals that can broaden beyond their base preset once experience + age signal
 // the user is ready for more. Listed weakest→strongest rung. 'hybrid' is a
 // strict superset of the NRF2 and NAD+ families; 'full' is a strict superset
 // of every preset — so broadening never drops a compound the stated goal
 // promised. 'learn' has no ladder: it's about understanding fundamentals
 // first, not maximizing stack size, so it always stays on 'starter'.
-const GOAL_UPGRADE_RUNGS: Partial<Record<string, PresetKey[]>> = {
+const GOAL_UPGRADE_RUNGS: Partial<Record<string, UpgradeRungs>> = {
   defense: ['hybrid', 'full'],
   energy: ['hybrid', 'full'],
   metabolic: ['full'],
@@ -92,14 +101,14 @@ function ladderStep(age: string | undefined, experience: string | undefined): 0 
 
 /**
  * Resolve a ladder step against a goal's available rungs, counting from the
- * strongest rung backward. A goal with only one rung available (metabolic,
- * longevity — there's no gentle mid-tier for them) only activates on the
- * strongest combined signal (advanced + accelerated age); a lone step-1 nudge
- * isn't enough to justify jumping straight to the 14-compound Full-Spectrum
- * stack. A goal with two rungs (defense, energy — bridged by 'hybrid') can
- * take the softer step first.
+ * strongest rung backward. A single-rung goal (metabolic, longevity — there's
+ * no gentle mid-tier for them) only activates on the strongest combined
+ * signal (step 2: advanced + accelerated age); a lone step-1 nudge isn't
+ * enough to justify jumping straight to the 14-compound Full-Spectrum stack.
+ * A two-rung goal (defense, energy — bridged by 'hybrid') can take the softer
+ * step first. See UpgradeRungs — this indexing is only valid for 1–2 rungs.
  */
-function resolveRung(rungs: PresetKey[], step: 1 | 2): PresetKey | null {
+function resolveRung(rungs: UpgradeRungs, step: 1 | 2): PresetKey | null {
   const index = rungs.length - (3 - step);
   return index >= 0 ? rungs[index] : null;
 }
@@ -107,11 +116,19 @@ function resolveRung(rungs: PresetKey[], step: 1 | 2): PresetKey | null {
 // The open-ended "build a complete protocol" goal scales its breadth to the
 // user's experience (and, once experience shows readiness, to age) so a
 // first-timer isn't handed 14 compounds and an advanced user in an
-// accelerated-decline age band isn't capped at five.
+// accelerated-decline age band isn't capped at five. Age is only consulted
+// once experience is affirmatively 'some' — an *unanswered* experience must
+// stay on the same neutral 'hybrid' default as a totally blank quiz, not
+// silently borrow the age signal. This matters beyond the final result: the
+// live quiz preview (see StarterQuiz.tsx) calls this mid-flow with age known
+// but experience not yet picked — if age alone could push it to 'full' here,
+// the preview would promise Full-Spectrum 14 and then drop to Foundation the
+// instant the user picked "Brand new".
 function resolveFullGoalPreset(age?: string, experience?: string): PresetKey {
   if (experience === 'new') return 'starter';
   if (experience === 'advanced') return 'full';
-  return isAcceleratedAge(age) ? 'full' : 'hybrid';
+  if (experience === 'some') return isAcceleratedAge(age) ? 'full' : 'hybrid';
+  return 'hybrid';
 }
 
 // Where each goal sends the user next, independent of which stack is loaded.

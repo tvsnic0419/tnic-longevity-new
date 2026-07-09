@@ -29,10 +29,12 @@ const goalAccent: Record<string, string> = {
 };
 
 function LiveStackPreview({ answers }: { answers: QuizAnswers }) {
-  // Reuse the quiz engine's resolution so the preview can never drift from the
-  // stack the completed quiz actually recommends. Age can broaden the result
-  // (see getQuizPreset), so once it's answered the preview reflects that too —
-  // only experience (answered last) remains unknown at preview time.
+  // Reuse the quiz engine's own resolution rather than a second hand-rolled
+  // goal→preset map, so this preview can never drift from what the completed
+  // quiz actually recommends. Experience (the field that can broaden the
+  // result — see getQuizPreset) is always still unanswered while this is
+  // showing, so today it renders the goal's base preset; passing the full
+  // answers keeps that guarantee automatic if the step order ever changes.
   const presetKey = getQuizPreset(answers);
   const preset = stackPresets[presetKey];
   const accent = goalAccent[answers.goal ?? ''] ?? 'var(--accent-cyan)';
