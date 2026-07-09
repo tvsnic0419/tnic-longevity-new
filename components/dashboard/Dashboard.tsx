@@ -15,7 +15,7 @@ import EvidenceBadge from '@/components/trust/EvidenceBadge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { PageShell } from '@/components/ui/PageShell';
 import { cn } from '@/lib/utils';
-import { EXPORT_KIT_EVENT } from '@/components/os/ExportKitModal';
+import { EXPORT_KIT_EVENT } from '@/components/os/os-events';
 import { NextUpPanel } from '@/components/os/NextUpPanel';
 import { DashboardStatusExport } from '@/components/dashboard/DashboardStatusExport';
 import { OnboardingStrip } from '@/components/dashboard/OnboardingStrip';

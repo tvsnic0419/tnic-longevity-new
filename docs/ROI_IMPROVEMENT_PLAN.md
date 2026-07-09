@@ -57,13 +57,35 @@ Per the chosen direction — keep persistence, add an easy reset — this PR:
 - makes the dashboard onboarding honest — any non-empty stack now counts as
   "stack built," so the status bar and the getting-started strip agree.
 
-## Phase 2 — Core Web Vitals & performance
+## Phase 2 — Core Web Vitals & performance ✅ (shipped)
 
 **Why:** CWV is both a ranking factor and a conversion factor; Phase 1's
 Speed Insights makes the wins measurable.
 
-- Audit the 167 client components; hoist static, non-interactive sections to
-  server components (smaller First Load JS on landing pages).
+**Shipped — shared-bundle diet.** The biggest, cheapest CWV win turned out to
+be removing content-data payloads that always-mounted OS chrome was dragging
+into the shared client bundle on every one of ~200 routes:
+
+- The **command palette** and **export kit** rendered eagerly in the root
+  layout, pulling the command index (compounds, hallmarks, comparisons,
+  library modules) into every page even though they only open on ⌘K / a
+  button. A lightweight launcher (`OsOverlays`) now owns the hotkeys/events and
+  lazy-loads each overlay via `next/dynamic` on first use.
+- **`ContextBar`** renders on nearly every page and imported `route-context`,
+  which imported the full `comparisons` (64 kB), `hallmarks-library` (53 kB)
+  and `library-modules` (26 kB) modules purely to resolve breadcrumb *titles*.
+  A dependency-free `lib/breadcrumb-titles.ts` (slug→title maps, guarded by a
+  drift test) replaced those imports.
+
+**Measured result (production build, gzipped initial JS):** −46 to −47 kB on
+every content page (~13%), −53 kB on the homepage. Verified in a real browser
+that ⌘K, `/`, the Nav search button, Escape/toggle/reopen, and the export kit
+all still work.
+
+**Still open for a later pass:**
+
+- Audit remaining client components; hoist static, non-interactive sections to
+  server components.
 - Defer/lazy-load below-the-fold heavy widgets (network graphs, charts).
 - Verify LCP image handling and font loading on top landing pages.
 

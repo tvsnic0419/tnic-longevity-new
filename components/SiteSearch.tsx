@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search } from 'lucide-react';
-import { COMMAND_PALETTE_EVENT } from '@/components/os/CommandPalette';
+import { COMMAND_PALETTE_EVENT } from '@/components/os/os-events';
 
 export function SiteSearch() {
   const router = useRouter();
