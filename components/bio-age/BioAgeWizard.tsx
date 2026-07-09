@@ -55,6 +55,15 @@ function NumberInput({
   label: string; value: string; onChange: (v: string) => void;
   placeholder?: string; unit?: string; optional?: boolean;
 }) {
+  // Hold a local draft while the field is focused so the user can clear it and
+  // retype freely. Some callers coerce an empty string back to a default (e.g.
+  // weightKg: Number(v) || 70); without this buffer that fallback would flow
+  // back through `value` and overwrite each keystroke, making the field
+  // impossible to edit. When blurred we render `value` directly, so the draft
+  // only needs seeding on focus — no effect required.
+  const [focused, setFocused] = useState(false);
+  const [draft, setDraft] = useState(value);
+
   return (
     <div>
       <label className="block text-sm text-muted-foreground mb-1.5">
@@ -63,8 +72,10 @@ function NumberInput({
       <div className="flex items-center gap-2">
         <input
           type="number"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
+          value={focused ? draft : value}
+          onFocus={() => { setDraft(value); setFocused(true); }}
+          onChange={(e) => { setDraft(e.target.value); onChange(e.target.value); }}
+          onBlur={() => setFocused(false)}
           placeholder={placeholder ?? '—'}
           className="flex-1 bg-background border border-border rounded-lg px-3 py-2 text-sm font-mono text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30 transition"
         />
