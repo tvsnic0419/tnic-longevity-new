@@ -3,14 +3,6 @@
 import Link from 'next/link';
 import { CheckCircle2, Circle, ChevronRight } from 'lucide-react';
 import { usePlatform } from '@/context/PlatformContext';
-import { stackPresets } from '@/lib/presets';
-
-const DEFAULT_IDS = new Set<string>(stackPresets.starter.ids);
-
-function isDefaultStack(selected: string[]) {
-  if (selected.length !== DEFAULT_IDS.size) return true;
-  return selected.every((id) => DEFAULT_IDS.has(id));
-}
 
 export function OnboardingStrip() {
   const { quizResult, selected, labs, profile } = usePlatform();
@@ -28,7 +20,7 @@ export function OnboardingStrip() {
       label: 'Build your stack',
       sublabel: 'Customize compounds in Stack Architect',
       href: '/stacks',
-      done: !isDefaultStack(selected),
+      done: selected.length > 0,
     },
     {
       id: 'labs',

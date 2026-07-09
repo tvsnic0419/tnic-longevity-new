@@ -1,6 +1,8 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
+import { track } from '@vercel/analytics/server';
 import { PRODUCT_PICKS } from '@/lib/product-picks';
+import { ANALYTICS_EVENTS } from '@/lib/analytics-events';
 
 export const runtime = 'edge';
 
@@ -44,6 +46,19 @@ export async function GET(
   const safeDest = safeRedirectUrl(dest);
   if (!safeDest) {
     return NextResponse.json({ error: 'Invalid product destination' }, { status: 500 });
+  }
+
+  // First-party affiliate-click signal — the platform's primary revenue KPI.
+  // Cookieless, records only the product and destination host (no visitor id),
+  // and must never block or fail the redirect.
+  try {
+    await track(
+      ANALYTICS_EVENTS.affiliateClick,
+      { product: productId, destination: safeDest.host, companion },
+      { headers: req.headers },
+    );
+  } catch {
+    // Analytics is best-effort; the redirect is the contract.
   }
 
   return NextResponse.redirect(safeDest, {

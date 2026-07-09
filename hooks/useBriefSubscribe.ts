@@ -7,6 +7,8 @@ import {
   type BriefDeliveryMode,
   type BriefSubscribeResponse,
 } from '@/lib/brief-subscribe-client';
+import { trackEvent } from '@/lib/analytics';
+import { ANALYTICS_EVENTS } from '@/lib/analytics-events';
 
 export function useBriefSubscribe(initialEmail = '') {
   const [email, setEmail] = useState(initialEmail);
@@ -35,6 +37,7 @@ export function useBriefSubscribe(initialEmail = '') {
       setDeliveryMode(result.mode ?? 'feed');
       setWelcomeSent(Boolean(result.welcomeSent));
       setNotice(result.message ?? null);
+      trackEvent(ANALYTICS_EVENTS.emailSubscribed, { mode: result.mode ?? 'feed' });
       return true;
     }
     setError(result.error ?? 'Subscription failed.');

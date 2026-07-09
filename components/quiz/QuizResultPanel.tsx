@@ -13,6 +13,8 @@ import type { getQuizResult } from '@/lib/homepage';
 import { QuizShareCard } from '@/components/quiz/QuizShareCard';
 import { isCompleteQuizAnswers } from '@/lib/quiz-share';
 import { buildShopPresetUrl } from '@/lib/stack-url';
+import { trackEvent } from '@/lib/analytics';
+import { ANALYTICS_EVENTS } from '@/lib/analytics-events';
 
 type QuizResult = ReturnType<typeof getQuizResult>;
 
@@ -41,6 +43,12 @@ export function QuizResultPanel({ result, answers, onRetake }: QuizResultPanelPr
       experience: answers.experience,
       preset: result.preset,
       completedAt: new Date().toISOString(),
+    });
+    trackEvent(ANALYTICS_EVENTS.quizCompleted, {
+      preset: result.preset,
+      goal: answers.goal ?? 'learn',
+      age: answers.age ?? 'unknown',
+      experience: answers.experience ?? 'unknown',
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
