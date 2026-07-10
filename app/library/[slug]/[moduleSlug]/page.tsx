@@ -16,6 +16,7 @@ import {
   buildMedicalWebPageSchema,
   getCompoundCitations,
 } from '@/lib/seo';
+import { getComparisonsForCompound } from '@/lib/comparison-relations';
 import { seoRoutes } from '@/lib/seo-routes';
 
 const VALID_CATEGORIES = Object.keys(libraryCategoryMeta) as LibraryModuleCategory[];
@@ -55,6 +56,8 @@ export default async function LibraryModulePage({
 
   const mdx = loadMdx(mod.mdxSlug, mod.category);
   const path = getModulePath(mod);
+  const comparisons =
+    mod.category === 'compounds' ? getComparisonsForCompound(mod.slug) : [];
 
   const breadcrumb = buildBreadcrumbSchema([
     { name: 'Library', path: '/library' },
@@ -89,7 +92,7 @@ export default async function LibraryModulePage({
   return (
     <>
       <StructuredData schemas={schemas} />
-      <LibraryModuleDetail module={mod} mdxBody={mdx?.body ?? null} />
+      <LibraryModuleDetail module={mod} mdxBody={mdx?.body ?? null} comparisons={comparisons} />
     </>
   );
 }
