@@ -56,7 +56,7 @@ export default function SponsorshipPolicyPage() {
       icon={ShieldCheck}
       eyebrow="Trust · Sponsorship"
       title="Sponsorship & Advertising Principles"
-      description="How commercial relationships can exist without compromising TNIC analysis, evidence labels, or user trust."
+      description="How commercial relationships can exist without compromising TNiC analysis, evidence labels, or user trust."
       theme="cyan"
       pageKey="sponsorship"
       disclaimer="This page is a product integrity statement, not legal advice. Formal sponsor agreements should be reviewed by qualified counsel."

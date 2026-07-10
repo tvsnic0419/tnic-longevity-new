@@ -63,7 +63,7 @@ export default function PartnershipsPage() {
           <div className="flex items-start gap-3 mb-5">
             <Sparkles className="w-5 h-5 text-accent-cyan shrink-0 mt-1" aria-hidden="true" />
             <div>
-              <p className="text-label text-accent-cyan mb-2">What TNIC is building</p>
+              <p className="text-label text-accent-cyan mb-2">What TNiC is building</p>
               <p className="text-body-sm text-muted-foreground leading-relaxed">
                 TNiC is a cellular health and nutrition intelligence product for advanced consumers who want to
                 understand compounds, pathways, evidence quality, biomarkers, and stack relationships before they buy

@@ -378,7 +378,7 @@ function ResultReasoning({ result, context }: { result: BioAgeResult; context: R
     <div className="rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-5 space-y-4">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="text-xs text-cyan-300 font-medium uppercase tracking-wide">Why TNIC showed this</p>
+          <p className="text-xs text-cyan-300 font-medium uppercase tracking-wide">Why TNiC showed this</p>
           <p className="text-sm text-muted-foreground mt-1">
             Chronological age sets the baseline. Each domain then adds or subtracts modeled years based on
             signal quality and direction. This is an educational estimate, not a diagnostic clock.
