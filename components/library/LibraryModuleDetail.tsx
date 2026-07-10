@@ -18,6 +18,9 @@ import { getBuyerGuideByModuleSlug } from '@/lib/buyer-guides';
 import type { LifestyleSlug } from '@/lib/lifestyle-pillars';
 import { ModuleContextStrip } from './ModuleContextStrip';
 import { HallmarkChipGroup } from '@/components/design/HallmarkChip';
+import { MethodReviewStrip } from './authority/MethodReviewStrip';
+import { EvidenceBoundaries } from './authority/EvidenceBoundaries';
+import { getAuthorityProfile, getAuthorityCitations } from '@/lib/authority-profiles';
 import { recordModuleVisit } from '@/lib/recent-modules';
 
 export function LibraryModuleDetail({
@@ -39,6 +42,9 @@ export function LibraryModuleDetail({
     .filter(Boolean) ?? [];
   const buyerGuide =
     module.category === 'compounds' ? getBuyerGuideByModuleSlug(module.slug) : undefined;
+  const authorityProfile =
+    module.category === 'compounds' ? getAuthorityProfile(module.slug) : undefined;
+  const authorityCitations = authorityProfile ? getAuthorityCitations(authorityProfile) : [];
 
   useEffect(() => {
     recordModuleVisit(module);
@@ -195,6 +201,14 @@ export function LibraryModuleDetail({
               <p className="text-sm text-muted-foreground leading-relaxed">{module.summary}</p>
             </motion.div>
 
+            {authorityProfile && (
+              <MethodReviewStrip
+                tier={authorityProfile.evidenceTier}
+                lastReviewed={authorityProfile.lastReviewed}
+                methodNote={authorityProfile.methodNote}
+              />
+            )}
+
             {module.requiresDisclaimer && (
               <div className="rounded-xl p-5 border border-accent-amber/30 bg-accent-amber/5 flex gap-3">
                 <AlertTriangle className="w-5 h-5 text-accent-amber shrink-0 mt-0.5" />
@@ -215,10 +229,10 @@ export function LibraryModuleDetail({
             )}
 
             {mdxBody ? (
-              <div className="gradient-border p-6 md:p-8">
+              <div className="rounded-xl border border-border bg-card/40 p-6 md:p-8">
                 <div className="flex items-center gap-2 mb-4">
                   <BookOpen className="w-4 h-4 text-accent-cyan" />
-                  <p className="text-[10px] font-mono text-accent-cyan uppercase">Deep dive</p>
+                  <p className="text-label">Deep dive</p>
                 </div>
                 <MdxRenderer content={mdxBody} />
               </div>
@@ -226,6 +240,13 @@ export function LibraryModuleDetail({
               <div className="glass rounded-xl p-8 text-center text-muted-foreground">
                 Content module in progress. Outline available in sidebar.
               </div>
+            )}
+
+            {authorityProfile && (
+              <EvidenceBoundaries
+                boundaries={authorityProfile.boundaries}
+                citations={authorityCitations}
+              />
             )}
 
             <div className="flex flex-wrap gap-3">

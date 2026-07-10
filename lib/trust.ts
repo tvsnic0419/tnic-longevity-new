@@ -355,6 +355,30 @@ const curatedCitations: SourceCitation[] = [
     type: 'clinical',
     summary: 'Intermittent fisetin dosing reduced senescent cell markers in older adults.',
   },
+  // Consolidated from the authored compound records (lib/data.ts) so the Elite-8
+  // authority pages can reference the registry as a single source of truth.
+  {
+    id: 'c-spermidine-memory-2021',
+    title: 'Spermidine supplementation improves memory in older adults',
+    authors: 'Madeo F et al.',
+    journal: 'Cell',
+    year: 2021,
+    pmid: '33932338',
+    type: 'clinical',
+    summary:
+      'Randomized controlled trial in older adults with subjective cognitive decline: wheat-germ spermidine improved memory performance vs placebo. A pilot cognitive endpoint — not a longevity or mortality outcome.',
+  },
+  {
+    id: 'c-pterostilbene-pk-2011',
+    title: 'Pharmacokinetics and safety of pterostilbene in humans',
+    authors: 'Kapetanovic IM et al.',
+    journal: 'J Agric Food Chem',
+    year: 2011,
+    pmid: '21749330',
+    type: 'clinical',
+    summary:
+      'First human pharmacokinetic and safety study of pterostilbene. Establishes bioavailability and short-term tolerability — not an aging-biomarker or longevity outcome trial.',
+  },
 ];
 
 /**
