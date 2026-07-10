@@ -5,6 +5,7 @@ import { StructuredData } from '@/components/seo/StructuredData';
 import { getHallmarkBySlug, hallmarkLibrary } from '@/lib/hallmarks-library';
 import { loadMdx } from '@/lib/mdx';
 import { buildArticleSchema, buildBreadcrumbSchema } from '@/lib/seo';
+import { getCompoundsForHallmark, getCompoundIdToSlugMap } from '@/lib/library-graph';
 import { seoRoutes } from '@/lib/seo-routes';
 
 export function generateStaticParams() {
@@ -38,6 +39,8 @@ export default async function HallmarkPage({
 
   const mdx = loadMdx(hallmark.mdxSlug);
   const path = `/library/${hallmark.slug}`;
+  const targetingCompounds = getCompoundsForHallmark(hallmark.id);
+  const compoundHrefs = getCompoundIdToSlugMap();
 
   const schemas = [
     buildArticleSchema({
@@ -56,7 +59,12 @@ export default async function HallmarkPage({
   return (
     <>
       <StructuredData schemas={schemas} />
-      <HallmarkDetail hallmark={hallmark} mdxBody={mdx?.body ?? null} />
+      <HallmarkDetail
+        hallmark={hallmark}
+        mdxBody={mdx?.body ?? null}
+        targetingCompounds={targetingCompounds}
+        compoundHrefs={compoundHrefs}
+      />
     </>
   );
 }

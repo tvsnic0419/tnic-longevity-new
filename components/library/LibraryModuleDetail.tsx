@@ -6,6 +6,7 @@ import { ArrowLeft, BookOpen, Layers, FlaskConical, AlertTriangle, Scale } from 
 import Link from 'next/link';
 import type { LibraryModule } from '@/lib/library-modules';
 import type { ComparisonLink } from '@/lib/comparison-relations';
+import type { GuideLink } from '@/lib/library-graph';
 import { libraryCategoryMeta } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { compounds } from '@/lib/data';
@@ -22,10 +23,12 @@ export function LibraryModuleDetail({
   module,
   mdxBody,
   comparisons = [],
+  guide,
 }: {
   module: LibraryModule;
   mdxBody: string | null;
   comparisons?: ComparisonLink[];
+  guide?: GuideLink;
 }) {
   const categoryMeta = libraryCategoryMeta[module.category];
   const relatedHallmarks = hallmarkLibrary.filter((h) => module.relatedHallmarkIds.includes(h.id));
@@ -160,6 +163,19 @@ export function LibraryModuleDetail({
                   ))}
                 </ul>
               </div>
+            )}
+
+            {guide && (
+              <Link
+                href={guide.href}
+                className="focus-ring interactive flex items-center gap-3 glass glass-hover rounded-xl p-4"
+              >
+                <BookOpen className="w-5 h-5 text-accent-emerald shrink-0" />
+                <div>
+                  <p className="text-sm font-semibold">{guide.label}</p>
+                  <p className="text-xs text-muted-foreground">Full buyer&rsquo;s guide — dosing, forms, evidence</p>
+                </div>
+              </Link>
             )}
 
             <Link

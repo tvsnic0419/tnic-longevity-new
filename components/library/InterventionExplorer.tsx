@@ -17,9 +17,12 @@ const categoryLabels = {
 export function InterventionExplorer({
   interventions,
   hallmarkTitle,
+  compoundHrefs = {},
 }: {
   interventions: HallmarkIntervention[];
   hallmarkTitle: string;
+  /** compound id -> module slug, for compounds that have a library page. */
+  compoundHrefs?: Record<string, string>;
 }) {
   const [filter, setFilter] = useState<'all' | HallmarkIntervention['category']>('all');
   const [tnicOnly, setTnicOnly] = useState(false);
@@ -78,8 +81,11 @@ export function InterventionExplorer({
               <p className="text-xs text-muted-foreground leading-relaxed">{item.description}</p>
               <div className="flex flex-wrap gap-3 mt-2">
                 <span className="text-[10px] font-mono text-caption">Impact: {item.impact}/10</span>
-                {item.compoundId && (
-                  <a href={`/#compounds`} className="text-[10px] text-accent-violet hover:underline">
+                {item.compoundId && compoundHrefs[item.compoundId] && (
+                  <a
+                    href={`/library/compounds/${compoundHrefs[item.compoundId]}`}
+                    className="text-[10px] text-accent-violet hover:underline"
+                  >
                     View {compounds.find((c) => c.id === item.compoundId)?.name}
                   </a>
                 )}

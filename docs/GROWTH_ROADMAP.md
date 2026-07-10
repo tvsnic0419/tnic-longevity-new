@@ -45,6 +45,21 @@ interlinking, and metadata derived from already-authored data.
   - Bundle-safe: links are computed server-side and passed as a lightweight
     prop, so the 64 kB `comparisons` module never enters the client bundle.
 
+- **Cross-type library interlinking (`library-graph.ts`).** Closed the
+  remaining loops so every content type links to its neighbours:
+  - **Hallmark → compounds that target it** — each hallmark page now lists the
+    compounds targeting it (derived from `compound.hallmarks`, evidence-sorted,
+    only compounds with a page), symmetric to the existing compound → hallmark
+    link.
+  - **Fixed the Intervention Explorer's compound links**, which pointed at a
+    dead `/#compounds` homepage anchor, to the real `/library/compounds/<slug>`
+    pages (via a server-passed id→slug map — no heavy client import).
+  - **Compound → supplement-guide** — compound deep-dives now funnel to the
+    high-intent guide landing pages; the guides already linked back, so the
+    loop is complete.
+  - Guarded by `library-graph.test.ts`, including a check that every mapped
+    guide href resolves to a real app route.
+
 ### Next
 
 - Pillar → cluster internal linking across hallmarks, compounds, and guides.
