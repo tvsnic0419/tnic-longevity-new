@@ -2,9 +2,10 @@
 
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, BookOpen, Layers, FlaskConical, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, BookOpen, Layers, FlaskConical, AlertTriangle, Scale } from 'lucide-react';
 import Link from 'next/link';
 import type { LibraryModule } from '@/lib/library-modules';
+import type { ComparisonLink } from '@/lib/comparison-relations';
 import { libraryCategoryMeta } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { compounds } from '@/lib/data';
@@ -20,9 +21,11 @@ import { recordModuleVisit } from '@/lib/recent-modules';
 export function LibraryModuleDetail({
   module,
   mdxBody,
+  comparisons = [],
 }: {
   module: LibraryModule;
   mdxBody: string | null;
+  comparisons?: ComparisonLink[];
 }) {
   const categoryMeta = libraryCategoryMeta[module.category];
   const relatedHallmarks = hallmarkLibrary.filter((h) => module.relatedHallmarkIds.includes(h.id));
@@ -128,6 +131,30 @@ export function LibraryModuleDetail({
                         className="text-sm text-muted-foreground hover:text-accent-cyan transition"
                       >
                         {slug.replace(/-/g, ' ')}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {comparisons.length > 0 && (
+              <div className="glass rounded-xl p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <Scale className="w-4 h-4 text-accent-cyan" />
+                  <p className="text-[10px] font-mono text-accent-cyan uppercase">Compare {module.title}</p>
+                </div>
+                <ul className="space-y-2.5">
+                  {comparisons.map((comparison) => (
+                    <li key={comparison.slug}>
+                      <Link
+                        href={`/library/compare/${comparison.slug}`}
+                        className="focus-ring interactive group flex items-center justify-between gap-2 rounded-md"
+                      >
+                        <span className="text-sm text-muted-foreground group-hover:text-accent-cyan transition truncate">
+                          {comparison.labelA} vs {comparison.labelB}
+                        </span>
+                        <EvidenceTag tier={comparison.evidenceTier} className="shrink-0" />
                       </Link>
                     </li>
                   ))}
