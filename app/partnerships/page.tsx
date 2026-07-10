@@ -47,8 +47,9 @@ function buildSchemas() {
 
 export default function PartnershipsPage() {
   return (
-    <PageShell>
-      <StructuredData schemas={buildSchemas()} />
+    <main id="main-content" tabIndex={-1}>
+      <PageShell>
+        <StructuredData schemas={buildSchemas()} />
       <PageHeader
         icon={Handshake}
         eyebrow="Partnerships"
@@ -129,7 +130,8 @@ export default function PartnershipsPage() {
           </a>
         </div>
       </section>
-    </PageShell>
+      </PageShell>
+    </main>
   );
 }
 

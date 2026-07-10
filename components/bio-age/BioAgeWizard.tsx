@@ -203,7 +203,7 @@ function WizardProgress({ step }: { step: number }) {
           <span
             key={s}
             className={`text-[10px] font-medium tracking-wide transition-colors ${
-              i === step ? 'text-emerald-400' : i < step ? 'text-muted-foreground' : 'text-border'
+              i === step ? 'text-emerald-400' : i < step ? 'text-muted-foreground' : 'text-foreground/50'
             }`}
           >
             {s}
@@ -456,6 +456,7 @@ function StepProfile({
           <select
             value={data.sex}
             onChange={(e) => onChange({ sex: e.target.value as Sex })}
+            aria-label="Biological Sex"
             className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-emerald-500 transition"
           >
             <option value="male">Male</option>

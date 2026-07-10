@@ -134,7 +134,7 @@ function CompoundCard({
       {/* Clock estimate */}
       <div className="flex items-center gap-2">
         <Clock className="w-3 h-3 shrink-0" style={{ color: CONFIDENCE_COLOR[clockConfidence] }} aria-hidden="true" />
-        <span className="text-[10px] text-white/45 font-mono truncate">{clock}</span>
+        <span className="text-[10px] text-white/60 font-mono truncate">{clock}</span>
         <span
           className="text-[8px] font-mono shrink-0 px-1.5 py-0.5 rounded"
           style={{ color: CONFIDENCE_COLOR[clockConfidence], background: `${CONFIDENCE_COLOR[clockConfidence]}14` }}
