@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, RotateCcw, Check, Layers, Compass, ShoppingBag, BookOpen, Mail, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useBriefSubscribe } from '@/hooks/useBriefSubscribe';
-import { compounds } from '@/lib/data';
+import { DetailedStackSuggestion } from '@/components/quiz/DetailedStackSuggestion';
 import { usePlatform } from '@/context/PlatformContext';
 import type { PresetKey } from '@/lib/presets';
 import type { getQuizResult } from '@/lib/homepage';
@@ -69,25 +69,7 @@ export function QuizResultPanel({ result, answers, onRetake }: QuizResultPanelPr
         </div>
       </div>
 
-      <div className="glass rounded-xl p-4 mb-4">
-        <p className="text-[10px] font-mono text-accent-violet uppercase mb-2">
-          Recommended preset: {result.stack.label}
-        </p>
-        <div className="flex flex-wrap gap-1.5 mb-3">
-          {result.stack.ids.map((id) => {
-            const c = compounds.find((x) => x.id === id);
-            return c ? (
-              <span
-                key={id}
-                className="text-[10px] bg-accent-violet/10 text-accent-violet px-2 py-0.5 rounded font-semibold"
-              >
-                {c.name}
-              </span>
-            ) : null;
-          })}
-        </div>
-        <p className="text-[10px] text-muted-foreground">{result.stack.desc}</p>
-      </div>
+      <DetailedStackSuggestion preset={result.preset as PresetKey} />
 
       <div className="space-y-2" role="group" aria-label="Quiz result actions">
         <button
