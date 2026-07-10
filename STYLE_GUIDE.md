@@ -2,6 +2,10 @@
 
 > Version 1.0 · June 2026  
 > Governs typography, spacing, components, accessibility, and page patterns across tnic.help.
+>
+> **See also → [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md) (v2 — Restraint):** the
+> display-typeface system, the "one accent" rules, and the three signature components
+> (Evidence badge, Citation, Hallmark chip). v2 supersedes conflicting guidance below.
 
 ---
 

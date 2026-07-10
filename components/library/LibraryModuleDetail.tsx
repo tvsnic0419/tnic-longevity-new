@@ -17,6 +17,7 @@ import { LifestylePillarPanel } from './LifestylePillarPanel';
 import { getBuyerGuideByModuleSlug } from '@/lib/buyer-guides';
 import type { LifestyleSlug } from '@/lib/lifestyle-pillars';
 import { ModuleContextStrip } from './ModuleContextStrip';
+import { HallmarkChipGroup } from '@/components/design/HallmarkChip';
 import { recordModuleVisit } from '@/lib/recent-modules';
 
 export function LibraryModuleDetail({
@@ -76,20 +77,16 @@ export function LibraryModuleDetail({
             </div>
 
             {relatedHallmarks.length > 0 && (
-              <div className="glass rounded-xl p-5">
-                <p className="text-[10px] font-mono text-accent-violet uppercase mb-3">Related hallmarks</p>
-                <ul className="space-y-2">
-                  {relatedHallmarks.map((h) => (
-                    <li key={h.id}>
-                      <Link
-                        href={`/library/${h.slug}`}
-                        className="text-sm text-muted-foreground hover:text-accent-cyan transition"
-                      >
-                        #{h.number} {h.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+              <div className="rounded-xl border border-border bg-card/40 p-5">
+                <HallmarkChipGroup
+                  label="Targets these hallmarks"
+                  size="sm"
+                  hallmarks={relatedHallmarks.map((h) => ({
+                    slug: h.slug,
+                    title: h.title,
+                    number: h.number,
+                  }))}
+                />
               </div>
             )}
 
