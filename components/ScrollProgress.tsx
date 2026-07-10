@@ -42,7 +42,10 @@ export function ScrollProgress() {
         />
       </div>
 
-      <div className="hidden xl:flex fixed right-6 top-1/2 -translate-y-1/2 z-40 flex-col gap-3">
+      <nav
+        aria-label="Section navigation"
+        className="hidden xl:flex fixed right-6 top-1/2 -translate-y-1/2 z-40 flex-col gap-3"
+      >
         {navLinks.map((link) => {
           const id = link.href.slice(1);
           const isActive = active === id;
@@ -70,7 +73,7 @@ export function ScrollProgress() {
             </a>
           );
         })}
-      </div>
+      </nav>
     </>
   );
 }

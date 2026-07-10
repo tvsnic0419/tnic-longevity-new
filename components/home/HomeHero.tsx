@@ -88,7 +88,7 @@ export function HomeHero() {
               </Link>
             </div>
 
-            <div className="mb-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-white/45 lg:justify-start">
+            <div className="mb-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-white/60 lg:justify-start">
               <span>Free forever</span>
               <Dot />
               <span>Data stays on your device</span>

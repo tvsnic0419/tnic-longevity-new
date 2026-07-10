@@ -22,7 +22,11 @@ export function SubPageLayout({ children, hideContextBar = false }: SubPageLayou
       <ScrollProgress />
       <Nav />
       <div className="pt-14 md:pt-16">
-        {!hideContextBar && <ContextBar />}
+        {!hideContextBar && (
+          <aside aria-label="Longevity OS status">
+            <ContextBar />
+          </aside>
+        )}
         <main id="main-content" tabIndex={-1}>
           {children}
         </main>

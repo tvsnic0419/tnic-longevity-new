@@ -28,9 +28,7 @@ export function Slider({ label, value, onChange, min, max, step = 1, unit = '', 
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
         className="w-full age-slider"
-        aria-valuemin={min}
-        aria-valuemax={max}
-        aria-valuenow={value}
+        aria-label={label}
       />
       {hint && <p className="text-caption text-caption mt-1">{hint}</p>}
     </div>

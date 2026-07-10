@@ -22,11 +22,17 @@ export function ToolDisclaimer({ variant = 'info' }: { variant?: 'info' | 'warni
         </strong>{' '}
         Outputs are evidence-informed models for personal exploration. Dosing suggestions derive from
         published trial ranges, not prescriptions.{' '}
-        <Link href="/trust/disclaimers" className="text-accent-cyan hover:text-accent-emerald">
+        <Link
+          href="/trust/disclaimers"
+          className="text-accent-cyan underline underline-offset-2 hover:text-accent-emerald"
+        >
           Read disclaimers
         </Link>{' '}
         ·{' '}
-        <Link href="/trust/methodology" className="text-accent-cyan hover:text-accent-emerald">
+        <Link
+          href="/trust/methodology"
+          className="text-accent-cyan underline underline-offset-2 hover:text-accent-emerald"
+        >
           Evidence methodology
         </Link>
       </p>

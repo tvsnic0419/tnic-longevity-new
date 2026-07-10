@@ -89,17 +89,55 @@ all still work.
 - Defer/lazy-load below-the-fold heavy widgets (network graphs, charts).
 - Verify LCP image handling and font loading on top landing pages.
 
-## Phase 3 — SEO depth & discoverability
+## Phase 3 — SEO depth & discoverability ✅ (largely shipped)
 
 **Why:** organic search is the traffic engine for an education/affiliate
 site; compounding, durable ROI.
 
-- Add explicit metadata to the few pages inheriting only root defaults
-  (`/library`, quiz-share presets).
-- Expand structured data: `FAQPage`, `BreadcrumbList`, `Product`/`Review`
-  where warranted.
+**Audit finding:** the structured-data layer was already mature — `FAQPage`,
+`BreadcrumbList`, `Product`, `HowTo`, `MedicalWebPage`, and `Article` schemas
+are all built and wired. The real gaps were social/link-preview coverage and
+accessibility, so the sponsor-readiness pass and the accessibility pass below
+carried the incremental ROI here.
+
+**Shipped — OG / link-preview coverage.** ~17 metadata-exporting pages that
+ship no `opengraph-image` file (partnerships, contact, sponsorship + other
+trust children, dashboard, site-map, supplement guides) had *no* social image.
+`buildPageMetadata` now supplies a brand-default image, scoped by a
+`SEGMENTS_WITH_OWN_OG_IMAGE` list so pages with bespoke images keep them.
+Every sitemap page now emits exactly one `og:image`.
+
+**Still open for a later pass:**
+
 - Strengthen internal linking between guides, library modules, and compare
   pages.
+
+## Phase 3.5 — Accessibility (WCAG AA) ✅ (shipped)
+
+**Why:** accessibility is a Google ranking signal, a conversion factor, and a
+legal-exposure reducer — and an `axe-core` sweep is objective and measurable.
+
+**Audit:** ran `axe-core` (WCAG 2.0/2.1 A + AA + best-practice) across 15 key
+pages. Found 114 color-contrast nodes, plus critical form-label / select-name /
+tab-ARIA / link-distinguishability defects and missing landmarks.
+
+**Shipped:**
+
+- **Contrast (114 → 0):** bumped the dark `--color-text-faint` token to meet
+  4.5:1 on the `#020811` base (fixes `.text-caption` sitewide); brightened the
+  hero/elite `text-white/45` micro-labels; fixed the near-invisible (1.14:1)
+  bio-age step indicator; bumped the tab-badge opacity; underlined the
+  in-text tool disclaimer links so they no longer rely on color alone.
+- **Critical control fixes:** accessible names on the `Slider` range input and
+  the bio-age biological-sex `<select>`; valid `aria-controls` target on the
+  trust hub tabpanel (`id`/`aria-labelledby`).
+- **Landmarks:** `<main id="main-content">` on `/about` and `/partnerships`
+  (restoring the skip-link target); wrapped the OS `ContextBar` in a
+  complementary `<aside>`; made the fixed section-scroll rail a labelled
+  `<nav>`. Resolves every `region` / `landmark-one-main` / `skip-link` finding.
+
+**Result:** only 7 advisory `heading-order` nodes remain (deferred — they need
+per-page heading-level judgment). All serious/critical findings cleared.
 
 ## Phase 4 — Conversion-rate optimization
 
