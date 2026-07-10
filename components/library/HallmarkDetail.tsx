@@ -1,9 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowLeft, BookOpen, Network } from 'lucide-react';
+import { ArrowLeft, BookOpen, Network, Pill } from 'lucide-react';
 import Link from 'next/link';
 import type { HallmarkLibraryEntry } from '@/lib/types';
+import type { CompoundLink } from '@/lib/library-graph';
+import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { HallmarkVisual } from './HallmarkVisual';
 import { InterventionExplorer } from './InterventionExplorer';
 import { HallmarkNotesPanel } from './HallmarkNotesPanel';
@@ -16,9 +18,13 @@ import { HALLMARK_VISUALS } from '@/components/illustrations/HallmarkVisuals';
 export function HallmarkDetail({
   hallmark,
   mdxBody,
+  targetingCompounds = [],
+  compoundHrefs = {},
 }: {
   hallmark: HallmarkLibraryEntry;
   mdxBody: string | null;
+  targetingCompounds?: CompoundLink[];
+  compoundHrefs?: Record<string, string>;
 }) {
   const MechanismVisual = HALLMARK_VISUALS[hallmark.id];
 
@@ -93,6 +99,32 @@ export function HallmarkDetail({
               </div>
             )}
 
+            {targetingCompounds.length > 0 && (
+              <div>
+                <div className="flex items-center gap-2 mb-4">
+                  <Pill className="w-4 h-4 text-accent-cyan" />
+                  <p className="text-[10px] font-mono text-accent-cyan uppercase tracking-wider">
+                    Compounds targeting {hallmark.title}
+                  </p>
+                </div>
+                <ul className="grid gap-3 sm:grid-cols-2">
+                  {targetingCompounds.map((compound) => (
+                    <li key={compound.slug}>
+                      <Link
+                        href={`/library/compounds/${compound.slug}`}
+                        className="focus-ring interactive group flex items-center justify-between gap-3 glass glass-hover rounded-xl p-4"
+                      >
+                        <span className="text-sm font-semibold text-foreground group-hover:text-accent-cyan transition truncate">
+                          {compound.name}
+                        </span>
+                        <EvidenceTag tier={compound.evidence} size="sm" className="shrink-0" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             <div>
               <p className="text-[10px] font-mono text-accent-emerald uppercase tracking-wider mb-4">
                 Intervention Explorer — ranked by evidence
@@ -100,6 +132,7 @@ export function HallmarkDetail({
               <InterventionExplorer
                 interventions={hallmark.interventions}
                 hallmarkTitle={hallmark.title}
+                compoundHrefs={compoundHrefs}
               />
             </div>
 
