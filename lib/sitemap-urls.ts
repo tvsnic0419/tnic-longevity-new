@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
+import { allCompoundIds } from '@/lib/compound-authority';
 import { getAllModuleParams } from '@/lib/library-modules';
 import { getAllComparisonSlugs } from '@/lib/comparisons';
 import { PRESET_KEYS } from '@/lib/quiz-share';
@@ -55,6 +56,13 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     priority: 0.85,
   }));
 
+  const compoundRoutes = allCompoundIds.map((id) => ({
+    url: `${base}/library/compounds/${id}`,
+    lastModified,
+    changeFrequency: 'monthly' as const,
+    priority: 0.87,
+  }));
+
   const compareRoutes = getAllComparisonSlugs().map((slug) => ({
     url: `${base}/library/compare/${slug}`,
     lastModified,
@@ -83,5 +91,5 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     priority: 0.82,
   }));
 
-  return [...coreRoutes, ...quizShareRoutes, ...toolTabRoutes, ...hallmarkRoutes, ...compareRoutes, ...moduleRoutes];
+  return [...coreRoutes, ...quizShareRoutes, ...toolTabRoutes, ...hallmarkRoutes, ...compoundRoutes, ...compareRoutes, ...moduleRoutes];
 }
