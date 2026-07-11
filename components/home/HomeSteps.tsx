@@ -3,6 +3,8 @@ import { ClipboardList, BookOpen, Activity, ArrowRight, type LucideIcon } from '
 
 /** A calm three-step path from curiosity to a tracked protocol. Server-rendered. */
 
+type Accent = 'cyan' | 'emerald' | 'violet';
+
 interface Step {
   num: string;
   icon: LucideIcon;
@@ -10,6 +12,7 @@ interface Step {
   desc: string;
   cta: string;
   href: string;
+  accent: Accent;
 }
 
 const steps: Step[] = [
@@ -20,6 +23,7 @@ const steps: Step[] = [
     desc: 'Answer a few questions and get a mechanism-matched starting stack, tuned to your goal and experience.',
     cta: 'Start the quiz',
     href: '/quiz',
+    accent: 'cyan',
   },
   {
     num: '02',
@@ -28,6 +32,7 @@ const steps: Step[] = [
     desc: 'See how each hallmark of aging actually works, and why every compound sits where it does on the A–C scale.',
     cta: 'Open the library',
     href: '/library',
+    accent: 'emerald',
   },
   {
     num: '03',
@@ -36,8 +41,27 @@ const steps: Step[] = [
     desc: 'Design a protocol, model its projected impact, then log labs to watch it move — all private to your device.',
     cta: 'Open the dashboard',
     href: '/dashboard',
+    accent: 'violet',
   },
 ];
+
+const accentText: Record<Accent, string> = {
+  cyan: 'text-accent-cyan',
+  emerald: 'text-accent-emerald',
+  violet: 'text-accent-violet',
+};
+
+const accentBadge: Record<Accent, string> = {
+  cyan: 'icon-badge-cyan',
+  emerald: 'icon-badge-emerald',
+  violet: 'icon-badge-violet',
+};
+
+const accentVar: Record<Accent, string> = {
+  cyan: 'var(--accent-cyan)',
+  emerald: 'var(--accent-emerald)',
+  violet: 'var(--accent-violet)',
+};
 
 export function HomeSteps() {
   return (
@@ -58,19 +82,23 @@ export function HomeSteps() {
         </div>
 
         <ol className="grid grid-cols-1 gap-5 md:grid-cols-3">
-          {steps.map(({ num, icon: Icon, title, desc, cta, href }) => (
-            <li key={num} className="card-base flex flex-col p-7">
+          {steps.map(({ num, icon: Icon, title, desc, cta, href, accent }) => (
+            <li
+              key={num}
+              className="card-premium card-accent-glow flex flex-col rounded-2xl p-7"
+              style={{ ['--card-accent' as string]: accentVar[accent] }}
+            >
               <div className="mb-6 flex items-center gap-4">
-                <span className="font-mono text-3xl font-semibold text-accent-cyan/60">{num}</span>
-                <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl icon-badge-cyan">
-                  <Icon className="h-5 w-5 text-accent-cyan" aria-hidden="true" />
+                <span className={`font-mono text-3xl font-semibold ${accentText[accent]}/60`}>{num}</span>
+                <span className={`inline-flex h-11 w-11 items-center justify-center rounded-xl ${accentBadge[accent]}`}>
+                  <Icon className={`h-5 w-5 ${accentText[accent]}`} aria-hidden="true" />
                 </span>
               </div>
               <h3 className="heading-card mb-2 text-lg">{title}</h3>
               <p className="text-body-sm mb-6 flex-1 leading-relaxed">{desc}</p>
               <Link
                 href={href}
-                className="focus-ring group mt-auto inline-flex items-center gap-1.5 rounded-md text-sm font-semibold text-accent-cyan"
+                className={`focus-ring group mt-auto inline-flex items-center gap-1.5 rounded-md text-sm font-semibold ${accentText[accent]}`}
               >
                 {cta}
                 <ArrowRight

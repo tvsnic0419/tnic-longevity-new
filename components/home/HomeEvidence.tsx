@@ -2,6 +2,26 @@ import Link from 'next/link';
 import { ShieldCheck, Lock, BookMarked, ArrowUpRight, type LucideIcon } from 'lucide-react';
 import { citationRegistry } from '@/lib/trust';
 
+type Accent = 'emerald' | 'cyan' | 'violet';
+
+const accentBadge: Record<Accent, string> = {
+  emerald: 'icon-badge-emerald',
+  cyan: 'icon-badge-cyan',
+  violet: 'icon-badge-violet',
+};
+
+const accentText: Record<Accent, string> = {
+  emerald: 'text-accent-emerald',
+  cyan: 'text-accent-cyan',
+  violet: 'text-accent-violet',
+};
+
+const accentVar: Record<Accent, string> = {
+  emerald: 'var(--accent-emerald)',
+  cyan: 'var(--accent-cyan)',
+  violet: 'var(--accent-violet)',
+};
+
 /**
  * Credibility band — the numbers and principles a sponsor or first-time visitor
  * needs to trust the platform. Citation count is read from the live registry so
@@ -17,21 +37,24 @@ const stats: { value: string; label: string }[] = [
   { value: '100%', label: 'Free & independent' },
 ];
 
-const pillars: { icon: LucideIcon; title: string; desc: string }[] = [
+const pillars: { icon: LucideIcon; title: string; desc: string; accent: Accent }[] = [
   {
     icon: ShieldCheck,
     title: 'Independent by design',
     desc: 'No supplement inventory to move and no affiliate-driven rankings — the evidence sets the order, not a sponsor.',
+    accent: 'emerald',
   },
   {
     icon: Lock,
     title: 'Private by default',
     desc: 'Your quiz, stack, and lab results stay on your device. No accounts, no health-data sales, no tracking pixels.',
+    accent: 'cyan',
   },
   {
     icon: BookMarked,
     title: 'Cited to the source',
     desc: 'Every tier and claim traces back to human trials, linked by PubMed ID so you can check the work yourself.',
+    accent: 'violet',
   },
 ];
 
@@ -77,10 +100,14 @@ export function HomeEvidence() {
         </dl>
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-          {pillars.map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="card-base p-6">
-              <span className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl icon-badge-emerald">
-                <Icon className="h-5 w-5 text-accent-emerald" aria-hidden="true" />
+          {pillars.map(({ icon: Icon, title, desc, accent }) => (
+            <div
+              key={title}
+              className="card-premium card-accent-glow p-6"
+              style={{ ['--card-accent' as string]: accentVar[accent] }}
+            >
+              <span className={`mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl ${accentBadge[accent]}`}>
+                <Icon className={`h-5 w-5 ${accentText[accent]}`} aria-hidden="true" />
               </span>
               <h3 className="heading-card mb-2">{title}</h3>
               <p className="text-body-sm leading-relaxed">{desc}</p>

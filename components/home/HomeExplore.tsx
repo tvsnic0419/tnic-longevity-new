@@ -94,6 +94,14 @@ const accentBadge: Record<Accent, string> = {
   amber: 'icon-badge-amber',
 };
 
+const accentVar: Record<Accent, string> = {
+  cyan: 'var(--accent-cyan)',
+  violet: 'var(--accent-violet)',
+  emerald: 'var(--accent-emerald)',
+  rose: 'var(--accent-rose)',
+  amber: 'var(--accent-amber)',
+};
+
 export function HomeExplore() {
   return (
     <section
@@ -126,7 +134,8 @@ export function HomeExplore() {
             <Link
               key={title}
               href={href}
-              className="card-premium tnic-card focus-ring group flex flex-col rounded-2xl p-6"
+              className="card-premium card-accent-glow tnic-card focus-ring group flex flex-col rounded-2xl p-6"
+              style={{ ['--card-accent' as string]: accentVar[accent] }}
             >
               <div className="mb-5 flex items-center justify-between">
                 <span
