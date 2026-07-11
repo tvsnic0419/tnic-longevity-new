@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import { ClipboardList, Library, ArrowRight, Sparkles } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo';
 import { StarterQuiz } from '@/components/sections/StarterQuiz';
+import { MolecularMotif } from '@/components/illustrations/MolecularMotif';
 
 /**
  * Server-rendered homepage hero.
@@ -36,6 +37,11 @@ export function HomeHero() {
         <div className="absolute -left-32 -top-40 h-[38rem] w-[38rem] rounded-full bg-[radial-gradient(circle,rgba(0,224,255,0.16),transparent_60%)] blur-2xl" />
         <div className="absolute -right-40 top-1/3 h-[34rem] w-[34rem] rounded-full bg-[radial-gradient(circle,rgba(52,211,153,0.12),transparent_60%)] blur-2xl" />
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-background" />
+        <MolecularMotif
+          theme="cyan"
+          size="hero"
+          className="absolute -right-10 top-0 hidden h-[34rem] w-[26rem] opacity-40 md:block lg:-right-4"
+        />
       </div>
 
       <div className="container-page">

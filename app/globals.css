@@ -601,6 +601,12 @@ body::after {
 .animate-breathe { animation: breathe 4s ease-in-out infinite; }
 .animate-gradient { animation: gradient-drift 6s ease infinite; background-size: 200% 200%; }
 
+@keyframes motif-glow-pulse {
+  0%, 100% { opacity: 0.08; }
+  50% { opacity: 0.18; }
+}
+.motif-glow-pulse { animation: motif-glow-pulse 6s ease-in-out infinite; }
+
 /* ── Scan line overlay ── */
 .scan-overlay::after {
   content: '';

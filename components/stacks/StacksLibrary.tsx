@@ -58,6 +58,7 @@ export function StacksLibrary() {
         meta={`${eliteStacks.length} elite stacks · 6 evidence-graded compounds · Educational only`}
         theme="violet"
         context={getHubContext('stacks')}
+        graphic
       />
 
       <div className="flex flex-wrap gap-3 mb-6">

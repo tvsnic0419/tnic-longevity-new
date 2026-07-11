@@ -51,6 +51,7 @@ export function AntiAgingLibrary({ asPageTitle = false }: AntiAgingLibraryProps)
           meta={notedCount > 0 ? `${notedCount} hallmark${notedCount > 1 ? 's' : ''} with personal notes saved locally` : undefined}
           theme="cyan"
           as={asPageTitle ? 'h1' : 'h2'}
+          graphic
         />
 
         {/* Systems Map CTA */}

@@ -83,6 +83,7 @@ export function LabHub() {
         description="Log lab results, visualize trends, map risks to the 12 Hallmarks of Aging, and get stack-aware recommendations — all processed locally in your browser."
         theme="rose"
         context={getHubContext('labs')}
+        graphic
       />
 
       {analysis.markersTracked > 0 && (
