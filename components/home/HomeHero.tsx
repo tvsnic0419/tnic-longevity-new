@@ -40,7 +40,7 @@ export function HomeHero() {
         <MolecularMotif
           theme="cyan"
           size="hero"
-          className="absolute -right-10 top-0 hidden h-[34rem] w-[26rem] opacity-40 md:block lg:-right-4"
+          className="absolute -right-10 top-0 hidden opacity-40 md:block lg:-right-4"
         />
       </div>
 

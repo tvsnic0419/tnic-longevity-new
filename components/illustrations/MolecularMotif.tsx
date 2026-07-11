@@ -66,17 +66,30 @@ const HELIX_TOP = 210;
 const HELIX_BOTTOM = 440;
 const HELIX_STEPS = 8;
 
+const RING_A_PATH = ringPath(RING_A);
+const RING_B_PATH = ringPath(RING_B);
+const HELIX_PATH_A = helixStrand(HELIX_CX, HELIX_TOP, HELIX_BOTTOM, 26, 0);
+const HELIX_PATH_B = helixStrand(HELIX_CX, HELIX_TOP, HELIX_BOTTOM, 26, Math.PI);
+const RING_BOND_PATH = `M ${RING_A[1].join(',')} L ${RING_B[4].join(',')}`;
+const HELIX_LEAD_IN_PATH = `M ${RING_B[2][0]},${RING_B[2][1]} Q ${RING_B[2][0] + 10},${(RING_B[2][1] + HELIX_TOP) / 2} ${HELIX_CX},${HELIX_TOP}`;
+
 /**
  * Literal molecular / scientific-diagram motif for hero and hub-header
  * backdrops — a two-ring "compound" sketch (atoms, bonds, alternating double
- * bonds) flowing into a DNA double helix with base-pair rungs. Purely
- * decorative (aria-hidden) and server-rendered; its one ambient glow pulse
- * is a plain CSS animation, so the site's global
- * `prefers-reduced-motion: reduce` rule (app/globals.css) neutralizes it
- * automatically — no client JS needed.
+ * bonds) flowing into a DNA double helix with base-pair rungs. Every stroke
+ * is drawn twice — a wide, blurred "glow" pass underneath a crisp pass on
+ * top — and atoms use a radial gradient plus a small specular dot, for a
+ * lit, dimensional look rather than flat vector lines. Purely decorative
+ * (aria-hidden) and server-rendered; its one ambient glow pulse is a plain
+ * CSS animation, so the site's global `prefers-reduced-motion: reduce` rule
+ * (app/globals.css) neutralizes it automatically — no client JS needed.
  */
 export function MolecularMotif({ theme = 'cyan', size = 'hero', className = '' }: MolecularMotifProps) {
   const accent = ACCENT_VAR[theme];
+  const orbId = `motif-orb-${theme}`;
+  const fadeId = `motif-fade-${theme}`;
+  const softGlowId = `motif-blur-soft-${theme}`;
+  const wideGlowId = `motif-blur-wide-${theme}`;
 
   const helixRungs = Array.from({ length: HELIX_STEPS + 1 }, (_, i) => {
     const t = i / HELIX_STEPS;
@@ -87,81 +100,104 @@ export function MolecularMotif({ theme = 'cyan', size = 'hero', className = '' }
     return { x1, x2, y };
   });
 
+  const doubleBonds = [0, 2, 4].map((i) => doubleBondLine(RING_A[i], RING_A[(i + 1) % 6]));
+
   return (
     <svg
       viewBox="0 0 300 460"
       aria-hidden="true"
       focusable="false"
-      className={`pointer-events-none select-none ${size === 'hero' ? 'w-full h-full' : 'w-32 h-48 md:w-40 md:h-60'} ${className}`}
+      className={`pointer-events-none select-none ${size === 'compact' ? 'w-32 h-48 md:w-40 md:h-60' : 'w-full h-full'} ${className}`}
     >
       <defs>
-        <linearGradient id={`motif-fade-${theme}`} x1="0%" y1="0%" x2="0%" y2="100%">
+        <linearGradient id={fadeId} x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stopColor={accent} stopOpacity="0.9" />
           <stop offset="100%" stopColor={accent} stopOpacity="0.15" />
         </linearGradient>
-        <filter id={`motif-glow-${theme}`} x="-60%" y="-60%" width="220%" height="220%">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
+        <radialGradient id={orbId} cx="32%" cy="28%" r="75%">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+          <stop offset="30%" stopColor={accent} stopOpacity="0.95" />
+          <stop offset="100%" stopColor={accent} stopOpacity="0.55" />
+        </radialGradient>
+        <filter id={softGlowId} x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="2.4" />
+        </filter>
+        <filter id={wideGlowId} x="-120%" y="-120%" width="340%" height="340%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="9" />
         </filter>
       </defs>
 
-      <g opacity="0.9" strokeLinecap="round">
-        {/* Ring A — six-membered aromatic ring, alternating double bonds */}
-        <path d={ringPath(RING_A)} fill="none" stroke={accent} strokeWidth="2" opacity="0.55" />
-        {[0, 2, 4].map((i) => {
-          const bond = doubleBondLine(RING_A[i], RING_A[(i + 1) % 6]);
-          return (
-            <line
-              key={i}
-              x1={bond.x1}
-              y1={bond.y1}
-              x2={bond.x2}
-              y2={bond.y2}
-              stroke={accent}
-              strokeWidth="1.5"
-              opacity="0.4"
-            />
-          );
-        })}
-        {RING_A.map(([x, y], i) => (
-          <circle key={`a-${i}`} cx={x} cy={y} r={i % 3 === 0 ? 4.5 : 3} fill={i % 3 === 0 ? accent : '#fafafa'} opacity={i % 3 === 0 ? 0.9 : 0.5} />
-        ))}
-
-        {/* Bond connecting the two rings */}
-        <line x1={RING_A[1][0]} y1={RING_A[1][1]} x2={RING_B[4][0]} y2={RING_B[4][1]} stroke={accent} strokeWidth="2" opacity="0.5" />
-
-        {/* Ring B — smaller heteroatom ring (nitrogen-tinted vertex, NAD+/purine-style) */}
-        <path d={ringPath(RING_B)} fill="none" stroke={accent} strokeWidth="1.75" opacity="0.5" />
-        {RING_B.map(([x, y], i) => (
-          <circle key={`b-${i}`} cx={x} cy={y} r={i === 1 ? 4 : 2.5} fill={i === 1 ? '#fafafa' : accent} opacity={i === 1 ? 0.85 : 0.45} />
-        ))}
-
-        {/* Bond flowing from ring B into the helix */}
-        <path
-          d={`M ${RING_B[2][0]},${RING_B[2][1]} Q ${RING_B[2][0] + 10},${(RING_B[2][1] + HELIX_TOP) / 2} ${HELIX_CX},${HELIX_TOP}`}
-          fill="none"
-          stroke={accent}
-          strokeWidth="1.75"
-          opacity="0.4"
-        />
-
-        {/* DNA double helix */}
-        <path d={helixStrand(HELIX_CX, HELIX_TOP, HELIX_BOTTOM, 26, 0)} fill="none" stroke={`url(#motif-fade-${theme})`} strokeWidth="2.25" />
-        <path d={helixStrand(HELIX_CX, HELIX_TOP, HELIX_BOTTOM, 26, Math.PI)} fill="none" stroke="#fafafa" strokeOpacity="0.3" strokeWidth="2" />
-        {helixRungs.map((r, i) => (
-          <line key={`rung-${i}`} x1={r.x1} y1={r.y} x2={r.x2} y2={r.y} stroke={accent} strokeWidth="1.25" opacity="0.3" />
-        ))}
+      {/* Layered bloom — soft, diffuse light pools behind the ring cluster
+          and the length of the helix, echoing the hero's own blur orbs but
+          scoped to this motif so it still reads at "compact" header size. */}
+      <g filter={`url(#${wideGlowId})`}>
+        <circle cx={RING_A[0][0]} cy={RING_A[0][1]} r="58" fill={accent} opacity="0.16" className="motif-glow-pulse" />
+        <circle cx={RING_B[0][0]} cy={RING_B[0][1]} r="34" fill={accent} opacity="0.14" />
+        <ellipse cx={HELIX_CX} cy={(HELIX_TOP + HELIX_BOTTOM) / 2} rx="34" ry={(HELIX_BOTTOM - HELIX_TOP) / 2} fill={accent} opacity="0.08" />
       </g>
 
-      {/* Soft ambient glow behind ring A, echoing the hero's existing blur orbs */}
-      <circle
-        cx={RING_A[0][0]}
-        cy={RING_A[0][1]}
-        r="60"
-        fill={accent}
-        opacity="0.12"
-        filter={`url(#motif-glow-${theme})`}
-        className="motif-glow-pulse"
-      />
+      {/* Glow pass — wide, blurred duplicate of every stroke beneath the
+          crisp linework, so bonds and strands read as lit neon rather than
+          flat vector lines. */}
+      <g fill="none" strokeLinecap="round" filter={`url(#${softGlowId})`} opacity="0.55">
+        <path d={RING_A_PATH} stroke={accent} strokeWidth="4.5" />
+        <path d={RING_B_PATH} stroke={accent} strokeWidth="4" />
+        <path d={RING_BOND_PATH} stroke={accent} strokeWidth="4" />
+        <path d={HELIX_LEAD_IN_PATH} stroke={accent} strokeWidth="3.5" />
+        <path d={HELIX_PATH_A} stroke={accent} strokeWidth="4.5" />
+        <path d={HELIX_PATH_B} stroke={accent} strokeWidth="3.5" />
+      </g>
+
+      <g opacity="0.95" strokeLinecap="round">
+        {/* Ring A — six-membered aromatic ring, alternating double bonds */}
+        <path d={RING_A_PATH} fill="none" stroke={accent} strokeWidth="2" opacity="0.65" />
+        {doubleBonds.map((bond, i) => (
+          <line
+            key={i}
+            x1={bond.x1}
+            y1={bond.y1}
+            x2={bond.x2}
+            y2={bond.y2}
+            stroke={accent}
+            strokeWidth="1.5"
+            opacity="0.5"
+          />
+        ))}
+        {RING_A.map(([x, y], i) => {
+          const featured = i % 3 === 0;
+          return (
+            <g key={`a-${i}`}>
+              <circle cx={x} cy={y} r={featured ? 4.5 : 3} fill={featured ? `url(#${orbId})` : '#fafafa'} opacity={featured ? 1 : 0.55} />
+              {featured && <circle cx={x - 1.3} cy={y - 1.3} r="1" fill="#ffffff" opacity="0.9" />}
+            </g>
+          );
+        })}
+
+        {/* Bond connecting the two rings */}
+        <path d={RING_BOND_PATH} stroke={accent} strokeWidth="2" opacity="0.55" />
+
+        {/* Ring B — smaller heteroatom ring (nitrogen-tinted vertex, NAD+/purine-style) */}
+        <path d={RING_B_PATH} fill="none" stroke={accent} strokeWidth="1.75" opacity="0.55" />
+        {RING_B.map(([x, y], i) => {
+          const featured = i === 1;
+          return (
+            <g key={`b-${i}`}>
+              <circle cx={x} cy={y} r={featured ? 4 : 2.5} fill={featured ? '#fafafa' : `url(#${orbId})`} opacity={featured ? 0.9 : 0.65} />
+              {featured && <circle cx={x - 1.1} cy={y - 1.1} r="0.9" fill="#ffffff" opacity="0.85" />}
+            </g>
+          );
+        })}
+
+        {/* Bond flowing from ring B into the helix */}
+        <path d={HELIX_LEAD_IN_PATH} fill="none" stroke={accent} strokeWidth="1.75" opacity="0.45" />
+
+        {/* DNA double helix */}
+        <path d={HELIX_PATH_A} fill="none" stroke={`url(#${fadeId})`} strokeWidth="2.25" />
+        <path d={HELIX_PATH_B} fill="none" stroke="#fafafa" strokeOpacity="0.35" strokeWidth="2" />
+        {helixRungs.map((r, i) => (
+          <line key={`rung-${i}`} x1={r.x1} y1={r.y} x2={r.x2} y2={r.y} stroke={accent} strokeWidth="1.25" opacity="0.35" />
+        ))}
+      </g>
     </svg>
   );
 }

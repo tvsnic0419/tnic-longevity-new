@@ -221,8 +221,8 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
                     onClick={() => select(opt.id)}
                     className="focus-ring quiz-option w-full text-left rounded-2xl border px-4 py-3.5 flex items-center gap-3.5 group"
                     style={{
-                      background: `color-mix(in srgb, ${optAccent} 7%, var(--glass-bg))`,
-                      borderColor: `color-mix(in srgb, ${optAccent} 22%, var(--glass-border))`,
+                      background: `color-mix(in srgb, ${optAccent} 16%, var(--glass-bg))`,
+                      borderColor: `color-mix(in srgb, ${optAccent} 42%, var(--glass-border))`,
                       ['--opt-accent' as string]: optAccent,
                     }}
                   >
@@ -230,13 +230,13 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
                       <div
                         className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110"
                         style={{
-                          background: `color-mix(in srgb, ${optAccent} 20%, transparent)`,
-                          boxShadow: `inset 0 0 0 1px color-mix(in srgb, ${optAccent} 30%, transparent)`,
+                          background: `color-mix(in srgb, ${optAccent} 32%, transparent)`,
+                          boxShadow: `inset 0 0 0 1.5px color-mix(in srgb, ${optAccent} 55%, transparent), 0 0 16px -4px color-mix(in srgb, ${optAccent} 50%, transparent)`,
                         }}
                       >
                         <Icon
                           className="w-5 h-5"
-                          style={{ color: optAccent }}
+                          style={{ color: optAccent, filter: `drop-shadow(0 0 4px color-mix(in srgb, ${optAccent} 70%, transparent))` }}
                           aria-hidden="true"
                         />
                       </div>
