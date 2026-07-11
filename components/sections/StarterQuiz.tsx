@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BookOpen, Shield, Zap, Layers, Check } from 'lucide-react';
+import { BookOpen, Shield, Zap, Layers, Check, ArrowRight } from 'lucide-react';
 import { quizSteps, getQuizResult, getQuizPreset, type QuizAnswers } from '@/lib/homepage';
 import { stackPresets } from '@/lib/presets';
 import { compounds } from '@/lib/data';
@@ -149,12 +149,12 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
             return (
               <div key={s.id} className="flex items-center gap-2">
                 <div
-                  className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold transition-all duration-300"
+                  className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-all duration-300"
                   style={{
                     background: isComplete
                       ? 'var(--accent-emerald)'
                       : isActive
-                        ? 'color-mix(in srgb, var(--accent-cyan) 20%, transparent)'
+                        ? 'color-mix(in srgb, var(--accent-cyan) 22%, transparent)'
                         : 'color-mix(in srgb, currentColor 8%, transparent)',
                     border: isActive
                       ? '1.5px solid var(--accent-cyan)'
@@ -162,9 +162,10 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
                         ? '1.5px solid var(--accent-emerald)'
                         : '1.5px solid color-mix(in srgb, currentColor 15%, transparent)',
                     color: isComplete ? '#000' : isActive ? 'var(--accent-cyan)' : 'var(--muted-foreground)',
+                    boxShadow: isActive ? '0 0 0 4px color-mix(in srgb, var(--accent-cyan) 14%, transparent)' : 'none',
                   }}
                 >
-                  {isComplete ? <Check className="w-2.5 h-2.5" /> : i + 1}
+                  {isComplete ? <Check className="w-3 h-3" /> : i + 1}
                 </div>
                 {i < quizSteps.length - 1 && (
                   <div
@@ -183,9 +184,10 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
         </div>
       )}
 
-      <div className="h-0.5 bg-muted rounded-full mb-5 overflow-hidden">
+      <div className="h-1 bg-muted rounded-full mb-5 overflow-hidden">
         <motion.div
           className="h-full bg-gradient-to-r from-accent-cyan to-accent-emerald rounded-full"
+          style={{ boxShadow: '0 0 8px color-mix(in srgb, var(--accent-cyan) 60%, transparent)' }}
           animate={{ width: `${progress}%` }}
           transition={{ duration: 0.4 }}
         />
@@ -205,7 +207,7 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
             exit={{ opacity: 0, x: -12 }}
           >
             <p className="text-sm font-semibold mb-3">{current.question}</p>
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               {current.options.map((opt) => {
                 const Icon = 'icon' in opt ? goalIcons[opt.icon] : null;
                 const optAccent =
@@ -217,37 +219,48 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
                     key={opt.id}
                     type="button"
                     onClick={() => select(opt.id)}
-                    className="focus-ring w-full text-left glass glass-hover rounded-xl px-4 py-3 flex items-center gap-3 transition-all group"
-                    style={{ ['--hover-accent' as string]: optAccent }}
+                    className="focus-ring quiz-option w-full text-left rounded-2xl border px-4 py-3.5 flex items-center gap-3.5 group"
+                    style={{
+                      background: `color-mix(in srgb, ${optAccent} 7%, var(--glass-bg))`,
+                      borderColor: `color-mix(in srgb, ${optAccent} 22%, var(--glass-border))`,
+                      ['--opt-accent' as string]: optAccent,
+                    }}
                   >
                     {Icon && (
                       <div
-                        className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-all group-hover:scale-110"
+                        className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110"
                         style={{
-                          background: `color-mix(in srgb, ${optAccent} 15%, transparent)`,
+                          background: `color-mix(in srgb, ${optAccent} 20%, transparent)`,
+                          boxShadow: `inset 0 0 0 1px color-mix(in srgb, ${optAccent} 30%, transparent)`,
                         }}
                       >
                         <Icon
-                          className="w-3.5 h-3.5"
+                          className="w-5 h-5"
                           style={{ color: optAccent }}
                           aria-hidden="true"
                         />
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold group-hover:text-foreground transition-colors"
+                      <p className="text-[15px] font-semibold leading-snug group-hover:text-foreground transition-colors"
                         style={{ color: 'inherit' }}>
                         {opt.label}
                       </p>
-                      {'desc' in opt && <p className="text-[10px] text-muted-foreground">{opt.desc}</p>}
+                      {'desc' in opt && <p className="text-[11px] text-muted-foreground mt-0.5">{opt.desc}</p>}
                     </div>
-                    {step === 0 && (
+                    {step === 0 ? (
                       <span
                         className="shrink-0 text-[9px] font-semibold font-mono opacity-0 group-hover:opacity-100 transition-opacity"
                         style={{ color: optAccent }}
                       >
                         {stackPresets[getQuizPreset({ goal: opt.id })].label}
                       </span>
+                    ) : (
+                      <ArrowRight
+                        className="w-4 h-4 shrink-0 opacity-0 -translate-x-1 group-hover:opacity-70 group-hover:translate-x-0 transition-all duration-300"
+                        style={{ color: optAccent }}
+                        aria-hidden="true"
+                      />
                     )}
                   </button>
                 );

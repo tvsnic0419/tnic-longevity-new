@@ -607,6 +607,18 @@ body::after {
 }
 .motif-glow-pulse { animation: motif-glow-pulse 6s ease-in-out infinite; }
 
+/* ── Starter quiz option rows — per-option accent glow on hover/focus ── */
+.quiz-option {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.quiz-option:hover,
+.quiz-option:focus-visible {
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 28px -12px color-mix(in srgb, var(--opt-accent) 45%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--opt-accent) 30%, transparent);
+}
+
 /* ── Scan line overlay ── */
 .scan-overlay::after {
   content: '';
