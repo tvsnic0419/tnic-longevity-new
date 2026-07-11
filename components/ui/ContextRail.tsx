@@ -43,10 +43,16 @@ export function ContextRail({ what, why, next, theme = 'cyan', className = '' }:
       {items.map((item, i) => {
         const Icon = item.icon ?? defaultIcons[i] ?? HelpCircle;
         return (
-          <div key={item.label} className="context-rail-item">
-            <div className="flex items-center gap-2 mb-1.5">
-              <Icon className={`w-3.5 h-3.5 ${t.text}`} aria-hidden="true" />
-              <p className={`context-rail-label ${t.text}`}>{item.label}</p>
+          <div
+            key={item.label}
+            className="context-rail-item"
+            style={{ ['--rail-accent' as string]: t.cssVar }}
+          >
+            <div className="flex items-center gap-2.5 mb-2">
+              <div className="context-rail-icon">
+                <Icon className="w-4 h-4" aria-hidden="true" />
+              </div>
+              <p className="context-rail-label">{item.label}</p>
             </div>
             <p className="text-body-sm leading-relaxed">{item.text}</p>
           </div>

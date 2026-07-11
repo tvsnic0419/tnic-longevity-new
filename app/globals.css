@@ -901,15 +901,15 @@ body::after {
 
 .context-rail-item {
   position: relative;
-  padding: 1.15rem 1.25rem 1.15rem 1.5rem;
+  padding: 1.25rem 1.35rem 1.25rem 1.6rem;
   border-radius: var(--radius-xl);
   background: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--glass-bg) 84%, #ffffff 7%),
+    color-mix(in srgb, var(--rail-accent) 6%, var(--glass-bg)),
     var(--glass-bg) 60%
   );
   backdrop-filter: blur(16px);
-  border: 1px solid color-mix(in srgb, var(--accent-cyan) 12%, var(--color-border-subtle));
+  border: 1px solid color-mix(in srgb, var(--rail-accent) 16%, var(--color-border-subtle));
   box-shadow:
     inset 0 1px 0 0 color-mix(in srgb, #ffffff 9%, transparent),
     0 2px 4px -2px rgba(0, 0, 0, 0.35),
@@ -918,7 +918,9 @@ body::after {
   transition: border-color 0.25s, background 0.25s, transform 0.25s, box-shadow 0.25s;
 }
 /* Accent spine — codes each step and turns three flat boxes into one
-   deliberate orientation strip. */
+   deliberate orientation strip. Driven by --rail-accent (set per-item from
+   the section's own theme), not a fixed hue, so it never clashes on
+   violet/rose/amber-themed hubs. */
 .context-rail-item::before {
   content: '';
   position: absolute;
@@ -928,27 +930,40 @@ body::after {
   width: 3px;
   background: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--accent-cyan) 80%, transparent),
-    color-mix(in srgb, var(--accent-emerald) 55%, transparent)
+    color-mix(in srgb, var(--rail-accent) 90%, transparent),
+    color-mix(in srgb, var(--rail-accent) 35%, transparent)
   );
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
 .context-rail-item:hover {
-  border-color: color-mix(in srgb, var(--accent-cyan) 32%, transparent);
+  border-color: color-mix(in srgb, var(--rail-accent) 38%, transparent);
   transform: translateY(-3px);
   box-shadow:
     inset 0 1px 0 0 color-mix(in srgb, #ffffff 12%, transparent),
-    0 14px 34px -10px color-mix(in srgb, var(--accent-cyan) 24%, transparent);
+    0 14px 34px -10px color-mix(in srgb, var(--rail-accent) 30%, transparent);
+}
+
+.context-rail-icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--rail-accent);
+  background: color-mix(in srgb, var(--rail-accent) 18%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--rail-accent) 32%, transparent);
 }
 
 .context-rail-label {
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  margin-bottom: 0.375rem;
+  color: var(--rail-accent);
 }
 
 .section-header-mesh {
