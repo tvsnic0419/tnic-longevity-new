@@ -214,6 +214,11 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
                   step === 0
                     ? goalAccent[opt.id] ?? 'var(--accent-cyan)'
                     : 'var(--accent-cyan)';
+                // Mixing the (light, high-lightness) accent straight into the
+                // dark glass background reads as a pale wash — pre-mix it
+                // with black first for a deeper, richer jewel-tone base,
+                // most noticeable on cyan, which is the lightest accent.
+                const deepAccent = `color-mix(in srgb, ${optAccent} 60%, black)`;
                 return (
                   <button
                     key={opt.id}
@@ -221,8 +226,8 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
                     onClick={() => select(opt.id)}
                     className="focus-ring quiz-option w-full text-left rounded-2xl border px-4 py-3.5 flex items-center gap-3.5 group"
                     style={{
-                      background: `color-mix(in srgb, ${optAccent} 16%, var(--glass-bg))`,
-                      borderColor: `color-mix(in srgb, ${optAccent} 42%, var(--glass-border))`,
+                      background: `color-mix(in srgb, ${deepAccent} 38%, var(--glass-bg))`,
+                      borderColor: `color-mix(in srgb, ${deepAccent} 65%, var(--glass-border))`,
                       ['--opt-accent' as string]: optAccent,
                     }}
                   >
