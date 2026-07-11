@@ -26,6 +26,7 @@ export function QuizPageContent() {
           meta="Goal · Age range · Experience"
           theme="emerald"
           context={getHubContext('quiz')}
+          graphic
         />
 
         <StarterQuiz variant="page" />
