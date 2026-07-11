@@ -1,4 +1,5 @@
 /** Runtime environment helpers — single place for production guards */
+import { timingSafeEqual } from 'crypto';
 
 export function isProduction(): boolean {
   return process.env.VERCEL_ENV === 'production' || process.env.NODE_ENV === 'production';
@@ -22,4 +23,13 @@ export function requireSecretInProduction(
     error: `${name} is required in production`,
     status: 503,
   };
+}
+
+/** Constant-time secret comparison — use for any header/bearer secret check. */
+export function safeEqual(a: string | undefined, b: string | undefined): boolean {
+  if (!a || !b) return false;
+  const bufA = Buffer.from(a);
+  const bufB = Buffer.from(b);
+  if (bufA.length !== bufB.length) return false;
+  return timingSafeEqual(bufA, bufB);
 }

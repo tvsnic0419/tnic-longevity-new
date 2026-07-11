@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { requireSecretInProduction } from '@/lib/env';
+import { requireSecretInProduction, safeEqual } from '@/lib/env';
 import { parsePartnerJson, PARTNER_SCHEMA } from '@/lib/lab-partner-import';
 import { recordLabWebhookEvent } from '@/lib/lab-webhook-events';
 
@@ -17,7 +17,9 @@ export async function POST(request: Request) {
   }
 
   const header = request.headers.get('x-tnic-webhook-secret');
-  if (header !== secret) {
+  // secret is only unset outside production (guarded above), where this
+  // intentionally stays open for local/dev use.
+  if (secret && !safeEqual(header ?? undefined, secret)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

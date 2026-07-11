@@ -6,7 +6,9 @@ export function StructuredData({ schemas }: { schemas: object[] }) {
         <script
           key={i}
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          // Escape `<` so no field value can break out of the script tag
+          // (e.g. a `</script><script>` sequence in authored copy).
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, '\\u003c') }}
         />
       ))}
     </>

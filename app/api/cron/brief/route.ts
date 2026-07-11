@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { requireSecretInProduction } from '@/lib/env';
+import { requireSecretInProduction, safeEqual } from '@/lib/env';
 import { sendWeeklyBriefDigest, isResendConfigured } from '@/lib/resend';
 
 export const runtime = 'nodejs';
@@ -15,7 +15,9 @@ export async function GET(request: Request) {
   const auth = request.headers.get('authorization');
   const bearer = auth?.replace(/^Bearer\s+/i, '');
 
-  if (bearer !== cronSecret) {
+  // cronSecret is only unset outside production (guarded above), where this
+  // intentionally stays open for local/dev use.
+  if (cronSecret && !safeEqual(bearer, cronSecret)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

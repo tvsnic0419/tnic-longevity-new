@@ -104,7 +104,8 @@ export function useLabOrderWatcher({
 
       try {
         const eventsRes = await fetch(
-          `/api/labs/partner/events?since=${encodeURIComponent(since)}&order_ids=${encodeURIComponent(orderIds)}`,
+          `/api/labs/partner/events?since=${encodeURIComponent(since)}&order_ids=${encodeURIComponent(orderIds)}&partner_id=${encodeURIComponent(session.partner_id)}`,
+          { headers: { Authorization: `Bearer ${session.access_token}` } },
         );
         const eventsData = await eventsRes.json();
         if (eventsData.ok && Array.isArray(eventsData.events)) {

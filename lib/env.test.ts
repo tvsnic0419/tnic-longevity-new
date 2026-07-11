@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach, afterEach } from 'vitest';
-import { isProduction, requireSecretInProduction } from './env';
+import { isProduction, requireSecretInProduction, safeEqual } from './env';
 
 describe('env', () => {
   const original = { ...process.env };
@@ -33,5 +33,23 @@ describe('env', () => {
   it('requireSecretInProduction passes when secret is set', () => {
     process.env.VERCEL_ENV = 'production';
     expect(requireSecretInProduction('abc', 'CRON_SECRET')).toBeNull();
+  });
+
+  it('safeEqual matches equal strings', () => {
+    expect(safeEqual('shared-secret', 'shared-secret')).toBe(true);
+  });
+
+  it('safeEqual rejects mismatched strings', () => {
+    expect(safeEqual('shared-secret', 'wrong')).toBe(false);
+  });
+
+  it('safeEqual rejects when either side is missing', () => {
+    expect(safeEqual(undefined, 'shared-secret')).toBe(false);
+    expect(safeEqual('shared-secret', undefined)).toBe(false);
+    expect(safeEqual(undefined, undefined)).toBe(false);
+  });
+
+  it('safeEqual rejects different-length strings without throwing', () => {
+    expect(safeEqual('short', 'a-much-longer-secret')).toBe(false);
   });
 });
