@@ -13,25 +13,39 @@ const ToolsPromoStrip = dynamic(() => import('@/components/tools/ToolsPromoStrip
 const LibraryFacetFilters = dynamic(() => import('@/components/library/LibraryFacetFilters').then(mod => ({ default: mod.LibraryFacetFilters })), { ssr: false });
 const RecommendedNextSteps = dynamic(() => import('@/components/ui/RecommendedNextSteps').then(mod => ({ default: mod.RecommendedNextSteps })), { ssr: false });
 
-// All 12 visuals with correct slugs for deep linkage
-const hallmarkData = [
-  { slug: 'genomic-instability', Component: dynamic(() => import('@/components/illustrations/GenomicInstabilityVisual').then(mod => ({ default: mod.GenomicInstabilityVisual })), { ssr: false }), title: "Genomic Instability" },
-  { slug: 'telomere-attrition', Component: dynamic(() => import('@/components/illustrations/TelomereAttritionVisual').then(mod => ({ default: mod.TelomereAttritionVisual })), { ssr: false }), title: "Telomere Attrition" },
-  { slug: 'epigenetic-alterations', Component: dynamic(() => import('@/components/illustrations/EpigeneticAlterationsVisual').then(mod => ({ default: mod.EpigeneticAlterationsVisual })), { ssr: false }), title: "Epigenetic Alterations" },
-  { slug: 'loss-of-proteostasis', Component: dynamic(() => import('@/components/illustrations/LossOfProteostasisVisual').then(mod => ({ default: mod.LossOfProteostasisVisual })), { ssr: false }), title: "Loss of Proteostasis" },
-  { slug: 'deregulated-nutrient-sensing', Component: dynamic(() => import('@/components/illustrations/DeregulatedNutrientSensingVisual').then(mod => ({ default: mod.DeregulatedNutrientSensingVisual })), { ssr: false }), title: "Deregulated Nutrient Sensing" },
-  { slug: 'mitochondrial-dysfunction', Component: dynamic(() => import('@/components/illustrations/HallmarkVisuals').then(mod => ({ default: mod.MitochondrialDysfunctionVisual })), { ssr: false }), title: "Mitochondrial Dysfunction" },
-  { slug: 'cellular-senescence', Component: dynamic(() => import('@/components/illustrations/CellularSenescenceVisual').then(mod => ({ default: mod.CellularSenescenceVisual })), { ssr: false }), title: "Cellular Senescence" },
-  { slug: 'stem-cell-exhaustion', Component: dynamic(() => import('@/components/illustrations/StemCellExhaustionVisual').then(mod => ({ default: mod.StemCellExhaustionVisual })), { ssr: false }), title: "Stem Cell Exhaustion" },
-  { slug: 'altered-intercellular-communication', Component: dynamic(() => import('@/components/illustrations/AlteredIntercellularCommunicationVisual').then(mod => ({ default: mod.AlteredIntercellularCommunicationVisual })), { ssr: false }), title: "Altered Intercellular Communication" },
-  { slug: 'chronic-inflammation', Component: dynamic(() => import('@/components/illustrations/ChronicInflammationVisual').then(mod => ({ default: mod.ChronicInflammationVisual })), { ssr: false }), title: "Chronic Inflammation" },
-  { slug: 'dysbiosis', Component: dynamic(() => import('@/components/illustrations/DysbiosisVisual').then(mod => ({ default: mod.DysbiosisVisual })), { ssr: false }), title: "Dysbiosis" },
-  { slug: 'disabled-macroautophagy', Component: dynamic(() => import('@/components/illustrations/DisabledMacroautophagyVisual').then(mod => ({ default: mod.DisabledMacroautophagyVisual })), { ssr: false }), title: "Disabled Macroautophagy" },
-];
+// All 12 visuals
+const GenomicInstabilityVisual = dynamic(() => import('@/components/illustrations/GenomicInstabilityVisual').then(mod => ({ default: mod.GenomicInstabilityVisual })), { ssr: false });
+const TelomereAttritionVisual = dynamic(() => import('@/components/illustrations/TelomereAttritionVisual').then(mod => ({ default: mod.TelomereAttritionVisual })), { ssr: false });
+const EpigeneticAlterationsVisual = dynamic(() => import('@/components/illustrations/EpigeneticAlterationsVisual').then(mod => ({ default: mod.EpigeneticAlterationsVisual })), { ssr: false });
+const LossOfProteostasisVisual = dynamic(() => import('@/components/illustrations/LossOfProteostasisVisual').then(mod => ({ default: mod.LossOfProteostasisVisual })), { ssr: false });
+const DeregulatedNutrientSensingVisual = dynamic(() => import('@/components/illustrations/DeregulatedNutrientSensingVisual').then(mod => ({ default: mod.DeregulatedNutrientSensingVisual })), { ssr: false });
+const MitochondrialDysfunctionVisual = dynamic(() => import('@/components/illustrations/HallmarkVisuals').then(mod => ({ default: mod.MitochondrialDysfunctionVisual })), { ssr: false });
+const CellularSenescenceVisual = dynamic(() => import('@/components/illustrations/CellularSenescenceVisual').then(mod => ({ default: mod.CellularSenescenceVisual })), { ssr: false });
+const StemCellExhaustionVisual = dynamic(() => import('@/components/illustrations/StemCellExhaustionVisual').then(mod => ({ default: mod.StemCellExhaustionVisual })), { ssr: false });
+const AlteredIntercellularCommunicationVisual = dynamic(() => import('@/components/illustrations/AlteredIntercellularCommunicationVisual').then(mod => ({ default: mod.AlteredIntercellularCommunicationVisual })), { ssr: false });
+const ChronicInflammationVisual = dynamic(() => import('@/components/illustrations/ChronicInflammationVisual').then(mod => ({ default: mod.ChronicInflammationVisual })), { ssr: false });
+const DysbiosisVisual = dynamic(() => import('@/components/illustrations/DysbiosisVisual').then(mod => ({ default: mod.DysbiosisVisual })), { ssr: false });
+const DisabledMacroautophagyVisual = dynamic(() => import('@/components/illustrations/DisabledMacroautophagyVisual').then(mod => ({ default: mod.DisabledMacroautophagyVisual })), { ssr: false });
 
 export default function LibraryPage() {
+  const visuals = [
+    { Component: GenomicInstabilityVisual, title: "Genomic Instability" },
+    { Component: TelomereAttritionVisual, title: "Telomere Attrition" },
+    { Component: EpigeneticAlterationsVisual, title: "Epigenetic Alterations" },
+    { Component: LossOfProteostasisVisual, title: "Loss of Proteostasis" },
+    { Component: DeregulatedNutrientSensingVisual, title: "Deregulated Nutrient Sensing" },
+    { Component: MitochondrialDysfunctionVisual, title: "Mitochondrial Dysfunction" },
+    { Component: CellularSenescenceVisual, title: "Cellular Senescence" },
+    { Component: StemCellExhaustionVisual, title: "Stem Cell Exhaustion" },
+    { Component: AlteredIntercellularCommunicationVisual, title: "Altered Intercellular Communication" },
+    { Component: ChronicInflammationVisual, title: "Chronic Inflammation" },
+    { Component: DysbiosisVisual, title: "Dysbiosis" },
+    { Component: DisabledMacroautophagyVisual, title: "Disabled Macroautophagy" },
+  ];
+
   return (
     <>
+      {/* Lead with the page title and context, then the tools to act on it */}
       <AntiAgingLibrary asPageTitle />
 
       <Suspense fallback={<div className="h-12 animate-pulse bg-white/5" />}>
@@ -48,7 +62,7 @@ export default function LibraryPage() {
         <RecommendedNextSteps context="library" />
       </div>
 
-      {/* Premium Luminous All 12 Hallmarks Visual Grid */}
+      {/* Polished All 12 Hallmarks Visual Grid */}
       <section className="container-page py-12 md:py-16 border-t border-[var(--color-border-subtle)]">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
@@ -56,40 +70,28 @@ export default function LibraryPage() {
               <div className="text-label text-[var(--accent-cyan)] mb-1.5">COMPLETE VISUAL SYSTEM</div>
               <h2 className="heading-section">All 12 Hallmarks of Aging</h2>
               <p className="text-body text-[var(--color-text-secondary)] max-w-2xl mt-2">
-                High-detail mechanistic visualizations. Click any hallmark to explore the full evidence, compounds, and protocol actions.
+                High-detail mechanistic visualizations. Hover to explore.
               </p>
             </div>
-            <Link href="/hallmarks" className="text-sm text-[var(--accent-cyan)] hover:underline">
-              Explore all deep-dives →
+            <Link href="/library" className="text-sm text-[var(--accent-cyan)] hover:underline">
+              Explore full library →
             </Link>
           </div>
 
-          {/* Enhanced luminous hallmark cards with premium depth and interaction */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {hallmarkData.map(({ slug, Component, title }, index) => (
+            {visuals.map(({ Component, title }, index) => (
               <Link 
                 key={index} 
-                href={`/hallmarks/${slug}`}
-                className="group block"
+                href="/library" 
+                className="group block transition-transform hover:scale-[1.01]"
               >
-                <div className="tnic-glass rounded-2xl overflow-hidden border border-[var(--color-border-subtle)] transition-all duration-300 group-hover:border-[var(--accent-cyan)]/40 group-hover:shadow-[0_0_0_1px_rgba(0,224,255,0.15),0_20px_60px_-15px_rgba(0,0,0,0.5)] h-full flex flex-col">
-                  
-                  {/* Illustration container with enhanced luminous treatment */}
-                  <div className="p-5 bg-[var(--color-bg-elevated)]/60 relative overflow-hidden">
-                    <div className="relative z-10">
-                      <Component showLabels={true} interactive={false} />
-                    </div>
-                    {/* Subtle luminous edge glow on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-cyan)]/5 via-transparent to-[var(--accent-emerald)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="tnic-glass rounded-2xl overflow-hidden border border-[var(--color-border-subtle)] group-hover:border-[var(--accent-cyan)]/30 transition-colors h-full">
+                  <div className="p-4">
+                    <Component showLabels={true} interactive={false} />
                   </div>
-
-                  <div className="px-5 pb-5 pt-4 border-t border-[var(--color-border-subtle)] flex-1 flex flex-col">
-                    <div className="text-[15px] font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--accent-cyan)] transition-colors tracking-[-0.15px]">
+                  <div className="px-4 pb-4 pt-2 border-t border-[var(--color-border-subtle)]">
+                    <div className="text-sm font-medium text-[var(--color-text-primary)] group-hover:text-[var(--accent-cyan)] transition-colors">
                       {title}
-                    </div>
-                    <div className="text-xs text-[var(--color-text-muted)] mt-1.5 group-hover:text-[var(--accent-cyan)]/70 transition-colors flex items-center gap-1">
-                      View evidence, compounds & synergies 
-                      <span className="transition-transform group-hover:translate-x-0.5">→</span>
                     </div>
                   </div>
                 </div>
@@ -99,7 +101,7 @@ export default function LibraryPage() {
 
           <div className="mt-8 text-center">
             <p className="text-sm text-[var(--color-text-muted)]">
-              All visuals are part of TNiC’s evidence-based illustration system. Click any card to enter the full mechanistic deep-dive.
+              All visuals are part of TNiC’s evidence-based illustration system.
             </p>
           </div>
         </div>

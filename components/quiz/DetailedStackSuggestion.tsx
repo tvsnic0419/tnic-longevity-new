@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { ExternalLink, Sparkles, ShieldAlert } from 'lucide-react';
 import { compounds } from '@/lib/data';
 import { stackPresets, type PresetKey } from '@/lib/presets';
@@ -100,12 +99,7 @@ export function DetailedStackSuggestion({ preset }: { preset: PresetKey }) {
                 </span>
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-1.5">
-                    <Link
-                      href={`/library/compounds/${c.id}`}
-                      className="focus-ring rounded text-sm font-semibold hover:text-accent-cyan transition-colors"
-                    >
-                      {c.name}
-                    </Link>
+                    <p className="text-sm font-semibold">{c.name}</p>
                     <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded ${t.cls}`}>{t.label}</span>
                     <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
                       {c.timing}
