@@ -56,7 +56,7 @@ export function BiomarkerImpactTool() {
       <ToolDisclaimer />
 
       <div className="grid lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-4 space-y-5">
+        <div className="lg:col-span-4 space-y-5 min-w-0">
           <Card elevated>
             <CardHeader>
               <CardTitle>Select biomarker</CardTitle>
@@ -132,7 +132,7 @@ export function BiomarkerImpactTool() {
           </Card>
         </div>
 
-        <div className="lg:col-span-8 space-y-5">
+        <div className="lg:col-span-8 space-y-5 min-w-0">
           <Card elevated>
             <CardHeader>
               <CardTitle>Impact ranking</CardTitle>

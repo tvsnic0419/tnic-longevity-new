@@ -450,6 +450,10 @@ body::after {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
+  /* Fade the trailing edges so a horizontally-scrollable row reads as
+     "more content this way" instead of abruptly, amateurishly cut off. */
+  mask-image: linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent);
 }
 
 .summary-strip {

@@ -50,7 +50,7 @@ export function StackNetworkTool() {
       <StackPresetsBar selected={selected} onApply={applyPreset} />
 
       <div className="grid lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-5 space-y-5">
+        <div className="lg:col-span-5 space-y-5 min-w-0">
           <Card variant="elevated">
             <CardHeader>
               <CardTitle>Build your stack</CardTitle>
@@ -83,7 +83,7 @@ export function StackNetworkTool() {
           )}
         </div>
 
-        <div className="lg:col-span-7 space-y-5">
+        <div className="lg:col-span-7 space-y-5 min-w-0">
           <Card variant="elevated">
             <CardHeader>
               <div className="flex flex-wrap items-center justify-between gap-3">

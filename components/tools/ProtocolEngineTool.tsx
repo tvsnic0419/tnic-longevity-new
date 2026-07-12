@@ -77,7 +77,7 @@ export function ProtocolEngineTool() {
       </div>
 
       <div className="grid lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-4 space-y-5">
+        <div className="lg:col-span-4 space-y-5 min-w-0">
           <Card variant="elevated">
             <CardHeader>
               <CardTitle>Your inputs</CardTitle>
@@ -172,7 +172,7 @@ export function ProtocolEngineTool() {
           </Card>
         </div>
 
-        <div className="lg:col-span-8 space-y-5">
+        <div className="lg:col-span-8 space-y-5 min-w-0">
           <Card variant="elevated" className="border-l-2 border-l-accent-violet">
             <CardHeader>
               <div className="flex flex-wrap items-start justify-between gap-3">

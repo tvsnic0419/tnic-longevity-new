@@ -85,7 +85,7 @@ export function AntiAgingLibrary({ asPageTitle = false }: AntiAgingLibraryProps)
 
         <div className="grid lg:grid-cols-12 gap-6 lg:gap-8">
           {/* Hallmark selector */}
-          <nav className="lg:col-span-4" aria-label="Hallmark list">
+          <nav className="lg:col-span-4 min-w-0" aria-label="Hallmark list">
             <p className="text-label text-accent-cyan mb-3 hidden lg:block">Select hallmark</p>
             <div
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-2 max-h-none lg:max-h-[32rem] lg:overflow-y-auto lg:pr-1 scroll-region"
@@ -170,7 +170,7 @@ export function AntiAgingLibrary({ asPageTitle = false }: AntiAgingLibraryProps)
           </nav>
 
           {/* Detail panel */}
-          <article className="lg:col-span-8" aria-live="polite">
+          <article className="lg:col-span-8 min-w-0" aria-live="polite">
             <AnimatePresence mode="wait">
               <motion.div
                 key={active.id}

@@ -43,7 +43,7 @@ export function SystemsSynthesisView({ hallmarkId, className }: SystemsSynthesis
   return (
     <div className={cn('space-y-4', className)}>
       {/* Tab bar */}
-      <div className="flex gap-1 p-1 bg-card border border-border rounded-xl overflow-x-auto scrollbar-none">
+      <div className="flex gap-1 p-1 bg-card border border-border rounded-xl scroll-region">
         {tabs.map(({ id, label, icon: Icon }) => {
           const active = activeTab === id;
           return (

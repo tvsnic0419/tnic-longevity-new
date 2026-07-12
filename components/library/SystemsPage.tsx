@@ -89,7 +89,7 @@ export function SystemsPage() {
 
         <div className="grid lg:grid-cols-12 gap-8">
           {/* Left — hallmark selector */}
-          <div className="lg:col-span-4 space-y-2">
+          <div className="lg:col-span-4 space-y-2 min-w-0">
             <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-3 px-1">
               Select Hallmark — sorted by leverage
             </p>
@@ -152,7 +152,7 @@ export function SystemsPage() {
           </div>
 
           {/* Right — synthesis panel */}
-          <div className="lg:col-span-8">
+          <div className="lg:col-span-8 min-w-0">
             {selectedHallmark && (
               <motion.div
                 key={selected}

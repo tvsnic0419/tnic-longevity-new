@@ -147,7 +147,7 @@ export function BiomarkerDashboardTool() {
       </div>
 
       <div className="grid lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-4 space-y-5">
+        <div className="lg:col-span-4 space-y-5 min-w-0">
           <Card variant="elevated">
             <CardHeader>
               <CardTitle>Marker selector</CardTitle>
@@ -220,7 +220,7 @@ export function BiomarkerDashboardTool() {
           </Card>
         </div>
 
-        <div className="lg:col-span-8 space-y-5">
+        <div className="lg:col-span-8 space-y-5 min-w-0">
           {activeSeries && activeSeries.points.length > 0 ? (
             <>
               <Card variant="elevated">

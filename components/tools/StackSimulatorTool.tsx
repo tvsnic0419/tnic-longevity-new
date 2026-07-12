@@ -47,7 +47,7 @@ export function StackSimulatorTool() {
       <StackPresetsBar selected={selected} onApply={applyPreset} />
 
       <div className="grid lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-7 space-y-6">
+        <div className="lg:col-span-7 space-y-6 min-w-0">
           <Card variant="elevated">
             <CardHeader>
               <CardTitle>Compound selector</CardTitle>
@@ -154,7 +154,7 @@ export function StackSimulatorTool() {
           </AnimatePresence>
         </div>
 
-        <div className="lg:col-span-5 space-y-5">
+        <div className="lg:col-span-5 space-y-5 min-w-0">
           <SynergyScorePanel
             score={result.analysis.score}
             analysis={result.analysis}

@@ -48,7 +48,7 @@ export function HealthspanEstimatorTool() {
       <ToolDisclaimer variant={estimate.dataConfidence < 50 ? 'warning' : 'info'} />
 
       <div className="grid lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-4 space-y-5">
+        <div className="lg:col-span-4 space-y-5 min-w-0">
           <Card elevated>
             <CardHeader>
               <CardTitle>Inputs</CardTitle>
@@ -113,7 +113,7 @@ export function HealthspanEstimatorTool() {
           </Card>
         </div>
 
-        <div className="lg:col-span-8 space-y-5">
+        <div className="lg:col-span-8 space-y-5 min-w-0">
           <div className="grid sm:grid-cols-3 gap-4">
             <Card elevated className="text-center">
               <p className="text-label text-accent-cyan mb-1">Healthspan score</p>

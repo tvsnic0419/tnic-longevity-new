@@ -60,7 +60,7 @@ export function ProtocolCustomizerTool() {
       <ToolDisclaimer />
 
       <div className="grid lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-5 space-y-5">
+        <div className="lg:col-span-5 space-y-5 min-w-0">
           <Card elevated>
             <CardHeader>
               <CardTitle>Your profile</CardTitle>
@@ -105,7 +105,7 @@ export function ProtocolCustomizerTool() {
           </Card>
         </div>
 
-        <div className="lg:col-span-7 space-y-5">
+        <div className="lg:col-span-7 space-y-5 min-w-0">
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
             <Card elevated>
               <CardHeader>
