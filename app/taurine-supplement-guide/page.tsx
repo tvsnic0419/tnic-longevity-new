@@ -4,6 +4,7 @@ import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
+import { TaurineVisual } from '@/components/illustrations/CompoundVisuals';
 
 export const metadata = buildPageMetadata({
   title: 'Taurine Supplement Guide 2026 — Longevity, Dosage & the Science 2023 Paper',
@@ -139,48 +140,59 @@ export default function TaurineGuidePage() {
 
       {/* Hero */}
       <section className="py-16 md:py-20 border-b border-border">
-        <div className="container-page max-w-4xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-emerald/10 border border-accent-emerald/20 mb-6">
-            <FlaskConical className="w-3.5 h-3.5 text-accent-emerald" aria-hidden="true" />
-            <span className="text-xs font-mono text-accent-emerald uppercase tracking-wider">Evidence Tier A · Taurine · Singh 2023 Science</span>
-          </div>
-
-          <h1 className="heading-hero mb-4">
-            Taurine Supplement Guide 2026
-          </h1>
-          <p className="text-xl text-muted-foreground mb-6 max-w-2xl">
-            A 2023 paper in <em>Science</em> showed taurine declines 80% by age 60 — and that restoring it extended median lifespan 10–12% in mice. Here is everything you need to know about taurine for human longevity.
-          </p>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-            {[
-              { value: '80%', label: 'Decline by age 60', color: 'text-accent-rose' },
-              { value: '10–12%', label: 'Lifespan extension (mice)', color: 'text-accent-emerald' },
-              { value: '3 g/day', label: 'Evidence-based dose', color: 'text-accent-cyan' },
-              { value: 'Science', label: '2023 journal', color: 'text-accent-violet' },
-            ].map((stat) => (
-              <div key={stat.label} className="rounded-xl border border-border/60 bg-card p-4 text-center">
-                <p className={`text-xl font-bold font-mono ${stat.color}`}>{stat.value}</p>
-                <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
+        <div className="container-page max-w-5xl">
+          <div className="grid lg:grid-cols-[1fr_300px] gap-10 items-start">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-emerald/10 border border-accent-emerald/20 mb-6">
+                <FlaskConical className="w-3.5 h-3.5 text-accent-emerald" aria-hidden="true" />
+                <span className="text-xs font-mono text-accent-emerald uppercase tracking-wider">Evidence Tier A · Taurine · Singh 2023 Science</span>
               </div>
-            ))}
-          </div>
 
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/library/compounds/taurine"
-              className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-accent-emerald text-bg-base font-semibold text-sm hover:bg-accent-emerald/90 transition"
-            >
-              Compound deep-dive
-              <ArrowRight className="w-4 h-4" aria-hidden="true" />
-            </Link>
-            <Link
-              href="/library/compare/taurine-vs-nmn"
-              className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-border/60 bg-card text-foreground font-medium text-sm hover:border-accent-emerald/30 transition"
-            >
-              Taurine vs NMN comparison
-              <ArrowRight className="w-4 h-4" aria-hidden="true" />
-            </Link>
+              <h1 className="heading-hero mb-4">
+                Taurine Supplement Guide 2026
+              </h1>
+              <p className="text-xl text-muted-foreground mb-6 max-w-2xl">
+                A 2023 paper in <em>Science</em> showed taurine declines 80% by age 60 — and that restoring it extended median lifespan 10–12% in mice. Here is everything you need to know about taurine for human longevity.
+              </p>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+                {[
+                  { value: '80%', label: 'Decline by age 60', color: 'text-accent-rose' },
+                  { value: '10–12%', label: 'Lifespan extension (mice)', color: 'text-accent-emerald' },
+                  { value: '3 g/day', label: 'Evidence-based dose', color: 'text-accent-cyan' },
+                  { value: 'Science', label: '2023 journal', color: 'text-accent-violet' },
+                ].map((stat) => (
+                  <div key={stat.label} className="rounded-xl border border-border/60 bg-card p-4 text-center">
+                    <p className={`text-xl font-bold font-mono ${stat.color}`}>{stat.value}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/library/compounds/taurine"
+                  className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-accent-emerald text-bg-base font-semibold text-sm hover:bg-accent-emerald/90 transition"
+                >
+                  Compound deep-dive
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </Link>
+                <Link
+                  href="/library/compare/taurine-vs-nmn"
+                  className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-border/60 bg-card text-foreground font-medium text-sm hover:border-accent-emerald/30 transition"
+                >
+                  Taurine vs NMN comparison
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="glass rounded-xl overflow-hidden">
+              <p className="text-[9px] font-mono text-muted-foreground uppercase tracking-wider px-4 pt-3 pb-1">
+                Mechanism Diagram
+              </p>
+              <TaurineVisual className="w-full" />
+            </div>
           </div>
         </div>
       </section>

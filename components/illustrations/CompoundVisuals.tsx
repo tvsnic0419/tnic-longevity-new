@@ -359,6 +359,183 @@ export const TudcaVisual: React.FC<CompoundVisualProps> = ({ className = '', siz
   );
 };
 
+/* ─── Berberine ─── */
+export const BerberineVisual: React.FC<CompoundVisualProps> = ({ className = '', size = 320 }) => {
+  const c = ACC.violet;
+  return (
+    <svg width={size} height={size * 0.75} viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg" className={cn(className)} aria-label="Berberine — mitochondrial Complex I inhibition drives AMPK activation" role="img">
+      <rect width="320" height="240" fill="#030712" rx="8" />
+      <circle cx="55" cy="120" r="26" fill={c.f} stroke={c.s} strokeWidth="2" />
+      <text x="55" y="117" textAnchor="middle" fill={c.s} fontSize="8" fontWeight="700">Berber-</text>
+      <text x="55" y="127" textAnchor="middle" fill={c.s} fontSize="8" fontWeight="700">ine</text>
+      <path d="M81 120 L112 120" stroke={c.s} strokeWidth="2.5" />
+      <path d="M104 114 L112 120 L104 126" stroke={c.s} strokeWidth="2" fill="none" />
+      <ellipse cx="152" cy="120" rx="36" ry="20" fill={c.f} stroke={c.s} strokeWidth="2" strokeOpacity="0.85" />
+      <text x="152" y="117" textAnchor="middle" fill={c.s} fontSize="8">Complex I ↓</text>
+      <text x="152" y="128" textAnchor="middle" fill={c.s} fontSize="6.5" opacity="0.7">mild mito inhibition</text>
+      <path d="M188 120 L216 120" stroke={c.s} strokeWidth="2.5" />
+      <path d="M208 114 L216 120 L208 126" stroke={c.s} strokeWidth="2" fill="none" />
+      <ellipse cx="262" cy="120" rx="42" ry="27" fill="#1f2937" stroke={c.s} strokeWidth="2.5" />
+      <text x="262" y="112" textAnchor="middle" fill="#e5e7eb" fontSize="9.5" fontWeight="700">AMPK ↑</text>
+      <text x="262" y="123" textAnchor="middle" fill="#9ca3af" fontSize="6.5">↑AMP:ATP</text>
+      <text x="262" y="133" textAnchor="middle" fill="#9ca3af" fontSize="6.5">energy sensor</text>
+      <path d="M235 148 L200 178" stroke={c.s} strokeWidth="1.3" strokeDasharray="4,3" strokeOpacity="0.6" />
+      <path d="M289 148 L300 178" stroke={c.s} strokeWidth="1.3" strokeDasharray="4,3" strokeOpacity="0.6" />
+      <rect x="130" y="180" width="170" height="24" rx="12" fill={c.f} stroke={c.s} strokeWidth="1.5" strokeOpacity="0.7" />
+      <text x="215" y="196" textAnchor="middle" fill={c.s} fontSize="8">↑glucose uptake · ↓gluconeogenesis · HbA1c ↓</text>
+      <text x="160" y="232" textAnchor="middle" fill="#9ca3af" fontSize="11">Berberine → AMPK Activation</text>
+    </svg>
+  );
+};
+
+/* ─── Grape Seed Extract (OPC) ─── */
+export const GrapeseedVisual: React.FC<CompoundVisualProps> = ({ className = '', size = 320 }) => {
+  const c = ACC.emerald;
+  return (
+    <svg width={size} height={size * 0.75} viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg" className={cn(className)} aria-label="Grape Seed Extract OPC — four-pathway antioxidant and vascular defense" role="img">
+      <rect width="320" height="240" fill="#030712" rx="8" />
+      <circle cx="55" cy="120" r="26" fill={c.f} stroke={c.s} strokeWidth="2" />
+      <text x="55" y="117" textAnchor="middle" fill={c.s} fontSize="7.5" fontWeight="700">Grape Seed</text>
+      <text x="55" y="128" textAnchor="middle" fill={c.s} fontSize="6.5" opacity="0.7">95% OPC</text>
+      <path d="M81 105 L118 78" stroke={c.s} strokeWidth="1.8" strokeOpacity="0.75" />
+      <path d="M81 118 L120 118" stroke={c.s} strokeWidth="1.8" strokeOpacity="0.75" />
+      <path d="M81 132 L118 158" stroke={c.s} strokeWidth="1.8" strokeOpacity="0.75" />
+      <ellipse cx="160" cy="70" rx="42" ry="16" fill={c.f} stroke={c.s} strokeWidth="1.6" strokeOpacity="0.85" />
+      <text x="160" y="74" textAnchor="middle" fill={c.s} fontSize="7.5">ROS scavenging · NF-κB ↓</text>
+      <ellipse cx="165" cy="118" rx="34" ry="18" fill={c.f} stroke={c.s} strokeWidth="1.6" strokeOpacity="0.85" />
+      <text x="165" y="115" textAnchor="middle" fill={c.s} fontSize="8">Nrf2</text>
+      <text x="165" y="125" textAnchor="middle" fill={c.s} fontSize="6.5" opacity="0.7">activation</text>
+      <ellipse cx="160" cy="163" rx="42" ry="18" fill={c.f} stroke={c.s} strokeWidth="1.6" strokeOpacity="0.85" />
+      <text x="160" y="160" textAnchor="middle" fill={c.s} fontSize="7.5">eNOS / NO ↑</text>
+      <text x="160" y="171" textAnchor="middle" fill={c.s} fontSize="6.5" opacity="0.7">endothelial function</text>
+      <path d="M203 74 L235 90" stroke={c.s} strokeWidth="1.4" strokeDasharray="4,3" strokeOpacity="0.6" />
+      <path d="M199 118 L235 118" stroke={c.s} strokeWidth="1.4" strokeDasharray="4,3" strokeOpacity="0.6" />
+      <path d="M202 163 L235 148" stroke={c.s} strokeWidth="1.4" strokeDasharray="4,3" strokeOpacity="0.6" />
+      <ellipse cx="266" cy="118" rx="34" ry="34" fill="#1f2937" stroke={c.s} strokeWidth="2.5" />
+      <text x="266" y="112" textAnchor="middle" fill="#e5e7eb" fontSize="7.5">SBP ↓</text>
+      <text x="266" y="122" textAnchor="middle" fill="#9ca3af" fontSize="6.5">LDL oxid. ↓</text>
+      <text x="266" y="131" textAnchor="middle" fill="#9ca3af" fontSize="6.5">FMD ↑</text>
+      <text x="160" y="205" textAnchor="middle" fill="#9ca3af" fontSize="7.5" opacity="0.7">20–50× stronger antioxidant than vitamin C</text>
+      <text x="160" y="232" textAnchor="middle" fill="#9ca3af" fontSize="11">Grape Seed OPC — Four-Pathway Defense</text>
+    </svg>
+  );
+};
+
+/* ─── Urolithin A ─── */
+export const UrolithinAVisual: React.FC<CompoundVisualProps> = ({ className = '', size = 320 }) => {
+  const c = ACC.amber;
+  return (
+    <svg width={size} height={size * 0.75} viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg" className={cn(className)} aria-label="Urolithin A — mitophagy activation clears damaged mitochondria" role="img">
+      <rect width="320" height="240" fill="#030712" rx="8" />
+      <circle cx="55" cy="120" r="26" fill={c.f} stroke={c.s} strokeWidth="2" />
+      <text x="55" y="117" textAnchor="middle" fill={c.s} fontSize="7.5" fontWeight="700">Urolithin</text>
+      <text x="55" y="128" textAnchor="middle" fill={c.s} fontSize="7.5" fontWeight="700">A</text>
+      <path d="M81 120 L112 120" stroke={c.s} strokeWidth="2.5" />
+      <path d="M104 114 L112 120 L104 126" stroke={c.s} strokeWidth="2" fill="none" />
+      <ellipse cx="155" cy="120" rx="40" ry="22" fill={c.f} stroke={c.s} strokeWidth="2" strokeOpacity="0.85" />
+      <text x="155" y="116" textAnchor="middle" fill={c.s} fontSize="8">Mitophagy</text>
+      <text x="155" y="127" textAnchor="middle" fill={c.s} fontSize="6.5" opacity="0.7">activated</text>
+      <path d="M195 120 L222 120" stroke={c.s} strokeWidth="2.5" />
+      <path d="M214 114 L222 120 L214 126" stroke={c.s} strokeWidth="2" fill="none" />
+      <ellipse cx="266" cy="120" rx="40" ry="27" fill="#1f2937" stroke={c.s} strokeWidth="2.5" />
+      <text x="266" y="112" textAnchor="middle" fill="#e5e7eb" fontSize="7.5">Damaged mito</text>
+      <text x="266" y="122" textAnchor="middle" fill="#9ca3af" fontSize="6.5">selectively</text>
+      <text x="266" y="132" textAnchor="middle" fill="#9ca3af" fontSize="6.5">cleared</text>
+      <path d="M235 148 L200 178" stroke={c.s} strokeWidth="1.3" strokeDasharray="4,3" strokeOpacity="0.6" />
+      <path d="M295 148 L305 178" stroke={c.s} strokeWidth="1.3" strokeDasharray="4,3" strokeOpacity="0.6" />
+      <rect x="130" y="180" width="170" height="24" rx="12" fill={c.f} stroke={c.s} strokeWidth="1.5" strokeOpacity="0.7" />
+      <text x="215" y="196" textAnchor="middle" fill={c.s} fontSize="8">muscle strength ↑ · fatigue ↓ (Phase 2 RCT)</text>
+      <text x="160" y="232" textAnchor="middle" fill="#9ca3af" fontSize="11">Urolithin A → Mitophagy Activation</text>
+    </svg>
+  );
+};
+
+/* ─── Fisetin ─── */
+export const FisetinVisual: React.FC<CompoundVisualProps> = ({ className = '', size = 320 }) => {
+  const c = ACC.rose;
+  return (
+    <svg width={size} height={size * 0.75} viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg" className={cn(className)} aria-label="Fisetin — senolytic clearance of senescent cells" role="img">
+      <rect width="320" height="240" fill="#030712" rx="8" />
+      <circle cx="55" cy="120" r="26" fill={c.f} stroke={c.s} strokeWidth="2" />
+      <text x="55" y="123" textAnchor="middle" fill={c.s} fontSize="9" fontWeight="700">Fisetin</text>
+      <path d="M81 120 L112 120" stroke={c.s} strokeWidth="2.5" />
+      <path d="M104 114 L112 120 L104 126" stroke={c.s} strokeWidth="2" fill="none" />
+      <ellipse cx="155" cy="120" rx="40" ry="22" fill={c.f} stroke={c.s} strokeWidth="2" strokeOpacity="0.85" />
+      <text x="155" y="116" textAnchor="middle" fill={c.s} fontSize="7.5">Senescent cells</text>
+      <text x="155" y="127" textAnchor="middle" fill={c.s} fontSize="6.5" opacity="0.7">targeted (SASP)</text>
+      <path d="M195 120 L222 120" stroke={c.s} strokeWidth="2.5" />
+      <path d="M214 114 L222 120 L214 126" stroke={c.s} strokeWidth="2" fill="none" />
+      <ellipse cx="266" cy="120" rx="40" ry="27" fill="#1f2937" stroke={c.s} strokeWidth="2.5" />
+      <text x="266" y="114" textAnchor="middle" fill="#e5e7eb" fontSize="8" fontWeight="700">Apoptosis</text>
+      <text x="266" y="125" textAnchor="middle" fill="#9ca3af" fontSize="6.5">triggered</text>
+      <text x="266" y="134" textAnchor="middle" fill="#9ca3af" fontSize="6.5">selectively</text>
+      <path d="M235 148 L200 178" stroke={c.s} strokeWidth="1.3" strokeDasharray="4,3" strokeOpacity="0.6" />
+      <path d="M295 148 L305 178" stroke={c.s} strokeWidth="1.3" strokeDasharray="4,3" strokeOpacity="0.6" />
+      <rect x="125" y="180" width="180" height="24" rx="12" fill={c.f} stroke={c.s} strokeWidth="1.5" strokeOpacity="0.7" />
+      <text x="215" y="196" textAnchor="middle" fill={c.s} fontSize="8">p16 ↓ · p21 ↓ · SASP ↓ (Mayo pilot)</text>
+      <text x="160" y="232" textAnchor="middle" fill="#9ca3af" fontSize="11">Fisetin → Senolytic Clearance</text>
+    </svg>
+  );
+};
+
+/* ─── CoQ10 (Ubiquinol) ─── */
+export const Coq10Visual: React.FC<CompoundVisualProps> = ({ className = '', size = 320 }) => {
+  const c = ACC.cyan;
+  return (
+    <svg width={size} height={size * 0.75} viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg" className={cn(className)} aria-label="CoQ10 ubiquinol — electron transport chain cofactor" role="img">
+      <rect width="320" height="240" fill="#030712" rx="8" />
+      <circle cx="55" cy="120" r="26" fill={c.f} stroke={c.s} strokeWidth="2" />
+      <text x="55" y="117" textAnchor="middle" fill={c.s} fontSize="8" fontWeight="700">CoQ10</text>
+      <text x="55" y="128" textAnchor="middle" fill={c.s} fontSize="6.5" opacity="0.7">ubiquinol</text>
+      <path d="M81 120 L112 120" stroke={c.s} strokeWidth="2.5" />
+      <path d="M104 114 L112 120 L104 126" stroke={c.s} strokeWidth="2" fill="none" />
+      <ellipse cx="160" cy="120" rx="44" ry="22" fill={c.f} stroke={c.s} strokeWidth="2" strokeOpacity="0.85" />
+      <text x="160" y="116" textAnchor="middle" fill={c.s} fontSize="8">Electron Transport</text>
+      <text x="160" y="127" textAnchor="middle" fill={c.s} fontSize="6.5" opacity="0.7">Complex I · II · III cofactor</text>
+      <path d="M204 120 L228 120" stroke={c.s} strokeWidth="2.5" />
+      <path d="M220 114 L228 120 L220 126" stroke={c.s} strokeWidth="2" fill="none" />
+      <ellipse cx="270" cy="120" rx="36" ry="27" fill="#1f2937" stroke={c.s} strokeWidth="2.5" />
+      <text x="270" y="114" textAnchor="middle" fill="#e5e7eb" fontSize="7.5" fontWeight="700">ATP ↑</text>
+      <text x="270" y="125" textAnchor="middle" fill="#9ca3af" fontSize="6.5">antioxidant</text>
+      <text x="270" y="134" textAnchor="middle" fill="#9ca3af" fontSize="6.5">recycling</text>
+      <path d="M240 148 L210 178" stroke={c.s} strokeWidth="1.3" strokeDasharray="4,3" strokeOpacity="0.6" />
+      <path d="M295 148 L300 178" stroke={c.s} strokeWidth="1.3" strokeDasharray="4,3" strokeOpacity="0.6" />
+      <rect x="130" y="180" width="170" height="24" rx="12" fill={c.f} stroke={c.s} strokeWidth="1.5" strokeOpacity="0.7" />
+      <text x="215" y="196" textAnchor="middle" fill={c.s} fontSize="8">hs-CRP ↓ · IL-6 ↓ · critical for statin users</text>
+      <text x="160" y="232" textAnchor="middle" fill="#9ca3af" fontSize="11">CoQ10 → Electron Transport Chain</text>
+    </svg>
+  );
+};
+
+/* ─── Omega-3 (EPA + DHA) ─── */
+export const Omega3Visual: React.FC<CompoundVisualProps> = ({ className = '', size = 320 }) => {
+  const c = ACC.emerald;
+  return (
+    <svg width={size} height={size * 0.75} viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg" className={cn(className)} aria-label="Omega-3 EPA and DHA — specialized pro-resolving mediator resolution axis" role="img">
+      <rect width="320" height="240" fill="#030712" rx="8" />
+      <circle cx="55" cy="120" r="26" fill={c.f} stroke={c.s} strokeWidth="2" />
+      <text x="55" y="117" textAnchor="middle" fill={c.s} fontSize="8" fontWeight="700">EPA +</text>
+      <text x="55" y="128" textAnchor="middle" fill={c.s} fontSize="8" fontWeight="700">DHA</text>
+      <path d="M81 120 L112 120" stroke={c.s} strokeWidth="2.5" />
+      <path d="M104 114 L112 120 L104 126" stroke={c.s} strokeWidth="2" fill="none" />
+      <ellipse cx="160" cy="120" rx="44" ry="22" fill={c.f} stroke={c.s} strokeWidth="2" strokeOpacity="0.85" />
+      <text x="160" y="116" textAnchor="middle" fill={c.s} fontSize="8">SPM synthesis</text>
+      <text x="160" y="127" textAnchor="middle" fill={c.s} fontSize="6.5" opacity="0.7">resolvins · protectins</text>
+      <path d="M204 120 L228 120" stroke={c.s} strokeWidth="2.5" />
+      <path d="M220 114 L228 120 L220 126" stroke={c.s} strokeWidth="2" fill="none" />
+      <ellipse cx="270" cy="120" rx="36" ry="27" fill="#1f2937" stroke={c.s} strokeWidth="2.5" />
+      <text x="270" y="113" textAnchor="middle" fill="#e5e7eb" fontSize="7">Active</text>
+      <text x="270" y="123" textAnchor="middle" fill="#9ca3af" fontSize="6.5">inflammation</text>
+      <text x="270" y="132" textAnchor="middle" fill="#9ca3af" fontSize="6.5">resolution</text>
+      <path d="M240 148 L210 178" stroke={c.s} strokeWidth="1.3" strokeDasharray="4,3" strokeOpacity="0.6" />
+      <path d="M295 148 L300 178" stroke={c.s} strokeWidth="1.3" strokeDasharray="4,3" strokeOpacity="0.6" />
+      <rect x="120" y="180" width="180" height="24" rx="12" fill={c.f} stroke={c.s} strokeWidth="1.5" strokeOpacity="0.7" />
+      <text x="210" y="196" textAnchor="middle" fill={c.s} fontSize="8">MACE ↓25% (REDUCE-IT) · CRP ↓</text>
+      <text x="160" y="232" textAnchor="middle" fill="#9ca3af" fontSize="11">Omega-3 → SPM Resolution Axis</text>
+    </svg>
+  );
+};
+
 /* ─── Convenience map — keyed by module.slug / mdx filename stem ─── */
 export const COMPOUND_VISUALS: Record<string, React.ComponentType<CompoundVisualProps>> = {
   nmn: NmnVisual,
@@ -373,4 +550,10 @@ export const COMPOUND_VISUALS: Record<string, React.ComponentType<CompoundVisual
   cakg: CakgVisual,
   rala: RalaVisual,
   tudca: TudcaVisual,
+  berberine: BerberineVisual,
+  grapeseed: GrapeseedVisual,
+  urolithina: UrolithinAVisual,
+  fisetin: FisetinVisual,
+  coq10: Coq10Visual,
+  omega3: Omega3Visual,
 };

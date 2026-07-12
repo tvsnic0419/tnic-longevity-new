@@ -5,6 +5,7 @@ import { StructuredData } from '@/components/seo/StructuredData';
 import { seoRoutes } from '@/lib/seo-routes';
 import { buildHowToSchema, buildGuidePageSchema, buildBreadcrumbSchema } from '@/lib/seo';
 import { getScoredCompounds } from '@/lib/elite-8-data';
+import { LongevityAxesVisual } from '@/components/illustrations/GuideVisuals';
 
 export const metadata = seoRoutes.longevityGuide();
 
@@ -112,42 +113,51 @@ export default function LongevitySupplementsGuidePage() {
             <span className="text-foreground">Longevity Supplements Guide</span>
           </nav>
 
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.2em] text-accent-cyan border border-accent-cyan/20 bg-accent-cyan/[0.06] px-4 py-2 rounded-full mb-6">
-              <FlaskConical className="w-3 h-3" />
-              Evidence-Ranked · 2026 Edition
+          <div className="grid lg:grid-cols-[1fr_340px] gap-10 items-start">
+            <div className="max-w-3xl">
+              <div className="inline-flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.2em] text-accent-cyan border border-accent-cyan/20 bg-accent-cyan/[0.06] px-4 py-2 rounded-full mb-6">
+                <FlaskConical className="w-3 h-3" />
+                Evidence-Ranked · 2026 Edition
+              </div>
+
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white mb-6 leading-[1.05]">
+                Best Longevity{' '}
+                <span style={{ color: 'var(--accent-cyan)' }}>Supplements</span>{' '}
+                2026
+              </h1>
+
+              <p className="text-lg sm:text-xl text-white/60 leading-relaxed mb-8 max-w-2xl">
+                Ranked by composite LQ score across 8 evidence dimensions: clinical trials, epigenetic
+                biomarkers, effect size, evolutionary depth, safety, bioavailability, and human
+                population data. Every claim linked to a PubMed ID.
+              </p>
+
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/quiz"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold bg-accent-cyan text-black hover:bg-accent-cyan/90 transition-all focus-ring"
+                >
+                  Get Your Personalized Stack <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  href="/library"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold border border-white/15 text-white/80 hover:border-white/30 hover:text-white transition-all focus-ring"
+                >
+                  Browse Full Library
+                </Link>
+              </div>
+
+              <p className="mt-6 text-xs text-white/30 font-mono">
+                Educational only · Not medical advice · All citations PubMed-verified
+              </p>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white mb-6 leading-[1.05]">
-              Best Longevity{' '}
-              <span style={{ color: 'var(--accent-cyan)' }}>Supplements</span>{' '}
-              2026
-            </h1>
-
-            <p className="text-lg sm:text-xl text-white/60 leading-relaxed mb-8 max-w-2xl">
-              Ranked by composite LQ score across 8 evidence dimensions: clinical trials, epigenetic
-              biomarkers, effect size, evolutionary depth, safety, bioavailability, and human
-              population data. Every claim linked to a PubMed ID.
-            </p>
-
-            <div className="flex flex-wrap gap-3">
-              <Link
-                href="/quiz"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold bg-accent-cyan text-black hover:bg-accent-cyan/90 transition-all focus-ring"
-              >
-                Get Your Personalized Stack <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/library"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold border border-white/15 text-white/80 hover:border-white/30 hover:text-white transition-all focus-ring"
-              >
-                Browse Full Library
-              </Link>
+            <div className="glass rounded-xl overflow-hidden">
+              <p className="text-[9px] font-mono text-white/50 uppercase tracking-wider px-4 pt-3 pb-1">
+                Systems Overview
+              </p>
+              <LongevityAxesVisual className="w-full" />
             </div>
-
-            <p className="mt-6 text-xs text-white/30 font-mono">
-              Educational only · Not medical advice · All citations PubMed-verified
-            </p>
           </div>
         </div>
       </section>
