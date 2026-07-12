@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Scale } from 'lucide-react';
 import { EvidenceCompareTable } from '@/components/library/EvidenceCompareTable';
+import { ComparisonVisual } from '@/components/illustrations/ComparisonVisuals';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
@@ -80,6 +81,13 @@ export default async function CompareDetailPage({
           align="left"
           context={getCompareContext(comparison)}
         />
+
+        <div className="glass rounded-xl overflow-hidden mb-8">
+          <p className="text-[9px] font-mono text-muted-foreground uppercase tracking-wider px-4 pt-3 pb-1">
+            Mechanism Comparison
+          </p>
+          <ComparisonVisual slug={slug} className="w-full" />
+        </div>
 
         <EvidenceCompareTable comparison={comparison} />
 
