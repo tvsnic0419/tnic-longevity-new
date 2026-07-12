@@ -18,6 +18,7 @@ import { getBuyerGuideByModuleSlug } from '@/lib/buyer-guides';
 import type { LifestyleSlug } from '@/lib/lifestyle-pillars';
 import { ModuleContextStrip } from './ModuleContextStrip';
 import { recordModuleVisit } from '@/lib/recent-modules';
+import { COMPOUND_VISUALS } from '@/components/illustrations/CompoundVisuals';
 
 export function LibraryModuleDetail({
   module,
@@ -38,6 +39,7 @@ export function LibraryModuleDetail({
     .filter(Boolean) ?? [];
   const buyerGuide =
     module.category === 'compounds' ? getBuyerGuideByModuleSlug(module.slug) : undefined;
+  const CompoundVisual = COMPOUND_VISUALS[module.slug];
 
   useEffect(() => {
     recordModuleVisit(module);
@@ -57,6 +59,15 @@ export function LibraryModuleDetail({
           <aside className="lg:col-span-4 space-y-6 min-w-0">
             {module.category === 'lifestyle' && (
               <LifestylePillarPanel slug={module.slug as LifestyleSlug} />
+            )}
+
+            {CompoundVisual && (
+              <div className="glass rounded-xl overflow-hidden">
+                <p className="text-[9px] font-mono text-muted-foreground uppercase tracking-wider px-4 pt-3 pb-1">
+                  Mechanism Diagram
+                </p>
+                <CompoundVisual className="w-full" />
+              </div>
             )}
 
             <div className="card-elevated p-6">
