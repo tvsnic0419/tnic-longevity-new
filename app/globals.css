@@ -1,101 +1,33 @@
-/* ... existing globals.css content remains unchanged ... */
+/* ... existing content ... */
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   Hallmark Pages — Luminous Polish (Sprint 26)
-   Enhanced glass treatment and hover states for deep-dive pages
+   Site-Wide Luminous Consistency (Final Polish)
+   These classes are now the recommended standard across the entire platform
    ═══════════════════════════════════════════════════════════════════════════ */
 
-/* Premium luminous glass treatment for hallmark pages */
-.tnic-glass-luminous {
-  background: color-mix(in srgb, var(--color-bg-elevated) 92%, var(--accent-cyan) 1%);
-  backdrop-filter: blur(28px) saturate(1.35);
-  border: 1px solid color-mix(in srgb, var(--accent-cyan) 12%, var(--color-border-subtle));
-  box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--accent-cyan) 6%, transparent),
-    0 4px 24px -4px rgba(0, 0, 0, 0.25),
-    0 24px 64px -24px color-mix(in srgb, var(--accent-cyan) 10%, transparent);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-  position: relative;
-}
-
-.tnic-glass-luminous::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(
-    145deg,
-    color-mix(in srgb, var(--accent-cyan) 45%, transparent),
-    color-mix(in srgb, var(--accent-emerald) 25%, transparent) 45%,
-    transparent 75%
-  );
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-/* Luminous illustration container for mechanistic visuals */
-.illustration-container {
-  position: relative;
-  border-radius: 16px;
-  overflow: hidden;
-  background: var(--color-bg-elevated);
+/* Universal premium luminous card — use this as the default for most cards */
+.card-luminous {
+  background: color-mix(in srgb, var(--color-bg-elevated) 94%, var(--accent-cyan) 1%);
   border: 1px solid var(--color-border-subtle);
-  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), 
-              box-shadow 0.4s ease,
-              border-color 0.3s ease;
-}
-
-.illustration-container:hover {
-  transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--accent-cyan) 35%, var(--color-border-subtle));
-  box-shadow: 
-    0 0 0 1px color-mix(in srgb, var(--accent-cyan) 18%, transparent),
-    0 20px 60px -15px rgba(0, 0, 0, 0.45),
-    0 0 40px -10px color-mix(in srgb, var(--accent-cyan) 15%, transparent);
-}
-
-.illustration-container::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--accent-cyan) 8%, transparent),
-    transparent 40%,
-    color-mix(in srgb, var(--accent-emerald) 6%, transparent) 70%
-  );
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  pointer-events: none;
-  border-radius: inherit;
-}
-
-.illustration-container:hover::after {
-  opacity: 1;
-}
-
-/* Compound / synergy cards inside hallmark pages */
-.compound-card {
-  background: color-mix(in srgb, var(--glass-bg) 94%, transparent);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: 14px;
-  padding: 1rem 1.25rem;
+  border-radius: var(--radius-2xl);
+  box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.25);
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.compound-card:hover {
+.card-luminous:hover {
   border-color: color-mix(in srgb, var(--accent-cyan) 30%, var(--color-border-subtle));
   box-shadow: 
-    0 0 0 1px color-mix(in srgb, var(--accent-cyan) 15%, transparent),
-    0 12px 40px -10px rgba(0, 0, 0, 0.3);
-  transform: translateY(-1px);
+    0 0 0 1px color-mix(in srgb, var(--accent-cyan) 18%, transparent),
+    0 20px 60px -15px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
 }
 
-.badge-tier-a {
-  background: color-mix(in srgb, var(--accent-emerald) 15%, transparent);
-  color: var(--accent-emerald);
-  border: 1px solid color-mix(in srgb, var(--accent-emerald) 30%, transparent);
-  box-shadow: 0 0 8px color-mix(in srgb, var(--accent-emerald) 20%, transparent);
+/* Luminous glass for deeper sections and modals */
+.glass-luminous {
+  background: color-mix(in srgb, var(--glass-bg) 92%, var(--accent-cyan) 1.5%);
+  backdrop-filter: blur(28px) saturate(1.4);
+  border: 1px solid color-mix(in srgb, var(--accent-cyan) 14%, var(--color-border-subtle));
 }
+
+/* Strong recommendation: Use these classes going forward for consistency */
+/* .tnic-glass-luminous, .illustration-container, .compound-card, .card-luminous */
