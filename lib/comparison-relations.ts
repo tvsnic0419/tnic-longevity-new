@@ -1,5 +1,6 @@
 import { evidenceComparisons, type EvidenceComparison } from './comparisons';
 import { libraryModules } from './library-modules';
+import type { CompoundLink } from './library-graph';
 
 /**
  * Lightweight, serializable shape for cross-linking to a comparison. Kept small
@@ -46,6 +47,19 @@ export function getComparisonsForCompound(moduleSlug: string): ComparisonLink[] 
   return evidenceComparisons
     .filter((c) => compoundSlugsForComparison(c).includes(moduleSlug))
     .map(toLink);
+}
+
+/**
+ * Compounds (with library pages) featured in a given comparison, resolved to
+ * full `CompoundLink`s — the reverse of `getComparisonsForCompound`, in the
+ * same shape used across the interlink graph so pages and the Knowledge
+ * Graph explorer can render comparison → compound edges consistently.
+ */
+export function getCompoundLinksForComparison(comp: EvidenceComparison): CompoundLink[] {
+  return compoundSlugsForComparison(comp)
+    .map((slug) => libraryModules.find((m) => m.category === 'compounds' && m.slug === slug))
+    .filter((m): m is NonNullable<typeof m> => m !== undefined)
+    .map((m) => ({ slug: m.slug, name: m.title, evidence: m.evidenceTier }));
 }
 
 /**

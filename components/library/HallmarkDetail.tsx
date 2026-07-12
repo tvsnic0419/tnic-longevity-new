@@ -14,17 +14,21 @@ import { ContextRail } from '@/components/ui/ContextRail';
 import { getHallmarkContext } from '@/lib/hub-context';
 import { SystemsSynthesisView } from './SystemsSynthesisView';
 import { HALLMARK_VISUALS } from '@/components/illustrations/HallmarkVisuals';
+import { NextBestRail } from './NextBestRail';
+import type { NextBestItem } from '@/lib/next-best';
 
 export function HallmarkDetail({
   hallmark,
   mdxBody,
   targetingCompounds = [],
   compoundHrefs = {},
+  nextBest = [],
 }: {
   hallmark: HallmarkLibraryEntry;
   mdxBody: string | null;
   targetingCompounds?: CompoundLink[];
   compoundHrefs?: Record<string, string>;
+  nextBest?: NextBestItem[];
 }) {
   const MechanismVisual = HALLMARK_VISUALS[hallmark.id];
 
@@ -154,6 +158,8 @@ export function HallmarkDetail({
               </div>
               <SystemsSynthesisView hallmarkId={hallmark.id} />
             </div>
+
+            <NextBestRail items={nextBest} />
           </div>
         </div>
       </div>

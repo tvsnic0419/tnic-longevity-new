@@ -18,6 +18,7 @@ import {
 } from '@/lib/seo';
 import { getComparisonsForCompound } from '@/lib/comparison-relations';
 import { getGuideForCompound } from '@/lib/library-graph';
+import { getNextBestForCompound } from '@/lib/next-best';
 import { seoRoutes } from '@/lib/seo-routes';
 
 const VALID_CATEGORIES = Object.keys(libraryCategoryMeta) as LibraryModuleCategory[];
@@ -60,6 +61,7 @@ export default async function LibraryModulePage({
   const comparisons =
     mod.category === 'compounds' ? getComparisonsForCompound(mod.slug) : [];
   const guide = mod.category === 'compounds' ? getGuideForCompound(mod.slug) : undefined;
+  const nextBest = mod.category === 'compounds' ? getNextBestForCompound(mod.slug) : [];
 
   const breadcrumb = buildBreadcrumbSchema([
     { name: 'Library', path: '/library' },
@@ -99,6 +101,7 @@ export default async function LibraryModulePage({
         mdxBody={mdx?.body ?? null}
         comparisons={comparisons}
         guide={guide}
+        nextBest={nextBest}
       />
     </>
   );

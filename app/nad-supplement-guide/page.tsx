@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import { ArrowRight, FlaskConical, ShieldCheck, Clock, ExternalLink, CheckCircle2, AlertTriangle, Zap } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
+import { NextBestRail } from '@/components/library/NextBestRail';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata } from '@/lib/seo';
 import { buildBreadcrumbSchema } from '@/lib/seo';
+import { getNextBestForGuide } from '@/lib/next-best';
 import { SITE } from '@/lib/site';
 
 export const metadata = buildPageMetadata({
@@ -175,6 +177,7 @@ function buildNadGuideSchemas() {
 }
 
 export default function NadSupplementGuidePage() {
+  const nextBest = getNextBestForGuide('/nad-supplement-guide');
   return (
     <SubPageLayout>
       <StructuredData schemas={buildNadGuideSchemas()} />
@@ -548,6 +551,8 @@ export default function NadSupplementGuidePage() {
               <p className="text-xs text-muted-foreground mt-1">All 8 elite compounds ranked</p>
             </Link>
           </div>
+
+          <NextBestRail items={nextBest} className="mt-10" />
 
           <p className="text-center text-xs text-muted-foreground mt-10 font-mono leading-relaxed max-w-2xl mx-auto">
             Educational platform — not medical advice. NAD+ supplement dosing should be discussed with

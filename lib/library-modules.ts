@@ -191,7 +191,7 @@ export const libraryModules: LibraryModule[] = [
     summary:
       'Isothiocyanate from broccoli sprouts that covalently modifies KEAP1, releasing NRF2 to drive phase-II detox, proteasome upregulation, and anti-inflammatory gene expression.',
     evidenceTier: 'A',
-    relatedHallmarkIds: ['genomic', 'inflammation', 'proteostasis'],
+    relatedHallmarkIds: ['genomic', 'inflammation', 'proteostasis', 'dysbiosis'],
     compoundId: 'sulforaphane',
     relatedSynergySlugs: ['glynac-nrf2-triad'],
     outline: [
@@ -341,7 +341,7 @@ export const libraryModules: LibraryModule[] = [
     summary:
       'Isoquinoline alkaloid activating AMPK with RCT-equivalent glucose control vs metformin (500 mg TID, 13-week head-to-head). Tier A for metabolic endpoints; adds LDL/TG lipid benefits metformin lacks. Bioavailability-enhanced forms (dihydroberberine) achieve 5× plasma levels.',
     evidenceTier: 'A',
-    relatedHallmarkIds: ['nutrient', 'inflammation', 'mito', 'communication'],
+    relatedHallmarkIds: ['nutrient', 'inflammation', 'mito'],
     compoundId: 'berberine',
     outline: [
       'Overview & AMPK mechanism',
@@ -423,9 +423,9 @@ export const libraryModules: LibraryModule[] = [
     title: 'Omega-3 (EPA + DHA)',
     tagline: 'REDUCE-IT: 25% CV event reduction — SPM resolution axis',
     summary:
-      'EPA and DHA serve as precursors to specialized pro-resolving mediators (SPMs) — resolvins and protectins — that actively resolve inflammation rather than merely suppressing it. REDUCE-IT trial (NEJM 2018, n=8,179): high-dose EPA (4 g/day) reduced major CV events 25% in high-risk patients. Tier A across cardiovascular, inflammatory, and microbiome endpoints.',
+      'EPA and DHA serve as precursors to specialized pro-resolving mediators (SPMs) — resolvins and protectins — that actively resolve inflammation rather than merely suppressing it. REDUCE-IT trial (NEJM 2018, n=8,179): high-dose EPA (4 g/day) reduced major CV events 25% in high-risk patients. Tier A across cardiovascular, inflammatory, and telomere endpoints.',
     evidenceTier: 'A',
-    relatedHallmarkIds: ['inflammation', 'communication', 'telomeres', 'dysbiosis'],
+    relatedHallmarkIds: ['inflammation', 'communication', 'telomeres'],
     compoundId: 'omega3',
     outline: [
       'Overview: EPA/DHA vs ALA — why conversion matters',

@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import { ArrowRight, FlaskConical, ExternalLink, CheckCircle2, AlertTriangle, Zap, TrendingUp, ShieldCheck } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
+import { NextBestRail } from '@/components/library/NextBestRail';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
+import { getNextBestForGuide } from '@/lib/next-best';
 import { SITE } from '@/lib/site';
 
 export const metadata = buildPageMetadata({
@@ -133,6 +135,7 @@ function buildTaurineSchemas() {
 }
 
 export default function TaurineGuidePage() {
+  const nextBest = getNextBestForGuide('/taurine-supplement-guide');
   return (
     <SubPageLayout>
       <StructuredData schemas={buildTaurineSchemas()} />
@@ -467,6 +470,8 @@ export default function TaurineGuidePage() {
               </Link>
             </div>
           </div>
+
+          <NextBestRail items={nextBest} className="mt-10" />
 
           <p className="text-xs text-muted-foreground text-center mt-8 max-w-xl mx-auto">
             Educational content only — not medical advice. Taurine is a dietary supplement, not FDA-approved to treat or prevent any disease. Discuss with your physician if you have a known medical condition, especially active cancer.

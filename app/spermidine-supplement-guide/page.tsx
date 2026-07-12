@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import { ArrowRight, FlaskConical, ExternalLink, CheckCircle2, AlertTriangle, Microscope, Recycle, TrendingUp } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
+import { NextBestRail } from '@/components/library/NextBestRail';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
+import { getNextBestForGuide } from '@/lib/next-best';
 import { SITE } from '@/lib/site';
 
 export const metadata = buildPageMetadata({
@@ -177,6 +179,7 @@ const mechanisms = [
 
 export default function SpermidineSupplementGuidePage() {
   const schemas = buildSpermidineSchemas();
+  const nextBest = getNextBestForGuide('/spermidine-supplement-guide');
 
   return (
     <SubPageLayout>
@@ -537,6 +540,8 @@ export default function SpermidineSupplementGuidePage() {
               </Link>
             ))}
           </div>
+
+          <NextBestRail items={nextBest} className="mt-10" />
         </div>
       </section>
     </SubPageLayout>

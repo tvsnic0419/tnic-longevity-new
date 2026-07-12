@@ -4,6 +4,7 @@ export const PRIORITY_INDEX_PATHS = [
   '/supplement-guides',
   '/longevity-supplements-guide',
   '/library',
+  '/library/explorer',
   '/library/compare',
   '/library/compare/nmn-vs-nr',
   '/library/compare/glynac-vs-liposomal-glutathione',

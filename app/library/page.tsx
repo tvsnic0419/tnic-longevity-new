@@ -104,6 +104,15 @@ export default function LibraryPage() {
               All visuals are part of TNiC’s evidence-based illustration system.
             </p>
           </div>
+
+          <div className="mt-6 text-center">
+            <Link
+              href="/library/explorer"
+              className="focus-ring interactive inline-flex items-center gap-2 rounded-full border border-border bg-card/40 px-5 py-2.5 text-sm font-semibold text-foreground/80 hover:border-accent-cyan/50 hover:text-accent-cyan transition-colors"
+            >
+              Explore the Knowledge Graph →
+            </Link>
+          </div>
         </div>
       </section>
 

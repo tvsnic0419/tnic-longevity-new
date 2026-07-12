@@ -17,6 +17,8 @@ import { LifestylePillarPanel } from './LifestylePillarPanel';
 import { getBuyerGuideByModuleSlug } from '@/lib/buyer-guides';
 import type { LifestyleSlug } from '@/lib/lifestyle-pillars';
 import { ModuleContextStrip } from './ModuleContextStrip';
+import { NextBestRail } from './NextBestRail';
+import type { NextBestItem } from '@/lib/next-best';
 import { recordModuleVisit } from '@/lib/recent-modules';
 
 export function LibraryModuleDetail({
@@ -24,11 +26,13 @@ export function LibraryModuleDetail({
   mdxBody,
   comparisons = [],
   guide,
+  nextBest = [],
 }: {
   module: LibraryModule;
   mdxBody: string | null;
   comparisons?: ComparisonLink[];
   guide?: GuideLink;
+  nextBest?: NextBestItem[];
 }) {
   const categoryMeta = libraryCategoryMeta[module.category];
   const relatedHallmarks = hallmarkLibrary.filter((h) => module.relatedHallmarkIds.includes(h.id));
@@ -251,6 +255,8 @@ export function LibraryModuleDetail({
                 Evidence methodology
               </Link>
             </div>
+
+            <NextBestRail items={nextBest} />
           </div>
         </div>
       </div>

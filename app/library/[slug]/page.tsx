@@ -6,6 +6,7 @@ import { getHallmarkBySlug, hallmarkLibrary } from '@/lib/hallmarks-library';
 import { loadMdx } from '@/lib/mdx';
 import { buildArticleSchema, buildBreadcrumbSchema } from '@/lib/seo';
 import { getCompoundsForHallmark, getCompoundIdToSlugMap } from '@/lib/library-graph';
+import { getNextBestForHallmark } from '@/lib/next-best';
 import { seoRoutes } from '@/lib/seo-routes';
 
 export function generateStaticParams() {
@@ -41,6 +42,7 @@ export default async function HallmarkPage({
   const path = `/library/${hallmark.slug}`;
   const targetingCompounds = getCompoundsForHallmark(hallmark.id);
   const compoundHrefs = getCompoundIdToSlugMap();
+  const nextBest = getNextBestForHallmark(hallmark.id);
 
   const schemas = [
     buildArticleSchema({
@@ -64,6 +66,7 @@ export default async function HallmarkPage({
         mdxBody={mdx?.body ?? null}
         targetingCompounds={targetingCompounds}
         compoundHrefs={compoundHrefs}
+        nextBest={nextBest}
       />
     </>
   );

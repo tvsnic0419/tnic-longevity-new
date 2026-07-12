@@ -3,14 +3,14 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Scale } from 'lucide-react';
 import { EvidenceCompareTable } from '@/components/library/EvidenceCompareTable';
+import { NextBestRail } from '@/components/library/NextBestRail';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import {
   getAllComparisonSlugs,
   getComparison,
 } from '@/lib/comparisons';
-import { getRelatedComparisons } from '@/lib/comparison-relations';
+import { getNextBestForComparison } from '@/lib/next-best';
 import { buildArticleSchema, buildBreadcrumbSchema, buildPageMetadata } from '@/lib/seo';
 import { getCompareContext } from '@/lib/hub-context';
 
@@ -43,7 +43,7 @@ export default async function CompareDetailPage({
   const comparison = getComparison(slug);
   if (!comparison) notFound();
 
-  const relatedComparisons = getRelatedComparisons(slug);
+  const nextBest = getNextBestForComparison(slug);
 
   const schemas = [
     buildArticleSchema({
@@ -83,36 +83,7 @@ export default async function CompareDetailPage({
 
         <EvidenceCompareTable comparison={comparison} />
 
-        {relatedComparisons.length > 0 && (
-          <section className="mt-10" aria-labelledby="related-comparisons-heading">
-            <h2
-              id="related-comparisons-heading"
-              className="text-label text-accent-cyan mb-4"
-            >
-              Related comparisons
-            </h2>
-            <ul className="grid gap-3 sm:grid-cols-2">
-              {relatedComparisons.map((related) => (
-                <li key={related.slug}>
-                  <Link
-                    href={`/library/compare/${related.slug}`}
-                    className="focus-ring interactive group flex items-center justify-between gap-3 glass glass-hover rounded-xl p-4"
-                  >
-                    <span className="min-w-0">
-                      <span className="block text-sm font-semibold text-foreground truncate">
-                        {related.title}
-                      </span>
-                      <span className="block text-xs text-muted-foreground truncate">
-                        {related.labelA} vs {related.labelB}
-                      </span>
-                    </span>
-                    <EvidenceTag tier={related.evidenceTier} className="shrink-0" />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
+        <NextBestRail items={nextBest} className="mt-10" />
       </div>
     </div>
   );

@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import { ArrowRight, ExternalLink, CheckCircle2, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
+import { NextBestRail } from '@/components/library/NextBestRail';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
+import { getNextBestForGuide } from '@/lib/next-best';
 import { SITE } from '@/lib/site';
 
 export const metadata = buildPageMetadata({
@@ -149,6 +151,7 @@ function buildSulforaphaneSchemas() {
 }
 
 export default function SulforaphaneGuidePage() {
+  const nextBest = getNextBestForGuide('/sulforaphane-supplement-guide');
   return (
     <SubPageLayout>
       <StructuredData schemas={buildSulforaphaneSchemas()} />
@@ -467,6 +470,8 @@ export default function SulforaphaneGuidePage() {
               </Link>
             </div>
           </div>
+
+          <NextBestRail items={nextBest} className="mt-10" />
 
           <p className="text-xs text-muted-foreground text-center mt-8 max-w-xl mx-auto">
             Educational content only — not medical advice. Sulforaphane is a dietary phytochemical, not FDA-approved to treat or prevent any disease. Broccoli sprouts may contain harmful bacteria if grown improperly — follow safe sprouting protocols.

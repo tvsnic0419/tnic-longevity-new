@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import { ArrowRight, FlaskConical, ShieldCheck, TrendingUp, Zap, CheckCircle2, AlertTriangle, ExternalLink, Activity } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
+import { NextBestRail } from '@/components/library/NextBestRail';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
+import { getNextBestForGuide } from '@/lib/next-best';
 import { SITE } from '@/lib/site';
 
 export const metadata = buildPageMetadata({
@@ -191,6 +193,7 @@ function buildBerberineSchemas() {
 }
 
 export default function BerberineGuidePage() {
+  const nextBest = getNextBestForGuide('/berberine-supplement-guide');
   return (
     <SubPageLayout>
       <StructuredData schemas={buildBerberineSchemas()} />
@@ -582,6 +585,8 @@ export default function BerberineGuidePage() {
               </Link>
             </div>
           </div>
+
+          <NextBestRail items={nextBest} className="mt-10" />
 
           <p className="text-xs text-muted-foreground text-center mt-8 max-w-xl mx-auto">
             Educational content only — not medical advice. Berberine is a dietary supplement, not FDA-approved to treat or prevent any disease. Consult your physician before starting, especially if you take medications metabolized by CYP3A4 or CYP2D6 enzymes, or any blood sugar medications.

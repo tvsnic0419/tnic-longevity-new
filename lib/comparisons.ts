@@ -568,9 +568,9 @@ export const evidenceComparisons: EvidenceComparison[] = [
       'Cost is the primary constraint — generic metformin is extremely low cost',
     ],
     relatedHrefs: [
-      { label: 'Berberine in Library', href: '/library/berberine' },
+      { label: 'Berberine in Library', href: '/library/compounds/berberine' },
       { label: 'Stack Architect', href: '/stacks' },
-      { label: 'Nutrient Sensing Hallmark', href: '/library/hallmarks/nutrient' },
+      { label: 'Nutrient Sensing Hallmark', href: '/library/disabled-macroautophagy' },
     ],
     keywords: ['berberine', 'metformin', 'ampk', 'glucose', 'metabolic', 'diabetes', 'longevity'],
   },
@@ -776,7 +776,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
       { label: 'Spermidine in Library', href: '/library/compounds/spermidine' },
       { label: 'NMN vs NR', href: '/library/compare/nmn-vs-nr' },
       { label: 'Disabled Autophagy hallmark', href: '/library/disabled-macroautophagy' },
-      { label: 'NAD⁺ Mito Stack synergy', href: '/library/nad-mito-stack' },
+      { label: 'NAD⁺ Mito Stack synergy', href: '/library/synergies/nad-mito-stack' },
     ],
     keywords: ['nmn', 'spermidine', 'autophagy', 'nad+', 'ep300', 'sirt1', 'longevity', 'immune aging', 'polyamine'],
   },
@@ -860,6 +860,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
       'Cardiovascular or inflammation focus — quercetin has broader anti-inflammatory meta-analysis data',
     ],
     relatedHrefs: [
+      { label: 'Fisetin in Library', href: '/library/compounds/fisetin' },
       { label: 'Cellular Senescence hallmark', href: '/library/cellular-senescence' },
       { label: 'Full Hybrid Stack', href: '/stacks' },
       { label: 'Berberine vs Metformin', href: '/library/compare/berberine-vs-metformin' },
@@ -1132,7 +1133,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
     ],
     relatedHrefs: [
       { label: 'Rapamycin Guide', href: '/library/compounds/rapamycin' },
-      { label: 'mTOR & Nutrient Sensing hallmark', href: '/library/deregulated-nutrient-sensing' },
+      { label: 'mTOR & Nutrient Sensing hallmark', href: '/library/disabled-macroautophagy' },
       { label: 'Ca-AKG vs Spermidine', href: '/library/compare/cakg-vs-spermidine' },
       { label: 'Elite 8 LQ Ranking', href: '/elite-8' },
     ],
