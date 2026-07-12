@@ -48,7 +48,7 @@ export default function LibraryPage() {
         <RecommendedNextSteps context="library" />
       </div>
 
-      {/* Polished All 12 Hallmarks Visual Grid with correct deep linkage */}
+      {/* Premium Luminous All 12 Hallmarks Visual Grid */}
       <section className="container-page py-12 md:py-16 border-t border-[var(--color-border-subtle)]">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
@@ -64,23 +64,32 @@ export default function LibraryPage() {
             </Link>
           </div>
 
+          {/* Enhanced luminous hallmark cards with premium depth and interaction */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {hallmarkData.map(({ slug, Component, title }, index) => (
               <Link 
                 key={index} 
                 href={`/hallmarks/${slug}`}
-                className="group block transition-transform hover:scale-[1.01]"
+                className="group block"
               >
-                <div className="tnic-glass rounded-2xl overflow-hidden border border-[var(--color-border-subtle)] group-hover:border-[var(--accent-cyan)]/30 transition-colors h-full">
-                  <div className="p-4">
-                    <Component showLabels={true} interactive={false} />
+                <div className="tnic-glass rounded-2xl overflow-hidden border border-[var(--color-border-subtle)] transition-all duration-300 group-hover:border-[var(--accent-cyan)]/40 group-hover:shadow-[0_0_0_1px_rgba(0,224,255,0.15),0_20px_60px_-15px_rgba(0,0,0,0.5)] h-full flex flex-col">
+                  
+                  {/* Illustration container with enhanced luminous treatment */}
+                  <div className="p-5 bg-[var(--color-bg-elevated)]/60 relative overflow-hidden">
+                    <div className="relative z-10">
+                      <Component showLabels={true} interactive={false} />
+                    </div>
+                    {/* Subtle luminous edge glow on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-cyan)]/5 via-transparent to-[var(--accent-emerald)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   </div>
-                  <div className="px-4 pb-4 pt-2 border-t border-[var(--color-border-subtle)]">
-                    <div className="text-sm font-medium text-[var(--color-text-primary)] group-hover:text-[var(--accent-cyan)] transition-colors">
+
+                  <div className="px-5 pb-5 pt-4 border-t border-[var(--color-border-subtle)] flex-1 flex flex-col">
+                    <div className="text-[15px] font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--accent-cyan)] transition-colors tracking-[-0.15px]">
                       {title}
                     </div>
-                    <div className="text-xs text-[var(--color-text-muted)] mt-1 group-hover:text-[var(--accent-cyan)]/70 transition-colors">
-                      View evidence, compounds & synergies →
+                    <div className="text-xs text-[var(--color-text-muted)] mt-1.5 group-hover:text-[var(--accent-cyan)]/70 transition-colors flex items-center gap-1">
+                      View evidence, compounds & synergies 
+                      <span className="transition-transform group-hover:translate-x-0.5">→</span>
                     </div>
                   </div>
                 </div>
