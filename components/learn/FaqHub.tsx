@@ -34,6 +34,7 @@ export function FaqHub() {
         description="Thirty-three expert answers about TNiC protocols, compound science, safety, evidence tiers, data privacy, and how we differ from supplement stores."
         align="left"
         context={getHubContext('faq')}
+        graphic
       />
 
       <div className="flex flex-wrap gap-2 mb-8">

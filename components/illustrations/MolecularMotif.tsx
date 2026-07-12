@@ -47,16 +47,56 @@ function doubleBondLine(p1: [number, number], p2: [number, number]) {
   };
 }
 
-/** Sampled sine-wave strand for the DNA double helix */
-function helixStrand(cx: number, top: number, bottom: number, amplitude: number, phase: number): string {
-  const steps = 24;
-  const points: [number, number][] = Array.from({ length: steps + 1 }, (_, i) => {
-    const t = i / steps;
-    const y = top + t * (bottom - top);
-    const x = cx + amplitude * Math.sin(t * Math.PI * 3 + phase);
-    return [x, y];
+const HELIX_TWISTS = 4; // full half-turns across the strand — more twists reads as more visibly intertwined
+
+function pointToStr([x, y]: [number, number]): string {
+  return `${x.toFixed(1)},${y.toFixed(1)}`;
+}
+
+function pointsToPath(points: [number, number][]): string {
+  return points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${pointToStr(p)}`).join(' ');
+}
+
+/** Deviation of the two mirror-image strands at a given point along the helix */
+function helixDeviations(t: number, amplitude: number): [number, number] {
+  const theta = t * Math.PI * HELIX_TWISTS;
+  const d0 = amplitude * Math.sin(theta);
+  return [d0, -d0];
+}
+
+/**
+ * A real double helix reads as *intertwined* only if one strand visibly
+ * passes over the other at each twist — two flat overlapping sine paths
+ * don't sell that. So instead of drawing "strand A" and "strand B" as two
+ * whole paths (whichever is drawn second would sit on top everywhere,
+ * right or wrong), this samples the pair of mirror-image sine strands and,
+ * point by point, sorts them into a continuous "front" envelope (always on
+ * top) and a "back" envelope broken into short segments with a small gap
+ * right at each crossing — the standard illustrator's trick for showing
+ * one strand ducking behind the other.
+ */
+function helixWeave(cx: number, top: number, bottom: number, amplitude: number, steps: number) {
+  const sample = (t: number, front: boolean): [number, number] => {
+    const [d0, d1] = helixDeviations(t, amplitude);
+    const d = front ? Math.max(d0, d1) : Math.min(d0, d1);
+    return [cx + d, top + t * (bottom - top)];
+  };
+
+  const frontPoints = Array.from({ length: steps + 1 }, (_, i) => sample(i / steps, true));
+
+  const gapHalfWidth = 0.018;
+  const crossings = Array.from({ length: HELIX_TWISTS - 1 }, (_, i) => (i + 1) / HELIX_TWISTS);
+  const boundaries = [0, ...crossings, 1];
+  const backSegments = boundaries.slice(0, -1).map((start, i) => {
+    const end = boundaries[i + 1];
+    const segStart = i === 0 ? start : start + gapHalfWidth;
+    const segEnd = i === boundaries.length - 2 ? end : end - gapHalfWidth;
+    const segSteps = Math.max(4, Math.round(steps * (segEnd - segStart)));
+    const pts = Array.from({ length: segSteps + 1 }, (_, j) => sample(segStart + (j / segSteps) * (segEnd - segStart), false));
+    return pointsToPath(pts);
   });
-  return points.map(([x, y], i) => `${i === 0 ? 'M' : 'L'} ${x.toFixed(1)},${y.toFixed(1)}`).join(' ');
+
+  return { frontPath: pointsToPath(frontPoints), backSegments };
 }
 
 const RING_A = hexPoints(96, 108, 44);
@@ -64,12 +104,14 @@ const RING_B = hexPoints(184, 132, 34);
 const HELIX_CX = 150;
 const HELIX_TOP = 210;
 const HELIX_BOTTOM = 440;
-const HELIX_STEPS = 8;
+const HELIX_STEPS = 10;
+const HELIX_AMPLITUDE = 26;
 
 const RING_A_PATH = ringPath(RING_A);
 const RING_B_PATH = ringPath(RING_B);
-const HELIX_PATH_A = helixStrand(HELIX_CX, HELIX_TOP, HELIX_BOTTOM, 26, 0);
-const HELIX_PATH_B = helixStrand(HELIX_CX, HELIX_TOP, HELIX_BOTTOM, 26, Math.PI);
+const { frontPath: HELIX_FRONT_PATH, backSegments: HELIX_BACK_SEGMENTS } = helixWeave(
+  HELIX_CX, HELIX_TOP, HELIX_BOTTOM, HELIX_AMPLITUDE, 64,
+);
 const RING_BOND_PATH = `M ${RING_A[1].join(',')} L ${RING_B[4].join(',')}`;
 const HELIX_LEAD_IN_PATH = `M ${RING_B[2][0]},${RING_B[2][1]} Q ${RING_B[2][0] + 10},${(RING_B[2][1] + HELIX_TOP) / 2} ${HELIX_CX},${HELIX_TOP}`;
 
@@ -94,10 +136,8 @@ export function MolecularMotif({ theme = 'cyan', size = 'hero', className = '' }
   const helixRungs = Array.from({ length: HELIX_STEPS + 1 }, (_, i) => {
     const t = i / HELIX_STEPS;
     const y = HELIX_TOP + t * (HELIX_BOTTOM - HELIX_TOP);
-    const phase = t * Math.PI * 3;
-    const x1 = HELIX_CX + 26 * Math.sin(phase);
-    const x2 = HELIX_CX + 26 * Math.sin(phase + Math.PI);
-    return { x1, x2, y };
+    const [d0, d1] = helixDeviations(t, HELIX_AMPLITUDE);
+    return { x1: HELIX_CX + d0, x2: HELIX_CX + d1, y };
   });
 
   const doubleBonds = [0, 2, 4].map((i) => doubleBondLine(RING_A[i], RING_A[(i + 1) % 6]));
@@ -144,8 +184,10 @@ export function MolecularMotif({ theme = 'cyan', size = 'hero', className = '' }
         <path d={RING_B_PATH} stroke={accent} strokeWidth="4" />
         <path d={RING_BOND_PATH} stroke={accent} strokeWidth="4" />
         <path d={HELIX_LEAD_IN_PATH} stroke={accent} strokeWidth="3.5" />
-        <path d={HELIX_PATH_A} stroke={accent} strokeWidth="4.5" />
-        <path d={HELIX_PATH_B} stroke={accent} strokeWidth="3.5" />
+        <path d={HELIX_FRONT_PATH} stroke={accent} strokeWidth="4.5" />
+        {HELIX_BACK_SEGMENTS.map((d, i) => (
+          <path key={i} d={d} stroke={accent} strokeWidth="3.5" />
+        ))}
       </g>
 
       <g opacity="0.95" strokeLinecap="round">
@@ -191,12 +233,15 @@ export function MolecularMotif({ theme = 'cyan', size = 'hero', className = '' }
         {/* Bond flowing from ring B into the helix */}
         <path d={HELIX_LEAD_IN_PATH} fill="none" stroke={accent} strokeWidth="1.75" opacity="0.45" />
 
-        {/* DNA double helix */}
-        <path d={HELIX_PATH_A} fill="none" stroke={`url(#${fadeId})`} strokeWidth="2.25" />
-        <path d={HELIX_PATH_B} fill="none" stroke="#fafafa" strokeOpacity="0.35" strokeWidth="2" />
+        {/* DNA double helix — back strand + rungs drawn first, front strand
+            drawn last so it visibly passes over both at every twist. */}
+        {HELIX_BACK_SEGMENTS.map((d, i) => (
+          <path key={`back-${i}`} d={d} fill="none" stroke="#fafafa" strokeOpacity="0.32" strokeWidth="2" />
+        ))}
         {helixRungs.map((r, i) => (
           <line key={`rung-${i}`} x1={r.x1} y1={r.y} x2={r.x2} y2={r.y} stroke={accent} strokeWidth="1.25" opacity="0.35" />
         ))}
+        <path d={HELIX_FRONT_PATH} fill="none" stroke={`url(#${fadeId})`} strokeWidth="2.25" />
       </g>
     </svg>
   );

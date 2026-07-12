@@ -124,6 +124,7 @@ export function ProductsHub() {
         description="One evidence-aligned product per compound. TNiC may earn a commission on purchases via affiliate links — it never influences which products are listed or their evidence tier."
         theme="emerald"
         align="left"
+        graphic
         context={getHubContext('products')}
       />
 

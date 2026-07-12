@@ -76,6 +76,7 @@ export function TrustHub() {
         title="How TNiC Earns Your Trust"
         description="Evidence tagging, source citations, methodology, disclaimers, and public update history. No black boxes — every recommendation is traceable."
         theme="emerald"
+        graphic
         meta={`${citationRegistry.length} indexed citations · Tier A/B/C grading · N=1 clearly labeled`}
         context={getHubContext('trust')}
       />

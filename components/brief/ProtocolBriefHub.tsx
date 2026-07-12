@@ -22,6 +22,7 @@ export function ProtocolBriefHub() {
         theme="violet"
         align="left"
         context={getHubContext('brief')}
+        graphic
       />
 
       <BriefSubscribePanel />

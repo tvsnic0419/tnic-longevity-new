@@ -112,6 +112,7 @@ export function ToolsHub() {
           theme="violet"
           as="h1"
           context={getHubContext('tools')}
+          graphic
         />
 
         <ContextRail
