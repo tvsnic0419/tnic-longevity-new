@@ -348,9 +348,11 @@ body::after {
 
 .card-base {
   background: var(--glass-bg);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(var(--glass-blur-mid));
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-xl);
+  /* Section-surface depth (Design System v8 mid-plane) — was flat before. */
+  box-shadow: var(--glass-shadow-mid);
 }
 
 .card-elevated {
@@ -740,14 +742,17 @@ body::after {
     color-mix(in srgb, var(--glass-bg) 88%, #ffffff 7%),
     var(--glass-bg) 55%
   );
-  backdrop-filter: blur(24px);
+  backdrop-filter: blur(var(--glass-blur-mid));
   border-radius: var(--radius-2xl);
   border: 1px solid var(--color-border-subtle);
-  /* Depth: inset top highlight + layered elevation shadow. */
+  /* Depth: inset top highlight + the Deep Glass mid-plane stacked shadow
+     (Design System v8) — keeps this widely-reused card in step with the
+     rest of the depth system instead of its own one-off shadow numbers.
+     The branded cyan/emerald/violet ::before border below is intentional
+     brand accenting, kept separate from the neutral glass edge tokens. */
   box-shadow:
     inset 0 1px 0 0 color-mix(in srgb, #ffffff 10%, transparent),
-    0 2px 4px -2px rgba(0, 0, 0, 0.4),
-    0 24px 48px -28px rgba(0, 0, 0, 0.65);
+    var(--glass-shadow-mid);
   overflow: hidden;
 }
 
@@ -1229,11 +1234,14 @@ body::after {
 
 .nav-glass-scrolled {
   background: color-mix(in srgb, var(--color-bg-base) 92%, transparent);
-  backdrop-filter: blur(24px) saturate(1.4);
+  backdrop-filter: blur(var(--glass-blur-mid)) saturate(1.4);
   border-bottom-color: color-mix(in srgb, var(--accent-cyan) 18%, var(--color-border-subtle));
+  /* Ties into the Deep Glass mid-plane shadow recipe (Design System v8) —
+     a full-bleed bar only has a bottom edge, so it draws the shared shadow
+     token rather than the 4-sided .glass-deep treatment. */
   box-shadow:
     0 1px 0 color-mix(in srgb, var(--accent-cyan) 10%, transparent),
-    0 8px 32px -8px rgba(0, 0, 0, 0.35);
+    var(--glass-shadow-mid);
 }
 
 .logo-glow {
