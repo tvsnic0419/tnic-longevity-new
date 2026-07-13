@@ -4,6 +4,7 @@ import { ClipboardList, Library, ArrowRight, Sparkles } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo';
 import { StarterQuiz } from '@/components/sections/StarterQuiz';
 import { GlassPanel } from '@/components/ui/GlassPanel';
+import { compounds } from '@/lib/data';
 
 /**
  * Server-rendered homepage hero.
@@ -16,7 +17,7 @@ import { GlassPanel } from '@/components/ui/GlassPanel';
 
 const heroStats = [
   { value: '12', label: 'Hallmarks of aging' },
-  { value: '49', label: 'Graded compounds' },
+  { value: String(compounds.length), label: 'Graded compounds' },
   { value: 'A–C', label: 'Evidence tiers' },
   { value: '100%', label: 'Free & private' },
 ];

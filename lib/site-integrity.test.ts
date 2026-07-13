@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { compounds, researchFeed, safetyNotes } from './data';
@@ -40,6 +40,33 @@ describe('site data integrity', () => {
     const urls = new Set(buildSitemapEntries().map((e) => new URL(e.url).pathname));
     for (const path of PRIORITY_INDEX_PATHS) {
       expect(urls.has(path), `sitemap missing ${path}`).toBe(true);
+    }
+  });
+
+  it('every statically-routable app page is present in the sitemap', () => {
+    // Walks app/ for directories with a page.tsx, skipping api routes and any
+    // dynamic ([slug]) or route-group ((group)) segment — those are either
+    // user-generated (excluded on purpose, e.g. /scorecard/[code]) or already
+    // enumerated into the sitemap from their own data source (hallmarks,
+    // library modules, comparisons, quiz presets, tool tabs). This exists
+    // because a page can be real, linked, and crawlable while still being
+    // absent from the sitemap purely by omission — that gap has happened
+    // more than once (e.g. /about, /hallmarks/[slug], /library/systems).
+    function collectStaticPageRoutes(dir: string, base = ''): string[] {
+      const entries = readdirSync(dir, { withFileTypes: true });
+      const routes = entries.some((e) => e.isFile() && e.name === 'page.tsx') ? [base || '/'] : [];
+      for (const entry of entries) {
+        if (!entry.isDirectory() || entry.name === 'api') continue;
+        if (entry.name.startsWith('[') || entry.name.startsWith('(')) continue;
+        routes.push(...collectStaticPageRoutes(resolve(dir, entry.name), `${base}/${entry.name}`));
+      }
+      return routes;
+    }
+
+    const staticRoutes = collectStaticPageRoutes(resolve(process.cwd(), 'app'));
+    const sitemapPaths = new Set(buildSitemapEntries().map((e) => new URL(e.url).pathname));
+    for (const route of staticRoutes) {
+      expect(sitemapPaths.has(route), `app route ${route} has a page.tsx but is missing from the sitemap`).toBe(true);
     }
   });
 

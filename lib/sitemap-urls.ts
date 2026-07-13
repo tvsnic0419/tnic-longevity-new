@@ -15,6 +15,7 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     { url: base, lastModified, changeFrequency: 'weekly', priority: 1 },
     { url: `${base}/library`, lastModified, changeFrequency: 'weekly', priority: 0.95 },
     { url: `${base}/library/delivery-systems`, lastModified, changeFrequency: 'monthly', priority: 0.84 },
+    { url: `${base}/library/systems`, lastModified, changeFrequency: 'monthly', priority: 0.84 },
     { url: `${base}/library/compare`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/learn`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/faq`, lastModified, changeFrequency: 'monthly', priority: 0.85 },
@@ -40,6 +41,10 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     { url: `${base}/contact`, lastModified, changeFrequency: 'monthly', priority: 0.75 },
     { url: `${base}/partnerships`, lastModified, changeFrequency: 'monthly', priority: 0.74 },
     { url: `${base}/site-map`, lastModified, changeFrequency: 'weekly', priority: 0.75 },
+    { url: `${base}/about`, lastModified, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${base}/bio-age`, lastModified, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${base}/club`, lastModified, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${base}/hallmarks`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/trust`, lastModified, changeFrequency: 'weekly', priority: 0.85 },
     { url: `${base}/trust/methodology`, lastModified, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/trust/disclaimers`, lastModified, changeFrequency: 'monthly', priority: 0.7 },
@@ -53,6 +58,13 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     lastModified,
     changeFrequency: 'monthly' as const,
     priority: 0.85,
+  }));
+
+  const hallmarkDeepDiveRoutes = hallmarkLibrary.map((h) => ({
+    url: `${base}/hallmarks/${h.slug}`,
+    lastModified,
+    changeFrequency: 'monthly' as const,
+    priority: 0.83,
   }));
 
   const compareRoutes = getAllComparisonSlugs().map((slug) => ({
@@ -83,5 +95,13 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     priority: 0.82,
   }));
 
-  return [...coreRoutes, ...quizShareRoutes, ...toolTabRoutes, ...hallmarkRoutes, ...compareRoutes, ...moduleRoutes];
+  return [
+    ...coreRoutes,
+    ...quizShareRoutes,
+    ...toolTabRoutes,
+    ...hallmarkRoutes,
+    ...hallmarkDeepDiveRoutes,
+    ...compareRoutes,
+    ...moduleRoutes,
+  ];
 }
