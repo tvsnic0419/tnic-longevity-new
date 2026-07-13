@@ -2732,3 +2732,206 @@ body::after {
 .graphic-glow {
   box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Design System v8 — Deep Glass
+   ───────────────────────────────────────────────────────────────────────────
+   Optical depth through real layering, not blur alone. Four depth planes:
+
+     field   — the ambient backdrop itself (no glass surface; light source)
+     mid     — secondary surfaces sitting just above the backdrop
+     content — the primary "hero glass" moment — most elevated, most blur
+     float   — small accents that read as floating above content
+
+   Each plane is a token bundle (blur / fill / shadow) consumed by the
+   `.glass-deep` + `.glass-plane-*` classes below, or via the <GlassPanel>
+   / <GlassCard> React primitives (components/ui/GlassPanel.tsx) — never
+   hand-rolled per component. Restraint is the point: most surfaces on the
+   site are NOT glass. Reserve these for one or two moments per page.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Blur per plane. Deeper planes blur less (they sit closer to the light
+     source / backdrop); shallower, content-facing planes blur more (more
+     "glass" is optically between the viewer and the backdrop). */
+  --glass-blur-field: 40px;
+  --glass-blur-mid: 18px;
+  --glass-blur-content: 28px;
+  --glass-blur-float: 14px;
+
+  /* Fill — translucency per plane, dark theme */
+  --glass-fill-field: color-mix(in srgb, var(--color-bg-elevated) 45%, transparent);
+  --glass-fill-mid: color-mix(in srgb, var(--color-bg-elevated) 62%, transparent);
+  --glass-fill-content: color-mix(in srgb, var(--color-bg-elevated) 76%, transparent);
+  --glass-fill-float: color-mix(in srgb, var(--color-bg-elevated) 68%, transparent);
+
+  /* Specular top/left highlight + cool→warm chromatic tint suggesting
+     refraction, plus a darker bottom/right edge for the "3D" read. */
+  --glass-edge-specular: rgba(255, 255, 255, 0.38);
+  --glass-edge-cool: rgba(150, 210, 255, 0.16);
+  --glass-edge-warm: rgba(255, 185, 130, 0.10);
+  --glass-edge-shadow: rgba(0, 0, 0, 0.4);
+
+  /* Stacked shadows — contact + lift + ambient — never a single flat drop
+     shadow. Spread and opacity scale up with plane elevation. */
+  --glass-shadow-field:
+    0 1px 1px rgba(0, 0, 0, 0.18),
+    0 12px 32px -18px rgba(0, 0, 0, 0.3);
+  --glass-shadow-mid:
+    0 1px 1px rgba(0, 0, 0, 0.22),
+    0 8px 20px -10px rgba(0, 0, 0, 0.32),
+    0 24px 48px -28px rgba(0, 0, 0, 0.38);
+  --glass-shadow-content:
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 14px 28px -12px rgba(0, 0, 0, 0.42),
+    0 44px 88px -32px rgba(0, 0, 0, 0.55);
+  --glass-shadow-float:
+    0 2px 4px rgba(0, 0, 0, 0.25),
+    0 16px 32px -12px rgba(0, 0, 0, 0.4),
+    0 48px 96px -30px rgba(0, 0, 0, 0.48);
+
+  /* Motion — slow, weighted, spring-feeling rather than linear/ease-out. */
+  --ease-glass: cubic-bezier(0.16, 1, 0.3, 1);
+  --glass-tilt-max: 5deg;
+}
+
+[data-theme="light"] {
+  --glass-fill-field: color-mix(in srgb, var(--color-bg-elevated) 55%, transparent);
+  --glass-fill-mid: color-mix(in srgb, var(--color-bg-elevated) 70%, transparent);
+  --glass-fill-content: color-mix(in srgb, var(--color-bg-elevated) 84%, transparent);
+  --glass-fill-float: color-mix(in srgb, var(--color-bg-elevated) 76%, transparent);
+
+  --glass-edge-specular: rgba(255, 255, 255, 0.75);
+  --glass-edge-cool: rgba(8, 145, 178, 0.10);
+  --glass-edge-warm: rgba(217, 119, 6, 0.08);
+  --glass-edge-shadow: rgba(15, 23, 42, 0.14);
+
+  --glass-shadow-field:
+    0 1px 1px rgba(15, 23, 42, 0.04),
+    0 12px 32px -18px rgba(15, 23, 42, 0.08);
+  --glass-shadow-mid:
+    0 1px 1px rgba(15, 23, 42, 0.05),
+    0 8px 20px -10px rgba(15, 23, 42, 0.07),
+    0 24px 48px -28px rgba(15, 23, 42, 0.09);
+  --glass-shadow-content:
+    0 1px 2px rgba(15, 23, 42, 0.05),
+    0 14px 28px -12px rgba(15, 23, 42, 0.09),
+    0 44px 88px -32px rgba(15, 23, 42, 0.12);
+  --glass-shadow-float:
+    0 2px 4px rgba(15, 23, 42, 0.05),
+    0 16px 32px -12px rgba(15, 23, 42, 0.08),
+    0 48px 96px -30px rgba(15, 23, 42, 0.1);
+}
+
+/* Base glass surface — shared plumbing for every depth plane.
+   Deliberately does NOT set its own border-radius: this class is unlayered
+   CSS, which beats Tailwind's `@layer utilities` by cascade-layer rules
+   regardless of source order — setting `border-radius: inherit` here would
+   silently override every `rounded-*` utility applied alongside it. The
+   host element's radius always comes from a Tailwind rounded-* class in
+   className; ::before/::after below inherit that computed value instead. */
+.glass-deep {
+  position: relative;
+  isolation: isolate;
+  background: var(--glass-fill, var(--glass-fill-content));
+  backdrop-filter: blur(var(--glass-blur, 24px)) saturate(1.3);
+  -webkit-backdrop-filter: blur(var(--glass-blur, 24px)) saturate(1.3);
+}
+
+/* Specular + chromatic 1px edge, via the padding+mask gradient-border
+   technique already used elsewhere in this file (.card-premium::before). */
+.glass-deep::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    var(--glass-edge-specular) 0%,
+    var(--glass-edge-cool) 14%,
+    transparent 42%,
+    transparent 58%,
+    var(--glass-edge-warm) 86%,
+    var(--glass-edge-shadow) 100%
+  );
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Faint interior chromatic wash — reinforces refraction without more blur. */
+.glass-deep::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(ellipse 70% 55% at 12% -6%, var(--glass-edge-cool), transparent 60%),
+    radial-gradient(ellipse 70% 55% at 88% 106%, var(--glass-edge-warm), transparent 60%);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.glass-deep > * {
+  position: relative;
+  z-index: 2;
+}
+
+.glass-plane-field {
+  --glass-blur: var(--glass-blur-field);
+  --glass-fill: var(--glass-fill-field);
+  box-shadow: var(--glass-shadow-field);
+}
+.glass-plane-mid {
+  --glass-blur: var(--glass-blur-mid);
+  --glass-fill: var(--glass-fill-mid);
+  box-shadow: var(--glass-shadow-mid);
+}
+.glass-plane-content {
+  --glass-blur: var(--glass-blur-content);
+  --glass-fill: var(--glass-fill-content);
+  box-shadow: var(--glass-shadow-content);
+}
+.glass-plane-float {
+  --glass-blur: var(--glass-blur-float);
+  --glass-fill: var(--glass-fill-float);
+  box-shadow: var(--glass-shadow-float);
+}
+
+/* Contrast scrim — an optional darkening gradient under text sitting on
+   glass, so body copy still clears WCAG AA over a translucent surface. */
+.glass-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    color-mix(in srgb, var(--color-bg-base) 60%, transparent) 75%
+  );
+  pointer-events: none;
+}
+
+/* Tilt is a transform-only, GPU-cheap effect — but still gated for users
+   who prefer reduced motion (belt-and-suspenders alongside the app-wide
+   framer-motion MotionConfig reducedMotion="user" in PlatformProviderWrapper). */
+@media (prefers-reduced-motion: reduce) {
+  .glass-deep {
+    transform: none !important;
+  }
+}
+
+/* Mobile: keep the layered read but halve blur cost — backdrop-filter is
+   expensive, and phones are where it's most likely to jank. No tilt on
+   touch (handled in GlassPanel via pointerType checks, not just here). */
+@media (max-width: 767px) {
+  .glass-deep {
+    backdrop-filter: blur(calc(var(--glass-blur, 24px) * 0.5)) saturate(1.15);
+    -webkit-backdrop-filter: blur(calc(var(--glass-blur, 24px) * 0.5)) saturate(1.15);
+  }
+}
