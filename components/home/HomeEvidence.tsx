@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { ShieldCheck, Lock, BookMarked, ArrowUpRight, type LucideIcon } from 'lucide-react';
 import { citationRegistry } from '@/lib/trust';
 import { compounds } from '@/lib/data';
+import { GlassPanel } from '@/components/ui/GlassPanel';
+import { RevealItem } from '@/components/ui/RevealItem';
 
 /**
  * Credibility band — the numbers and principles a sponsor or first-time visitor
@@ -58,34 +60,35 @@ export function HomeEvidence() {
           </p>
         </div>
 
-        <dl className="mb-12 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border md:grid-cols-4">
-          {stats.map((stat) => (
-            <div
-              key={stat.label}
-              className="bg-[var(--color-bg-elevated)] px-5 py-7 text-center"
-            >
-              <dt className="sr-only">{stat.label}</dt>
-              <dd>
-                <span className="tnic-tabular block text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-                  {stat.value}
-                </span>
-                <span className="mt-2 block text-xs leading-tight text-muted-foreground">
-                  {stat.label}
-                </span>
-              </dd>
-            </div>
-          ))}
-        </dl>
+        <GlassPanel depth="mid" className="mb-12 overflow-hidden rounded-2xl">
+          <dl className="grid grid-cols-2 gap-px sm:grid-cols-4">
+            {stats.map((stat) => (
+              <div key={stat.label} className="bg-white/[0.02] px-5 py-7 text-center">
+                <dt className="sr-only">{stat.label}</dt>
+                <dd>
+                  <span className="tnic-tabular block text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+                    {stat.value}
+                  </span>
+                  <span className="mt-2 block text-xs leading-tight text-muted-foreground">
+                    {stat.label}
+                  </span>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </GlassPanel>
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-          {pillars.map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="card-base p-6">
-              <span className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl icon-badge-emerald">
-                <Icon className="h-5 w-5 text-accent-emerald" aria-hidden="true" />
-              </span>
-              <h3 className="heading-card mb-2">{title}</h3>
-              <p className="text-body-sm leading-relaxed">{desc}</p>
-            </div>
+          {pillars.map(({ icon: Icon, title, desc }, i) => (
+            <RevealItem key={title} index={i}>
+              <GlassPanel depth="mid" className="glass-hover h-full rounded-2xl p-6">
+                <span className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl icon-badge-emerald">
+                  <Icon className="h-5 w-5 text-accent-emerald" aria-hidden="true" />
+                </span>
+                <h3 className="heading-card mb-2">{title}</h3>
+                <p className="text-body-sm leading-relaxed">{desc}</p>
+              </GlassPanel>
+            </RevealItem>
           ))}
         </div>
 

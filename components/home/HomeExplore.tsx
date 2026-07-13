@@ -10,6 +10,8 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { compounds } from '@/lib/data';
+import { GlassPanel } from '@/components/ui/GlassPanel';
+import { RevealItem } from '@/components/ui/RevealItem';
 
 /**
  * The homepage's primary navigation surface — six clean, crawlable cards that
@@ -123,27 +125,27 @@ export function HomeExplore() {
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {destinations.map(({ href, icon: Icon, eyebrow, title, desc, accent }) => (
-            <Link
-              key={title}
-              href={href}
-              className="card-premium tnic-card focus-ring group flex flex-col rounded-2xl p-6"
-            >
-              <div className="mb-5 flex items-center justify-between">
-                <span
-                  className={`inline-flex h-11 w-11 items-center justify-center rounded-xl ${accentBadge[accent]}`}
-                >
-                  <Icon className={`h-5 w-5 ${accentText[accent]}`} aria-hidden="true" />
-                </span>
-                <ArrowUpRight
-                  className="h-4 w-4 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground"
-                  aria-hidden="true"
-                />
-              </div>
-              <p className={`text-label mb-1.5 ${accentText[accent]}`}>{eyebrow}</p>
-              <h3 className="heading-card mb-2 text-base">{title}</h3>
-              <p className="text-body-sm leading-relaxed">{desc}</p>
-            </Link>
+          {destinations.map(({ href, icon: Icon, eyebrow, title, desc, accent }, i) => (
+            <RevealItem key={title} index={i}>
+              <GlassPanel depth="mid" className="glass-hover h-full overflow-hidden rounded-2xl">
+                <Link href={href} className="focus-ring group flex h-full flex-col p-6">
+                  <div className="mb-5 flex items-center justify-between">
+                    <span
+                      className={`inline-flex h-11 w-11 items-center justify-center rounded-xl ${accentBadge[accent]}`}
+                    >
+                      <Icon className={`h-5 w-5 ${accentText[accent]}`} aria-hidden="true" />
+                    </span>
+                    <ArrowUpRight
+                      className="h-4 w-4 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <p className={`text-label mb-1.5 ${accentText[accent]}`}>{eyebrow}</p>
+                  <h3 className="heading-card mb-2 text-base">{title}</h3>
+                  <p className="text-body-sm leading-relaxed">{desc}</p>
+                </Link>
+              </GlassPanel>
+            </RevealItem>
           ))}
         </div>
       </div>

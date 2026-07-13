@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ClipboardList, LayoutDashboard, ArrowRight } from 'lucide-react';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 
 /** Final conversion band — one confident ask, server-rendered. */
 export function HomeCTA() {
@@ -34,13 +35,15 @@ export function HomeCTA() {
                 aria-hidden="true"
               />
             </Link>
-            <Link
-              href="/dashboard"
-              className="focus-ring glass glass-hover inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-semibold text-foreground"
-            >
-              <LayoutDashboard className="h-5 w-5 text-accent-cyan" aria-hidden="true" />
-              Open the Longevity OS
-            </Link>
+            <GlassPanel depth="float" className="glass-hover rounded-full">
+              <Link
+                href="/dashboard"
+                className="focus-ring inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-semibold text-foreground"
+              >
+                <LayoutDashboard className="h-5 w-5 text-accent-cyan" aria-hidden="true" />
+                Open the Longevity OS
+              </Link>
+            </GlassPanel>
           </div>
         </div>
       </div>

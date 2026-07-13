@@ -4,6 +4,7 @@ import { ClipboardList, Library, ArrowRight, Sparkles } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo';
 import { StarterQuiz } from '@/components/sections/StarterQuiz';
 import { GlassPanel } from '@/components/ui/GlassPanel';
+import { HeroSceneMount } from '@/components/home/HeroSceneMount';
 import { compounds } from '@/lib/data';
 
 /**
@@ -36,7 +37,11 @@ export function HomeHero() {
       <div aria-hidden="true" className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[radial-gradient(#12203c_0.8px,transparent_1px)] [background-size:22px_22px] opacity-50" />
         <div className="absolute -left-32 -top-40 h-[38rem] w-[38rem] rounded-full bg-[radial-gradient(circle,rgba(0,224,255,0.16),transparent_60%)] blur-2xl" />
-        <div className="absolute -right-40 top-1/3 h-[34rem] w-[34rem] rounded-full bg-[radial-gradient(circle,rgba(52,211,153,0.12),transparent_60%)] blur-2xl" />
+        {/* Violet, not emerald — the compound-synergy network sitting in this
+            corner already carries its own emerald/amber tier-color signal;
+            a second emerald wash here would compete with it instead of
+            grounding it. */}
+        <div className="absolute -right-40 top-1/3 h-[34rem] w-[34rem] rounded-full bg-[radial-gradient(circle,rgba(192,132,252,0.10),transparent_60%)] blur-2xl" />
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-background" />
       </div>
 
@@ -132,6 +137,12 @@ export function HomeHero() {
           {/* Content plane — the hero's one primary glass moment, with pointer tilt */}
           <div className="mt-12 lg:col-span-5 lg:mt-0">
             <div className="relative">
+              {/* Ambient 3D compound-synergy network — real product data, not
+                  decoration for its own sake. Furthest-back layer (-z-10);
+                  the gradient glow and glass card paint above it in DOM order. */}
+              <div className="absolute -inset-20 -z-10 opacity-80" aria-hidden="true">
+                <HeroSceneMount />
+              </div>
               <div
                 className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-[var(--accent-cyan)]/12 via-transparent to-[var(--accent-emerald)]/12 blur-2xl"
                 aria-hidden="true"

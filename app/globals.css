@@ -1258,6 +1258,7 @@ body::after {
 }
 
 .nav-glass-scrolled {
+  position: relative;
   background: color-mix(in srgb, var(--color-bg-base) 92%, transparent);
   backdrop-filter: blur(var(--glass-blur-mid)) saturate(1.4);
   border-bottom-color: color-mix(in srgb, var(--accent-cyan) 18%, var(--color-border-subtle));
@@ -1267,6 +1268,20 @@ body::after {
   box-shadow:
     0 1px 0 color-mix(in srgb, var(--accent-cyan) 10%, transparent),
     var(--glass-shadow-mid);
+}
+
+/* Specular top-edge highlight — the same "light catching the glass" cue as
+   .glass-deep::before, adapted for a full-bleed horizontal bar (a card's
+   4-sided diagonal edge gradient doesn't apply to something with no visible
+   left/right/top edges against other content). */
+.nav-glass-scrolled::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--glass-edge-specular) 50%, transparent);
+  opacity: 0.4;
+  pointer-events: none;
 }
 
 .logo-glow {
@@ -1289,10 +1304,12 @@ body::after {
 
 /* ── Footer aurora ── */
 .footer-aurora {
+  /* position: relative already comes from Footer.tsx's own Tailwind class. */
   background:
     radial-gradient(ellipse 80% 50% at 50% 100%, color-mix(in srgb, var(--accent-cyan) 10%, transparent), transparent),
     radial-gradient(ellipse 60% 40% at 20% 80%, color-mix(in srgb, var(--accent-violet) 6%, transparent), transparent),
     var(--color-bg-base);
+  box-shadow: var(--footer-lift-shadow);
 }
 
 /* ── Hub page shell ── */
@@ -2738,6 +2755,12 @@ body::after {
     0 16px 32px -12px rgba(0, 0, 0, 0.4),
     0 48px 96px -30px rgba(0, 0, 0, 0.48);
 
+  /* Upward-cast shadow for the footer — the last element on the page has
+     nothing beneath it to blur/darken, so instead of a translucent glass
+     fill it gets a soft shadow cast onto the section above, reading as a
+     distinct raised plane rather than blending flat into the page. */
+  --footer-lift-shadow: 0 -20px 40px -28px rgba(0, 0, 0, 0.35);
+
   /* Motion — slow, weighted, spring-feeling rather than linear/ease-out. */
   --ease-glass: cubic-bezier(0.16, 1, 0.3, 1);
   --glass-tilt-max: 5deg;
@@ -2769,6 +2792,8 @@ body::after {
     0 2px 4px rgba(15, 23, 42, 0.05),
     0 16px 32px -12px rgba(15, 23, 42, 0.08),
     0 48px 96px -30px rgba(15, 23, 42, 0.1);
+
+  --footer-lift-shadow: 0 -20px 40px -28px rgba(15, 23, 42, 0.1);
 }
 
 /* Base glass surface — shared plumbing for every depth plane.
