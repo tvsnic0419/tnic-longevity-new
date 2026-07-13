@@ -2883,3 +2883,14 @@ body::after {
     -webkit-backdrop-filter: blur(calc(var(--glass-blur, 24px) * 0.5)) saturate(1.15);
   }
 }
+
+/* Optional premium grain texture — a pure-SVG noise filter (no binary asset),
+   opt-in and off by default. Reserve for one ambient backdrop moment per page
+   (currently: the homepage Hero backdrop only) — this is atmosphere, not a
+   sitewide filter. Never apply over readable text or interactive surfaces. */
+.grain-overlay {
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+}
