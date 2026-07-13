@@ -243,13 +243,14 @@ body::after {
   body::after { opacity: 0; }
 }
 
-/* ── Typography scale ── */
+/* ── Typography scale ──
+   Default `color` for these classes lives in the @layer components block
+   below, not here — see that block's comment for why. */
 .heading-page {
   font-size: clamp(2rem, 4.5vw + 0.75rem, 3.25rem);
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: var(--leading-tight);
-  color: var(--color-text-primary);
 }
 
 .heading-section {
@@ -257,32 +258,27 @@ body::after {
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.2;
-  color: var(--color-text-primary);
 }
 
 .heading-card {
   font-size: 1rem;
   font-weight: 600;
   line-height: 1.35;
-  color: var(--color-text-primary);
 }
 
 .text-body {
   font-size: 1rem;
   line-height: var(--leading-body);
-  color: var(--color-text-secondary);
 }
 
 .text-body-sm {
   font-size: 0.875rem;
   line-height: 1.6;
-  color: var(--color-text-muted);
 }
 
 .text-caption {
   font-size: 0.75rem;
   line-height: 1.5;
-  color: var(--color-text-faint);
 }
 
 .text-label {
@@ -291,7 +287,37 @@ body::after {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--color-text-faint);
+}
+
+/* Default colors for the typography scale above, deliberately placed in
+   Tailwind's `components` layer instead of left unlayered. Unlayered CSS
+   always beats anything in `@layer utilities` regardless of source order or
+   specificity — which silently broke every `text-label`/`text-caption`/
+   `text-body`/`heading-*` usage that tried to override its default color
+   with a Tailwind utility (e.g. `text-label text-accent-cyan` rendered as
+   plain gray, never cyan — verified via computed style on the live page).
+   Tailwind's own `@layer theme, base, components, utilities;` order puts
+   `utilities` after `components`, so utilities now correctly win here. */
+@layer components {
+  .heading-page,
+  .heading-section,
+  .heading-card,
+  .text-display,
+  .headline-editorial {
+    color: var(--color-text-primary);
+  }
+  .text-body,
+  .pull-quote,
+  .manifesto-text {
+    color: var(--color-text-secondary);
+  }
+  .text-body-sm {
+    color: var(--color-text-muted);
+  }
+  .text-caption,
+  .text-label {
+    color: var(--color-text-faint);
+  }
 }
 
 /* ── Layout ── */
@@ -994,7 +1020,6 @@ body::after {
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 1.02;
-  color: var(--color-text-primary);
 }
 
 /* ── Site-wide ambient canvas ── */
@@ -1522,7 +1547,6 @@ body::after {
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 1.0;
-  color: var(--color-text-primary);
   text-shadow: 0 0 80px rgba(0, 224, 255, 0.28), 0 0 160px rgba(0, 224, 255, 0.10), 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
@@ -1710,7 +1734,6 @@ body::after {
   border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
   font-size: 1rem;
   line-height: 1.6;
-  color: var(--color-text-secondary);
 }
 
 /* ── Number counter display ── */
@@ -1821,7 +1844,6 @@ body::after {
   font-size: clamp(1.125rem, 2vw + 0.25rem, 1.5rem);
   font-weight: 400;
   line-height: 1.65;
-  color: var(--color-text-secondary);
   font-style: italic;
   letter-spacing: -0.01em;
 }
