@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { Layers, Wrench, Table2, BookOpen, ShoppingBag } from 'lucide-react';
 import { eliteStacks } from '@/lib/stacks-library';
@@ -12,12 +13,19 @@ import { buildShopStackUrl } from '@/lib/stack-url';
 import { PageShell } from '@/components/ui/PageShell';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { TabBar } from '@/components/ui/TabBar';
+import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
 import { DynamicStackBuilder } from './DynamicStackBuilder';
 import { EliteStackCard } from './EliteStackCard';
-import { StackComparisonTable } from './StackComparisonTable';
 import { ToolsPromoStrip } from '@/components/tools/ToolsPromoStrip';
 import { QuizStacksBanner } from './QuizStacksBanner';
 import { getHubContext } from '@/lib/hub-context';
+
+// Only ever rendered behind the "Compare" tab — lazy so its compound-data
+// and DataTable weight doesn't ship on first load for the (default) Catalog tab.
+const StackComparisonTable = dynamic(
+  () => import('./StackComparisonTable').then((m) => ({ default: m.StackComparisonTable })),
+  { loading: () => <SectionSkeleton height="lg" /> },
+);
 
 type Tab = 'catalog' | 'builder' | 'compare';
 
