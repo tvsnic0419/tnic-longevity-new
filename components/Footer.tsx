@@ -56,12 +56,12 @@ export function Footer() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-10 mb-10">
           <div className="sm:col-span-2 lg:col-span-1">
+            {/* No aria-label here — see the matching comment in Nav.tsx. */}
             <Link
               href="/"
-              aria-label="TNiC home"
               className="focus-ring inline-flex items-center mb-4 rounded-xl group transition-transform hover:scale-[1.02]"
             >
-              <Logo variant="lockup" size="md" alt="TNiC – Longevity OS" />
+              <Logo variant="lockup" size="md" alt="TNiC – Longevity OS · Home" />
             </Link>
             <p className="text-body-sm max-w-xs">
               Independent longevity intelligence. Evidence-graded compounds,

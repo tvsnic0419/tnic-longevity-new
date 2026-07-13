@@ -19,7 +19,10 @@ export function ToolsPromoStrip({
             <Calculator className="w-5 h-5 text-accent-violet" aria-hidden="true" />
             <p className="text-label text-accent-violet">Interactive Tools</p>
           </div>
-          <h3 className="heading-section text-xl mb-2">{headline}</h3>
+          {/* h2, not h3: this follows the page's <h1> directly (via
+              PageHeader) on every hub that renders this strip, and
+              `heading-section` is the design system's h2-level style. */}
+          <h2 className="heading-section text-xl mb-2">{headline}</h2>
           <p className="text-body-sm text-muted-foreground">
             Evidence-graded simulators with disclaimers. Educational only — not medical advice.
           </p>

@@ -136,8 +136,9 @@ export function BiomarkerInput() {
       {mode === 'single' && (
         <div className="space-y-4">
           <div>
-            <label className="text-xs text-muted-foreground block mb-1">Biomarker</label>
+            <label htmlFor="biomarker-select" className="text-xs text-muted-foreground block mb-1">Biomarker</label>
             <select
+              id="biomarker-select"
               value={markerId}
               onChange={(e) => setMarkerId(e.target.value)}
               className="input-base"
@@ -151,8 +152,9 @@ export function BiomarkerInput() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-xs text-muted-foreground block mb-1">Value</label>
+              <label htmlFor="biomarker-value" className="text-xs text-muted-foreground block mb-1">Value</label>
               <input
+                id="biomarker-value"
                 type="number"
                 step="0.01"
                 value={value}
@@ -162,8 +164,9 @@ export function BiomarkerInput() {
               />
             </div>
             <div>
-              <label className="text-xs text-muted-foreground block mb-1">Test Date</label>
+              <label htmlFor="biomarker-date" className="text-xs text-muted-foreground block mb-1">Test Date</label>
               <input
+                id="biomarker-date"
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
@@ -229,8 +232,9 @@ export function BiomarkerInput() {
       {mode === 'panel' && (
         <div className="space-y-4">
           <div>
-            <label className="text-xs text-muted-foreground block mb-1">Panel Date</label>
+            <label htmlFor="panel-date" className="text-xs text-muted-foreground block mb-1">Panel Date</label>
             <input
+              id="panel-date"
               type="date"
               value={panelDate}
               onChange={(e) => setPanelDate(e.target.value)}
@@ -241,9 +245,10 @@ export function BiomarkerInput() {
           <div className="grid sm:grid-cols-2 gap-3 max-h-[320px] overflow-y-auto pr-1">
             {biomarkers.map((b) => (
               <div key={b.id} className="glass rounded-xl p-3">
-                <label className="text-xs font-semibold text-foreground/80 block mb-1">{b.name}</label>
+                <label htmlFor={`panel-marker-${b.id}`} className="text-xs font-semibold text-foreground/80 block mb-1">{b.name}</label>
                 <div className="flex items-center gap-2">
                   <input
+                    id={`panel-marker-${b.id}`}
                     type="number"
                     step="0.01"
                     value={panelValues[b.id] ?? ''}

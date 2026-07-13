@@ -83,12 +83,16 @@ export function Nav() {
         className={`absolute inset-0 nav-glass ${scrolled ? 'nav-glass-scrolled' : ''}`}
       />
       <div className="relative container-page py-3 md:py-4 flex justify-between items-center gap-4">
+        {/* No aria-label here: it would duplicate/conflict with the Logo's
+            own role="img" + aria-label below, which Lighthouse's
+            label-content-name-mismatch audit flags as visible text not
+            reflected in the accessible name. Let the link's name derive
+            from that single nested image role instead. */}
         <Link
           href="/"
-          aria-label="TNiC home"
           className="focus-ring interactive flex items-center rounded-xl shrink-0 group transition-transform hover:scale-[1.02]"
         >
-          <Logo variant="lockup" size="nav" alt="TNiC – Longevity OS" />
+          <Logo variant="lockup" size="nav" alt="TNiC – Longevity OS · Home" />
         </Link>
 
         <div className="hidden lg:flex gap-0.5 xl:gap-1">
