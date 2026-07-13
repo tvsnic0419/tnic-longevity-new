@@ -4,6 +4,7 @@ import { ClipboardList, Library, ArrowRight, Sparkles } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo';
 import { StarterQuiz } from '@/components/sections/StarterQuiz';
 import { GlassPanel } from '@/components/ui/GlassPanel';
+import { HeroSceneMount } from '@/components/home/HeroSceneMount';
 import { compounds } from '@/lib/data';
 
 /**
@@ -132,6 +133,12 @@ export function HomeHero() {
           {/* Content plane — the hero's one primary glass moment, with pointer tilt */}
           <div className="mt-12 lg:col-span-5 lg:mt-0">
             <div className="relative">
+              {/* Ambient 3D compound-synergy network — real product data, not
+                  decoration for its own sake. Furthest-back layer (-z-10);
+                  the gradient glow and glass card paint above it in DOM order. */}
+              <div className="absolute -inset-20 -z-10 opacity-80" aria-hidden="true">
+                <HeroSceneMount />
+              </div>
               <div
                 className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-[var(--accent-cyan)]/12 via-transparent to-[var(--accent-emerald)]/12 blur-2xl"
                 aria-hidden="true"
