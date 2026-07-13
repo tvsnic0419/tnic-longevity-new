@@ -132,7 +132,7 @@ function HallmarkCell({
             ? ({ '--cell-glow': meta.colorVar } as React.CSSProperties)
             : undefined
         }
-        aria-label={`${title}${covered ? ' — covered by your stack' : ' — gap in coverage'}`}
+        aria-label={`Hallmark ${number}: ${title}${covered ? ' — covered by your stack' : ' — gap in coverage'}`}
       >
         {covered && (
           <div
