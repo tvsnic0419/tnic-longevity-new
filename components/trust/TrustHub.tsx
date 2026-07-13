@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import {
   Shield,
@@ -16,14 +17,36 @@ import {
 import { PageShell } from '@/components/ui/PageShell';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { TabBar } from '@/components/ui/TabBar';
+import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
 import { EvidenceTagLegend } from './EvidenceTag';
-import { CitationList } from './CitationList';
-import { CitationExportPanel } from './CitationExportPanel';
 import { DisclaimerBanner } from './DisclaimerBanner';
-import { JourneyTimeline } from './JourneyTimeline';
-import { UpdateHistoryList } from './UpdateHistoryList';
-import { MethodologySection } from './MethodologySection';
-import { PersonalJourneyPanel } from './PersonalJourneyPanel';
+
+// 'overview' is the default tab and needs DisclaimerBanner/EvidenceTagLegend
+// immediately; the rest are only ever rendered behind a tab click.
+const CitationList = dynamic(
+  () => import('./CitationList').then((m) => ({ default: m.CitationList })),
+  { loading: () => <SectionSkeleton height="md" /> },
+);
+const CitationExportPanel = dynamic(
+  () => import('./CitationExportPanel').then((m) => ({ default: m.CitationExportPanel })),
+  { loading: () => <SectionSkeleton height="md" /> },
+);
+const JourneyTimeline = dynamic(
+  () => import('./JourneyTimeline').then((m) => ({ default: m.JourneyTimeline })),
+  { loading: () => <SectionSkeleton height="md" /> },
+);
+const UpdateHistoryList = dynamic(
+  () => import('./UpdateHistoryList').then((m) => ({ default: m.UpdateHistoryList })),
+  { loading: () => <SectionSkeleton height="md" /> },
+);
+const MethodologySection = dynamic(
+  () => import('./MethodologySection').then((m) => ({ default: m.MethodologySection })),
+  { loading: () => <SectionSkeleton height="md" /> },
+);
+const PersonalJourneyPanel = dynamic(
+  () => import('./PersonalJourneyPanel').then((m) => ({ default: m.PersonalJourneyPanel })),
+  { loading: () => <SectionSkeleton height="md" /> },
+);
 import {
   citationFramework,
   citationRegistry,

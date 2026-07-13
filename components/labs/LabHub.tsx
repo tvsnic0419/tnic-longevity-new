@@ -8,6 +8,7 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
+import dynamic from 'next/dynamic';
 import { FlaskConical, LineChart, Lightbulb, Dna, Shield, Download, FileJson } from 'lucide-react';
 import { exportLabsPartnerJsonString } from '@/lib/lab-partner-export';
 import { analyzeLabs } from '@/lib/lab-analysis';
@@ -17,15 +18,32 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { TabBar } from '@/components/ui/TabBar';
 import { StatStrip } from '@/components/ui/StatStrip';
 import { Button } from '@/components/ui/Button';
+import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
 import { UserFlowGuide } from './UserFlowGuide';
 import { BiomarkerInput } from './BiomarkerInput';
-import { LabTrendDashboard } from './LabTrendDashboard';
-import { HallmarkRiskPanel } from './HallmarkRiskPanel';
-import { LabRecommendations } from './LabRecommendations';
-import { PrivacyPanel } from './PrivacyPanel';
 import { ToolsPromoStrip } from '@/components/tools/ToolsPromoStrip';
 import { LabPartnerPanel } from './LabPartnerPanel';
 import { getHubContext } from '@/lib/hub-context';
+
+// 'input' is the default tab and stays a regular import. The other four are
+// only ever rendered behind a tab click, so they're lazy — same pattern as
+// ToolsHub's tool panels.
+const LabTrendDashboard = dynamic(
+  () => import('./LabTrendDashboard').then((m) => ({ default: m.LabTrendDashboard })),
+  { loading: () => <SectionSkeleton height="lg" /> },
+);
+const HallmarkRiskPanel = dynamic(
+  () => import('./HallmarkRiskPanel').then((m) => ({ default: m.HallmarkRiskPanel })),
+  { loading: () => <SectionSkeleton height="lg" /> },
+);
+const LabRecommendations = dynamic(
+  () => import('./LabRecommendations').then((m) => ({ default: m.LabRecommendations })),
+  { loading: () => <SectionSkeleton height="lg" /> },
+);
+const PrivacyPanel = dynamic(
+  () => import('./PrivacyPanel').then((m) => ({ default: m.PrivacyPanel })),
+  { loading: () => <SectionSkeleton height="lg" /> },
+);
 
 type Tab = 'input' | 'trends' | 'risk' | 'insights' | 'privacy';
 
