@@ -42,7 +42,6 @@ export function HomeHero() {
             a second emerald wash here would compete with it instead of
             grounding it. */}
         <div className="absolute -right-40 top-1/3 h-[34rem] w-[34rem] rounded-full bg-[radial-gradient(circle,rgba(192,132,252,0.10),transparent_60%)] blur-2xl" />
-        <div className="grain-overlay absolute inset-0" />
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-background" />
       </div>
 
