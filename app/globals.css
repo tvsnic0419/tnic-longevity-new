@@ -2732,3 +2732,181 @@ body::after {
 .graphic-glow {
   box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   DEEP-GLASS SYSTEM
+   Light passing through layered glass. Depth comes from z-order + layered
+   fills + a specular/refractive rim + stacked soft shadows — not blur alone.
+   Every glass surface composes these tokens; no one-off magic numbers.
+   Lives in @layer components so Tailwind utilities (absolute, hidden, rounded…)
+   compose over these primitives instead of losing to them.
+   ═══════════════════════════════════════════════════════════════════════ */
+@layer components {
+:root {
+  /* Blur is expensive — three capped levels, used on few surfaces only */
+  --dg-blur-1: 5px;    /* far / large regions          */
+  --dg-blur-2: 12px;   /* mid glass                    */
+  --dg-blur-3: 20px;   /* raised foreground cards      */
+
+  /* Layered fills — a cool slate tint under a soft top-lit sheen */
+  --dg-tint: rgba(10, 17, 34, 0.55);
+  --dg-sheen-hi: rgba(255, 255, 255, 0.07);
+  --dg-sheen-lo: rgba(255, 255, 255, 0.015);
+
+  /* Specular edges: bright top/left, dark bottom/right */
+  --dg-edge-light: rgba(255, 255, 255, 0.55);
+  --dg-edge-dark: rgba(0, 0, 0, 0.40);
+  /* Chromatic refraction at the rim — cool → warm, kept low for restraint */
+  --dg-refract-cool: rgba(0, 224, 255, 0.28);
+  --dg-refract-warm: rgba(160, 130, 255, 0.20);
+  --dg-hairline: rgba(255, 255, 255, 0.08);
+
+  /* Stacked, soft depth shadows — never a single harsh drop */
+  --dg-shadow-1:
+    0 1px 1px rgba(0, 0, 0, 0.20),
+    0 3px 8px -3px rgba(0, 0, 0, 0.35);
+  --dg-shadow-2:
+    0 1px 1px rgba(0, 0, 0, 0.22),
+    0 6px 16px -6px rgba(0, 0, 0, 0.40),
+    0 14px 34px -12px rgba(0, 0, 0, 0.45);
+  --dg-shadow-3:
+    0 1px 1px rgba(0, 0, 0, 0.25),
+    0 10px 24px -8px rgba(0, 0, 0, 0.42),
+    0 26px 60px -16px rgba(0, 0, 0, 0.60);
+
+  /* Weighted, physics-feeling easing */
+  --dg-ease: cubic-bezier(0.16, 0.84, 0.44, 1);
+  --dg-ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+/* Light theme — glass reads as bright frosted, edges softer */
+:root[data-theme='light'],
+.light {
+  --dg-tint: rgba(255, 255, 255, 0.66);
+  --dg-sheen-hi: rgba(255, 255, 255, 0.9);
+  --dg-sheen-lo: rgba(255, 255, 255, 0.3);
+  --dg-edge-light: rgba(255, 255, 255, 0.9);
+  --dg-edge-dark: rgba(15, 23, 42, 0.12);
+  --dg-refract-cool: rgba(8, 145, 178, 0.20);
+  --dg-refract-warm: rgba(124, 58, 237, 0.14);
+  --dg-hairline: rgba(15, 23, 42, 0.08);
+  --dg-shadow-1: 0 1px 2px rgba(15, 23, 42, 0.06), 0 3px 8px -3px rgba(15, 23, 42, 0.10);
+  --dg-shadow-2: 0 1px 2px rgba(15, 23, 42, 0.06), 0 8px 20px -8px rgba(15, 23, 42, 0.14);
+  --dg-shadow-3: 0 2px 4px rgba(15, 23, 42, 0.07), 0 20px 48px -16px rgba(15, 23, 42, 0.20);
+}
+
+/* ── Core primitive ──────────────────────────────────────────────────── */
+.dg-panel {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--dg-radius, 1.25rem);
+  background:
+    linear-gradient(177deg, var(--dg-sheen-hi), var(--dg-sheen-lo) 46%),
+    var(--dg-tint);
+  backdrop-filter: blur(var(--dg-blur, var(--dg-blur-2))) saturate(1.2);
+  -webkit-backdrop-filter: blur(var(--dg-blur, var(--dg-blur-2))) saturate(1.2);
+  border: 1px solid var(--dg-hairline);
+  box-shadow: var(--dg-shadow, var(--dg-shadow-2));
+}
+/* Refractive rim: a 1px gradient ring — specular → cool → clear → warm → dark */
+.dg-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    var(--dg-edge-light) 0%,
+    var(--dg-refract-cool) 20%,
+    transparent 44%,
+    transparent 58%,
+    var(--dg-refract-warm) 82%,
+    var(--dg-edge-dark) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+/* Soft top-left specular bloom inside the glass */
+.dg-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(120% 60% at 15% -10%, rgba(255, 255, 255, 0.10), transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+.dg-panel > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Depth planes */
+.dg-1 { --dg-blur: var(--dg-blur-1); --dg-shadow: var(--dg-shadow-1); --dg-sheen-hi: rgba(255, 255, 255, 0.04); }
+.dg-2 { --dg-blur: var(--dg-blur-2); --dg-shadow: var(--dg-shadow-2); }
+.dg-3 { --dg-blur: var(--dg-blur-3); --dg-shadow: var(--dg-shadow-3); --dg-sheen-hi: rgba(255, 255, 255, 0.09); }
+
+/* Radius tokens for glass surfaces (rim + fill share --dg-radius) */
+.dg-r-md  { --dg-radius: 0.85rem; }
+.dg-r-lg  { --dg-radius: 1rem; }
+.dg-r-xl  { --dg-radius: 1.5rem; }
+.dg-r-2xl { --dg-radius: 1.75rem; }
+
+/* Interactive lift */
+.dg-interactive {
+  transition: transform 0.4s var(--dg-ease), box-shadow 0.4s var(--dg-ease), border-color 0.3s var(--dg-ease);
+}
+.dg-interactive:hover { transform: translateY(-3px); box-shadow: var(--dg-shadow-3); }
+
+/* Pointer-tilt wrapper — JS sets --dg-rx/--dg-ry, CSS springs it */
+.dg-tilt {
+  transform: perspective(1100px) rotateX(var(--dg-rx, 0deg)) rotateY(var(--dg-ry, 0deg));
+  transform-style: preserve-3d;
+  transition: transform 0.5s var(--dg-ease);
+  will-change: transform;
+}
+
+/* Small floating accent chip (plane 3) */
+.dg-chip {
+  --dg-radius: 0.85rem;
+  --dg-blur: var(--dg-blur-3);
+  --dg-shadow: var(--dg-shadow-2);
+}
+
+/* Slow, weighted float for floating accents */
+@keyframes dg-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-9px); }
+}
+.dg-float { animation: dg-float 7s var(--dg-ease-soft) infinite; }
+.dg-float-slow { animation: dg-float 11s var(--dg-ease-soft) infinite; }
+
+/* No backdrop-filter support → lean on fill opacity so it still reads as glass */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .dg-panel {
+    background:
+      linear-gradient(177deg, var(--dg-sheen-hi), var(--dg-sheen-lo) 46%),
+      color-mix(in srgb, var(--dg-tint), #0a1122 35%);
+  }
+}
+
+/* Mobile: cheaper blur, no tilt — still a premium layered look */
+@media (max-width: 767px) {
+  :root { --dg-blur-2: 9px; --dg-blur-3: 14px; }
+  .dg-tilt { transform: none; }
+}
+
+/* Reduced motion: no tilt, no lift translation, no float */
+@media (prefers-reduced-motion: reduce) {
+  .dg-interactive, .dg-tilt { transition: none; }
+  .dg-interactive:hover { transform: none; }
+  .dg-tilt { transform: none !important; }
+  .dg-float, .dg-float-slow { animation: none; }
+}
+} /* end @layer components — deep-glass system */
