@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import { ClipboardList, Library, ArrowRight, Sparkles } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo';
 import { StarterQuiz } from '@/components/sections/StarterQuiz';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 
 /**
  * Server-rendered homepage hero.
@@ -50,12 +51,21 @@ export function HomeHero() {
               </span>
             </div>
 
-            <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium text-white/80">
+            {/* Float plane — smallest, most elevated glass accent in the hero */}
+            <GlassPanel
+              depth="float"
+              className="mb-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium text-white/80"
+            >
               <Sparkles className="h-3.5 w-3.5 text-[var(--accent-cyan)]" aria-hidden="true" />
               The anti-aging operating system
-            </span>
+            </GlassPanel>
 
-            <h1 id="home-hero-heading" className="headline-editorial mb-5 text-white">
+            {/* !text-white: .headline-editorial is unlayered CSS and sets its
+                own theme-aware color, which beats Tailwind's `text-white`
+                utility by cascade-layer rules regardless of source order.
+                This hero is intentionally always-dark (bg-[#020811] above),
+                so force white with Tailwind's `!` important-modifier. */}
+            <h1 id="home-hero-heading" className="headline-editorial mb-5 !text-white">
               Understand how you age.
               <br />
               <span className="gradient-sweep-text">Then act on the evidence.</span>
@@ -96,38 +106,42 @@ export function HomeHero() {
               <span>No account needed</span>
             </div>
 
-            {/* Evidence stat row — hairline grid, server-rendered numbers */}
-            <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] sm:grid-cols-4">
-              {heroStats.map((stat) => (
-                <div key={stat.label} className="bg-[#020811]/60 px-4 py-4 text-center lg:text-left">
-                  <dt className="sr-only">{stat.label}</dt>
-                  <dd>
-                    <span className="tnic-tabular block text-2xl font-bold tracking-tight text-white">
-                      {stat.value}
-                    </span>
-                    <span className="mt-1 block text-[11px] leading-tight text-white/50">
-                      {stat.label}
-                    </span>
-                  </dd>
-                </div>
-              ))}
-            </dl>
+            {/* Mid plane — evidence stat row sits just above the backdrop.
+                gap-px against the panel's own fill, with a faint per-cell
+                overlay, reproduces the hairline grid without a hard-coded bg. */}
+            <GlassPanel depth="mid" className="overflow-hidden rounded-2xl">
+              <dl className="grid grid-cols-2 gap-px sm:grid-cols-4">
+                {heroStats.map((stat) => (
+                  <div key={stat.label} className="bg-white/[0.03] px-4 py-4 text-center lg:text-left">
+                    <dt className="sr-only">{stat.label}</dt>
+                    <dd>
+                      <span className="tnic-tabular block text-2xl font-bold tracking-tight text-white">
+                        {stat.value}
+                      </span>
+                      <span className="mt-1 block text-[11px] leading-tight text-white/50">
+                        {stat.label}
+                      </span>
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </GlassPanel>
           </div>
 
-          {/* Interactive quiz — the single client island in the hero */}
+          {/* Content plane — the hero's one primary glass moment, with pointer tilt */}
           <div className="mt-12 lg:col-span-5 lg:mt-0">
             <div className="relative">
               <div
                 className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-[var(--accent-cyan)]/12 via-transparent to-[var(--accent-emerald)]/12 blur-2xl"
                 aria-hidden="true"
               />
-              <div className="relative tnic-glass rounded-3xl">
+              <GlassPanel depth="content" tilt className="relative rounded-3xl">
                 <Suspense
                   fallback={<div className="h-[380px] animate-pulse rounded-3xl bg-white/5" />}
                 >
                   <StarterQuiz />
                 </Suspense>
-              </div>
+              </GlassPanel>
             </div>
           </div>
         </div>
