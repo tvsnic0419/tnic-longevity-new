@@ -1,17 +1,18 @@
 import Link from 'next/link';
 import { ShieldCheck, Lock, BookMarked, ArrowUpRight, type LucideIcon } from 'lucide-react';
 import { citationRegistry } from '@/lib/trust';
+import { compounds } from '@/lib/data';
 
 /**
  * Credibility band — the numbers and principles a sponsor or first-time visitor
- * needs to trust the platform. Citation count is read from the live registry so
- * it never drifts from the source of truth.
+ * needs to trust the platform. Compound and citation counts are read from the
+ * live data sources so they never drift from the source of truth.
  */
 
 const citationCount = citationRegistry.length;
 
 const stats: { value: string; label: string }[] = [
-  { value: '49', label: 'Evidence-graded compounds' },
+  { value: `${compounds.length}`, label: 'Evidence-graded compounds' },
   { value: '12', label: 'Hallmarks of aging mapped' },
   { value: `${citationCount}`, label: 'Indexed PubMed citations' },
   { value: '100%', label: 'Free & independent' },

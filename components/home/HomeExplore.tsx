@@ -9,6 +9,7 @@ import {
   ArrowUpRight,
   type LucideIcon,
 } from 'lucide-react';
+import { compounds } from '@/lib/data';
 
 /**
  * The homepage's primary navigation surface — six clean, crawlable cards that
@@ -33,7 +34,7 @@ const destinations: Destination[] = [
     icon: Library,
     eyebrow: 'Reference',
     title: 'Anti-Aging Library',
-    desc: 'The 12 hallmarks of aging and 49 evidence-graded compounds — each tiered A–C from human trials, with PubMed citations.',
+    desc: `The 12 hallmarks of aging and ${compounds.length} evidence-graded compounds — each tiered A–C from human trials, with PubMed citations.`,
     accent: 'cyan',
   },
   {
