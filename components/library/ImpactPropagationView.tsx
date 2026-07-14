@@ -1,10 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { ArrowDown, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { RelationBadge } from './RelationBadge';
 import { getImpactPropagation } from '@/lib/relations';
+import { getHallmarkById } from '@/lib/hallmarks-library';
 
 const hallmarkNames: Record<string, string> = {
   genomic:      'Genomic Instability',
@@ -51,6 +53,17 @@ const accentBg: Record<string, string> = {
   emerald: 'bg-accent-emerald/8 border-accent-emerald/20',
   rose:    'bg-accent-rose/8 border-accent-rose/20',
 };
+
+function HallmarkLink({ id, className }: { id: string; className?: string }) {
+  const label = hallmarkNames[id] ?? id;
+  const hallmark = getHallmarkById(id);
+  if (!hallmark) return <span className={className}>{label}</span>;
+  return (
+    <Link href={`/library/${hallmark.slug}`} className={cn('hover:underline', className)}>
+      {label}
+    </Link>
+  );
+}
 
 function LeverageBar({ score }: { score: number }) {
   const color =
@@ -118,9 +131,7 @@ export function ImpactPropagationView({ hallmarkId, className }: ImpactPropagati
                 className={cn('rounded-xl border p-4', accentBg[accent])}
               >
                 <div className="flex items-start justify-between gap-3 mb-2">
-                  <span className={cn('text-sm font-semibold', accentText[accent])}>
-                    {hallmarkNames[effect.hallmarkId] ?? effect.hallmarkId}
-                  </span>
+                  <HallmarkLink id={effect.hallmarkId} className={cn('text-sm font-semibold', accentText[accent])} />
                   <RelationBadge type={effect.type} strength={effect.strength} showStrength={false} />
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed">{effect.mechanism}</p>
@@ -151,11 +162,9 @@ export function ImpactPropagationView({ hallmarkId, className }: ImpactPropagati
                   className="rounded-lg border border-border/40 bg-card/50 p-3"
                 >
                   <div className="flex items-center gap-2 mb-1">
-                    <span className={cn('text-xs font-semibold', accentText[accent])}>
-                      {hallmarkNames[effect.hallmarkId] ?? effect.hallmarkId}
-                    </span>
+                    <HallmarkLink id={effect.hallmarkId} className={cn('text-xs font-semibold', accentText[accent])} />
                     <span className="text-[9px] font-mono text-muted-foreground">
-                      via {hallmarkNames[effect.via] ?? effect.via}
+                      via <HallmarkLink id={effect.via} className="hover:underline" />
                     </span>
                   </div>
                   <p className="text-[11px] text-muted-foreground leading-relaxed">{effect.mechanism}</p>

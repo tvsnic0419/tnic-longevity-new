@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
+import { HallmarksConstellation } from '@/components/ui/HallmarksConstellation';
 import { ArrowRight, Dna, FlaskConical } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -47,34 +48,41 @@ const COVERAGE_BG = (pct: number) =>
 
 export default function HallmarksIndexPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen section-deep text-foreground">
       <Nav />
       <main id="main-content" tabIndex={-1}>
 
         {/* Hero */}
         <section className="pt-28 pb-16 md:pt-36 md:pb-20 relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,color-mix(in_srgb,var(--accent-emerald)_10%,transparent),transparent)]" />
-          <div className="relative container-page max-w-4xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6">
-              <Dna className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-xs font-medium text-emerald-400 tracking-widest uppercase">Longevity Science</span>
-            </div>
-            <h1 className="text-4xl md:text-6xl font-black tracking-tight text-foreground mb-6 leading-[1.05]">
-              The 12 Hallmarks
-              <br />
-              <span className="text-emerald-400">of Aging</span>
-            </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mb-8">
-              First systematized by López-Otín et al. (2013, updated 2023), the hallmarks are the molecular and cellular
-              mechanisms that cause organisms to age. Understanding them is the prerequisite for any rational anti-aging protocol.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link href="/stacks" className="inline-flex items-center gap-2 bg-emerald-500 text-black px-5 py-3 rounded-xl text-sm font-bold hover:bg-emerald-400 transition-colors">
-                Build My Stack <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link href="/library" className="inline-flex items-center gap-2 border border-border px-5 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                Interactive Library
-              </Link>
+          <div className="relative container-page">
+            <div className="grid lg:grid-cols-12 gap-10 items-center">
+              <div className="lg:col-span-7 max-w-2xl">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6">
+                  <Dna className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-xs font-medium text-emerald-400 tracking-widest uppercase">Longevity Science</span>
+                </div>
+                <h1 className="text-4xl md:text-6xl font-black tracking-tight text-foreground mb-6 leading-[1.05]">
+                  The 12 Hallmarks
+                  <br />
+                  <span className="text-emerald-400">of Aging</span>
+                </h1>
+                <p className="text-xl text-muted-foreground leading-relaxed mb-8">
+                  First systematized by López-Otín et al. (2013, updated 2023), the hallmarks are the molecular and cellular
+                  mechanisms that cause organisms to age. Understanding them is the prerequisite for any rational anti-aging protocol.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Link href="/stacks" className="inline-flex items-center gap-2 bg-emerald-500 text-black px-5 py-3 rounded-xl text-sm font-bold hover:bg-emerald-400 transition-colors">
+                    Build My Stack <ArrowRight className="w-4 h-4" />
+                  </Link>
+                  <Link href="/library" className="inline-flex items-center gap-2 border border-border px-5 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                    Interactive Library
+                  </Link>
+                </div>
+              </div>
+              <div className="hidden lg:block lg:col-span-5">
+                <HallmarksConstellation />
+              </div>
             </div>
           </div>
         </section>

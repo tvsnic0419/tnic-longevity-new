@@ -53,7 +53,7 @@ export function JourneyTimeline({ milestones, showCitations = true }: JourneyTim
                   <span className="text-label text-accent-amber/80">N=1 · not population data</span>
                 )}
                 <time className="font-mono text-caption">{m.date}</time>
-                {m.evidenceTier && <EvidenceTag tier={m.evidenceTier} size="sm" />}
+                {m.evidenceTier && <EvidenceTag tier={m.evidenceTier} size="sm" href="/trust/methodology" />}
               </div>
               <h3 className="heading-card text-base md:text-lg mb-1">{m.title}</h3>
               <p className="text-body-sm">{m.desc}</p>

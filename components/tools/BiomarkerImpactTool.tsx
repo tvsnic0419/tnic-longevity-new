@@ -100,7 +100,7 @@ export function BiomarkerImpactTool() {
                     <HeartPulse className="w-4 h-4 text-accent-cyan" />
                   )}
                   <span className="font-semibold">{result.topPick.name}</span>
-                  <EvidenceTag tier={result.topPick.evidence} size="sm" />
+                  <EvidenceTag tier={result.topPick.evidence} size="sm" href="/trust/methodology" />
                 </div>
                 <p className="text-body-sm mb-2">{result.topPick.mechanism}</p>
                 <div className="flex gap-2 flex-wrap">
@@ -188,7 +188,7 @@ export function BiomarkerImpactTool() {
                           <Badge variant={i.impactLabel === 'primary' ? 'success' : 'info'}>
                             {i.impactScore}
                           </Badge>
-                          <EvidenceTag tier={i.evidence} size="sm" />
+                          <EvidenceTag tier={i.evidence} size="sm" href="/trust/methodology" />
                         </div>
                       </div>
                       <p className="text-caption text-muted-foreground mt-1">{i.mechanism.slice(0, 100)}…</p>

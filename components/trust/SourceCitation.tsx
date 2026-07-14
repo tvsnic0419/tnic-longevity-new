@@ -36,7 +36,7 @@ export function SourceCitation({ citation, compact = false, showType = true, evi
   return (
     <article className="card-base p-4 md:p-5">
       <div className="flex flex-wrap items-start gap-2 mb-2">
-        {evidenceTier && <EvidenceTag tier={evidenceTier} size="sm" />}
+        {evidenceTier && <EvidenceTag tier={evidenceTier} size="sm" href="/trust/methodology" />}
         {showType && (
           <span className="text-label text-muted-foreground">{citationTypeLabels[citation.type]}</span>
         )}

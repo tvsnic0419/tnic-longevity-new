@@ -182,7 +182,7 @@ export function ProtocolEngineTool() {
                 </div>
                 <div className="flex gap-2">
                   <Badge variant="info">Confidence {result.confidence}%</Badge>
-                  <EvidenceTag tier={result.evidenceTier} size="sm" />
+                  <EvidenceTag tier={result.evidenceTier} size="sm" href="/trust/methodology" />
                 </div>
               </div>
             </CardHeader>

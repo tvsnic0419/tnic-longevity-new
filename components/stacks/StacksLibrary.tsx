@@ -14,6 +14,7 @@ import { PageShell } from '@/components/ui/PageShell';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { TabBar } from '@/components/ui/TabBar';
 import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
+import { SynergyNetworkGraph } from '@/components/ui/SynergyNetworkGraph';
 import { DynamicStackBuilder } from './DynamicStackBuilder';
 import { EliteStackCard } from './EliteStackCard';
 import { ToolsPromoStrip } from '@/components/tools/ToolsPromoStrip';
@@ -76,6 +77,12 @@ export function StacksLibrary() {
           <ShoppingBag className="w-4 h-4" />
           Protocol Shop — verify your stack
         </Link>
+      </div>
+
+      <div className="glass rounded-2xl p-6 md:p-8 mb-8">
+        <p className="text-label text-accent-violet mb-1">Compound Synergy Network</p>
+        <h2 className="heading-card mb-4">How the 14 core compounds connect</h2>
+        <SynergyNetworkGraph />
       </div>
 
       <ToolsPromoStrip headline="Advanced Stack Simulator — age-adjusted dosing, risk index, hallmark radar" className="mb-8" />

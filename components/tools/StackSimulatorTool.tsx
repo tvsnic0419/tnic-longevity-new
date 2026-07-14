@@ -100,7 +100,7 @@ export function StackSimulatorTool() {
                             <li key={d.compoundId} className="glass rounded-lg p-3 text-sm">
                               <div className="flex justify-between gap-2">
                                 <span className="font-semibold text-foreground">{d.name}</span>
-                                <EvidenceTag tier={d.evidence} size="sm" />
+                                <EvidenceTag tier={d.evidence} size="sm" href="/trust/methodology" />
                               </div>
                               <p className="text-accent-cyan font-mono text-xs mt-1">{d.adjustedDose}</p>
                               {d.baseDose !== d.adjustedDose && (

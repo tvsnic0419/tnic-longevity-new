@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Badge } from '@/components/ui/Badge';
 import type { EvidenceLevel, EvidenceTier } from '@/lib/types';
 import {
@@ -22,6 +23,12 @@ export interface EvidenceBadgeProps {
   size?: 'sm' | 'md';
   showTooltip?: boolean;
   className?: string;
+  /**
+   * When set, renders as a Link to the given path (e.g. /trust/methodology).
+   * Only pass this where the badge isn't already nested inside another
+   * link/button — an <a> inside an <a> is invalid HTML.
+   */
+  href?: string;
 }
 
 export function EvidenceBadge({
@@ -30,24 +37,35 @@ export function EvidenceBadge({
   size = 'md',
   showTooltip = true,
   className,
+  href,
 }: EvidenceBadgeProps) {
   const def = evidenceBadgeDefinitions[level];
-
-  return (
+  const content = (
     <Badge
       className={cn(
         'normal-case tracking-normal font-sans font-medium',
         levelStyles[level],
         size === 'sm' ? 'text-[10px] px-2 py-0.5' : 'text-xs px-2.5 py-1',
+        href && 'transition-colors hover:brightness-110',
         className,
       )}
       title={showTooltip ? def.description : undefined}
-      aria-label={`${def.label}${sources ? `: ${sources}` : ''}`}
+      aria-label={href ? undefined : `${def.label}${sources ? `: ${sources}` : ''}`}
     >
       {level} Evidence
       {sources && <span className="ml-1 opacity-75 font-normal">({sources})</span>}
     </Badge>
   );
+
+  if (href) {
+    return (
+      <Link href={href} aria-label={`${def.label}${sources ? `: ${sources}` : ''}. See evidence methodology.`}>
+        {content}
+      </Link>
+    );
+  }
+
+  return content;
 }
 
 /** Convenience wrapper: Tier A/B/C → Strong/Moderate/Mechanistic */

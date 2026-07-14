@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, BookOpen, Layers, FlaskConical, AlertTriangle, Scale } from 'lucide-react';
+import { ArrowLeft, BookOpen, Layers, FlaskConical, AlertTriangle, Scale, Network, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import type { LibraryModule } from '@/lib/library-modules';
 import type { ComparisonLink } from '@/lib/comparison-relations';
@@ -14,10 +14,15 @@ import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { MdxRenderer } from './MdxRenderer';
 import { CompoundBuyerGuidePanel } from './CompoundBuyerGuide';
 import { LifestylePillarPanel } from './LifestylePillarPanel';
+import { PathwaySynthesis } from './PathwaySynthesis';
+import { EmergentEffectsView } from './EmergentEffectsView';
 import { getBuyerGuideByModuleSlug } from '@/lib/buyer-guides';
 import type { LifestyleSlug } from '@/lib/lifestyle-pillars';
 import { ModuleContextStrip } from './ModuleContextStrip';
 import { recordModuleVisit } from '@/lib/recent-modules';
+import { getPathwaysForCompound, getEmergentEffectsForCompound } from '@/lib/relations';
+import { GlassCard } from '@/components/ui/GlassPanel';
+import { RevealItem } from '@/components/ui/RevealItem';
 
 export function LibraryModuleDetail({
   module,
@@ -38,13 +43,15 @@ export function LibraryModuleDetail({
     .filter(Boolean) ?? [];
   const buyerGuide =
     module.category === 'compounds' ? getBuyerGuideByModuleSlug(module.slug) : undefined;
+  const compoundPathways = module.compoundId ? getPathwaysForCompound(module.compoundId) : [];
+  const compoundEmergentEffects = module.compoundId ? getEmergentEffectsForCompound(module.compoundId) : [];
 
   useEffect(() => {
     recordModuleVisit(module);
   }, [module]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground pt-6 md:pt-8 pb-20">
+    <div className="min-h-screen section-deep text-foreground pt-6 md:pt-8 pb-20">
       <div className="max-w-7xl mx-auto px-6">
         <Link
           href="/library#content-modules"
@@ -63,7 +70,7 @@ export function LibraryModuleDetail({
               <p className="text-[10px] font-mono text-accent-cyan tracking-widest mb-2 uppercase">
                 {categoryMeta.label}
               </p>
-              <EvidenceTag tier={module.evidenceTier} size="lg" className="mb-4" />
+              <EvidenceTag tier={module.evidenceTier} size="lg" className="mb-4" href="/trust/methodology" />
               <h2 className="text-lg font-bold mb-4">Module outline</h2>
               <ol className="space-y-2">
                 {module.outline.map((item, i) => (
@@ -76,7 +83,7 @@ export function LibraryModuleDetail({
             </div>
 
             {relatedHallmarks.length > 0 && (
-              <div className="glass rounded-xl p-5">
+              <GlassCard depth="mid" rounded="rounded-xl" className="!p-5">
                 <p className="text-[10px] font-mono text-accent-violet uppercase mb-3">Related hallmarks</p>
                 <ul className="space-y-2">
                   {relatedHallmarks.map((h) => (
@@ -90,22 +97,22 @@ export function LibraryModuleDetail({
                     </li>
                   ))}
                 </ul>
-              </div>
+              </GlassCard>
             )}
 
             {relatedCompound && (
-              <div className="glass rounded-xl p-5">
+              <GlassCard depth="mid" rounded="rounded-xl" className="!p-5">
                 <p className="text-[10px] font-mono text-accent-emerald uppercase mb-3">TNiC compound</p>
                 <p className="text-sm font-semibold text-foreground">{relatedCompound.name}</p>
                 <p className="text-xs text-muted-foreground mt-1">{relatedCompound.dose} · {relatedCompound.timing}</p>
                 <Link href="/stacks" className="text-xs text-accent-cyan hover:text-accent-emerald mt-3 inline-block">
                   Add to stack →
                 </Link>
-              </div>
+              </GlassCard>
             )}
 
             {synergyCompounds.length > 0 && (
-              <div className="glass rounded-xl p-5">
+              <GlassCard depth="mid" rounded="rounded-xl" className="!p-5">
                 <p className="text-[10px] font-mono text-accent-emerald uppercase mb-3">Stack compounds</p>
                 <ul className="space-y-2">
                   {synergyCompounds.map((c) => (
@@ -117,11 +124,11 @@ export function LibraryModuleDetail({
                 <Link href="/stacks" className="text-xs text-accent-cyan hover:text-accent-emerald mt-3 inline-block">
                   Open Stack Architect →
                 </Link>
-              </div>
+              </GlassCard>
             )}
 
             {module.relatedSynergySlugs && module.relatedSynergySlugs.length > 0 && (
-              <div className="glass rounded-xl p-5">
+              <GlassCard depth="mid" rounded="rounded-xl" className="!p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <Layers className="w-4 h-4 text-accent-cyan" />
                   <p className="text-[10px] font-mono text-accent-cyan uppercase">Related synergies</p>
@@ -138,31 +145,33 @@ export function LibraryModuleDetail({
                     </li>
                   ))}
                 </ul>
-              </div>
+              </GlassCard>
             )}
 
             {comparisons.length > 0 && (
-              <div className="glass rounded-xl p-5">
+              <GlassCard depth="mid" rounded="rounded-xl" className="!p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <Scale className="w-4 h-4 text-accent-cyan" />
                   <p className="text-[10px] font-mono text-accent-cyan uppercase">Compare {module.title}</p>
                 </div>
                 <ul className="space-y-2.5">
-                  {comparisons.map((comparison) => (
+                  {comparisons.map((comparison, i) => (
                     <li key={comparison.slug}>
-                      <Link
-                        href={`/library/compare/${comparison.slug}`}
-                        className="focus-ring interactive group flex items-center justify-between gap-2 rounded-md"
-                      >
-                        <span className="text-sm text-muted-foreground group-hover:text-accent-cyan transition truncate">
-                          {comparison.labelA} vs {comparison.labelB}
-                        </span>
-                        <EvidenceTag tier={comparison.evidenceTier} className="shrink-0" />
-                      </Link>
+                      <RevealItem index={i}>
+                        <Link
+                          href={`/library/compare/${comparison.slug}`}
+                          className="focus-ring interactive group flex items-center justify-between gap-2 rounded-md"
+                        >
+                          <span className="text-sm text-muted-foreground group-hover:text-accent-cyan transition truncate">
+                            {comparison.labelA} vs {comparison.labelB}
+                          </span>
+                          <EvidenceTag tier={comparison.evidenceTier} className="shrink-0" />
+                        </Link>
+                      </RevealItem>
                     </li>
                   ))}
                 </ul>
-              </div>
+              </GlassCard>
             )}
 
             {guide && (
@@ -228,6 +237,30 @@ export function LibraryModuleDetail({
             ) : (
               <div className="glass rounded-xl p-8 text-center text-muted-foreground">
                 Content module in progress. Outline available in sidebar.
+              </div>
+            )}
+
+            {compoundPathways.length > 0 && (
+              <div className="glass rounded-xl p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <Network className="w-4 h-4 text-accent-violet" />
+                  <p className="text-[10px] font-mono text-accent-violet uppercase">
+                    Systems pathways — {compoundPathways.length} mapped
+                  </p>
+                </div>
+                <PathwaySynthesis compoundId={module.compoundId} />
+              </div>
+            )}
+
+            {compoundEmergentEffects.length > 0 && (
+              <div className="glass rounded-xl p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <Sparkles className="w-4 h-4 text-accent-violet" />
+                  <p className="text-[10px] font-mono text-accent-violet uppercase">
+                    Emergent effects — {compoundEmergentEffects.length} mapped
+                  </p>
+                </div>
+                <EmergentEffectsView compoundId={module.compoundId} />
               </div>
             )}
 

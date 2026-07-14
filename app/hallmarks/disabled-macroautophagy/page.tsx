@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
-import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Scale } from 'lucide-react';
+import { HallmarkInterventionName } from '@/components/library/HallmarkInterventionName';
+import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Scale, Sparkles } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Disabled Macroautophagy / Nutrient Sensing | Hallmarks of Aging | TNiC',
@@ -98,6 +99,10 @@ export default function DisabledMacroautophagyPage() {
             <div className="flex flex-wrap gap-3">
               <Link href="/stacks" className="inline-flex items-center gap-2 bg-amber-500 text-black px-5 py-3 rounded-xl text-sm font-bold hover:bg-amber-400 transition-colors">Build My Stack <ArrowRight className="w-4 h-4" /></Link>
               <Link href="/bio-age" className="inline-flex items-center gap-2 border border-border px-5 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Assess My Bio Age</Link>
+              <Link href="/library/disabled-macroautophagy" className="inline-flex items-center gap-2 border border-border px-5 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                <Sparkles className="w-4 h-4" />
+                Interactive Deep-Dive
+              </Link>
             </div>
           </div>
         </section>
@@ -176,7 +181,7 @@ export default function DisabledMacroautophagyPage() {
               {INTERVENTIONS.map((iv) => (
                 <div key={iv.name} className="rounded-2xl border border-border/60 bg-card/40 p-6">
                   <div className="flex items-start justify-between gap-4 mb-3">
-                    <h3 className="font-bold text-foreground text-lg">{iv.name}</h3>
+                    <h3 className="font-bold text-foreground text-lg"><HallmarkInterventionName name={iv.name} /></h3>
                     <span className={`shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold ${iv.tier === 'A' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'}`}>
                       Tier {iv.tier}
                     </span>

@@ -26,21 +26,21 @@ interface Edge {
 }
 
 const nodes: Node[] = [
-  { id: 'nmn', label: 'NMN', x: 200, y: 120, color: '#22d3ee' },
-  { id: 'glynac', label: 'GlyNAC', x: 320, y: 80, color: '#34d399' },
-  { id: 'sulforaphane', label: 'Sulforaphane', x: 320, y: 160, color: '#fbbf24' },
-  { id: 'resveratrol', label: 'Resveratrol', x: 120, y: 80, color: '#a78bfa' },
-  { id: 'ca-akg', label: 'Ca-AKG', x: 120, y: 160, color: '#f87171' },
-  { id: 'fisetin', label: 'Fisetin', x: 260, y: 200, color: '#fb7185' },
+  { id: 'nmn', label: 'NMN', x: 200, y: 120, color: 'var(--accent-cyan)' },
+  { id: 'glynac', label: 'GlyNAC', x: 320, y: 80, color: 'var(--accent-emerald)' },
+  { id: 'sulforaphane', label: 'Sulforaphane', x: 320, y: 160, color: 'var(--accent-amber)' },
+  { id: 'resveratrol', label: 'Resveratrol', x: 120, y: 80, color: 'var(--accent-violet)' },
+  { id: 'ca-akg', label: 'Ca-AKG', x: 120, y: 160, color: 'var(--accent-rose)' },
+  { id: 'fisetin', label: 'Fisetin', x: 260, y: 200, color: 'var(--accent-rose)' },
 ];
 
 const edges: Edge[] = [
-  { from: 'nmn', to: 'glynac', strength: 3, pathway: 'NAD+ + GSH', color: '#22d3ee' },
-  { from: 'glynac', to: 'sulforaphane', strength: 3, pathway: 'NRF2 + GSH', color: '#fbbf24' },
-  { from: 'nmn', to: 'resveratrol', strength: 2, pathway: 'SIRT1', color: '#a78bfa' },
-  { from: 'nmn', to: 'ca-akg', strength: 2, pathway: 'NAD+ + TCA', color: '#f87171' },
-  { from: 'glynac', to: 'fisetin', strength: 2, pathway: 'Antioxidant + Senolytic', color: '#fb7185' },
-  { from: 'sulforaphane', to: 'resveratrol', strength: 1, pathway: 'NRF2 + SIRT1', color: '#a78bfa' },
+  { from: 'nmn', to: 'glynac', strength: 3, pathway: 'NAD+ + GSH', color: 'var(--accent-cyan)' },
+  { from: 'glynac', to: 'sulforaphane', strength: 3, pathway: 'NRF2 + GSH', color: 'var(--accent-amber)' },
+  { from: 'nmn', to: 'resveratrol', strength: 2, pathway: 'SIRT1', color: 'var(--accent-violet)' },
+  { from: 'nmn', to: 'ca-akg', strength: 2, pathway: 'NAD+ + TCA', color: 'var(--accent-rose)' },
+  { from: 'glynac', to: 'fisetin', strength: 2, pathway: 'Antioxidant + Senolytic', color: 'var(--accent-rose)' },
+  { from: 'sulforaphane', to: 'resveratrol', strength: 1, pathway: 'NRF2 + SIRT1', color: 'var(--accent-violet)' },
 ];
 
 export const SynergyNetworkVisual: React.FC<SynergyNetworkProps> = ({
@@ -63,13 +63,13 @@ export const SynergyNetworkVisual: React.FC<SynergyNetworkProps> = ({
         width={width} 
         height={height} 
         viewBox={`0 0 ${width} ${height}`}
-        className="rounded-2xl bg-[#0a0f1a] border border-white/10"
+        className="rounded-2xl bg-[var(--color-bg-elevated)] border border-[var(--color-border-subtle)]"
         aria-label="Synergy Network: Key compounds and their mechanistic connections"
       >
         {/* Background grid for scientific feel */}
         <defs>
           <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#1f2937" strokeWidth="0.5" />
+            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="var(--color-border-subtle)" strokeWidth="0.5" />
           </pattern>
         </defs>
         <rect width={width} height={height} fill="url(#grid)" opacity="0.4" />
@@ -126,7 +126,7 @@ export const SynergyNetworkVisual: React.FC<SynergyNetworkProps> = ({
                 cx={node.x}
                 cy={node.y}
                 r={isActive ? 18 : 15}
-                fill="#0a0f1a"
+                fill="var(--color-bg-elevated)"
                 stroke={node.color}
                 strokeWidth={isActive ? 3 : 2}
                 className="transition-all duration-150"
@@ -148,7 +148,7 @@ export const SynergyNetworkVisual: React.FC<SynergyNetworkProps> = ({
                 x={node.x}
                 y={node.y + 4}
                 textAnchor="middle"
-                fill="white"
+                fill="var(--color-text-primary)"
                 fontSize={isActive ? "11" : "10"}
                 fontWeight={isActive ? "600" : "500"}
                 className="pointer-events-none select-none"
@@ -162,7 +162,7 @@ export const SynergyNetworkVisual: React.FC<SynergyNetworkProps> = ({
                     cx={node.x + 22}
                     cy={node.y - 18}
                     r="8"
-                    fill="#111827"
+                    fill="var(--color-bg-elevated)"
                     stroke={node.color}
                     strokeWidth="1"
                   />
@@ -184,19 +184,19 @@ export const SynergyNetworkVisual: React.FC<SynergyNetworkProps> = ({
 
         {/* Legend */}
         <g transform="translate(20, 220)">
-          <text x="0" y="0" fill="#9ca3af" fontSize="9" fontWeight="500">Synergy Strength</text>
-          <line x1="0" y1="12" x2="25" y2="12" stroke="#22d3ee" strokeWidth="3" />
-          <text x="30" y="15" fill="#9ca3af" fontSize="8">Strong</text>
-          <line x1="70" y1="12" x2="95" y2="12" stroke="#22d3ee" strokeWidth="2" />
-          <text x="100" y="15" fill="#9ca3af" fontSize="8">Medium</text>
-          <line x1="140" y1="12" x2="155" y2="12" stroke="#22d3ee" strokeWidth="1.5" />
-          <text x="160" y="15" fill="#9ca3af" fontSize="8">Additive</text>
+          <text x="0" y="0" fill="var(--color-text-muted)" fontSize="9" fontWeight="500">Synergy Strength</text>
+          <line x1="0" y1="12" x2="25" y2="12" stroke="var(--accent-cyan)" strokeWidth="3" />
+          <text x="30" y="15" fill="var(--color-text-muted)" fontSize="8">Strong</text>
+          <line x1="70" y1="12" x2="95" y2="12" stroke="var(--accent-cyan)" strokeWidth="2" />
+          <text x="100" y="15" fill="var(--color-text-muted)" fontSize="8">Medium</text>
+          <line x1="140" y1="12" x2="155" y2="12" stroke="var(--accent-cyan)" strokeWidth="1.5" />
+          <text x="160" y="15" fill="var(--color-text-muted)" fontSize="8">Additive</text>
         </g>
       </svg>
 
       {/* Hover info */}
       {hoveredNode && (
-        <div className="absolute bottom-3 right-3 bg-[#111827] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white/80 pointer-events-none">
+        <div className="absolute bottom-3 right-3 bg-[var(--color-bg-elevated)] border border-[var(--color-border-subtle)] rounded-lg px-3 py-1.5 text-xs text-[var(--color-text-secondary)] pointer-events-none">
           {nodes.find(n => n.id === hoveredNode)?.label} • {getConnectedEdges(hoveredNode).length} synergies
         </div>
       )}

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type { EvidenceTier } from '@/lib/types';
 import { evidenceTagDefinitions } from '@/lib/trust';
 import { cn } from '@/lib/utils';
@@ -13,6 +14,13 @@ interface EvidenceTagProps {
   size?: 'sm' | 'md' | 'lg';
   showTooltip?: boolean;
   className?: string;
+  /**
+   * When set, renders as a Link to the given path (e.g. /trust/methodology)
+   * so the tier claim is traceable to its evidence standard. Only pass this
+   * where the tag isn't already nested inside another link/button — an <a>
+   * inside an <a> is invalid HTML and breaks the outer link's clicks.
+   */
+  href?: string;
 }
 
 const sizeStyles = {
@@ -21,24 +29,44 @@ const sizeStyles = {
   lg: 'text-sm px-2.5 py-1',
 };
 
-export function EvidenceTag({ tier, size = 'md', showTooltip = true, className = '' }: EvidenceTagProps) {
+export function EvidenceTag({ tier, size = 'md', showTooltip = true, className = '', href }: EvidenceTagProps) {
   const def = evidenceTagDefinitions[tier];
-
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center font-mono font-bold rounded border',
-        tierStyles[tier],
-        sizeStyles[size],
-        className,
-      )}
-      title={showTooltip ? def.description : undefined}
-      aria-label={`Evidence tier ${tier}: ${def.label}`}
-    >
+  const sharedClassName = cn(
+    'inline-flex items-center font-mono font-bold rounded border',
+    tierStyles[tier],
+    sizeStyles[size],
+    href && 'transition-colors hover:brightness-110',
+    className,
+  );
+  const label = (
+    <>
       Tier {tier}
       {size !== 'sm' && (
         <span className="hidden sm:inline font-normal opacity-70 ml-1">· {def.short}</span>
       )}
+    </>
+  );
+
+  if (href) {
+    return (
+      <Link
+        href={href}
+        className={sharedClassName}
+        title={showTooltip ? def.description : undefined}
+        aria-label={`Evidence tier ${tier}: ${def.label}. See evidence methodology.`}
+      >
+        {label}
+      </Link>
+    );
+  }
+
+  return (
+    <span
+      className={sharedClassName}
+      title={showTooltip ? def.description : undefined}
+      aria-label={`Evidence tier ${tier}: ${def.label}`}
+    >
+      {label}
     </span>
   );
 }

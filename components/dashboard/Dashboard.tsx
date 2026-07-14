@@ -204,7 +204,7 @@ export function Dashboard() {
           <Card variant="default" className="lg:col-span-3">
             <CardContent className="pt-6">
               <div className={cn('border-l-4 pl-5', dynamicHighlight.accent)}>
-                <EvidenceBadge level={dynamicHighlight.evidence} size="sm" />
+                <EvidenceBadge level={dynamicHighlight.evidence} size="sm" href="/trust/methodology" />
                 <p className="font-medium mt-3 text-sm leading-relaxed">{dynamicHighlight.text}</p>
                 <p className="text-caption text-muted-foreground mt-2">Live insight from your data</p>
               </div>
@@ -251,7 +251,7 @@ export function Dashboard() {
                   key={`${m.date}-${m.title}`}
                   className={cn('border-l-4 pl-5', highlightAccent[m.type] ?? 'border-accent-emerald')}
                 >
-                  <EvidenceBadge level={milestoneEvidenceLevel(m.type)} size="sm" />
+                  <EvidenceBadge level={milestoneEvidenceLevel(m.type)} size="sm" href="/trust/methodology" />
                   <p className="text-caption text-muted-foreground mt-2">{m.date}</p>
                   <p className="font-medium mt-1 text-sm leading-relaxed">{m.title}</p>
                   <p className="text-body-sm text-muted-foreground mt-2">{m.desc}</p>

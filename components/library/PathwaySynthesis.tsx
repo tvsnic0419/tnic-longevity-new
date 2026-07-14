@@ -1,11 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, FlaskConical, Dna } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { pathwayGroups, getPathwaysForHallmark, getPathwaysForCompound } from '@/lib/relations';
 import type { PathwayGroup } from '@/lib/relations';
+import { getHallmarkById } from '@/lib/hallmarks-library';
+import { getCompoundIdToSlugMap } from '@/lib/library-graph';
 
 const compoundNames: Record<string, string> = {
   nmn: 'NMN',
@@ -47,6 +50,7 @@ const accentClasses: Record<string, { text: string; bg: string; border: string; 
 function PathwayCard({ group, highlight }: { group: PathwayGroup; highlight?: boolean }) {
   const [open, setOpen] = useState(false);
   const ac = accentClasses[group.accent];
+  const compoundSlugs = getCompoundIdToSlugMap();
 
   return (
     <motion.div
@@ -57,31 +61,45 @@ function PathwayCard({ group, highlight }: { group: PathwayGroup; highlight?: bo
         highlight ? `${ac.bg} ${ac.border}` : 'border-border/50 bg-card/30',
       )}
     >
-      <button
-        onClick={() => setOpen(!open)}
-        className="w-full p-5 text-left"
-        aria-expanded={open}
-      >
-        <div className="flex items-start justify-between gap-3 mb-3">
-          <div>
-            <p className={cn('text-sm font-bold mb-0.5', ac.text)}>{group.name}</p>
-            <p className="text-xs text-muted-foreground leading-snug">{group.tagline}</p>
+      <div className="p-5">
+        <button
+          onClick={() => setOpen(!open)}
+          className="w-full text-left"
+          aria-expanded={open}
+        >
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <div>
+              <p className={cn('text-sm font-bold mb-0.5', ac.text)}>{group.name}</p>
+              <p className="text-xs text-muted-foreground leading-snug">{group.tagline}</p>
+            </div>
+            {open ? (
+              <ChevronUp className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
+            ) : (
+              <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
+            )}
           </div>
-          {open ? (
-            <ChevronUp className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
-          ) : (
-            <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
-          )}
-        </div>
+        </button>
 
         <div className="flex flex-wrap gap-1.5">
-          {group.hallmarkIds.map((id) => (
-            <span key={id} className={cn('text-[9px] font-mono px-1.5 py-0.5 rounded-md border', ac.badge)}>
-              {hallmarkNames[id] ?? id}
-            </span>
-          ))}
+          {group.hallmarkIds.map((id) => {
+            const hallmark = getHallmarkById(id);
+            const label = hallmarkNames[id] ?? id;
+            return hallmark ? (
+              <Link
+                key={id}
+                href={`/library/${hallmark.slug}`}
+                className={cn('text-[9px] font-mono px-1.5 py-0.5 rounded-md border transition-colors hover:brightness-110', ac.badge)}
+              >
+                {label}
+              </Link>
+            ) : (
+              <span key={id} className={cn('text-[9px] font-mono px-1.5 py-0.5 rounded-md border', ac.badge)}>
+                {label}
+              </span>
+            );
+          })}
         </div>
-      </button>
+      </div>
 
       <AnimatePresence>
         {open && (
@@ -118,11 +136,23 @@ function PathwayCard({ group, highlight }: { group: PathwayGroup; highlight?: bo
                   <p className="text-[9px] font-mono text-muted-foreground uppercase">TNiC Compounds</p>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
-                  {group.compoundIds.map((id) => (
-                    <span key={id} className={cn('text-xs font-semibold px-2.5 py-1 rounded-lg border', ac.badge)}>
-                      {compoundNames[id] ?? id}
-                    </span>
-                  ))}
+                  {group.compoundIds.map((id) => {
+                    const slug = compoundSlugs[id];
+                    const label = compoundNames[id] ?? id;
+                    return slug ? (
+                      <Link
+                        key={id}
+                        href={`/library/compounds/${slug}`}
+                        className={cn('text-xs font-semibold px-2.5 py-1 rounded-lg border transition-colors hover:brightness-110', ac.badge)}
+                      >
+                        {label}
+                      </Link>
+                    ) : (
+                      <span key={id} className={cn('text-xs font-semibold px-2.5 py-1 rounded-lg border', ac.badge)}>
+                        {label}
+                      </span>
+                    );
+                  })}
                 </div>
               </div>
             </div>

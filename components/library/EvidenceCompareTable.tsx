@@ -31,7 +31,7 @@ export function EvidenceCompareTable({ comparison }: EvidenceCompareTableProps) 
   return (
     <div className="space-y-8">
       <div className="flex flex-wrap items-center gap-3">
-        <EvidenceTag tier={comparison.evidenceTier} size="md" />
+        <EvidenceTag tier={comparison.evidenceTier} size="md" href="/trust/methodology" />
         <span className="text-caption font-mono capitalize">{comparison.category} comparison</span>
       </div>
 

@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
-import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Zap } from 'lucide-react';
+import { HallmarkInterventionName } from '@/components/library/HallmarkInterventionName';
+import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Zap, Sparkles } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Mitochondrial Dysfunction | Hallmarks of Aging | TNiC',
@@ -85,7 +86,7 @@ export default function MitochondrialDysfunctionPage() {
             <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
               <Link href="/library" className="hover:text-foreground transition-colors">Library</Link>
               <span>/</span>
-              <span>Hallmarks</span>
+              <Link href="/hallmarks" className="hover:text-foreground transition-colors">Hallmarks</Link>
               <span>/</span>
               <span className="text-amber-400">Mitochondrial Dysfunction</span>
             </div>
@@ -108,6 +109,10 @@ export default function MitochondrialDysfunctionPage() {
               </Link>
               <Link href="/bio-age" className="inline-flex items-center gap-2 border border-border px-5 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 Assess My Bio Age
+              </Link>
+              <Link href="/library/mitochondrial-dysfunction" className="inline-flex items-center gap-2 border border-border px-5 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                <Sparkles className="w-4 h-4" />
+                Interactive Deep-Dive
               </Link>
             </div>
           </div>
@@ -207,7 +212,7 @@ export default function MitochondrialDysfunctionPage() {
               {INTERVENTIONS.map((iv) => (
                 <div key={iv.name} className="rounded-2xl border border-border/60 bg-card/40 p-6">
                   <div className="flex items-start justify-between gap-4 mb-3">
-                    <h3 className="font-bold text-foreground text-lg">{iv.name}</h3>
+                    <h3 className="font-bold text-foreground text-lg"><HallmarkInterventionName name={iv.name} /></h3>
                     <span className={`shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold ${
                       iv.tier === 'A'
                         ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'

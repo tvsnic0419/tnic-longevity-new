@@ -13,7 +13,7 @@ const researchCount = allIssues.filter((i) => i.source === 'research-intel').len
 
 export function ProtocolBriefHub() {
   return (
-    <div>
+    <div className="section-deep -mx-4 rounded-3xl px-4 py-6 md:-mx-6 md:px-6">
       <PageHeader
         icon={Newspaper}
         eyebrow="Protocol Brief · Research Digest"
@@ -35,7 +35,7 @@ export function ProtocolBriefHub() {
           >
             <div className="flex flex-wrap items-center gap-3 mb-3">
               <time className="text-caption font-mono">{entry.date}</time>
-              <EvidenceTag tier={entry.evidenceTier} size="sm" />
+              <EvidenceTag tier={entry.evidenceTier} size="sm" href="/trust/methodology" />
               {i === 0 && (
                 <span className="text-[10px] font-mono text-accent-violet uppercase tracking-wider">
                   Latest

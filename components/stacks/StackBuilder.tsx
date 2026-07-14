@@ -215,7 +215,7 @@ function CompoundLibrary({
               <div className="min-w-0 flex-1">
                 <p className="font-medium text-sm">{c.name}</p>
                 <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
-                  <EvidenceBadge level={evidence} size="sm" showTooltip={false} />
+                  <EvidenceBadge level={evidence} size="sm" showTooltip={false} href="/trust/methodology" />
                   <Badge variant="info" className="normal-case tracking-normal font-sans">
                     {baseScore}/10
                   </Badge>
@@ -297,7 +297,7 @@ function ActiveStackPanel({
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 min-w-0 flex-1">
                     <span className="font-semibold">{c.name}</span>
-                    <EvidenceBadge level={evidence} size="sm" showTooltip={false} />
+                    <EvidenceBadge level={evidence} size="sm" showTooltip={false} href="/trust/methodology" />
                     <span className="text-caption font-mono text-muted-foreground hidden sm:inline">
                       {c.dose}
                     </span>

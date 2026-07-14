@@ -14,6 +14,9 @@ import { ContextRail } from '@/components/ui/ContextRail';
 import { getHallmarkContext } from '@/lib/hub-context';
 import { SystemsSynthesisView } from './SystemsSynthesisView';
 import { HALLMARK_VISUALS } from '@/components/illustrations/HallmarkVisuals';
+import { GlassCard } from '@/components/ui/GlassPanel';
+import { RevealItem } from '@/components/ui/RevealItem';
+import { RecommendedNextSteps } from '@/components/ui/RecommendedNextSteps';
 
 export function HallmarkDetail({
   hallmark,
@@ -29,7 +32,7 @@ export function HallmarkDetail({
   const MechanismVisual = HALLMARK_VISUALS[hallmark.id];
 
   return (
-    <div className="min-h-screen bg-background text-foreground pt-6 md:pt-8 pb-20">
+    <div className="min-h-screen section-deep text-foreground pt-6 md:pt-8 pb-20">
       <div className="max-w-7xl mx-auto px-6">
         <Link
           href="/library"
@@ -64,7 +67,7 @@ export function HallmarkDetail({
               <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">{hallmark.title}</h1>
               <p className="text-lg text-muted-foreground mb-6">{hallmark.tagline}</p>
               <p className="text-sm text-muted-foreground leading-relaxed mb-4">{hallmark.summary}</p>
-              <div className="glass rounded-xl p-5 mb-4">
+              <GlassCard depth="mid" rounded="rounded-xl" className="mb-4 !p-5">
                 <p className="text-[10px] font-mono text-accent-violet uppercase mb-2">Mechanism</p>
                 <p className="text-sm text-foreground/80 leading-relaxed">{hallmark.mechanism}</p>
                 {hallmark.keyMolecules && hallmark.keyMolecules.length > 0 && (
@@ -80,11 +83,11 @@ export function HallmarkDetail({
                     ))}
                   </div>
                 )}
-              </div>
-              <div className="glass rounded-xl p-5">
+              </GlassCard>
+              <GlassCard depth="mid" rounded="rounded-xl" className="!p-5">
                 <p className="text-[10px] font-mono text-accent-amber uppercase mb-2">Why it matters</p>
                 <p className="text-sm text-foreground/80 leading-relaxed">{hallmark.whyItMatters}</p>
-              </div>
+              </GlassCard>
             </motion.div>
 
             <ContextRail {...getHallmarkContext(hallmark)} theme="cyan" />
@@ -108,17 +111,19 @@ export function HallmarkDetail({
                   </p>
                 </div>
                 <ul className="grid gap-3 sm:grid-cols-2">
-                  {targetingCompounds.map((compound) => (
+                  {targetingCompounds.map((compound, i) => (
                     <li key={compound.slug}>
-                      <Link
-                        href={`/library/compounds/${compound.slug}`}
-                        className="focus-ring interactive group flex items-center justify-between gap-3 glass glass-hover rounded-xl p-4"
-                      >
-                        <span className="text-sm font-semibold text-foreground group-hover:text-accent-cyan transition truncate">
-                          {compound.name}
-                        </span>
-                        <EvidenceTag tier={compound.evidence} size="sm" className="shrink-0" />
-                      </Link>
+                      <RevealItem index={i}>
+                        <Link
+                          href={`/library/compounds/${compound.slug}`}
+                          className="focus-ring interactive group flex items-center justify-between gap-3 glass glass-hover rounded-xl p-4"
+                        >
+                          <span className="text-sm font-semibold text-foreground group-hover:text-accent-cyan transition truncate">
+                            {compound.name}
+                          </span>
+                          <EvidenceTag tier={compound.evidence} size="sm" className="shrink-0" />
+                        </Link>
+                      </RevealItem>
                     </li>
                   ))}
                 </ul>
@@ -154,6 +159,8 @@ export function HallmarkDetail({
               </div>
               <SystemsSynthesisView hallmarkId={hallmark.id} />
             </div>
+
+            <RecommendedNextSteps context="library" />
           </div>
         </div>
       </div>

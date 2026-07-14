@@ -1,12 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { RelationBadge } from './RelationBadge';
 import { getOutgoingRelations, getIncomingRelations } from '@/lib/relations';
 import type { HallmarkRelation } from '@/lib/relations';
+import { getHallmarkById } from '@/lib/hallmarks-library';
 
 const hallmarkAccent: Record<string, 'cyan' | 'amber' | 'violet' | 'emerald' | 'rose'> = {
   genomic:      'cyan',
@@ -67,34 +69,47 @@ function RelationRow({ relation, perspective }: { relation: HallmarkRelation; pe
   const isOutgoing = relation.from === perspective;
   const other = isOutgoing ? relation.to : relation.from;
   const accent = hallmarkAccent[other] ?? 'cyan';
+  const otherHallmark = getHallmarkById(other);
 
   return (
     <div className={cn('rounded-xl border transition-colors', accentBorder[accent], open ? accentBg[accent] : 'border-border/50')}>
-      <button
-        onClick={() => setOpen(!open)}
-        className="w-full flex items-center gap-3 p-4 text-left"
-        aria-expanded={open}
-      >
+      <div className="w-full flex items-center gap-3 p-4">
         <div className="flex items-center gap-2 flex-1 min-w-0">
           {isOutgoing ? (
             <ArrowRight className={cn('w-3.5 h-3.5 shrink-0', accentText[accent])} aria-label="affects" />
           ) : (
             <ArrowRight className="w-3.5 h-3.5 shrink-0 text-muted-foreground rotate-180" aria-label="affected by" />
           )}
-          <span className={cn('text-sm font-semibold truncate', accentText[accent])}>
-            {hallmarkNames[other] ?? other}
-          </span>
+          {otherHallmark ? (
+            <Link
+              href={`/library/${otherHallmark.slug}`}
+              className={cn('text-sm font-semibold truncate hover:underline', accentText[accent])}
+            >
+              {hallmarkNames[other] ?? other}
+            </Link>
+          ) : (
+            <span className={cn('text-sm font-semibold truncate', accentText[accent])}>
+              {hallmarkNames[other] ?? other}
+            </span>
+          )}
         </div>
-        <RelationBadge type={relation.type} strength={relation.strength} />
-        <span className="text-[10px] font-mono text-muted-foreground shrink-0">
-          Tier {relation.evidence}
-        </span>
-        {open ? (
-          <ChevronUp className="w-4 h-4 text-muted-foreground shrink-0" />
-        ) : (
-          <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />
-        )}
-      </button>
+        <button
+          onClick={() => setOpen(!open)}
+          className="flex items-center gap-2 shrink-0"
+          aria-expanded={open}
+          aria-label={open ? 'Hide relation mechanism' : 'Show relation mechanism'}
+        >
+          <RelationBadge type={relation.type} strength={relation.strength} />
+          <span className="text-[10px] font-mono text-muted-foreground">
+            Tier {relation.evidence}
+          </span>
+          {open ? (
+            <ChevronUp className="w-4 h-4 text-muted-foreground" />
+          ) : (
+            <ChevronDown className="w-4 h-4 text-muted-foreground" />
+          )}
+        </button>
+      </div>
 
       <AnimatePresence>
         {open && (

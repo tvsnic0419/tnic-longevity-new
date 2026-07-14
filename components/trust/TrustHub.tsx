@@ -212,7 +212,7 @@ export function TrustHub() {
                 const std = evidenceStandards.find((s) => s.tier === tier)!;
                 return (
                   <div key={tier} className={`card-elevated p-6 border ${tierBorder[tier]}`}>
-                    <EvidenceTag tier={tier} size="lg" className="mb-4" />
+                    <EvidenceTag tier={tier} size="lg" className="mb-4" href="/trust/methodology" />
                     <h3 className="heading-card text-base mb-3">{def.label.split('—')[1]?.trim()}</h3>
                     <ul className="space-y-2 mb-4">
                       {std.criteria.map((c) => (

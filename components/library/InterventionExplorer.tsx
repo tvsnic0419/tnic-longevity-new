@@ -72,7 +72,7 @@ export function InterventionExplorer({
             <div className="flex-1 min-w-0">
               <div className="flex flex-wrap items-center gap-2 mb-1">
                 <h4 className="font-semibold text-sm">{item.name}</h4>
-                <EvidenceTag tier={item.evidence} size="sm" />
+                <EvidenceTag tier={item.evidence} size="sm" href="/trust/methodology" />
                 <span className="text-[10px] text-caption">{categoryLabels[item.category]}</span>
                 {item.tnicAvailable && (
                   <span className="text-[10px] text-accent-cyan font-semibold">IN TNiC STACK</span>

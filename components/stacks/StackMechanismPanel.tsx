@@ -1,6 +1,7 @@
 'use client';
 
-import { TrendingDown } from 'lucide-react';
+import Link from 'next/link';
+import { TrendingDown, FlaskConical, ArrowRight } from 'lucide-react';
 import { usePlatform } from '@/context/PlatformContext';
 
 export function StackMechanismPanel() {
@@ -24,6 +25,14 @@ export function StackMechanismPanel() {
           ? 'applied to your defense scan'
           : 'run a defense scan to apply this to your profile'}
       </p>
+      <Link
+        href="/labs"
+        className="focus-ring interactive group flex items-center gap-2 mt-4 pt-4 border-t border-border/40 text-xs font-semibold text-accent-cyan hover:text-accent-emerald transition-colors"
+      >
+        <FlaskConical className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+        Verify with real labs — track the biomarkers this stack targets
+        <ArrowRight className="w-3.5 h-3.5 shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+      </Link>
     </div>
   );
 }

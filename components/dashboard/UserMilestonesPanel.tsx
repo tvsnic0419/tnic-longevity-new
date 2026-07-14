@@ -78,7 +78,7 @@ export function UserMilestonesPanel() {
               key={m.id}
               className={cn('border-l-4 pl-4 py-1', kindAccent[m.kind] ?? 'border-accent-emerald')}
             >
-              <EvidenceBadge level={milestoneEvidenceLevel(m.kind)} size="sm" />
+              <EvidenceBadge level={milestoneEvidenceLevel(m.kind)} size="sm" href="/trust/methodology" />
               <p className="text-caption text-muted-foreground mt-2">{m.date}</p>
               <p className="font-medium mt-1 text-sm leading-relaxed">{m.title}</p>
               <p className="text-body-sm text-muted-foreground mt-1">{m.desc}</p>

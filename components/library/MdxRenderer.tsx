@@ -323,7 +323,7 @@ function renderDirective(block: Extract<ParsedBlock, { kind: 'directive' }>, key
       >
         <div className="flex items-center gap-3 mb-2">
           <FlaskConical className="w-4 h-4 text-accent-emerald" aria-hidden="true" />
-          <EvidenceTag tier={tier} size="sm" />
+          <EvidenceTag tier={tier} size="sm" href="/trust/methodology" />
         </div>
         <p
           className="text-sm text-muted-foreground leading-relaxed"

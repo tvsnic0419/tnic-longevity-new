@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { SynergyNetworkVisual } from '@/components/illustrations/SynergyNetworkVisual';
 import { emergentEffects, getEmergentEffectsForHallmark, getEmergentEffectsForCompound } from '@/lib/relations';
 import type { EmergentEffect } from '@/lib/relations';
+import { getCompoundIdToSlugMap } from '@/lib/library-graph';
 
 const compoundNames: Record<string, string> = {
   nmn: 'NMN',
@@ -20,16 +21,6 @@ const compoundNames: Record<string, string> = {
   omega3: 'Omega-3',
   urolithina: 'Urolithin A',
   spermidine: 'Spermidine',
-};
-
-const compoundHrefs: Record<string, string> = {
-  nmn: '/library/nmn',
-  cakg: '/library/ca-akg',
-  resveratrol: '/library/resveratrol',
-  sulforaphane: '/library/sulforaphane',
-  glynac: '/library/glynac',
-  rala: '/library/r-alpha-lipoic-acid',
-  fisetin: '/library/fisetin',
 };
 
 const evidenceColors: Record<string, string> = {
@@ -49,6 +40,7 @@ function multiplierLabel(m: number): string {
 }
 
 function EmergentCard({ effect, index }: { effect: EmergentEffect; index: number }) {
+  const compoundSlugs = getCompoundIdToSlugMap();
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
@@ -89,7 +81,8 @@ function EmergentCard({ effect, index }: { effect: EmergentEffect; index: number
       {/* Compounds */}
       <div className="flex flex-wrap gap-1.5 pt-1">
         {effect.compoundIds.map((id) => {
-          const href = compoundHrefs[id];
+          const slug = compoundSlugs[id];
+          const href = slug ? `/library/compounds/${slug}` : undefined;
           const label = compoundNames[id] ?? id;
           return href ? (
             <Link
