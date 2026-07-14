@@ -3,6 +3,9 @@ import Link from 'next/link';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Brain } from 'lucide-react';
+import { getHallmarkBySlug } from '@/lib/hallmarks-library';
+import { InterventionCards } from '@/components/hallmarks/InterventionCards';
+import { HallmarkHeroVisual } from '@/components/hallmarks/HallmarkHeroVisual';
 
 export const metadata: Metadata = {
   title: 'Loss of Proteostasis | Hallmarks of Aging | TNiC',
@@ -14,45 +17,6 @@ export const metadata: Metadata = {
   },
 };
 
-const INTERVENTIONS = [
-  {
-    name: 'GlyNAC (Glutathione Restoration)',
-    tier: 'A',
-    dose: '600 mg glycine + 600 mg NAC daily',
-    mechanism:
-      'Glutathione is the primary defense against protein oxidation. Oxidized proteins misfold and cannot be recognized by chaperones, creating proteostasis backlog. Three Mayo Clinic RCTs (PMIDs: 34129059, 36656670, 35975308) show GlyNAC restores glutathione in older adults and reduces protein carbonylation — the primary oxidative damage marker on proteins.',
-    pmids: ['34129059', '36656670'],
-    tier_color: 'emerald',
-  },
-  {
-    name: 'Sulforaphane (Proteasome Upregulation)',
-    tier: 'A',
-    dose: '30–60 mg glucoraphanin or 10–30 mg SFN daily',
-    mechanism:
-      'NRF2 activation by sulforaphane directly upregulates proteasome subunits (PSMA, PSMB) and heat shock proteins (HSP70, HSP90) that refold damaged proteins. It also induces autophagy of protein aggregates via p62/SQSTM1 pathway. Human airway studies confirm NRF2 target gene induction.',
-    pmids: ['28515065', '27356680'],
-    tier_color: 'emerald',
-  },
-  {
-    name: 'R-Alpha Lipoic Acid (R-ALA)',
-    tier: 'B',
-    dose: '300–600 mg R-ALA daily',
-    mechanism:
-      'R-ALA recycles oxidized glutathione back to its active form, extends the functional half-life of intracellular antioxidants, and is a cofactor for pyruvate dehydrogenase — which keeps mitochondria producing ATP for proteasome function. At 10× the potency of α-tocopherol at the inner mitochondrial membrane.',
-    pmids: ['22563875'],
-    tier_color: 'amber',
-  },
-  {
-    name: 'Sauna / Heat Shock Exposure',
-    tier: 'B',
-    dose: '3–4× weekly, 15–20 min at 80–100°C (Finnish sauna protocol)',
-    mechanism:
-      'Acute heat stress (40–42°C) triggers the heat shock response via HSF1 transcription factor, massively upregulating HSP70, HSP90, and small heat shock proteins. These molecular chaperones refold damaged proteins and tag irreparably misfolded ones for proteasome clearance. Finnish cohort data links regular sauna use to 40% lower all-cause mortality.',
-    pmids: ['25705824', '30077204'],
-    tier_color: 'amber',
-  },
-];
-
 const BIOMARKERS = [
   { name: 'Protein carbonylation (plasma)', normal: '< 0.5 nmol/mg protein', note: 'Primary oxidative damage marker on proteins; specialist metabolomics labs' },
   { name: 'GSH/GSSG ratio', normal: '> 10:1 (reduced:oxidized glutathione)', note: 'Tracks cellular antioxidant capacity; SpectraCell or Vibrant Wellness labs' },
@@ -62,13 +26,17 @@ const BIOMARKERS = [
 ];
 
 export default function LossOfProteostasisPage() {
+  const hallmark = getHallmarkBySlug('loss-of-proteostasis')!;
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
       <main id="main-content" tabIndex={-1}>
         <section className="pt-28 pb-16 md:pt-36 md:pb-20 relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,color-mix(in_srgb,var(--accent-amber)_8%,transparent),transparent)]" />
-          <div className="relative container-page max-w-4xl">
+          <div className="relative container-page max-w-6xl">
+            <div className="grid items-center gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-7">
             <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
               <Link href="/hallmarks" className="hover:text-foreground transition-colors">Hallmarks</Link>
               <span>/</span>
@@ -88,6 +56,11 @@ export default function LossOfProteostasisPage() {
             <div className="flex flex-wrap gap-3">
               <Link href="/stacks" className="inline-flex items-center gap-2 bg-amber-500 text-black px-5 py-3 rounded-xl text-sm font-bold hover:bg-amber-400 transition-colors">Build My Stack <ArrowRight className="w-4 h-4" /></Link>
               <Link href="/bio-age" className="inline-flex items-center gap-2 border border-border px-5 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Assess My Bio Age</Link>
+            </div>
+            </div>
+            <div className="lg:col-span-5">
+              <HallmarkHeroVisual hallmark={hallmark} />
+            </div>
             </div>
           </div>
         </section>
@@ -162,25 +135,7 @@ export default function LossOfProteostasisPage() {
             </div>
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-2">Proteostasis support with clinical evidence</h2>
             <p className="text-muted-foreground mb-8">Tier A = human RCT evidence. Tier B = at least one human trial + mechanistic data.</p>
-            <div className="space-y-5">
-              {INTERVENTIONS.map((iv) => (
-                <div key={iv.name} className="rounded-2xl border border-border/60 bg-card/40 p-6">
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <h3 className="font-bold text-foreground text-lg">{iv.name}</h3>
-                    <span className={`shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold ${iv.tier === 'A' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'}`}>
-                      Tier {iv.tier}
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">{iv.mechanism}</p>
-                  <div className="flex flex-wrap gap-3 text-xs">
-                    <span className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-muted-foreground"><strong className="text-foreground">Dose:</strong> {iv.dose}</span>
-                    {iv.pmids.map((pmid) => (
-                      <a key={pmid} href={`https://pubmed.ncbi.nlm.nih.gov/${pmid}/`} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-cyan-400 hover:border-cyan-500/40 transition-colors">PMID {pmid}</a>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <InterventionCards interventions={hallmark.interventions} />
           </div>
         </section>
 

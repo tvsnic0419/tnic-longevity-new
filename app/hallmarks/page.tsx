@@ -113,6 +113,7 @@ export default function HallmarksIndexPage() {
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {hallmarkLibrary.map((h) => {
                 const hasEditorial = EDITORIAL_SLUGS.has(h.slug);
+                const topIntervention = [...h.interventions].sort((a, b) => a.rank - b.rank)[0];
                 return (
                   <div key={h.id} className="rounded-2xl border border-border/60 bg-card/40 p-5 flex flex-col">
                     {/* Header */}
@@ -152,6 +153,24 @@ export default function HallmarksIndexPage() {
                         </span>
                       )}
                     </div>
+
+                    {/* Top intervention */}
+                    {topIntervention && (
+                      <div className="mb-4 flex items-center gap-2 text-xs">
+                        <span
+                          className={`shrink-0 px-1.5 py-0.5 rounded font-bold ${
+                            topIntervention.evidence === 'A'
+                              ? 'bg-emerald-500/15 text-emerald-400'
+                              : topIntervention.evidence === 'B'
+                              ? 'bg-amber-500/15 text-amber-400'
+                              : 'bg-rose-500/15 text-rose-400'
+                          }`}
+                        >
+                          Tier {topIntervention.evidence}
+                        </span>
+                        <span className="truncate text-muted-foreground">{topIntervention.name}</span>
+                      </div>
+                    )}
 
                     {/* Links */}
                     <div className="flex gap-2">

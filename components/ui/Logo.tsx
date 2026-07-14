@@ -81,7 +81,7 @@ export function Logo({
   className = '',
   alt,
 }: LogoProps) {
-  const altText = alt || (variant === 'lockup' ? 'TNiC – Longevity OS' : 'TNiC emblem');
+  const altText = alt || (variant === 'lockup' ? 'TNiC – Longevity Intelligence' : 'TNiC emblem');
 
   if (variant === 'lockup') {
     const s = lockupScale[size];

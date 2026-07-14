@@ -19,7 +19,7 @@ const tierACount = compounds.filter((c) => c.evidence === 'A').length;
 const tierBCount = compounds.filter((c) => c.evidence === 'B').length;
 
 const hubLinks = [
-  { href: '/dashboard', label: 'My Longevity OS', icon: LayoutDashboard },
+  { href: '/dashboard', label: 'My Dashboard', icon: LayoutDashboard },
   { href: '/quiz', label: '3-Min Quiz', icon: HelpCircle },
   { href: '/library', label: 'Anti-Aging Library', icon: Library },
   { href: '/learn', label: 'Learn Hub', icon: GraduationCap },
@@ -65,7 +65,7 @@ export function Footer() {
               href="/"
               className="focus-ring inline-flex items-center mb-4 rounded-xl group transition-transform hover:scale-[1.02]"
             >
-              <Logo variant="lockup" size="md" alt="TNiC – Longevity OS · Home" />
+              <Logo variant="lockup" size="md" alt="TNiC – Longevity Intelligence · Home" />
             </Link>
             <p className="text-body-sm max-w-xs">
               Independent longevity intelligence. Evidence-graded compounds,

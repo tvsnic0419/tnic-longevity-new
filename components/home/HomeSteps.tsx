@@ -34,7 +34,7 @@ const steps: Step[] = [
   {
     num: '03',
     icon: Activity,
-    title: 'Build & track in the OS',
+    title: 'Build & track your protocol',
     desc: 'Design a protocol, model its projected impact, then log labs to watch it move — all private to your device.',
     cta: 'Open the dashboard',
     href: '/dashboard',

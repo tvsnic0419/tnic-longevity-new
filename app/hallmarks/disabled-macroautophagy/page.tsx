@@ -3,6 +3,9 @@ import Link from 'next/link';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Scale } from 'lucide-react';
+import { getHallmarkBySlug } from '@/lib/hallmarks-library';
+import { InterventionCards } from '@/components/hallmarks/InterventionCards';
+import { HallmarkHeroVisual } from '@/components/hallmarks/HallmarkHeroVisual';
 
 export const metadata: Metadata = {
   title: 'Disabled Macroautophagy / Nutrient Sensing | Hallmarks of Aging | TNiC',
@@ -14,54 +17,6 @@ export const metadata: Metadata = {
   },
 };
 
-const INTERVENTIONS = [
-  {
-    name: 'Caloric Restriction / Strategic Fasting',
-    tier: 'A',
-    dose: '20–30% CR or 16:8 TRE daily; 2–5 day extended fast quarterly',
-    mechanism:
-      'The most replicated lifespan intervention across species. CR suppresses mTORC1 (via reduced amino acid and glucose signaling through Rag GTPases and DEPTOR), activates AMPK (via rising AMP/ATP), and derepresses autophagy, SIRT1/3, and mitophagy simultaneously. The CALERIE human trial (PMID: 27544442) confirmed favorable metabolic and inflammatory changes at 2 years.',
-    pmids: ['27544442', '27411588'],
-    tier_color: 'emerald',
-  },
-  {
-    name: 'Resveratrol → AMPK / Sirtuin Axis',
-    tier: 'B',
-    dose: '250–500 mg daily; pterostilbene or micronized forms preferred for bioavailability',
-    mechanism:
-      'Resveratrol activates AMPK directly (via LKB1 pathway) and SIRT1 allosterically — both upstream activators of autophagy and mitochondrial biogenesis. AMPK phosphorylates ULK1 (autophagy initiation) and TFEB (lysosome biogenesis). SIRT1 deacetylates PGC-1α, driving mitochondrial renewal. Acts as a CR-mimetic compound.',
-    pmids: ['21360229', '17909917'],
-    tier_color: 'amber',
-  },
-  {
-    name: 'NMN → SIRT1 / mTOR Counterbalance',
-    tier: 'B',
-    dose: '500–1000 mg NMN daily',
-    mechanism:
-      'Sirtuins (SIRT1, SIRT3, SIRT6) counterbalance mTOR signaling: SIRT1 suppresses mTORC1 via TSC2 deacetylation; SIRT6 deacetylates H3K9 to suppress ribosomal gene expression (the downstream target of mTOR). As NAD+ falls with age, this sirtuin brake on mTOR is lost — restoring NAD+ via NMN reactivates it.',
-    pmids: ['34272067'],
-    tier_color: 'amber',
-  },
-  {
-    name: 'Rapamycin (mTOR Inhibitor)',
-    tier: 'B',
-    dose: '5–6 mg weekly (physician-supervised); PEARL trial using 5 mg/week in healthy adults',
-    mechanism:
-      'Rapamycin is the most replicated life-extending drug across species — extending median lifespan 9–14% in aged mice even when started late (Harrison et al., Nature 2009, PMID: 19587683). It allosterically inhibits mTORC1, inducing autophagy, senescent cell clearance, and immune rejuvenation. Immunosuppressive risks at daily dosing are largely avoided with weekly administration.',
-    pmids: ['19587683', '36855074'],
-    tier_color: 'amber',
-  },
-  {
-    name: 'Metformin (AMPK Activator)',
-    tier: 'B',
-    dose: '500–1000 mg daily (prescription required); TAME trial ongoing',
-    mechanism:
-      'Metformin inhibits mitochondrial Complex I, raising the AMP/ATP ratio and activating AMPK — mimicking caloric restriction at the molecular level. It also suppresses hepatic gluconeogenesis and mTOR. The TAME (Targeting Aging with Metformin) trial is the first FDA-endorsed aging intervention trial, expected to complete ~2027.',
-    pmids: ['26579537'],
-    tier_color: 'amber',
-  },
-];
-
 const BIOMARKERS = [
   { name: 'Fasting insulin', normal: '< 5 µIU/mL', note: 'Most sensitive mTOR suppression proxy; standard lab, ideally alongside fasting glucose' },
   { name: 'IGF-1 (fasting serum)', normal: '100–200 ng/mL (age-adjusted)', note: 'mTOR activator and CR-responsive; declines with dietary restriction — optimal ≠ always lowest' },
@@ -71,13 +26,17 @@ const BIOMARKERS = [
 ];
 
 export default function DisabledMacroautophagyPage() {
+  const hallmark = getHallmarkBySlug('disabled-macroautophagy')!;
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
       <main id="main-content" tabIndex={-1}>
         <section className="pt-28 pb-16 md:pt-36 md:pb-20 relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,color-mix(in_srgb,var(--accent-amber)_8%,transparent),transparent)]" />
-          <div className="relative container-page max-w-4xl">
+          <div className="relative container-page max-w-6xl">
+            <div className="grid items-center gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-7">
             <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
               <Link href="/hallmarks" className="hover:text-foreground transition-colors">Hallmarks</Link>
               <span>/</span>
@@ -98,6 +57,11 @@ export default function DisabledMacroautophagyPage() {
             <div className="flex flex-wrap gap-3">
               <Link href="/stacks" className="inline-flex items-center gap-2 bg-amber-500 text-black px-5 py-3 rounded-xl text-sm font-bold hover:bg-amber-400 transition-colors">Build My Stack <ArrowRight className="w-4 h-4" /></Link>
               <Link href="/bio-age" className="inline-flex items-center gap-2 border border-border px-5 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Assess My Bio Age</Link>
+            </div>
+            </div>
+            <div className="lg:col-span-5">
+              <HallmarkHeroVisual hallmark={hallmark} />
+            </div>
             </div>
           </div>
         </section>
@@ -172,25 +136,7 @@ export default function DisabledMacroautophagyPage() {
             </div>
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-2">mTOR suppression — from lifestyle to clinical</h2>
             <p className="text-muted-foreground mb-8">Tier A = multiple human RCTs. Tier B = at least one human trial + mechanistic data. Listed from most to least accessible.</p>
-            <div className="space-y-5">
-              {INTERVENTIONS.map((iv) => (
-                <div key={iv.name} className="rounded-2xl border border-border/60 bg-card/40 p-6">
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <h3 className="font-bold text-foreground text-lg">{iv.name}</h3>
-                    <span className={`shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold ${iv.tier === 'A' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'}`}>
-                      Tier {iv.tier}
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">{iv.mechanism}</p>
-                  <div className="flex flex-wrap gap-3 text-xs">
-                    <span className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-muted-foreground"><strong className="text-foreground">Dose:</strong> {iv.dose}</span>
-                    {iv.pmids.map((pmid) => (
-                      <a key={pmid} href={`https://pubmed.ncbi.nlm.nih.gov/${pmid}/`} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-cyan-400 hover:border-cyan-500/40 transition-colors">PMID {pmid}</a>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <InterventionCards interventions={hallmark.interventions} />
           </div>
         </section>
 
