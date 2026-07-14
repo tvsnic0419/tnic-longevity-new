@@ -63,7 +63,7 @@ export function HomeHero() {
               className="mb-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium text-white/80"
             >
               <Sparkles className="h-3.5 w-3.5 text-[var(--accent-cyan)]" aria-hidden="true" />
-              The anti-aging operating system
+              Interventions for the 12 hallmarks of aging
             </GlassPanel>
 
             {/* !text-white: .headline-editorial is unlayered CSS and sets its

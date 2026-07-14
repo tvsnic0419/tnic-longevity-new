@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Zap } from 'lucide-react';
+import { getHallmarkBySlug } from '@/lib/hallmarks-library';
+import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 
 export const metadata: Metadata = {
   title: 'Mitochondrial Dysfunction | Hallmarks of Aging | TNiC',
@@ -15,54 +17,6 @@ export const metadata: Metadata = {
   },
 };
 
-const INTERVENTIONS = [
-  {
-    name: 'GlyNAC (Glycine + NAC)',
-    tier: 'A',
-    dose: '600 mg glycine + 600 mg NAC daily (split AM/PM)',
-    mechanism:
-      'Three RCTs (Mayo Clinic) demonstrate GlyNAC directly restores mitochondrial function in older adults: it rebuilds glutathione, reduces mitochondrial ROS, improves OxPhos efficiency, and increases mitochondrial biogenesis markers (PGC-1α). Only compound with multiple human RCTs specifically measuring mitochondrial function restoration.',
-    pmids: ['34129059', '36656670', '35975308'],
-    color: 'emerald',
-  },
-  {
-    name: 'Urolithin A',
-    tier: 'A',
-    dose: '500–1000 mg daily (Mitopure or equivalent)',
-    mechanism:
-      'Urolithin A is the most clinically-validated mitophagy inducer. It activates PINK1/Parkin pathway — the mitochondrial quality control system that tags damaged mitochondria for autophagy. The 2022 Amazentis RCT (PMID: 35922106) showed improved muscle endurance and mitochondrial gene expression in older adults at 4 months.',
-    pmids: ['35922106', '31806338'],
-    color: 'amber',
-  },
-  {
-    name: 'NMN / NR (NAD+ precursors)',
-    tier: 'A',
-    dose: '500–1000 mg NMN or 300–1000 mg NR daily',
-    mechanism:
-      'NAD+ is the electron carrier that feeds Complex I of the electron transport chain. As NAD+ drops ~50% by age 60, mitochondrial respiration efficiency collapses. NMN/NR restore NAD+, improve OxPhos coupling efficiency, reduce mitochondrial ROS leak, and activate SIRT1/SIRT3 — which deacetylate and activate mitochondrial enzymes.',
-    pmids: ['34272067', '31820135'],
-    color: 'cyan',
-  },
-  {
-    name: 'CoQ10 (Ubiquinol form)',
-    tier: 'B',
-    dose: '200–400 mg ubiquinol daily with fat-containing meal',
-    mechanism:
-      'CoQ10 is the mobile electron carrier between Complex I/II and Complex III of the ETC. Plasma CoQ10 declines ~40% between ages 20 and 80 — and statin use accelerates depletion another 20–40%. Ubiquinol (reduced form) shows superior bioavailability. The Q-SYMBIO trial (PMID: 25282031) demonstrated 43% reduction in major cardiovascular events.',
-    pmids: ['25282031', '26177482'],
-    color: 'violet',
-  },
-  {
-    name: 'Alpha-Lipoic Acid (R-ALA)',
-    tier: 'B',
-    dose: '300–600 mg R-ALA daily',
-    mechanism:
-      'R-ALA is a cofactor for pyruvate dehydrogenase and α-ketoglutarate dehydrogenase — both mitochondrial enzyme complexes that feed the TCA cycle. It also recycles CoQ10, Vitamin C, and glutathione. As a mitochondrial antioxidant, R-ALA is 10× more potent than α-tocopherol at the inner mitochondrial membrane.',
-    pmids: ['22563875'],
-    color: 'rose',
-  },
-];
-
 const BIOMARKERS = [
   { name: 'NAD+ (whole blood)', normal: '20–50 µM; higher is better', note: 'Direct ETC fuel proxy; Jinfiniti Intracellular NAD+ test preferred' },
   { name: 'Lactate / pyruvate ratio', normal: '< 10:1', note: 'Elevated ratio = impaired OxPhos, forced anaerobic shift; specialist labs' },
@@ -73,6 +27,8 @@ const BIOMARKERS = [
 ];
 
 export default function MitochondrialDysfunctionPage() {
+  const hallmark = getHallmarkBySlug('mitochondrial-dysfunction')!;
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
@@ -203,39 +159,7 @@ export default function MitochondrialDysfunctionPage() {
             <p className="text-muted-foreground mb-8">
               Tier A = multiple human RCTs. Tier B = at least one human trial + mechanistic data. Listed in order of evidence strength.
             </p>
-            <div className="space-y-5">
-              {INTERVENTIONS.map((iv) => (
-                <div key={iv.name} className="rounded-2xl border border-border/60 bg-card/40 p-6">
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <h3 className="font-bold text-foreground text-lg">{iv.name}</h3>
-                    <span className={`shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold ${
-                      iv.tier === 'A'
-                        ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
-                        : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
-                    }`}>
-                      Tier {iv.tier}
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">{iv.mechanism}</p>
-                  <div className="flex flex-wrap gap-3 text-xs">
-                    <span className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-muted-foreground">
-                      <strong className="text-foreground">Dose:</strong> {iv.dose}
-                    </span>
-                    {iv.pmids.map((pmid) => (
-                      <a
-                        key={pmid}
-                        href={`https://pubmed.ncbi.nlm.nih.gov/${pmid}/`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-cyan-400 hover:border-cyan-500/40 transition-colors"
-                      >
-                        PMID {pmid}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <InterventionCards interventions={hallmark.interventions} />
           </div>
         </section>
 

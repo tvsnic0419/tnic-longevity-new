@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Network } from 'lucide-react';
+import { getHallmarkBySlug } from '@/lib/hallmarks-library';
+import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 
 export const metadata: Metadata = {
   title: 'Altered Intercellular Communication | Hallmarks of Aging | TNiC',
@@ -14,45 +16,6 @@ export const metadata: Metadata = {
   },
 };
 
-const INTERVENTIONS = [
-  {
-    name: 'Sulforaphane + GlyNAC (NRF2 Anti-SASP)',
-    tier: 'A',
-    dose: 'Sulforaphane 30 mg + GlyNAC 600/600 mg daily',
-    mechanism:
-      'The SASP is the single largest driver of intercellular signaling disruption in aging. Sulforaphane suppresses NF-κB (the master SASP transcription factor) via NRF2-mediated HO-1 and NQO1 upregulation. GlyNAC reduces the ROS that activates NF-κB. Both have human RCT evidence for reducing downstream inflammatory markers.',
-    pmids: ['27356680', '36656670'],
-    tier_color: 'emerald',
-  },
-  {
-    name: 'Sleep and Circadian Alignment',
-    tier: 'A',
-    dose: '7–9 hours; consistent sleep/wake times; light exposure management',
-    mechanism:
-      'The circadian clock coordinates pulsatile hormone release: cortisol (AM peak), GH (deep sleep bursts), melatonin (darkness onset). Circadian disruption desynchronizes these signals — the equivalent of broadcasting noise on every channel simultaneously. Meta-analyses confirm that each hour of sleep debt reduces GH pulse amplitude ~25% and increases cortisol AUC.',
-    pmids: ['31433373'],
-    tier_color: 'emerald',
-  },
-  {
-    name: 'Insulin Sensitivity Optimization',
-    tier: 'A',
-    dose: 'Zone 2 cardio 150+ min/week + resistance training; limit refined carbohydrates',
-    mechanism:
-      'Insulin resistance is the master dysregulator of intercellular communication: it elevates IGF-1, suppresses SHBG (reducing free sex hormones), activates mTOR chronically, and promotes adipose inflammation (amplifying SASP). Human exercise trials consistently improve insulin sensitivity and downstream hormonal communication.',
-    pmids: ['29204594'],
-    tier_color: 'emerald',
-  },
-  {
-    name: 'Resveratrol (NF-κB / SIRT1)',
-    tier: 'B',
-    dose: '250–500 mg daily; synergistic with NMN',
-    mechanism:
-      'SIRT1 deacetylates the p65 subunit of NF-κB, reducing transcriptional activity of pro-inflammatory cytokines (TNF-α, IL-6, IL-1β) — the primary SASP signaling disruptors. Resveratrol as SIRT1 activator amplifies this effect in the context of adequate NAD+ substrate.',
-    pmids: ['17909917'],
-    tier_color: 'amber',
-  },
-];
-
 const BIOMARKERS = [
   { name: 'IL-6 (serum)', normal: '< 3.0 pg/mL', note: 'Primary SASP signaling cytokine; rises with age; predicts frailty and mortality' },
   { name: 'TNF-α (serum)', normal: '< 8.1 pg/mL', note: 'Amplifies NF-κB in target cells; disrupts insulin and leptin signaling' },
@@ -62,6 +25,8 @@ const BIOMARKERS = [
 ];
 
 export default function AlteredIntercellularCommunicationPage() {
+  const hallmark = getHallmarkBySlug('altered-intercellular-communication')!;
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
@@ -159,25 +124,7 @@ export default function AlteredIntercellularCommunicationPage() {
             </div>
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-2">Restoring signaling fidelity</h2>
             <p className="text-muted-foreground mb-8">Tier A = human RCT evidence. Tier B = at least one human trial + mechanistic data.</p>
-            <div className="space-y-5">
-              {INTERVENTIONS.map((iv) => (
-                <div key={iv.name} className="rounded-2xl border border-border/60 bg-card/40 p-6">
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <h3 className="font-bold text-foreground text-lg">{iv.name}</h3>
-                    <span className={`shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold ${iv.tier === 'A' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'}`}>
-                      Tier {iv.tier}
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">{iv.mechanism}</p>
-                  <div className="flex flex-wrap gap-3 text-xs">
-                    <span className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-muted-foreground"><strong className="text-foreground">Dose:</strong> {iv.dose}</span>
-                    {iv.pmids.map((pmid) => (
-                      <a key={pmid} href={`https://pubmed.ncbi.nlm.nih.gov/${pmid}/`} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-cyan-400 hover:border-cyan-500/40 transition-colors">PMID {pmid}</a>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <InterventionCards interventions={hallmark.interventions} />
           </div>
         </section>
 

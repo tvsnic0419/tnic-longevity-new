@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Layers } from 'lucide-react';
+import { getHallmarkBySlug } from '@/lib/hallmarks-library';
+import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 
 export const metadata: Metadata = {
   title: 'Disabled Autophagy | Hallmarks of Aging | TNiC',
@@ -14,45 +16,6 @@ export const metadata: Metadata = {
   },
 };
 
-const INTERVENTIONS = [
-  {
-    name: 'Time-Restricted Eating (16:8+)',
-    tier: 'A',
-    dose: 'Eating window ≤ 8 hours daily; 24–72h fasts monthly for deeper autophagy',
-    mechanism:
-      'The most accessible autophagy inducer. During the fasting window, falling insulin/IGF-1 suppresses mTORC1, releasing the brake on autophagy. AMPK activates ULK1 — the autophagy initiation kinase. Multiple human trials (PMID: 31601727) confirm autophagy induction via LC3-II elevation and p62 reduction in peripheral blood cells during 24h fasting.',
-    pmids: ['31601727', '27411588'],
-    tier_color: 'emerald',
-  },
-  {
-    name: 'Spermidine',
-    tier: 'B',
-    dose: '1–3 mg daily (wheat germ extract or SpermidineLIFE)',
-    mechanism:
-      'Spermidine induces autophagy via EP300 histone acetyltransferase inhibition — independently of mTOR — making it combinable with other autophagy inducers without redundancy. A 2021 German RCT (PMID: 33932338) showed improved cognitive performance in older adults at risk for dementia, attributed to autophagy-mediated neuronal maintenance.',
-    pmids: ['33932338', '26822811'],
-    tier_color: 'amber',
-  },
-  {
-    name: 'Resveratrol → AMPK Activation',
-    tier: 'B',
-    dose: '250–500 mg daily, preferably with a fat-containing meal',
-    mechanism:
-      'Resveratrol activates AMPK (and indirectly SIRT1) — both upstream activators of autophagy. AMPK phosphorylates ULK1 at Ser317 and Ser777, activating the autophagy initiation complex. SIRT1 deacetylates ATG5, ATG7, and LC3, promoting autophagosome maturation.',
-    pmids: ['21360229'],
-    tier_color: 'amber',
-  },
-  {
-    name: 'NMN → SIRT1 Autophagy Axis',
-    tier: 'B',
-    dose: '500–1000 mg NMN daily',
-    mechanism:
-      'SIRT1 requires NAD+ as substrate to deacetylate autophagy regulators. Age-related NAD+ decline reduces SIRT1 activity, impairing autophagosome formation and lysosomal biogenesis. NMN restores NAD+ and reactivates the SIRT1-autophagy connection.',
-    pmids: ['34272067'],
-    tier_color: 'amber',
-  },
-];
-
 const BIOMARKERS = [
   { name: 'LC3-II/LC3-I ratio (PBMCs)', normal: 'Higher ratio = more autophagy; research labs only', note: 'Gold standard autophagy flux marker; requires fasting state sampling' },
   { name: 'p62/SQSTM1 (plasma)', normal: 'Lower is better — p62 accumulates when autophagy fails', note: 'Accessible via specialist labs; rises with autophagy impairment' },
@@ -62,6 +25,8 @@ const BIOMARKERS = [
 ];
 
 export default function DisabledAutophagyPage() {
+  const hallmark = getHallmarkBySlug('disabled-autophagy')!;
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
@@ -159,25 +124,7 @@ export default function DisabledAutophagyPage() {
             </div>
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-2">Autophagy inducers with clinical evidence</h2>
             <p className="text-muted-foreground mb-8">Tier A = human RCT evidence. Tier B = at least one human trial + mechanistic data.</p>
-            <div className="space-y-5">
-              {INTERVENTIONS.map((iv) => (
-                <div key={iv.name} className="rounded-2xl border border-border/60 bg-card/40 p-6">
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <h3 className="font-bold text-foreground text-lg">{iv.name}</h3>
-                    <span className={`shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold ${iv.tier === 'A' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'}`}>
-                      Tier {iv.tier}
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">{iv.mechanism}</p>
-                  <div className="flex flex-wrap gap-3 text-xs">
-                    <span className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-muted-foreground"><strong className="text-foreground">Dose:</strong> {iv.dose}</span>
-                    {iv.pmids.map((pmid) => (
-                      <a key={pmid} href={`https://pubmed.ncbi.nlm.nih.gov/${pmid}/`} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-cyan-400 hover:border-cyan-500/40 transition-colors">PMID {pmid}</a>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <InterventionCards interventions={hallmark.interventions} />
           </div>
         </section>
 

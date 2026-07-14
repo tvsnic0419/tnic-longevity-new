@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { Dna, ArrowRight, FlaskConical, Activity, ShieldCheck, BookOpen } from 'lucide-react';
+import { getHallmarkBySlug } from '@/lib/hallmarks-library';
+import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 
 export const metadata: Metadata = {
   title: 'Genomic Instability | Hallmarks of Aging | TNiC',
@@ -15,45 +17,6 @@ export const metadata: Metadata = {
   },
 };
 
-const INTERVENTIONS = [
-  {
-    name: 'NMN / NR (NAD+ precursors)',
-    tier: 'A',
-    dose: '500–1000 mg NMN or 300–1000 mg NR daily',
-    mechanism:
-      'NAD+ fuels PARP1 and SIRT1/SIRT6, the two primary DNA-repair enzymes. By age 50, NAD+ drops ~50%, crippling PARP-mediated single-strand break repair.',
-    pmids: ['31272867', '34272067'],
-    color: 'emerald',
-  },
-  {
-    name: 'Sulforaphane (SFN)',
-    tier: 'B',
-    dose: '30–60 mg glucoraphanin or 10–30 mg SFN daily',
-    mechanism:
-      'Activates NRF2 → upregulates Phase II detox enzymes (NQO1, HMOX1) that neutralize reactive oxygen species before they cause DNA strand breaks. Also induces autophagy of oxidatively damaged proteins.',
-    pmids: ['28515065', '31920436'],
-    color: 'cyan',
-  },
-  {
-    name: 'GlyNAC (Glycine + NAC)',
-    tier: 'A',
-    dose: '600 mg glycine + 600 mg NAC daily',
-    mechanism:
-      'Rebuilds glutathione — the cell\'s primary antioxidant defense. Depleted glutathione permits mitochondrial ROS to escape and damage nuclear DNA. Three human RCTs confirm restoration within 16 weeks.',
-    pmids: ['34129059', '36656670'],
-    color: 'violet',
-  },
-  {
-    name: 'Resveratrol',
-    tier: 'B',
-    dose: '100–500 mg daily with fat-containing meal',
-    mechanism:
-      'Allosteric SIRT1 activator. SIRT1 deacetylates H3K9ac at double-strand break sites, recruiting DNA repair machinery (BRCA1, FANCD2). Bioavailability is low — pterostilbene or micronized forms preferred.',
-    pmids: ['25927007'],
-    color: 'amber',
-  },
-];
-
 const BIOMARKERS = [
   { name: '8-OHdG (urine or serum)', normal: '< 15 ng/mg creatinine', note: 'Oxidative DNA damage marker — most accessible clinical proxy' },
   { name: 'γ-H2AX foci (PBMC)', normal: 'Lab-dependent', note: 'Gold standard for double-strand break quantification; available via specialty labs' },
@@ -63,6 +26,8 @@ const BIOMARKERS = [
 ];
 
 export default function GenomicInstabilityPage() {
+  const hallmark = getHallmarkBySlug('genomic-instability')!;
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
@@ -192,39 +157,7 @@ export default function GenomicInstabilityPage() {
             <p className="text-muted-foreground mb-8">
               Tier A = human RCT evidence. Tier B = at least one human trial + strong mechanistic data. We don’t list Tier C here.
             </p>
-            <div className="space-y-5">
-              {INTERVENTIONS.map((iv) => (
-                <div key={iv.name} className="rounded-2xl border border-border/60 bg-card/40 p-6">
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <h3 className="font-bold text-foreground text-lg">{iv.name}</h3>
-                    <span className={`shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold ${
-                      iv.tier === 'A'
-                        ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
-                        : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
-                    }`}>
-                      Tier {iv.tier}
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">{iv.mechanism}</p>
-                  <div className="flex flex-wrap gap-3 text-xs">
-                    <span className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-muted-foreground">
-                      <strong className="text-foreground">Dose:</strong> {iv.dose}
-                    </span>
-                    {iv.pmids.map((pmid) => (
-                      <a
-                        key={pmid}
-                        href={`https://pubmed.ncbi.nlm.nih.gov/${pmid}/`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-cyan-400 hover:border-cyan-500/40 transition-colors"
-                      >
-                        PMID {pmid}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <InterventionCards interventions={hallmark.interventions} />
           </div>
         </section>
 

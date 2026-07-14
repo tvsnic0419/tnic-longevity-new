@@ -74,8 +74,8 @@ const destinations: Destination[] = [
   {
     href: '/dashboard',
     icon: LayoutDashboard,
-    eyebrow: 'Operate',
-    title: 'Your Longevity OS',
+    eyebrow: 'Track',
+    title: 'Your Dashboard',
     desc: 'One private dashboard tying your quiz, stack, and labs into a single clear next action — no account required.',
     accent: 'cyan',
   },

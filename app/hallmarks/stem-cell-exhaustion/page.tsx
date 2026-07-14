@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Heart } from 'lucide-react';
+import { getHallmarkBySlug } from '@/lib/hallmarks-library';
+import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 
 export const metadata: Metadata = {
   title: 'Stem Cell Exhaustion | Hallmarks of Aging | TNiC',
@@ -14,45 +16,6 @@ export const metadata: Metadata = {
   },
 };
 
-const INTERVENTIONS = [
-  {
-    name: 'Resistance Training',
-    tier: 'A',
-    dose: '3–4× weekly compound movements; progressive overload; prioritize eccentric phase',
-    mechanism:
-      'Mechanical loading directly activates muscle satellite cells (resident stem cells) via the PI3K/Akt/mTOR pathway and IGF-1 release. Multiple RCTs confirm satellite cell activation, myonuclei addition, and muscle CSA increase in older adults with progressive resistance training — the best-studied stem cell intervention in humans.',
-    pmids: ['20847421', '29794774'],
-    tier_color: 'emerald',
-  },
-  {
-    name: 'Calcium Alpha-Ketoglutarate (Ca-AKG)',
-    tier: 'A',
-    dose: '1000–1500 mg daily',
-    mechanism:
-      'AKG is a cofactor for collagen hydroxylation (via prolyl hydroxylases) — maintaining the extracellular matrix stem cell niches depend on. It also signals through AMPK/mTOR to support quiescence in bone marrow stem cells, protecting their long-term renewal capacity. AKG declines ~10-fold between ages 30 and 70.',
-    pmids: ['33027664'],
-    tier_color: 'emerald',
-  },
-  {
-    name: 'NMN (NAD+ Stem Cell Maintenance)',
-    tier: 'B',
-    dose: '500–1000 mg NMN daily',
-    mechanism:
-      'NAD+ is required for hematopoietic stem cell (HSC) self-renewal and differentiation — demonstrated in mouse knockout models where NMN restoration prevented HSC exhaustion. SIRT1 and SIRT3 (NAD+-dependent) regulate stem cell quiescence and oxidative stress tolerance. Age-related NAD+ decline may directly impair stem cell pool maintenance.',
-    pmids: ['31820135'],
-    tier_color: 'amber',
-  },
-  {
-    name: 'Reduce Chronic Inflammation (Senolytic + NRF2)',
-    tier: 'A',
-    dose: 'Sulforaphane 30–60 mg + GlyNAC 600/600 mg; senolytic cycles as indicated',
-    mechanism:
-      'Inflammaging — chronic SASP from senescent cells — suppresses stem cell niches by converting them to a pro-inflammatory microenvironment. NF-κB activation in the niche suppresses Wnt signaling, which stem cells require for self-renewal. Reducing SASP restores niche permissiveness for stem cell activation.',
-    pmids: ['27356680', '36656670'],
-    tier_color: 'emerald',
-  },
-];
-
 const BIOMARKERS = [
   { name: 'CD34+ cell count (blood)', normal: '1–4 cells/µL; declining with age', note: 'Hematopoietic progenitor cells; tracks bone marrow stem cell output; CBC differential' },
   { name: 'Grip strength (dynamometry)', normal: '≥ 35 kg men, ≥ 20 kg women; preserve vs decline', note: 'Best functional proxy for muscle stem cell (satellite cell) maintenance; sarcopenia predictor' },
@@ -62,6 +25,8 @@ const BIOMARKERS = [
 ];
 
 export default function StemCellExhaustionPage() {
+  const hallmark = getHallmarkBySlug('stem-cell-exhaustion')!;
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
@@ -162,25 +127,7 @@ export default function StemCellExhaustionPage() {
             </div>
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-2">Stem cell support with clinical evidence</h2>
             <p className="text-muted-foreground mb-8">Tier A = human RCT evidence. Tier B = at least one human trial + mechanistic data.</p>
-            <div className="space-y-5">
-              {INTERVENTIONS.map((iv) => (
-                <div key={iv.name} className="rounded-2xl border border-border/60 bg-card/40 p-6">
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <h3 className="font-bold text-foreground text-lg">{iv.name}</h3>
-                    <span className={`shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold ${iv.tier === 'A' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'}`}>
-                      Tier {iv.tier}
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">{iv.mechanism}</p>
-                  <div className="flex flex-wrap gap-3 text-xs">
-                    <span className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-muted-foreground"><strong className="text-foreground">Dose:</strong> {iv.dose}</span>
-                    {iv.pmids.map((pmid) => (
-                      <a key={pmid} href={`https://pubmed.ncbi.nlm.nih.gov/${pmid}/`} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-cyan-400 hover:border-cyan-500/40 transition-colors">PMID {pmid}</a>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <InterventionCards interventions={hallmark.interventions} />
           </div>
         </section>
 

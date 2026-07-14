@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Timer } from 'lucide-react';
+import { getHallmarkBySlug } from '@/lib/hallmarks-library';
+import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 
 export const metadata: Metadata = {
   title: 'Telomere Attrition | Hallmarks of Aging | TNiC',
@@ -14,45 +16,6 @@ export const metadata: Metadata = {
   },
 };
 
-const INTERVENTIONS = [
-  {
-    name: 'Stress Reduction / HRV Training',
-    tier: 'A',
-    dose: 'Daily practice: 10–20 min meditation, breathwork, or biofeedback. Target HRV trend improvement.',
-    mechanism:
-      'Chronic cortisol directly accelerates telomere attrition via oxidative stress and reduced telomerase activity. Multiple RCTs on mindfulness-based stress reduction (MBSR) show measurable telomerase activity increases in PBMCs — the immune cells where telomere length is most clinically tracked (PMID: 20166168).',
-    pmids: ['20166168', '24727492'],
-    tier_color: 'emerald',
-  },
-  {
-    name: 'Aerobic Exercise (Consistent, Moderate)',
-    tier: 'A',
-    dose: '150 min/week moderate intensity (Zone 2) + 2× strength training',
-    mechanism:
-      'Meta-analyses consistently show longer leukocyte telomeres in aerobically active vs sedentary adults — independent of age, BMI, and smoking status. Proposed mechanisms: reduced oxidative stress, increased telomerase activity, and lower cortisol chronically. Endurance athletes show the largest effect.',
-    pmids: ['28367216', '26166433'],
-    tier_color: 'emerald',
-  },
-  {
-    name: 'NMN / NR (NAD+ precursors)',
-    tier: 'B',
-    dose: '500–1000 mg NMN or 300–1000 mg NR daily',
-    mechanism:
-      'NAD+-dependent SIRT1 deacetylates and activates TERT (telomerase reverse transcriptase) — the enzyme that extends telomeres. Additionally, PARP-mediated DNA repair at telomere ends depends on adequate NAD+. Age-related NAD+ decline may directly impair telomerase function.',
-    pmids: ['34272067'],
-    tier_color: 'amber',
-  },
-  {
-    name: 'Omega-3 (EPA + DHA)',
-    tier: 'B',
-    dose: '2–4 g EPA+DHA daily from fish oil or algae source',
-    mechanism:
-      'Two large observational studies link higher plasma omega-3 index with slower telomere shortening rate. The proposed mechanism is reduced oxidative stress and NF-κB-mediated inflammation — both of which consume telomere length. VITAL trial subgroup analysis suggests cardiovascular protection.',
-    pmids: ['25552792', '33167080'],
-    tier_color: 'amber',
-  },
-];
-
 const BIOMARKERS = [
   { name: 'Leukocyte telomere length (qPCR)', normal: 'Age-adjusted Z-score > −1.0 SD', note: 'LifeLength, Repeat Diagnostics, or TeloYears — compares vs age-matched reference population' },
   { name: 'Telomerase activity (TRAP assay)', normal: 'Specialist labs only', note: 'Functional measure; elevated post-exercise and MBSR practice; declining with chronic stress' },
@@ -62,6 +25,8 @@ const BIOMARKERS = [
 ];
 
 export default function TelomereAttritionPage() {
+  const hallmark = getHallmarkBySlug('telomere-attrition')!;
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
@@ -164,25 +129,7 @@ export default function TelomereAttritionPage() {
             </div>
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-2">What slows telomere shortening</h2>
             <p className="text-muted-foreground mb-8">Tier A = human RCT evidence. Tier B = at least one human trial + strong mechanistic data.</p>
-            <div className="space-y-5">
-              {INTERVENTIONS.map((iv) => (
-                <div key={iv.name} className="rounded-2xl border border-border/60 bg-card/40 p-6">
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <h3 className="font-bold text-foreground text-lg">{iv.name}</h3>
-                    <span className={`shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold ${iv.tier === 'A' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'}`}>
-                      Tier {iv.tier}
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">{iv.mechanism}</p>
-                  <div className="flex flex-wrap gap-3 text-xs">
-                    <span className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-muted-foreground"><strong className="text-foreground">Dose:</strong> {iv.dose}</span>
-                    {iv.pmids.map((pmid) => (
-                      <a key={pmid} href={`https://pubmed.ncbi.nlm.nih.gov/${pmid}/`} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-cyan-400 hover:border-cyan-500/40 transition-colors">PMID {pmid}</a>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <InterventionCards interventions={hallmark.interventions} />
           </div>
         </section>
 

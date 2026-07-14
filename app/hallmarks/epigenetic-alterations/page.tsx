@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Dna } from 'lucide-react';
+import { getHallmarkBySlug } from '@/lib/hallmarks-library';
+import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 
 export const metadata: Metadata = {
   title: 'Epigenetic Alterations | Hallmarks of Aging | TNiC',
@@ -14,45 +16,6 @@ export const metadata: Metadata = {
   },
 };
 
-const INTERVENTIONS = [
-  {
-    name: 'Calcium Alpha-Ketoglutarate (Ca-AKG)',
-    tier: 'A',
-    dose: '1000–1500 mg Ca-AKG daily (Rejuvant or equivalent)',
-    mechanism:
-      'AKG is an essential cofactor for TET2 dioxygenases — the enzymes that demethylate CpG sites and restore youthful methylation patterns. It also fuels the TCA cycle and is a key component of the α-ketoglutarate-dependent demethylase family (KDM2/4/6). A 2021 human trial (PMID: 33027664) showed 8-year reduction in biological age (Klemera-Doubal method) over 7 months.',
-    pmids: ['33027664'],
-    tier_color: 'emerald',
-  },
-  {
-    name: 'NMN → SIRT1 Epigenetic Axis',
-    tier: 'A',
-    dose: '500–1000 mg NMN daily',
-    mechanism:
-      'SIRT1 and SIRT6 are NAD+-dependent deacetylases that stabilize heterochromatin by maintaining H3K9me3 and H4K16ac marks at pericentromeric regions. When NAD+ falls, SIRT1 activity collapses — heterochromatin dissolves, transposable elements reactivate, and the epigenetic age clock accelerates. NMN restores NAD+ and reactivates this epigenetic maintenance axis.',
-    pmids: ['34272067', '31820135'],
-    tier_color: 'emerald',
-  },
-  {
-    name: 'Resveratrol → SIRT1 Activation',
-    tier: 'B',
-    dose: '100–500 mg daily with fat; pterostilbene or micronized formulations preferred',
-    mechanism:
-      'Resveratrol acts as an allosteric activator of SIRT1, increasing its affinity for acetylated substrates. SIRT1 then deacetylates H3K9ac at sites of heterochromatin disruption, re-silencing pro-aging gene expression. Most effective when combined with NMN/NR to ensure adequate NAD+ substrate.',
-    pmids: ['17909917', '25927007'],
-    tier_color: 'amber',
-  },
-  {
-    name: 'Caloric Restriction / Fasting',
-    tier: 'A',
-    dose: '20–30% caloric restriction or 16:8+ time-restricted eating daily',
-    mechanism:
-      'CR resets age-related CpG methylation drift in rodents and nonhuman primates. In humans, the CALERIE trial (PMID: 31011460) showed reduced epigenetic age acceleration at 2-year follow-up. The mechanism involves AMPK/SIRT1 axis and reduced IGF-1/insulin signaling, which re-establishes youthful methylation maintenance.',
-    pmids: ['31011460'],
-    tier_color: 'emerald',
-  },
-];
-
 const BIOMARKERS = [
   { name: 'Horvath DNAmAge (blood)', normal: 'Biological age ≤ chronological age', note: 'TruAge, GrimAge, or Elysium Index — gold standard epigenetic clock; annual retesting' },
   { name: 'GrimAge (mortality predictor)', normal: 'Acceleration ≤ 0 years', note: 'Best predictor of all-cause mortality among all clocks; tracks SASP-linked methylation sites' },
@@ -62,6 +25,8 @@ const BIOMARKERS = [
 ];
 
 export default function EpigeneticAlterationsPage() {
+  const hallmark = getHallmarkBySlug('epigenetic-alterations')!;
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
@@ -160,25 +125,7 @@ export default function EpigeneticAlterationsPage() {
             </div>
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-2">Epigenetic reprogramming with clinical evidence</h2>
             <p className="text-muted-foreground mb-8">Tier A = human RCT evidence. Tier B = at least one human trial + mechanistic data.</p>
-            <div className="space-y-5">
-              {INTERVENTIONS.map((iv) => (
-                <div key={iv.name} className="rounded-2xl border border-border/60 bg-card/40 p-6">
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <h3 className="font-bold text-foreground text-lg">{iv.name}</h3>
-                    <span className={`shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold ${iv.tier === 'A' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'}`}>
-                      Tier {iv.tier}
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">{iv.mechanism}</p>
-                  <div className="flex flex-wrap gap-3 text-xs">
-                    <span className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-muted-foreground"><strong className="text-foreground">Dose:</strong> {iv.dose}</span>
-                    {iv.pmids.map((pmid) => (
-                      <a key={pmid} href={`https://pubmed.ncbi.nlm.nih.gov/${pmid}/`} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-cyan-400 hover:border-cyan-500/40 transition-colors">PMID {pmid}</a>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <InterventionCards interventions={hallmark.interventions} />
           </div>
         </section>
 

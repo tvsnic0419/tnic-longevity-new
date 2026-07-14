@@ -20,8 +20,8 @@ export function HomeCTA() {
             Find the protocol that fits you — in three minutes.
           </h2>
           <p className="text-body mx-auto mb-9 max-w-xl">
-            Start with the quiz, or open the OS and build from scratch. Either way it stays
-            private, stays free, and never asks you to sign up.
+            Start with the quiz, or jump straight into building your protocol. Either way it
+            stays private, stays free, and never asks you to sign up.
           </p>
           <div className="flex flex-col justify-center gap-3 sm:flex-row">
             <Link
@@ -41,7 +41,7 @@ export function HomeCTA() {
                 className="focus-ring inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-semibold text-foreground"
               >
                 <LayoutDashboard className="h-5 w-5 text-accent-cyan" aria-hidden="true" />
-                Open the Longevity OS
+                Open Your Dashboard
               </Link>
             </GlassPanel>
           </div>

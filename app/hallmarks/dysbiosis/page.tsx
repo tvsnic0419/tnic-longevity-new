@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Radio } from 'lucide-react';
+import { getHallmarkBySlug } from '@/lib/hallmarks-library';
+import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 
 export const metadata: Metadata = {
   title: 'Dysbiosis | Hallmarks of Aging | TNiC',
@@ -14,45 +16,6 @@ export const metadata: Metadata = {
   },
 };
 
-const INTERVENTIONS = [
-  {
-    name: 'Diverse Plant Fiber (30+ species/week)',
-    tier: 'A',
-    dose: '30+ distinct plant species per week; 30–50g total dietary fiber daily',
-    mechanism:
-      'The most evidence-backed microbiome intervention. Diverse fiber feeds SCFA-producing taxa (Faecalibacterium prausnitzii, Roseburia, Bifidobacterium) that ferment fiber to butyrate, propionate, and acetate. Butyrate is the primary fuel for colonocytes, the main HDAC inhibitor in the gut, and a direct inducer of colonic regulatory T-cells (suppressing intestinal inflammation). APC guidelines recommend 30+ species/week.',
-    pmids: ['34702753'],
-    tier_color: 'emerald',
-  },
-  {
-    name: 'Fermented Foods Daily',
-    tier: 'A',
-    dose: '6 servings/day (yogurt, kefir, kimchi, sauerkraut, kombucha) — Stanford trial protocol',
-    mechanism:
-      'The landmark 2021 Sonnenburg/Gardner Stanford trial (PMID: 34432955) compared high-fiber vs high-fermented food diets in adults for 17 weeks. Fermented food increased microbiome diversity, reduced 19 inflammatory markers including IL-6 and IL-12, and expanded novel bacterial strains. The fiber arm showed no diversity increase — fermented foods outperformed.',
-    pmids: ['34432955'],
-    tier_color: 'emerald',
-  },
-  {
-    name: 'Sulforaphane (Gut NRF2 / Barrier)',
-    tier: 'B',
-    dose: '30–60 mg glucoraphanin or 10–30 mg SFN daily',
-    mechanism:
-      'NRF2 is highly expressed in gut epithelial cells. Sulforaphane activates NRF2 in colonocytes and enterocytes, upregulating tight junction proteins (ZO-1, claudin-3) and reducing epithelial ROS — the primary driver of gut barrier permeability. Also selectively favors Lactobacillus/Bifidobacterium over pro-inflammatory species in preclinical models.',
-    pmids: ['28515065'],
-    tier_color: 'amber',
-  },
-  {
-    name: 'Targeted Probiotics (Akkermansia, Bifidobacterium)',
-    tier: 'B',
-    dose: 'Akkermansia muciniphila (10^9 CFU pasteurized) or Bifidobacterium longum BB536 (10^9 CFU)',
-    mechanism:
-      'Akkermansia muciniphila — the gut barrier guardian — declines from 4% in young adults to near 0% in the elderly. A 2019 Belgian RCT (PMID: 31792544) showed pasteurized Akkermansia improved insulin sensitivity, reduced liver inflammation markers, and decreased gut permeability in overweight adults. Bifidobacterium longum reduces anxiety-linked cortisol and IL-6.',
-    pmids: ['31792544'],
-    tier_color: 'amber',
-  },
-];
-
 const BIOMARKERS = [
   { name: 'Zonulin (serum)', normal: '< 35 ng/mL', note: 'Tight junction regulator; elevated = leaky gut; LabCorp, Quest, or ZRT Lab' },
   { name: 'Calprotectin (fecal)', normal: '< 50 µg/g', note: 'Neutrophil activation marker in gut; sensitive to intestinal inflammation' },
@@ -62,6 +25,8 @@ const BIOMARKERS = [
 ];
 
 export default function DysbiosisPage() {
+  const hallmark = getHallmarkBySlug('dysbiosis')!;
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
@@ -162,25 +127,7 @@ export default function DysbiosisPage() {
             </div>
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-2">Microbiome restoration with clinical evidence</h2>
             <p className="text-muted-foreground mb-8">Tier A = human RCT evidence. Tier B = at least one human trial + mechanistic data.</p>
-            <div className="space-y-5">
-              {INTERVENTIONS.map((iv) => (
-                <div key={iv.name} className="rounded-2xl border border-border/60 bg-card/40 p-6">
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <h3 className="font-bold text-foreground text-lg">{iv.name}</h3>
-                    <span className={`shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold ${iv.tier === 'A' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'}`}>
-                      Tier {iv.tier}
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">{iv.mechanism}</p>
-                  <div className="flex flex-wrap gap-3 text-xs">
-                    <span className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-muted-foreground"><strong className="text-foreground">Dose:</strong> {iv.dose}</span>
-                    {iv.pmids.map((pmid) => (
-                      <a key={pmid} href={`https://pubmed.ncbi.nlm.nih.gov/${pmid}/`} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-cyan-400 hover:border-cyan-500/40 transition-colors">PMID {pmid}</a>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <InterventionCards interventions={hallmark.interventions} />
           </div>
         </section>
 

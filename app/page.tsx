@@ -4,7 +4,7 @@ import { ScrollProgress } from '@/components/ScrollProgress';
 import { HomeHero } from '@/components/home/HomeHero';
 import { HomeExplore } from '@/components/home/HomeExplore';
 import { HomeSteps } from '@/components/home/HomeSteps';
-import { HomeEvidence } from '@/components/home/HomeEvidence';
+import { HomeHallmarks } from '@/components/home/HomeHallmarks';
 import { HomeGuides } from '@/components/home/HomeGuides';
 import { HomeCTA } from '@/components/home/HomeCTA';
 
@@ -24,7 +24,7 @@ export default function HomePage() {
         <HomeHero />
         <HomeExplore />
         <HomeSteps />
-        <HomeEvidence />
+        <HomeHallmarks />
         <HomeGuides />
         <HomeCTA />
       </main>

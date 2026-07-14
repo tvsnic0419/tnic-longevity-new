@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { Zap, ArrowRight, FlaskConical, Activity, ShieldCheck, BookOpen } from 'lucide-react';
+import { getHallmarkBySlug } from '@/lib/hallmarks-library';
+import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 
 export const metadata: Metadata = {
   title: 'Cellular Senescence | Hallmarks of Aging | TNiC',
@@ -15,45 +17,6 @@ export const metadata: Metadata = {
   },
 };
 
-const INTERVENTIONS = [
-  {
-    name: 'Fisetin',
-    tier: 'B',
-    dose: '100 mg/kg intermittent dosing (2 days on / 2 weeks off); human trial used 20 mg/kg × 2 days',
-    mechanism:
-      'Fisetin selectively kills senescent cells via pro-apoptotic Bcl-2 family modulation — it downregulates BCL-XL and BCL-W, which senescent cells overexpress to resist apoptosis. A 2019 Mayo Clinic paper (PMID: 31395257) showed reduction in senescent cell burden and circulating SASP markers in older adults.',
-    pmids: ['31395257', '29242236'],
-    color: 'amber',
-  },
-  {
-    name: 'Quercetin + Dasatinib (D+Q)',
-    tier: 'A',
-    dose: 'Dasatinib 100 mg + Quercetin 1000 mg × 3 consecutive days / month (under physician supervision)',
-    mechanism:
-      'The first senolytic combination with human RCT evidence. D+Q disrupts the senescent survival pathway by inhibiting SRC kinase (dasatinib) and PI3K/AKT via quercetin. The 2019 Mayo RCT (PMID: 32107278) showed reduced senescent cell burden in diabetic kidney disease patients at 3 days dosing. Dasatinib is prescription-only.',
-    pmids: ['32107278', '31787728'],
-    color: 'emerald',
-  },
-  {
-    name: 'Navitoclax (ABT-263)',
-    tier: 'C',
-    dose: 'N/A — not for self-administration',
-    mechanism:
-      'Pan-BCL-2 inhibitor with potent senolytic activity in mice. Cleared senescent hematopoietic stem cells and extended median lifespan 7–11% in aged mice. Thrombocytopenia limits human use — included here for mechanistic completeness.',
-    pmids: ['26687169'],
-    color: 'rose',
-  },
-  {
-    name: 'Rapamycin (intermittent)',
-    tier: 'B',
-    dose: '5–6 mg weekly (physician-supervised); 1–2 mg daily dosing being studied',
-    mechanism:
-      'mTORC1 inhibition reduces SASP secretion from already-senescent cells (senomorphic effect) without killing them. Also suppresses conversion of normal cells to senescent state by reducing replicative stress. Human longevity data from the PEARL trial (PMID: 36855074) is ongoing.',
-    pmids: ['36855074', '23396136'],
-    color: 'violet',
-  },
-];
-
 const BIOMARKERS = [
   { name: 'p16INK4a (T-cells)', normal: 'Lower is better; age-adjusted', note: 'Best blood-based senescence burden marker; available via Iollo, Elysium Index' },
   { name: 'IL-6 (serum)', normal: '< 3.0 pg/mL', note: 'Primary SASP cytokine; rises linearly with senescent cell burden' },
@@ -64,6 +27,8 @@ const BIOMARKERS = [
 ];
 
 export default function CellularSenescencePage() {
+  const hallmark = getHallmarkBySlug('cellular-senescence')!;
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
@@ -189,41 +154,7 @@ export default function CellularSenescencePage() {
             <p className="text-muted-foreground mb-8">
               Tier A = human RCT evidence. Tier B = at least one human trial + mechanistic data. Tier C = preclinical only.
             </p>
-            <div className="space-y-5">
-              {INTERVENTIONS.map((iv) => (
-                <div key={iv.name} className="rounded-2xl border border-border/60 bg-card/40 p-6">
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <h3 className="font-bold text-foreground text-lg">{iv.name}</h3>
-                    <span className={`shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold ${
-                      iv.tier === 'A'
-                        ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
-                        : iv.tier === 'B'
-                        ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
-                        : 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
-                    }`}>
-                      Tier {iv.tier}
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">{iv.mechanism}</p>
-                  <div className="flex flex-wrap gap-3 text-xs">
-                    <span className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-muted-foreground">
-                      <strong className="text-foreground">Dose:</strong> {iv.dose}
-                    </span>
-                    {iv.pmids.map((pmid) => (
-                      <a
-                        key={pmid}
-                        href={`https://pubmed.ncbi.nlm.nih.gov/${pmid}/`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-cyan-400 hover:border-cyan-500/40 transition-colors"
-                      >
-                        PMID {pmid}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <InterventionCards interventions={hallmark.interventions} />
           </div>
         </section>
 
