@@ -45,7 +45,7 @@ export default function Elite8Page() {
   ];
 
   return (
-    <SubPageLayout>
+    <SubPageLayout hideContextBar>
       <StructuredData schemas={schemas} />
       <Elite8Hub />
     </SubPageLayout>

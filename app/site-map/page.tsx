@@ -24,7 +24,7 @@ export default function SiteMapPage() {
   const rest = entries.filter((e) => !prioritySet.has(pathFromUrl(e.url)));
 
   return (
-    <SubPageLayout>
+    <SubPageLayout hideContextBar>
       <div className="container-page py-12 md:py-16">
         <header className="mb-10">
           <h1 className="heading-section">Site Map</h1>
