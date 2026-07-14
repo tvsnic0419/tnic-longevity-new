@@ -73,7 +73,7 @@ export const compoundBuyerGuides: CompoundBuyerGuide[] = [
       { id: 'nad-proof', label: 'Optional NAD+ metabolite retest', detail: 'Week-4 blood NAD+ index to confirm response' },
     ],
     doseAnchors: [
-      { label: 'Martens RCT', dose: '1000 mg/day', pmid: '29514064', note: 'Elevated whole-blood NAD+' },
+      { label: 'NAD+ intermediates review', dose: '1000 mg/day', pmid: '29249689', note: 'Cell Metab review on NMN/NR pharmacology and therapeutic potential' },
       { label: 'Common consumer range', dose: '300–500 mg/day', note: 'Start mid-range; titrate at week 12' },
       { label: 'TNiC compare anchor', dose: 'See NMN vs NR table', note: 'Match one precursor — not both high-dose' },
     ],
@@ -104,8 +104,8 @@ export const compoundBuyerGuides: CompoundBuyerGuide[] = [
       { id: 'fillers', label: 'Excipient disclosure', detail: 'No hidden niacin or alpha-lipoic acid "boosters" changing stack math' },
     ],
     doseAnchors: [
-      { label: 'Kumar RCT', dose: '600 mg glycine + 600 mg NAC', pmid: '34129059', note: '24 weeks, restored GSH' },
-      { label: 'Follow-up trial', dose: 'Same ratio', pmid: '36656670', note: 'Mitochondrial function improved' },
+      { label: 'Sekhar group pilot RCT', dose: '600 mg glycine + 600 mg NAC', pmid: '33783984', note: '16 weeks, restored GSH' },
+      { label: 'Follow-up trial', dose: 'Same ratio', pmid: '35975308', note: 'Mitochondrial function improved' },
       { label: 'Entry titration', dose: '300+300 → 600+600', note: 'GI tolerance week 1–2' },
     ],
     redFlags: [
@@ -134,7 +134,7 @@ export const compoundBuyerGuides: CompoundBuyerGuide[] = [
       { id: 'nitrile', label: 'Low nitrile byproducts', detail: 'Quality extracts minimize inactive nitriles' },
     ],
     doseAnchors: [
-      { label: 'Airway NRF2 study', dose: '~40 μmol SFN dose equivalent', pmid: '27356680', note: 'Broccoli sprout extract' },
+      { label: 'Airway NRF2 study', dose: '~40 μmol SFN dose equivalent', pmid: '19028145', note: 'Broccoli sprout extract' },
       { label: 'Practical GR range', dose: '10–35 mg glucoraphanin', note: 'With active myrosinase' },
       { label: 'Stack pairing', dose: 'AM with GlyNAC', note: 'Substrate before gene switch' },
     ],
@@ -194,8 +194,8 @@ export const compoundBuyerGuides: CompoundBuyerGuide[] = [
       { id: 'batch', label: 'Batch COA', detail: 'Mouse lifespan paper used specific purity — demand same rigor' },
     ],
     doseAnchors: [
-      { label: 'Mouse lifespan', dose: '~1–2 g AKG equivalent', pmid: '33027664', note: 'Median lifespan extension' },
-      { label: 'Human pilot', dose: '1–2 g/day Ca-AKG', pmid: '38247127', note: 'Middle-aged adults' },
+      { label: 'Mouse lifespan', dose: '~1–2 g AKG equivalent', pmid: '32877690', note: 'Median lifespan extension' },
+      { label: 'Human data status', dose: '1–2 g/day Ca-AKG', note: 'ABLE trial (registered human RCT testing epigenetic-age effects) has a published protocol but results are not yet available — no human efficacy data yet' },
       { label: 'Stack timing', dose: 'AM with breakfast', note: 'Pairs with NMN in NAD+ Mito Stack' },
     ],
     redFlags: [
@@ -309,7 +309,7 @@ export const compoundBuyerGuides: CompoundBuyerGuide[] = [
       { id: 'sp-gluten', label: 'Gluten residual if celiac', detail: 'Wheat germ extract may retain trace gluten — request gluten test if sensitive' },
     ],
     doseAnchors: [
-      { label: 'Madeo 2021 (Cortex)', dose: '0.9mg/day spermidine', pmid: '33932338', note: 'Memory improvement in older adults — wheat germ extract at this dose' },
+      { label: 'Human RCT (memory)', dose: '0.9mg/day spermidine', note: 'The largest human RCT testing spermidine for memory in older adults did not find a statistically significant benefit vs placebo' },
       { label: 'Dietary reference', dose: '1–6mg daily', note: 'Range from dietary sources; supplement at the low end is sufficient' },
     ],
     redFlags: [
@@ -364,8 +364,8 @@ export const compoundBuyerGuides: CompoundBuyerGuide[] = [
       { id: 'bbr-micro', label: 'Microbial limits', detail: 'Soil-grown botanicals require full microbial panel' },
     ],
     doseAnchors: [
-      { label: 'Zhang 2008 metformin-equivalent RCT', dose: '500mg TID (1,500mg/day)', pmid: '18396172', note: 'Three-times-daily dosing with meals — most studied protocol' },
-      { label: 'Meta-analysis (27 RCTs)', dose: '500–1,500mg/day', pmid: '26507383', note: 'Full dose range across studies — all TID with meals' },
+      { label: 'Yin 2008 metformin-equivalent RCT', dose: '500mg TID (1,500mg/day)', pmid: '18442638', note: 'Three-times-daily dosing with meals — most studied protocol' },
+      { label: 'Meta-analysis (16 RCTs)', dose: '500–1,500mg/day', pmid: '30466986', note: 'Full dose range across studies — all TID with meals' },
     ],
     redFlags: [
       'Single 500mg daily dose — TID dosing is required for plasma level maintenance',
@@ -391,8 +391,8 @@ export const compoundBuyerGuides: CompoundBuyerGuide[] = [
       { id: 'ua-purity', label: '≥95% urolithin A', detail: 'Mitopure is >98% pure — other brands should meet at minimum 95%' },
     ],
     doseAnchors: [
-      { label: 'Ryu 2022 Phase 2 RCT', dose: '500mg/day', pmid: '35391504', note: '4-month RCT in adults ≥65 — muscle function, mitochondrial gene expression improved' },
-      { label: 'Andreux 2019 Phase 1', dose: '250–2,000mg tested', pmid: '31230029', note: '500mg was the optimal dose — dose-ranging confirmed' },
+      { label: 'Singh 2022 Phase 2 RCT', dose: '500mg/day', pmid: '35584623', note: 'RCT in middle-aged adults — muscle strength, exercise performance, mitochondrial biomarkers improved' },
+      { label: 'Andreux 2019 Phase 1', dose: '250–2,000mg tested', pmid: '32694802', note: '500mg was the optimal dose — dose-ranging confirmed' },
     ],
     redFlags: [
       'Pomegranate extract instead of purified urolithin A — gut conversion highly variable (~30–40% of adults cannot convert)',
@@ -447,7 +447,7 @@ export const compoundBuyerGuides: CompoundBuyerGuide[] = [
       { id: 'om-contam', label: 'PCBs and heavy metals ≤EU limits', detail: 'Cold-water fish concentrate toxins — request full contamination panel' },
     ],
     doseAnchors: [
-      { label: 'REDUCE-IT trial', dose: '4g EPA/day (prescription Vascepa)', pmid: '30145934', note: '25% reduction in cardiovascular events — high-dose EPA only, not combined EPA+DHA' },
+      { label: 'REDUCE-IT trial', dose: '4g EPA/day (prescription Vascepa)', pmid: '30415628', note: '25% reduction in cardiovascular events — high-dose EPA only, not combined EPA+DHA' },
       { label: 'General longevity protocol', dose: '2–4g EPA+DHA daily', note: 'Target omega-3 index ≥8% in red blood cells — test at baseline and 12 weeks' },
     ],
     redFlags: [

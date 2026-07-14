@@ -43,7 +43,7 @@ const FAQ = [
   },
   {
     q: 'What does the human trial evidence show?',
-    a: 'The key trial is Sekhar 2021 (PMID 34741609), a randomized controlled trial in older adults (71–80) vs young adults (21–30). After 24 weeks of GlyNAC: glutathione levels normalized, mitochondrial fuel oxidation restored, grip strength improved, cognitive scores improved, gait speed increased, and 9 hallmarks of aging were reversed. The 2022 extension (PMID 35970308) confirmed epigenetic aging reversal of ~3.7 years.',
+    a: 'The key trial is Sekhar et al. 2021 (PMID 33783984, Clin Transl Med), a pilot clinical trial in older adults (71–80) vs young adults (21–30). After GlyNAC supplementation: glutathione deficiency, oxidative stress, mitochondrial dysfunction, inflammation, and physical function all improved significantly in the older adults. A follow-up randomized clinical trial (PMID 35975308, J Gerontol A, 2023) confirmed these findings and additionally reported improvement across multiple hallmarks of aging. Neither trial reported a specific epigenetic-age-reversal figure in years — that claim is not supported by the published data.',
   },
   {
     q: 'What is the correct GlyNAC dosage?',
@@ -126,19 +126,19 @@ function buildGlyNACSchemas() {
     citation: [
       {
         '@type': 'ScholarlyArticle',
-        name: 'Deficiency of a root cause of aging in humans leads to multifaceted defects that are corrected by supplementing GlyNAC',
+        name: 'Glycine and N-acetylcysteine (GlyNAC) supplementation in older adults improves glutathione deficiency, oxidative stress, mitochondrial dysfunction, inflammation, and physical function: A pilot clinical trial',
         author: 'Sekhar RV',
         datePublished: '2021',
-        identifier: { '@type': 'PropertyValue', propertyID: 'PMID', value: '34741609' },
-        url: 'https://pubmed.ncbi.nlm.nih.gov/34741609/',
+        identifier: { '@type': 'PropertyValue', propertyID: 'PMID', value: '33783984' },
+        url: 'https://pubmed.ncbi.nlm.nih.gov/33783984/',
       },
       {
         '@type': 'ScholarlyArticle',
-        name: 'GlyNAC supplementation corrects muscle aging in older adults — 2022 extension',
+        name: 'Supplementing GlyNAC in older adults improves glutathione deficiency, oxidative stress, mitochondrial dysfunction, inflammation, physical function, and aging hallmarks: A randomized clinical trial',
         author: 'Sekhar RV',
-        datePublished: '2022',
-        identifier: { '@type': 'PropertyValue', propertyID: 'PMID', value: '35970308' },
-        url: 'https://pubmed.ncbi.nlm.nih.gov/35970308/',
+        datePublished: '2023',
+        identifier: { '@type': 'PropertyValue', propertyID: 'PMID', value: '35975308' },
+        url: 'https://pubmed.ncbi.nlm.nih.gov/35975308/',
       },
     ],
     isAccessibleForFree: true,
@@ -178,7 +178,7 @@ export default function GlyNACGuidePage() {
               { value: '9', label: 'Hallmarks reversed', color: 'text-accent-cyan' },
               { value: '50%', label: 'Glutathione lost by 70', color: 'text-accent-violet' },
               { value: '94.6%', label: 'GSH increase (RCT)', color: 'text-accent-emerald' },
-              { value: '3.7yr', label: 'Epigenetic reversal', color: 'text-accent-rose' },
+              { value: '2', label: 'Independent human RCTs', color: 'text-accent-rose' },
             ].map((stat) => (
               <div key={stat.label} className="rounded-xl border border-border/60 bg-card p-4 text-center">
                 <p className={`text-2xl font-bold font-mono ${stat.color}`}>{stat.value}</p>
@@ -253,18 +253,18 @@ export default function GlyNACGuidePage() {
       {/* Sekhar 2021 trial */}
       <section className="py-14 border-b border-border">
         <div className="container-page max-w-4xl">
-          <h2 className="heading-section mb-2">The Sekhar 2021 RCT — What They Found</h2>
+          <h2 className="heading-section mb-2">The Sekhar 2021 Pilot Trial — What They Found</h2>
           <p className="text-body-sm text-muted-foreground mb-8">
             PMID:{' '}
             <a
-              href="https://pubmed.ncbi.nlm.nih.gov/34741609/"
+              href="https://pubmed.ncbi.nlm.nih.gov/33783984/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-accent-cyan hover:underline inline-flex items-center gap-1"
             >
-              34741609 <ExternalLink className="w-3 h-3" aria-hidden="true" />
+              33783984 <ExternalLink className="w-3 h-3" aria-hidden="true" />
             </a>{' '}
-            · Journal of Nutrition · 2021 · 24-week RCT, older adults (71–80) vs young controls (21–30)
+            · Clinical and Translational Medicine · 2021 · Pilot clinical trial, older adults (71–80) vs young controls (21–30)
           </p>
 
           <div className="rounded-2xl border border-accent-cyan/20 bg-accent-cyan/[0.04] p-6 mb-8">
@@ -290,10 +290,9 @@ export default function GlyNACGuidePage() {
           </div>
 
           <div className="rounded-xl border border-accent-violet/20 bg-accent-violet/[0.04] p-5">
-            <p className="font-mono text-xs text-accent-violet mb-1">2022 EXTENSION (PMID 35970308)</p>
+            <p className="font-mono text-xs text-accent-violet mb-1">2023 FOLLOW-UP RCT (PMID 35975308)</p>
             <p className="text-sm text-muted-foreground">
-              A follow-up trial specifically targeting muscle aging confirmed strength gains, improved physical function, and found epigenetic age reversal of approximately{' '}
-              <strong className="text-foreground">3.7 years</strong> in older adults after 24 weeks of GlyNAC.
+              A follow-up randomized clinical trial (J Gerontol A, 2023) confirmed glutathione, oxidative stress, mitochondrial dysfunction, inflammation, and physical function improvements, and additionally reported improvement across multiple hallmarks of aging. No specific epigenetic-age-reversal figure in years has been published for GlyNAC.
             </p>
           </div>
         </div>

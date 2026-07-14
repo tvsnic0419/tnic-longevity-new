@@ -21,7 +21,7 @@ const INTERVENTIONS = [
     dose: 'Sulforaphane 30 mg + GlyNAC 600/600 mg daily',
     mechanism:
       'The SASP is the single largest driver of intercellular signaling disruption in aging. Sulforaphane suppresses NF-κB (the master SASP transcription factor) via NRF2-mediated HO-1 and NQO1 upregulation. GlyNAC reduces the ROS that activates NF-κB. Both have human RCT evidence for reducing downstream inflammatory markers.',
-    pmids: ['27356680', '36656670'],
+    pmids: ['19028145', '33783984'],
     tier_color: 'emerald',
   },
   {
@@ -48,7 +48,7 @@ const INTERVENTIONS = [
     dose: '250–500 mg daily; synergistic with NMN',
     mechanism:
       'SIRT1 deacetylates the p65 subunit of NF-κB, reducing transcriptional activity of pro-inflammatory cytokines (TNF-α, IL-6, IL-1β) — the primary SASP signaling disruptors. Resveratrol as SIRT1 activator amplifies this effect in the context of adequate NAD+ substrate.',
-    pmids: ['17909917'],
+    pmids: ['17086191'],
     tier_color: 'amber',
   },
 ];

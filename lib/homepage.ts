@@ -153,7 +153,7 @@ const PRESET_INSIGHT: Record<PresetKey, string> = {
   longevity:
     'Your Longevity Pro stack centers on urolithin A (Phase 2 mitophagy RCT) and fisetin (Mayo Clinic senolytic pilot), with omega-3, NMN, and resveratrol — aimed squarely at senescent-cell clearance and mitochondrial cleanup.',
   metabolic:
-    'Your Cardio-Metabolic stack — berberine (head-to-head vs metformin, PMID 18396172), omega-3 (REDUCE-IT), CoQ10, and R-ALA — stacks AMPK, lipid, and ETC support, Tier A across the board.',
+    'Your Cardio-Metabolic stack — berberine (head-to-head vs metformin, PMID 18442638), omega-3 (REDUCE-IT), CoQ10, and R-ALA — stacks AMPK, lipid, and ETC support, Tier A across the board.',
   hybrid:
     'Your Full Hybrid stack spans GlyNAC, sulforaphane, NMN, Ca-AKG, and R-ALA — NRF2 activation, mitochondrial substrate restoration, and glutathione support in the broadest five-compound protocol TNiC offers.',
   full:

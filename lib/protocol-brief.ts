@@ -21,7 +21,7 @@ export const protocolBriefIssues: ProtocolBriefEntry[] = [
     summary:
       'Six evidence comparison routes (NMN vs NR, NRF2 vs Mito, and more) and brand-agnostic buyer guides now live on every compound module. Decision tools beat catalog browsing.',
     evidenceTier: 'A',
-    pmids: ['36482258', '34129059'],
+    pmids: ['36482258', '33783984'],
     libraryHrefs: [
       { label: 'Evidence comparisons', href: '/library/compare' },
       { label: 'NMN buyer guide', href: '/library/compounds/nmn#buyer-guide' },
@@ -53,7 +53,7 @@ export const protocolBriefIssues: ProtocolBriefEntry[] = [
     summary:
       'Kumar trials show dual-precursor GlyNAC restores erythrocyte glutathione and improves mitochondrial markers in older adults. Liposomal GSH lacks equivalent longevity-trial depth.',
     evidenceTier: 'A',
-    pmids: ['34129059', '36656670'],
+    pmids: ['33783984', '35975308'],
     libraryHrefs: [
       { label: 'GlyNAC module', href: '/library/compounds/glynac' },
       { label: 'GlyNAC vs liposomal GSH', href: '/library/compare/glynac-vs-liposomal-glutathione' },
@@ -69,7 +69,7 @@ export const protocolBriefIssues: ProtocolBriefEntry[] = [
     summary:
       'NRF2 activation requires glucoraphanin conversion via myrosinase. Broccoli powder without quantified GR + enzyme fails the buyer guide — regardless of marketing.',
     evidenceTier: 'A',
-    pmids: ['18454171', '27356680'],
+    pmids: ['19028145', '38772511'],
     libraryHrefs: [
       { label: 'Sulforaphane module', href: '/library/compounds/sulforaphane' },
       { label: 'SFN vs curcumin', href: '/library/compare/sulforaphane-vs-curcumin' },

@@ -21,8 +21,8 @@ const INTERVENTIONS = [
     tier: 'A',
     dose: '600 mg glycine + 600 mg NAC daily (split AM/PM)',
     mechanism:
-      'Three RCTs (Mayo Clinic) demonstrate GlyNAC directly restores mitochondrial function in older adults: it rebuilds glutathione, reduces mitochondrial ROS, improves OxPhos efficiency, and increases mitochondrial biogenesis markers (PGC-1α). Only compound with multiple human RCTs specifically measuring mitochondrial function restoration.',
-    pmids: ['34129059', '36656670', '35975308'],
+      'Two RCTs (Mayo Clinic) demonstrate GlyNAC directly restores mitochondrial function in older adults: it rebuilds glutathione, reduces mitochondrial ROS, improves OxPhos efficiency, and increases mitochondrial biogenesis markers (PGC-1α). Only compound with multiple human RCTs specifically measuring mitochondrial function restoration.',
+    pmids: ['33783984', '35975308'],
     color: 'emerald',
   },
   {

@@ -27,49 +27,49 @@ export const metadata = buildPageMetadata({
 const EVIDENCE_TABLE = [
   {
     endpoint: 'Blood glucose (HbA1c)',
-    finding: '−0.5 to −0.9% HbA1c reduction in T2D patients',
+    finding: '20% fasting glucose reduction, ~2.0 percentage-point HbA1c reduction — statistically equivalent to metformin',
     quality: 'Strong',
-    pmid: '19800084',
+    pmid: '18442638',
     color: 'text-accent-emerald',
     badge: 'bg-accent-emerald/10 border-accent-emerald/20',
   },
   {
     endpoint: 'Fasting blood glucose',
-    finding: '−0.84 mmol/L fasting glucose reduction (meta-analysis)',
+    finding: 'Same head-to-head RCT as above reported fasting glucose reduction alongside HbA1c — no dedicated glucose-only meta-analysis has been published for berberine',
     quality: 'Strong',
-    pmid: '23118876',
+    pmid: '18442638',
     color: 'text-accent-emerald',
     badge: 'bg-accent-emerald/10 border-accent-emerald/20',
   },
   {
     endpoint: 'LDL cholesterol',
-    finding: '−12–23 mg/dL LDL reduction; −35% triglycerides in some trials',
+    finding: 'Meta-analysis of 16 RCTs confirms improved lipid profile (LDL, triglycerides) in dyslipidemia patients',
     quality: 'Good',
-    pmid: '15735277',
+    pmid: '30466986',
     color: 'text-accent-cyan',
     badge: 'bg-accent-cyan/10 border-accent-cyan/20',
   },
   {
     endpoint: 'Weight / BMI',
-    finding: '−1.5 to −2.5 kg body weight in 3-month trials; no head-to-head GLP-1 data',
+    finding: 'Some trials report modest body weight reduction as a secondary endpoint; no dedicated weight-loss meta-analysis or head-to-head GLP-1 data exists',
     quality: 'Moderate',
-    pmid: '23118876',
+    pmid: undefined,
     color: 'text-accent-violet',
     badge: 'bg-accent-violet/10 border-accent-violet/20',
   },
   {
     endpoint: 'AMPK activation',
-    finding: 'Dose-dependent AMPK activation in cell/animal models; human mechanistic data limited',
+    finding: 'Activates AMP-activated protein kinase with beneficial metabolic effects in diabetic and insulin-resistant states (cell/animal models; human mechanistic data limited)',
     quality: 'Moderate',
-    pmid: '16439621',
+    pmid: '16873688',
     color: 'text-accent-violet',
     badge: 'bg-accent-violet/10 border-accent-violet/20',
   },
   {
     endpoint: 'Longevity / lifespan',
-    finding: 'Preclinical: extended lifespan in C. elegans and Drosophila; no human longevity RCTs',
+    finding: 'Mechanistic rationale via AMPK activation; no verified lifespan-extension citation for berberine specifically and no human longevity RCTs',
     quality: 'Preclinical only',
-    pmid: '26186647',
+    pmid: undefined,
     color: 'text-amber-400',
     badge: 'bg-amber-400/10 border-amber-400/20',
   },
@@ -86,7 +86,7 @@ const FAQ = [
   },
   {
     q: 'What is the correct berberine dosage?',
-    a: 'The most-studied protocol is 500 mg three times daily with meals (1.5 g/day total). This was used in the key Zhang 2008 T2D trial (PMID 19800084). Some practitioners use 500 mg twice daily (1 g/day) with good results. Take with meals — berberine bioavailability improves with food and the GI effects are reduced. Doses above 1.5 g/day rarely provide additional benefit and increase GI side effects.',
+    a: 'The most-studied protocol is 500 mg three times daily with meals (1.5 g/day total). This was used in the key Yin 2008 T2D trial (PMID 18442638). Some practitioners use 500 mg twice daily (1 g/day) with good results. Take with meals — berberine bioavailability improves with food and the GI effects are reduced. Doses above 1.5 g/day rarely provide additional benefit and increase GI side effects.',
   },
   {
     q: 'What are the main berberine side effects?',
@@ -110,7 +110,7 @@ function buildBerberineSchemas() {
   const howTo = buildHowToSchema({
     name: 'How to Start a Berberine Supplement Protocol Safely',
     description:
-      'Evidence-based protocol for starting berberine supplementation for metabolic health and longevity, based on the Zhang 2008 RCT and subsequent meta-analyses.',
+      'Evidence-based protocol for starting berberine supplementation for metabolic health and longevity, based on the Yin 2008 RCT and subsequent meta-analyses.',
     path: '/berberine-supplement-guide',
     totalTime: 'PT10M',
     steps: [
@@ -124,7 +124,7 @@ function buildBerberineSchemas() {
       },
       {
         name: 'Titrate to 500mg with each main meal (week 3+)',
-        text: 'Increase to 500 mg with breakfast, 500 mg with lunch, 500 mg with dinner (1.5 g/day total). This matches the Zhang 2008 RCT protocol — the landmark trial showing comparable HbA1c reduction to metformin.',
+        text: 'Increase to 500 mg with breakfast, 500 mg with lunch, 500 mg with dinner (1.5 g/day total). This matches the Yin 2008 RCT protocol — the landmark trial showing comparable HbA1c reduction to metformin.',
       },
       {
         name: 'Cycle your dosing if taking long-term',
@@ -164,18 +164,18 @@ function buildBerberineSchemas() {
       {
         '@type': 'ScholarlyArticle',
         name: 'Efficacy of berberine in patients with type 2 diabetes mellitus',
-        author: 'Zhang Y et al.',
+        author: 'Yin J et al.',
         datePublished: '2008',
-        identifier: { '@type': 'PropertyValue', propertyID: 'PMID', value: '19800084' },
-        url: 'https://pubmed.ncbi.nlm.nih.gov/19800084/',
+        identifier: { '@type': 'PropertyValue', propertyID: 'PMID', value: '18442638' },
+        url: 'https://pubmed.ncbi.nlm.nih.gov/18442638/',
       },
       {
         '@type': 'ScholarlyArticle',
-        name: 'Berberine in the treatment of type 2 diabetes mellitus: a systematic review and meta-analysis',
-        author: 'Dong H et al.',
-        datePublished: '2012',
-        identifier: { '@type': 'PropertyValue', propertyID: 'PMID', value: '23118876' },
-        url: 'https://pubmed.ncbi.nlm.nih.gov/23118876/',
+        name: 'Efficacy and safety of berberine for dyslipidaemias: A systematic review and meta-analysis of randomized clinical trials',
+        author: 'Ju J et al.',
+        datePublished: '2018',
+        identifier: { '@type': 'PropertyValue', propertyID: 'PMID', value: '30466986' },
+        url: 'https://pubmed.ncbi.nlm.nih.gov/30466986/',
       },
     ],
     isAccessibleForFree: true,
@@ -340,14 +340,18 @@ export default function BerberineGuidePage() {
                   </span>
                 </div>
                 <p className="text-sm text-muted-foreground mb-2">{item.finding}</p>
-                <a
-                  href={`https://pubmed.ncbi.nlm.nih.gov/${item.pmid}/`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`text-xs font-mono inline-flex items-center gap-1 ${item.color} hover:underline`}
-                >
-                  PMID {item.pmid} <ExternalLink className="w-3 h-3" aria-hidden="true" />
-                </a>
+                {item.pmid ? (
+                  <a
+                    href={`https://pubmed.ncbi.nlm.nih.gov/${item.pmid}/`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`text-xs font-mono inline-flex items-center gap-1 ${item.color} hover:underline`}
+                  >
+                    PMID {item.pmid} <ExternalLink className="w-3 h-3" aria-hidden="true" />
+                  </a>
+                ) : (
+                  <span className="text-xs font-mono text-muted-foreground">No dedicated citation available</span>
+                )}
               </div>
             ))}
           </div>
@@ -359,7 +363,7 @@ export default function BerberineGuidePage() {
         <div className="container-page max-w-4xl">
           <h2 className="heading-section mb-3">Dosing Protocol</h2>
           <p className="text-body mb-8 max-w-2xl">
-            The standard protocol used in the landmark Zhang 2008 RCT and subsequent meta-analyses.
+            The standard protocol used in the landmark Yin 2008 RCT and subsequent meta-analyses.
           </p>
 
           <div className="overflow-x-auto rounded-xl border border-border/60 mb-8">
@@ -479,7 +483,7 @@ export default function BerberineGuidePage() {
               {
                 n: '03',
                 title: 'Titrate to 500 mg × 3 meals (1.5 g/day)',
-                body: "This is the Zhang 2008 RCT dose — the landmark trial showing HbA1c reduction equivalent to metformin at 1500 mg/day. Take it with or 15–30 min before each main meal. Don't skip doses.",
+                body: "This is the Yin 2008 RCT dose — the landmark trial showing HbA1c reduction equivalent to metformin at 1500 mg/day. Take it with or 15–30 min before each main meal. Don't skip doses.",
               },
               {
                 n: '04',

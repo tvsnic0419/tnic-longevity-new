@@ -30,7 +30,7 @@ const INTERVENTIONS = [
     dose: '250–500 mg daily; pterostilbene or micronized forms preferred for bioavailability',
     mechanism:
       'Resveratrol activates AMPK directly (via LKB1 pathway) and SIRT1 allosterically — both upstream activators of autophagy and mitochondrial biogenesis. AMPK phosphorylates ULK1 (autophagy initiation) and TFEB (lysosome biogenesis). SIRT1 deacetylates PGC-1α, driving mitochondrial renewal. Acts as a CR-mimetic compound.',
-    pmids: ['21360229', '17909917'],
+    pmids: ['21360229', '17086191'],
     tier_color: 'amber',
   },
   {

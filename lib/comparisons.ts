@@ -93,7 +93,6 @@ export const evidenceComparisons: EvidenceComparison[] = [
         a: 'Igarashi/Liao 250 mg NMN',
         b: 'Martens 1000 mg NR',
         verdict: 'b',
-        pmid: '29514064',
         note: 'Both elevate NAD+ — dose units differ',
       },
     ],
@@ -136,7 +135,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
         a: '24-week GSH restoration (Kumar)',
         b: 'Acute plasma rise; limited long-term trials',
         verdict: 'a',
-        pmid: '34129059',
+        pmid: '33783984',
       },
       {
         dimension: 'Mechanism',
@@ -204,7 +203,6 @@ export const evidenceComparisons: EvidenceComparison[] = [
         a: 'KEAP1 covalent modification — direct',
         b: 'Indirect; weak KEAP1 data',
         verdict: 'a',
-        pmid: '18454171',
       },
       {
         dimension: 'Bioavailability',
@@ -268,10 +266,10 @@ export const evidenceComparisons: EvidenceComparison[] = [
     rows: [
       {
         dimension: 'SIRT1 activation data',
-        a: 'Extensive in-vitro + human pilot exposure',
+        a: 'Extensive in-vitro + foundational mouse study',
         b: 'Strong preclinical; fewer human trials',
         verdict: 'a',
-        pmid: '17909917',
+        pmid: '17086191',
       },
       {
         dimension: 'Oral bioavailability',
@@ -360,7 +358,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
         a: 'Kumar GlyNAC RCT + NRF2 literature',
         b: 'Igarashi NMN RCT + AKG mouse data',
         verdict: 'tie',
-        pmid: '34129059',
+        pmid: '33783984',
       },
       {
         dimension: 'Quiz preset mapping',
@@ -463,7 +461,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
     category: 'compound',
     evidenceTier: 'A',
     summary:
-      'A 2008 Metabolism RCT (PMID 18396172) randomized 116 T2D patients to berberine 500 mg TID vs metformin 500 mg TID for 13 weeks. Berberine reduced fasting glucose 20% and HbA1c by 2.0% — outcomes statistically equivalent to metformin at the same dose. Both activate AMPK, the cellular energy sensor that also inhibits mTOR and supports longevity pathways. The key difference: metformin is a prescription biguanide with known B12 depletion risk and contraindications in renal impairment; berberine is a consumer-accessible alkaloid with a favorable safety profile and additional lipid benefits not seen with metformin.',
+      'A 2008 Metabolism RCT (PMID 18442638) randomized T2D patients to berberine 500 mg TID vs metformin 500 mg TID for 13 weeks. Berberine reduced fasting glucose 20% and HbA1c by 2.0 percentage points — outcomes statistically equivalent to metformin at the same dose. Both activate AMPK, the cellular energy sensor that also inhibits mTOR and supports longevity pathways. The key difference: metformin is a prescription biguanide with known B12 depletion risk and contraindications in renal impairment; berberine is a consumer-accessible alkaloid with a favorable safety profile and additional lipid benefits not seen with metformin.',
     verdict:
       'Tie on acute glucose control (head-to-head RCT). Choose berberine for consumer accessibility, lipid co-benefits, and absence of B12 depletion. Choose metformin if your physician recommends it for T2D management or you are in the TAME trial longevity cohort — do not self-combine both at full dose (additive hypoglycemia risk).',
     rows: [
@@ -472,7 +470,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
         a: '−20% (13-week RCT, n=116)',
         b: '−23% (same trial, same dose)',
         verdict: 'tie',
-        pmid: '18396172',
+        pmid: '18442638',
         note: 'Difference not statistically significant — berberine non-inferior',
       },
       {
@@ -480,22 +478,22 @@ export const evidenceComparisons: EvidenceComparison[] = [
         a: '−2.0 percentage points',
         b: '−1.8 percentage points',
         verdict: 'a',
-        pmid: '18396172',
+        pmid: '18442638',
       },
       {
         dimension: 'LDL cholesterol',
-        a: '−13.5% (meta-analysis, 27 RCTs)',
+        a: 'Meaningful reduction (meta-analysis, 16 RCTs)',
         b: 'Neutral to modest reduction',
         verdict: 'a',
-        pmid: '26507383',
+        pmid: '30466986',
         note: "Berberine's lipid benefit is a meaningful advantage for CV risk reduction",
       },
       {
         dimension: 'Triglycerides',
-        a: '−35% in dyslipidemia trials',
+        a: 'Reduced in dyslipidemia trials',
         b: 'Minimal effect',
         verdict: 'a',
-        pmid: '26507383',
+        pmid: '30466986',
       },
       {
         dimension: 'AMPK activation (longevity pathway)',
@@ -596,8 +594,8 @@ export const evidenceComparisons: EvidenceComparison[] = [
       },
       {
         dimension: 'Human trial evidence',
-        a: 'Phase 2 RCT (Ryu 2022, PMID 35391504) — muscle strength and mitophagy gene expression confirmed in biopsy',
-        b: 'Meta-analysis 17 RCTs (Liang 2016, PMID 26267690) — hs-CRP and IL-6 reduction; Q-SYMBIO RCT for heart failure',
+        a: 'Randomized trial (Singh 2022, PMID 35584623) — muscle strength and exercise performance improved versus placebo',
+        b: 'Meta-analysis of RCTs (Fan 2017, PMID 28179205) — hs-CRP and IL-6 reduction; Q-SYMBIO RCT for heart failure',
         verdict: 'tie',
         note: 'Both have Tier A-level evidence in their respective primary endpoints',
       },
@@ -610,17 +608,16 @@ export const evidenceComparisons: EvidenceComparison[] = [
       },
       {
         dimension: 'Muscle function (≥65)',
-        a: 'Phase 2 RCT primary endpoint: significant improvement in handgrip and leg press',
+        a: 'Randomized trial primary endpoint: improved handgrip and leg press vs placebo',
         b: 'Indirect — ETC support contributes to muscle energy but not primary endpoint',
         verdict: 'a',
-        pmid: '35391504',
+        pmid: '35584623',
       },
       {
         dimension: 'Cardiovascular benefit',
         a: 'Not primary indication',
-        b: 'Q-SYMBIO: 43% MACE reduction in heart failure; REDUCE-IT context (CoQ10 membrane + omega-3)',
+        b: 'Q-SYMBIO: reduced cardiac events in heart failure',
         verdict: 'b',
-        pmid: '29541041',
       },
       {
         dimension: 'Dietary accessibility',
@@ -791,15 +788,15 @@ export const evidenceComparisons: EvidenceComparison[] = [
     summary:
       'Fisetin and quercetin are both flavonoids studied for senolytic activity — the ability to selectively eliminate senescent "zombie" cells that accumulate with age and drive inflammaging. They share the BCL-2/BCL-XL inhibition pathway but differ dramatically in their human evidence, dosing strategy, and solo OTC viability. Fisetin has a standalone Mayo Clinic phase 1 pilot; quercetin is most studied in combination with the prescription drug dasatinib (D+Q protocol).',
     verdict:
-      'Fisetin is the stronger OTC-only senolytic choice: the only flavonoid with a standalone Mayo Clinic clinical signal. Quercetin belongs in a D+Q protocol (physician supervised) — solo OTC quercetin has weak senolytic evidence. Do not replace dasatinib with quercetin for serious senolytic intent.',
+      'Fisetin has the strongest preclinical senolytic data among flavonoids studied alone, though human trials of fisetin monotherapy have not yet reported results. Quercetin belongs in a D+Q protocol (physician supervised) — solo OTC quercetin has weak senolytic evidence. Do not replace dasatinib with quercetin for serious senolytic intent.',
     rows: [
       {
         dimension: 'Standalone senolytic human evidence',
-        a: 'Phase 1 feasibility (Trivedi 2019): cleared circulating senescent cells in 14 subjects',
+        a: 'Strongest evidence is preclinical (mouse) senotherapeutic data; dedicated human trials of fisetin alone are registered but not yet reporting results',
         b: 'Weak as solo agent — primarily studied as D+Q adjunct',
-        verdict: 'a',
-        pmid: '30957782',
-        note: 'Quercetin alone has not shown clinically significant senolytic effect in RCTs',
+        verdict: 'context',
+        pmid: '30279143',
+        note: "Real Mayo Clinic human senolytic pilots used the dasatinib+quercetin combination, not fisetin alone — a standalone human fisetin senolytic result has not been published",
       },
       {
         dimension: 'Prescription pairing',
@@ -813,7 +810,6 @@ export const evidenceComparisons: EvidenceComparison[] = [
         a: 'Strong preclinical: BDNF upregulation, reduces tau, neuroinflammation in aged mice',
         b: 'Moderate — primarily anti-inflammatory, less direct neuroproliferative data',
         verdict: 'a',
-        pmid: '30957782',
       },
       {
         dimension: 'AMPK / metabolic support',
@@ -849,7 +845,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
       },
     ],
     whenChooseA: [
-      'Solo OTC senolytic protocol — Fisetin is the only flavonoid with standalone Mayo signal',
+      'Solo OTC senolytic protocol — Fisetin has the strongest preclinical (mouse) senolytic signal among flavonoids tested alone',
       'Neurological aging concern: cognitive protection, BDNF support, tau reduction',
       'Pulse dosing without prescription involvement',
       'No physician for Dasatinib access — Fisetin is the defensible OTC alternative',
@@ -972,14 +968,15 @@ export const evidenceComparisons: EvidenceComparison[] = [
     summary:
       'Ca-AKG and spermidine are both emerging longevity compounds with striking epigenetic and autophagy data — but they operate at entirely different nodes. Ca-AKG is a TET DNA demethylase cofactor: it supplies the substrate TET enzymes need to remove methyl groups from aging DNA, potentially reversing epigenetic drift. Spermidine inhibits EP300 acetyltransferase, triggering autophagy flux that clears damaged organelles and proteins. Together they address the two biggest non-NAD+ longevity nodes: epigenetic age and proteostasis.',
     verdict:
-      'Ca-AKG leads on epigenetic clock reversal evidence (Rejuvant trial: −8yr biological age). Spermidine leads on autophagy breadth, immune rejuvenation, and observational lifespan data. Stack both if budget allows — they are mechanistically orthogonal and naturally synergistic.',
+      'Ca-AKG has strong preclinical epigenetic/lifespan data in mice, though a human epigenetic-age trial has not yet reported results. Spermidine leads on autophagy breadth, immune rejuvenation, and observational lifespan data. Stack both if budget allows — they are mechanistically orthogonal and naturally synergistic.',
     rows: [
       {
         dimension: 'Epigenetic clock reversal',
-        a: 'Rejuvant trial (Demidenko 2021): −7.5 years biological age (Horvath clock) in 42 adults over 7 months',
+        a: 'Mouse lifespan/epigenetic data is strong; a registered human epigenetic-age trial (ABLE) has not yet reported results',
         b: 'Indirect — autophagy improves proteostasis which correlates with slower epigenetic drift',
-        verdict: 'a',
-        pmid: '34708673',
+        verdict: 'context',
+        pmid: '32877690',
+        note: 'No published human RCT has reported an epigenetic-age reduction for Ca-AKG — claims to that effect should be treated as unverified',
       },
       {
         dimension: 'Autophagy induction',
@@ -1029,7 +1026,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
       },
     ],
     whenChooseA: [
-      'Epigenetic age reduction is the primary goal — Rejuvant trial is the strongest clock reversal signal in a single compound',
+      'Epigenetic age reduction is a research interest — Ca-AKG has the strongest preclinical (mouse) signal, though human clock-reversal data is not yet published',
       'mTOR suppression desired without rapamycin prescription',
       'Running a methylation-focused protocol targeting DNAmAge Horvath clock markers',
     ],
@@ -1252,10 +1249,10 @@ export const evidenceComparisons: EvidenceComparison[] = [
       },
       {
         dimension: 'Cardiovascular RCT evidence',
-        a: 'REDUCE-IT (PMID 30345336): 4 g EPA (Vascepa) reduced major cardiac events 25% — the definitive omega-3 cardiovascular trial',
+        a: 'REDUCE-IT (PMID 30415628): 4 g icosapent ethyl (Vascepa) reduced major cardiac events 25% — the definitive omega-3 cardiovascular trial',
         b: 'No head-to-head cardiovascular outcome trials at effective EPA+DHA doses',
         verdict: 'a',
-        pmid: '30345336',
+        pmid: '30415628',
         note: 'The massive REDUCE-IT and STRENGTH trials used fish oil derivatives, not krill oil',
       },
       {

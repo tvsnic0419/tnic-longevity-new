@@ -20,8 +20,8 @@ const INTERVENTIONS = [
     tier: 'A',
     dose: '600 mg glycine + 600 mg NAC daily',
     mechanism:
-      'Glutathione is the primary defense against protein oxidation. Oxidized proteins misfold and cannot be recognized by chaperones, creating proteostasis backlog. Three Mayo Clinic RCTs (PMIDs: 34129059, 36656670, 35975308) show GlyNAC restores glutathione in older adults and reduces protein carbonylation — the primary oxidative damage marker on proteins.',
-    pmids: ['34129059', '36656670'],
+      'Glutathione is the primary defense against protein oxidation. Oxidized proteins misfold and cannot be recognized by chaperones, creating proteostasis backlog. Two Mayo Clinic RCTs (PMIDs: 33783984, 35975308) show GlyNAC restores glutathione in older adults and reduces protein carbonylation — the primary oxidative damage marker on proteins.',
+    pmids: ['33783984', '35975308'],
     tier_color: 'emerald',
   },
   {
@@ -30,7 +30,7 @@ const INTERVENTIONS = [
     dose: '30–60 mg glucoraphanin or 10–30 mg SFN daily',
     mechanism:
       'NRF2 activation by sulforaphane directly upregulates proteasome subunits (PSMA, PSMB) and heat shock proteins (HSP70, HSP90) that refold damaged proteins. It also induces autophagy of protein aggregates via p62/SQSTM1 pathway. Human airway studies confirm NRF2 target gene induction.',
-    pmids: ['28515065', '27356680'],
+    pmids: ['28515065', '19028145'],
     tier_color: 'emerald',
   },
   {

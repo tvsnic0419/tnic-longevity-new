@@ -30,7 +30,7 @@ const INTERVENTIONS = [
     dose: '1000–1500 mg daily',
     mechanism:
       'AKG is a cofactor for collagen hydroxylation (via prolyl hydroxylases) — maintaining the extracellular matrix stem cell niches depend on. It also signals through AMPK/mTOR to support quiescence in bone marrow stem cells, protecting their long-term renewal capacity. AKG declines ~10-fold between ages 30 and 70.',
-    pmids: ['33027664'],
+    pmids: ['32877690'],
     tier_color: 'emerald',
   },
   {
@@ -48,7 +48,7 @@ const INTERVENTIONS = [
     dose: 'Sulforaphane 30–60 mg + GlyNAC 600/600 mg; senolytic cycles as indicated',
     mechanism:
       'Inflammaging — chronic SASP from senescent cells — suppresses stem cell niches by converting them to a pro-inflammatory microenvironment. NF-κB activation in the niche suppresses Wnt signaling, which stem cells require for self-renewal. Reducing SASP restores niche permissiveness for stem cell activation.',
-    pmids: ['27356680', '36656670'],
+    pmids: ['19028145', '33783984'],
     tier_color: 'emerald',
   },
 ];

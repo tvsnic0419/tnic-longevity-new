@@ -20,8 +20,8 @@ const INTERVENTIONS = [
     tier: 'A',
     dose: '30–60 mg glucoraphanin or 10–30 mg SFN daily; best from fresh broccoli sprouts or standardized extract',
     mechanism:
-      'The most mechanistically complete anti-inflammatory compound with human evidence. NRF2 activation upregulates HO-1, NQO1, and GCLC — which neutralize the ROS that drive NF-κB activation. Simultaneously, NRF2 directly suppresses NF-κB transcriptional activity via IκBα. A human airway study (PMID: 27356680) demonstrated significant CRP and IL-6 reduction.',
-    pmids: ['27356680', '28515065'],
+      'The most mechanistically complete anti-inflammatory compound with human evidence. NRF2 activation upregulates HO-1, NQO1, and GCLC — which neutralize the ROS that drive NF-κB activation. Simultaneously, NRF2 directly suppresses NF-κB transcriptional activity via IκBα. A human airway study (PMID: 19028145) demonstrated significant CRP and IL-6 reduction.',
+    pmids: ['19028145', '28515065'],
     tier_color: 'emerald',
   },
   {
@@ -29,8 +29,8 @@ const INTERVENTIONS = [
     tier: 'A',
     dose: '600 mg glycine + 600 mg NAC daily',
     mechanism:
-      'Oxidative stress is the upstream activator of NF-κB. When ROS oxidize IκB kinase (IKK), it phosphorylates IκB, releasing NF-κB to the nucleus. GlyNAC rebuilds glutathione — the primary intracellular ROS scavenger — breaking this chain at its root. Three human RCTs confirm reduced inflammatory markers alongside oxidative stress restoration.',
-    pmids: ['36656670', '35975308'],
+      'Oxidative stress is the upstream activator of NF-κB. When ROS oxidize IκB kinase (IKK), it phosphorylates IκB, releasing NF-κB to the nucleus. GlyNAC rebuilds glutathione — the primary intracellular ROS scavenger — breaking this chain at its root. Two human RCTs confirm reduced inflammatory markers alongside oxidative stress restoration.',
+    pmids: ['33783984', '35975308'],
     tier_color: 'emerald',
   },
   {
@@ -38,8 +38,8 @@ const INTERVENTIONS = [
     tier: 'A',
     dose: '2–4 g EPA+DHA daily; fish oil or algae-based',
     mechanism:
-      'EPA and DHA are precursors to specialized pro-resolving mediators (SPMs): resolvins, protectins, and maresins. SPMs actively terminate inflammation by clearing cellular debris, reducing neutrophil infiltration, and reprogramming macrophages from M1 (pro-inflammatory) to M2 (resolving) phenotype. The REDUCE-IT trial (PMID: 30145941) showed 25% reduction in MACE with 4g icosapentaenoic acid.',
-    pmids: ['30145941', '33167080'],
+      'EPA and DHA are precursors to specialized pro-resolving mediators (SPMs): resolvins, protectins, and maresins. SPMs actively terminate inflammation by clearing cellular debris, reducing neutrophil infiltration, and reprogramming macrophages from M1 (pro-inflammatory) to M2 (resolving) phenotype. The REDUCE-IT trial (PMID: 30415628) showed 25% reduction in MACE with 4g icosapentaenoic acid.',
+    pmids: ['30415628', '33167080'],
     tier_color: 'emerald',
   },
   {
@@ -57,7 +57,7 @@ const INTERVENTIONS = [
     dose: '250–500 mg daily',
     mechanism:
       'SIRT1 deacetylates the p65 subunit of NF-κB at K310, suppressing its transcriptional activity without blocking upstream signaling. This is a particularly targeted anti-inflammatory mechanism — it reduces chronic NF-κB output while preserving acute inflammatory responses needed for infection defense.',
-    pmids: ['17909917'],
+    pmids: ['17086191'],
     tier_color: 'amber',
   },
 ];

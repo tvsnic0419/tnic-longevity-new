@@ -17,7 +17,7 @@ export const journeyMilestones: JourneyMilestone[] = [
     desc: 'N=1 trial: 600mg glycine + 600mg NAC daily. Targeting glutathione restoration based on Kumar et al. human trials.',
     metric: 'Subjective recovery improved',
     evidenceTier: 'A',
-    citationIds: ['c-glynac-2023'],
+    citationIds: ['c-glynac-2021'],
     personal: true,
   },
   {
@@ -27,7 +27,7 @@ export const journeyMilestones: JourneyMilestone[] = [
     desc: 'Added sulforaphane + R-ALA. Built first synergy matrix mapping compounds to hallmarks of aging.',
     metric: '3-compound NRF2 stack',
     evidenceTier: 'A',
-    citationIds: ['c-sf-2008'],
+    citationIds: ['c-sf-2009'],
     personal: true,
   },
   {

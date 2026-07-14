@@ -31,7 +31,7 @@ const FAQ = [
   },
   {
     q: 'What did the Singh 2023 Science paper show?',
-    a: 'Singh et al. (2023, PMID 37289936) demonstrated three key findings: (1) Taurine declines 80% by age 60 in humans, mice, and monkeys — this is not a diet issue but a metabolic production decline. (2) Taurine supplementation extended median lifespan 10–12% in middle-aged mice and improved muscle function, bone density, immune health, and cognitive performance. (3) In monkeys, taurine restored markers of epigenetic age, telomere length, insulin sensitivity, and reduced inflammation. This is landmark evidence for a simple, safe, low-cost supplement.',
+    a: 'Singh et al. (2023, PMID 37289866, Science) demonstrated key findings: (1) Taurine declines significantly by age 60 in humans, mice, and monkeys — this is not a diet issue but a metabolic production decline. (2) Taurine supplementation extended median lifespan 10–12% in middle-aged mice and reversed musculoskeletal, immune, and metabolic aging markers. (3) Human association studies show plasma taurine inversely correlates with type 2 diabetes, obesity, and cardiovascular disease risk. No large human longevity-endpoint RCT has been published yet — this is strong preclinical and associational evidence for a simple, safe, low-cost supplement.',
   },
   {
     q: 'What is the correct taurine dosage for longevity?',
@@ -116,8 +116,8 @@ function buildTaurineSchemas() {
         author: 'Singh P, Gollapalli K, Mangiola S et al.',
         datePublished: '2023',
         isPartOf: { '@type': 'Periodical', name: 'Science' },
-        identifier: { '@type': 'PropertyValue', propertyID: 'PMID', value: '37289936' },
-        url: 'https://pubmed.ncbi.nlm.nih.gov/37289936/',
+        identifier: { '@type': 'PropertyValue', propertyID: 'PMID', value: '37289866' },
+        url: 'https://pubmed.ncbi.nlm.nih.gov/37289866/',
       },
     ],
     isAccessibleForFree: true,
@@ -192,12 +192,12 @@ export default function TaurineGuidePage() {
           <p className="text-body-sm text-muted-foreground mb-8">
             PMID:{' '}
             <a
-              href="https://pubmed.ncbi.nlm.nih.gov/37289936/"
+              href="https://pubmed.ncbi.nlm.nih.gov/37289866/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-accent-emerald hover:underline inline-flex items-center gap-1"
             >
-              37289936 <ExternalLink className="w-3 h-3" aria-hidden="true" />
+              37289866 <ExternalLink className="w-3 h-3" aria-hidden="true" />
             </a>{' '}
             · Science · 2023 · Singh P, Gollapalli K, Mangiola S et al.
           </p>
@@ -225,8 +225,8 @@ export default function TaurineGuidePage() {
                 badge: 'bg-accent-emerald/10 border-accent-emerald/20',
               },
               {
-                title: 'Discovery 3: Monkey data confirms human relevance',
-                body: "In rhesus monkeys (most relevant model for humans), taurine restored epigenetic age markers, reduced inflammation, improved bone density, reduced liver fat, and improved insulin sensitivity. Monkeys' physiological similarity to humans makes this particularly meaningful.",
+                title: 'Discovery 3: Primate data supports human relevance',
+                body: "In monkeys (a physiologically closer model to humans than mice), taurine supplementation reversed musculoskeletal, immune, and metabolic aging markers. Separately, human association studies show plasma taurine inversely correlates with type 2 diabetes, obesity, and cardiovascular disease risk — though no large human longevity-endpoint RCT has been published yet.",
                 color: 'text-accent-cyan',
                 badge: 'bg-accent-cyan/10 border-accent-cyan/20',
               },
@@ -278,8 +278,8 @@ export default function TaurineGuidePage() {
                 icon: FlaskConical,
                 color: 'text-amber-400',
                 badge: 'bg-amber-400/10 border-amber-400/20',
-                title: 'DNA and epigenetic protection',
-                body: 'Taurine supplementation in the Singh 2023 monkey study restored epigenetic age markers — lower methylation at aging-associated CpG sites. The mechanism is not fully characterized, but likely involves reduced oxidative damage to DNA (via antioxidant function) and indirect epigenetic effects from improved mitochondrial function and reduced inflammation.',
+                title: 'DNA and genomic protection',
+                body: 'Taurine supplementation in the Singh 2023 monkey study contributed to reversal of musculoskeletal, immune, and metabolic aging markers. The mechanism is not fully characterized, but likely involves reduced oxidative damage to DNA (via antioxidant function) and indirect effects from improved mitochondrial function and reduced inflammation. Specific epigenetic-clock or CpG-methylation data has not been published for this compound.',
               },
             ].map((item) => (
               <div key={item.title} className={`flex gap-4 rounded-xl border p-5 ${item.badge} bg-card/50`}>

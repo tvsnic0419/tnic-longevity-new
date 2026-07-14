@@ -39,8 +39,8 @@ const INTERVENTIONS = [
     tier: 'A',
     dose: '600 mg glycine + 600 mg NAC daily',
     mechanism:
-      'Rebuilds glutathione — the cell\'s primary antioxidant defense. Depleted glutathione permits mitochondrial ROS to escape and damage nuclear DNA. Three human RCTs confirm restoration within 16 weeks.',
-    pmids: ['34129059', '36656670'],
+      'Rebuilds glutathione — the cell\'s primary antioxidant defense. Depleted glutathione permits mitochondrial ROS to escape and damage nuclear DNA. Two human RCTs confirm restoration within 16 weeks.',
+    pmids: ['33783984', '35975308'],
     color: 'violet',
   },
   {

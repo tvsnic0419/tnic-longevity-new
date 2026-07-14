@@ -29,8 +29,8 @@ const INTERVENTIONS = [
     tier: 'B',
     dose: '1–3 mg daily (wheat germ extract or SpermidineLIFE)',
     mechanism:
-      'Spermidine induces autophagy via EP300 histone acetyltransferase inhibition — independently of mTOR — making it combinable with other autophagy inducers without redundancy. A 2021 German RCT (PMID: 33932338) showed improved cognitive performance in older adults at risk for dementia, attributed to autophagy-mediated neuronal maintenance.',
-    pmids: ['33932338', '26822811'],
+      'Spermidine induces autophagy via EP300 histone acetyltransferase inhibition — independently of mTOR — making it combinable with other autophagy inducers without redundancy. The flagship human RCT testing spermidine for cognitive performance in older adults at risk for dementia found no statistically significant memory benefit versus placebo — the autophagy-mediated neuronal maintenance rationale remains preclinical for cognitive outcomes in humans.',
+    pmids: ['26822811'],
     tier_color: 'amber',
   },
   {

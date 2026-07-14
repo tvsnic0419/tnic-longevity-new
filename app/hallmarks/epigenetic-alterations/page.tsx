@@ -20,8 +20,8 @@ const INTERVENTIONS = [
     tier: 'A',
     dose: '1000–1500 mg Ca-AKG daily (Rejuvant or equivalent)',
     mechanism:
-      'AKG is an essential cofactor for TET2 dioxygenases — the enzymes that demethylate CpG sites and restore youthful methylation patterns. It also fuels the TCA cycle and is a key component of the α-ketoglutarate-dependent demethylase family (KDM2/4/6). A 2021 human trial (PMID: 33027664) showed 8-year reduction in biological age (Klemera-Doubal method) over 7 months.',
-    pmids: ['33027664'],
+      'AKG is an essential cofactor for TET2 dioxygenases — the enzymes that demethylate CpG sites and restore youthful methylation patterns. It also fuels the TCA cycle and is a key component of the α-ketoglutarate-dependent demethylase family (KDM2/4/6). Mouse lifespan data is strong: Ca-AKG extends lifespan and compresses morbidity in aging mice (PMID: 32877690). A human trial (the ABLE trial) is registered but has not yet reported results — no human epigenetic-age-reduction figure is established.',
+    pmids: ['32877690'],
     tier_color: 'emerald',
   },
   {
@@ -39,7 +39,7 @@ const INTERVENTIONS = [
     dose: '100–500 mg daily with fat; pterostilbene or micronized formulations preferred',
     mechanism:
       'Resveratrol acts as an allosteric activator of SIRT1, increasing its affinity for acetylated substrates. SIRT1 then deacetylates H3K9ac at sites of heterochromatin disruption, re-silencing pro-aging gene expression. Most effective when combined with NMN/NR to ensure adequate NAD+ substrate.',
-    pmids: ['17909917', '25927007'],
+    pmids: ['17086191', '25927007'],
     tier_color: 'amber',
   },
   {
