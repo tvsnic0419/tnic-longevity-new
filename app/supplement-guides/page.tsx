@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, BookOpen, FlaskConical, Microscope, Shield, Zap, Leaf, Recycle } from 'lucide-react';
+import { ArrowRight, BookOpen, FlaskConical, Microscope, Shield, Zap, Leaf, Recycle, Battery, Sparkles, Flame, Heart, Atom, Dna, Grape, TrendingUp } from 'lucide-react';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildCollectionPageSchema, buildBreadcrumbSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
@@ -71,8 +71,8 @@ const guides = [
     title: 'GlyNAC Supplement Guide',
     subtitle: '9 hallmarks of aging reversed in a 24-week human RCT',
     description:
-      "Sekhar et al. 2021 found GlyNAC (glycine + NAC) reversed 9 of the 12 hallmarks of aging in older adults — including a 94.6% increase in glutathione and 3.7-year epigenetic age reversal. This guide covers the evidence and the protocol.",
-    pills: ['Sekhar 2021 RCT', '9 hallmarks reversed', 'GSH +94.6%'],
+      'Two independent human RCTs (Sekhar group, Baylor) found GlyNAC (glycine + NAC) restores glutathione deficiency, reduces oxidative stress, and improves mitochondrial dysfunction, inflammation, and physical function in older adults. This guide covers the evidence and the protocol.',
+    pills: ['2 human RCTs', 'Glutathione restored', 'Multiple hallmarks'],
     evidenceTier: 'A',
     glowHover: 'glow-hover-emerald',
     borderHover: 'hover:border-accent-emerald/40',
@@ -141,6 +141,134 @@ const guides = [
     glowHover: 'glow-hover-emerald',
     borderHover: 'hover:border-accent-emerald/40',
   },
+  {
+    href: '/urolithin-a-supplement-guide',
+    icon: Battery,
+    iconBadge: 'icon-badge-violet',
+    iconText: 'text-accent-violet',
+    badge: 'Mitophagy',
+    badgeColor: 'bg-accent-violet/15 text-accent-violet',
+    title: 'Urolithin A Supplement Guide',
+    subtitle: 'The first oral compound with human evidence for activating mitophagy',
+    description:
+      'Only 30–40% of adults have gut microbiota that convert dietary ellagitannins into urolithin A. Andreux et al. 2019 was the first human evidence that an oral compound stimulates a mitophagy-associated molecular signature; a 2022 randomized trial confirmed improved muscle strength and exercise performance.',
+    pills: ['First human mitophagy trial', 'Muscle strength RCT', 'Tier A'],
+    evidenceTier: 'A',
+    glowHover: 'glow-hover-violet',
+    borderHover: 'hover:border-accent-violet/40',
+  },
+  {
+    href: '/fisetin-supplement-guide',
+    icon: Sparkles,
+    iconBadge: 'icon-badge-rose',
+    iconText: 'text-accent-rose',
+    badge: 'Senolytic',
+    badgeColor: 'bg-accent-rose/15 text-accent-rose',
+    title: 'Fisetin Supplement Guide',
+    subtitle: 'The most potent senolytic flavonoid tested in mice — human data still emerging',
+    description:
+      'Fisetin was identified as the most potent senolytic among 10 flavonoids screened, extending lifespan in mice. This guide is honest about what is and isn\'t proven: Mayo Clinic\'s published human senolytic pilots used dasatinib+quercetin, not fisetin alone — dedicated human fisetin trials are registered but not yet reported.',
+    pills: ['Most potent in mouse screen', 'Human trials pending', 'Tier B'],
+    evidenceTier: 'B',
+    glowHover: 'glow-hover-rose',
+    borderHover: 'hover:border-accent-rose/40',
+  },
+  {
+    href: '/coq10-supplement-guide',
+    icon: Flame,
+    iconBadge: 'icon-badge-cyan',
+    iconText: 'text-accent-cyan',
+    badge: 'Statin Depletion',
+    badgeColor: 'bg-accent-cyan/15 text-accent-cyan',
+    title: 'CoQ10 (Ubiquinol) Supplement Guide',
+    subtitle: 'Electron transport chain cofactor that statins deplete',
+    description:
+      'CoQ10 biosynthesis declines ~50% by age 60, and statins block the same mevalonate pathway that produces it. Covers the statin-depletion evidence, a meta-analysis showing reduced hs-CRP and IL-6, and ubiquinol vs ubiquinone form selection.',
+    pills: ['Statin depletion evidence', 'hs-CRP / IL-6 meta-analysis', 'Tier B'],
+    evidenceTier: 'B',
+    glowHover: 'glow-hover-cyan',
+    borderHover: 'hover:border-accent-cyan/40',
+  },
+  {
+    href: '/omega-3-supplement-guide',
+    icon: Heart,
+    iconBadge: 'icon-badge-emerald',
+    iconText: 'text-accent-emerald',
+    badge: 'REDUCE-IT',
+    badgeColor: 'bg-accent-emerald/15 text-accent-emerald',
+    title: 'Omega-3 (EPA + DHA) Supplement Guide',
+    subtitle: 'The largest cardiovascular benefit shown for a supplement-derived agent',
+    description:
+      'The REDUCE-IT trial showed icosapent ethyl reduced major cardiovascular events by 25% relative risk versus placebo. Covers the resolvin/protectin resolution mechanism, a telomere-preservation RCT, and triglyceride vs ethyl-ester form selection.',
+    pills: ['REDUCE-IT: −25% MACE', 'Telomere RCT', 'Tier A'],
+    evidenceTier: 'A',
+    glowHover: 'glow-hover-emerald',
+    borderHover: 'hover:border-accent-emerald/40',
+  },
+  {
+    href: '/r-ala-supplement-guide',
+    icon: Atom,
+    iconBadge: 'icon-badge-amber',
+    iconText: 'text-accent-amber',
+    badge: 'Redox Cycling',
+    badgeColor: 'bg-amber-500/15 text-amber-400',
+    title: 'R-ALA Supplement Guide',
+    subtitle: 'Why the enantiomer matters — R-ALA vs racemic alpha-lipoic acid',
+    description:
+      'R-ALA is a TCA cycle cofactor and glutathione-cycle amplifier — but most cheap alpha-lipoic-acid supplements are racemic R/S mixtures where the S-form competes with R-ALA for uptake. Covers the mitochondrial redox mechanism and why form selection roughly doubles effective dose.',
+    pills: ['TCA cycle cofactor', 'Enantiomer matters', 'Tier B'],
+    evidenceTier: 'B',
+    glowHover: 'glow-hover-amber',
+    borderHover: 'hover:border-amber-500/40',
+  },
+  {
+    href: '/ca-akg-supplement-guide',
+    icon: Dna,
+    iconBadge: 'icon-badge-violet',
+    iconText: 'text-accent-violet',
+    badge: 'Epigenetic Substrate',
+    badgeColor: 'bg-accent-violet/15 text-accent-violet',
+    title: 'Ca-AKG Supplement Guide',
+    subtitle: 'Mouse lifespan data is strong — human epigenetic-age results are not yet published',
+    description:
+      'Ca-AKG extended median lifespan 12–14% in mice as a TCA cycle fuel and TET/JMJD dioxygenase cofactor. The registered human ABLE trial testing epigenetic-age effects has not yet reported results — this guide is explicit about that distinction rather than citing an unverified figure.',
+    pills: ['12–14% mouse lifespan', 'Human trial pending', 'Tier B'],
+    evidenceTier: 'B',
+    glowHover: 'glow-hover-violet',
+    borderHover: 'hover:border-accent-violet/40',
+  },
+  {
+    href: '/resveratrol-supplement-guide',
+    icon: Grape,
+    iconBadge: 'icon-badge-rose',
+    iconText: 'text-accent-rose',
+    badge: 'Sirtuin Activation',
+    badgeColor: 'bg-accent-rose/15 text-accent-rose',
+    title: 'Resveratrol Supplement Guide',
+    subtitle: 'The foundational SIRT1 mouse study — and what human evidence actually shows',
+    description:
+      'Baur et al. 2006 showed resveratrol improved health and survival in mice via SIRT1 activation — the study that launched the sirtuin field. Covers the NMN + resveratrol stack rationale, bioavailability limits, and honest framing of what remains unproven in humans.',
+    pills: ['Baur 2006 landmark', 'NMN stack rationale', 'Tier B'],
+    evidenceTier: 'B',
+    glowHover: 'glow-hover-rose',
+    borderHover: 'hover:border-accent-rose/40',
+  },
+  {
+    href: '/pterostilbene-supplement-guide',
+    icon: TrendingUp,
+    iconBadge: 'icon-badge-cyan',
+    iconText: 'text-accent-cyan',
+    badge: 'Bioavailability Upgrade',
+    badgeColor: 'bg-accent-cyan/15 text-accent-cyan',
+    title: 'Pterostilbene Supplement Guide',
+    subtitle: 'Resveratrol\'s methoxylated cousin — human safety established, efficacy still preclinical',
+    description:
+      'Pterostilbene\'s methoxy groups cut first-pass glucuronidation, giving it a longer half-life and higher plasma levels than resveratrol at equivalent doses. A human dose-escalation trial established safety up to 250mg/day — this guide is clear that trial covered safety, not efficacy endpoints.',
+    pills: ['Human safety trial', 'Higher bioavailability', 'Tier B'],
+    evidenceTier: 'B',
+    glowHover: 'glow-hover-cyan',
+    borderHover: 'hover:border-accent-cyan/40',
+  },
 ];
 
 const comparisons = [
@@ -166,6 +294,11 @@ const compoundDeepDives = [
   { href: '/library/compounds/urolithina', label: 'Urolithin A' },
   { href: '/library/compounds/rapamycin', label: 'Rapamycin' },
   { href: '/library/compounds/pterostilbene', label: 'Pterostilbene' },
+  { href: '/library/compounds/resveratrol', label: 'Resveratrol' },
+  { href: '/library/compounds/fisetin', label: 'Fisetin' },
+  { href: '/library/compounds/coq10', label: 'CoQ10' },
+  { href: '/library/compounds/omega3', label: 'Omega-3' },
+  { href: '/library/compounds/rala', label: 'R-ALA' },
 ];
 
 const collectionSchema = buildCollectionPageSchema({
@@ -239,8 +372,8 @@ export default function SupplementGuidesPage() {
           <div className="container-page">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {[
-                { stat: '7', label: 'In-depth guides' },
-                { stat: '11', label: 'Compound profiles' },
+                { stat: '15', label: 'In-depth guides' },
+                { stat: '14', label: 'Compound profiles' },
                 { stat: '8+', label: 'Head-to-head comparisons' },
                 { stat: '50+', label: 'PubMed citations' },
               ].map((item) => (

@@ -58,6 +58,14 @@ const compoundGuides: Record<string, GuideLink> = {
   sulforaphane: { href: '/sulforaphane-supplement-guide', label: 'Sulforaphane supplement guide' },
   spermidine: { href: '/spermidine-supplement-guide', label: 'Spermidine supplement guide' },
   taurine: { href: '/taurine-supplement-guide', label: 'Taurine supplement guide' },
+  urolithina: { href: '/urolithin-a-supplement-guide', label: 'Urolithin A supplement guide' },
+  fisetin: { href: '/fisetin-supplement-guide', label: 'Fisetin supplement guide' },
+  coq10: { href: '/coq10-supplement-guide', label: 'CoQ10 supplement guide' },
+  omega3: { href: '/omega-3-supplement-guide', label: 'Omega-3 supplement guide' },
+  rala: { href: '/r-ala-supplement-guide', label: 'R-ALA supplement guide' },
+  cakg: { href: '/ca-akg-supplement-guide', label: 'Ca-AKG supplement guide' },
+  resveratrol: { href: '/resveratrol-supplement-guide', label: 'Resveratrol supplement guide' },
+  pterostilbene: { href: '/pterostilbene-supplement-guide', label: 'Pterostilbene supplement guide' },
 };
 
 export function getGuideForCompound(moduleSlug: string): GuideLink | undefined {
