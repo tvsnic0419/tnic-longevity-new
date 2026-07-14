@@ -96,7 +96,7 @@ const FAQ = [
   },
   {
     q: 'What are the main CoQ10 side effects?',
-    a: 'CoQ10 is generally well tolerated. The most commonly reported effects are mild GI symptoms (nausea, upset stomach) at higher doses, and rare reports of insomnia if taken late in the day (some people prefer AM-only dosing for this reason). CoQ10 can theoretically reduce the effectiveness of warfarin due to structural similarity to vitamin K — anyone on anticoagulants should discuss this with their physician before starting. It is not a substitute for cholesterol-lowering therapy.',
+    a: 'CoQ10 is generally well tolerated. The most commonly reported effects are mild GI symptoms (nausea, upset stomach) at higher doses, and rare reports of insomnia if taken late in the day (some people prefer AM-only dosing for this reason). CoQ10 can theoretically reduce the effectiveness of warfarin due to structural similarity to vitamin K — anyone on anticoagulants should discuss this with their physician before starting. It is not a substitute for cholesterol-lowering therapy. Some people also report a mild reduction in blood pressure at higher doses, which is generally a benign finding but worth noting if you already take antihypertensive medication.',
   },
   {
     q: 'Does CoQ10 extend lifespan?',
@@ -104,7 +104,7 @@ const FAQ = [
   },
   {
     q: 'Can I stack CoQ10 with NMN or R-ALA?',
-    a: "Yes. CoQ10 is commonly paired with NMN (which supports the NAD+ side of mitochondrial metabolism) and R-alpha lipoic acid (R-ALA, which recycles other antioxidant systems and supports mitochondrial enzyme complexes). The three compounds act on complementary parts of the same mitochondrial network rather than duplicating each other's mechanism, which is the rationale for combining them in mitochondria-focused stacks.",
+    a: "Yes. CoQ10 is commonly paired with NMN (which supports the NAD+ side of mitochondrial metabolism) and R-alpha lipoic acid (R-ALA, which recycles other antioxidant systems and supports mitochondrial enzyme complexes). The three compounds act on complementary parts of the same mitochondrial network rather than duplicating each other's mechanism, which is the rationale for combining them in mitochondria-focused stacks. As always, introduce new supplements one at a time where practical, so you can attribute any change — positive or negative — to the right addition.",
   },
   {
     q: 'Should I take CoQ10 with or without food?',

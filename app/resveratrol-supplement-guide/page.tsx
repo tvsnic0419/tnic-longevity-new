@@ -84,31 +84,31 @@ const EVIDENCE_TABLE = [
 const FAQ = [
   {
     q: 'Has resveratrol actually been shown to extend human lifespan?',
-    a: "No. The landmark finding — resveratrol improving health and survival — comes from Baur et al. 2006 (Nature, PMID 17086191), a mouse study in animals fed a high-calorie diet. It is the foundational study behind resveratrol's longevity reputation, and it is genuinely important mechanistic evidence, but it is not a human trial and does not establish a human lifespan effect. No human longevity-outcome RCT for resveratrol exists as of 2026. Anyone claiming resveratrol has been 'proven' to extend human life is overstating the evidence.",
+    a: "No. The landmark finding — resveratrol improving health and survival — comes from Baur et al. 2006 (Nature, PMID 17086191), a mouse study in animals fed a high-calorie diet. It is the foundational study behind resveratrol's longevity reputation, and it is genuinely important mechanistic evidence, but it is not a human trial and does not establish a human lifespan effect. No human longevity-outcome RCT for resveratrol exists as of 2026. Anyone claiming resveratrol has been 'proven' to extend human life is overstating the evidence. Treat the mouse data as strong hypothesis-generating evidence, not proof of a human effect — that distinction matters enormously when deciding how much confidence to place in the compound.",
   },
   {
     q: 'Is there a human trial showing resveratrol activates SIRT1?',
-    a: "Not a dedicated, verified one that this guide can point to. The SIRT1-activation mechanism is extremely well characterized in the Baur 2006 mouse model and in cell-free biochemical assays, but a specific human PBMC or tissue-biopsy RCT confirming SIRT1/FOXO3a activation at a defined resveratrol dose is not part of the verified evidence base here. Be skeptical of any source citing such a trial without a real PMID attached — this is exactly the kind of unverifiable claim that gets fabricated in supplement marketing.",
+    a: "Not a dedicated, verified one that this guide can point to. The SIRT1-activation mechanism is extremely well characterized in the Baur 2006 mouse model and in cell-free biochemical assays, but a specific human PBMC or tissue-biopsy RCT confirming SIRT1/FOXO3a activation at a defined resveratrol dose is not part of the verified evidence base here. Be skeptical of any source citing such a trial without a real PMID attached — this is exactly the kind of unverifiable claim that gets fabricated in supplement marketing. If a definitive human SIRT1-activation trial is eventually published with a real, verifiable PMID, this guide will be updated to reflect it — until then, the honest answer is 'not yet confirmed.'",
   },
   {
     q: 'What is the correct resveratrol dosage?',
-    a: 'The commonly used range is 150–500mg of trans-resveratrol daily. Because standard powder has roughly 1% oral bioavailability (intestinal glucuronidation degrades most of the dose before it reaches circulation), many practitioners prefer micronized or liposomal formulations, which achieve 3–5x higher peak plasma concentration for the same milligram dose. Take with a fat-containing meal — resveratrol is fat-soluble and absorption improves substantially with dietary fat present.',
+    a: 'The commonly used range is 150–500mg of trans-resveratrol daily. Because standard powder has roughly 1% oral bioavailability (intestinal glucuronidation degrades most of the dose before it reaches circulation), many practitioners prefer micronized or liposomal formulations, which achieve 3–5x higher peak plasma concentration for the same milligram dose. Take with a fat-containing meal — resveratrol is fat-soluble and absorption improves substantially with dietary fat present. Also confirm the label specifies trans-resveratrol rather than an undifferentiated resveratrol blend — the cis isomer that can appear in lower-quality extracts has substantially reduced biological activity.',
   },
   {
     q: 'Should I take resveratrol in the morning or at night?',
-    a: 'Evening (PM) dosing is generally preferred. SIRT1 expression follows a circadian rhythm that peaks later in the day, so PM timing is thought to align resveratrol\'s SIRT1-activating effect with the body\'s own expression pattern. Pair it with a fat-containing dinner to improve absorption.',
+    a: 'Evening (PM) dosing is generally preferred. SIRT1 expression follows a circadian rhythm that peaks later in the day, so PM timing is thought to align resveratrol\'s SIRT1-activating effect with the body\'s own expression pattern. Pair it with a fat-containing dinner to improve absorption. There is no strong reason to believe morning dosing would be harmful — it simply isn\'t the timing best supported by the circadian rationale behind this compound\'s proposed mechanism.',
   },
   {
     q: 'Does stacking resveratrol with NMN actually work?',
-    a: "The mechanistic logic is sound and widely cited: NMN restores the NAD+ substrate pool that SIRT1 depends on, while resveratrol increases SIRT1's catalytic affinity for that substrate by an estimated 8–13x. In principle, raising both substrate availability and enzyme affinity at once should produce more sirtuin output than either compound alone. That said, this specific combination has not been tested together in a dedicated human RCT — the case for stacking them is mechanistic reasoning extrapolated from separate lines of evidence, not a proven combined-outcome trial. Say this plainly to yourself before treating the stack as clinically validated.",
+    a: "The mechanistic logic is sound and widely cited: NMN restores the NAD+ substrate pool that SIRT1 depends on, while resveratrol increases SIRT1's catalytic affinity for that substrate by an estimated 8–13x. In principle, raising both substrate availability and enzyme affinity at once should produce more sirtuin output than either compound alone. That said, this specific combination has not been tested together in a dedicated human RCT — the case for stacking them is mechanistic reasoning extrapolated from separate lines of evidence, not a proven combined-outcome trial. Say this plainly to yourself before treating the stack as clinically validated. This is precisely the kind of claim where marketing language often outruns the evidence — you deserve to know the difference between 'mechanistically sound' and 'clinically proven,' and right now this stack sits in the former category only.",
   },
   {
     q: 'What are the main resveratrol side effects and interactions?',
-    a: 'Resveratrol is generally well tolerated at typical supplemental doses, with mild GI upset (nausea, loose stool) reported at higher doses in some users. It has documented antiplatelet activity, so caution is warranted if you take blood thinners or have surgery scheduled — stop at least two weeks before any procedure. It may also affect the metabolism of drugs processed by certain CYP enzymes. Discuss with your physician before combining with any prescription medication.',
+    a: 'Resveratrol is generally well tolerated at typical supplemental doses, with mild GI upset (nausea, loose stool) reported at higher doses in some users. It has documented antiplatelet activity, so caution is warranted if you take blood thinners or have surgery scheduled — stop at least two weeks before any procedure. It may also affect the metabolism of drugs processed by certain CYP enzymes. Discuss with your physician before combining with any prescription medication. None of this caution list is unique to resveratrol — most polyphenols with antiplatelet activity carry the same basic warnings.',
   },
   {
     q: 'Resveratrol or pterostilbene — which should I actually buy?',
-    a: "They share the same core SIRT1/AMPK mechanism, but pterostilbene's two methoxy groups (versus resveratrol's two hydroxyl groups) dramatically reduce intestinal glucuronidation, giving it roughly 82% bioavailability versus resveratrol's much lower native absorption, plus a longer plasma half-life. Resveratrol has the deeper research history and the single landmark mouse longevity study; pterostilbene has a human safety trial (dose-escalation, not efficacy) supporting its tolerability up to 250mg/day. See the full head-to-head comparison for the complete picture.",
+    a: "They share the same core SIRT1/AMPK mechanism, but pterostilbene's two methoxy groups (versus resveratrol's two hydroxyl groups) dramatically reduce intestinal glucuronidation, giving it roughly 82% bioavailability versus resveratrol's much lower native absorption, plus a longer plasma half-life. Resveratrol has the deeper research history and the single landmark mouse longevity study; pterostilbene has a human safety trial (dose-escalation, not efficacy) supporting its tolerability up to 250mg/day. Cost and personal GI tolerance are often the deciding factors in practice, since the mechanistic ceiling is similar for both. See the full head-to-head comparison for the complete picture.",
   },
 ];
 
@@ -598,7 +598,7 @@ export default function ResveratrolGuidePage() {
               <div>
                 <h3 className="font-semibold text-accent-rose mb-2">Important safety note</h3>
                 <p className="text-sm text-muted-foreground">
-                  Resveratrol has documented antiplatelet activity. If you take blood thinners, have a bleeding disorder, or have surgery scheduled, talk to your physician before starting — and stop at least two weeks before any procedure. TNiC content is educational and not a substitute for medical advice.
+                  Resveratrol has documented antiplatelet activity. If you take blood thinners, have a bleeding disorder, or have surgery scheduled, talk to your physician before starting — and stop at least two weeks before any procedure. This caution applies even if you consider yourself generally healthy — bleeding risk from antiplatelet supplements is often underappreciated precisely because these compounds are sold over the counter without a prescribing physician in the loop. TNiC content is educational and not a substitute for medical advice.
                 </p>
               </div>
             </div>
@@ -612,7 +612,7 @@ export default function ResveratrolGuidePage() {
           <div className="rounded-2xl border border-accent-violet/20 bg-accent-violet/[0.04] p-8 md:p-10 text-center">
             <h2 className="heading-section mb-3">Build Your Sirtuin Stack</h2>
             <p className="text-body text-muted-foreground mb-8 max-w-xl mx-auto">
-              Resveratrol pairs with NMN and Ca-AKG in TNiC&rsquo;s SIRT1-focused presets. Take the quiz to get a personalized protocol.
+              Resveratrol pairs with NMN and Ca-AKG in TNiC&rsquo;s SIRT1-focused presets. Take the quiz to get a personalized protocol based on your current stack, goals, and any contraindications you flag along the way.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               <Link

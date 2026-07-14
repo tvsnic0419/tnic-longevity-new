@@ -73,7 +73,7 @@ const EVIDENCE_TABLE = [
   {
     endpoint: 'Longevity / lifespan',
     finding:
-      'Mechanistic rationale via inflammation resolution and telomere preservation; no dedicated human longevity-extension RCT exists among the studies cited on this page.',
+      'Mechanistic rationale via inflammation resolution and telomere preservation; no dedicated human longevity-extension RCT exists among the studies cited on this page. The telomere-length finding is a genuine biomarker result, not a proxy that has itself been proven to extend human lifespan.',
     quality: 'Mechanistic / no direct longevity RCT',
     pmid: undefined,
     color: 'text-amber-400',
@@ -88,7 +88,7 @@ const FAQ = [
   },
   {
     q: 'What is the difference between EPA and DHA?',
-    a: 'Both are omega-3 fatty acids, but they specialize. EPA (eicosapentaenoic acid) is the primary precursor for resolvin-mediated inflammation resolution and competes directly with arachidonic acid for the COX-2 enzyme, producing less-inflammatory prostanoids. DHA (docosahexaenoic acid) is structurally important in neuronal and retinal cell membranes and is also a precursor to protectins and maresins. Most combined supplements provide both because they serve complementary, not redundant, roles.',
+    a: 'Both are omega-3 fatty acids, but they specialize. EPA (eicosapentaenoic acid) is the primary precursor for resolvin-mediated inflammation resolution and competes directly with arachidonic acid for the COX-2 enzyme, producing less-inflammatory prostanoids. DHA (docosahexaenoic acid) is structurally important in neuronal and retinal cell membranes and is also a precursor to protectins and maresins. Most combined supplements provide both because they serve complementary, not redundant, roles. The REDUCE-IT trial specifically used a purified EPA-only formulation, which is worth remembering when people cite that trial as evidence for omega-3 broadly — it was not a combined EPA+DHA product.',
   },
   {
     q: 'What is the correct omega-3 dosage?',
@@ -96,19 +96,19 @@ const FAQ = [
   },
   {
     q: 'What are the main omega-3 side effects?',
-    a: 'The most common complaints are fishy aftertaste/burps and mild GI upset, both of which are reduced by taking capsules with food or choosing enteric-coated or triglyceride-form products. At higher doses (4g/day range), omega-3s have a mild blood-thinning effect — anyone on anticoagulants or anticipating surgery should discuss this with their physician. Icosapent ethyl specifically carries a small increased risk of atrial fibrillation noted in its prescribing information; this is a consideration for the prescription form, not necessarily generic OTC fish oil at typical consumer doses.',
+    a: 'The most common complaints are fishy aftertaste/burps and mild GI upset, both of which are reduced by taking capsules with food or choosing enteric-coated or triglyceride-form products. At higher doses (4g/day range), omega-3s have a mild blood-thinning effect — anyone on anticoagulants or anticipating surgery should discuss this with their physician. Icosapent ethyl specifically carries a small increased risk of atrial fibrillation noted in its prescribing information; this is a consideration for the prescription form, not necessarily generic OTC fish oil at typical consumer doses. Poor-quality or improperly stored fish oil can also oxidize (go rancid), which both tastes worse and reduces the amount of intact, usable EPA/DHA you are actually getting.',
   },
   {
     q: 'Does omega-3 protect telomeres?',
-    a: 'One randomized controlled trial in healthy adults found omega-3 supplementation reduced oxidative stress markers and preserved leukocyte telomere length relative to placebo. That is a genuine, citable finding — but it is a single RCT on a surrogate biomarker (telomere length), not proof that omega-3 extends lifespan or prevents age-related disease. Telomere attrition is one of several recognized hallmarks of aging, which is why this finding is notable, but treat it as one data point rather than a settled outcome.',
+    a: 'One randomized controlled trial in healthy adults found omega-3 supplementation reduced oxidative stress markers and preserved leukocyte telomere length relative to placebo. That is a genuine, citable finding — but it is a single RCT on a surrogate biomarker (telomere length), not proof that omega-3 extends lifespan or prevents age-related disease. Telomere attrition is one of several recognized hallmarks of aging, which is why this finding is notable, but treat it as one data point rather than a settled outcome. Replication in additional independent cohorts would strengthen the case considerably; TNiC will update this page if that evidence emerges.',
   },
   {
     q: 'Can I stack omega-3 with resveratrol or sulforaphane?',
-    a: 'Yes — omega-3 is commonly paired with resveratrol and sulforaphane in anti-inflammatory-focused stacks. The mechanisms are complementary rather than redundant: omega-3&rsquo;s resolvins/protectins actively resolve inflammation, resveratrol modulates SIRT1 and NF-κB signaling, and sulforaphane activates the NRF2 antioxidant response pathway. There is no known adverse interaction between these three compounds, though as always, discuss any new supplement combination with your physician if you take prescription medication.',
+    a: 'Yes — omega-3 is commonly paired with resveratrol and sulforaphane in anti-inflammatory-focused stacks. The mechanisms are complementary rather than redundant: omega-3&rsquo;s resolvins/protectins actively resolve inflammation, resveratrol modulates SIRT1 and NF-κB signaling, and sulforaphane activates the NRF2 antioxidant response pathway. There is no known adverse interaction between these three compounds, though as always, discuss any new supplement combination with your physician if you take prescription medication, particularly anticoagulants given omega-3&rsquo;s own mild blood-thinning effect at higher doses.',
   },
   {
     q: 'Should I take omega-3 with or without food?',
-    a: 'With food, and ideally a meal containing some fat. Absorption of both EPA and DHA improves with dietary fat present, and taking capsules with a meal substantially reduces the fishy burps and GI discomfort some people experience. If you take a higher combined dose (3–4g/day), splitting it across two meals (AM/PM) is a reasonable way to improve tolerability.',
+    a: 'With food, and ideally a meal containing some fat. Absorption of both EPA and DHA improves with dietary fat present, and taking capsules with a meal substantially reduces the fishy burps and GI discomfort some people experience. If you take a higher combined dose (3–4g/day), splitting it across two meals (AM/PM) is a reasonable way to improve tolerability. Freezing capsules before taking them is a commonly cited trick for reducing fishy aftertaste, though it has not been tested in a formal trial — it delays capsule breakdown until further along in digestion.',
   },
   {
     q: 'Is a vegan algae-based omega-3 as good as fish oil?',
@@ -336,7 +336,7 @@ export default function Omega3GuidePage() {
       <section className="py-14 border-b border-border">
         <div className="container-page max-w-4xl">
           <h2 className="heading-section mb-3">Evidence Summary by Endpoint</h2>
-          <p className="text-body-sm text-muted-foreground mb-8">Click each PMID to view the source trial on PubMed.</p>
+          <p className="text-body-sm text-muted-foreground mb-8">Click each PMID to view the source trial on PubMed. Pay attention to which formulation each finding applies to — icosapent ethyl and combined EPA+DHA fish oil are related but distinct products, and the two studies cited here tested different things.</p>
 
           <div className="grid md:grid-cols-2 gap-4">
             {EVIDENCE_TABLE.map((item) => (
@@ -489,7 +489,7 @@ export default function Omega3GuidePage() {
                 color: 'text-accent-violet',
                 badge: 'bg-accent-violet/10 border-accent-violet/20',
                 title: 'Chronic Inflammation',
-                body: 'This is omega-3&rsquo;s primary hallmark. The SPM pathway (resolvins, protectins, maresins) actively resolves inflammatory cascades rather than merely suppressing them, and EPA&rsquo;s COX-2 competition independently shifts eicosanoid production toward less-inflammatory prostanoids. This is a well-established mechanistic picture; the two trials cited on this page tested cardiovascular outcomes and telomere length, not inflammatory markers directly.',
+                body: 'This is omega-3&rsquo;s primary hallmark. The SPM pathway (resolvins, protectins, maresins) actively resolves inflammatory cascades rather than merely suppressing them, and EPA&rsquo;s COX-2 competition independently shifts eicosanoid production toward less-inflammatory prostanoids. This is a well-established mechanistic picture; the two trials cited on this page tested cardiovascular outcomes and telomere length, not inflammatory markers directly, so treat the inflammation-resolution story as mechanism rather than a headline statistic from either study.',
                 href: '/library/chronic-inflammation',
                 label: 'Chronic Inflammation',
               },
@@ -498,7 +498,7 @@ export default function Omega3GuidePage() {
                 color: 'text-accent-cyan',
                 badge: 'bg-accent-cyan/10 border-accent-cyan/20',
                 title: 'Altered Intercellular Communication',
-                body: 'Resolvins and protectins function as intercellular signaling molecules — they reprogram macrophage phenotype and coordinate tissue-level responses to injury and inflammation. This lipid-mediator signaling system is a clear mechanistic link to the intercellular communication hallmark, though it is described here as established mechanism rather than a claim from either PMID cited on this page.',
+                body: 'Resolvins and protectins function as intercellular signaling molecules — they reprogram macrophage phenotype and coordinate tissue-level responses to injury and inflammation. This lipid-mediator signaling system is a clear mechanistic link to the intercellular communication hallmark, though it is described here as established mechanism rather than a claim from either PMID cited on this page. As cells age, this kind of coordinated signaling tends to degrade, which is part of the broader case for keeping the raw materials (EPA and DHA) available.',
                 href: '/library/altered-intercellular-communication',
                 label: 'Altered Intercellular Communication',
               },
@@ -603,7 +603,7 @@ export default function Omega3GuidePage() {
               <div>
                 <h3 className="font-semibold text-accent-rose mb-2">Important safety note</h3>
                 <p className="text-sm text-muted-foreground">
-                  Omega-3 supplements have a mild blood-thinning effect at higher doses. If you take anticoagulant or antiplatelet medication, or have upcoming surgery, tell your physician before starting or increasing your dose. The prescription formulation icosapent ethyl carries a noted increased atrial fibrillation risk in its prescribing information — this is a physician-managed medication, not an OTC decision. TNiC content is educational and not a substitute for medical advice.
+                  Omega-3 supplements have a mild blood-thinning effect at higher doses. If you take anticoagulant or antiplatelet medication, or have upcoming surgery, tell your physician before starting or increasing your dose. The prescription formulation icosapent ethyl carries a noted increased atrial fibrillation risk in its prescribing information — this is a physician-managed medication, not an OTC decision, and switching from it to an OTC fish oil supplement (or vice versa) should be a decision made with your prescribing physician, not on your own. TNiC content is educational and not a substitute for medical advice.
                 </p>
               </div>
             </div>
@@ -617,7 +617,7 @@ export default function Omega3GuidePage() {
           <div className="rounded-2xl border border-accent-violet/20 bg-accent-violet/[0.04] p-8 md:p-10 text-center">
             <h2 className="heading-section mb-3">Build Your Anti-Inflammatory Stack</h2>
             <p className="text-body text-muted-foreground mb-8 max-w-xl mx-auto">
-              Omega-3 pairs with resveratrol and sulforaphane in TNiC&rsquo;s anti-inflammatory-focused stacks. Take the quiz to get a personalized protocol.
+              Omega-3 pairs with resveratrol and sulforaphane in TNiC&rsquo;s anti-inflammatory-focused stacks — three compounds working through complementary inflammation-resolution and antioxidant-response pathways. Take the quiz to get a personalized protocol based on your goals, current medications, and cardiovascular risk profile.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               <Link
@@ -652,7 +652,7 @@ export default function Omega3GuidePage() {
           </div>
 
           <p className="text-xs text-muted-foreground text-center mt-8 max-w-xl mx-auto">
-            Educational content only — not medical advice. Omega-3 is a dietary supplement, not FDA-approved to treat or prevent any disease. Icosapent ethyl (Vascepa) is a prescription drug and requires physician oversight. Consult your physician before starting, especially if you take anticoagulant medication or have elevated triglycerides.
+            Educational content only — not medical advice. Omega-3 is a dietary supplement, not FDA-approved to treat or prevent any disease. Icosapent ethyl (Vascepa) is a prescription drug and requires physician oversight. Consult your physician before starting, especially if you take anticoagulant medication or have elevated triglycerides. Nothing on this page should be interpreted as a recommendation to start, stop, or change any prescription medication.
           </p>
         </div>
       </section>

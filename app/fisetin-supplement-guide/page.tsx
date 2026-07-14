@@ -77,7 +77,7 @@ const EVIDENCE_TABLE = [
   {
     endpoint: 'Human senolytic evidence — the drug class generally',
     finding:
-      "Mayo Clinic's published human senolytic pilot trials to date used a dasatinib+quercetin (D+Q) combination — not fisetin. Any claim that fisetin has been through the same human pilot process as D+Q is incorrect.",
+      "Mayo Clinic's published human senolytic pilot trials to date used a dasatinib+quercetin (D+Q) combination — not fisetin. Any claim that fisetin has been through the same human pilot process as D+Q is incorrect, even though the two are frequently conflated in consumer-facing content because both are flavonoid-adjacent senolytics.",
     quality: 'Different compound',
     pmid: undefined,
     color: 'text-amber-400',
@@ -88,31 +88,31 @@ const EVIDENCE_TABLE = [
 const FAQ = [
   {
     q: 'Has fisetin actually been tested in humans as a senolytic?',
-    a: "Not with published results, as of this writing. The landmark fisetin senolytic study (Yousefzadeh et al. 2018, PMID 30279143) was conducted entirely in mice, plus supporting cell-based work. Dedicated human trials of fisetin alone are registered on clinicaltrials.gov — for example NCT03675724 and NCT04733534 — which means researchers are actively pursuing the question, but no confirmed published results from a completed fisetin-monotherapy human trial exist yet. Be skeptical of any source that states specific human results for fisetin alone.",
+    a: "Not with published results, as of this writing. The landmark fisetin senolytic study (Yousefzadeh et al. 2018, PMID 30279143) was conducted entirely in mice, plus supporting cell-based work. Dedicated human trials of fisetin alone are registered on clinicaltrials.gov — for example NCT03675724 and NCT04733534 — which means researchers are actively pursuing the question, but no confirmed published results from a completed fisetin-monotherapy human trial exist yet. Be skeptical of any source that states specific human results for fisetin alone; if you see a specific percentage or outcome attributed to a human fisetin trial, ask for the citation and check it yourself.",
   },
   {
     q: "Didn't Mayo Clinic already run human senolytic trials?",
-    a: 'Yes, but not with fisetin. Mayo Clinic\'s published human senolytic pilot trials used a combination of dasatinib and quercetin (D+Q) — a different drug pairing entirely. It is a common and understandable mix-up, since fisetin and quercetin are both flavonoid senolytics and get discussed together, but the actual human pilot data belongs to the D+Q combination, not to fisetin monotherapy. This distinction matters if you\'re deciding how much clinical confidence to place in fisetin specifically.',
+    a: 'Yes, but not with fisetin. Mayo Clinic\'s published human senolytic pilot trials used a combination of dasatinib and quercetin (D+Q) — a different drug pairing entirely. It is a common and understandable mix-up, since fisetin and quercetin are both flavonoid senolytics and get discussed together, but the actual human pilot data belongs to the D+Q combination, not to fisetin monotherapy. This distinction matters if you\'re deciding how much clinical confidence to place in fisetin specifically — the D+Q pilot data cannot be borrowed to support fisetin claims just because the two compounds are chemically related.',
   },
   {
     q: 'Why is fisetin taken for only 2 days a month instead of daily?',
-    a: 'This "pulse dosing" or "hit-and-run" approach comes directly from the mouse study design (PMID 30279143), where intermittent dosing was shown to clear senescent cells effectively — the underlying idea is that senolytics work by triggering apoptosis in the existing pool of senescent cells during the dosing window, rather than requiring continuous exposure to suppress an ongoing process. Continuous daily dosing was not the protocol that produced the reported mouse results, so most fisetin protocols in practice mirror the pulsed design rather than inventing a new one.',
+    a: 'This "pulse dosing" or "hit-and-run" approach comes directly from the mouse study design (PMID 30279143), where intermittent dosing was shown to clear senescent cells effectively — the underlying idea is that senolytics work by triggering apoptosis in the existing pool of senescent cells during the dosing window, rather than requiring continuous exposure to suppress an ongoing process. Continuous daily dosing was not the protocol that produced the reported mouse results, so most fisetin protocols in practice mirror the pulsed design rather than inventing a new one. Practically, this also means you should not expect — or look for — a daily subjective effect from fisetin the way you might with a stimulant or an acute-acting compound.',
   },
   {
     q: 'Is fisetin better than quercetin as a senolytic?',
-    a: "Honestly, neither has strong monotherapy human RCT evidence to lean on yet. Fisetin has the edge in preclinical potency — it was identified as the most potent senolytic among 10 flavonoids screened head-to-head in mice. Quercetin's real-world human evidence comes almost entirely from the dasatinib+quercetin combination, not quercetin alone, which makes an apples-to-apples human comparison difficult. See our full breakdown at Fisetin vs Quercetin for the complete picture, including where each compound's evidence actually comes from.",
+    a: "Honestly, neither has strong monotherapy human RCT evidence to lean on yet. Fisetin has the edge in preclinical potency — it was identified as the most potent senolytic among 10 flavonoids screened head-to-head in mice. Quercetin's real-world human evidence comes almost entirely from the dasatinib+quercetin combination, not quercetin alone, which makes an apples-to-apples human comparison difficult. If someone tells you one is definitively \"better\" than the other based on human outcomes, ask which specific human trial they're referring to — there's a good chance the answer is that no such head-to-head human trial exists yet. See our full breakdown at Fisetin vs Quercetin for the complete picture, including where each compound's evidence actually comes from.",
   },
   {
     q: 'What are the side effects and who should avoid fisetin?',
-    a: 'Reported cautions include potential inhibition of platelet aggregation and CYP-metabolizing enzymes at higher pulse doses. If you have scheduled surgery within two weeks, are pregnant or nursing, avoid fisetin. If you take blood thinners (warfarin, aspirin), are undergoing chemotherapy, or take any CYP-metabolized medication, consult your physician before starting — the interaction risk profile has not been extensively characterized in humans given how limited fisetin-specific human research is to date.',
+    a: 'Reported cautions include potential inhibition of platelet aggregation and CYP-metabolizing enzymes at higher pulse doses. If you have scheduled surgery within two weeks, are pregnant or nursing, avoid fisetin. If you take blood thinners (warfarin, aspirin), are undergoing chemotherapy, or take any CYP-metabolized medication, consult your physician before starting — the interaction risk profile has not been extensively characterized in humans given how limited fisetin-specific human research is to date. When in doubt, treat fisetin the way you would any compound with a thin human safety record: disclose it to your care team rather than assuming it is inert simply because it is sold over the counter.',
   },
   {
     q: 'Can I stack fisetin with resveratrol or NMN?',
-    a: "Yes — this is a common pairing because the mechanisms are complementary rather than redundant. Fisetin selectively induces apoptosis in senescent cells by inhibiting BCL-2/BCL-XL survival signaling; resveratrol activates the SIRT1 pathway involved in stress resistance and metabolic regulation; NMN raises NAD+ availability supporting sirtuin and PARP activity broadly. None of the three has been tested as a combined stack in a human trial, so treat the synergy as mechanistically plausible rather than clinically proven.",
+    a: "Yes — this is a common pairing because the mechanisms are complementary rather than redundant. Fisetin selectively induces apoptosis in senescent cells by inhibiting BCL-2/BCL-XL survival signaling; resveratrol activates the SIRT1 pathway involved in stress resistance and metabolic regulation; NMN raises NAD+ availability supporting sirtuin and PARP activity broadly. None of the three has been tested as a combined stack in a human trial, so treat the synergy as mechanistically plausible rather than clinically proven — a reasonable framing is that they address different, complementary parts of the aging process rather than reinforcing the exact same pathway.",
   },
   {
     q: 'How much fisetin should I take and in what form?',
-    a: "The typical range is 100–500mg fisetin, with 2 consecutive days per month (pulse dosing) as the preferred protocol over daily use. Fisetin has relatively poor natural bioavailability (~40%), so liposomal formulations or taking it with a fat-containing meal are commonly used to improve absorption — this is a general bioavailability strategy for poorly soluble flavonoids, not a claim backed by a fisetin-specific pharmacokinetic trial.",
+    a: "The typical range is 100–500mg fisetin, with 2 consecutive days per month (pulse dosing) as the preferred protocol over daily use. Fisetin has relatively poor natural bioavailability (~40%), so liposomal formulations or taking it with a fat-containing meal are commonly used to improve absorption — this is a general bioavailability strategy for poorly soluble flavonoids, not a claim backed by a fisetin-specific pharmacokinetic trial. Some practitioners instead use a weight-based dose in the range of roughly 20mg/kg for 2 days, mirroring the dosing paradigm used in the mouse literature — but treat this as a research-derived extrapolation rather than a separately validated human protocol.",
   },
 ];
 
@@ -257,7 +257,7 @@ export default function FisetinGuidePage() {
             These two flavonoids get lumped together constantly. Here is an honest comparison of what each one&rsquo;s evidence base actually contains.
           </p>
           <p className="text-body text-muted-foreground mb-6 max-w-2xl">
-            Senolytics are a genuinely new drug and supplement category: compounds designed to selectively clear senescent ("zombie") cells rather than to prevent damage or slow a process, the way most longevity interventions do. That novelty is part of why the evidence landscape is so easy to misrepresent — the field is young, the human data is thin relative to the hype, and two structurally similar flavonoids (fisetin and quercetin) get discussed as if they were interchangeable when their actual evidence bases diverge in important ways. Untangling which claims belong to which compound, and which belong to mice rather than people, is the whole point of this comparison.
+            Senolytics are a genuinely new drug and supplement category: compounds designed to selectively clear senescent (&ldquo;zombie&rdquo;) cells rather than to prevent damage or slow a process, the way most longevity interventions do. That novelty is part of why the evidence landscape is so easy to misrepresent — the field is young, the human data is thin relative to the hype, and two structurally similar flavonoids (fisetin and quercetin) get discussed as if they were interchangeable when their actual evidence bases diverge in important ways. Untangling which claims belong to which compound, and which belong to mice rather than people, is the whole point of this comparison.
           </p>
 
           <div className="overflow-x-auto rounded-xl border border-border/60 mb-8">
@@ -403,11 +403,11 @@ export default function FisetinGuidePage() {
                 <p className="font-semibold text-accent-emerald text-sm">Best practices</p>
               </div>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>· Use pulse dosing (2 consecutive days/month) rather than daily use — this is the studied protocol</li>
-                <li>· Choose liposomal or fat-based delivery — fisetin&rsquo;s natural bioavailability (~40%) is limited</li>
-                <li>· Take in the morning, with a fat-containing meal, on both pulse days</li>
-                <li>· Stack with resveratrol or NMN if pursuing a broader senescence/NAD+ protocol</li>
-                <li>· Disclose fisetin use to any physician or surgeon, even though dosing is infrequent</li>
+                <li>· Use pulse dosing (2 consecutive days/month) rather than daily use — this is the studied protocol, and there is no evidence basis for a continuous daily regimen</li>
+                <li>· Choose liposomal or fat-based delivery — fisetin&rsquo;s natural bioavailability (~40%) is limited, and absorption strategies matter more here than for many other flavonoids</li>
+                <li>· Take in the morning, with a fat-containing meal, on both pulse days, to maximize absorption during the dosing window</li>
+                <li>· Stack with resveratrol or NMN if pursuing a broader senescence/NAD+ protocol, since the mechanisms are complementary rather than overlapping</li>
+                <li>· Disclose fisetin use to any physician or surgeon, even though dosing is infrequent — the platelet and CYP-enzyme considerations apply during the pulse window regardless of how few days a month you take it</li>
               </ul>
             </div>
             <div className="rounded-xl border border-accent-rose/20 bg-accent-rose/[0.04] p-5">
@@ -416,11 +416,11 @@ export default function FisetinGuidePage() {
                 <p className="font-semibold text-accent-rose text-sm">Cautions</p>
               </div>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>· Avoid if scheduled for surgery within 2 weeks — potential effect on platelet aggregation</li>
-                <li>· Avoid if pregnant or nursing</li>
-                <li>· Consult a physician first if taking blood thinners (warfarin, aspirin)</li>
-                <li>· Consult a physician first if undergoing chemotherapy</li>
-                <li>· Consult a physician if taking any CYP-metabolized medication — potential CYP inhibition at higher pulse doses</li>
+                <li>· Avoid if scheduled for surgery within 2 weeks — potential effect on platelet aggregation that could complicate bleeding risk</li>
+                <li>· Avoid if pregnant or nursing — not studied in these populations</li>
+                <li>· Consult a physician first if taking blood thinners (warfarin, aspirin) — the interaction has not been formally characterized in a human pharmacokinetic study</li>
+                <li>· Consult a physician first if undergoing chemotherapy — potential interactions with treatments that rely on modulating cell survival and apoptosis pathways</li>
+                <li>· Consult a physician if taking any CYP-metabolized medication — potential CYP inhibition at higher pulse doses could alter how those medications are cleared</li>
               </ul>
             </div>
           </div>
@@ -438,21 +438,21 @@ export default function FisetinGuidePage() {
                 color: 'text-accent-violet',
                 badge: 'bg-accent-violet/10 border-accent-violet/20',
                 title: 'BCL-2/BCL-XL Inhibition (Selective Apoptosis)',
-                body: 'Senescent cells uniquely depend on BCL-2 and BCL-XL anti-apoptotic proteins to avoid self-destructing despite their damaged state. Fisetin inhibits these proteins, triggering apoptosis specifically in senescent cells. Normal, healthy cells don\'t rely on this same survival pathway, so they are spared — this selectivity is the defining property of a senolytic.',
+                body: 'Senescent cells uniquely depend on BCL-2 and BCL-XL anti-apoptotic proteins to avoid self-destructing despite their damaged state. Fisetin inhibits these proteins, triggering apoptosis specifically in senescent cells. Normal, healthy cells don\'t rely on this same survival pathway, so they are spared — this selectivity is the defining property of a senolytic, and it is what separates this category from a general antioxidant or anti-inflammatory supplement.',
               },
               {
                 icon: Waves,
                 color: 'text-accent-cyan',
                 badge: 'bg-accent-cyan/10 border-accent-cyan/20',
                 title: 'Reduced SASP Signaling (Mechanistic Rationale)',
-                body: "Senescent cells secrete inflammatory signaling molecules collectively known as the senescence-associated secretory phenotype (SASP). Clearing senescent cells should, mechanistically, reduce this inflammatory signaling burden. This rationale is well-established in the senescence field broadly, but it has not been directly confirmed as a human outcome specific to fisetin.",
+                body: "Senescent cells secrete inflammatory signaling molecules collectively known as the senescence-associated secretory phenotype (SASP). Clearing senescent cells should, mechanistically, reduce this inflammatory signaling burden. This rationale is well-established in the senescence field broadly, but it has not been directly confirmed as a human outcome specific to fisetin — the mouse study measured senescence markers and lifespan, not circulating SASP cytokines in people.",
               },
               {
                 icon: Repeat,
                 color: 'text-accent-emerald',
                 badge: 'bg-accent-emerald/10 border-accent-emerald/20',
                 title: 'Pulse-Dosing ("Hit-and-Run") Rationale',
-                body: 'Because senolytics act by triggering apoptosis rather than by continuously suppressing a process, the mouse literature established an intermittent dosing model: clear the existing senescent cell pool during a short dosing window, then stand down. This is why fisetin protocols use 2 consecutive days per month rather than daily dosing.',
+                body: 'Because senolytics act by triggering apoptosis rather than by continuously suppressing a process, the mouse literature established an intermittent dosing model: clear the existing senescent cell pool during a short dosing window, then stand down. This is why fisetin protocols use 2 consecutive days per month rather than daily dosing — continuous exposure was not the design that produced the reported mouse results, so there is no evidence basis for dosing it like a typical daily supplement.',
               },
             ].map((card) => (
               <div key={card.title} className={`rounded-xl border p-5 ${card.badge} bg-card/50`}>
@@ -468,7 +468,7 @@ export default function FisetinGuidePage() {
           <div className="mt-8 rounded-xl border border-border/60 bg-card/50 p-5">
             <p className="font-semibold text-sm mb-3">Common stacking pairs</p>
             <p className="text-sm text-muted-foreground mb-4">
-              Fisetin&rsquo;s apoptosis-based mechanism is mechanistically distinct from sirtuin activation and NAD+ repletion, making it a frequent companion in broader longevity protocols.
+              Fisetin&rsquo;s apoptosis-based mechanism is mechanistically distinct from sirtuin activation and NAD+ repletion, making it a frequent companion in broader longevity protocols. Because fisetin is pulsed monthly rather than taken daily, it slots in alongside daily-use compounds without requiring you to change their schedule.
             </p>
             <div className="flex flex-wrap gap-3">
               <Link
@@ -506,7 +506,7 @@ export default function FisetinGuidePage() {
                 badge: 'bg-accent-violet/10 border-accent-violet/20',
                 title: 'Cellular Senescence',
                 href: '/library/cellular-senescence',
-                body: 'This is the hallmark fisetin targets most directly. By selectively inducing apoptosis in senescent ("zombie") cells via BCL-2/BCL-XL inhibition, fisetin reduces the senescent cell burden — the mechanism demonstrated in the 2018 mouse study.',
+                body: 'This is the hallmark fisetin targets most directly. By selectively inducing apoptosis in senescent ("zombie") cells via BCL-2/BCL-XL inhibition, fisetin reduces the senescent cell burden — the mechanism demonstrated in the 2018 mouse study across multiple tissue types, using both acute and pulsed dosing regimens.',
               },
               {
                 icon: Network,
@@ -514,7 +514,7 @@ export default function FisetinGuidePage() {
                 badge: 'bg-accent-cyan/10 border-accent-cyan/20',
                 title: 'Altered Intercellular Communication',
                 href: '/library/altered-intercellular-communication',
-                body: 'Senescent cells drive dysregulated intercellular signaling largely through SASP factor secretion. Clearing senescent cells is a plausible mechanistic route to reducing this signaling disruption — again, this is mechanistic rationale extrapolated from the senescence-clearance data, not a directly measured human outcome for fisetin.',
+                body: 'Senescent cells drive dysregulated intercellular signaling largely through SASP factor secretion. Clearing senescent cells is a plausible mechanistic route to reducing this signaling disruption — again, this is mechanistic rationale extrapolated from the senescence-clearance data, not a directly measured human outcome for fisetin. It is one of several reasons senolytics are of interest well beyond any single organ system.',
               },
               {
                 icon: Activity,
@@ -522,7 +522,7 @@ export default function FisetinGuidePage() {
                 badge: 'bg-accent-emerald/10 border-accent-emerald/20',
                 title: 'Chronic Inflammation',
                 href: '/library/chronic-inflammation',
-                body: 'SASP secretion from senescent cells is a recognized driver of "inflammaging," the chronic low-grade inflammation that accumulates with age. Reducing senescent cell burden is mechanistically linked to reducing this inflammatory driver, based on the broader senolytic literature rather than a fisetin-specific human inflammation trial.',
+                body: 'SASP secretion from senescent cells is a recognized driver of "inflammaging," the chronic low-grade inflammation that accumulates with age. Reducing senescent cell burden is mechanistically linked to reducing this inflammatory driver, based on the broader senolytic literature rather than a fisetin-specific human inflammation trial — an important distinction to hold onto given how often this connection gets stated as settled fact.',
               },
             ].map((card) => (
               <Link
@@ -573,7 +573,7 @@ export default function FisetinGuidePage() {
               {
                 n: '05',
                 title: 'Reassess periodically and disclose use before any surgery',
-                body: 'There is no validated human blood biomarker that confirms senolytic effect from fisetin specifically. Track general wellbeing over successive monthly pulses, and always tell a physician or surgeon you take fisetin given its potential effect on platelet aggregation.',
+                body: 'There is no validated human blood biomarker that confirms senolytic effect from fisetin specifically, so resist the temptation to order a lab panel expecting a clear readout. Track general wellbeing over successive monthly pulses instead, and always tell a physician or surgeon you take fisetin given its potential effect on platelet aggregation, even though the dosing window is brief.',
               },
             ].map((step) => (
               <div key={step.n} className="flex gap-4 rounded-xl border border-border/50 bg-card/50 p-5">
@@ -619,7 +619,7 @@ export default function FisetinGuidePage() {
               <div>
                 <h3 className="font-semibold text-accent-rose mb-2">Important safety note</h3>
                 <p className="text-sm text-muted-foreground">
-                  Fisetin may inhibit platelet aggregation and CYP-metabolizing enzymes at higher pulse doses. Avoid it if you have surgery scheduled within 2 weeks, or if you are pregnant or nursing. If you take blood thinners, are undergoing chemotherapy, or take any CYP-metabolized medication, talk to your physician before starting. Human research on fisetin specifically remains limited, so err on the side of caution with any existing medical condition. TNiC content is educational and not a substitute for medical advice.
+                  Fisetin may inhibit platelet aggregation and CYP-metabolizing enzymes at higher pulse doses. Avoid it if you have surgery scheduled within 2 weeks, or if you are pregnant or nursing. If you take blood thinners, are undergoing chemotherapy, or take any CYP-metabolized medication, talk to your physician before starting. Human research on fisetin specifically remains limited — the pulse-dosing protocol itself is derived from mouse data rather than a human dose-finding study — so err on the side of caution with any existing medical condition, and disclose fisetin use even though you only take it a few days a month. TNiC content is educational and not a substitute for medical advice.
                 </p>
               </div>
             </div>
@@ -633,7 +633,7 @@ export default function FisetinGuidePage() {
           <div className="rounded-2xl border border-accent-violet/20 bg-accent-violet/[0.04] p-8 md:p-10 text-center">
             <h2 className="heading-section mb-3">Build Your Senolytic Protocol</h2>
             <p className="text-body text-muted-foreground mb-8 max-w-xl mx-auto">
-              Fisetin pairs naturally with resveratrol and NMN in TNiC&rsquo;s senescence-focused protocols. Take the quiz to get a personalized stack.
+              Fisetin pairs naturally with resveratrol and NMN in TNiC&rsquo;s senescence-focused protocols — a monthly pulse alongside daily foundational compounds. Take the quiz to get a personalized stack that fits your goals and current supplement routine.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               <Link
