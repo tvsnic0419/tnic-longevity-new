@@ -110,6 +110,10 @@ const FAQ = [
     q: 'Should I take omega-3 with or without food?',
     a: 'With food, and ideally a meal containing some fat. Absorption of both EPA and DHA improves with dietary fat present, and taking capsules with a meal substantially reduces the fishy burps and GI discomfort some people experience. If you take a higher combined dose (3–4g/day), splitting it across two meals (AM/PM) is a reasonable way to improve tolerability.',
   },
+  {
+    q: 'Is a vegan algae-based omega-3 as good as fish oil?',
+    a: 'Algae-based supplements provide DHA, and some also provide EPA, without a fish-derived source — a reasonable option for vegans or anyone avoiding fish oil for other reasons. Neither of the two studies cited on this page tested an algae-based formulation specifically, so TNiC cannot make a direct evidence-based claim that algae-derived omega-3 replicates the REDUCE-IT cardiovascular outcome or the telomere-length finding. The underlying fatty acids (EPA and DHA) are chemically identical regardless of source, which supports the mechanistic case for algae oil, but the specific trial evidence on this page was generated using fish-oil-derived and fish-oil-derived-drug formulations.',
+  },
 ];
 
 function buildOmega3Schemas() {
@@ -258,7 +262,7 @@ export default function Omega3GuidePage() {
         <div className="container-page max-w-4xl">
           <h2 className="heading-section mb-3">Omega-3 vs Krill Oil: Does the Bioavailability Premium Pay Off?</h2>
           <p className="text-body mb-6 max-w-2xl">
-            Krill oil is marketed as the &ldquo;superior absorption&rdquo; omega-3 source. The absorption edge is real — but so is the price. Here is the honest tradeoff.
+            Krill oil is marketed as the &ldquo;superior absorption&rdquo; omega-3 source. The absorption edge is real — but so is the price. The question that actually matters is not which form absorbs better per milligram, but which one gets more total EPA+DHA into your body per dollar spent, since that is what drove the outcome data behind the strongest omega-3 trials. Here is the honest tradeoff.
           </p>
 
           <div className="overflow-x-auto rounded-xl border border-border/60 mb-8">
@@ -322,7 +326,7 @@ export default function Omega3GuidePage() {
           <div className="rounded-xl border border-amber-400/20 bg-amber-400/[0.04] p-5">
             <p className="font-semibold text-amber-400 mb-2">The verdict</p>
             <p className="text-sm text-muted-foreground">
-              Krill oil&rsquo;s phospholipid-bound structure does appear to offer an absorption edge in comparative studies, and that is a real, honest advantage. But it typically delivers less EPA+DHA per capsule than triglyceride-form fish oil, at a meaningfully higher cost per gram of active omega-3. For most people prioritizing total EPA+DHA intake per dollar — which is what drove the outcome data in trials like REDUCE-IT — triglyceride-form fish oil is the more evidence-efficient choice. Krill oil is a reasonable pick if the fishy aftertaste of fish oil is a dealbreaker for you, or if you specifically want the co-occurring astaxanthin. See our full <Link href="/library/compare/omega3-vs-krill-oil" className="text-accent-violet hover:underline">Omega-3 vs Krill Oil comparison</Link> for the detailed breakdown.
+              Krill oil&rsquo;s phospholipid-bound structure does appear to offer an absorption edge in comparative studies, and that is a real, honest advantage. But it typically delivers less EPA+DHA per capsule than triglyceride-form fish oil, at a meaningfully higher cost per gram of active omega-3. For most people prioritizing total EPA+DHA intake per dollar — which is what drove the outcome data in trials like REDUCE-IT — triglyceride-form fish oil is the more evidence-efficient choice. Krill oil is a reasonable pick if the fishy aftertaste of fish oil is a dealbreaker for you, or if you specifically want the co-occurring astaxanthin, but neither of those is the same thing as a proven superior clinical outcome. See our full <Link href="/library/compare/omega3-vs-krill-oil" className="text-accent-violet hover:underline">Omega-3 vs Krill Oil comparison</Link> for the detailed breakdown.
             </p>
           </div>
         </div>
@@ -367,7 +371,7 @@ export default function Omega3GuidePage() {
         <div className="container-page max-w-4xl">
           <h2 className="heading-section mb-3">Dosing Protocol</h2>
           <p className="text-body mb-8 max-w-2xl">
-            Dosing ranges span general-health maintenance through the higher, more clinically studied anti-inflammatory range. The prescription REDUCE-IT protocol is listed separately since it requires a physician.
+            Dosing ranges span general-health maintenance through the higher, more clinically studied anti-inflammatory range. The prescription REDUCE-IT protocol is listed separately since it requires a physician and uses a different, purified formulation rather than a combined EPA+DHA supplement.
           </p>
 
           <div className="overflow-x-auto rounded-xl border border-border/60 mb-8">
@@ -410,6 +414,7 @@ export default function Omega3GuidePage() {
                 <li>· Split higher doses (3g+) into AM/PM to improve tolerability</li>
                 <li>· If you have elevated triglycerides and are on a statin, ask your physician about prescription icosapent ethyl</li>
                 <li>· Look for third-party purity testing (heavy metals, oxidation/TOTOX value)</li>
+                <li>· Give it several weeks to months before evaluating triglyceride or inflammatory changes — this is not a fast-acting compound</li>
               </ul>
             </div>
             <div className="rounded-xl border border-accent-rose/20 bg-accent-rose/[0.04] p-5">
@@ -423,6 +428,7 @@ export default function Omega3GuidePage() {
                 <li>· Do not assume generic fish oil replicates the REDUCE-IT trial&rsquo;s specific cardiovascular outcome</li>
                 <li>· Choose reputable brands — fish oil is prone to oxidation (rancidity) if poorly stored or low quality</li>
                 <li>· Shellfish-derived krill oil is not appropriate for those with shellfish allergies</li>
+                <li>· Very high intakes (well above 4g/day) have not been shown to add benefit and may increase bleeding risk</li>
               </ul>
             </div>
           </div>
@@ -440,21 +446,21 @@ export default function Omega3GuidePage() {
                 color: 'text-accent-violet',
                 badge: 'bg-accent-violet/10 border-accent-violet/20',
                 title: 'Specialized Pro-resolving Mediators (SPMs)',
-                body: 'EPA and DHA are enzymatic precursors to resolvins, protectins, and maresins — lipid mediators that actively terminate inflammatory cascades by clearing cellular debris and reprogramming macrophages from a pro-inflammatory M1 phenotype toward a tissue-repairing M2 phenotype. This is an active resolution process, not passive anti-inflammatory suppression.',
+                body: 'EPA and DHA are enzymatic precursors to resolvins, protectins, and maresins — lipid mediators that actively terminate inflammatory cascades by clearing cellular debris and reprogramming macrophages from a pro-inflammatory M1 phenotype toward a tissue-repairing M2 phenotype. This is an active resolution process, not passive anti-inflammatory suppression — the distinction is why researchers describe omega-3 as coordinating the end of an inflammatory episode rather than simply blunting it.',
               },
               {
                 icon: HeartPulse,
                 color: 'text-accent-cyan',
                 badge: 'bg-accent-cyan/10 border-accent-cyan/20',
                 title: 'COX-2 Competition',
-                body: 'EPA competes directly with arachidonic acid for the COX-2 enzyme, shifting eicosanoid production toward less-inflammatory prostanoids. This is a distinct mechanism from the SPM resolution pathway and contributes independently to omega-3&rsquo;s anti-inflammatory profile.',
+                body: 'EPA competes directly with arachidonic acid for the COX-2 enzyme, shifting eicosanoid production toward less-inflammatory prostanoids. This is a distinct mechanism from the SPM resolution pathway and contributes independently to omega-3&rsquo;s anti-inflammatory profile, meaning omega-3 has at least two separate, complementary routes into the inflammatory cascade rather than a single point of action.',
               },
               {
                 icon: TrendingUp,
                 color: 'text-accent-emerald',
                 badge: 'bg-accent-emerald/10 border-accent-emerald/20',
                 title: 'Form Matters for Absorption',
-                body: 'Triglyceride-form (re-esterified) fish oil achieves superior absorption compared to the ethyl ester form used in many older or lower-cost products. Since the clinical benefit of omega-3 depends on actually raising tissue EPA/DHA levels, the chemical form you take is not a cosmetic detail — it materially affects how much active compound you absorb per dose.',
+                body: 'Triglyceride-form (re-esterified) fish oil achieves superior absorption compared to the ethyl ester form used in many older or lower-cost products. Since the clinical benefit of omega-3 depends on actually raising tissue EPA/DHA levels, the chemical form you take is not a cosmetic detail — it materially affects how much active compound you absorb per dose, which is part of why label-reading matters more for omega-3 than for many other supplements.',
               },
             ].map((card) => (
               <div key={card.title} className={`rounded-xl border p-5 ${card.badge} bg-card/50`}>
@@ -474,7 +480,7 @@ export default function Omega3GuidePage() {
         <div className="container-page max-w-4xl">
           <h2 className="heading-section mb-3">How Omega-3 Addresses the Hallmarks of Aging</h2>
           <p className="text-body mb-8 max-w-2xl">
-            Omega-3&rsquo;s evidence base maps onto three of the twelve recognized hallmarks of aging — most directly chronic inflammation.
+            Omega-3&rsquo;s evidence base maps onto three of the twelve recognized hallmarks of aging — most directly chronic inflammation. The telomere-attrition connection is the most directly trial-backed of the three; the inflammation and intercellular-communication connections rest more heavily on well-established mechanism than on a dedicated outcome trial among the two PMIDs cited on this page.
           </p>
           <div className="grid md:grid-cols-3 gap-5">
             {[
@@ -531,27 +537,27 @@ export default function Omega3GuidePage() {
               {
                 n: '01',
                 title: 'Determine your risk profile',
-                body: 'If you have elevated triglycerides and are already on statin therapy, discuss prescription icosapent ethyl (Vascepa) with your physician — this is the specific formulation and dose studied in the REDUCE-IT cardiovascular outcomes trial. For general health maintenance, an over-the-counter combined EPA+DHA supplement is the right starting point.',
+                body: 'If you have elevated triglycerides and are already on statin therapy, discuss prescription icosapent ethyl (Vascepa) with your physician — this is the specific formulation and dose studied in the REDUCE-IT cardiovascular outcomes trial. For general health maintenance, an over-the-counter combined EPA+DHA supplement is the right starting point. These are two different products with two different evidence bases, so be clear with yourself about which one you are actually taking.',
               },
               {
                 n: '02',
                 title: 'Choose triglyceride-form fish oil over ethyl ester',
-                body: 'Check the supplement facts panel — triglyceride (re-esterified) form generally achieves superior absorption compared to ethyl ester form, meaning more of what you swallow actually reaches your tissues.',
+                body: 'Check the supplement facts panel — triglyceride (re-esterified) form generally achieves superior absorption compared to ethyl ester form, meaning more of what you swallow actually reaches your tissues. This single label detail is one of the highest-leverage decisions you can make when choosing a product.',
               },
               {
                 n: '03',
                 title: 'Start at 1–2g/day combined EPA+DHA with a meal',
-                body: 'Take with a fat-containing meal to maximize absorption and reduce fishy aftertaste or GI upset. This is a reasonable general-health starting point for most adults.',
+                body: 'Take with a fat-containing meal to maximize absorption and reduce fishy aftertaste or GI upset. This is a reasonable general-health starting point for most adults, and a sensible place to gauge your own tolerability before considering a higher dose.',
               },
               {
                 n: '04',
                 title: 'Titrate to 2–4g/day for an anti-inflammatory-focused protocol',
-                body: "This range reflects doses commonly referenced in the inflammation and lipid research literature. Split across AM/PM meals if you're at the higher end of the range.",
+                body: "This range reflects doses commonly referenced in the inflammation and lipid research literature. Split across AM/PM meals if you're at the higher end of the range, and reduce the dose if you notice GI discomfort or a fishy aftertaste that a fat-containing meal doesn't resolve.",
               },
               {
                 n: '05',
                 title: 'Reassess periodically with bloodwork',
-                body: 'Triglyceride levels and, where available, an omega-3 index test can help confirm you are in an evidence-supported response range. If you are on the prescription icosapent ethyl protocol, follow your physician&rsquo;s monitoring schedule instead.',
+                body: 'Triglyceride levels and, where available, an omega-3 index test can help confirm you are in an evidence-supported response range. If you are on the prescription icosapent ethyl protocol, follow your physician&rsquo;s monitoring schedule instead, since that protocol involves a different formulation and a different set of things to track.',
               },
             ].map((step) => (
               <div key={step.n} className="flex gap-4 rounded-xl border border-border/50 bg-card/50 p-5">

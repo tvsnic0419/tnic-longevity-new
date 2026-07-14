@@ -100,7 +100,7 @@ const FAQ = [
   },
   {
     q: 'Does CoQ10 extend lifespan?',
-    a: "There is no dedicated human longevity RCT for CoQ10 among the studies referenced on this page, and TNiC is not aware of one that meets our citation bar. The longevity case rests on mechanism: CoQ10 supports the electron transport chain responsible for roughly 95% of cellular ATP production, and functions as the only fat-soluble antioxidant your cells synthesize endogenously. Mitochondrial dysfunction is one of the recognized hallmarks of aging, which is why CoQ10 sits in most longevity stacks — but that is an extrapolation from mechanism, not a proven outcome in a human aging trial. TNiC rates it Tier B overall, with stronger (Tier A-adjacent) evidence specifically for statin-associated depletion and inflammatory marker reduction.",
+    a: "There is no dedicated human longevity RCT for CoQ10 among the studies referenced on this page, and TNiC is not aware of one that meets our citation bar. The longevity case rests on mechanism: CoQ10 supports the electron transport chain responsible for roughly 95% of cellular ATP production, and functions as the only fat-soluble antioxidant your cells synthesize endogenously. Mitochondrial dysfunction is one of the recognized hallmarks of aging, which is why CoQ10 sits in most longevity stacks — but that is an extrapolation from mechanism, not a proven outcome in a human aging trial. TNiC rates it Tier B overall, with stronger (Tier A-adjacent) evidence specifically for statin-associated depletion and inflammatory marker reduction. If a longevity-specific human trial for CoQ10 is published in the future, this page will be updated to reflect it — until then, treat the lifespan-extension framing as a reasonable hypothesis, not an established fact.",
   },
   {
     q: 'Can I stack CoQ10 with NMN or R-ALA?',
@@ -344,7 +344,7 @@ export default function CoQ10GuidePage() {
       <section className="py-14 border-b border-border">
         <div className="container-page max-w-4xl">
           <h2 className="heading-section mb-3">Evidence Summary by Endpoint</h2>
-          <p className="text-body-sm text-muted-foreground mb-8">Click each PMID to view the source trial on PubMed.</p>
+          <p className="text-body-sm text-muted-foreground mb-8">Click each PMID to view the source trial on PubMed. The quality tags below distinguish between direct randomized-trial findings, review-level rationale, and mechanistic reasoning that has not been tested as a primary endpoint in a dedicated human trial — the distinction matters more than the headline claim.</p>
 
           <div className="grid md:grid-cols-2 gap-4">
             {EVIDENCE_TABLE.map((item) => (
@@ -497,7 +497,7 @@ export default function CoQ10GuidePage() {
                 color: 'text-accent-violet',
                 badge: 'bg-accent-violet/10 border-accent-violet/20',
                 title: 'Mitochondrial Dysfunction',
-                body: 'This is CoQ10&rsquo;s primary hallmark. As the electron carrier between Complex I/II and Complex III, CoQ10 is structurally required for oxidative phosphorylation. The statin-depletion study (PMID 23287371) directly measured reduced mitochondrial OXPHOS capacity alongside reduced muscle CoQ10 — concrete human evidence that CoQ10 status and mitochondrial function move together.',
+                body: 'This is CoQ10&rsquo;s primary hallmark. As the electron carrier between Complex I/II and Complex III, CoQ10 is structurally required for oxidative phosphorylation. The statin-depletion study (PMID 23287371) directly measured reduced mitochondrial OXPHOS capacity alongside reduced muscle CoQ10 — concrete human evidence that CoQ10 status and mitochondrial function move together, even though the study itself examined a drug effect rather than a supplementation outcome.',
                 href: '/library/mitochondrial-dysfunction',
                 label: 'Mitochondrial Dysfunction',
               },
@@ -506,7 +506,7 @@ export default function CoQ10GuidePage() {
                 color: 'text-accent-cyan',
                 badge: 'bg-accent-cyan/10 border-accent-cyan/20',
                 title: 'Chronic Inflammation',
-                body: 'The Fan et al. meta-analysis (PMID 28179205) found CoQ10 supplementation significantly reduced hs-CRP and IL-6 — two of the most widely used inflammaging biomarkers. Lower systemic inflammation is one of the more human-trial-backed longevity mechanisms for this compound.',
+                body: 'The Fan et al. meta-analysis (PMID 28179205) found CoQ10 supplementation significantly reduced hs-CRP and IL-6 — two of the most widely used inflammaging biomarkers. Lower systemic inflammation is one of the more human-trial-backed longevity mechanisms for this compound, and this meta-analysis-level evidence is a meaningfully stronger evidence tier than the mechanistic-only reasoning behind some of CoQ10&rsquo;s other proposed benefits.',
                 href: '/library/chronic-inflammation',
                 label: 'Chronic Inflammation',
               },
@@ -660,7 +660,7 @@ export default function CoQ10GuidePage() {
           </div>
 
           <p className="text-xs text-muted-foreground text-center mt-8 max-w-xl mx-auto">
-            Educational content only — not medical advice. CoQ10 is a dietary supplement, not FDA-approved to treat or prevent any disease. Consult your physician before starting, especially if you take statins, warfarin, or other anticoagulant medications.
+            Educational content only — not medical advice. CoQ10 is a dietary supplement, not FDA-approved to treat or prevent any disease. Consult your physician before starting, especially if you take statins, warfarin, or other anticoagulant medications. Nothing on this page should be interpreted as a recommendation to start, stop, or change any prescription medication.
           </p>
         </div>
       </section>

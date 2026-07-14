@@ -59,7 +59,7 @@ const EVIDENCE_TABLE = [
   {
     endpoint: 'Safety & tolerability (humans)',
     finding:
-      'The 2019 human safety trial found oral urolithin A well tolerated across the doses tested, with no serious treatment-related adverse events reported versus placebo.',
+      'The 2019 human safety trial found oral urolithin A well tolerated across the doses tested, with no serious treatment-related adverse events reported versus placebo. Tolerability data at this stage in a compound&rsquo;s development matters as much as efficacy data — it is what allowed the subsequent 2022 functional-outcomes trial to proceed with confidence in the dosing range.',
     quality: 'Strong',
     pmid: '32694802',
     color: 'text-accent-emerald',
@@ -68,7 +68,7 @@ const EVIDENCE_TABLE = [
   {
     endpoint: 'Mitophagy induction & lifespan (preclinical)',
     finding:
-      'In C. elegans, urolithin A induced mitophagy and extended lifespan; in rodents it increased muscle function. This is worm and rodent mechanistic evidence establishing the pathway — it is not human outcome data.',
+      'In C. elegans, urolithin A induced mitophagy and extended lifespan; in rodents it increased muscle function. This is worm and rodent mechanistic evidence establishing the pathway — it is not human outcome data, and lifespan-extension findings in invertebrates do not translate on a one-to-one basis to human aging. Its real value is that it identified the PINK1/Parkin mitophagy mechanism that the later human trials were specifically designed to test.',
     quality: 'Preclinical only',
     pmid: '27400265',
     color: 'text-amber-400',
@@ -77,7 +77,7 @@ const EVIDENCE_TABLE = [
   {
     endpoint: 'Natural gut conversion vs. direct supplementation',
     finding:
-      'Only an estimated 30–40% of adults carry gut microbiota capable of converting dietary ellagitannins (from pomegranate, walnuts) into urolithin A themselves. This variability — not a deficiency in the ellagitannin-rich foods themselves — is the core rationale for supplementing the metabolite directly.',
+      'Only an estimated 30–40% of adults carry gut microbiota capable of converting dietary ellagitannins (from pomegranate, walnuts) into urolithin A themselves. This variability — not a deficiency in the ellagitannin-rich foods themselves — is the core rationale for supplementing the metabolite directly. In practice, this means two people eating identical diets rich in pomegranate and walnuts can end up with meaningfully different urolithin A exposure, purely as a function of which gut bacterial strains they happen to carry.',
     quality: 'Established mechanism',
     pmid: undefined,
     color: 'text-accent-violet',
@@ -88,31 +88,31 @@ const EVIDENCE_TABLE = [
 const FAQ = [
   {
     q: "Is 'Mitopure' just a marketing name, or does it matter which form I take?",
-    a: 'It genuinely matters here. Mitopure is the standardized, purified urolithin A form manufactured by Amazentis — and it is the exact form used in both human clinical trials (Andreux 2019, PMID 32694802; Singh 2022, PMID 35584623). Mentioning it isn\'t an endorsement of any specific retailer; it\'s a factual statement that the clinical evidence for urolithin A was generated using this standardized ingredient, not an arbitrary pomegranate extract with unverified urolithin A content. If you buy a non-standardized "pomegranate ellagitannin" product instead, you are no longer working from the same evidence base.',
+    a: 'It genuinely matters here. Mitopure is the standardized, purified urolithin A form manufactured by Amazentis — and it is the exact form used in both human clinical trials (Andreux 2019, PMID 32694802; Singh 2022, PMID 35584623). Mentioning it isn\'t an endorsement of any specific retailer; it\'s a factual statement that the clinical evidence for urolithin A was generated using this standardized ingredient, not an arbitrary pomegranate extract with unverified urolithin A content. If you buy a non-standardized "pomegranate ellagitannin" product instead, you are no longer working from the same evidence base, because you have no way of knowing how much actual urolithin A — if any — that product delivers.',
   },
   {
     q: 'What is actually different between the two human urolithin A studies?',
-    a: "The 2019 Andreux trial (PMID 32694802) was primarily a safety and pharmacology study: it confirmed urolithin A is well tolerated and showed a molecular signature consistent with improved mitochondrial function in muscle tissue — but it did not measure strength or performance outcomes. The 2022 Singh trial (PMID 35584623) is the one with real functional endpoints: a randomized, placebo-controlled design in middle-aged adults that found improvements in muscle strength and exercise performance alongside favorable mitochondrial biomarkers. Together they answer two different questions — 'is it safe and does it do something at the molecular level' and 'does that translate into a measurable functional benefit' — and both came back positive, which is unusually clean for a supplement.",
+    a: "The 2019 Andreux trial (PMID 32694802) was primarily a safety and pharmacology study: it confirmed urolithin A is well tolerated and showed a molecular signature consistent with improved mitochondrial function in muscle tissue — but it did not measure strength or performance outcomes. The 2022 Singh trial (PMID 35584623) is the one with real functional endpoints: a randomized, placebo-controlled design in middle-aged adults that found improvements in muscle strength and exercise performance alongside favorable mitochondrial biomarkers. Together they answer two different questions — 'is it safe and does it do something at the molecular level' and 'does that translate into a measurable functional benefit' — and both came back positive, which is unusually clean for a supplement. It's worth reading both abstracts yourself rather than taking any single source's summary at face value, including this one.",
   },
   {
     q: 'Does the C. elegans and rodent lifespan data apply to humans?',
-    a: "Not directly, and it shouldn't be presented that way. The Ryu 2016 paper (PMID 27400265) is preclinical: it showed urolithin A induces mitophagy and extends lifespan in C. elegans and improves muscle function in rodents. That's the mechanistic discovery paper — it established the PINK1/Parkin mitophagy pathway as the reason urolithin A might matter for human aging, which the two later human trials then went on to test directly in people. Worm lifespan extension is not evidence of human lifespan extension; treat it as the mechanistic origin story, not a human result.",
+    a: "Not directly, and it shouldn't be presented that way. The Ryu 2016 paper (PMID 27400265) is preclinical: it showed urolithin A induces mitophagy and extends lifespan in C. elegans and improves muscle function in rodents. That's the mechanistic discovery paper — it established the PINK1/Parkin mitophagy pathway as the reason urolithin A might matter for human aging, which the two later human trials then went on to test directly in people. Worm lifespan extension is not evidence of human lifespan extension; treat it as the mechanistic origin story, not a human result. Any marketing that cites this paper alongside a specific human lifespan claim is overstating what it actually found.",
   },
   {
     q: 'Should I just eat more pomegranates and walnuts instead of supplementing?',
-    a: "You can, but it may not work the way you'd expect. Urolithin A isn't present in pomegranates or walnuts directly — it's produced when your gut bacteria metabolize the ellagitannins those foods contain. Only an estimated 30–40% of adults carry the specific gut microbiota needed to make that conversion efficiently. If you're not a 'producer,' eating ellagitannin-rich foods may deliver little to no urolithin A regardless of quantity. Direct supplementation with a standardized urolithin A product bypasses this variability entirely — which is precisely why the clinical trials dosed the metabolite itself rather than pomegranate extract.",
+    a: "You can, but it may not work the way you'd expect. Urolithin A isn't present in pomegranates or walnuts directly — it's produced when your gut bacteria metabolize the ellagitannins those foods contain. Only an estimated 30–40% of adults carry the specific gut microbiota needed to make that conversion efficiently. If you're not a 'producer,' eating ellagitannin-rich foods may deliver little to no urolithin A regardless of quantity, no matter how much pomegranate juice or walnuts you consume. Direct supplementation with a standardized urolithin A product bypasses this variability entirely — which is precisely why the clinical trials dosed the metabolite itself rather than pomegranate extract, removing gut-microbiome status as a confounding variable.",
   },
   {
     q: 'How does urolithin A compare to CoQ10 for mitochondrial health?',
-    a: "They target different parts of the same problem. CoQ10 supports the electron transport chain directly — it's a cofactor mitochondria need to generate ATP, and levels decline with age and statin use. Urolithin A doesn't power up existing mitochondria; it triggers mitophagy, the selective removal of damaged mitochondria, which is a prerequisite for healthy mitochondrial turnover. See our full breakdown at Urolithin A vs CoQ10 for the complete mechanism-by-mechanism comparison — the honest answer is that these are complementary strategies, not competing ones.",
+    a: "They target different parts of the same problem. CoQ10 supports the electron transport chain directly — it's a cofactor mitochondria need to generate ATP, and levels decline with age and statin use. Urolithin A doesn't power up existing mitochondria; it triggers mitophagy, the selective removal of damaged mitochondria, which is a prerequisite for healthy mitochondrial turnover. Neither compound can substitute for the other's specific job: CoQ10 does nothing to clear out damaged mitochondria, and urolithin A does nothing to directly recharge the electron transport chain. See our full breakdown at Urolithin A vs CoQ10 for the complete mechanism-by-mechanism comparison — the honest answer is that these are complementary strategies, not competing ones.",
   },
   {
     q: 'Can I stack urolithin A with NMN or spermidine?',
-    a: 'Yes — these are frequently stacked because they act on distinct but related pathways. NMN raises NAD+ availability, which supports the sirtuin and PARP pathways involved in cellular energy metabolism and DNA repair. Spermidine independently triggers autophagic flux via EP300 inhibition, working further upstream of general cellular cleanup than urolithin A\'s mitochondria-specific mitophagy. None of the three studies cited here tested a combination directly, so the synergy rationale is mechanistic rather than clinically proven as a stack — but the three pathways do not appear to compete with or cancel each other out.',
+    a: 'Yes — these are frequently stacked because they act on distinct but related pathways. NMN raises NAD+ availability, which supports the sirtuin and PARP pathways involved in cellular energy metabolism and DNA repair. Spermidine independently triggers autophagic flux via EP300 inhibition, working further upstream of general cellular cleanup than urolithin A\'s mitochondria-specific mitophagy. None of the three studies cited here tested a combination directly, so the synergy rationale is mechanistic rather than clinically proven as a stack — but the three pathways do not appear to compete with or cancel each other out, which is the main thing to check before combining any set of supplements.',
   },
   {
     q: 'What are the safety considerations and who should be cautious?',
-    a: 'Both human trials to date found urolithin A well tolerated, with no dedicated population identified where it should be avoided outright. That said, if you are pregnant or nursing, undergoing active cancer treatment, or taking immunomodulating therapy, talk to your physician before starting — mitophagy and cellular clearance pathways can intersect with treatments that rely on modulating cell survival, and none of the existing trials specifically enrolled these populations. As always, this is educational content, not a substitute for individualized medical advice.',
+    a: 'Both human trials to date found urolithin A well tolerated, with no dedicated population identified where it should be avoided outright. That said, if you are pregnant or nursing, undergoing active cancer treatment, or taking immunomodulating therapy, talk to your physician before starting — mitophagy and cellular clearance pathways can intersect with treatments that rely on modulating cell survival, and none of the existing trials specifically enrolled these populations. No dedicated drug-interaction study has been published either, so if you take multiple prescription medications, it is reasonable to mention urolithin A to your pharmacist even though no specific interaction has been flagged. As always, this is educational content, not a substitute for individualized medical advice.',
   },
 ];
 
@@ -454,21 +454,21 @@ export default function UrolithinAGuidePage() {
                 color: 'text-accent-violet',
                 badge: 'bg-accent-violet/10 border-accent-violet/20',
                 title: 'PINK1/Parkin-Mediated Mitophagy',
-                body: 'Urolithin A activates the PINK1/Parkin axis, the cell\'s quality-control system for identifying and selectively degrading damaged mitochondria. This is mitophagy — a specialized, targeted form of autophagy focused specifically on the mitochondrial network rather than general cellular debris.',
+                body: 'Urolithin A activates the PINK1/Parkin axis, the cell\'s quality-control system for identifying and selectively degrading damaged mitochondria. This is mitophagy — a specialized, targeted form of autophagy focused specifically on the mitochondrial network rather than general cellular debris. Healthy mitochondrial turnover depends on this system working continuously: cells are always generating some level of mitochondrial damage from normal metabolic activity, and clearing that damage efficiently is what keeps the overall mitochondrial pool functional as tissue ages.',
               },
               {
                 icon: GitCompare,
                 color: 'text-accent-cyan',
                 badge: 'bg-accent-cyan/10 border-accent-cyan/20',
                 title: 'Independent of AMPK and mTOR',
-                body: 'Unlike many longevity compounds that route through AMPK activation or mTOR inhibition, urolithin A triggers mitophagy through a distinct pathway. This matters practically: it means urolithin A\'s mechanism does not directly overlap with compounds like berberine or metformin, making mechanistic redundancy less of a concern when stacking.',
+                body: 'Unlike many longevity compounds that route through AMPK activation or mTOR inhibition, urolithin A triggers mitophagy through a distinct pathway. This matters practically: it means urolithin A\'s mechanism does not directly overlap with compounds like berberine or metformin, making mechanistic redundancy less of a concern when stacking. It also means the safety and interaction profile is genuinely different from AMPK-activating compounds — urolithin A is not expected to independently lower blood glucose the way berberine or metformin can.',
               },
               {
                 icon: Leaf,
                 color: 'text-accent-emerald',
                 badge: 'bg-accent-emerald/10 border-accent-emerald/20',
                 title: 'Gut-Derived Metabolite, Standardized Dosing',
-                body: 'Urolithin A is naturally produced by gut bacteria metabolizing ellagitannins from pomegranate and walnuts — but only in adults whose microbiome supports the conversion. Supplementing with a standardized form (Mitopure, the form used in both human trials) delivers a consistent dose regardless of your personal gut-microbiome profile.',
+                body: 'Urolithin A is naturally produced by gut bacteria metabolizing ellagitannins from pomegranate and walnuts — but only in adults whose microbiome supports the conversion. Supplementing with a standardized form (Mitopure, the form used in both human trials) delivers a consistent dose regardless of your personal gut-microbiome profile, which sidesteps what is otherwise one of the more frustrating sources of individual variability in polyphenol supplementation.',
               },
             ].map((card) => (
               <div key={card.title} className={`rounded-xl border p-5 ${card.badge} bg-card/50`}>
@@ -522,7 +522,7 @@ export default function UrolithinAGuidePage() {
                 badge: 'bg-accent-violet/10 border-accent-violet/20',
                 title: 'Mitochondrial Dysfunction',
                 href: '/library/mitochondrial-dysfunction',
-                body: 'This is the hallmark urolithin A targets most directly. Removing damaged mitochondria via mitophagy is the mechanistic basis for the improved mitochondrial-health signature and functional outcomes seen in the two human trials.',
+                body: 'This is the hallmark urolithin A targets most directly. Removing damaged mitochondria via mitophagy is the mechanistic basis for the improved mitochondrial-health signature and functional outcomes seen in the two human trials. Of the twelve recognized hallmarks of aging, mitochondrial dysfunction is one of the few where a compound has now shown both a biomarker signal and a functional outcome in humans within the same evidence base.',
               },
               {
                 icon: Scale,
@@ -530,7 +530,7 @@ export default function UrolithinAGuidePage() {
                 badge: 'bg-accent-cyan/10 border-accent-cyan/20',
                 title: 'Disabled Autophagy',
                 href: '/library/disabled-autophagy',
-                body: 'Mitophagy is a specialized subtype of autophagy. As general autophagic capacity declines with age, urolithin A\'s ability to selectively activate this specific arm of the cleanup machinery is mechanistically relevant to restoring autophagic flux, at least within the mitochondrial compartment.',
+                body: 'Mitophagy is a specialized subtype of autophagy. As general autophagic capacity declines with age, urolithin A\'s ability to selectively activate this specific arm of the cleanup machinery is mechanistically relevant to restoring autophagic flux, at least within the mitochondrial compartment. It complements rather than replaces broader autophagy-inducing approaches, since it is specific to mitochondria rather than cellular debris generally.',
               },
               {
                 icon: Heart,
@@ -538,7 +538,7 @@ export default function UrolithinAGuidePage() {
                 badge: 'bg-accent-emerald/10 border-accent-emerald/20',
                 title: 'Cellular Senescence',
                 href: '/library/cellular-senescence',
-                body: 'Damaged, dysfunctional mitochondria are a known contributor to the senescent cell phenotype. Clearing them via mitophagy is a plausible mechanistic route to reducing this contribution — this is mechanistic rationale, not a claim that either human trial directly measured senescence markers.',
+                body: 'Damaged, dysfunctional mitochondria are a known contributor to the senescent cell phenotype. Clearing them via mitophagy is a plausible mechanistic route to reducing this contribution — this is mechanistic rationale, not a claim that either human trial directly measured senescence markers. It illustrates how the twelve hallmarks are interconnected rather than isolated: intervening on one (mitochondrial quality) can plausibly influence another (senescent cell burden) even without direct trial confirmation of that specific link.',
               },
             ].map((card) => (
               <Link
@@ -589,7 +589,7 @@ export default function UrolithinAGuidePage() {
               {
                 n: '05',
                 title: 'Reassess at several months using strength or performance markers',
-                body: "Because the human functional-outcomes evidence (muscle strength, exercise performance) emerged over a multi-month randomized trial, give your own protocol a comparable window before deciding whether it's working for you.",
+                body: "Because the human functional-outcomes evidence (muscle strength, exercise performance) emerged over a multi-month randomized trial, give your own protocol a comparable window before deciding whether it's working for you. Simple, low-cost tracking — grip strength, a timed walk, or a familiar resistance-training benchmark — is a reasonable proxy for the kind of functional outcomes the clinical trial measured.",
               },
             ].map((step) => (
               <div key={step.n} className="flex gap-4 rounded-xl border border-border/50 bg-card/50 p-5">
@@ -635,7 +635,7 @@ export default function UrolithinAGuidePage() {
               <div>
                 <h3 className="font-semibold text-accent-rose mb-2">Important safety note</h3>
                 <p className="text-sm text-muted-foreground">
-                  Urolithin A has been well tolerated in the human trials conducted to date, with no dedicated population identified where it must be avoided outright. Still, if you are pregnant or nursing, undergoing active cancer treatment, or taking immunomodulating therapy, talk to your physician before starting — these populations were not specifically studied. TNiC content is educational and not a substitute for medical advice.
+                  Urolithin A has been well tolerated in the human trials conducted to date, with no dedicated population identified where it must be avoided outright. Still, if you are pregnant or nursing, undergoing active cancer treatment, or taking immunomodulating therapy, talk to your physician before starting — these populations were not specifically studied, and mitophagy pathways can intersect with treatments that depend on modulating cell survival. If you take prescription medications and are unsure about interactions, ask your pharmacist before adding urolithin A to your routine, since no dedicated drug-interaction study has been published to date. TNiC content is educational and not a substitute for medical advice.
                 </p>
               </div>
             </div>
@@ -649,7 +649,7 @@ export default function UrolithinAGuidePage() {
           <div className="rounded-2xl border border-accent-violet/20 bg-accent-violet/[0.04] p-8 md:p-10 text-center">
             <h2 className="heading-section mb-3">Build Your Mitochondrial Health Stack</h2>
             <p className="text-body text-muted-foreground mb-8 max-w-xl mx-auto">
-              Urolithin A pairs naturally with NMN and spermidine in TNiC&rsquo;s mitochondrial-health protocols. Take the quiz to get a personalized stack.
+              Urolithin A pairs naturally with NMN and spermidine in TNiC&rsquo;s mitochondrial-health protocols — one clears damaged mitochondria, the others support the energy and cleanup pathways around them. Take the quiz to get a personalized stack based on your goals and current supplement use.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               <Link

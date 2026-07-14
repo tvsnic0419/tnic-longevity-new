@@ -28,7 +28,7 @@ const EVIDENCE_TABLE = [
   {
     endpoint: 'Lifespan / survival (mouse)',
     finding:
-      'The foundational Baur 2006 study found resveratrol significantly improved health and survival in mice fed a high-calorie diet, via SIRT1 activation. This is the landmark finding that launched resveratrol longevity research — but it is a mouse study, not a human trial.',
+      'The foundational Baur 2006 study found resveratrol significantly improved health and survival in mice fed a high-calorie diet, via SIRT1 activation. This is the landmark finding that launched resveratrol longevity research — but it is a mouse study, not a human trial. The high-calorie-diet design is precisely why the finding sparked such intense follow-on interest in resveratrol as a caloric-restriction mimetic — though translation from mouse metabolism to human physiology is never guaranteed.',
     quality: 'Strong (animal)',
     pmid: '17086191',
     color: 'text-accent-emerald',
@@ -37,7 +37,7 @@ const EVIDENCE_TABLE = [
   {
     endpoint: 'SIRT1 activation mechanism',
     finding:
-      'The same landmark study demonstrated the mechanism: resveratrol allosterically activates SIRT1, increasing its affinity for acetylated substrates and driving the downstream PGC-1α / FOXO3a / NF-κB effects described below. Demonstrated in the mouse model, not confirmed in a dedicated human PBMC or tissue-biopsy RCT.',
+      'The same landmark study demonstrated the mechanism: resveratrol allosterically activates SIRT1, increasing its affinity for acetylated substrates and driving the downstream PGC-1α / FOXO3a / NF-κB effects described below. Demonstrated in the mouse model, not confirmed in a dedicated human PBMC or tissue-biopsy RCT. Understanding this mechanism is what underlies the entire rationale for pairing resveratrol with NAD+ precursors like NMN — a SIRT1 activator is only as useful as the NAD+ substrate pool it has to work with.',
     quality: 'Strong (animal)',
     pmid: '17086191',
     color: 'text-accent-emerald',
@@ -46,7 +46,7 @@ const EVIDENCE_TABLE = [
   {
     endpoint: 'Metabolic health effects (high-calorie diet)',
     finding:
-      'Baur 2006 also reported that resveratrol shifted several metabolic markers in mice on a high-calorie diet toward those of mice on a standard diet — consistent with a caloric-restriction-mimetic effect. Again: mouse data only.',
+      'Baur 2006 also reported that resveratrol shifted several metabolic markers in mice on a high-calorie diet toward those of mice on a standard diet — consistent with a caloric-restriction-mimetic effect. Again: mouse data only. This kind of composite metabolic shift is exactly what caloric restriction itself produces in animal models, which is why resveratrol is described as a CR mimetic rather than simply an antioxidant.',
     quality: 'Strong (animal)',
     pmid: '17086191',
     color: 'text-accent-emerald',
@@ -55,7 +55,7 @@ const EVIDENCE_TABLE = [
   {
     endpoint: 'Human SIRT1/FOXO3a activation',
     finding:
-      'No verified, dedicated human RCT in this library confirms resveratrol activates SIRT1 or FOXO3a in human PBMCs or other tissue at any specific dose. Claims to this effect exist widely in supplement marketing — treat them as unverified until a specific citable trial is available.',
+      'No verified, dedicated human RCT in this library confirms resveratrol activates SIRT1 or FOXO3a in human PBMCs or other tissue at any specific dose. Claims to this effect exist widely in supplement marketing — treat them as unverified until a specific citable trial is available. Confirming this directly would typically require invasive muscle or fat-tissue biopsies or specialized repeated PBMC assays — logistically and financially demanding, which partly explains why the human evidence base here remains thin despite decades of interest.',
     quality: 'Not established in humans',
     pmid: undefined,
     color: 'text-amber-400',
@@ -64,7 +64,7 @@ const EVIDENCE_TABLE = [
   {
     endpoint: 'Bioavailability / absorption',
     finding:
-      'Well-characterized pharmacokinetic finding across the resveratrol literature: standard powder is glucuronidated in the intestinal wall, limiting systemic bioavailability to roughly 1%. Micronized and liposomal formulations achieve several-fold higher peak plasma concentration. This is established pharmacology rather than a single-trial claim.',
+      'Well-characterized pharmacokinetic finding across the resveratrol literature: standard powder is glucuronidated in the intestinal wall, limiting systemic bioavailability to roughly 1%. Micronized and liposomal formulations achieve several-fold higher peak plasma concentration. This is established pharmacology rather than a single-trial claim. In practice, the difference between a 500mg dose of standard powder and a 500mg dose of a micronized formulation can be several-fold in actual plasma exposure — the label dose alone tells you little about what your body actually absorbs.',
     quality: 'Established pharmacology',
     pmid: undefined,
     color: 'text-accent-cyan',
@@ -73,7 +73,7 @@ const EVIDENCE_TABLE = [
   {
     endpoint: 'Human longevity / outcome RCTs',
     finding:
-      'No human longevity-endpoint RCT exists for resveratrol as of 2026. The NMN + resveratrol combination in particular has strong mechanistic rationale (see below) but has not been tested together in a dedicated human trial. Do not let marketing imply otherwise.',
+      'No human longevity-endpoint RCT exists for resveratrol as of 2026. The NMN + resveratrol combination in particular has strong mechanistic rationale (see below) but has not been tested together in a dedicated human trial. Do not let marketing imply otherwise. Until such a trial exists, anyone stacking the two compounds should think of it as an evidence-informed bet on mechanism, not a validated intervention — a reasonable bet, but a bet nonetheless.',
     quality: 'Not established',
     pmid: undefined,
     color: 'text-amber-400',
@@ -209,7 +209,7 @@ export default function ResveratrolGuidePage() {
             Resveratrol Supplement Guide 2026
           </h1>
           <p className="text-xl text-muted-foreground mb-6 max-w-2xl">
-            Resveratrol&rsquo;s reputation rests on one landmark mouse study. That study is genuinely important — but it is not a human trial. Here is the mechanism, the dosing protocol, and an honest accounting of what has and has not been shown in people.
+            Resveratrol&rsquo;s reputation rests on one landmark mouse study. That study is genuinely important — but it is not a human trial, and no amount of marketing copy changes that fact. This guide lays out the SIRT1/AMPK mechanism in full, the dosing and timing protocol that follows from established pharmacokinetics, and an honest accounting of what has — and has not — been demonstrated in people, so you can make an informed decision instead of relying on hype.
           </p>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
@@ -249,8 +249,11 @@ export default function ResveratrolGuidePage() {
       <section className="py-14 border-b border-border">
         <div className="container-page max-w-4xl">
           <h2 className="heading-section mb-3">Resveratrol vs Pterostilbene: Same Target, Different Bioavailability</h2>
-          <p className="text-body mb-6 max-w-2xl">
+          <p className="text-body mb-4 max-w-2xl">
             Both compounds activate the same SIRT1/AMPK machinery. The real-world question is which one actually gets into your bloodstream — and what the human evidence supports for each.
+          </p>
+          <p className="text-body mb-6 max-w-2xl">
+            Resveratrol and pterostilbene are both stilbene polyphenols built around the same core scaffold, differing only in two functional groups — hydroxyl versus methoxy. That small chemical difference has an outsized practical consequence: it determines how much of an oral dose survives first-pass metabolism in the intestinal wall and liver before reaching systemic circulation. For a compound whose entire value proposition rests on reaching SIRT1-engaging concentrations in tissue, bioavailability isn&rsquo;t a side detail — it is arguably the single most important practical variable in choosing between the two.
           </p>
 
           <div className="overflow-x-auto rounded-xl border border-border/60 mb-8">
@@ -320,7 +323,7 @@ export default function ResveratrolGuidePage() {
           <div className="rounded-xl border border-amber-400/20 bg-amber-400/[0.04] p-5">
             <p className="font-semibold text-amber-400 mb-2">The verdict</p>
             <p className="text-sm text-muted-foreground">
-              Neither compound has a human longevity-outcome RCT behind it. Resveratrol carries the deeper history and the single landmark mouse study that started the sirtuin field; pterostilbene carries a human safety trial and a meaningfully better absorption profile per milligram. If bioavailability and GI tolerance matter most to you, pterostilbene is the reasonable upgrade to evaluate. See our <Link href="/pterostilbene-supplement-guide" className="text-accent-cyan hover:underline">full pterostilbene guide</Link> and the <Link href="/library/compare/resveratrol-vs-pterostilbene" className="text-accent-cyan hover:underline">head-to-head comparison</Link> for the complete breakdown.
+              Neither compound has a human longevity-outcome RCT behind it. Resveratrol carries the deeper history and the single landmark mouse study that started the sirtuin field; pterostilbene carries a human safety trial and a meaningfully better absorption profile per milligram. If bioavailability and GI tolerance matter most to you, pterostilbene is the reasonable upgrade to evaluate. If you already have a resveratrol-based stack running well and tolerate it, there is no urgent mechanistic reason to switch — the underlying pathway is the same either way. See our <Link href="/pterostilbene-supplement-guide" className="text-accent-cyan hover:underline">full pterostilbene guide</Link> and the <Link href="/library/compare/resveratrol-vs-pterostilbene" className="text-accent-cyan hover:underline">head-to-head comparison</Link> for the complete breakdown.
             </p>
           </div>
         </div>
@@ -365,7 +368,7 @@ export default function ResveratrolGuidePage() {
         <div className="container-page max-w-4xl">
           <h2 className="heading-section mb-3">Dosing Protocol</h2>
           <p className="text-body mb-8 max-w-2xl">
-            A conservative, tolerability-first ramp based on the commonly used 150–500mg trans-resveratrol range and established bioavailability pharmacology.
+            A conservative, tolerability-first ramp based on the commonly used 150–500mg trans-resveratrol range and established bioavailability pharmacology. Because roughly 99% of a standard oral dose is lost to intestinal glucuronidation before it reaches systemic circulation, the practical decision that matters most is less about the milligram number on the label and more about which formulation you choose — a poorly absorbed 500mg dose can deliver less usable resveratrol than a well-formulated 150mg dose.
           </p>
 
           <div className="overflow-x-auto rounded-xl border border-border/60 mb-8">
@@ -407,6 +410,7 @@ export default function ResveratrolGuidePage() {
                 <li>· Pair with NMN if using an AM/PM sirtuin stack — understand this is mechanistic reasoning, not a proven combined-trial result</li>
                 <li>· Give it 8–12 weeks before evaluating subjective effects</li>
                 <li>· Source third-party-tested trans-resveratrol specifically (not the cis isomer, which is far less active)</li>
+                <li>· Reassess your formulation choice before assuming the compound &ldquo;isn&rsquo;t working&rdquo; — most disappointing self-experiments trace back to a poorly absorbed powder form, not a failed mechanism</li>
               </ul>
             </div>
             <div className="rounded-xl border border-accent-rose/20 bg-accent-rose/[0.04] p-5">
@@ -420,6 +424,7 @@ export default function ResveratrolGuidePage() {
                 <li>· May interact with drugs metabolized by certain CYP enzymes</li>
                 <li>· Not established as safe in pregnancy or nursing — avoid</li>
                 <li>· Do not treat the NMN + resveratrol stack as clinically proven — it is a reasoned combination, not a tested one</li>
+                <li>· If combining with pterostilbene or other stilbenoids, do not simply add the doses together — discuss total stilbenoid exposure with your physician</li>
               </ul>
             </div>
           </div>
@@ -437,21 +442,21 @@ export default function ResveratrolGuidePage() {
                 color: 'text-accent-violet',
                 badge: 'bg-accent-violet/10 border-accent-violet/20',
                 title: 'Allosteric SIRT1 Activation',
-                body: "Resveratrol binds SIRT1 at a site distinct from its catalytic pocket, inducing a conformational change that increases SIRT1's affinity for acetylated substrates by roughly 8–13×. This mimics caloric restriction: SIRT1 deacetylates PGC-1α (mitochondrial biogenesis), FOXO3a (antioxidant defense and autophagy genes), and NF-κB/RelA (suppressing inflammatory gene expression).",
+                body: "Resveratrol binds SIRT1 at a site distinct from its catalytic pocket, inducing a conformational change that increases SIRT1's affinity for acetylated substrates by roughly 8–13×. This mimics caloric restriction: SIRT1 deacetylates PGC-1α (mitochondrial biogenesis), FOXO3a (antioxidant defense and autophagy genes), and NF-κB/RelA (suppressing inflammatory gene expression). In practical terms, this affinity boost means resveratrol doesn't just add a new pathway — it makes the SIRT1 enzyme already present in your cells dramatically more effective at doing its existing job, which is why the compound is often framed as an amplifier rather than a standalone driver of the caloric-restriction response.",
               },
               {
                 icon: Zap,
                 color: 'text-accent-cyan',
                 badge: 'bg-accent-cyan/10 border-accent-cyan/20',
                 title: 'AMPK Activation via CAMKK2',
-                body: 'Independent of the SIRT1 pathway, resveratrol activates AMPK through CAMKK2 signaling — adding a second mechanism for mTOR suppression and autophagy induction. This dual SIRT1/AMPK action is why resveratrol is often framed as a caloric-restriction mimetic rather than a single-pathway compound.',
+                body: 'Independent of the SIRT1 pathway, resveratrol activates AMPK through CAMKK2 signaling — adding a second mechanism for mTOR suppression and autophagy induction. This dual SIRT1/AMPK action is why resveratrol is often framed as a caloric-restriction mimetic rather than a single-pathway compound. Because AMPK activation and SIRT1 activation converge on overlapping downstream targets — both ultimately suppress mTOR signaling and promote autophagy — the two mechanisms reinforce rather than merely add to each other, which is a large part of why resveratrol is grouped with metformin and exercise as a caloric-restriction-mimetic compound despite having a completely different upstream trigger.',
               },
               {
                 icon: TrendingUp,
                 color: 'text-accent-emerald',
                 badge: 'bg-accent-emerald/10 border-accent-emerald/20',
                 title: 'Bioavailability Bottleneck',
-                body: 'Glucuronidation in the intestinal wall limits standard-powder bioavailability to roughly 1%. This is the central practical challenge with resveratrol supplementation — the mechanism is compelling, but getting an effective dose into circulation requires a formulation built to work around first-pass metabolism.',
+                body: 'Glucuronidation in the intestinal wall limits standard-powder bioavailability to roughly 1%. This is the central practical challenge with resveratrol supplementation — the mechanism is compelling, but getting an effective dose into circulation requires a formulation built to work around first-pass metabolism. This is also the core reason resveratrol research results can look so inconsistent across studies — a trial using unformulated powder and a trial using a micronized or liposomal version are, in a real pharmacokinetic sense, testing different exposure levels of the same molecule.',
               },
             ].map((card) => (
               <div key={card.title} className={`rounded-xl border p-5 ${card.badge} bg-card/50`}>
@@ -480,7 +485,7 @@ export default function ResveratrolGuidePage() {
                 color: 'text-accent-violet',
                 badge: 'bg-accent-violet/10 border-accent-violet/20',
                 title: 'Mitochondrial Dysfunction',
-                body: 'SIRT1-mediated deacetylation of PGC-1α is the master switch for mitochondrial biogenesis. Combined with independent AMPK activation via CAMKK2, resveratrol\'s mechanism supports both making more mitochondria and improving the metabolic efficiency of existing ones — the well-established rationale behind its caloric-restriction-mimetic reputation.',
+                body: 'SIRT1-mediated deacetylation of PGC-1α is the master switch for mitochondrial biogenesis. Combined with independent AMPK activation via CAMKK2, resveratrol\'s mechanism supports both making more mitochondria and improving the metabolic efficiency of existing ones — the well-established rationale behind its caloric-restriction-mimetic reputation. In practice, this is the same biological logic behind exercise-induced mitochondrial adaptation — resveratrol\'s mechanism proposes a pharmacological shortcut to a subset of that same signaling cascade.',
                 href: '/library/mitochondrial-dysfunction',
                 label: 'Mitochondrial Dysfunction hallmark',
               },
@@ -489,7 +494,7 @@ export default function ResveratrolGuidePage() {
                 color: 'text-accent-cyan',
                 badge: 'bg-accent-cyan/10 border-accent-cyan/20',
                 title: 'Chronic Inflammation',
-                body: 'SIRT1 deacetylates the RelA subunit of NF-κB, the master transcription factor driving inflammatory gene expression. By suppressing NF-κB activity, resveratrol\'s mechanism provides a plausible route to dampening low-grade chronic inflammation ("inflammaging") — a mechanistic pathway, not a human-outcome-trial finding for resveratrol specifically.',
+                body: 'SIRT1 deacetylates the RelA subunit of NF-κB, the master transcription factor driving inflammatory gene expression. By suppressing NF-κB activity, resveratrol\'s mechanism provides a plausible route to dampening low-grade chronic inflammation ("inflammaging") — a mechanistic pathway, not a human-outcome-trial finding for resveratrol specifically. Because NF-κB activity tends to rise with age independent of any acute infection or injury, a mechanism that plausibly dials it back is of considerable theoretical interest, even absent a dedicated resveratrol-specific human inflammatory-outcome trial.',
                 href: '/library/chronic-inflammation',
                 label: 'Chronic Inflammation hallmark',
               },
@@ -498,7 +503,7 @@ export default function ResveratrolGuidePage() {
                 color: 'text-accent-emerald',
                 badge: 'bg-accent-emerald/10 border-accent-emerald/20',
                 title: 'Cellular Senescence',
-                body: 'FOXO3a activation via SIRT1 deacetylation switches on autophagy and antioxidant-defense genes, both of which are mechanistically linked to reducing the accumulation of dysfunctional, senescence-prone cells. This is an extrapolated mechanistic connection — there is no dedicated senescence-clearance trial for resveratrol in humans.',
+                body: 'FOXO3a activation via SIRT1 deacetylation switches on autophagy and antioxidant-defense genes, both of which are mechanistically linked to reducing the accumulation of dysfunctional, senescence-prone cells. This is an extrapolated mechanistic connection — there is no dedicated senescence-clearance trial for resveratrol in humans. Autophagy in particular is the cellular process responsible for clearing damaged proteins and organelles before they accumulate to the point of triggering senescence, which is why compounds that upregulate autophagy are routinely discussed in the context of this hallmark, resveratrol among them.',
                 href: '/library/cellular-senescence',
                 label: 'Cellular Senescence hallmark',
               },
@@ -527,27 +532,27 @@ export default function ResveratrolGuidePage() {
               {
                 n: '01',
                 title: 'Choose a bioavailable formulation first',
-                body: 'Standard resveratrol powder loses roughly 99% of its dose to intestinal glucuronidation. Micronized or liposomal trans-resveratrol achieves 3–5× higher plasma concentration for the same milligram amount — this decision matters more than the exact dose you pick.',
+                body: 'Standard resveratrol powder loses roughly 99% of its dose to intestinal glucuronidation. Micronized or liposomal trans-resveratrol achieves 3–5× higher plasma concentration for the same milligram amount — this decision matters more than the exact dose you pick, and arguably matters more than any other variable in this entire protocol.',
               },
               {
                 n: '02',
                 title: 'Check bleeding risk and interactions',
-                body: 'Resveratrol has antiplatelet activity. If you take blood thinners, have surgery scheduled within two weeks, or take medications with CYP-mediated metabolism, talk to your physician before starting.',
+                body: 'Resveratrol has antiplatelet activity. If you take blood thinners, have surgery scheduled within two weeks, or take medications with CYP-mediated metabolism, talk to your physician before starting. Do not skip this step simply because resveratrol is sold over the counter — an OTC status says nothing about interaction risk.',
               },
               {
                 n: '03',
                 title: 'Start at 150mg in the evening with food',
-                body: 'Take your first dose with a fat-containing dinner. Evening dosing is preferred because SIRT1 expression follows a circadian rhythm that peaks later in the day.',
+                body: 'Take your first dose with a fat-containing dinner. Evening dosing is preferred because SIRT1 expression follows a circadian rhythm that peaks later in the day. Track how you feel over this window rather than expecting an immediate subjective change — SIRT1-mediated effects operate on a slower biological timescale than a stimulant would.',
               },
               {
                 n: '04',
                 title: 'Titrate to 300–500mg if well tolerated',
-                body: 'After one to two weeks without GI discomfort, move toward the upper end of the 150–500mg range for a stronger SIRT1-activation signal — still in the evening, still with food.',
+                body: 'After one to two weeks without GI discomfort, move toward the upper end of the 150–500mg range for a stronger SIRT1-activation signal — still in the evening, still with food. If you experience any GI discomfort at this stage, drop back to 150mg for another week before trying again.',
               },
               {
                 n: '05',
                 title: 'Consider the NMN pairing, with realistic expectations',
-                body: "If building a sirtuin-focused stack, NMN in the morning plus resveratrol in the evening is the standard TNiC pairing. Remember: the mechanistic case is strong (more substrate, more affinity for that substrate), but this specific combination hasn't been validated in a dedicated human RCT. Track your own biomarkers rather than assuming a guaranteed effect.",
+                body: "If building a sirtuin-focused stack, NMN in the morning plus resveratrol in the evening is the standard TNiC pairing. Remember: the mechanistic case is strong (more substrate, more affinity for that substrate), but this specific combination hasn't been validated in a dedicated human RCT. Reassess after 8–12 weeks using whatever biomarkers matter most to you — this is how you generate your own evidence in the absence of a dedicated combination trial.",
               },
             ].map((step) => (
               <div key={step.n} className="flex gap-4 rounded-xl border border-border/50 bg-card/50 p-5">

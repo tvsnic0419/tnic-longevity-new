@@ -41,7 +41,7 @@ const EVIDENCE_TABLE = [
   {
     endpoint: 'Senolytic potency vs. other flavonoids (mice, cells)',
     finding:
-      'In a screen of 10 flavonoids, fisetin emerged as the single most potent senolytic tested — the basis for its reputation as the leading flavonoid senolytic candidate.',
+      'In a screen of 10 flavonoids, fisetin emerged as the single most potent senolytic tested — the basis for its reputation as the leading flavonoid senolytic candidate. This head-to-head screening design is what distinguishes fisetin\'s evidence from a simple "flavonoids are healthy" claim; it was specifically compared against nine other structurally related compounds and came out on top.',
     quality: 'Strong (preclinical)',
     pmid: '30279143',
     color: 'text-accent-emerald',
@@ -50,7 +50,7 @@ const EVIDENCE_TABLE = [
   {
     endpoint: 'Senescence marker clearance across tissues (mice)',
     finding:
-      'Both acute and intermittent ("pulse") dosing reduced senescence markers across multiple tissues in aged mice — the origin of the pulse-dosing protocol used in most fisetin regimens today.',
+      'Both acute and intermittent ("pulse") dosing reduced senescence markers across multiple tissues in aged mice — the origin of the pulse-dosing protocol used in most fisetin regimens today. The fact that senescence markers dropped across multiple tissue types, rather than just one, is part of what made this result notable within the senolytic field.',
     quality: 'Strong (preclinical)',
     pmid: '30279143',
     color: 'text-accent-emerald',
@@ -59,7 +59,7 @@ const EVIDENCE_TABLE = [
   {
     endpoint: 'Lifespan extension (mice)',
     finding:
-      'Fisetin extended both median and maximum lifespan in mice relative to untreated controls in the same study.',
+      'Fisetin extended both median and maximum lifespan in mice relative to untreated controls in the same study. Extending maximum — not just median — lifespan is a more demanding bar in aging research, since it implies an effect on the upper limit of the lifespan distribution rather than simply improving average outcomes.',
     quality: 'Strong (preclinical)',
     pmid: '30279143',
     color: 'text-accent-emerald',
@@ -68,7 +68,7 @@ const EVIDENCE_TABLE = [
   {
     endpoint: 'Human senolytic outcomes — fisetin monotherapy',
     finding:
-      'No completed, published human trial of fisetin alone has reported senolytic outcome data as of this writing. Registered trials exist (e.g. NCT03675724, NCT04733534) but their results are not yet confirmed reported — do not treat this as "pending good news."',
+      'No completed, published human trial of fisetin alone has reported senolytic outcome data as of this writing. Registered trials exist (e.g. NCT03675724, NCT04733534) but their results are not yet confirmed reported — do not treat this as "pending good news." A registered trial only tells you a question is being asked, not what the answer will be.',
     quality: 'Human evidence: not yet published',
     pmid: undefined,
     color: 'text-amber-400',
@@ -213,7 +213,7 @@ export default function FisetinGuidePage() {
             Fisetin Supplement Guide 2026
           </h1>
           <p className="text-xl text-muted-foreground mb-6 max-w-2xl">
-            Fisetin is the most potent senolytic identified in a landmark mouse study — and one of the most overstated compounds in longevity marketing. Here is exactly what the mouse data shows, why pulse dosing exists, and the honest truth about human trials that haven&rsquo;t happened yet.
+            Fisetin is the most potent senolytic identified in a landmark mouse study — and one of the most overstated compounds in longevity marketing. Here is exactly what the mouse data shows, why pulse dosing exists, and the honest truth about human trials that haven&rsquo;t happened yet, including the specific mix-up between fisetin and the dasatinib+quercetin combination that Mayo Clinic actually tested in people.
           </p>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
@@ -255,6 +255,9 @@ export default function FisetinGuidePage() {
           <h2 className="heading-section mb-3">Fisetin vs Quercetin: Two Flavonoid Senolytics, Very Different Human Evidence</h2>
           <p className="text-body mb-6 max-w-2xl">
             These two flavonoids get lumped together constantly. Here is an honest comparison of what each one&rsquo;s evidence base actually contains.
+          </p>
+          <p className="text-body text-muted-foreground mb-6 max-w-2xl">
+            Senolytics are a genuinely new drug and supplement category: compounds designed to selectively clear senescent ("zombie") cells rather than to prevent damage or slow a process, the way most longevity interventions do. That novelty is part of why the evidence landscape is so easy to misrepresent — the field is young, the human data is thin relative to the hype, and two structurally similar flavonoids (fisetin and quercetin) get discussed as if they were interchangeable when their actual evidence bases diverge in important ways. Untangling which claims belong to which compound, and which belong to mice rather than people, is the whole point of this comparison.
           </p>
 
           <div className="overflow-x-auto rounded-xl border border-border/60 mb-8">
@@ -318,7 +321,7 @@ export default function FisetinGuidePage() {
           <div className="rounded-xl border border-amber-400/20 bg-amber-400/[0.04] p-5">
             <p className="font-semibold text-amber-400 mb-2">The verdict</p>
             <p className="text-sm text-muted-foreground">
-              Fisetin has a genuine edge in preclinical potency — it was identified as the strongest of 10 flavonoids screened. But neither compound has published human monotherapy senolytic trial results. Quercetin&rsquo;s real human evidence belongs to the dasatinib+quercetin combination, not quercetin alone, so a fair comparison has to acknowledge that both flavonoids are, individually, still waiting on human confirmation. See the full breakdown at Fisetin vs Quercetin.
+              Fisetin has a genuine edge in preclinical potency — it was identified as the strongest of 10 flavonoids screened. But neither compound has published human monotherapy senolytic trial results. Quercetin&rsquo;s real human evidence belongs to the dasatinib+quercetin combination, not quercetin alone, so a fair comparison has to acknowledge that both flavonoids are, individually, still waiting on human confirmation. Neither &ldquo;fisetin is proven in humans&rdquo; nor &ldquo;quercetin is proven in humans&rdquo; is an accurate statement as of this writing — the honest framing is that the preclinical case for fisetin specifically is strong, and the human case for the senolytic drug class generally rests on a different combination entirely. See the full breakdown at Fisetin vs Quercetin.
             </p>
           </div>
         </div>
