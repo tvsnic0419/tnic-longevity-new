@@ -16,6 +16,8 @@ interface PageHeaderProps {
   description: string;
   meta?: string;
   context?: PageHeaderContext;
+  /** See ContextRail's own variant doc — 'cards' (default) or 'compact'. */
+  contextVariant?: 'cards' | 'compact';
   theme?: ThemeAccent;
   as?: 'h1' | 'h2';
   align?: 'center' | 'left';
@@ -29,6 +31,7 @@ export function PageHeader({
   description,
   meta,
   context,
+  contextVariant,
   theme = 'cyan',
   as: Tag = 'h1',
   align = 'center',
@@ -54,6 +57,7 @@ export function PageHeader({
           why={context.why}
           next={context.next}
           theme={theme}
+          variant={contextVariant}
           className={`mt-8 max-w-3xl ${align === 'center' ? 'mx-auto' : ''}`}
         />
       )}

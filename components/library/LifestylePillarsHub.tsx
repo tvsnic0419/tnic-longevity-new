@@ -59,6 +59,7 @@ export function LifestylePillarsHub() {
           why="Compounds provide substrate; lifestyle provides the signal and schedule. Fix pillars before escalating spend."
           next="Start with Sleep (#1 priority), then Exercise. Log labs at baseline and checkpoint weeks."
           theme="amber"
+          variant="compact"
           className="mb-10 max-w-4xl mx-auto"
         />
 

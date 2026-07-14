@@ -87,7 +87,7 @@ export function HallmarkDetail({
               </div>
             </motion.div>
 
-            <ContextRail {...getHallmarkContext(hallmark)} theme="cyan" />
+            <ContextRail {...getHallmarkContext(hallmark)} theme="cyan" variant="compact" />
 
             {mdxBody && (
               <div className="gradient-border p-6 md:p-8">
