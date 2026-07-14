@@ -5,6 +5,7 @@ import { Footer } from '@/components/Footer';
 import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Shield } from 'lucide-react';
 import { getHallmarkBySlug } from '@/lib/hallmarks-library';
 import { InterventionCards } from '@/components/hallmarks/InterventionCards';
+import { HallmarkHeroVisual } from '@/components/hallmarks/HallmarkHeroVisual';
 
 export const metadata: Metadata = {
   title: 'Chronic Inflammation (Inflammaging) | Hallmarks of Aging | TNiC',
@@ -34,7 +35,9 @@ export default function ChronicInflammationPage() {
       <main id="main-content" tabIndex={-1}>
         <section className="pt-28 pb-16 md:pt-36 md:pb-20 relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,color-mix(in_srgb,var(--accent-rose)_10%,transparent),transparent)]" />
-          <div className="relative container-page max-w-4xl">
+          <div className="relative container-page max-w-6xl">
+            <div className="grid items-center gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-7">
             <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
               <Link href="/hallmarks" className="hover:text-foreground transition-colors">Hallmarks</Link>
               <span>/</span>
@@ -54,6 +57,11 @@ export default function ChronicInflammationPage() {
             <div className="flex flex-wrap gap-3">
               <Link href="/stacks" className="inline-flex items-center gap-2 bg-rose-500 text-white px-5 py-3 rounded-xl text-sm font-bold hover:bg-rose-400 transition-colors">Build My Stack <ArrowRight className="w-4 h-4" /></Link>
               <Link href="/labs" className="inline-flex items-center gap-2 border border-border px-5 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Track hs-CRP</Link>
+            </div>
+            </div>
+            <div className="lg:col-span-5">
+              <HallmarkHeroVisual hallmark={hallmark} />
+            </div>
             </div>
           </div>
         </section>

@@ -5,6 +5,7 @@ import { Footer } from '@/components/Footer';
 import { Zap, ArrowRight, FlaskConical, Activity, ShieldCheck, BookOpen } from 'lucide-react';
 import { getHallmarkBySlug } from '@/lib/hallmarks-library';
 import { InterventionCards } from '@/components/hallmarks/InterventionCards';
+import { HallmarkHeroVisual } from '@/components/hallmarks/HallmarkHeroVisual';
 
 export const metadata: Metadata = {
   title: 'Cellular Senescence | Hallmarks of Aging | TNiC',
@@ -37,7 +38,9 @@ export default function CellularSenescencePage() {
         {/* Hero */}
         <section className="pt-28 pb-16 md:pt-36 md:pb-20 relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,color-mix(in_srgb,var(--accent-rose)_10%,transparent),transparent)]" />
-          <div className="relative container-page max-w-4xl">
+          <div className="relative container-page max-w-6xl">
+            <div className="grid items-center gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-7">
             <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
               <Link href="/library" className="hover:text-foreground transition-colors">Library</Link>
               <span>/</span>
@@ -65,6 +68,11 @@ export default function CellularSenescencePage() {
               <Link href="/bio-age" className="inline-flex items-center gap-2 border border-border px-5 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 Assess My Bio Age
               </Link>
+            </div>
+            </div>
+            <div className="lg:col-span-5">
+              <HallmarkHeroVisual hallmark={hallmark} />
+            </div>
             </div>
           </div>
         </section>
