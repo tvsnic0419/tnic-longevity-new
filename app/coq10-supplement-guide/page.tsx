@@ -110,6 +110,10 @@ const FAQ = [
     q: 'Should I take CoQ10 with or without food?',
     a: 'Always with a meal that contains some fat. CoQ10 is highly lipophilic (fat-soluble) and absorption on an empty stomach is substantially reduced regardless of form. Splitting a higher total dose into an AM and PM serving, each taken with a meal, is a reasonable way to keep plasma levels steadier across the day, though this has not been directly compared to once-daily dosing in a dedicated trial.',
   },
+  {
+    q: 'How long does CoQ10 take to work, and how will I know?',
+    a: "Plasma CoQ10 levels rise within days to weeks, but the outcomes people actually care about — reduced statin-associated muscle discomfort, or measurable change in inflammatory markers like hs-CRP — take longer to show up. The inflammatory-marker meta-analysis behind this guide reflects trials that ran for a number of weeks, not days, so an 8–12 week evaluation window is a reasonable expectation to set before deciding whether it is working for you. There is no fast way to shortcut this; taking a much higher dose does not appear to accelerate the timeline based on the available evidence.",
+  },
 ];
 
 function buildCoQ10Schemas() {
@@ -266,7 +270,7 @@ export default function CoQ10GuidePage() {
         <div className="container-page max-w-4xl">
           <h2 className="heading-section mb-3">CoQ10 vs Ubiquinol: Does the Upgraded Form Matter?</h2>
           <p className="text-body mb-6 max-w-2xl">
-            Every CoQ10 bottle is either &ldquo;ubiquinone&rdquo; (oxidized, the older/cheaper form) or &ldquo;ubiquinol&rdquo; (reduced, the newer/pricier form). Here is the honest comparison.
+            Every CoQ10 bottle is either &ldquo;ubiquinone&rdquo; (oxidized, the older/cheaper form) or &ldquo;ubiquinol&rdquo; (reduced, the newer/pricier form). Marketing copy often implies ubiquinone is basically inert by comparison — that overstates the case. Both forms participate in the electron transport chain; the real question is which one gets more CoQ10 into your bloodstream per dollar spent, and whether that matters for you specifically. Here is the honest comparison.
           </p>
 
           <div className="overflow-x-auto rounded-xl border border-border/60 mb-8">
@@ -330,7 +334,7 @@ export default function CoQ10GuidePage() {
           <div className="rounded-xl border border-amber-400/20 bg-amber-400/[0.04] p-5">
             <p className="font-semibold text-amber-400 mb-2">The verdict</p>
             <p className="text-sm text-muted-foreground">
-              Ubiquinol&rsquo;s absorption edge in plasma studies is real, and it makes physiological sense given that it is already in the active reduced state. Whether that edge is worth the price premium depends on your situation: if you are over 40, on a statin, or simply want the highest plasma concentration per dose, ubiquinol is the more defensible pick. If budget is the constraint, ubiquinone still functions in the electron transport chain and is not a &ldquo;fake&rdquo; or ineffective form — it is simply a lower-absorption one. See our full <Link href="/library/compare/coq10-vs-ubiquinol" className="text-accent-violet hover:underline">CoQ10 vs Ubiquinol comparison</Link> for the detailed breakdown.
+              Ubiquinol&rsquo;s absorption edge in plasma studies is real, and it makes physiological sense given that it is already in the active reduced state. Whether that edge is worth the price premium depends on your situation: if you are over 40, on a statin, or simply want the highest plasma concentration per dose, ubiquinol is the more defensible pick. If budget is the constraint, ubiquinone still functions in the electron transport chain and is not a &ldquo;fake&rdquo; or ineffective form — it is simply a lower-absorption one, and younger adults with intact endogenous conversion capacity may not notice a practical difference between the two. Neither form has a dedicated head-to-head longevity outcome trial behind it; the case for choosing ubiquinol is a pharmacokinetic one (plasma concentration achieved per milligram dosed), not a claim that ubiquinol produces a different clinical outcome than ubiquinone at an equivalent absorbed dose. See our full <Link href="/library/compare/coq10-vs-ubiquinol" className="text-accent-violet hover:underline">CoQ10 vs Ubiquinol comparison</Link> for the detailed breakdown.
             </p>
           </div>
         </div>
@@ -375,7 +379,7 @@ export default function CoQ10GuidePage() {
         <div className="container-page max-w-4xl">
           <h2 className="heading-section mb-3">Dosing Protocol</h2>
           <p className="text-body mb-8 max-w-2xl">
-            Dosing ranges reflect the general-support and statin-depletion literature — there is no single universally &ldquo;correct&rdquo; dose, but these ranges are consistently used across trials and clinical practice.
+            Dosing ranges reflect the general-support and statin-depletion literature — there is no single universally &ldquo;correct&rdquo; dose, but these ranges are consistently used across trials and clinical practice. As with most fat-soluble compounds, more is not automatically better beyond the range studied; the goal is to replace what age and, if applicable, statin therapy have depleted, not to maximize plasma levels indefinitely.
           </p>
 
           <div className="overflow-x-auto rounded-xl border border-border/60 mb-8">
@@ -414,10 +418,11 @@ export default function CoQ10GuidePage() {
               </div>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>· Always take with a fat-containing meal — CoQ10 is lipophilic and poorly absorbed without dietary fat</li>
-                <li>· Statin users: prioritize this compound above most other mitochondrial supplements</li>
-                <li>· Prefer ubiquinol if budget allows, especially if you are over 40</li>
-                <li>· Split higher doses (200mg+) into AM/PM to keep plasma levels steadier</li>
-                <li>· Store away from heat and light — CoQ10 can degrade in poor storage conditions</li>
+                <li>· Statin users: prioritize this compound above most other mitochondrial supplements given the documented depletion mechanism</li>
+                <li>· Prefer ubiquinol if budget allows, especially if you are over 40 and conversion capacity has declined</li>
+                <li>· Split higher doses (200mg+) into AM/PM to keep plasma levels steadier across the day</li>
+                <li>· Store away from heat and light — CoQ10 can degrade in poor storage conditions, reducing potency before you even take it</li>
+                <li>· Give it 8–12 weeks before judging whether it is working — this is not a fast-acting compound</li>
               </ul>
             </div>
             <div className="rounded-xl border border-accent-rose/20 bg-accent-rose/[0.04] p-5">
@@ -427,10 +432,11 @@ export default function CoQ10GuidePage() {
               </div>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>· May reduce warfarin&rsquo;s effectiveness due to structural similarity to vitamin K — discuss with your physician if anticoagulated</li>
-                <li>· Not a substitute for statin therapy or cholesterol management</li>
-                <li>· High doses taken late in the day may cause insomnia in some people</li>
-                <li>· Limited safety data in pregnancy and nursing — consult your physician</li>
+                <li>· Not a substitute for statin therapy or physician-directed cholesterol management</li>
+                <li>· High doses taken late in the day may cause insomnia in some people — consider AM-only dosing if this happens</li>
+                <li>· Limited safety data in pregnancy and nursing — consult your physician before starting</li>
                 <li>· Mild GI upset possible at higher doses; take with food to minimize this</li>
+                <li>· May modestly lower blood pressure — use caution if combined with antihypertensive medication</li>
               </ul>
             </div>
           </div>
@@ -448,21 +454,21 @@ export default function CoQ10GuidePage() {
                 color: 'text-accent-violet',
                 badge: 'bg-accent-violet/10 border-accent-violet/20',
                 title: 'Electron Transport Shuttle',
-                body: 'CoQ10 ferries electrons between Complex I/II and Complex III in the mitochondrial inner membrane — a required step in the electron transport chain that ultimately drives ATP synthase. This single carrier function underlies roughly 95% of cellular ATP production, which is why CoQ10 depletion shows up as fatigue and reduced exercise tolerance in deficiency states.',
+                body: 'CoQ10 ferries electrons between Complex I/II and Complex III in the mitochondrial inner membrane — a required step in the electron transport chain that ultimately drives ATP synthase. This single carrier function underlies roughly 95% of cellular ATP production, which is why CoQ10 depletion shows up as fatigue and reduced exercise tolerance in deficiency states. Tissues with the highest energy demand — heart, skeletal muscle, and liver — carry the largest CoQ10 reserves and are also the most sensitive to its decline.',
               },
               {
                 icon: ShieldCheck,
                 color: 'text-accent-cyan',
                 badge: 'bg-accent-cyan/10 border-accent-cyan/20',
                 title: 'The Only Fat-Soluble Antioxidant You Make Yourself',
-                body: 'Ubiquinol (the reduced QH2 form) is the sole fat-soluble antioxidant your cells synthesize endogenously. It quenches lipid peroxides in cell membranes and lipoproteins — damage the water-soluble glutathione system cannot reach. Ubiquinone (the oxidized Q form) must first be converted to ubiquinol before it can perform this antioxidant role.',
+                body: 'Ubiquinol (the reduced QH2 form) is the sole fat-soluble antioxidant your cells synthesize endogenously. It quenches lipid peroxides in cell membranes and lipoproteins — damage the water-soluble glutathione system cannot reach because it operates in the aqueous cytoplasm rather than inside lipid bilayers. Ubiquinone (the oxidized Q form) must first be converted to ubiquinol before it can perform this antioxidant role, a conversion step whose efficiency itself declines with age.',
               },
               {
                 icon: TrendingUp,
                 color: 'text-accent-emerald',
                 badge: 'bg-accent-emerald/10 border-accent-emerald/20',
                 title: 'Endogenous Synthesis Decline & the Statin Connection',
-                body: 'Endogenous CoQ10 biosynthesis peaks around age 20–30 and declines substantially by age 60. Statins inhibit HMG-CoA reductase in the mevalonate pathway — the same upstream pathway your body uses to make CoQ10 — which is the biochemical basis for statin-associated CoQ10 depletion documented in muscle tissue studies.',
+                body: 'Endogenous CoQ10 biosynthesis peaks around age 20–30 and declines substantially by age 60. Statins inhibit HMG-CoA reductase in the mevalonate pathway — the same upstream pathway your body uses to make both cholesterol and CoQ10 — which is the biochemical basis for statin-associated CoQ10 depletion documented in muscle tissue studies. This shared-pathway relationship is why CoQ10 supplementation is discussed specifically in the context of statin therapy rather than as a generic anti-aging additive.',
               },
             ].map((card) => (
               <div key={card.title} className={`rounded-xl border p-5 ${card.badge} bg-card/50`}>
@@ -482,7 +488,7 @@ export default function CoQ10GuidePage() {
         <div className="container-page max-w-4xl">
           <h2 className="heading-section mb-3">How CoQ10 Addresses the Hallmarks of Aging</h2>
           <p className="text-body mb-8 max-w-2xl">
-            CoQ10&rsquo;s evidence base maps onto three of the twelve recognized hallmarks of aging — most directly the mitochondrial one.
+            CoQ10&rsquo;s evidence base maps onto three of the twelve recognized hallmarks of aging — most directly the mitochondrial one. The strength of the connection varies: mitochondrial dysfunction is a direct, mechanistic fit, inflammation has meta-analysis-level human trial support, and genomic instability is a plausible downstream consequence of CoQ10&rsquo;s antioxidant role rather than something tested directly in the studies cited on this page.
           </p>
           <div className="grid md:grid-cols-3 gap-5">
             {[
@@ -539,27 +545,27 @@ export default function CoQ10GuidePage() {
               {
                 n: '01',
                 title: 'Identify whether you are in a depletion-risk group',
-                body: 'Statin users have the clearest evidence-based reason to supplement, since statins block the same mevalonate pathway used to synthesize CoQ10. Anyone over 40 is also a reasonable candidate given the well-documented age-related decline in endogenous biosynthesis.',
+                body: 'Statin users have the clearest evidence-based reason to supplement, since statins block the same mevalonate pathway used to synthesize CoQ10. Anyone over 40 is also a reasonable candidate given the well-documented age-related decline in endogenous biosynthesis. If neither applies to you, CoQ10 is still a reasonable general mitochondrial-support supplement, just with a less urgent case behind it.',
               },
               {
                 n: '02',
                 title: 'Choose ubiquinol over ubiquinone if budget allows',
-                body: 'Ubiquinol is already in the active, reduced antioxidant state and tends to reach higher plasma concentrations in absorption studies — particularly relevant for older adults whose conversion capacity has declined. Ubiquinone still works in the electron transport chain; it is a budget option, not a broken one.',
+                body: 'Ubiquinol is already in the active, reduced antioxidant state and tends to reach higher plasma concentrations in absorption studies — particularly relevant for older adults whose conversion capacity has declined. Ubiquinone still works in the electron transport chain; it is a budget option, not a broken one. If cost is the deciding factor, ubiquinone at a modestly higher dose is a reasonable substitute.',
               },
               {
                 n: '03',
                 title: 'Start at 100mg/day with a fat-containing meal',
-                body: 'This is a reasonable general baseline. Take it with breakfast or your largest meal — CoQ10 is fat-soluble and its absorption without dietary fat is poor no matter which form you choose.',
+                body: 'This is a reasonable general baseline. Take it with breakfast or your largest meal — CoQ10 is fat-soluble and its absorption without dietary fat is poor no matter which form you choose. Consistency matters more than perfect timing: pick a meal you eat reliably every day and anchor the dose there.',
               },
               {
                 n: '04',
                 title: 'Increase to 200–300mg/day if you take a statin',
-                body: 'Split into two doses with meals (AM/PM). This range reflects doses referenced in the statin-depletion literature and commonly used in clinical practice. Confirm with your physician, especially if you are also on anticoagulant medication.',
+                body: 'Split into two doses with meals (AM/PM). This range reflects doses referenced in the statin-depletion literature and commonly used in clinical practice. Confirm with your physician, especially if you are also on anticoagulant medication or have low blood pressure, since CoQ10 can have a mild additive effect in both areas.',
               },
               {
                 n: '05',
                 title: 'Reassess at 8–12 weeks',
-                body: 'Track any statin-associated muscle symptoms, and if you have access to lab work, consider checking hs-CRP. The inflammatory-marker meta-analysis supports an 8-week-plus window as a reasonable point to evaluate whether supplementation is doing anything measurable for you.',
+                body: 'Track any statin-associated muscle symptoms, and if you have access to lab work, consider checking hs-CRP. The inflammatory-marker meta-analysis supports an 8-week-plus window as a reasonable point to evaluate whether supplementation is doing anything measurable for you. If you notice no change in symptoms or markers by 12 weeks, it is reasonable to reconsider the dose, the form, or whether CoQ10 is the right tool for your specific situation.',
               },
             ].map((step) => (
               <div key={step.n} className="flex gap-4 rounded-xl border border-border/50 bg-card/50 p-5">
@@ -605,7 +611,7 @@ export default function CoQ10GuidePage() {
               <div>
                 <h3 className="font-semibold text-accent-rose mb-2">Important safety note</h3>
                 <p className="text-sm text-muted-foreground">
-                  CoQ10 can reduce the anticoagulant effectiveness of warfarin due to a structural similarity to vitamin K. If you are on blood thinners, inform your physician before starting CoQ10. CoQ10 is also not a substitute for statin therapy or physician-directed cholesterol management — it addresses a side effect of statins, not the underlying condition the statin is prescribed for. TNiC content is educational and not a substitute for medical advice.
+                  CoQ10 can reduce the anticoagulant effectiveness of warfarin due to a structural similarity to vitamin K. If you are on blood thinners, inform your physician before starting CoQ10. CoQ10 is also not a substitute for statin therapy or physician-directed cholesterol management — it addresses a side effect of statins, not the underlying condition the statin is prescribed for. Stopping or reducing a prescribed statin because you have added CoQ10 is not supported by any evidence discussed on this page and should never be done without your prescribing physician&rsquo;s explicit guidance. TNiC content is educational and not a substitute for medical advice.
                 </p>
               </div>
             </div>
@@ -619,7 +625,7 @@ export default function CoQ10GuidePage() {
           <div className="rounded-2xl border border-accent-violet/20 bg-accent-violet/[0.04] p-8 md:p-10 text-center">
             <h2 className="heading-section mb-3">Build Your Mitochondrial Stack</h2>
             <p className="text-body text-muted-foreground mb-8 max-w-xl mx-auto">
-              CoQ10 pairs with NMN and R-ALA in TNiC&rsquo;s mitochondria-focused stacks. Take the quiz to get a personalized protocol.
+              CoQ10 pairs with NMN and R-ALA in TNiC&rsquo;s mitochondria-focused stacks — three compounds addressing complementary parts of the same energy-production and antioxidant network rather than duplicating one another. Take the quiz to get a personalized protocol based on your age, medication list, and goals.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               <Link

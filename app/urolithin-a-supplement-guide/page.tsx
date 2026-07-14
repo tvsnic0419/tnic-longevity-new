@@ -41,7 +41,7 @@ const EVIDENCE_TABLE = [
   {
     endpoint: 'Mitochondrial & cellular health signature (muscle, humans)',
     finding:
-      'First human clinical evidence that an oral compound induces a molecular signature of improved mitochondrial and cellular health in skeletal muscle of older/middle-aged adults. This was a safety and biomarker-signature trial — not a muscle-strength outcome study.',
+      'First human clinical evidence that an oral compound induces a molecular signature of improved mitochondrial and cellular health in skeletal muscle of older/middle-aged adults. This was a safety and biomarker-signature trial — not a muscle-strength outcome study — meaning it establishes that the mechanism is active in real human tissue, which is a meaningful and non-trivial first step, but it does not by itself demonstrate a functional benefit you would feel.',
     quality: 'Strong',
     pmid: '32694802',
     color: 'text-accent-emerald',
@@ -50,7 +50,7 @@ const EVIDENCE_TABLE = [
   {
     endpoint: 'Muscle strength & exercise performance (humans)',
     finding:
-      'Randomized, placebo-controlled trial in middle-aged adults reporting improved muscle strength and exercise performance alongside favorable biomarkers of mitochondrial health versus placebo — the first urolithin A trial with genuine functional outcomes, not just biomarkers.',
+      'Randomized, placebo-controlled trial in middle-aged adults reporting improved muscle strength and exercise performance alongside favorable biomarkers of mitochondrial health versus placebo — the first urolithin A trial with genuine functional outcomes, not just biomarkers. This is the study that elevates urolithin A from &ldquo;interesting mechanism&rdquo; to &ldquo;interesting mechanism with a measurable human benefit attached to it,&rdquo; which is a rarer combination than most supplement categories can claim.',
     quality: 'Strong',
     pmid: '35584623',
     color: 'text-accent-emerald',
@@ -229,7 +229,7 @@ export default function UrolithinAGuidePage() {
             Urolithin A Supplement Guide 2026
           </h1>
           <p className="text-xl text-muted-foreground mb-6 max-w-2xl">
-            Urolithin A is the first orally administered compound shown, in a human trial, to trigger a molecular signature of improved mitochondrial health. Here is exactly what the two human studies found, what the worm and rodent data does and doesn&rsquo;t tell us, and why most adults can&rsquo;t make enough of it on their own.
+            Urolithin A is the first orally administered compound shown, in a human trial, to trigger a molecular signature of improved mitochondrial health. Here is exactly what the two human studies found, what the worm and rodent data does and doesn&rsquo;t tell us, and why most adults can&rsquo;t make enough of it on their own — plus the dosing protocol, mechanism, and honest safety picture behind the &ldquo;Mitopure&rdquo; name you keep seeing.
           </p>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
@@ -271,6 +271,9 @@ export default function UrolithinAGuidePage() {
           <h2 className="heading-section mb-3">Urolithin A vs CoQ10 — Two Different Mitochondrial Strategies</h2>
           <p className="text-body mb-6 max-w-2xl">
             Both compounds get marketed under the same &ldquo;mitochondrial support&rdquo; banner, which obscures how differently they actually work. Here is the honest breakdown.
+          </p>
+          <p className="text-body text-muted-foreground mb-6 max-w-2xl">
+            Mitochondrial dysfunction is one of the more consistently observed features of aging tissue: energy output declines, reactive oxygen species accumulate, and the pool of dysfunctional mitochondria within a cell grows over time. Most supplements that claim to address this simply try to make existing mitochondria run better — feeding the electron transport chain with cofactors, or buffering the oxidative byproducts of energy production. Urolithin A takes a categorically different approach. Rather than optimizing what is already there, it triggers the cell&rsquo;s own quality-control system to identify and remove the damaged mitochondria outright, clearing space for newer, more efficient ones to take their place. Understanding that distinction is the key to understanding why urolithin A and CoQ10 are so often discussed side by side, and why the comparison isn&rsquo;t really about which one &ldquo;wins.&rdquo;
           </p>
 
           <div className="overflow-x-auto rounded-xl border border-border/60 mb-8">
@@ -334,7 +337,7 @@ export default function UrolithinAGuidePage() {
           <div className="rounded-xl border border-amber-400/20 bg-amber-400/[0.04] p-5">
             <p className="font-semibold text-amber-400 mb-2">The verdict</p>
             <p className="text-sm text-muted-foreground">
-              This isn&rsquo;t a competition — it&rsquo;s a division of labor. CoQ10 keeps existing mitochondria running efficiently; urolithin A clears out the damaged ones so healthy mitochondrial biogenesis has room to happen. Someone optimizing mitochondrial health broadly has a reasonable case for both, not either/or. See the full mechanism-by-mechanism breakdown at Urolithin A vs CoQ10.
+              This isn&rsquo;t a competition — it&rsquo;s a division of labor. CoQ10 keeps existing mitochondria running efficiently; urolithin A clears out the damaged ones so healthy mitochondrial biogenesis has room to happen. Someone optimizing mitochondrial health broadly has a reasonable case for both, not either/or, since neither compound directly substitutes for what the other one does. If you had to choose only one because of budget or simplicity, the deciding factor is usually which specific problem you&rsquo;re trying to solve: a known CoQ10 depletion issue (for example, from statin use) points toward CoQ10, while a broader interest in mitochondrial quality and muscle function — the specific outcomes measured in the urolithin A human trials — points toward urolithin A. See the full mechanism-by-mechanism breakdown at Urolithin A vs CoQ10.
             </p>
           </div>
         </div>
