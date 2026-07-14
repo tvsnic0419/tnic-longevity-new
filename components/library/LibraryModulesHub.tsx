@@ -66,6 +66,7 @@ export function LibraryModulesHub() {
           theme="emerald"
           as="h2"
           context={getHubContext('libraryModules')}
+          contextVariant="compact"
         />
 
         <div className="flex flex-wrap justify-center gap-3 mb-8">
