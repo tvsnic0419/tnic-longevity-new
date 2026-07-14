@@ -89,7 +89,7 @@ const GUIDE_FAQS = [
   },
   {
     question: 'Does NAD+ supplementation affect the epigenetic clock?',
-    answer: 'Pilot data suggests yes. A small NMN intervention study showed an average Horvath DNAmAge reduction of 2.1 years. This is not yet confirmed in large-scale replication. NAD+ is required by SIRT1/SIRT3, which regulate histone deacetylation and DNA methylation patterns — the biological mechanism exists. Expect more robust epigenetic clock data from NMN as the TAME-adjacent trials report.',
+    answer: 'No published, replicated human trial has reported a specific epigenetic-age-reduction figure for NMN or NR — treat any such number you encounter with skepticism. NAD+ is required by SIRT1/SIRT3, which regulate histone deacetylation and DNA methylation patterns, so the biological mechanism for an effect exists, but confirmed epigenetic clock data from NAD+ precursor trials is not yet available.',
   },
   {
     question: 'Is NMN safe to take long-term?',

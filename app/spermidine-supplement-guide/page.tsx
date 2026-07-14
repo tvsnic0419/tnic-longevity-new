@@ -42,7 +42,7 @@ const FAQ = [
   },
   {
     q: 'What is the correct spermidine dosage?',
-    a: "Most longevity-focused supplementation protocols use 1–5 mg/day of spermidine (as spermidine trihydrochloride or wheat germ extract standardized to spermidine content). A landmark human observational study (Kiechl et al. 2018) associated dietary spermidine intake above 80 µmol/day (~11 mg spermidine equivalent) with significantly reduced all-cause and cardiovascular mortality. The PROVINA pilot RCT used 1.2 mg/day spermidine (as wheat germ extract) and showed improved cognitive function in older adults. Wheat germ extract (standardized to ≥0.5% spermidine) is the most common supplement form.",
+    a: "Most longevity-focused supplementation protocols use 1–5 mg/day of spermidine (as spermidine trihydrochloride or wheat germ extract standardized to spermidine content). Human observational cohort studies associate higher dietary spermidine intake with reduced all-cause mortality (referenced in Madeo et al. 2018, Science, PMID 29371440). The largest human RCT to date testing spermidine for memory in older adults did not find a statistically significant benefit versus placebo — the memory claim specifically remains unproven in humans despite the strong preclinical autophagy case. Wheat germ extract (standardized to ≥0.5% spermidine) is the most common supplement form.",
   },
   {
     q: 'What foods are highest in spermidine?',
@@ -72,7 +72,7 @@ function buildSpermidineSchemas() {
       },
       {
         name: 'Start at 1–2 mg/day spermidine',
-        text: 'The PROVINA RCT used 1.2 mg/day with positive cognitive results. Most longevity protocols use 1–2 mg/day as the entry dose. Spermidine has no stimulant or sedative effect — take at any time of day. Morning dosing is most common but not required.',
+        text: 'Human RCTs testing spermidine at 1.2 mg/day have not shown a statistically significant cognitive benefit versus placebo, though the dose is well-tolerated. Most longevity protocols use 1–2 mg/day as the entry dose. Spermidine has no stimulant or sedative effect — take at any time of day. Morning dosing is most common but not required.',
       },
       {
         name: 'Consider escalating to 3–5 mg/day after 4 weeks',
@@ -114,19 +114,12 @@ function buildSpermidineSchemas() {
     citation: [
       {
         '@type': 'ScholarlyArticle',
-        name: 'Dietary spermidine improves cognitive function and reduces cardiovascular mortality',
+        name: 'Spermidine in health and disease',
+        author: 'Madeo F et al.',
         datePublished: '2018',
-        isPartOf: { '@type': 'Periodical', name: 'Cell Reports' },
-        identifier: { '@type': 'PropertyValue', propertyID: 'PMID', value: '29514097' },
-        url: 'https://pubmed.ncbi.nlm.nih.gov/29514097/',
-      },
-      {
-        '@type': 'ScholarlyArticle',
-        name: 'Spermidine supplementation in older adults — PROVINA pilot RCT',
-        datePublished: '2021',
-        isPartOf: { '@type': 'Periodical', name: 'Cortex' },
-        identifier: { '@type': 'PropertyValue', propertyID: 'PMID', value: '33429160' },
-        url: 'https://pubmed.ncbi.nlm.nih.gov/33429160/',
+        isPartOf: { '@type': 'Periodical', name: 'Science' },
+        identifier: { '@type': 'PropertyValue', propertyID: 'PMID', value: '29371440' },
+        url: 'https://pubmed.ncbi.nlm.nih.gov/29371440/',
       },
     ],
   };
@@ -169,9 +162,9 @@ const mechanisms = [
     icon: TrendingUp,
     color: 'text-accent-rose',
     badge: 'icon-badge-rose',
-    title: 'Cardiovascular and cognitive protection',
+    title: 'Cardiovascular protection',
     detail:
-      'The Kiechl 2018 Neurology study (PMID 29514097) followed 829 adults for 20 years and found that those in the highest dietary spermidine tertile had significantly lower all-cause mortality (HR 0.60) and cardiovascular mortality (HR 0.40). Human cardiac spermidine levels decline with age — restoration correlates with preserved cardiac function in mouse studies.',
+      'Human dietary-intake cohort studies associate higher spermidine consumption with reduced all-cause mortality (referenced in Madeo et al. 2018, Science, PMID 29371440). Human cardiac spermidine levels decline with age — restoration correlates with preserved cardiac function in mouse studies. The specific cognitive-benefit claim for spermidine is not supported by the largest human RCT to date.',
   },
 ];
 
@@ -201,7 +194,7 @@ export default function SpermidineSupplementGuidePage() {
             {[
               { value: '~10%', label: 'Lifespan extension (ITP mice)', color: 'text-accent-emerald' },
               { value: '40–80%', label: 'Spermidine decline with age', color: 'text-accent-cyan' },
-              { value: '0.60×', label: 'All-cause mortality HR (Kiechl)', color: 'text-accent-violet' },
+              { value: 'Lower', label: 'All-cause mortality, cohort studies', color: 'text-accent-violet' },
               { value: '1–5 mg', label: 'Daily supplemental dose', color: 'text-accent-rose' },
             ].map((stat) => (
               <div key={stat.label} className="rounded-xl border border-border/60 bg-card p-4 text-center">
@@ -275,20 +268,20 @@ export default function SpermidineSupplementGuidePage() {
                 note: 'ITP is the gold standard pre-clinical longevity test — requires replication across 3 independent sites. Spermidine joins rapamycin and acarbose as one of few compounds to pass.',
               },
               {
-                study: 'Kiechl et al. 2018 (Neurology) — PMID 29514097',
-                pmid: '29514097',
+                study: 'Dietary intake cohort studies — reviewed in Madeo et al. 2018 (Science) — PMID 29371440',
+                pmid: '29371440',
                 tier: 'Tier B',
                 tierColor: 'bg-accent-violet/15 text-accent-violet',
-                outcome: '829-person 20-year cohort: highest dietary spermidine tertile → HR 0.60 all-cause mortality, HR 0.40 cardiovascular mortality vs. lowest tertile.',
-                note: 'Observational — cannot establish causation. However, effect size is large and persists after multivariate adjustment including Mediterranean diet adherence.',
+                outcome: 'Human observational cohort studies associate higher dietary spermidine intake with reduced all-cause mortality.',
+                note: 'Observational — cannot establish causation. Reviewed alongside spermidine\'s autophagy mechanism in Madeo et al. 2018.',
               },
               {
-                study: 'PROVINA RCT (Wirth et al. 2021) — PMID 33429160',
-                pmid: '33429160',
+                study: 'Human RCT — spermidine for memory in older adults',
+                pmid: null,
                 tier: 'Tier B',
                 tierColor: 'bg-accent-cyan/15 text-accent-cyan',
-                outcome: '100 older adults (60–96 yo): 1.2 mg/day spermidine (wheat germ extract) vs. placebo for 3 months. Memory performance improved significantly (word recall test) in the spermidine group.',
-                note: 'Pilot RCT — small sample, single cognitive endpoint. Supports further larger trials. No adverse events at this dose.',
+                outcome: 'The largest human RCT to date testing spermidine supplementation for memory in older adults did not find a statistically significant benefit versus placebo.',
+                note: 'Human evidence for the memory claim specifically remains unproven despite the strong preclinical autophagy case.',
               },
               {
                 study: 'SOMA Trial — 6 mg/day for 3 months',
@@ -464,7 +457,7 @@ export default function SpermidineSupplementGuidePage() {
               {
                 n: '02',
                 title: 'Start at 1–2 mg/day',
-                body: 'The PROVINA RCT used 1.2 mg/day with positive cognitive results over 3 months. This is a conservative, well-evidenced starting point with essentially no adverse effect risk. Take at any time of day — with or without food.',
+                body: 'Human RCTs have tested 1.2 mg/day for tolerability over 3 months without finding a statistically significant cognitive benefit versus placebo. This is still a conservative, well-tolerated starting point with essentially no adverse effect risk. Take at any time of day — with or without food.',
               },
               {
                 n: '03',
