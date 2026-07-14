@@ -99,7 +99,7 @@ export default function LongevitySupplementsGuidePage() {
   ];
 
   return (
-    <SubPageLayout>
+    <SubPageLayout hideContextBar>
       <StructuredData schemas={schemas} />
 
       {/* Hero */}

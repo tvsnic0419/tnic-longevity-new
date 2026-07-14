@@ -31,7 +31,7 @@ const productSchemas = [
 
 export default function ProductsPage() {
   return (
-    <SubPageLayout>
+    <SubPageLayout hideContextBar>
       <StructuredData schemas={productSchemas} />
       <ProductsHub />
     </SubPageLayout>

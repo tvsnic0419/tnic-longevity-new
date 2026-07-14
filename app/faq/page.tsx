@@ -8,7 +8,7 @@ export const metadata = seoRoutes.faq();
 
 export default function FaqPage() {
   return (
-    <SubPageLayout>
+    <SubPageLayout hideContextBar>
       <StructuredData schemas={[buildFaqSchema()]} />
       <FaqHub />
     </SubPageLayout>

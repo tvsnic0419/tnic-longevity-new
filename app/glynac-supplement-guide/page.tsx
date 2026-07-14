@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, FlaskConical, ShieldCheck, TrendingUp, Zap, CheckCircle2, AlertTriangle, ExternalLink } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
+import { GuideHeroPanel } from '@/components/guides/GuideHeroPanel';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
@@ -155,53 +156,54 @@ function buildGlyNACSchemas() {
 
 export default function GlyNACGuidePage() {
   return (
-    <SubPageLayout>
+    <SubPageLayout hideContextBar>
       <StructuredData schemas={buildGlyNACSchemas()} />
 
       {/* Hero */}
       <section className="py-16 md:py-20 border-b border-border">
-        <div className="container-page max-w-4xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-cyan/10 border border-accent-cyan/20 mb-6">
-            <FlaskConical className="w-3.5 h-3.5 text-accent-cyan" aria-hidden="true" />
-            <span className="text-xs font-mono text-accent-cyan uppercase tracking-wider">Evidence Tier A · GlyNAC</span>
-          </div>
-
-          <h1 className="heading-hero mb-4">
-            GlyNAC Supplement Guide 2026
-          </h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl">
-            Glycine + N-Acetylcysteine is the only supplement combination proven in a human RCT to reverse 9 hallmarks of aging simultaneously — by restoring the glutathione your body stopped making.
-          </p>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-            {[
-              { value: '9', label: 'Hallmarks reversed', color: 'text-accent-cyan' },
-              { value: '50%', label: 'Glutathione lost by 70', color: 'text-accent-violet' },
-              { value: '94.6%', label: 'GSH increase (RCT)', color: 'text-accent-emerald' },
-              { value: '3.7yr', label: 'Epigenetic reversal', color: 'text-accent-rose' },
-            ].map((stat) => (
-              <div key={stat.label} className="rounded-xl border border-border/60 bg-card p-4 text-center">
-                <p className={`text-2xl font-bold font-mono ${stat.color}`}>{stat.value}</p>
-                <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
+        <div className="container-page max-w-6xl">
+          <div className="grid items-center gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-cyan/10 border border-accent-cyan/20 mb-6">
+                <FlaskConical className="w-3.5 h-3.5 text-accent-cyan" aria-hidden="true" />
+                <span className="text-xs font-mono text-accent-cyan uppercase tracking-wider">Evidence Tier A · GlyNAC</span>
               </div>
-            ))}
-          </div>
 
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/library/compounds/glynac"
-              className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-accent-cyan text-bg-base font-semibold text-sm hover:bg-accent-cyan/90 transition"
-            >
-              Deep-dive compound page
-              <ArrowRight className="w-4 h-4" aria-hidden="true" />
-            </Link>
-            <Link
-              href="/quiz"
-              className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-border/60 bg-card text-foreground font-medium text-sm hover:border-accent-cyan/30 transition"
-            >
-              Build my GlyNAC stack
-              <ArrowRight className="w-4 h-4" aria-hidden="true" />
-            </Link>
+              <h1 className="heading-hero mb-4">
+                GlyNAC Supplement Guide 2026
+              </h1>
+              <p className="text-xl text-muted-foreground mb-8 max-w-2xl">
+                Glycine + N-Acetylcysteine is the only supplement combination proven in a human RCT to reverse 9 hallmarks of aging simultaneously — by restoring the glutathione your body stopped making.
+              </p>
+
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/library/compounds/glynac"
+                  className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-accent-cyan text-bg-base font-semibold text-sm hover:bg-accent-cyan/90 transition"
+                >
+                  Deep-dive compound page
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </Link>
+                <Link
+                  href="/quiz"
+                  className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-border/60 bg-card text-foreground font-medium text-sm hover:border-accent-cyan/30 transition"
+                >
+                  Build my GlyNAC stack
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </Link>
+              </div>
+            </div>
+            <div className="lg:col-span-5">
+              <GuideHeroPanel
+                glowColor="var(--accent-cyan)"
+                headline={{ score: 94.6, label: 'GSH INCREASE', sublabel: 'Sekhar RCT', color: 'var(--accent-emerald)' }}
+                stats={[
+                  { value: '9', label: 'Hallmarks reversed', colorClass: 'text-accent-cyan' },
+                  { value: '50%', label: 'Glutathione lost by 70', colorClass: 'text-accent-violet' },
+                  { value: '3.7yr', label: 'Epigenetic reversal', colorClass: 'text-accent-rose' },
+                ]}
+              />
+            </div>
           </div>
         </div>
       </section>

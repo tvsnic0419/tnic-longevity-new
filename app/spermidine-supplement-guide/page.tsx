@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, FlaskConical, ExternalLink, CheckCircle2, AlertTriangle, Microscope, Recycle, TrendingUp } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
+import { GuideHeroPanel } from '@/components/guides/GuideHeroPanel';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
@@ -179,53 +180,54 @@ export default function SpermidineSupplementGuidePage() {
   const schemas = buildSpermidineSchemas();
 
   return (
-    <SubPageLayout>
+    <SubPageLayout hideContextBar>
       <StructuredData schemas={schemas} />
 
       {/* Hero */}
       <section className="py-16 md:py-20 border-b border-border">
-        <div className="container-page max-w-4xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-emerald/10 border border-accent-emerald/20 mb-6">
-            <Recycle className="w-3.5 h-3.5 text-accent-emerald" aria-hidden="true" />
-            <span className="text-xs font-mono text-accent-emerald uppercase tracking-wider">Evidence Tier B · Autophagy Activator · Spermidine</span>
-          </div>
-
-          <h1 className="heading-page mb-4">
-            Spermidine Supplement Guide 2026
-          </h1>
-          <p className="text-xl text-muted-foreground mb-6 max-w-2xl">
-            One of the few OTC supplements with ITP mouse lifespan data. Spermidine restores age-related autophagy decline through a mechanism distinct from fasting or rapamycin — and human observational data links higher intake to a 40% reduction in cardiovascular mortality.
-          </p>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-            {[
-              { value: '~10%', label: 'Lifespan extension (ITP mice)', color: 'text-accent-emerald' },
-              { value: '40–80%', label: 'Spermidine decline with age', color: 'text-accent-cyan' },
-              { value: '0.60×', label: 'All-cause mortality HR (Kiechl)', color: 'text-accent-violet' },
-              { value: '1–5 mg', label: 'Daily supplemental dose', color: 'text-accent-rose' },
-            ].map((stat) => (
-              <div key={stat.label} className="rounded-xl border border-border/60 bg-card p-4 text-center">
-                <p className={`text-xl font-bold font-mono ${stat.color}`}>{stat.value}</p>
-                <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
+        <div className="container-page max-w-6xl">
+          <div className="grid items-center gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-emerald/10 border border-accent-emerald/20 mb-6">
+                <Recycle className="w-3.5 h-3.5 text-accent-emerald" aria-hidden="true" />
+                <span className="text-xs font-mono text-accent-emerald uppercase tracking-wider">Evidence Tier B · Autophagy Activator · Spermidine</span>
               </div>
-            ))}
-          </div>
 
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/library/compounds/spermidine"
-              className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-accent-emerald text-bg-base font-semibold text-sm hover:bg-accent-emerald/90 transition"
-            >
-              Compound deep-dive
-              <ArrowRight className="w-4 h-4" aria-hidden="true" />
-            </Link>
-            <Link
-              href="/library/compare/cakg-vs-spermidine"
-              className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-border/60 bg-card text-foreground font-medium text-sm hover:border-accent-emerald/30 transition"
-            >
-              Ca-AKG vs Spermidine
-              <ArrowRight className="w-4 h-4" aria-hidden="true" />
-            </Link>
+              <h1 className="heading-page mb-4">
+                Spermidine Supplement Guide 2026
+              </h1>
+              <p className="text-xl text-muted-foreground mb-6 max-w-2xl">
+                One of the few OTC supplements with ITP mouse lifespan data. Spermidine restores age-related autophagy decline through a mechanism distinct from fasting or rapamycin — and human observational data links higher intake to a 40% reduction in cardiovascular mortality.
+              </p>
+
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/library/compounds/spermidine"
+                  className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-accent-emerald text-bg-base font-semibold text-sm hover:bg-accent-emerald/90 transition"
+                >
+                  Compound deep-dive
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </Link>
+                <Link
+                  href="/library/compare/cakg-vs-spermidine"
+                  className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-border/60 bg-card text-foreground font-medium text-sm hover:border-accent-emerald/30 transition"
+                >
+                  Ca-AKG vs Spermidine
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </Link>
+              </div>
+            </div>
+            <div className="lg:col-span-5">
+              <GuideHeroPanel
+                glowColor="var(--accent-emerald)"
+                stats={[
+                  { value: '~10%', label: 'Lifespan extension (ITP mice)', colorClass: 'text-accent-emerald' },
+                  { value: '40–80%', label: 'Spermidine decline with age', colorClass: 'text-accent-cyan' },
+                  { value: '0.60×', label: 'All-cause mortality HR (Kiechl)', colorClass: 'text-accent-violet' },
+                  { value: '1–5 mg', label: 'Daily supplemental dose', colorClass: 'text-accent-rose' },
+                ]}
+              />
+            </div>
           </div>
         </div>
       </section>
