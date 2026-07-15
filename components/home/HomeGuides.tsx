@@ -61,7 +61,7 @@ export function HomeGuides() {
     >
       <CellularDivider />
       <div className="container-page">
-        <div className="mb-10 flex flex-col gap-4 md:mb-14 md:flex-row md:items-end md:justify-between">
+        <RevealItem className="mb-10 flex flex-col gap-4 md:mb-14 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
             <p className="text-label mb-3 text-accent-violet">Start reading</p>
             <h2 id="home-guides-heading" className="heading-section mb-3">
@@ -74,12 +74,15 @@ export function HomeGuides() {
           </div>
           <Link
             href="/supplement-guides"
-            className="focus-ring hidden shrink-0 items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+            className="focus-ring group hidden shrink-0 items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
           >
             Browse all guides
-            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            <ArrowUpRight
+              className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              aria-hidden="true"
+            />
           </Link>
-        </div>
+        </RevealItem>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {guides.map(({ href, label, kicker }, i) => (

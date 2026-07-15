@@ -50,7 +50,7 @@ export function HomeSteps() {
     >
       <CellularDivider />
       <div className="container-page">
-        <div className="mx-auto mb-12 max-w-2xl text-center">
+        <RevealItem className="mx-auto mb-12 max-w-2xl text-center">
           <p className="text-label mb-3 text-accent-emerald">Get started in 3 steps</p>
           <h2 id="home-steps-heading" className="heading-section mb-3">
             From curious to a protocol you can trust.
@@ -59,7 +59,7 @@ export function HomeSteps() {
             No account, no upsell, no data leaving your device — just a clear path you can
             follow at your own pace.
           </p>
-        </div>
+        </RevealItem>
 
         <ol className="grid grid-cols-1 gap-5 md:grid-cols-3">
           {steps.map(({ num, icon: Icon, title, desc, cta, href }, i) => (

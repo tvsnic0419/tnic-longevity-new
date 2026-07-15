@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ClipboardList, LayoutDashboard, ArrowRight } from 'lucide-react';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { CellularDivider } from '@/components/ui/CellularDivider';
+import { RevealItem } from '@/components/ui/RevealItem';
 
 /** Final conversion band — one confident ask, server-rendered. */
 export function HomeCTA() {
@@ -16,7 +17,7 @@ export function HomeCTA() {
       </div>
 
       <div className="container-page">
-        <div className="mx-auto max-w-2xl text-center">
+        <RevealItem className="mx-auto max-w-2xl text-center">
           <p className="text-label mb-4 text-accent-cyan">Your first move</p>
           <h2 id="home-cta-heading" className="heading-section mb-4">
             Find the protocol that fits you — in three minutes.
@@ -47,7 +48,7 @@ export function HomeCTA() {
               </Link>
             </GlassPanel>
           </div>
-        </div>
+        </RevealItem>
       </div>
     </section>
   );

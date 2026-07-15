@@ -30,7 +30,7 @@ export function HomeHallmarks() {
       <CellularDivider />
       <div className="container-page">
         <div className="mb-10 items-center gap-10 lg:mb-14 lg:grid lg:grid-cols-12">
-          <div className="lg:col-span-7">
+          <RevealItem className="lg:col-span-7">
             <p className="text-label mb-3 text-accent-emerald">Interventions by hallmark</p>
             <h2 id="home-hallmarks-heading" className="heading-section mb-3">
               Twelve mechanisms of aging. A ranked, cited intervention for each.
@@ -42,12 +42,15 @@ export function HomeHallmarks() {
             </p>
             <Link
               href="/hallmarks"
-              className="focus-ring hidden items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+              className="focus-ring group hidden items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
             >
               See all 12 hallmarks
-              <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+              <ArrowUpRight
+                className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                aria-hidden="true"
+              />
             </Link>
-          </div>
+          </RevealItem>
 
           {/* Orbital map of all 12 hallmarks — hover/focus any node for a live
               preview. Same data as the grid below, browsable at a glance
@@ -102,10 +105,13 @@ export function HomeHallmarks() {
         <div className="mt-8 text-center sm:hidden">
           <Link
             href="/hallmarks"
-            className="focus-ring inline-flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground"
+            className="focus-ring group inline-flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground"
           >
             See all 12 hallmarks
-            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            <ArrowUpRight
+              className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              aria-hidden="true"
+            />
           </Link>
         </div>
       </div>
