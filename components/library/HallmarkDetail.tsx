@@ -7,6 +7,8 @@ import type { HallmarkLibraryEntry } from '@/lib/types';
 import type { CompoundLink } from '@/lib/library-graph';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { HallmarkVisual } from './HallmarkVisual';
+import { HallmarkIcon } from './HallmarkIcon';
+import { getHallmarkVisual } from '@/lib/hallmark-visuals';
 import { InterventionExplorer } from './InterventionExplorer';
 import { HallmarkNotesPanel } from './HallmarkNotesPanel';
 import { MdxRenderer } from './MdxRenderer';
@@ -14,6 +16,14 @@ import { ContextRail } from '@/components/ui/ContextRail';
 import { getHallmarkContext } from '@/lib/hub-context';
 import { SystemsSynthesisView } from './SystemsSynthesisView';
 import { HALLMARK_VISUALS } from '@/components/illustrations/HallmarkVisuals';
+
+const glowClassByTheme: Record<string, string> = {
+  cyan: 'glow-cyan',
+  emerald: 'glow-emerald',
+  violet: 'glow-violet',
+  amber: 'glow-amber',
+  rose: 'glow-rose',
+};
 
 export function HallmarkDetail({
   hallmark,
@@ -27,6 +37,8 @@ export function HallmarkDetail({
   compoundHrefs?: Record<string, string>;
 }) {
   const MechanismVisual = HALLMARK_VISUALS[hallmark.id];
+  const visualMeta = getHallmarkVisual(hallmark.visual);
+  const glowClass = glowClassByTheme[visualMeta.theme] ?? 'glow-cyan';
 
   return (
     <div className="min-h-screen bg-background text-foreground pt-6 md:pt-8 pb-20">
@@ -61,7 +73,12 @@ export function HallmarkDetail({
               <p className="font-mono text-[10px] text-accent-cyan tracking-widest mb-2">
                 HALLMARK {hallmark.number} OF 12
               </p>
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">{hallmark.title}</h1>
+              <div className="flex items-start gap-4 mb-2">
+                <span className={`shrink-0 rounded-2xl ${glowClass}`} aria-hidden="true">
+                  <HallmarkIcon type={hallmark.visual} size={56} />
+                </span>
+                <h1 className="text-3xl md:text-4xl font-bold tracking-tight pt-1">{hallmark.title}</h1>
+              </div>
               <p className="text-lg text-muted-foreground mb-6">{hallmark.tagline}</p>
               <p className="text-sm text-muted-foreground leading-relaxed mb-4">{hallmark.summary}</p>
               <div className="glass rounded-xl p-5 mb-4">

@@ -11,6 +11,16 @@ import { PeptideLegalBadge, getPeptideLegalStatusMeta } from './PeptideLegalBadg
 import { PeptideContextStrip } from './PeptideContextStrip';
 import { MdxRenderer } from '@/components/library/MdxRenderer';
 
+/** ThemeAccent -> full static Tailwind class strings — see the identical
+ * note in LibraryModuleDetail.tsx on why these can't be interpolated. */
+const themeVisual: Record<string, { badgeClass: string; glowClass: string; textClass: string }> = {
+  cyan: { badgeClass: 'icon-badge-cyan', glowClass: 'glow-cyan', textClass: 'text-accent-cyan' },
+  emerald: { badgeClass: 'icon-badge-emerald', glowClass: 'glow-emerald', textClass: 'text-accent-emerald' },
+  violet: { badgeClass: 'icon-badge-violet', glowClass: 'glow-violet', textClass: 'text-accent-violet' },
+  rose: { badgeClass: 'icon-badge-rose', glowClass: 'glow-rose', textClass: 'text-accent-rose' },
+  amber: { badgeClass: 'icon-badge-amber', glowClass: 'glow-amber', textClass: 'text-accent-amber' },
+};
+
 export function PeptideDetail({ peptide, mdxBody }: { peptide: Peptide; mdxBody: string | null }) {
   const categoryMeta = peptideCategoryMeta[peptide.category];
   const legalMeta = getPeptideLegalStatusMeta(peptide.legalStatus);
@@ -120,14 +130,22 @@ export function PeptideDetail({ peptide, mdxBody }: { peptide: Peptide; mdxBody:
           <div className="lg:col-span-8 space-y-8">
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
               <PeptideContextStrip peptide={peptide} />
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">
-                {peptide.name}
-                {peptide.aliases && peptide.aliases.length > 0 && (
-                  <span className="block text-sm font-normal text-muted-foreground mt-1">
-                    Also known as: {peptide.aliases.join(', ')}
-                  </span>
-                )}
-              </h1>
+              <div className="flex items-start gap-4 mb-2">
+                <span
+                  className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${themeVisual[categoryMeta.theme].badgeClass} ${themeVisual[categoryMeta.theme].glowClass}`}
+                  aria-hidden="true"
+                >
+                  <Syringe className={`h-7 w-7 ${themeVisual[categoryMeta.theme].textClass}`} />
+                </span>
+                <h1 className="text-3xl md:text-4xl font-bold tracking-tight pt-1">
+                  {peptide.name}
+                  {peptide.aliases && peptide.aliases.length > 0 && (
+                    <span className="block text-sm font-normal text-muted-foreground mt-1">
+                      Also known as: {peptide.aliases.join(', ')}
+                    </span>
+                  )}
+                </h1>
+              </div>
               <p className="text-lg text-muted-foreground mb-4">{peptide.tagline}</p>
               <p className="text-sm text-muted-foreground leading-relaxed">{peptide.summary}</p>
             </motion.div>

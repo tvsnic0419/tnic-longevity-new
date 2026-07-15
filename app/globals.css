@@ -385,11 +385,13 @@ body::after {
   position: relative;
   background: var(--color-bg-elevated);
   border-radius: var(--radius-2xl);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-}
-
-[data-theme="light"] .card-elevated {
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(15, 23, 42, 0.04);
+  /* Shares the Deep Glass mid-plane shadow recipe (Design System v8/v9)
+     instead of its own flat one-off shadow — this card read visibly
+     flatter than every other card class despite sitting at the same
+     elevation in the UI (sidebar module cards, etc). Theme-aware via the
+     token, so light mode gets a proper navy-tinted shadow instead of the
+     old hardcoded black rgba. */
+  box-shadow: var(--glass-shadow-mid);
 }
 
 .card-elevated::before,
@@ -1151,13 +1153,16 @@ body::after {
 .card-ultra {
   position: relative;
   background: color-mix(in srgb, var(--glass-bg) 92%, var(--color-bg-elevated));
-  backdrop-filter: blur(28px) saturate(1.2);
+  /* Deep Glass content-plane blur/shadow (Design System v8/v9) — was its
+     own one-off 28px/shadow recipe that happened to match the token's
+     blur value by coincidence but didn't track it, and used a hardcoded
+     dark-only shadow that didn't adapt in light theme. */
+  backdrop-filter: blur(var(--glass-blur-content)) saturate(1.2);
   border-radius: var(--radius-2xl);
   border: 1px solid color-mix(in srgb, var(--accent-cyan) 15%, var(--color-border-subtle));
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--accent-cyan) 6%, transparent),
-    0 4px 24px -4px rgba(0, 0, 0, 0.25),
-    0 24px 64px -24px color-mix(in srgb, var(--accent-cyan) 12%, transparent);
+    var(--glass-shadow-content);
   overflow: hidden;
 }
 
@@ -1725,11 +1730,11 @@ body::after {
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-2xl);
   overflow: hidden;
+  /* Deep Glass mid-plane shadow (Design System v8/v9) — replaces a
+     hardcoded dark-only shadow stack with the shared, theme-aware token. */
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--accent-cyan) 6%, transparent),
-    0 2px 4px rgba(0,0,0,0.15),
-    0 8px 32px rgba(0,0,0,0.1),
-    0 32px 80px rgba(0,0,0,0.06);
+    var(--glass-shadow-mid);
 }
 
 .card-depth::before {
@@ -2268,13 +2273,12 @@ body::after {
   background: color-mix(in srgb, var(--color-bg-elevated) 98%, var(--accent-cyan) 1%);
   border-radius: var(--radius-2xl);
   border: 1px solid color-mix(in srgb, var(--accent-cyan) 10%, var(--color-border-subtle));
+  /* Deep Glass float-plane shadow (Design System v8/v9) — this card's
+     name literally says "floating", which is exactly what the float
+     plane token was built for; replaces its own 6-layer one-off stack. */
   box-shadow:
     0 0 0 1px color-mix(in srgb, white 4%, transparent),
-    0 1px 3px rgba(0,0,0,0.16),
-    0 4px 12px -2px rgba(0,0,0,0.22),
-    0 16px 40px -8px rgba(0,0,0,0.28),
-    0 40px 80px -20px rgba(0,0,0,0.18),
-    0 0 80px -20px color-mix(in srgb, var(--accent-cyan) 8%, transparent);
+    var(--glass-shadow-float);
   overflow: hidden;
 }
 
