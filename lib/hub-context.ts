@@ -1,7 +1,7 @@
 import type { ThemeAccent } from './design-system';
 import type { ToolId } from './registry';
 import type { LibraryModule, LibraryModuleCategory } from './library-modules';
-import type { HallmarkLibraryEntry } from './types';
+import type { HallmarkLibraryEntry, Peptide } from './types';
 import type { EvidenceComparison } from './comparisons';
 
 export interface HubContext {
@@ -42,7 +42,9 @@ export const hubContexts: Record<
   | 'trust'
   | 'faq'
   | 'contact'
-  | 'deliverySystems',
+  | 'deliverySystems'
+  | 'peptides'
+  | 'topPicks',
   HubContextEntry
 > = {
   dashboard: {
@@ -140,6 +142,18 @@ export const hubContexts: Record<
     what: 'Comparison guide for lipid delivery technologies — liposomes, phytosomes, NLCs, and LNPs — and when each improves bioavailability.',
     why: 'Premium brands charge more for liposomal labels that may not improve absorption. Delivery chemistry determines whether dose dollars work.',
     next: 'Match your compound to phytosome or NLC rows, then verify branded forms at Protocol Shop before buying.',
+  },
+  peptides: {
+    theme: 'rose',
+    what: 'Eight of the most-discussed anti-aging peptides — evidence tier, mechanism, and legal status (FDA-approved vs. compounding-restricted vs. research-use-only) stated plainly for each.',
+    why: 'Peptides span a wider legal and evidence range than oral supplements in one catalog. Sorting by pathway alone hides that a Tier-A prescription drug and an unregulated research chemical are very different decisions.',
+    next: 'Read the legal-status banner on any peptide before anything else, then check its related hallmark for compounds with a deeper human evidence base.',
+  },
+  topPicks: {
+    theme: 'emerald',
+    what: "TNiC's highest-conviction compound picks across three overlapping pathways — sirtuin activation, PARP/DNA-repair support, and NRF2 antioxidant signaling.",
+    why: 'The same NAD+ pool fuels both sirtuins and PARP, and NRF2 activation both switches on antioxidant genes and reduces the DNA damage those repair pathways face — picks here reflect that shared biology instead of treating each pathway in isolation.',
+    next: 'Open a pick to read its full compound module, then check the Systems Map for how these pathways interact with the rest of the hallmarks.',
   },
 };
 
@@ -288,6 +302,18 @@ const moduleSlugOverrides: Partial<Record<string, Partial<HubContext>>> = {
     why: 'Rapamycin has the strongest preclinical lifespan data but serious immunosuppressive risks. This module is for informed physician discussions.',
     next: 'Complete physician checklist in module, do not self-source — read disclaimers before any discussion.',
   },
+  sulforaphane: {
+    next: 'See how this ranks against other NRF2 and PARP-support picks at /library/top-picks, then verify broccoli-sprout-extract form at shop.',
+  },
+  resveratrol: {
+    next: 'Compare against Pterostilbene\'s bioavailability advantage at /library/top-picks before choosing a form.',
+  },
+  pterostilbene: {
+    next: 'See the full Sirtuin Activation ranking at /library/top-picks, then verify micronized/liposomal form at shop.',
+  },
+  rala: {
+    next: 'See how this ranks for NRF2 support at /library/top-picks, then log GSH alongside 8-OHdG in Labs.',
+  },
 };
 
 export function getHubContext(
@@ -326,6 +352,24 @@ export function getHallmarkContext(hallmark: HallmarkLibraryEntry): HubContext {
     next: top
       ? `Top intervention: ${top.name} (Tier ${top.evidence}). Open linked module, add to stack, log ${hallmark.biomarkers.slice(0, 2).join(' or ') || 'relevant markers'} in Labs.`
       : 'Review ranked interventions below, then open linked library modules.',
+  };
+}
+
+export function getPeptideContext(peptide: Peptide): HubContext {
+  const legalNote =
+    peptide.legalStatus === 'fda-approved-rx'
+      ? 'It is FDA-approved for a specific indication — the longevity use discussed here is off-label.'
+      : peptide.legalStatus === 'compounding-restricted'
+        ? 'It has no legal US compounding pathway — sourcing means an unregulated research-chemical vendor.'
+        : 'It has no FDA-approved human-use pathway — sourcing means an unregulated research-chemical vendor.';
+
+  return {
+    what: `${peptide.name} (Tier ${peptide.evidenceTier}) — ${peptide.tagline}`,
+    why: `${legalNote} Evidence quality and legal status are independent questions; both are covered in full below.`,
+    next:
+      peptide.relatedHallmarkIds.length > 0
+        ? 'Read the mechanism and safety sections below, then check the related hallmark for compounds with a deeper human evidence base.'
+        : 'Read the mechanism and safety sections below before treating this as anything more than exploratory.',
   };
 }
 

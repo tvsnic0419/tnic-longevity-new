@@ -8,6 +8,7 @@ import { peptideCategoryMeta, peptideLibrary } from '@/lib/peptides-library';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { PeptideLegalBadge, getPeptideLegalStatusMeta } from './PeptideLegalBadge';
+import { PeptideContextStrip } from './PeptideContextStrip';
 import { MdxRenderer } from '@/components/library/MdxRenderer';
 
 export function PeptideDetail({ peptide, mdxBody }: { peptide: Peptide; mdxBody: string | null }) {
@@ -118,6 +119,7 @@ export function PeptideDetail({ peptide, mdxBody }: { peptide: Peptide; mdxBody:
 
           <div className="lg:col-span-8 space-y-8">
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+              <PeptideContextStrip peptide={peptide} />
               <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">
                 {peptide.name}
                 {peptide.aliases && peptide.aliases.length > 0 && (

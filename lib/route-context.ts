@@ -28,7 +28,9 @@ export const HUB_PATH_MAP: Record<string, HubKey> = {
   '/quiz': 'quiz',
   '/library/compare': 'compare',
   '/library/delivery-systems': 'deliverySystems',
+  '/library/top-picks': 'topPicks',
   '/library': 'library',
+  '/peptides': 'peptides',
   '/trust': 'trust',
   '/contact': 'contact',
 };
