@@ -153,15 +153,20 @@ export function HealthspanEstimatorTool() {
             <CardContent>
               <ResponsiveContainer width="100%" height={240}>
                 <LineChart data={chartData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
-                  <CartesianGrid stroke="rgba(255,255,255,0.06)" />
-                  <XAxis dataKey="name" tick={{ fill: '#71717a', fontSize: 11 }} />
-                  <YAxis yAxisId="left" domain={[0, 100]} tick={{ fill: '#71717a', fontSize: 10 }} />
-                  <YAxis yAxisId="right" orientation="right" domain={['dataMin - 2', 'dataMax + 2']} tick={{ fill: '#71717a', fontSize: 10 }} />
+                  <CartesianGrid stroke="var(--color-border-subtle)" />
+                  <XAxis dataKey="name" tick={{ fill: 'var(--color-text-faint)', fontSize: 11, fontFamily: 'var(--font-mono)' }} />
+                  <YAxis yAxisId="left" domain={[0, 100]} tick={{ fill: 'var(--color-text-faint)', fontSize: 10, fontFamily: 'var(--font-mono)' }} />
+                  <YAxis yAxisId="right" orientation="right" domain={['dataMin - 2', 'dataMax + 2']} tick={{ fill: 'var(--color-text-faint)', fontSize: 10, fontFamily: 'var(--font-mono)' }} />
                   <Tooltip
-                    contentStyle={{ background: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8 }}
+                    contentStyle={{
+                      background: 'var(--color-bg-elevated)',
+                      border: '1px solid var(--color-border-subtle)',
+                      borderRadius: 8,
+                      fontSize: 12,
+                    }}
                   />
-                  <Line yAxisId="left" type="monotone" dataKey="healthspan" stroke="#34d399" strokeWidth={2} dot={{ fill: '#34d399' }} name="Healthspan" />
-                  <Line yAxisId="right" type="monotone" dataKey="bioAge" stroke="#a78bfa" strokeWidth={2} dot={{ fill: '#a78bfa' }} name="Bio age" />
+                  <Line yAxisId="left" type="monotone" dataKey="healthspan" stroke="var(--accent-emerald)" strokeWidth={2} dot={{ fill: 'var(--accent-emerald)' }} name="Healthspan" />
+                  <Line yAxisId="right" type="monotone" dataKey="bioAge" stroke="var(--accent-violet)" strokeWidth={2} dot={{ fill: 'var(--accent-violet)' }} name="Bio age" />
                 </LineChart>
               </ResponsiveContainer>
               <p className="text-body-sm mt-4">{estimate.summary}</p>

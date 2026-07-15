@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { RevealItem } from '@/components/ui/RevealItem';
+import { CellularDivider } from '@/components/ui/CellularDivider';
 
 /**
  * A curated set of high-intent guides. Rendered as real server-side <a> links so
@@ -56,8 +57,9 @@ export function HomeGuides() {
   return (
     <section
       aria-labelledby="home-guides-heading"
-      className="border-t border-border/50 py-20 md:py-28"
+      className="relative border-t border-border/50 py-20 md:py-28"
     >
+      <CellularDivider />
       <div className="container-page">
         <div className="mb-10 flex flex-col gap-4 md:mb-14 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">

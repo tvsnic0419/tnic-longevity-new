@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ClipboardList, BookOpen, Activity, ArrowRight, type LucideIcon } from 'lucide-react';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { RevealItem } from '@/components/ui/RevealItem';
+import { CellularDivider } from '@/components/ui/CellularDivider';
 
 /** A calm three-step path from curiosity to a tracked protocol. Server-rendered. */
 
@@ -45,8 +46,9 @@ export function HomeSteps() {
   return (
     <section
       aria-labelledby="home-steps-heading"
-      className="border-t border-border/50 py-20 md:py-28"
+      className="relative border-t border-border/50 py-20 md:py-28"
     >
+      <CellularDivider />
       <div className="container-page">
         <div className="mx-auto mb-12 max-w-2xl text-center">
           <p className="text-label mb-3 text-accent-emerald">Get started in 3 steps</p>

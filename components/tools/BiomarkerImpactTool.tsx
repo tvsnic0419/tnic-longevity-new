@@ -25,9 +25,9 @@ import { Badge } from '@/components/ui/Badge';
 import { ToolDisclaimer } from './ToolDisclaimer';
 
 const impactColor = (label: string) => {
-  if (label === 'primary') return '#34d399';
-  if (label === 'secondary') return '#22d3ee';
-  return '#a78bfa';
+  if (label === 'primary') return 'var(--accent-emerald)';
+  if (label === 'secondary') return 'var(--accent-cyan)';
+  return 'var(--accent-violet)';
 };
 
 export function BiomarkerImpactTool() {
@@ -145,14 +145,19 @@ export function BiomarkerImpactTool() {
                 <BarChart data={chartData} margin={{ bottom: 48, left: 8, right: 8 }}>
                   <XAxis
                     dataKey="name"
-                    tick={{ fill: '#71717a', fontSize: 10 }}
+                    tick={{ fill: 'var(--color-text-faint)', fontSize: 10, fontFamily: 'var(--font-mono)' }}
                     angle={-35}
                     textAnchor="end"
                     height={60}
                   />
-                  <YAxis domain={[0, 100]} tick={{ fill: '#71717a', fontSize: 10 }} />
+                  <YAxis domain={[0, 100]} tick={{ fill: 'var(--color-text-faint)', fontSize: 10, fontFamily: 'var(--font-mono)' }} />
                   <Tooltip
-                    contentStyle={{ background: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8 }}
+                    contentStyle={{
+                      background: 'var(--color-bg-elevated)',
+                      border: '1px solid var(--color-border-subtle)',
+                      borderRadius: 8,
+                      fontSize: 12,
+                    }}
                     formatter={(v) => [`${v}`, 'Impact score']}
                     labelFormatter={(_, payload) => payload?.[0]?.payload?.fullName ?? ''}
                   />
@@ -161,7 +166,7 @@ export function BiomarkerImpactTool() {
                     {chartData.map((entry, i) => (
                       <Cell
                         key={i}
-                        fill={entry.type === 'lifestyle' ? '#22d3ee' : impactColor(entry.label)}
+                        fill={entry.type === 'lifestyle' ? 'var(--accent-cyan)' : impactColor(entry.label)}
                         fillOpacity={entry.type === 'lifestyle' ? 0.7 : 1}
                       />
                     ))}

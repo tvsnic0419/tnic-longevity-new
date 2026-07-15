@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ClipboardList, LayoutDashboard, ArrowRight } from 'lucide-react';
 import { GlassPanel } from '@/components/ui/GlassPanel';
+import { CellularDivider } from '@/components/ui/CellularDivider';
 
 /** Final conversion band — one confident ask, server-rendered. */
 export function HomeCTA() {
@@ -9,6 +10,7 @@ export function HomeCTA() {
       aria-labelledby="home-cta-heading"
       className="relative overflow-hidden border-t border-border/50 py-24 md:py-32"
     >
+      <CellularDivider />
       <div aria-hidden="true" className="absolute inset-0 -z-10">
         <div className="absolute left-1/2 top-0 h-[26rem] w-[42rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,color-mix(in_srgb,var(--accent-cyan)_16%,transparent),transparent_65%)] blur-2xl" />
       </div>

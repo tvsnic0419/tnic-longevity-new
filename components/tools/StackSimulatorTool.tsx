@@ -177,7 +177,7 @@ export function StackSimulatorTool() {
                     <PolarGrid stroke="var(--color-border-subtle)" />
                     <PolarAngleAxis
                       dataKey="hallmark"
-                      tick={{ fill: 'var(--color-text-faint)', fontSize: 9 }}
+                      tick={{ fill: 'var(--color-text-faint)', fontSize: 9, fontFamily: 'var(--font-mono)' }}
                     />
                     <Radar
                       dataKey="coverage"
