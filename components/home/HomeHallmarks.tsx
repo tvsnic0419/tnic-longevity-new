@@ -6,6 +6,7 @@ import { HallmarkIcon } from '@/components/library/HallmarkIcon';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { RevealItem } from '@/components/ui/RevealItem';
 import { CellularDivider } from '@/components/ui/CellularDivider';
+import { HallmarksConstellation } from '@/components/ui/HallmarksConstellation';
 
 /**
  * The homepage's evidence surface: all 12 hallmarks of aging, each paired
@@ -28,25 +29,33 @@ export function HomeHallmarks() {
     >
       <CellularDivider />
       <div className="container-page">
-        <div className="mb-10 flex flex-col gap-4 md:mb-14 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-2xl">
+        <div className="mb-10 items-center gap-10 lg:mb-14 lg:grid lg:grid-cols-12">
+          <div className="lg:col-span-7">
             <p className="text-label mb-3 text-accent-emerald">Interventions by hallmark</p>
             <h2 id="home-hallmarks-heading" className="heading-section mb-3">
               Twelve mechanisms of aging. A ranked, cited intervention for each.
             </h2>
-            <p className="text-body">
+            <p className="text-body mb-4">
               Every hallmark links to its highest-evidence levers — compounds, lifestyle
               changes, and clinical options — ranked by impact and traced to PubMed, not
               marketing copy.
             </p>
+            <Link
+              href="/hallmarks"
+              className="focus-ring hidden items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+            >
+              See all 12 hallmarks
+              <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
           </div>
-          <Link
-            href="/hallmarks"
-            className="focus-ring hidden shrink-0 items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
-          >
-            See all 12 hallmarks
-            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-          </Link>
+
+          {/* Orbital map of all 12 hallmarks — hover/focus any node for a live
+              preview. Same data as the grid below, browsable at a glance
+              instead of read serially; the grid stays for anyone who wants
+              the full ranked detail on every one. */}
+          <div className="mt-8 lg:col-span-5 lg:mt-0">
+            <HallmarksConstellation />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
