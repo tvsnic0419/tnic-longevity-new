@@ -66,6 +66,23 @@ export const seoRoutes = {
       keywords: ['hallmarks of aging', 'GlyNAC deep dive', 'longevity library', 'anti-aging education', 'NMN evidence', 'Ca-AKG epigenetic clock'],
     }),
 
+  peptidesHub: () =>
+    buildPageMetadata({
+      title: 'Anti-Aging Peptides — Evidence Graded, Legal Status Explained',
+      description:
+        'BPC-157, GHK-Cu, Epithalon, Thymosin Alpha-1, GH secretagogues, MOTS-c, semaglutide/tirzepatide, and Humanin — evidence-graded Tier A/B/C, with legal status (FDA-approved vs. research-chemical vs. compounding-restricted) stated plainly for every peptide.',
+      path: '/peptides',
+      keywords: ['anti-aging peptides', 'BPC-157', 'GHK-Cu', 'epithalon', 'thymosin alpha-1', 'MOTS-c', 'peptide therapy longevity'],
+    }),
+
+  peptide: (input: { name: string; tagline: string; slug: string }) =>
+    buildPageMetadata({
+      title: `${input.name} — Evidence, Dosing & Legal Status`,
+      description: input.tagline,
+      path: `/peptides/${input.slug}`,
+      keywords: [input.name, 'peptide therapy', 'anti-aging peptide', 'longevity evidence'],
+    }),
+
   shop: () =>
     buildPageMetadata({
       title: 'Protocol Shop — Verify Before You Buy',

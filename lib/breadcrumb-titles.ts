@@ -95,3 +95,14 @@ export const toolLabels: Record<ToolId, string> = {
   impact: 'Biomarker Impact',
   healthspan: 'Healthspan Estimator',
 };
+
+export const peptideTitles: Record<string, string> = {
+  'bpc-157': 'BPC-157',
+  'ghk-cu': 'GHK-Cu',
+  epithalon: 'Epithalon',
+  'thymosin-alpha-1': 'Thymosin Alpha-1',
+  'gh-secretagogues': 'Ipamorelin & CJC-1295',
+  'mots-c': 'MOTS-c',
+  'glp1-longevity': 'Semaglutide & Tirzepatide',
+  humanin: 'Humanin',
+};

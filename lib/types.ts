@@ -81,6 +81,38 @@ export interface Compound {
   studies: StudyRef[];
 }
 
+/** Groups peptides by primary mechanism/goal — one ThemeAccent color per category. */
+export type PeptideCategory = 'repair' | 'metabolic' | 'immune' | 'growth-axis' | 'mitochondrial';
+
+/**
+ * Peptides span a much wider legal spectrum than the oral-supplement Compound
+ * catalog: some are FDA-approved prescription drugs, others are sold almost
+ * exclusively as unregulated "research chemicals" with no approved human-use
+ * pathway. This is surfaced directly on every peptide page (PeptideLegalBadge)
+ * rather than folded into evidenceTier, since legal status and evidence
+ * quality are independent axes — a peptide can be well-studied and still
+ * illegal to buy for human use (BPC-157), or FDA-approved with a thin
+ * evidence base for the specific claim being made (off-label longevity use).
+ */
+export type PeptideLegalStatus = 'fda-approved-rx' | 'compounding-restricted' | 'research-use-only';
+
+export interface Peptide {
+  id: string;
+  slug: string;
+  name: string;
+  aliases?: string[];
+  category: PeptideCategory;
+  tagline: string;
+  summary: string;
+  evidenceTier: EvidenceTier;
+  legalStatus: PeptideLegalStatus;
+  administrationRoute: string;
+  outline: string[];
+  relatedHallmarkIds: string[];
+  relatedPeptideIds?: string[];
+  mdxSlug: string;
+}
+
 export interface Biomarker {
   id: string;
   name: string;

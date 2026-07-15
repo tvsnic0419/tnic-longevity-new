@@ -3,9 +3,11 @@ import path from 'path';
 import { cache } from 'react';
 import type { LibraryModuleCategory } from './library-modules';
 
+export type MdxCategory = LibraryModuleCategory | 'hallmarks' | 'peptides';
+
 export interface MdxDocument {
   slug: string;
-  category?: LibraryModuleCategory | 'hallmarks';
+  category?: MdxCategory;
   frontmatter: Record<string, string>;
   body: string;
 }
@@ -26,7 +28,7 @@ export function parseMdx(raw: string): { frontmatter: Record<string, string>; bo
   return { frontmatter, body: match[2].trim() };
 }
 
-function resolveMdxPath(slug: string, category: LibraryModuleCategory | 'hallmarks' = 'hallmarks'): string | null {
+function resolveMdxPath(slug: string, category: MdxCategory = 'hallmarks'): string | null {
   const filePath = path.join(process.cwd(), 'content', category, `${slug}.mdx`);
   if (!fs.existsSync(filePath)) return null;
   return filePath;
@@ -34,7 +36,7 @@ function resolveMdxPath(slug: string, category: LibraryModuleCategory | 'hallmar
 
 /** Cached per-request/build — avoids re-reading MDX files during SSG */
 export const loadMdx = cache(
-  (slug: string, category: LibraryModuleCategory | 'hallmarks' = 'hallmarks'): MdxDocument | null => {
+  (slug: string, category: MdxCategory = 'hallmarks'): MdxDocument | null => {
     const filePath = resolveMdxPath(slug, category);
     if (!filePath) return null;
     const raw = fs.readFileSync(filePath, 'utf8');
@@ -43,7 +45,7 @@ export const loadMdx = cache(
   },
 );
 
-export function listMdxSlugs(category: LibraryModuleCategory | 'hallmarks' = 'hallmarks'): string[] {
+export function listMdxSlugs(category: MdxCategory = 'hallmarks'): string[] {
   const dir = path.join(process.cwd(), 'content', category);
   if (!fs.existsSync(dir)) return [];
   return fs
