@@ -88,6 +88,17 @@ export interface HeroNetworkNode2D extends HeroNetworkNode {
   y: number;
 }
 
+// Transcendental functions (Math.cos/sin) aren't guaranteed bit-identical
+// across JS engines/architectures — Node's SSR process and the browser's
+// hydration pass can disagree at the ULP level, which React then reports as
+// a hydration mismatch on the serialized attribute string even though the
+// values are visually identical. Rounding closes that gap; matches the same
+// defensive .toFixed() already used for this exact reason in
+// HallmarksConstellation.tsx's node-position math.
+function round4(n: number): number {
+  return Math.round(n * 10000) / 10000;
+}
+
 export function buildHeroNetworkPoster2D(width: number, height: number): HeroNetworkNode2D[] {
   const cx = width / 2;
   const cy = height / 2;
@@ -101,12 +112,12 @@ export function buildHeroNetworkPoster2D(width: number, height: number): HeroNet
 
   const hubPositions: HeroNetworkNode2D[] = hubs.map((n, i) => {
     const angle = hubCount === 1 ? 0 : Math.PI * i;
-    return { ...n, x: cx + Math.cos(angle) * hubRadius, y: cy + Math.sin(angle) * hubRadius };
+    return { ...n, x: round4(cx + Math.cos(angle) * hubRadius), y: round4(cy + Math.sin(angle) * hubRadius) };
   });
 
   const outerPositions: HeroNetworkNode2D[] = outer.map((n, i) => {
     const angle = (i / outer.length) * Math.PI * 2 - Math.PI / 2;
-    return { ...n, x: cx + Math.cos(angle) * outerRadius, y: cy + Math.sin(angle) * outerRadius };
+    return { ...n, x: round4(cx + Math.cos(angle) * outerRadius), y: round4(cy + Math.sin(angle) * outerRadius) };
   });
 
   return [...hubPositions, ...outerPositions];

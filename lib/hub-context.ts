@@ -314,6 +314,36 @@ const moduleSlugOverrides: Partial<Record<string, Partial<HubContext>>> = {
   rala: {
     next: 'See how this ranks for NRF2 support at /library/top-picks, then log GSH alongside 8-OHdG in Labs.',
   },
+  tudca: {
+    next: 'Simulate alongside NAD+/mitochondrial compounds in Stack Architect, then verify UDCA-content purity at Protocol Shop.',
+  },
+  grapeseed: {
+    next: 'Log hs-CRP and a lipid panel in Labs — the endothelial and oxidative markers this compound is meant to move.',
+  },
+  cakg: {
+    next: 'Compare against Spermidine\'s autophagy-first approach at the Ca-AKG vs Spermidine comparison, then verify calcium-salt form at Protocol Shop.',
+  },
+  taurine: {
+    next: 'Compare against NMN\'s approach to the same mitochondrial-buffer hallmark at Taurine vs NMN, then verify pharmaceutical-grade sourcing at Protocol Shop.',
+  },
+  spermidine: {
+    next: 'Compare against Ca-AKG\'s epigenetic-cofactor approach at Ca-AKG vs Spermidine, then verify wheat-germ-extract purity at Protocol Shop.',
+  },
+  berberine: {
+    next: 'See the metformin head-to-head at Berberine vs Metformin, then verify dihydroberberine form (5x bioavailability) at Protocol Shop.',
+  },
+  urolithina: {
+    next: 'Compare against CoQ10\'s electron-transport-chain approach at Urolithin A vs CoQ10, then verify Mitopure-licensed form at Protocol Shop.',
+  },
+  fisetin: {
+    next: 'See the quercetin comparison at Fisetin vs Quercetin, then verify the pulse-dose protocol (2 consecutive days/month) at Protocol Shop.',
+  },
+  coq10: {
+    next: 'Compare ubiquinol vs ubiquinone forms at CoQ10 vs Ubiquinol, then verify statin-interaction dosing at Protocol Shop.',
+  },
+  omega3: {
+    next: 'Compare against krill oil\'s phospholipid-bound form at Omega-3 vs Krill Oil, then verify EPA:DHA ratio and third-party oxidation testing at Protocol Shop.',
+  },
 };
 
 export function getHubContext(
