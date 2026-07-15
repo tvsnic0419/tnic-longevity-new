@@ -1640,7 +1640,14 @@ body::after {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: gradient-sweep 7s linear infinite;
-  filter: drop-shadow(0 2px 16px rgba(34, 211, 238, 0.3));
+  /* text-shadow, not filter: drop-shadow — a filter on a background-clip:text
+     element with an animated background-position forces WebKit to
+     re-rasterize the whole alpha-based filter layer every frame, which iOS
+     Safari can't keep up with and falls back to blurring. text-shadow glows
+     the glyph outline directly without that rasterization cost. Two static
+     stops (cyan + emerald) instead of one so the glow doesn't visibly drift
+     out of sync with the animated fill as it sweeps through hues. */
+  text-shadow: 0 0 32px rgba(34, 211, 238, 0.3), 0 0 56px rgba(52, 211, 153, 0.14);
 }
 
 @keyframes gradient-sweep {
