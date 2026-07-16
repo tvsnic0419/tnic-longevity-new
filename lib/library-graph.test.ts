@@ -8,6 +8,7 @@ import {
   getCompoundsForHallmark,
   getGuideForCompound,
   getMappedGuideHrefs,
+  getSynergiesForCompound,
 } from './library-graph';
 
 const hallmarkIds = new Set(hallmarkLibrary.map((h) => h.id));
@@ -41,6 +42,33 @@ describe('library-graph: hallmark → compounds', () => {
 
   it('sorts by evidence tier (A before B before C)', () => {
     const tiers = getCompoundsForHallmark('inflammation').map((l) => l.evidence);
+    const sorted = [...tiers].sort();
+    expect(tiers).toEqual(sorted);
+  });
+});
+
+describe('library-graph: compound → synergies', () => {
+  it('returns only compounds that have a real library page', () => {
+    for (const c of compounds) {
+      for (const link of getSynergiesForCompound(c.id)) {
+        expect(compoundModuleSlugs.has(link.slug)).toBe(true);
+      }
+    }
+  });
+
+  it('surfaces synergies for a known compound (NMN)', () => {
+    const links = getSynergiesForCompound('nmn');
+    expect(links.length).toBeGreaterThan(0);
+    // NMN lists resveratrol as a synergy in lib/data.ts and resveratrol has a page.
+    expect(links.map((l) => l.slug)).toContain('resveratrol');
+  });
+
+  it('returns nothing for an unknown compound id', () => {
+    expect(getSynergiesForCompound('not-a-real-compound')).toEqual([]);
+  });
+
+  it('sorts by evidence tier (A before B before C)', () => {
+    const tiers = getSynergiesForCompound('berberine').map((l) => l.evidence);
     const sorted = [...tiers].sort();
     expect(tiers).toEqual(sorted);
   });

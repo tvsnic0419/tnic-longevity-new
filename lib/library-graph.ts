@@ -46,6 +46,26 @@ export function getCompoundsForHallmark(hallmarkId: string): CompoundLink[] {
 }
 
 /**
+ * Compounds that pair well with a given compound (by compound id, e.g. 'nmn'),
+ * derived from `Compound.synergies` — limited to compounds that have a real
+ * library page. Same shape and evidence-tier ordering as
+ * `getCompoundsForHallmark()`, so callers can render both with one component.
+ */
+export function getSynergiesForCompound(compoundId: string): CompoundLink[] {
+  const compound = compounds.find((c) => c.id === compoundId);
+  if (!compound) return [];
+  return compound.synergies
+    .map((id) => {
+      const c = compounds.find((x) => x.id === id);
+      if (!c) return null;
+      const slug = compoundIdToModuleSlug.get(c.id);
+      return slug ? { slug, name: c.name, evidence: c.evidence } : null;
+    })
+    .filter((x): x is CompoundLink => x !== null)
+    .sort((a, b) => a.evidence.localeCompare(b.evidence) || a.name.localeCompare(b.name));
+}
+
+/**
  * The supplement-guide landing page for a compound (by module slug), when one
  * exists. These are high-intent SEO pages, so compound deep-dives funnel to
  * them. Keys are compound module slugs; every href is a real guide route.

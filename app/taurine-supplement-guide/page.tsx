@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, FlaskConical, ExternalLink, CheckCircle2, AlertTriangle, Zap, TrendingUp, ShieldCheck } from 'lucide-react';
+import { ArrowRight, FlaskConical, ExternalLink, CheckCircle2, AlertTriangle, Zap, TrendingUp, ShieldCheck, Dna } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
@@ -290,6 +290,58 @@ export default function TaurineGuidePage() {
                   <h3 className="font-semibold mb-1">{item.title}</h3>
                   <p className="text-sm text-muted-foreground">{item.body}</p>
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Hallmarks of Aging */}
+      <section className="py-14 border-b border-border">
+        <div className="container-page max-w-4xl">
+          <h2 className="heading-section mb-3">How Taurine Addresses the Hallmarks of Aging</h2>
+          <p className="text-body mb-8 max-w-2xl">
+            Taurine&rsquo;s osmolyte, calcium-buffering, and antioxidant mechanisms map onto three of the twelve Hallmarks of Aging. The mechanistic case is well established biochemistry; the direct human-outcome evidence for each specific hallmark is earlier-stage than the mouse lifespan data from Singh et al. 2023.
+          </p>
+          <div className="grid md:grid-cols-3 gap-5">
+            {[
+              {
+                icon: Zap,
+                color: 'text-accent-cyan',
+                badge: 'bg-accent-cyan/10 border-accent-cyan/20',
+                title: 'Mitochondrial Dysfunction',
+                body: "Taurine modulates mitochondrial Ca2+ uptake via the mitochondrial calcium uniporter (MCU), preventing Ca2+-induced electron transport chain dysfunction and the excess ROS that follows. It is also incorporated into mitochondrial tRNA as a modified uridine, which is required for proper translation of electron-transport-chain proteins. Both roles decline as taurine levels fall with age — the Singh 2023 mouse and monkey data (PMID 37289866) is consistent with restoring this buffer producing measurable benefit.",
+                href: '/library/mitochondrial-dysfunction',
+                label: 'Mitochondrial Dysfunction hallmark',
+              },
+              {
+                icon: ShieldCheck,
+                color: 'text-accent-emerald',
+                badge: 'bg-accent-emerald/10 border-accent-emerald/20',
+                title: 'Chronic Inflammation',
+                body: 'Taurine reacts with hypochlorous acid produced by activated neutrophils to form taurine chloramine, a far less reactive species — reducing collateral tissue damage from immune activation. It also modulates NF-κB, a master switch for inflammaging. Singh et al. 2023 found human plasma taurine inversely correlates with cardiovascular disease risk, a condition with a strong inflammatory component, though this is association data rather than an inflammation-specific trial endpoint.',
+                href: '/library/chronic-inflammation',
+                label: 'Chronic Inflammation hallmark',
+              },
+              {
+                icon: Dna,
+                color: 'text-amber-400',
+                badge: 'bg-amber-400/10 border-amber-400/20',
+                title: 'Genomic Instability',
+                body: "Taurine's contribution here is indirect rather than a direct DNA-repair mechanism: reduced mitochondrial ROS output (via the MCU calcium-buffering role above) and taurine chloramine's antioxidant capacity both lower the oxidative burden that damages DNA over time. The Singh 2023 monkey cohort showed reversal of musculoskeletal, immune, and metabolic aging markers consistent with this reduced-damage model, but no dedicated genomic-stability or DNA-damage biomarker trial has been published for taurine specifically.",
+                href: '/library/genomic-instability',
+                label: 'Genomic Instability hallmark',
+              },
+            ].map((card) => (
+              <div key={card.title} className={`rounded-xl border p-5 ${card.badge} bg-card/50 flex flex-col`}>
+                <div className={`inline-flex items-center justify-center w-9 h-9 rounded-lg border mb-3 ${card.badge}`}>
+                  <card.icon className={`w-4.5 h-4.5 ${card.color}`} aria-hidden="true" />
+                </div>
+                <h3 className="font-semibold mb-2">{card.title}</h3>
+                <p className="text-sm text-muted-foreground mb-4 flex-1">{card.body}</p>
+                <Link href={card.href} className={`text-xs font-mono inline-flex items-center gap-1 ${card.color} hover:underline`}>
+                  {card.label} <ArrowRight className="w-3 h-3" aria-hidden="true" />
+                </Link>
               </div>
             ))}
           </div>

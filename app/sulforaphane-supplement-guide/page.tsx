@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, ExternalLink, CheckCircle2, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { ArrowRight, ExternalLink, CheckCircle2, AlertTriangle, ShieldCheck, Dna, Layers } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
@@ -225,6 +225,58 @@ export default function SulforaphaneGuidePage() {
                   <span className="text-[10px] font-mono text-muted-foreground px-2 py-0.5 rounded-full border border-border/60">{t.context}</span>
                 </div>
                 <p className="text-xs text-muted-foreground">{t.function}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Hallmarks of Aging */}
+      <section className="py-14 border-b border-border">
+        <div className="container-page max-w-4xl">
+          <h2 className="heading-section mb-3">How Sulforaphane Addresses the Hallmarks of Aging</h2>
+          <p className="text-body mb-8 max-w-2xl">
+            Sulforaphane&rsquo;s KEAP1-NRF2 mechanism activates a broad gene battery that maps onto three of the twelve Hallmarks of Aging. The mechanism below is well-characterized molecular biology; the human trial evidence backing each hallmark connection varies in strength, as noted per card.
+          </p>
+          <div className="grid md:grid-cols-3 gap-5">
+            {[
+              {
+                icon: Dna,
+                color: 'text-accent-violet',
+                badge: 'bg-accent-violet/10 border-accent-violet/20',
+                title: 'Genomic Instability',
+                body: 'NRF2 activation induces NQO1 (a quinone detoxification enzyme) and the GST family (glutathione conjugation of reactive electrophiles) — both reduce the pool of reactive species that would otherwise form oxidative or electrophilic DNA adducts. The 2009 human airway trial (Clin Immunol, PMID 19028145) confirmed this NRF2/NQO1 induction actually occurs in human tissue, not just in cell culture. This is a protective, damage-prevention mechanism rather than a direct DNA-repair pathway.',
+                href: '/library/genomic-instability',
+                label: 'Genomic Instability hallmark',
+              },
+              {
+                icon: ShieldCheck,
+                color: 'text-accent-emerald',
+                badge: 'bg-accent-emerald/10 border-accent-emerald/20',
+                title: 'Chronic Inflammation',
+                body: "Sulforaphane suppresses NF-κB — the master transcriptional driver of inflammaging — via the same competitive KEAP1 binding that releases NRF2, and separately induces HO-1, an anti-inflammatory heme-catabolism enzyme. The 2024 CKD patient RCT (Free Radic Biol Med, PMID 38772511) found reduced inflammatory markers alongside NRF2-pathway induction after six weeks of supplementation in a human patient population, not just a mechanistic cell-culture readout.",
+                href: '/library/chronic-inflammation',
+                label: 'Chronic Inflammation hallmark',
+              },
+              {
+                icon: Layers,
+                color: 'text-accent-cyan',
+                badge: 'bg-accent-cyan/10 border-accent-cyan/20',
+                title: 'Loss of Proteostasis',
+                body: "Among the >200 genes NRF2 activates is PSMB5, a core proteasome subunit — meaning sulforaphane doesn't just reduce protein damage, it increases the cell's capacity to clear already-misfolded or oxidatively damaged proteins. This pairs with NRF2-driven GCLC/GCLM induction, which restores the glutathione supply the proteostasis network depends on for redox-sensitive chaperone function. No dedicated human proteasome-activity or protein-aggregation trial has been published for sulforaphane specifically — this connection is mechanistic, drawn from the same gene-target data as the airway and CKD trials above.",
+                href: '/library/loss-of-proteostasis',
+                label: 'Loss of Proteostasis hallmark',
+              },
+            ].map((card) => (
+              <div key={card.title} className={`rounded-xl border p-5 ${card.badge} bg-card/50 flex flex-col`}>
+                <div className={`inline-flex items-center justify-center w-9 h-9 rounded-lg border mb-3 ${card.badge}`}>
+                  <card.icon className={`w-4.5 h-4.5 ${card.color}`} aria-hidden="true" />
+                </div>
+                <h3 className="font-semibold mb-2">{card.title}</h3>
+                <p className="text-sm text-muted-foreground mb-4 flex-1">{card.body}</p>
+                <Link href={card.href} className={`text-xs font-mono inline-flex items-center gap-1 ${card.color} hover:underline`}>
+                  {card.label} <ArrowRight className="w-3 h-3" aria-hidden="true" />
+                </Link>
               </div>
             ))}
           </div>

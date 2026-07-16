@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowLeft, BookOpen, Network, Pill } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen, Network, Pill } from 'lucide-react';
 import Link from 'next/link';
 import type { HallmarkLibraryEntry } from '@/lib/types';
 import type { CompoundLink } from '@/lib/library-graph';
@@ -98,6 +98,21 @@ export function HallmarkDetail({
                 <MdxRenderer content={mdxBody} />
               </div>
             )}
+
+            <Link
+              href={`/hallmarks/${hallmark.slug}`}
+              className="focus-ring interactive group flex items-center justify-between gap-3 glass glass-hover rounded-xl p-5"
+            >
+              <div>
+                <p className="text-sm font-semibold text-foreground group-hover:text-accent-cyan transition">
+                  Read the full long-form deep-dive
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Extended mechanism walkthrough, biomarker panel, and evidence-graded interventions for {hallmark.title}
+                </p>
+              </div>
+              <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-accent-cyan group-hover:translate-x-0.5 transition shrink-0" aria-hidden="true" />
+            </Link>
 
             {targetingCompounds.length > 0 && (
               <div>

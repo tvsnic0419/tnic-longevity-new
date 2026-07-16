@@ -7,6 +7,7 @@ import Link from 'next/link';
 import type { LibraryModule } from '@/lib/library-modules';
 import type { ComparisonLink } from '@/lib/comparison-relations';
 import type { GuideLink } from '@/lib/library-graph';
+import { getSynergiesForCompound } from '@/lib/library-graph';
 import { libraryCategoryMeta } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { compounds } from '@/lib/data';
@@ -33,9 +34,7 @@ export function LibraryModuleDetail({
   const categoryMeta = libraryCategoryMeta[module.category];
   const relatedHallmarks = hallmarkLibrary.filter((h) => module.relatedHallmarkIds.includes(h.id));
   const relatedCompound = module.compoundId ? compounds.find((c) => c.id === module.compoundId) : null;
-  const synergyCompounds = module.synergyCompoundIds
-    ?.map((id) => compounds.find((c) => c.id === id))
-    .filter(Boolean) ?? [];
+  const synergyCompounds = module.compoundId ? getSynergiesForCompound(module.compoundId) : [];
   const buyerGuide =
     module.category === 'compounds' ? getBuyerGuideByModuleSlug(module.slug) : undefined;
 
@@ -106,11 +105,17 @@ export function LibraryModuleDetail({
 
             {synergyCompounds.length > 0 && (
               <div className="glass rounded-xl p-5">
-                <p className="text-[10px] font-mono text-accent-emerald uppercase mb-3">Stack compounds</p>
+                <p className="text-[10px] font-mono text-accent-emerald uppercase mb-3">Pairs well with</p>
                 <ul className="space-y-2">
                   {synergyCompounds.map((c) => (
-                    <li key={c!.id} className="text-sm text-muted-foreground">
-                      {c!.name}
+                    <li key={c.slug}>
+                      <Link
+                        href={`/library/compounds/${c.slug}`}
+                        className="focus-ring interactive flex items-center justify-between gap-2 rounded-md text-sm text-muted-foreground hover:text-accent-cyan transition"
+                      >
+                        <span className="truncate">{c.name}</span>
+                        <EvidenceTag tier={c.evidence} className="shrink-0" />
+                      </Link>
                     </li>
                   ))}
                 </ul>
