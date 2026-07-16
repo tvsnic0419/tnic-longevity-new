@@ -10,6 +10,7 @@
  */
 
 import { buildPageMetadata } from './seo';
+import { glossary, consumerFAQ } from './data';
 
 export const seoRoutes = {
   home: () =>
@@ -42,17 +43,15 @@ export const seoRoutes = {
   learn: () =>
     buildPageMetadata({
       title: 'Learn Hub — Getting Started, Glossary & Red Flags',
-      description:
-        'Start here before you stack: 5-step onboarding checklist, 20-term longevity glossary, seven supplement red flags to avoid, outcome timelines, and evidence tier explainer.',
+      description: `Start here before you stack: 5-step onboarding checklist, ${glossary.length}-term longevity glossary, seven supplement red flags to avoid, outcome timelines, and evidence tier explainer.`,
       path: '/learn',
       keywords: ['longevity FAQ', 'getting started biohacking', 'supplement red flags', 'longevity glossary', 'evidence tier A B C'],
     }),
 
   faq: () =>
     buildPageMetadata({
-      title: 'FAQ — Twenty-Five Longevity Protocol Questions Answered',
-      description:
-        'Twenty-five honest answers about TNiC evidence tiers, rapamycin safety, epigenetic clocks, sleep and biological aging, daily vs cycling dosing, medications, and how we differ from supplement stores.',
+      title: `FAQ — ${consumerFAQ.length} Longevity Protocol Questions Answered`,
+      description: `${consumerFAQ.length} honest answers about TNiC evidence tiers, rapamycin safety, epigenetic clocks, sleep and biological aging, daily vs cycling dosing, medications, and how we differ from supplement stores.`,
       path: '/faq',
       keywords: ['longevity FAQ', 'NMN safety', 'evidence tier A B C', 'rapamycin longevity', 'epigenetic clock', 'supplement protocol questions'],
     }),
