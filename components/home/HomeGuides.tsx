@@ -46,6 +46,26 @@ const guides: { href: string; label: string; kicker: string }[] = [
     kicker: 'Cellular cleanup, and the ITP data',
   },
   {
+    href: '/coq10-supplement-guide',
+    label: 'CoQ10 Supplement Guide',
+    kicker: 'The statin-depletion evidence',
+  },
+  {
+    href: '/omega-3-supplement-guide',
+    label: 'Omega-3 Supplement Guide',
+    kicker: 'REDUCE-IT and the resolution mechanism',
+  },
+  {
+    href: '/urolithin-a-supplement-guide',
+    label: 'Urolithin A Supplement Guide',
+    kicker: 'The first human mitophagy trial',
+  },
+  {
+    href: '/ca-akg-supplement-guide',
+    label: 'Ca-AKG Supplement Guide',
+    kicker: 'Strong mouse data, honest human gaps',
+  },
+  {
     href: '/elite-8',
     label: 'The Elite 8 Ranking',
     kicker: 'Our highest-conviction compounds',

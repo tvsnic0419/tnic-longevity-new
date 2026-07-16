@@ -312,6 +312,8 @@ export const evidenceComparisons: EvidenceComparison[] = [
     ],
     relatedHrefs: [
       { label: 'Resveratrol deep dive', href: '/library/compounds/resveratrol' },
+      { label: 'Resveratrol Supplement Guide', href: '/resveratrol-supplement-guide' },
+      { label: 'Pterostilbene Supplement Guide', href: '/pterostilbene-supplement-guide' },
       { label: 'SIRT1 synergy guide', href: '/library/synergies/nmn-resveratrol-sirt1' },
     ],
     keywords: ['resveratrol', 'pterostilbene', 'sirt1', 'nad+'],
@@ -670,6 +672,8 @@ export const evidenceComparisons: EvidenceComparison[] = [
     relatedHrefs: [
       { label: 'Urolithin A in Library', href: '/library/compounds/urolithina' },
       { label: 'CoQ10 in Library', href: '/library/compounds/coq10' },
+      { label: 'Urolithin A Supplement Guide', href: '/urolithin-a-supplement-guide' },
+      { label: 'CoQ10 Supplement Guide', href: '/coq10-supplement-guide' },
       { label: 'Mitochondrial Dysfunction hallmark', href: '/library/mitochondrial-dysfunction' },
       { label: 'NMN vs Spermidine', href: '/library/compare/nmn-vs-spermidine' },
     ],
@@ -857,6 +861,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
     ],
     relatedHrefs: [
       { label: 'Cellular Senescence hallmark', href: '/library/cellular-senescence' },
+      { label: 'Fisetin Supplement Guide', href: '/fisetin-supplement-guide' },
       { label: 'Full Hybrid Stack', href: '/stacks' },
       { label: 'Berberine vs Metformin', href: '/library/compare/berberine-vs-metformin' },
     ],
@@ -1039,10 +1044,11 @@ export const evidenceComparisons: EvidenceComparison[] = [
     relatedHrefs: [
       { label: 'Ca-AKG Guide', href: '/library/compounds/cakg' },
       { label: 'Spermidine Guide', href: '/library/compounds/spermidine' },
+      { label: 'Ca-AKG Supplement Guide', href: '/ca-akg-supplement-guide' },
       { label: 'Epigenetic Alterations hallmark', href: '/library/epigenetic-alterations' },
       { label: 'NMN vs Spermidine', href: '/library/compare/nmn-vs-spermidine' },
     ],
-    keywords: ['ca-akg', 'alpha-ketoglutarate', 'spermidine', 'epigenetic clock', 'autophagy', 'methylation', 'horvath', 'rejuvant'],
+    keywords: ['ca-akg', 'alpha-ketoglutarate', 'spermidine', 'epigenetic clock', 'autophagy', 'methylation', 'horvath'],
   },
   {
     slug: 'rapamycin-vs-metformin',
@@ -1213,6 +1219,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
     ],
     relatedHrefs: [
       { label: 'CoQ10 in Library', href: '/library/compounds/coq10' },
+      { label: 'CoQ10 Supplement Guide', href: '/coq10-supplement-guide' },
       { label: 'Urolithin A vs CoQ10', href: '/library/compare/urolithina-vs-coq10' },
       { label: 'Mitochondrial Dysfunction hallmark', href: '/library/mitochondrial-dysfunction' },
       { label: 'Elite 8 LQ Ranking', href: '/elite-8' },
@@ -1296,6 +1303,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
     ],
     relatedHrefs: [
       { label: 'Omega-3 in Library', href: '/library/compounds/omega3' },
+      { label: 'Omega-3 Supplement Guide', href: '/omega-3-supplement-guide' },
       { label: 'Mitochondrial Dysfunction hallmark', href: '/library/mitochondrial-dysfunction' },
       { label: 'Best Longevity Supplements 2026', href: '/longevity-supplements-guide' },
       { label: 'Elite 8 LQ Ranking', href: '/elite-8' },
