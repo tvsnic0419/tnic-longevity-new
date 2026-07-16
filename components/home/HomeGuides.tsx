@@ -82,10 +82,10 @@ export function HomeGuides() {
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {guides.map(({ href, label, kicker }, i) => (
             <RevealItem key={href} index={i}>
-              <GlassPanel depth="mid" className="glass-hover h-full overflow-hidden rounded-2xl">
+              <GlassPanel depth="mid" className="glass-hover h-full rounded-2xl">
                 <Link
                   href={href}
-                  className="focus-ring group flex h-full flex-col justify-between gap-6 p-5"
+                  className="focus-ring group flex h-full flex-col justify-between gap-6 rounded-2xl p-5"
                 >
                   <ArrowUpRight
                     className="h-4 w-4 self-end text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent-cyan"

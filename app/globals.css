@@ -363,7 +363,11 @@ body::after {
 .glass-hover { transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
 
 @media (hover: hover) {
-  .glass-hover:hover {
+  /* :not(.glass-deep) — Deep Glass panels (GlassPanel/.glass-plane-*) own their
+     hover box-shadow via the plane tokens; letting this legacy rule apply to
+     them too would win on specificity and flatten the stacked contact+lift+
+     ambient shadow back to this single-layer glow. */
+  .glass-hover:not(.glass-deep):hover {
     background: color-mix(in srgb, var(--glass-bg) 90%, var(--accent-cyan) 5%);
     border-color: color-mix(in srgb, var(--accent-cyan) 25%, var(--glass-border));
     box-shadow:
