@@ -246,6 +246,21 @@ body::after {
 /* ── Typography scale ──
    Default `color` for these classes lives in the @layer components block
    below, not here — see that block's comment for why. */
+/* Slightly larger than .heading-page — for the one H1 on landing-style
+   pages (supplement guides) that wants a bit more hero presence than a
+   standard section/hub page title, without competing with the homepage's
+   .headline-editorial (the site's single biggest heading). Matches the
+   scale the NAD+ guide had already hand-rolled in Tailwind utilities
+   (text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1])
+   before this class existed — this centralizes that proven pattern instead
+   of leaving every other guide referencing an undefined class name. */
+.heading-hero {
+  font-size: clamp(1.875rem, 4vw + 1rem, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+
 .heading-page {
   font-size: clamp(2rem, 4.5vw + 0.75rem, 3.25rem);
   font-weight: 700;
@@ -299,6 +314,7 @@ body::after {
    Tailwind's own `@layer theme, base, components, utilities;` order puts
    `utilities` after `components`, so utilities now correctly win here. */
 @layer components {
+  .heading-hero,
   .heading-page,
   .heading-section,
   .heading-card,
@@ -2320,6 +2336,19 @@ body::after {
     transparent 70%
   );
   pointer-events: none;
+}
+
+/* Additive glossy sweep for .card-floating — a `background-image` layer
+   (not the `background` shorthand) so it composites on top of
+   .card-floating's own background-color instead of replacing it.
+   .card-floating's ::before/::after are already spoken for above, so
+   this lives on the element itself rather than a pseudo-element. */
+.card-floating.card-shine {
+  background-image: linear-gradient(
+    135deg,
+    color-mix(in srgb, white 6%, transparent) 0%,
+    transparent 32%
+  );
 }
 
 .card-floating > * { position: relative; z-index: 1; }

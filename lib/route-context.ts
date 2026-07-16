@@ -70,6 +70,24 @@ const SEGMENT_LABELS: Record<string, string> = {
   journey: 'Journey',
   updates: 'Updates',
   'delivery-systems': 'Delivery Systems',
+  // Supplement-guide routes — explicit so acronym/compound names don't get
+  // mangled by the naive titleCase() fallback below (e.g. "coq10" -> "Coq10"
+  // instead of "CoQ10", "ca-akg" -> "Ca Akg" instead of "Ca-AKG").
+  'supplement-guides': 'Supplement Guides',
+  'nad-supplement-guide': 'NAD+ Supplement Guide',
+  'glynac-supplement-guide': 'GlyNAC Supplement Guide',
+  'berberine-supplement-guide': 'Berberine Supplement Guide',
+  'taurine-supplement-guide': 'Taurine Supplement Guide',
+  'sulforaphane-supplement-guide': 'Sulforaphane Supplement Guide',
+  'spermidine-supplement-guide': 'Spermidine Supplement Guide',
+  'urolithin-a-supplement-guide': 'Urolithin A Supplement Guide',
+  'fisetin-supplement-guide': 'Fisetin Supplement Guide',
+  'coq10-supplement-guide': 'CoQ10 Supplement Guide',
+  'omega-3-supplement-guide': 'Omega-3 Supplement Guide',
+  'r-ala-supplement-guide': 'R-ALA Supplement Guide',
+  'ca-akg-supplement-guide': 'Ca-AKG Supplement Guide',
+  'resveratrol-supplement-guide': 'Resveratrol Supplement Guide',
+  'pterostilbene-supplement-guide': 'Pterostilbene Supplement Guide',
 };
 
 function titleCase(slug: string): string {
