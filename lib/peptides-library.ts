@@ -131,6 +131,7 @@ export const peptideLibrary: Peptide[] = [
       'Personal tracking template',
     ],
     relatedHallmarkIds: ['inflammation', 'senescence'],
+    relatedPeptideIds: ['glp1-longevity'],
     mdxSlug: 'thymosin-alpha-1',
   },
   {
@@ -154,6 +155,7 @@ export const peptideLibrary: Peptide[] = [
       'Personal tracking template',
     ],
     relatedHallmarkIds: ['nutrient', 'proteostasis'],
+    relatedPeptideIds: ['glp1-longevity'],
     mdxSlug: 'gh-secretagogues',
   },
   {
@@ -201,6 +203,7 @@ export const peptideLibrary: Peptide[] = [
       'Personal tracking template',
     ],
     relatedHallmarkIds: ['nutrient', 'inflammation'],
+    relatedPeptideIds: ['thymosin-alpha-1', 'gh-secretagogues'],
     mdxSlug: 'glp1-longevity',
   },
   {
