@@ -6,11 +6,11 @@ import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Scale, Pill,
 import { getCompoundsForHallmark } from '@/lib/library-graph';
 
 export const metadata: Metadata = {
-  title: 'Disabled Macroautophagy / Nutrient Sensing | Hallmarks of Aging | TNiC',
+  title: 'Deregulated Nutrient Sensing | Hallmarks of Aging | TNiC',
   description:
-    'Deep-dive into nutrient sensing dysregulation and disabled macroautophagy — the mTOR/AMPK axis that controls whether cells grow or clean. Rapamycin, resveratrol, NMN, metformin, and clinical evidence.',
+    'Deep-dive into deregulated nutrient sensing — the mTOR/AMPK axis that controls whether cells grow or clean. Rapamycin, resveratrol, NMN, metformin, and clinical evidence.',
   openGraph: {
-    title: 'Disabled Macroautophagy — Hallmark #12 of Aging | TNiC',
+    title: 'Deregulated Nutrient Sensing — Hallmark #12 of Aging | TNiC',
     description: 'How mTOR overactivation and AMPK decline disable cellular cleanup — and what the clinical evidence says about restoring nutrient sensing.',
   },
 };
@@ -77,7 +77,7 @@ const EVIDENCE_BADGE: Record<string, string> = {
   C: 'bg-rose-500/15 text-rose-400 border-rose-500/30',
 };
 
-export default function DisabledMacroautophagyPage() {
+export default function NutrientSensingPage() {
   const targetingCompounds = getCompoundsForHallmark('nutrient');
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -89,14 +89,14 @@ export default function DisabledMacroautophagyPage() {
             <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
               <Link href="/hallmarks" className="hover:text-foreground transition-colors">Hallmarks</Link>
               <span>/</span>
-              <span className="text-amber-400">Disabled Macroautophagy</span>
+              <span className="text-amber-400">Deregulated Nutrient Sensing</span>
             </div>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 mb-6">
               <Scale className="w-3.5 h-3.5 text-amber-400" />
               <span className="text-xs font-medium text-amber-400 tracking-widest uppercase">Hallmark #12 of 12</span>
             </div>
             <h1 className="text-4xl md:text-6xl font-black tracking-tight text-foreground mb-6 leading-[1.05]">
-              Disabled<br /><span className="text-amber-400">Macroautophagy</span>
+              Deregulated<br /><span className="text-amber-400">Nutrient Sensing</span>
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mb-8">
               mTOR — the master growth switch — stays on chronically in aging, suppressing the cellular cleanup
@@ -209,7 +209,7 @@ export default function DisabledMacroautophagyPage() {
               <p className="text-xs text-cyan-400 uppercase tracking-widest font-medium">TNiC Library</p>
             </div>
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-2">Compounds in the TNiC library that target this hallmark</h2>
-            <p className="text-muted-foreground mb-8">Structured compound profiles — dosing, mechanism, and evidence tier — for library compounds tagged as targeting nutrient sensing / disabled macroautophagy.</p>
+            <p className="text-muted-foreground mb-8">Structured compound profiles — dosing, mechanism, and evidence tier — for library compounds tagged as targeting nutrient sensing.</p>
             {targetingCompounds.length > 0 ? (
               <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
                 {targetingCompounds.map((compound) => (
@@ -242,7 +242,7 @@ export default function DisabledMacroautophagyPage() {
             <div className="flex flex-wrap justify-center gap-3">
               <Link href="/stacks" className="inline-flex items-center gap-2 bg-emerald-500 text-black px-6 py-3 rounded-xl text-sm font-bold hover:bg-emerald-400 transition-colors">Stack Architect <ArrowRight className="w-4 h-4" /></Link>
               <Link href="/hallmarks" className="inline-flex items-center gap-2 border border-border px-6 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"><BookOpen className="w-4 h-4" />All Hallmarks</Link>
-              <Link href="/library/disabled-macroautophagy" className="inline-flex items-center gap-2 border border-border px-6 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"><Library className="w-4 h-4" />View in Library</Link>
+              <Link href="/library/nutrient-sensing" className="inline-flex items-center gap-2 border border-border px-6 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"><Library className="w-4 h-4" />View in Library</Link>
             </div>
           </div>
         </section>

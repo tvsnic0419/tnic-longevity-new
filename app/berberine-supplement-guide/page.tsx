@@ -479,7 +479,7 @@ export default function BerberineGuidePage() {
                 badge: 'bg-accent-violet/10 border-accent-violet/20',
                 title: 'Deregulated Nutrient Sensing',
                 body: "AMPK is the cell's principal nutrient-sensing hub — it activates when energy (ATP) runs low and shifts metabolism toward catabolism (fat oxidation, glucose uptake, autophagy) while suppressing the anabolic, growth-signaling side of nutrient sensing (mTOR, fatty acid synthesis). Berberine activates AMPK by inhibiting mitochondrial Complex I, producing the same energy-deficit signal AMPK is built to detect — nearly identical to metformin's primary action. This is the most direct hallmark connection berberine has.",
-                href: '/library/disabled-macroautophagy',
+                href: '/library/nutrient-sensing',
                 label: 'Deregulated Nutrient Sensing hallmark',
               },
               {

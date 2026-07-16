@@ -28,7 +28,7 @@ const EDITORIAL_SLUGS = new Set([
   'altered-intercellular-communication',
   'chronic-inflammation',
   'dysbiosis',
-  'disabled-macroautophagy',
+  'nutrient-sensing',
 ]);
 
 const COVERAGE_COLOR = (pct: number) =>

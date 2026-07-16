@@ -570,7 +570,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
     relatedHrefs: [
       { label: 'Berberine in Library', href: '/library/berberine' },
       { label: 'Stack Architect', href: '/stacks' },
-      { label: 'Nutrient Sensing Hallmark', href: '/library/hallmarks/nutrient' },
+      { label: 'Nutrient Sensing Hallmark', href: '/library/nutrient-sensing' },
     ],
     keywords: ['berberine', 'metformin', 'ampk', 'glucose', 'metabolic', 'diabetes', 'longevity'],
   },
@@ -776,7 +776,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
       { label: 'NMN in Library', href: '/library/compounds/nmn' },
       { label: 'Spermidine in Library', href: '/library/compounds/spermidine' },
       { label: 'NMN vs NR', href: '/library/compare/nmn-vs-nr' },
-      { label: 'Disabled Autophagy hallmark', href: '/library/disabled-macroautophagy' },
+      { label: 'Disabled Autophagy hallmark', href: '/library/disabled-autophagy' },
       { label: 'NAD⁺ Mito Stack synergy', href: '/library/nad-mito-stack' },
     ],
     keywords: ['nmn', 'spermidine', 'autophagy', 'nad+', 'ep300', 'sirt1', 'longevity', 'immune aging', 'polyamine'],

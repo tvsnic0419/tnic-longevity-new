@@ -8,6 +8,16 @@
       "has": [{ "type": "host", "value": "www.tnic.help" }],
       "destination": "https://tnic.help/:path*",
       "permanent": true
+    },
+    {
+      "source": "/hallmarks/disabled-macroautophagy",
+      "destination": "/hallmarks/nutrient-sensing",
+      "permanent": true
+    },
+    {
+      "source": "/library/disabled-macroautophagy",
+      "destination": "/library/nutrient-sensing",
+      "permanent": true
     }
   ],
   "crons": [
