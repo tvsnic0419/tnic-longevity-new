@@ -75,6 +75,8 @@ const BIOMARKERS = [
 ];
 
 export default function MitochondrialDysfunctionPage() {
+  const compoundsForHallmark = getCompoundsForHallmark('mito');
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
@@ -241,6 +243,34 @@ export default function MitochondrialDysfunctionPage() {
           </div>
         </section>
 
+        {/* Compound Library */}
+        <section className="py-20 border-t border-border/50">
+          <div className="container-page max-w-4xl">
+            <div className="flex items-center gap-2 mb-2">
+              <Pill className="w-5 h-5 text-amber-400" />
+              <p className="text-xs text-amber-400 uppercase tracking-widest font-medium">Compound Library</p>
+            </div>
+            <h2 className="text-3xl font-black tracking-tight text-foreground mb-2">
+              Compounds in the TNiC library that target this hallmark
+            </h2>
+            <p className="text-muted-foreground mb-8">
+              Cross-referenced from the structured compound library, ranked by evidence tier.
+            </p>
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
+              {compoundsForHallmark.map((compound) => (
+                <Link
+                  key={compound.slug}
+                  href={`/library/compounds/${compound.slug}`}
+                  className="flex items-center justify-between gap-3 rounded-2xl border border-border/60 bg-card/40 p-4 hover:border-amber-500/40 transition-colors"
+                >
+                  <span className="text-sm font-medium text-foreground">{compound.name}</span>
+                  <EvidenceTag tier={compound.evidence} size="sm" />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* CTA */}
         <section className="py-20 border-t border-border/50">
           <div className="container-page text-center max-w-2xl">
@@ -259,6 +289,10 @@ export default function MitochondrialDysfunctionPage() {
               <Link href="/library" className="inline-flex items-center gap-2 border border-border px-6 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 <BookOpen className="w-4 h-4" />
                 All Hallmarks
+              </Link>
+              <Link href="/library/mitochondrial-dysfunction" className="inline-flex items-center gap-2 border border-border px-6 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                <Library className="w-4 h-4" />
+                View in Library
               </Link>
             </div>
           </div>
