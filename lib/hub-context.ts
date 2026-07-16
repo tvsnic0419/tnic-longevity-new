@@ -297,6 +297,27 @@ const moduleSlugOverrides: Partial<Record<string, Partial<HubContext>>> = {
   'nad-mito-stack': {
     next: 'Ramp Ca-AKG per module schedule, simulate full stack in Tools, log NAD+ index at 12 weeks.',
   },
+  'glynac-nrf2-triad': {
+    next: 'Run the AM choreography (GlyNAC → 20 min → sulforaphane → breakfast + R-ALA) for 24 weeks; log GSH and hs-CRP at baseline, week 12, and week 24 in Labs.',
+  },
+  'nmn-resveratrol-sirt1': {
+    next: 'Titrate NMN AM fasted and resveratrol PM with fat over 4 weeks; log a baseline NAD+ index now and retest at week 4.',
+  },
+  exercise: {
+    next: 'Establish your Zone 2 heart-rate zone with one 30-minute session this week, then log resting HR and hs-CRP in Labs before adding resistance or VO2max work.',
+  },
+  sleep: {
+    next: 'Fix your wake time first — don’t touch bedtime yet — and log actual sleep duration nightly; add outdoor AM light on day 4.',
+  },
+  nutrition: {
+    next: 'Log your current eating window and fiber grams for 3 days with no other changes, then tighten to a 10-hour window and add one high-fiber food.',
+  },
+  stress: {
+    next: 'Record a 7-day HRV baseline each morning in the same position, then add one 5-minute box-breathing session before extending to full biofeedback.',
+  },
+  'testing-and-monitoring': {
+    next: 'Order the Tier 1 baseline panel first, log results in Lab Hub, and set retest reminders from the cadence matrix before adding Tier 2 markers.',
+  },
   rapamycin: {
     what: 'Educational deep-dive on mTORC1 inhibition — prescription-only, physician-supervised contexts only.',
     why: 'Rapamycin has the strongest preclinical lifespan data but serious immunosuppressive risks. This module is for informed physician discussions.',
