@@ -116,7 +116,7 @@ export const buttonSizes = {
 
 /** Card variants */
 export const cardVariants = {
-  default: 'glass rounded-xl',
+  default: 'glass glass-shadow-mid rounded-xl',
   elevated: 'card-elevated',
   outline: 'border border-border bg-card rounded-xl',
   scientific: 'card-base border-l-2 border-l-accent-cyan',

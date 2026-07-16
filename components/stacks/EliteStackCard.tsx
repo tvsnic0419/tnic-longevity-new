@@ -44,7 +44,7 @@ export function EliteStackCard({ stack, expanded: defaultExpanded = false }: Eli
   const compoundNames = stack.compoundIds.map((id) => compounds.find((c) => c.id === id)?.name ?? id);
 
   return (
-    <motion.div layout className="glass rounded-2xl overflow-hidden">
+    <motion.div layout className="glass glass-shadow-mid rounded-2xl overflow-hidden">
       <button
         onClick={() => setOpen(!open)}
         className="w-full text-left p-5 hover:bg-muted/30 transition"

@@ -385,11 +385,17 @@ body::after {
   position: relative;
   background: var(--color-bg-elevated);
   border-radius: var(--radius-2xl);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  /* Real stacked depth (Design System v8 mid-plane) — was a near-flat
+     single shadow before, despite the "elevated" name. */
+  box-shadow: var(--glass-shadow-mid);
 }
 
-[data-theme="light"] .card-elevated {
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(15, 23, 42, 0.04);
+/* Opt-in stacked-shadow depth for bare `.glass` surfaces used as cards
+   (dashboard/sidebar/protocol-card panels) — deliberately NOT added to the
+   base `.glass` class itself, since that class is also used for small
+   inline chips/pills sitewide where this much shadow would be excessive. */
+.glass-shadow-mid {
+  box-shadow: var(--glass-shadow-mid);
 }
 
 .card-elevated::before,

@@ -46,7 +46,7 @@ export function HallmarkDetail({
               number={hallmark.number}
             />
             {MechanismVisual && (
-              <div className="glass rounded-xl overflow-hidden">
+              <div className="glass glass-shadow-mid rounded-xl overflow-hidden">
                 <p className="text-[9px] font-mono text-muted-foreground uppercase tracking-wider px-4 pt-3 pb-1">
                   Mechanism Diagram
                 </p>

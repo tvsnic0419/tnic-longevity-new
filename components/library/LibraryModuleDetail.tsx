@@ -75,7 +75,7 @@ export function LibraryModuleDetail({
             </div>
 
             {relatedHallmarks.length > 0 && (
-              <div className="glass rounded-xl p-5">
+              <div className="glass glass-shadow-mid rounded-xl p-5">
                 <p className="text-[10px] font-mono text-accent-violet uppercase mb-3">Related hallmarks</p>
                 <ul className="space-y-2">
                   {relatedHallmarks.map((h) => (
@@ -93,7 +93,7 @@ export function LibraryModuleDetail({
             )}
 
             {relatedCompound && (
-              <div className="glass rounded-xl p-5">
+              <div className="glass glass-shadow-mid rounded-xl p-5">
                 <p className="text-[10px] font-mono text-accent-emerald uppercase mb-3">TNiC compound</p>
                 <p className="text-sm font-semibold text-foreground">{relatedCompound.name}</p>
                 <p className="text-xs text-muted-foreground mt-1">{relatedCompound.dose} · {relatedCompound.timing}</p>
@@ -104,7 +104,7 @@ export function LibraryModuleDetail({
             )}
 
             {synergyCompounds.length > 0 && (
-              <div className="glass rounded-xl p-5">
+              <div className="glass glass-shadow-mid rounded-xl p-5">
                 <p className="text-[10px] font-mono text-accent-emerald uppercase mb-3">Pairs well with</p>
                 <ul className="space-y-2">
                   {synergyCompounds.map((c) => (
@@ -126,7 +126,7 @@ export function LibraryModuleDetail({
             )}
 
             {module.relatedSynergySlugs && module.relatedSynergySlugs.length > 0 && (
-              <div className="glass rounded-xl p-5">
+              <div className="glass glass-shadow-mid rounded-xl p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <Layers className="w-4 h-4 text-accent-cyan" />
                   <p className="text-[10px] font-mono text-accent-cyan uppercase">Related synergies</p>
@@ -147,7 +147,7 @@ export function LibraryModuleDetail({
             )}
 
             {comparisons.length > 0 && (
-              <div className="glass rounded-xl p-5">
+              <div className="glass glass-shadow-mid rounded-xl p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <Scale className="w-4 h-4 text-accent-cyan" />
                   <p className="text-[10px] font-mono text-accent-cyan uppercase">Compare {module.title}</p>
@@ -173,7 +173,7 @@ export function LibraryModuleDetail({
             {guide && (
               <Link
                 href={guide.href}
-                className="focus-ring interactive flex items-center gap-3 glass glass-hover rounded-xl p-4"
+                className="focus-ring interactive flex items-center gap-3 glass glass-shadow-mid glass-hover rounded-xl p-4"
               >
                 <BookOpen className="w-5 h-5 text-accent-emerald shrink-0" />
                 <div>
@@ -185,7 +185,7 @@ export function LibraryModuleDetail({
 
             <Link
               href="/labs"
-              className="focus-ring interactive flex items-center gap-3 glass glass-hover rounded-xl p-4"
+              className="focus-ring interactive flex items-center gap-3 glass glass-shadow-mid glass-hover rounded-xl p-4"
             >
               <FlaskConical className="w-5 h-5 text-accent-cyan shrink-0" />
               <div>

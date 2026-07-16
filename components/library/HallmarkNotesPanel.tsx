@@ -59,7 +59,7 @@ export function HallmarkNotesPanel({ hallmark }: { hallmark: HallmarkLibraryEntr
         )}
       </div>
 
-      <div className="glass rounded-xl p-4 mb-4">
+      <div className="glass glass-shadow-mid rounded-xl p-4 mb-4">
         <p className="text-[10px] font-mono text-muted-foreground uppercase mb-2">Tracking prompts</p>
         <ul className="space-y-1">
           {hallmark.personalPrompts.map((p) => (
@@ -71,7 +71,7 @@ export function HallmarkNotesPanel({ hallmark }: { hallmark: HallmarkLibraryEntr
         </ul>
       </div>
 
-      <div className="glass rounded-xl p-4">
+      <div className="glass glass-shadow-mid rounded-xl p-4">
         <p className="text-[10px] font-mono text-muted-foreground uppercase mb-2">Your stack coverage</p>
         {activeCompounds.length > 0 ? (
           <p className="text-xs text-accent-emerald">

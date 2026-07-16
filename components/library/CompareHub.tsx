@@ -38,7 +38,7 @@ export function CompareHub() {
             >
               <Link
                 href={`/library/compare/${comp.slug}`}
-                className="focus-ring block glass glass-hover rounded-2xl p-6 h-full group"
+                className="focus-ring block glass glass-shadow-mid glass-hover rounded-2xl p-6 h-full group"
               >
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <div className="flex items-center gap-2">
