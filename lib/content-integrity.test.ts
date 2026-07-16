@@ -1,8 +1,10 @@
-import { readFileSync, readdirSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { resolve, join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { compounds } from './data';
 import { citationRegistry } from './trust';
+import { libraryModules } from './library-modules';
+import { getGuideForCompound } from './library-graph';
 
 const COMPOUNDS_DIR = resolve(process.cwd(), 'content/compounds');
 const ALL_CONTENT_DIRS = ['compounds', 'hallmarks', 'synergies', 'lifestyle', 'guides'].map((d) =>
@@ -46,6 +48,31 @@ describe('content depth — every compound reaches the full-guide standard', () 
       /^##.*(synerg|stack integration)/im.test(doc.body),
       `${slug} is missing a Synergies / stack-integration section`,
     ).toBe(true);
+  });
+});
+
+describe('content depth — every compound has a resolvable standalone guide', () => {
+  const compoundIdToModuleSlug = new Map(
+    libraryModules.filter((m) => m.category === 'compounds' && m.compoundId).map((m) => [m.compoundId!, m.slug]),
+  );
+
+  it.each(compounds.map((c) => c.id))('%s has a library module page', (id) => {
+    expect(compoundIdToModuleSlug.has(id), `${id} has no entry in libraryModules`).toBe(true);
+  });
+
+  it.each(compounds.map((c) => c.id))('%s resolves to a standalone supplement guide', (id) => {
+    const moduleSlug = compoundIdToModuleSlug.get(id);
+    expect(moduleSlug, `${id} has no library module slug to look up a guide for`).toBeDefined();
+    const guide = getGuideForCompound(moduleSlug!);
+    expect(guide, `${id} (module slug "${moduleSlug}") has no entry in library-graph's compoundGuides map`).toBeDefined();
+  });
+
+  it.each(compounds.map((c) => c.id))('%s guide route has a real page.tsx file', (id) => {
+    const moduleSlug = compoundIdToModuleSlug.get(id);
+    const guide = moduleSlug ? getGuideForCompound(moduleSlug) : undefined;
+    if (!guide) return; // already failed by the previous assertion
+    const dir = join(process.cwd(), 'app', guide.href.replace(/^\//, ''));
+    expect(existsSync(join(dir, 'page.tsx')), `${id}'s guide route ${guide.href} has no page.tsx`).toBe(true);
   });
 });
 
