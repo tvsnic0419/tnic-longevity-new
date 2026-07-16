@@ -174,16 +174,35 @@ function extractPmids(content: string): string[] {
 
 const citationByPmid = new Map(citationRegistry.map((c) => [c.pmid, c]));
 
-function TableOfContents({ headings }: { headings: Heading[] }) {
+const WORDS_PER_MINUTE = 200;
+
+/** Rough word-count-based estimate — strips directive markers/attrs and
+ * table separator rows so they don't inflate the count, then counts
+ * whitespace-separated tokens at a standard ~200 wpm reading speed. */
+function estimateReadingMinutes(content: string): number {
+  const stripped = content
+    .replace(/^:::.*$/gm, '')
+    .replace(/^\|[\s-|]+\|$/gm, '')
+    .replace(/[|#>*_`-]/g, ' ');
+  const words = stripped.split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / WORDS_PER_MINUTE));
+}
+
+function TableOfContents({ headings, readingMinutes }: { headings: Heading[]; readingMinutes: number }) {
   return (
     <nav
       aria-label="On this page"
       className="not-prose mb-8 rounded-xl border border-border bg-muted/20 p-5"
     >
-      <div className="mb-3 flex items-center gap-2">
-        <ListTree className="h-4 w-4 text-accent-cyan" aria-hidden="true" />
+      <div className="mb-3 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <ListTree className="h-4 w-4 text-accent-cyan" aria-hidden="true" />
+          <p className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+            On this page
+          </p>
+        </div>
         <p className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-          On this page
+          ~{readingMinutes} min read
         </p>
       </div>
       <ul className="space-y-1.5">
@@ -609,39 +628,46 @@ function renderMarkdownBlock(content: string, blockKey: number, linkedTerms: Set
       const rows = trimmed.split('\n').filter((r) => !r.match(/^\|[\s-|]+\|$/));
       const headerCells = rows[0]?.split('|').filter(Boolean).map((c) => c.trim()) ?? [];
       elements.push(
-        <div key={key} className="overflow-x-auto my-4" role="region" aria-label="Data table">
-          <table className="w-full text-sm border-collapse">
-            {rows.length > 0 && (
-              <thead>
-                <tr className="border-b border-accent-cyan/20">
-                  {headerCells.map((cell, ci) => (
-                    <th
-                      key={ci}
-                      scope="col"
-                      className="py-2 px-3 text-left text-[10px] font-mono text-muted-foreground uppercase whitespace-nowrap"
-                      dangerouslySetInnerHTML={{ __html: renderInline(cell, linkedTerms) }}
-                    />
-                  ))}
-                </tr>
-              </thead>
-            )}
-            <tbody>
-              {rows.slice(1).map((row, ri) => {
-                const cells = row.split('|').filter(Boolean).map((c) => c.trim());
-                return (
-                  <tr key={ri} className="border-b border-border even:bg-muted/20 hover:bg-muted/40 transition-colors">
-                    {cells.map((cell, ci) => (
-                      <td
+        <div key={key} className="my-4">
+          <div className="overflow-x-auto" role="region" aria-label="Data table">
+            <table className="w-full text-sm border-collapse">
+              {rows.length > 0 && (
+                <thead>
+                  <tr className="border-b border-accent-cyan/20">
+                    {headerCells.map((cell, ci) => (
+                      <th
                         key={ci}
-                        className="py-2 px-3 text-left text-muted-foreground"
+                        scope="col"
+                        className="py-2 px-3 text-left text-[10px] font-mono text-muted-foreground uppercase whitespace-nowrap"
                         dangerouslySetInnerHTML={{ __html: renderInline(cell, linkedTerms) }}
                       />
                     ))}
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                </thead>
+              )}
+              <tbody>
+                {rows.slice(1).map((row, ri) => {
+                  const cells = row.split('|').filter(Boolean).map((c) => c.trim());
+                  return (
+                    <tr key={ri} className="border-b border-border even:bg-muted/20 hover:bg-muted/40 transition-colors">
+                      {cells.map((cell, ci) => (
+                        <td
+                          key={ci}
+                          className="py-2 px-3 text-left text-muted-foreground"
+                          dangerouslySetInnerHTML={{ __html: renderInline(cell, linkedTerms) }}
+                        />
+                      ))}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          {headerCells.length > 3 && (
+            <p className="mt-1.5 text-[10px] font-mono uppercase tracking-wider text-muted-foreground md:hidden">
+              ← Swipe for more columns →
+            </p>
+          )}
         </div>,
       );
       return;
@@ -706,10 +732,11 @@ export function MdxRenderer({
 
   const headings = showToc ? extractHeadings(content) : [];
   const pmids = showReferences ? extractPmids(content) : [];
+  const readingMinutes = estimateReadingMinutes(content);
 
   return (
     <article className="max-w-none">
-      {headings.length >= 3 && <TableOfContents headings={headings} />}
+      {headings.length >= 3 && <TableOfContents headings={headings} readingMinutes={readingMinutes} />}
       {elements}
       {pmids.length > 0 && <ReferencesSection pmids={pmids} />}
     </article>
