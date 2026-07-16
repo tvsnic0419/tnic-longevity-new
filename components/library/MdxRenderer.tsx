@@ -559,13 +559,24 @@ function renderMarkdownBlock(content: string, blockKey: number, linkedTerms: Set
 
     if (trimmed.startsWith('## ')) {
       const text = trimmed.slice(3);
+      const numbered = text.match(/^(\d+)\.\s+(.*)$/);
       elements.push(
         <h2
           key={key}
           id={slugify(text)}
-          className="scroll-mt-24 text-xl font-bold mt-8 mb-3 text-foreground"
-          dangerouslySetInnerHTML={{ __html: renderInline(text, linkedTerms) }}
-        />,
+          className="scroll-mt-24 mt-8 mb-3 flex items-baseline gap-3 text-xl font-bold text-foreground"
+        >
+          {numbered ? (
+            <>
+              <span className="shrink-0 font-mono text-sm text-accent-cyan" aria-hidden="true">
+                {numbered[1].padStart(2, '0')}
+              </span>
+              <span dangerouslySetInnerHTML={{ __html: renderInline(numbered[2], linkedTerms) }} />
+            </>
+          ) : (
+            <span dangerouslySetInnerHTML={{ __html: renderInline(text, linkedTerms) }} />
+          )}
+        </h2>,
       );
       return;
     }
@@ -602,12 +613,12 @@ function renderMarkdownBlock(content: string, blockKey: number, linkedTerms: Set
           <table className="w-full text-sm border-collapse">
             {rows.length > 0 && (
               <thead>
-                <tr className="border-b border-border">
+                <tr className="border-b border-accent-cyan/20">
                   {headerCells.map((cell, ci) => (
                     <th
                       key={ci}
                       scope="col"
-                      className="py-2 px-3 text-left text-[10px] font-mono text-muted-foreground uppercase"
+                      className="py-2 px-3 text-left text-[10px] font-mono text-muted-foreground uppercase whitespace-nowrap"
                       dangerouslySetInnerHTML={{ __html: renderInline(cell, linkedTerms) }}
                     />
                   ))}
@@ -618,7 +629,7 @@ function renderMarkdownBlock(content: string, blockKey: number, linkedTerms: Set
               {rows.slice(1).map((row, ri) => {
                 const cells = row.split('|').filter(Boolean).map((c) => c.trim());
                 return (
-                  <tr key={ri} className="border-b border-border">
+                  <tr key={ri} className="border-b border-border even:bg-muted/20 hover:bg-muted/40 transition-colors">
                     {cells.map((cell, ci) => (
                       <td
                         key={ci}

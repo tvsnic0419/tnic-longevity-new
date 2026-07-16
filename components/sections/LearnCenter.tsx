@@ -2,7 +2,41 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BookOpen, HelpCircle, Flag, MapPin, ChevronDown, ArrowRight } from 'lucide-react';
+import {
+  BookOpen,
+  HelpCircle,
+  Flag,
+  MapPin,
+  ChevronDown,
+  ArrowRight,
+  Shield,
+  Droplet,
+  Zap,
+  Dna,
+  Gauge,
+  Flame,
+  Cog,
+  Hourglass,
+  Layers,
+  FlaskConical,
+  Trash2,
+  Scale,
+  BatteryCharging,
+  FingerprintPattern,
+  HeartPulse,
+  Recycle,
+  Link as LinkIcon,
+  RotateCcw,
+  Radio,
+  Atom,
+  Syringe,
+  ShieldAlert,
+  Utensils,
+  Waves,
+  ShieldOff,
+  CircuitBoard,
+  type LucideIcon,
+} from 'lucide-react';
 import { SectionShell } from '@/components/SectionShell';
 import {
   gettingStartedSteps,
@@ -13,6 +47,57 @@ import {
 } from '@/lib/data';
 import { usePlatform } from '@/context/PlatformContext';
 import { getHubContext } from '@/lib/hub-context';
+
+/**
+ * Icon + theme per glossary term — a static lookup (not a dynamic
+ * `icon-badge-${theme}` string) because Tailwind's build-time scanner only
+ * detects literal class names in source; see the identical note in
+ * PeptideDetail.tsx / LibraryModuleDetail.tsx.
+ */
+const glossaryVisual: Record<string, { icon: LucideIcon; theme: 'cyan' | 'emerald' | 'violet' | 'amber' | 'rose' }> = {
+  NRF2: { icon: Shield, theme: 'cyan' },
+  Glutathione: { icon: Droplet, theme: 'emerald' },
+  'NAD+': { icon: Zap, theme: 'amber' },
+  'Hallmarks of Aging': { icon: Dna, theme: 'violet' },
+  Bioavailability: { icon: Gauge, theme: 'cyan' },
+  Inflammaging: { icon: Flame, theme: 'rose' },
+  Sirtuins: { icon: Cog, theme: 'violet' },
+  'Biological Age': { icon: Hourglass, theme: 'amber' },
+  Synergy: { icon: Layers, theme: 'violet' },
+  'Evidence Tier': { icon: FlaskConical, theme: 'emerald' },
+  Senolytics: { icon: Trash2, theme: 'rose' },
+  mTOR: { icon: Scale, theme: 'amber' },
+  AMPK: { icon: BatteryCharging, theme: 'emerald' },
+  'Epigenetic Clock': { icon: FingerprintPattern, theme: 'violet' },
+  Healthspan: { icon: HeartPulse, theme: 'emerald' },
+  Autophagy: { icon: Recycle, theme: 'cyan' },
+  Telomeres: { icon: LinkIcon, theme: 'rose' },
+  Mitophagy: { icon: RotateCcw, theme: 'violet' },
+  SASP: { icon: Radio, theme: 'rose' },
+  'Oxidative Stress': { icon: Atom, theme: 'amber' },
+  Peptide: { icon: Syringe, theme: 'cyan' },
+  'Research-Use-Only': { icon: ShieldAlert, theme: 'rose' },
+  Incretin: { icon: Utensils, theme: 'emerald' },
+  'GHRP / GHRH': { icon: Waves, theme: 'violet' },
+  Immunosenescence: { icon: ShieldOff, theme: 'rose' },
+  'Mitochondrial-Derived Peptide (MDP)': { icon: CircuitBoard, theme: 'violet' },
+};
+
+const glossaryIconBadgeClass: Record<string, string> = {
+  cyan: 'icon-badge-cyan',
+  emerald: 'icon-badge-emerald',
+  violet: 'icon-badge-violet',
+  amber: 'icon-badge-amber',
+  rose: 'icon-badge-rose',
+};
+
+const glossaryIconTextClass: Record<string, string> = {
+  cyan: 'text-accent-cyan',
+  emerald: 'text-accent-emerald',
+  violet: 'text-accent-violet',
+  amber: 'text-accent-amber',
+  rose: 'text-accent-rose',
+};
 
 const tabs = [
   { id: 'start', label: 'Start Here', icon: MapPin },
@@ -154,28 +239,42 @@ export function LearnCenter({ defaultTab }: { defaultTab?: TabId }) {
             exit={{ opacity: 0 }}
             className="grid md:grid-cols-2 gap-3"
           >
-            {glossary.map((g) => (
-              <button
-                key={g.term}
-                onClick={() => setOpenTerm(openTerm === g.term ? null : g.term)}
-                className={`text-left rounded-xl transition-all ${
-                  openTerm === g.term ? 'gradient-border p-5' : 'glass p-5 glass-hover'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <h3 className="font-bold text-accent-cyan">{g.term}</h3>
-                  <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${openTerm === g.term ? 'rotate-180' : ''}`} />
-                </div>
-                {openTerm === g.term && (
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-3">
-                    <p className="text-sm text-foreground/80 mb-2">{g.simple}</p>
-                    <p className="text-xs text-muted-foreground border-t border-border pt-2">
-                      <span className="text-accent-cyan font-mono">Why it matters: </span>{g.why}
-                    </p>
-                  </motion.div>
-                )}
-              </button>
-            ))}
+            {glossary.map((g) => {
+              const visual = glossaryVisual[g.term];
+              const GlossaryIcon = visual?.icon ?? BookOpen;
+              const badgeClass = glossaryIconBadgeClass[visual?.theme ?? 'cyan'];
+              const iconTextClass = glossaryIconTextClass[visual?.theme ?? 'cyan'];
+              return (
+                <button
+                  key={g.term}
+                  onClick={() => setOpenTerm(openTerm === g.term ? null : g.term)}
+                  className={`text-left rounded-xl transition-all ${
+                    openTerm === g.term ? 'gradient-border p-5' : 'glass p-5 glass-hover'
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span
+                        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${badgeClass}`}
+                        aria-hidden="true"
+                      >
+                        <GlossaryIcon className={`h-4 w-4 ${iconTextClass}`} />
+                      </span>
+                      <h3 className="font-bold text-accent-cyan truncate">{g.term}</h3>
+                    </div>
+                    <ChevronDown className={`w-4 h-4 shrink-0 text-muted-foreground transition-transform ${openTerm === g.term ? 'rotate-180' : ''}`} />
+                  </div>
+                  {openTerm === g.term && (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-3">
+                      <p className="text-sm text-foreground/80 mb-2">{g.simple}</p>
+                      <p className="text-xs text-muted-foreground border-t border-border pt-2">
+                        <span className="text-accent-cyan font-mono">Why it matters: </span>{g.why}
+                      </p>
+                    </motion.div>
+                  )}
+                </button>
+              );
+            })}
           </motion.div>
         )}
 
