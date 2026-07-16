@@ -6,6 +6,8 @@ import Link from 'next/link';
 import type { HallmarkLibraryEntry } from '@/lib/types';
 import type { CompoundLink } from '@/lib/library-graph';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { GlassPanel } from '@/components/ui/GlassPanel';
+import { RevealCard } from '@/components/ui/RevealCard';
 import { HallmarkVisual } from './HallmarkVisual';
 import { InterventionExplorer } from './InterventionExplorer';
 import { HallmarkNotesPanel } from './HallmarkNotesPanel';
@@ -46,12 +48,12 @@ export function HallmarkDetail({
               number={hallmark.number}
             />
             {MechanismVisual && (
-              <div className="glass rounded-xl overflow-hidden">
+              <GlassPanel depth="mid" className="overflow-hidden rounded-xl">
                 <p className="text-[9px] font-mono text-muted-foreground uppercase tracking-wider px-4 pt-3 pb-1">
                   Mechanism Diagram
                 </p>
                 <MechanismVisual className="w-full" />
-              </div>
+              </GlassPanel>
             )}
             <HallmarkNotesPanel hallmark={hallmark} />
           </div>
@@ -64,7 +66,7 @@ export function HallmarkDetail({
               <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">{hallmark.title}</h1>
               <p className="text-lg text-muted-foreground mb-6">{hallmark.tagline}</p>
               <p className="text-sm text-muted-foreground leading-relaxed mb-4">{hallmark.summary}</p>
-              <div className="glass rounded-xl p-5 mb-4">
+              <GlassPanel depth="mid" className="rounded-xl p-5 mb-4">
                 <p className="text-[10px] font-mono text-accent-violet uppercase mb-2">Mechanism</p>
                 <p className="text-sm text-foreground/80 leading-relaxed">{hallmark.mechanism}</p>
                 {hallmark.keyMolecules && hallmark.keyMolecules.length > 0 && (
@@ -80,11 +82,11 @@ export function HallmarkDetail({
                     ))}
                   </div>
                 )}
-              </div>
-              <div className="glass rounded-xl p-5">
+              </GlassPanel>
+              <GlassPanel depth="mid" className="rounded-xl p-5">
                 <p className="text-[10px] font-mono text-accent-amber uppercase mb-2">Why it matters</p>
                 <p className="text-sm text-foreground/80 leading-relaxed">{hallmark.whyItMatters}</p>
-              </div>
+              </GlassPanel>
             </motion.div>
 
             <ContextRail {...getHallmarkContext(hallmark)} theme="cyan" />
@@ -108,17 +110,19 @@ export function HallmarkDetail({
                   </p>
                 </div>
                 <ul className="grid gap-3 sm:grid-cols-2">
-                  {targetingCompounds.map((compound) => (
+                  {targetingCompounds.map((compound, i) => (
                     <li key={compound.slug}>
-                      <Link
-                        href={`/library/compounds/${compound.slug}`}
-                        className="focus-ring interactive group flex items-center justify-between gap-3 glass glass-hover rounded-xl p-4"
-                      >
-                        <span className="text-sm font-semibold text-foreground group-hover:text-accent-cyan transition truncate">
-                          {compound.name}
-                        </span>
-                        <EvidenceTag tier={compound.evidence} size="sm" className="shrink-0" />
-                      </Link>
+                      <RevealCard index={i} depth="mid" className="glass-hover rounded-xl">
+                        <Link
+                          href={`/library/compounds/${compound.slug}`}
+                          className="focus-ring interactive group flex items-center justify-between gap-3 rounded-xl p-4"
+                        >
+                          <span className="text-sm font-semibold text-foreground group-hover:text-accent-cyan transition truncate">
+                            {compound.name}
+                          </span>
+                          <EvidenceTag tier={compound.evidence} size="sm" className="shrink-0" />
+                        </Link>
+                      </RevealCard>
                     </li>
                   ))}
                 </ul>
