@@ -1,0 +1,175 @@
+---
+title: CoQ10 (Coenzyme Q10 / Ubiquinol)
+evidence_tier: B
+compound_id: coq10
+last_updated: 2026-07-16
+---
+
+> **TL;DR** — CoQ10 is a lipophilic electron carrier that shuttles electrons from Complex I/II to Complex III in the mitochondrial electron transport chain, and in its reduced (ubiquinol) form doubles as the only fat-soluble antioxidant the body synthesizes endogenously. Statins deplete endogenous CoQ10 because both share the mevalonate pathway. Take 100–300 mg ubiquinol daily with a fat-containing meal — 300 mg if you're on a statin.
+
+## 1. What CoQ10 does (and why it matters)
+
+CoQ10 (coenzyme Q10) sits at a genuine chokepoint in cellular energy production: it is the mobile electron carrier that ferries electrons from Complex I and Complex II to Complex III in the mitochondrial electron transport chain (ETC), a step required for roughly 95% of cellular ATP production. Without adequate CoQ10, the ETC backs up regardless of how much fuel (glucose, fatty acids) is available upstream.
+
+CoQ10 exists in two interconvertible forms: ubiquinone (oxidized, Q) and ubiquinol (reduced, QH₂). Ubiquinol is the form that does double duty as a fat-soluble antioxidant, neutralizing lipid peroxides in cell membranes — a job the water-soluble glutathione system can't reach. Ubiquinone must be reduced to ubiquinol before it can serve that antioxidant role.
+
+**Primary hallmark targeted:** Mitochondrial dysfunction.
+
+:::evidence tier="B"
+Fan et al., *Pharmacological Research* 2017 (PMID 28179205): a meta-analysis of randomized controlled trials found CoQ10 supplementation produced a significant reduction in hs-CRP and IL-6, two of the most-used systemic inflammation markers. This is a meta-analysis of inflammatory endpoints, not a longevity or mortality outcomes trial.
+:::
+
+:::pathway title="CoQ10 electron transport and antioxidant map" nodes="Ubiquinol|Reduced CoQ10 form|cyan,Complex I/II|ETC entry point|amber,Complex III|Electron acceptor|amber,ATP output|Energy output|emerald,Lipid peroxides|Oxidative damage|rose,Statins|HMG-CoA reductase inhibitor|violet" edges="Ubiquinol->Complex I/II|shuttles electrons,Complex I/II->Complex III|electron transfer,Complex III->ATP output|fuels,Ubiquinol->Lipid peroxides|quenches,Statins->Ubiquinol|depletes synthesis"
+:::
+
+## 2. Mechanism — electron transport chain cofactor and antioxidant
+
+### 2a. Electron transport chain shuttle
+
+| Step | Effect | Hallmark link |
+| --- | --- | --- |
+| CoQ10 accepts electrons from Complex I/II | Enables continued ETC flux | Mitochondrial dysfunction |
+| CoQ10 delivers electrons to Complex III | Sustains the proton gradient driving ATP synthase | Mitochondrial dysfunction |
+| ATP output | Roughly 95% of cellular ATP depends on this chain completing | Mitochondrial dysfunction |
+
+### 2b. Antioxidant function (ubiquinol vs ubiquinone)
+
+| Form | Role | Note |
+| --- | --- | --- |
+| Ubiquinol (QH₂, reduced) | Active fat-soluble antioxidant; quenches lipid peroxides in membranes | Physiologically active antioxidant form |
+| Ubiquinone (Q, oxidized) | Electron carrier form; must be reduced to ubiquinol to act as an antioxidant | Standard/older supplement form |
+
+Hernández-Camacho et al., *Frontiers in Physiology* 2018 (PMID 29459830) reviews CoQ10's dual role in mitochondrial bioenergetics and cellular antioxidant defense, and its decline with age — a mechanistic synthesis rather than a new clinical trial.
+
+### 2c. Statin-induced depletion (mevalonate pathway overlap)
+
+Statins work by inhibiting HMG-CoA reductase, the rate-limiting enzyme of the mevalonate pathway — the same biosynthetic pathway that produces the isoprenoid side chain of CoQ10. Blocking this pathway for cholesterol synthesis also reduces the raw material available for endogenous CoQ10 production, as a straightforward consequence of shared biochemistry rather than an off-target drug effect.
+
+Larsen et al., *Journal of the American College of Cardiology* 2013 (PMID 23287371): a controlled study found statin (simvastatin) therapy reduced muscle CoQ10 content and mitochondrial oxidative phosphorylation (OXPHOS) capacity — direct evidence connecting statin use to CoQ10 depletion at the tissue level.
+
+:::practical title="When CoQ10 earns a stack slot"
+CoQ10 has clear value when **two or more** apply:
+
+- You're on a statin or other HMG-CoA reductase inhibitor (the single strongest indication — mevalonate-pathway depletion is well established)
+- Mitochondrial dysfunction is a top-priority hallmark, or you have persistent low subjective energy
+- hs-CRP or IL-6 is elevated and you want an antioxidant-mechanism adjunct
+- You're already running a mitochondrial stack (NMN, R-ALA) and want to add the ETC electron-carrier leg
+
+**Skip or defer:** if budget-constrained and not on a statin, prioritize NAD+ precursors (NMN) or R-ALA first — statin users should prioritize CoQ10 regardless of what else is in the stack.
+:::
+
+## 3. Evidence summary
+
+| Study | Design | Population | Key outcomes | Tier |
+| --- | --- | --- | --- | --- |
+| Fan 2017 (PMID 28179205) | Meta-analysis of RCTs | Mixed adult populations across included trials | Significant hs-CRP and IL-6 reduction | B |
+| Hernández-Camacho 2018 (PMID 29459830) | Mechanistic review | N/A (review of aging/disease biology) | Synthesizes CoQ10's bioenergetic and antioxidant roles in aging | — |
+| Larsen 2013 (PMID 23287371) | Controlled study | Simvastatin-treated patients | Reduced muscle CoQ10 content and mitochondrial OXPHOS capacity | — |
+
+**Consensus:** Tier B overall. The evidence is strongest and most specific for two things: (1) statin-associated CoQ10 depletion, where the mevalonate-pathway mechanism is well established and directly demonstrated at the tissue level (Larsen 2013), and (2) inflammatory marker reduction, supported by meta-analysis-level evidence across multiple RCTs (Fan 2017). No dedicated human trial has tested CoQ10 against a longevity or mortality endpoint, which is why the overall tier sits at B rather than A despite the strength of the depletion-correction evidence.
+
+**Ubiquinol vs ubiquinone:** ubiquinol (the reduced form) generally achieves higher plasma concentrations than equivalent doses of ubiquinone, particularly relevant since the enzymatic capacity to reduce ubiquinone to ubiquinol also declines with age.
+
+:::decision title="Should you add CoQ10 to your stack?"
+node | On a statin or other HMG-CoA reductase inhibitor?
+yes | node | Also on warfarin or another vitamin K–dependent anticoagulant?
+  yes | redflag | Physician oversight required — CoQ10 has structural similarity to vitamin K and may reduce anticoagulant efficacy
+  no | Start 300 mg ubiquinol daily — statins deplete endogenous CoQ10 via the shared mevalonate pathway (Larsen 2013)
+no | node | hs-CRP/IL-6 elevated, or mitochondrial dysfunction a top-priority hallmark?
+  yes | Start 100–200 mg ubiquinol daily; reassess inflammatory markers at 8–12 weeks (Fan 2017 meta-analysis basis)
+  no | Prioritize NAD+ precursors (NMN) and R-ALA before adding CoQ10 without a specific indication
+redflag | Muscle pain or weakness while on a statin, combined with low energy, is a common presentation — CoQ10 repletion is a reasonable first step in consultation with your prescriber
+:::
+
+## 4. Dosing protocol
+
+| Parameter | Recommendation | Notes |
+| --- | --- | --- |
+| Dose | 100–300 mg ubiquinol daily (300 mg if on statins) | Statin users need higher-end dosing to offset mevalonate-pathway depletion (Larsen 2013) |
+| Form | Ubiquinol (reduced) preferred over ubiquinone | Skips the in-vivo reduction step; conversion capacity declines with age |
+| Timing | AM or split AM/PM, with a fat-containing meal | CoQ10 is fat-soluble; absorption drops sharply without dietary fat |
+| Duration | Continuous, ongoing | Statin-associated depletion persists as long as statin therapy continues |
+| Cycling | Not cycled | No cycling data; sustained depletion calls for sustained repletion |
+
+### Statin-offset ramp-in schedule
+
+| Week | Time | Compound | Dose |
+| --- | --- | --- | --- |
+| 1–2 | AM with breakfast | Ubiquinol | 100 mg |
+| 3+ (if on a statin) | AM + PM with meals | Ubiquinol | 150 mg x2 (300 mg total) |
+| Ongoing | AM/PM | Ubiquinol | Maintain at indicated dose |
+
+:::practical title="Titration checklist"
+- [ ] Confirm statin status before setting a target dose (300 mg if on a statin, 100–200 mg otherwise)
+- [ ] Take with the highest-fat meal of the day — absorption depends heavily on dietary fat
+- [ ] Log hs-CRP/IL-6 or subjective energy at baseline and 8–12 weeks
+- [ ] If on warfarin, confirm with your prescriber before starting given the vitamin K structural overlap
+- [ ] Choose ubiquinol over ubiquinone when budget allows, particularly over age 60
+:::
+
+:::cta href="/stacks" title="Add CoQ10 to your stack" label="Open Stack Architect"
+Toggle CoQ10 into a mitochondrial-focused stack, especially if you're on statin therapy.
+:::
+
+## 5. Monitoring
+
+| Biomarker | Target | Frequency | Action if off-target |
+| --- | --- | --- | --- |
+| hs-CRP | <1.0 mg/L | Baseline, 8–12 wk | Fan 2017 meta-analysis basis for expected reduction; flat response → confirm adherence and dose |
+| IL-6 | <1.5 pg/mL | Baseline, 8–12 wk | Same meta-analysis basis as hs-CRP |
+| Subjective energy / muscle symptoms | Improving, especially if on a statin | Ongoing | Statin-associated muscle symptoms may improve with repletion; persistent symptoms → discuss with prescriber |
+| Serum CoQ10 (optional, specialty labs) | Trending toward youthful range | Baseline, 12 wk | Not routinely tested; optional for those wanting direct confirmation of repletion |
+
+:::compare title="8–12 week CoQ10 response (inflammatory-marker focus)" before="Pre-supplementation" after="8–12 week target" summary="Based on the Fan 2017 meta-analysis of RCTs on inflammatory markers. Statin-associated depletion correction is separately supported by Larsen 2013. Neither establishes a direct longevity or mortality endpoint."
+hs-CRP|Elevated|Trending down
+IL-6|Elevated|Trending down
+Muscle CoQ10 (statin users, mechanistic)|Depleted|Repleted
+:::
+
+:::cta href="/labs" title="Track inflammatory and mitochondrial markers" label="Open Labs hub"
+Log hs-CRP, IL-6, and subjective energy or muscle symptoms at baseline and week 12.
+:::
+
+## 6. Safety, red flags, and contraindications
+
+- **Generally very well tolerated** — one of the better-tolerated compounds on the panel
+- **Mild GI upset** (nausea, reduced appetite) occasionally reported at higher doses
+- **Vitamin K structural similarity** creates a real anticoagulant-interaction risk that deserves explicit caution
+
+:::redflag title="Do not self-start without physician review"
+- **Warfarin or other vitamin K–dependent anticoagulants** — CoQ10's structural similarity to vitamin K may reduce anticoagulant efficacy; physician oversight required
+- **Active chemotherapy** — antioxidant supplementation during chemotherapy should be reviewed with an oncologist, since some regimens rely on oxidative mechanisms of action
+- **Pregnancy or breastfeeding** — limited safety data; consult a physician
+:::
+
+:::warning title="Soft cautions"
+Mild GI upset (nausea, reduced appetite) can occur at higher doses. Taking CoQ10 with food, and splitting into two smaller doses (AM/PM) rather than one large dose, typically resolves this.
+:::
+
+## 7. Synergies
+
+| Partner | Rationale | Guide |
+| --- | --- | --- |
+| NMN | CoQ10 (ETC electron carrier) and NMN (NAD+ substrate) address two independent nodes of the same mitochondrial respiratory system | [NMN module](/library/compounds/nmn) |
+| R-Alpha Lipoic Acid | Both are redox-active mitochondrial cofactors — R-ALA regenerates glutathione and vitamins C/E in the aqueous compartment while CoQ10 carries electrons and quenches lipid peroxides directly in the membrane | [R-ALA module](/library/compounds/rala) |
+
+## 8. Personal results template
+
+:::personal title="My CoQ10 results log"
+Copy to your notes or Labs hub. Update at baseline, week 4, and week 12.
+
+| Date | Week | Dose | hs-CRP | IL-6 | Energy (1–10) | Muscle symptoms (if on statin) | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| YYYY-MM-DD | 0 | — | — | — | — | — | Baseline |
+| YYYY-MM-DD | 4 | 100–300 mg | — | — | — | — | Titration check |
+| YYYY-MM-DD | 12 | 100–300 mg | — | — | — | — | Primary checkpoint |
+
+**Response criteria (personal):**
+- **Meaningful:** hs-CRP/IL-6 trending down and/or subjective energy or muscle symptoms improving by 12 wk
+- **Plateau:** No change at 12 wk → confirm dose (300 mg if on statin) and adherence with meals
+- **Adverse:** Persistent GI symptoms → split dosing further; any unusual bleeding or bruising if on warfarin → consult prescriber immediately
+:::
+
+:::cta href="/library/compounds/nmn" title="See the mitochondrial respiratory-chain pairing" label="Read the NMN module"
+CoQ10's clearest complementary pairing: the ETC electron-carrier leg alongside NMN's NAD+ substrate supply.
+:::
