@@ -7,6 +7,8 @@ import { HomeSteps } from '@/components/home/HomeSteps';
 import { HomeHallmarks } from '@/components/home/HomeHallmarks';
 import { HomeGuides } from '@/components/home/HomeGuides';
 import { HomeCTA } from '@/components/home/HomeCTA';
+import { StructuredData } from '@/components/seo/StructuredData';
+import { buildSoftwareApplicationSchema, buildItemListSchema } from '@/lib/seo';
 
 /**
  * Homepage — a server component so the full page renders to HTML on the server
@@ -18,6 +20,7 @@ import { HomeCTA } from '@/components/home/HomeCTA';
 export default function HomePage() {
   return (
     <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
+      <StructuredData schemas={[buildSoftwareApplicationSchema(), buildItemListSchema()]} />
       <ScrollProgress />
       <Nav />
       <main id="main-content" tabIndex={-1}>

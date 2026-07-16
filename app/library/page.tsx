@@ -1,48 +1,52 @@
-'use client';
-
 import { Suspense } from 'react';
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
-
-// Dynamic imports
-const AntiAgingLibrary = dynamic(() => import('@/components/library/AntiAgingLibrary').then(mod => ({ default: mod.AntiAgingLibrary })), { ssr: false });
-const LibraryModulesHub = dynamic(() => import('@/components/library/LibraryModulesHub').then(m => ({ default: m.LibraryModulesHub })), { ssr: false });
-const LifestylePillarsHub = dynamic(() => import('@/components/library/LifestylePillarsHub').then(m => ({ default: m.LifestylePillarsHub })), { ssr: false });
-const LibrarySearch = dynamic(() => import('@/components/library/LibrarySearch').then(m => ({ default: m.LibrarySearch })), { ssr: false });
-const ToolsPromoStrip = dynamic(() => import('@/components/tools/ToolsPromoStrip').then(m => ({ default: m.ToolsPromoStrip })), { ssr: false });
-const LibraryFacetFilters = dynamic(() => import('@/components/library/LibraryFacetFilters').then(mod => ({ default: mod.LibraryFacetFilters })), { ssr: false });
-const RecommendedNextSteps = dynamic(() => import('@/components/ui/RecommendedNextSteps').then(mod => ({ default: mod.RecommendedNextSteps })), { ssr: false });
+import { buildPageMetadata } from '@/lib/seo';
+import { AntiAgingLibrary } from '@/components/library/AntiAgingLibrary';
+import { LibraryModulesHub } from '@/components/library/LibraryModulesHub';
+import { LifestylePillarsHub } from '@/components/library/LifestylePillarsHub';
+import { LibrarySearch } from '@/components/library/LibrarySearch';
+import { ToolsPromoStrip } from '@/components/tools/ToolsPromoStrip';
+import { LibraryFacetFilters } from '@/components/library/LibraryFacetFilters';
+import { RecommendedNextSteps } from '@/components/ui/RecommendedNextSteps';
 
 // All 12 visuals
-const GenomicInstabilityVisual = dynamic(() => import('@/components/illustrations/GenomicInstabilityVisual').then(mod => ({ default: mod.GenomicInstabilityVisual })), { ssr: false });
-const TelomereAttritionVisual = dynamic(() => import('@/components/illustrations/TelomereAttritionVisual').then(mod => ({ default: mod.TelomereAttritionVisual })), { ssr: false });
-const EpigeneticAlterationsVisual = dynamic(() => import('@/components/illustrations/EpigeneticAlterationsVisual').then(mod => ({ default: mod.EpigeneticAlterationsVisual })), { ssr: false });
-const LossOfProteostasisVisual = dynamic(() => import('@/components/illustrations/LossOfProteostasisVisual').then(mod => ({ default: mod.LossOfProteostasisVisual })), { ssr: false });
-const DeregulatedNutrientSensingVisual = dynamic(() => import('@/components/illustrations/DeregulatedNutrientSensingVisual').then(mod => ({ default: mod.DeregulatedNutrientSensingVisual })), { ssr: false });
-const MitochondrialDysfunctionVisual = dynamic(() => import('@/components/illustrations/HallmarkVisuals').then(mod => ({ default: mod.MitochondrialDysfunctionVisual })), { ssr: false });
-const CellularSenescenceVisual = dynamic(() => import('@/components/illustrations/CellularSenescenceVisual').then(mod => ({ default: mod.CellularSenescenceVisual })), { ssr: false });
-const StemCellExhaustionVisual = dynamic(() => import('@/components/illustrations/StemCellExhaustionVisual').then(mod => ({ default: mod.StemCellExhaustionVisual })), { ssr: false });
-const AlteredIntercellularCommunicationVisual = dynamic(() => import('@/components/illustrations/AlteredIntercellularCommunicationVisual').then(mod => ({ default: mod.AlteredIntercellularCommunicationVisual })), { ssr: false });
-const ChronicInflammationVisual = dynamic(() => import('@/components/illustrations/ChronicInflammationVisual').then(mod => ({ default: mod.ChronicInflammationVisual })), { ssr: false });
-const DysbiosisVisual = dynamic(() => import('@/components/illustrations/DysbiosisVisual').then(mod => ({ default: mod.DysbiosisVisual })), { ssr: false });
-const DisabledMacroautophagyVisual = dynamic(() => import('@/components/illustrations/DisabledMacroautophagyVisual').then(mod => ({ default: mod.DisabledMacroautophagyVisual })), { ssr: false });
+import { GenomicInstabilityVisual } from '@/components/illustrations/GenomicInstabilityVisual';
+import { TelomereAttritionVisual } from '@/components/illustrations/TelomereAttritionVisual';
+import { EpigeneticAlterationsVisual } from '@/components/illustrations/EpigeneticAlterationsVisual';
+import { LossOfProteostasisVisual } from '@/components/illustrations/LossOfProteostasisVisual';
+import { DeregulatedNutrientSensingVisual } from '@/components/illustrations/DeregulatedNutrientSensingVisual';
+import { MitochondrialDysfunctionVisual } from '@/components/illustrations/HallmarkVisuals';
+import { CellularSenescenceVisual } from '@/components/illustrations/CellularSenescenceVisual';
+import { StemCellExhaustionVisual } from '@/components/illustrations/StemCellExhaustionVisual';
+import { AlteredIntercellularCommunicationVisual } from '@/components/illustrations/AlteredIntercellularCommunicationVisual';
+import { ChronicInflammationVisual } from '@/components/illustrations/ChronicInflammationVisual';
+import { DysbiosisVisual } from '@/components/illustrations/DysbiosisVisual';
+import { DisabledMacroautophagyVisual } from '@/components/illustrations/DisabledMacroautophagyVisual';
+
+export const metadata = buildPageMetadata({
+  title: 'Anti-Aging Library — The 12 Hallmarks of Aging, Evidence-Graded',
+  description:
+    'Explore the 12 hallmarks of aging with evidence-graded interventions, PMID-cited studies, and mechanistic visuals for each pathway — from genomic instability to disabled macroautophagy.',
+  path: '/library',
+  keywords: ['12 hallmarks of aging', 'anti-aging library', 'longevity interventions', 'hallmarks of aging explained'],
+});
+
+const visuals = [
+  { Component: GenomicInstabilityVisual, title: 'Genomic Instability' },
+  { Component: TelomereAttritionVisual, title: 'Telomere Attrition' },
+  { Component: EpigeneticAlterationsVisual, title: 'Epigenetic Alterations' },
+  { Component: LossOfProteostasisVisual, title: 'Loss of Proteostasis' },
+  { Component: DeregulatedNutrientSensingVisual, title: 'Deregulated Nutrient Sensing' },
+  { Component: MitochondrialDysfunctionVisual, title: 'Mitochondrial Dysfunction' },
+  { Component: CellularSenescenceVisual, title: 'Cellular Senescence' },
+  { Component: StemCellExhaustionVisual, title: 'Stem Cell Exhaustion' },
+  { Component: AlteredIntercellularCommunicationVisual, title: 'Altered Intercellular Communication' },
+  { Component: ChronicInflammationVisual, title: 'Chronic Inflammation' },
+  { Component: DysbiosisVisual, title: 'Dysbiosis' },
+  { Component: DisabledMacroautophagyVisual, title: 'Disabled Macroautophagy' },
+];
 
 export default function LibraryPage() {
-  const visuals = [
-    { Component: GenomicInstabilityVisual, title: "Genomic Instability" },
-    { Component: TelomereAttritionVisual, title: "Telomere Attrition" },
-    { Component: EpigeneticAlterationsVisual, title: "Epigenetic Alterations" },
-    { Component: LossOfProteostasisVisual, title: "Loss of Proteostasis" },
-    { Component: DeregulatedNutrientSensingVisual, title: "Deregulated Nutrient Sensing" },
-    { Component: MitochondrialDysfunctionVisual, title: "Mitochondrial Dysfunction" },
-    { Component: CellularSenescenceVisual, title: "Cellular Senescence" },
-    { Component: StemCellExhaustionVisual, title: "Stem Cell Exhaustion" },
-    { Component: AlteredIntercellularCommunicationVisual, title: "Altered Intercellular Communication" },
-    { Component: ChronicInflammationVisual, title: "Chronic Inflammation" },
-    { Component: DysbiosisVisual, title: "Dysbiosis" },
-    { Component: DisabledMacroautophagyVisual, title: "Disabled Macroautophagy" },
-  ];
-
   return (
     <>
       {/* Lead with the page title and context, then the tools to act on it */}
@@ -80,9 +84,9 @@ export default function LibraryPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {visuals.map(({ Component, title }, index) => (
-              <Link 
-                key={index} 
-                href="/library" 
+              <Link
+                key={index}
+                href="/library"
                 className="group block transition-transform hover:scale-[1.01]"
               >
                 <div className="tnic-glass rounded-2xl overflow-hidden border border-[var(--color-border-subtle)] group-hover:border-[var(--accent-cyan)]/30 transition-colors h-full">
