@@ -401,7 +401,10 @@ export default function CaAkgGuidePage() {
                 <li>· Take fasted, at least 30–60 minutes before any high-protein meal — protein competes with AKG for absorption</li>
                 <li>· Start at 1 g/day for the first 1–2 weeks and confirm tolerance before moving to 2 g</li>
                 <li>· Choose the calcium salt (Ca-AKG) form over free-acid AKG — meaningfully better oral bioavailability (~88%)</li>
-                <li>· Consider pairing with NMN (AM) and/or resveratrol (PM) as a mitochondrial + epigenetic stack — mechanistic rationale, not a tested combined-trial result</li>
+                <li>
+                  · Consider pairing with <Link href="/library/compounds/nmn" className="text-accent-violet hover:underline">NMN</Link> (AM) and/or{' '}
+                  <Link href="/library/compounds/resveratrol" className="text-accent-violet hover:underline">resveratrol</Link> (PM) as a mitochondrial + epigenetic stack — mechanistic rationale, not a tested combined-trial result
+                </li>
                 <li>· Track standard labs and how you feel; there is no validated at-home biomarker that confirms an epigenetic effect from Ca-AKG specifically</li>
               </ul>
             </div>

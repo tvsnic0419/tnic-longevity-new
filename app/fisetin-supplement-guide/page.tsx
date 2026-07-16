@@ -331,7 +331,7 @@ export default function FisetinGuidePage() {
       <section className="py-14 border-b border-border">
         <div className="container-page max-w-4xl">
           <h2 className="heading-section mb-3">Evidence Summary by Endpoint</h2>
-          <p className="text-body-sm text-muted-foreground mb-8">Click each PMID to view the source study on PubMed.</p>
+          <p className="text-body-sm text-muted-foreground mb-8">Click each PMID to view the source study on PubMed. Notice how many rows below point back to the same single paper — that is intentional, and it reflects how thin the fisetin-specific evidence base currently is outside of that one mouse study.</p>
 
           <div className="grid md:grid-cols-2 gap-4">
             {EVIDENCE_TABLE.map((item) => (
@@ -381,9 +381,9 @@ export default function FisetinGuidePage() {
               </thead>
               <tbody>
                 {[
-                  { phase: 'Pulse days 1–2 (monthly)', dose: '100–500 mg/day', timing: 'AM, with a fat-containing meal', note: 'Core protocol — 2 consecutive days only' },
-                  { phase: 'Remaining ~28 days', dose: 'None', timing: '—', note: 'No dosing — the "off" period is intentional, not optional' },
-                  { phase: 'Weight-based alternative (research-style)', dose: '~20 mg/kg × 2 days', timing: 'AM, with food', note: 'Mirrors the dosing paradigm used in the mouse literature, extrapolated by body weight' },
+                  { phase: 'Pulse days 1–2 (monthly)', dose: '100–500 mg/day', timing: 'AM, with a fat-containing meal', note: 'Core protocol — 2 consecutive days only, repeated once per month' },
+                  { phase: 'Remaining ~28 days', dose: 'None', timing: '—', note: 'No dosing — the "off" period is intentional, not optional, and is part of the pulse design itself' },
+                  { phase: 'Weight-based alternative (research-style)', dose: '~20 mg/kg × 2 days', timing: 'AM, with food', note: 'Mirrors the dosing paradigm used in the mouse literature, extrapolated by body weight rather than a flat dose' },
                 ].map((row) => (
                   <tr key={row.phase} className="border-b border-border/40 last:border-0">
                     <td className="p-4 font-medium">{row.phase}</td>
@@ -632,6 +632,7 @@ export default function FisetinGuidePage() {
         <div className="container-page max-w-4xl">
           <div className="rounded-2xl border border-accent-violet/20 bg-accent-violet/[0.04] p-8 md:p-10 text-center">
             <h2 className="heading-section mb-3">Build Your Senolytic Protocol</h2>
+            <p className="text-xs text-muted-foreground mb-4 max-w-xl mx-auto uppercase tracking-wide">Evidence tier B · mouse-model senolytic, human trials pending</p>
             <p className="text-body text-muted-foreground mb-8 max-w-xl mx-auto">
               Fisetin pairs naturally with resveratrol and NMN in TNiC&rsquo;s senescence-focused protocols — a monthly pulse alongside daily foundational compounds. Take the quiz to get a personalized stack that fits your goals and current supplement routine.
             </p>
@@ -668,7 +669,7 @@ export default function FisetinGuidePage() {
           </div>
 
           <p className="text-xs text-muted-foreground text-center mt-8 max-w-xl mx-auto">
-            Educational content only — not medical advice. Fisetin is a dietary supplement, not FDA-approved to treat or prevent any disease. Human trial data specific to fisetin alone is limited. Consult your physician before starting, especially if you take blood thinners, are scheduled for surgery, or are undergoing chemotherapy.
+            Educational content only — not medical advice. Fisetin is a dietary supplement, not FDA-approved to treat or prevent any disease. Human trial data specific to fisetin alone is limited — the strongest evidence remains a mouse study — and no completed fisetin-monotherapy human trial has published results as of this writing. Consult your physician before starting, especially if you take blood thinners, are scheduled for surgery, or are undergoing chemotherapy.
           </p>
         </div>
       </section>

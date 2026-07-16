@@ -332,7 +332,7 @@ export default function PterostilbeneGuidePage() {
       <section className="py-14 border-b border-border">
         <div className="container-page max-w-4xl">
           <h2 className="heading-section mb-3">Evidence Summary by Endpoint</h2>
-          <p className="text-body-sm text-muted-foreground mb-8">Click the PMID to view the source study on PubMed. Pterostilbene has exactly one verified human citation in this guide — a safety trial — and we are careful not to overstate what it showed.</p>
+          <p className="text-body-sm text-muted-foreground mb-8">Click the PMID to view the source study on PubMed. Pterostilbene has exactly one verified human citation in this guide — a safety trial — and we are careful not to overstate what it showed. Every other row below is explicitly labeled as preclinical, mechanistic, or not yet established, so you always know the strength of the claim you are reading.</p>
 
           <div className="grid md:grid-cols-2 gap-4">
             {EVIDENCE_TABLE.map((item) => (
@@ -475,7 +475,7 @@ export default function PterostilbeneGuidePage() {
         <div className="container-page max-w-4xl">
           <h2 className="heading-section mb-3">How Pterostilbene Addresses the Hallmarks of Aging</h2>
           <p className="text-body mb-8 max-w-2xl">
-            Pterostilbene&rsquo;s mechanism maps onto three of the twelve Hallmarks of Aging — largely mirroring resveratrol&rsquo;s pathway, with an added epigenetic angle from its methylation chemistry. The rationale below is well-established mechanistic pharmacology; the human efficacy evidence for pterostilbene specifically remains limited to the safety trial described above.
+            Pterostilbene&rsquo;s mechanism maps onto three of the twelve Hallmarks of Aging — largely mirroring resveratrol&rsquo;s pathway, with an added epigenetic angle from its methylation chemistry. The rationale below is well-established mechanistic pharmacology; the human efficacy evidence for pterostilbene specifically remains limited to the safety trial described above. Because the underlying SIRT1/AMPK biology is shared with resveratrol, most of the mechanistic reasoning here draws on the broader stilbenoid literature rather than pterostilbene-only findings — we flag that distinction throughout rather than blurring it.
           </p>
           <div className="grid md:grid-cols-3 gap-5">
             {[

@@ -1014,13 +1014,13 @@ export const evidenceComparisons: EvidenceComparison[] = [
       },
       {
         dimension: 'Cost',
-        a: 'Rejuvant/Ca-AKG: $50–80/month for 1 g/day',
+        a: 'Ca-AKG: $50–80/month for 1 g/day',
         b: 'Spermidine: $40–70/month for standardized 1–2 mg/day; or dietary from wheat germ',
         verdict: 'context',
       },
       {
         dimension: 'Safety profile',
-        a: 'Well-tolerated in Rejuvant trial; AKG is endogenous metabolite',
+        a: 'No published human trial safety data yet (ABLE trial results pending); AKG is an endogenous metabolite with no known toxicity at supplemental doses in animal studies',
         b: 'Excellent — endogenous polyamine; dietary equivalent dosing used in trials',
         verdict: 'tie',
       },
