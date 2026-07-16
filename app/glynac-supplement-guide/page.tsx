@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, FlaskConical, ShieldCheck, TrendingUp, Zap, CheckCircle2, AlertTriangle, ExternalLink } from 'lucide-react';
+import { ArrowRight, FlaskConical, ShieldCheck, TrendingUp, Zap, CheckCircle2, AlertTriangle, ExternalLink, Recycle } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
@@ -361,6 +361,58 @@ export default function GlyNACGuidePage() {
                 <li>· Don&apos;t take NAC alongside activated charcoal — it reduces absorption</li>
               </ul>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Hallmarks of Aging */}
+      <section className="py-14 border-b border-border">
+        <div className="container-page max-w-4xl">
+          <h2 className="heading-section mb-3">How GlyNAC Addresses the Hallmarks of Aging</h2>
+          <p className="text-body mb-8 max-w-2xl">
+            GlyNAC&rsquo;s mechanism — restoring the glutathione (GSH) pool depleted with age — maps onto several of the twelve recognized Hallmarks of Aging. The connections below follow from GSH&rsquo;s role as the cell&rsquo;s master redox buffer and reuse the same trial findings already cited on this page (Sekhar 2021, PMID 33783984; Sekhar 2023, PMID 35975308) — no new claims are introduced here.
+          </p>
+          <div className="grid md:grid-cols-3 gap-5">
+            {[
+              {
+                icon: Zap,
+                color: 'text-accent-cyan',
+                badge: 'bg-accent-cyan/10 border-accent-cyan/20',
+                title: 'Mitochondrial Dysfunction',
+                body: "Glutathione protects the cysteine residues on electron transport chain proteins — including Complex I subunits — from oxidative damage. Without adequate GSH, these residues oxidize and mitochondrial function degrades. Restoring the glutathione pool is consistent with the Sekhar trials' finding that mitochondrial fuel oxidation (MFO) returned to young-adult levels after supplementation.",
+                href: '/library/mitochondrial-dysfunction',
+                label: 'Mitochondrial Dysfunction hallmark',
+              },
+              {
+                icon: Recycle,
+                color: 'text-accent-violet',
+                badge: 'bg-accent-violet/10 border-accent-violet/20',
+                title: 'Loss of Proteostasis',
+                body: "Protein folding and chaperone function depend on a stable redox environment — oxidized cysteine residues on proteins themselves can drive misfolding independent of any single quality-control pathway. Restoring glutathione removes a major source of that oxidative pressure, consistent with the reduced unfolded protein response markers reported in the Sekhar RCTs.",
+                href: '/library/loss-of-proteostasis',
+                label: 'Loss of Proteostasis hallmark',
+              },
+              {
+                icon: ShieldCheck,
+                color: 'text-accent-emerald',
+                badge: 'bg-accent-emerald/10 border-accent-emerald/20',
+                title: 'Chronic Inflammation',
+                body: 'Glutathione depletion removes a brake on the IKKβ-NF-κB inflammatory signaling axis, one of the core drivers of age-related low-grade inflammation. Restoring GSH reinstates that braking effect — mechanistically consistent with the significant reductions in IL-6, TNF-α, and hsCRP reported in the Sekhar trials at 16 weeks.',
+                href: '/library/chronic-inflammation',
+                label: 'Chronic Inflammation hallmark',
+              },
+            ].map((card) => (
+              <div key={card.title} className={`rounded-xl border p-5 ${card.badge} bg-card/50 flex flex-col`}>
+                <div className={`inline-flex items-center justify-center w-9 h-9 rounded-lg border mb-3 ${card.badge}`}>
+                  <card.icon className={`w-4.5 h-4.5 ${card.color}`} aria-hidden="true" />
+                </div>
+                <h3 className="font-semibold mb-2">{card.title}</h3>
+                <p className="text-sm text-muted-foreground mb-4 flex-1">{card.body}</p>
+                <Link href={card.href} className={`text-xs font-mono inline-flex items-center gap-1 ${card.color} hover:underline`}>
+                  {card.label} <ArrowRight className="w-3 h-3" aria-hidden="true" />
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       </section>

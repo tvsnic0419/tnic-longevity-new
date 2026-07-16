@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, FlaskConical, ExternalLink, CheckCircle2, AlertTriangle, Microscope, Recycle, TrendingUp } from 'lucide-react';
+import { ArrowRight, FlaskConical, ExternalLink, CheckCircle2, AlertTriangle, Microscope, Recycle, TrendingUp, Scale, Layers, Heart } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
@@ -247,6 +247,59 @@ export default function SpermidineSupplementGuidePage() {
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* Hallmarks of Aging */}
+      <section className="py-14 border-b border-border">
+        <div className="container-page max-w-4xl">
+          <p className="text-label mb-2">Mechanism, mapped</p>
+          <h2 className="heading-section mb-3">How Spermidine Addresses the Hallmarks of Aging</h2>
+          <p className="text-body mb-8 max-w-2xl">
+            Spermidine&rsquo;s EP300-inhibition mechanism maps onto three of the twelve Hallmarks of Aging. As with the rest of this guide, the mechanistic case is well established, and the human-outcome strength varies considerably by hallmark — the largest human RCT for spermidine did not confirm every claim the mechanism suggests it should.
+          </p>
+          <div className="grid md:grid-cols-3 gap-5">
+            {[
+              {
+                icon: Scale,
+                color: 'text-accent-emerald',
+                badge: 'bg-accent-emerald/10 border-accent-emerald/20',
+                title: 'Disabled Autophagy',
+                body: "This is spermidine's flagship hallmark. EP300 inhibition triggers TFEB-driven transcription of ATG genes, and eIF5A hypusination supplies the translational machinery those genes need — together increasing autophagic flux across mitophagy, lipophagy, and aggrephagy. The ITP mouse lifespan extension (~10%, one of the few compounds to pass this gold-standard replicated test) is consistent with this mechanism producing a real biological effect, though ITP is a mouse endpoint, not a human one.",
+                href: '/library/disabled-autophagy',
+                label: 'Disabled Autophagy hallmark',
+              },
+              {
+                icon: Layers,
+                color: 'text-accent-violet',
+                badge: 'bg-accent-violet/10 border-accent-violet/20',
+                title: 'Epigenetic Alterations',
+                body: "EP300 is itself a histone acetyltransferase — the same enzyme spermidine inhibits to trigger autophagy also acetylates histones. Inhibiting it shifts chromatin toward a different acetylation state, which is a direct epigenetic mechanism distinct from the downstream autophagy effect. No dedicated human epigenetic-clock trial has been published for spermidine — this connection is drawn from EP300's dual role, not from a methylation or biological-age readout.",
+                href: '/library/epigenetic-alterations',
+                label: 'Epigenetic Alterations hallmark',
+              },
+              {
+                icon: Heart,
+                color: 'text-accent-rose',
+                badge: 'bg-accent-rose/10 border-accent-rose/20',
+                title: 'Cellular Senescence',
+                body: "Senescent cells accumulate damaged mitochondria and protein aggregates partly because autophagic and mitophagic clearance decline with age — the same clearance spermidine's mechanism restores. This makes spermidine a plausible upstream, preventive input rather than a senolytic: it isn't shown to clear already-senescent cells (unlike fisetin or dasatinib+quercetin), only to support the clearance machinery that may reduce how many cells become senescent in the first place.",
+                href: '/library/cellular-senescence',
+                label: 'Cellular Senescence hallmark',
+              },
+            ].map((card) => (
+              <div key={card.title} className={`rounded-xl border p-5 ${card.badge} bg-card/50 flex flex-col`}>
+                <div className={`inline-flex items-center justify-center w-9 h-9 rounded-lg border mb-3 ${card.badge}`}>
+                  <card.icon className={`w-4.5 h-4.5 ${card.color}`} aria-hidden="true" />
+                </div>
+                <h3 className="font-semibold mb-2">{card.title}</h3>
+                <p className="text-sm text-muted-foreground mb-4 flex-1">{card.body}</p>
+                <Link href={card.href} className={`text-xs font-mono inline-flex items-center gap-1 ${card.color} hover:underline`}>
+                  {card.label} <ArrowRight className="w-3 h-3" aria-hidden="true" />
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -506,6 +559,52 @@ export default function SpermidineSupplementGuidePage() {
         </div>
       </section>
 
+      {/* CTA */}
+      <section className="py-16 border-b border-border">
+        <div className="container-page max-w-4xl">
+          <div className="rounded-2xl border border-accent-emerald/20 bg-accent-emerald/[0.04] p-8 md:p-10 text-center">
+            <h2 className="heading-section mb-3">Build Your Autophagy Stack</h2>
+            <p className="text-body text-muted-foreground mb-8 max-w-xl mx-auto">
+              Spermidine pairs with urolithin A and time-restricted eating in TNiC&rsquo;s autophagy-focused presets. Take the quiz for a personalized protocol, or open the Stack Architect to check synergies and timing.
+            </p>
+            <div className="flex flex-wrap gap-3 justify-center">
+              <Link
+                href="/quiz"
+                className="focus-ring interactive inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-accent-emerald text-bg-base font-semibold text-sm hover:bg-accent-emerald/90 transition"
+              >
+                Take the 3-min quiz
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </Link>
+              <Link
+                href="/stacks"
+                className="focus-ring interactive inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-border/60 bg-card text-foreground font-medium text-sm hover:border-accent-emerald/30 transition"
+              >
+                Open Stack Architect
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </Link>
+              <Link
+                href="/library/compounds/spermidine"
+                className="focus-ring interactive inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-border/60 bg-card text-foreground font-medium text-sm hover:border-accent-emerald/30 transition"
+              >
+                Compound deep-dive
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </Link>
+              <Link
+                href="/library/compare/cakg-vs-spermidine"
+                className="focus-ring interactive inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-border/60 bg-card text-foreground font-medium text-sm hover:border-accent-violet/30 transition"
+              >
+                Ca-AKG vs Spermidine
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </Link>
+            </div>
+          </div>
+
+          <p className="text-xs text-muted-foreground text-center mt-8 max-w-xl mx-auto">
+            Educational content only — not medical advice. Spermidine is a dietary supplement, not FDA-approved to treat or prevent any disease. Consult your physician before starting, especially if you have an active cancer diagnosis.
+          </p>
+        </div>
+      </section>
+
       {/* Cross-links */}
       <section className="py-14">
         <div className="container-page max-w-4xl">
@@ -515,8 +614,10 @@ export default function SpermidineSupplementGuidePage() {
               { href: '/longevity-supplements-guide', label: 'Best Longevity Supplements 2026', desc: 'Full ranked guide' },
               { href: '/library/compounds/spermidine', label: 'Spermidine compound profile', desc: 'Mechanism, tier, synergies' },
               { href: '/library/compare/cakg-vs-spermidine', label: 'Ca-AKG vs Spermidine', desc: 'Head-to-head evidence comparison' },
-              { href: '/glynac-supplement-guide', label: 'GlyNAC Guide', desc: '9 hallmarks reversed — Sekhar 2021' },
+              { href: '/glynac-supplement-guide', label: 'GlyNAC Guide', desc: 'Human RCT — restores glutathione, multiple hallmarks' },
               { href: '/sulforaphane-supplement-guide', label: 'Sulforaphane Guide', desc: 'NRF2 activation and autophagy synergy' },
+              { href: '/urolithin-a-supplement-guide', label: 'Urolithin A Guide', desc: 'Synergistic mitophagy pairing' },
+              { href: '/library/compounds/nmn', label: 'NMN Guide', desc: 'NMN + spermidine — NAD+ and autophagy synergy' },
               { href: '/supplement-guides', label: 'All Supplement Guides', desc: 'Complete guide hub' },
             ].map((link) => (
               <Link
