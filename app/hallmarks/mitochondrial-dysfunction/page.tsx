@@ -95,7 +95,7 @@ export default function MitochondrialDysfunctionPage() {
             </div>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 mb-6">
               <Zap className="w-3.5 h-3.5 text-amber-400" />
-              <span className="text-xs font-medium text-amber-400 tracking-widest uppercase">Hallmark #9 of 12</span>
+              <span className="text-xs font-medium text-amber-400 tracking-widest uppercase">Hallmark #6 of 12</span>
             </div>
             <h1 className="text-4xl md:text-6xl font-black tracking-tight text-foreground mb-6 leading-[1.05]">
               Mitochondrial
