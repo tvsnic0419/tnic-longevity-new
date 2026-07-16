@@ -126,6 +126,7 @@ export function LearnCenter({ defaultTab }: { defaultTab?: TabId }) {
                   { href: '/berberine-supplement-guide', label: 'Berberine Guide', desc: "Nature's Ozempic — honest review" },
                   { href: '/taurine-supplement-guide', label: 'Taurine Guide', desc: 'Singh 2023 Science paper' },
                   { href: '/sulforaphane-supplement-guide', label: 'Sulforaphane Guide', desc: 'NRF2 activation protocol' },
+                  { href: '/peptides', label: 'Peptide Library', desc: 'BPC-157, GLP-1s, and 6 others — graded honestly' },
                   { href: '/supplement-guides', label: 'All Guide Index →', desc: 'Hub for all compound guides' },
                 ] as const).map((g) => (
                   <a

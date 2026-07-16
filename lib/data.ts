@@ -1308,6 +1308,12 @@ export const glossary = [
   { term: 'Mitophagy', simple: 'A specific form of autophagy that selectively removes damaged or dysfunctional mitochondria, replacing them with healthy ones.', why: 'Dysfunctional mitochondria that escape mitophagy leak reactive oxygen species and trigger inflammation. NMN supports mitophagy via SIRT1/SIRT3 activation; Ca-AKG supports it via TCA cycle optimization. Mitophagy is why you cannot \"energy boost\" your way out of mitochondrial dysfunction — you need to remove the damaged units first.' },
   { term: 'SASP', simple: 'Senescence-Associated Secretory Phenotype — the inflammatory cocktail of cytokines, proteases, and growth factors secreted by senescent (zombie) cells.', why: 'SASP is why a small number of senescent cells can damage a large surrounding tissue area. The SASP cytokines (IL-6, IL-8, MMP-3) drive chronic inflammation, disrupt tissue structure, and signal neighboring cells to senesce. Clearing senescent cells (senolytics) or suppressing SASP (senostatics) is the goal of dasatinib+quercetin protocols. NMN and resveratrol have partial SASP-suppressive effects via NAD+/SIRT1.' },
   { term: 'Oxidative Stress', simple: 'An imbalance between reactive oxygen species (free radicals) produced by metabolism and the antioxidant systems that neutralize them.', why: 'Oxidative stress is the molecular driver of aging across virtually every hallmark — it damages DNA, cross-links proteins, oxidizes lipids in cell membranes, and accelerates telomere shortening. Glutathione is the primary internal quencher; NRF2 is the genetic switch that upregulates the entire antioxidant defense network. This is why GlyNAC + sulforaphane form the oxidative stress reduction core of the TNiC NRF2 Defense preset.' },
+  { term: 'Peptide', simple: 'A short chain of amino acids — smaller than a full protein — that usually acts on a specific cell-surface receptor rather than a broad metabolic pathway.', why: 'Most peptides cannot survive oral digestion intact, which is why nearly every peptide on TNiC\'s list is injectable rather than a pill. That delivery difference is also why peptides carry a distinct legal and sourcing framework from oral compounds like NMN or GlyNAC.' },
+  { term: 'Research-Use-Only', simple: 'A legal labeling category meaning a substance has no FDA-approved human-use pathway and is sold explicitly "not for human consumption."', why: 'Most peptides on TNiC\'s list carry this status. It means no regulatory body inspects the vendor for purity, sterility, or accurate dosing — independent testing of these vendors has repeatedly found underdosed or contaminated product.' },
+  { term: 'Incretin', simple: 'A gut hormone (like GLP-1 or GIP) released after eating that regulates insulin secretion, gastric emptying, and appetite.', why: 'Semaglutide and tirzepatide work by mimicking incretin hormones — this is the mechanism behind their weight-loss and glycemic-control effects, and why they are grouped as "incretin-mimetic" peptides.' },
+  { term: 'GHRP / GHRH', simple: 'Two different drug classes that both raise growth hormone: a GHRP (like Ipamorelin) triggers a GH pulse via the ghrelin receptor; a GHRH analog (like CJC-1295) acts on a separate receptor to extend that pulse.', why: 'These are almost always stacked together because they hit different receptors — the combination produces a larger GH pulse than either alone, which is the entire rationale for pairing Ipamorelin with CJC-1295.' },
+  { term: 'Immunosenescence', simple: 'The age-related decline in immune system function, including weaker T-cell response and reduced vaccine responsiveness.', why: 'It is a recognized driver of the chronic-inflammation and cellular-senescence hallmarks, and is the biological rationale peptide communities cite for using immune-modulating peptides like Thymosin Alpha-1 — though that use itself has not been directly trial-tested.' },
+  { term: 'Mitochondrial-Derived Peptide (MDP)', simple: 'A short peptide encoded within mitochondrial DNA rather than the nuclear genome, discovered only in the last two decades.', why: 'MOTS-c and Humanin are both MDPs — a genuinely novel and actively-researched area of mitochondrial biology, though human interventional trial data for either is still absent as of this writing.' },
 ];
 
 export const consumerFAQ = [
@@ -1520,5 +1526,35 @@ export const consumerFAQ = [
     category: 'products' as const,
     question: 'How does the TNiC buyer guide work — and why does it not recommend specific brands?',
     answer: 'Each compound in the library has a buyer guide that lists: (1) required form on the label (e.g., "ubiquinol" not "CoQ10" without form disclosure); (2) COA demands — the specific assays to request from any manufacturer; (3) evidence-anchored dose range matched to the trial doses that produced results; and (4) red flags that disqualify a product immediately. TNiC earns zero revenue from products. The buyer guide is an intelligence checklist so you can evaluate any brand against objective criteria — not a product recommendation that could be biased by undisclosed compensation.',
+  },
+  {
+    id: 'faq36',
+    category: 'safety' as const,
+    question: 'Are peptides like BPC-157 legal to buy?',
+    answer: 'It depends entirely on the specific peptide — TNiC grades every peptide on a three-way legal axis, not a single "legal or not" label. Semaglutide and tirzepatide are FDA-approved prescription drugs. Thymosin Alpha-1 is an approved prescription drug (branded Zadaxin) in roughly 35 countries but not FDA-approved in the US. BPC-157 lost its US compounding-pharmacy pathway in 2023 and is now only available from unregulated "research chemical" vendors. Most others on the list (GHK-Cu injectable, epithalon, MOTS-c, humanin, the GH secretagogues) have no FDA-approved human-use pathway at all. Check the legal-status banner at the top of each peptide page before reading anything else about it.',
+  },
+  {
+    id: 'faq37',
+    category: 'products' as const,
+    question: "What's the difference between a research peptide and a prescription one like Ozempic?",
+    answer: 'A prescription peptide like semaglutide (Ozempic/Wegovy) or tirzepatide (Mounjaro/Zepbound) has been through FDA-reviewed human trials, is manufactured under pharmaceutical quality controls, and is dispensed by a licensed pharmacy against a physician prescription. A "research chemical" peptide like BPC-157 or MOTS-c is sold explicitly labeled "not for human consumption," has no FDA oversight of purity or dosing accuracy, and independent testing of these vendors has repeatedly found underdosed, contaminated, or mislabeled product. Both are technically "peptides" — the manufacturing and regulatory gap between them is the entire safety story.',
+  },
+  {
+    id: 'faq38',
+    category: 'safety' as const,
+    question: 'Is it safe to self-inject research-chemical peptides?',
+    answer: 'TNiC does not recommend self-administering any unregulated research-chemical peptide. Beyond the purity and dosing-accuracy risks from unverified sourcing, subcutaneous injection from a non-sterile source carries a real infection risk, and most of these peptides have zero published human safety or interaction data at any dose — every dosing pattern in circulation is extrapolated from animal pharmacokinetics. If you are considering one, read that peptide\'s full safety and red-flag section first, and treat any injection-site redness, fever, or swelling as a possible infection rather than a "normal peptide response."',
+  },
+  {
+    id: 'faq39',
+    category: 'science' as const,
+    question: 'Do peptides work the same way as oral compounds like NMN or GlyNAC?',
+    answer: 'No — mechanistically they are a different class entirely. Oral longevity compounds are typically small molecules absorbed through digestion (e.g., NMN feeding the NAD+ salvage pathway). Peptides are short chains of amino acids that usually cannot survive oral digestion intact, which is why almost all of them on TNiC\'s list are injectable rather than pills, and why they act on specific receptors (e.g., GHK-Cu on copper transport, Ipamorelin on the ghrelin receptor) rather than broad metabolic pathways. The evidence-tier system TNiC uses is identical across both categories, but the delivery route, legal framework, and safety profile are not interchangeable.',
+  },
+  {
+    id: 'faq40',
+    category: 'getting-started' as const,
+    question: 'Should I look into peptides before I finish the compound library?',
+    answer: 'Generally no. Every peptide on TNiC\'s list is either prescription-only, has a materially thinner human evidence base than TNiC\'s Tier-A oral compounds, or both — Semaglutide/Tirzepatide being the one exception with genuine large-RCT backing. If you are new to TNiC, the compound library and 3-Min Quiz are the lower-risk, better-evidenced starting point. Peptides are worth reading once you understand evidence tiers and want to evaluate a specific claim you have already encountered elsewhere, not as a first stop.',
   },
 ];

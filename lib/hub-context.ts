@@ -3,6 +3,7 @@ import type { ToolId } from './registry';
 import type { LibraryModule, LibraryModuleCategory } from './library-modules';
 import type { HallmarkLibraryEntry, Peptide } from './types';
 import type { EvidenceComparison } from './comparisons';
+import { consumerFAQ } from './data';
 
 export interface HubContext {
   what: string;
@@ -127,7 +128,7 @@ export const hubContexts: Record<
   },
   faq: {
     theme: 'cyan',
-    what: 'Twenty-five curated answers on protocols, safety, evidence tiers, and how TNiC differs from supplement stores.',
+    what: `${consumerFAQ.length} curated answers on protocols, safety, evidence tiers, and how TNiC differs from supplement stores.`,
     why: 'Smart consumers ask hard questions before spending on compounds. Honest FAQ beats marketing copy every time.',
     next: 'Filter by your concern (Safety or Products), then follow links to the Learn hub or Protocol Shop verification.',
   },
