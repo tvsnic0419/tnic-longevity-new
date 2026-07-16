@@ -1,9 +1,12 @@
 import type { Metadata } from 'next';
+import { Syringe } from 'lucide-react';
 import { PeptideCard } from '@/components/peptides/PeptideCard';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { DisclaimerBanner } from '@/components/trust/DisclaimerBanner';
 import { EvidenceTagLegend } from '@/components/trust/EvidenceTag';
 import { peptideCategoryMeta, peptideLibrary, getPeptidesByCategory } from '@/lib/peptides-library';
 import { disclaimers } from '@/lib/trust';
+import { getHubContext } from '@/lib/hub-context';
 import { seoRoutes } from '@/lib/seo-routes';
 import type { PeptideCategory } from '@/lib/types';
 
@@ -22,15 +25,14 @@ export default function PeptidesHubPage() {
   return (
     <div className="py-8 md:py-10">
       <div className="container-page">
-        <div className="mx-auto mb-10 max-w-3xl text-center md:mb-14">
-          <p className="text-label mb-3 text-accent-rose">Peptide Library</p>
-          <h1 className="heading-page mb-4">Anti-aging peptides, graded honestly.</h1>
-          <p className="text-body mx-auto max-w-2xl">
-            Eight of the most-discussed longevity peptides — evidence tier, mechanism, dosing
-            patterns reported in the literature, and the legal status of every single one,
-            stated plainly before anything else.
-          </p>
-        </div>
+        <PageHeader
+          icon={Syringe}
+          eyebrow="Peptide Library"
+          title="Anti-aging peptides, graded honestly."
+          description="Eight of the most-discussed longevity peptides — evidence tier, mechanism, dosing patterns reported in the literature, and the legal status of every single one, stated plainly before anything else."
+          theme="rose"
+          context={getHubContext('peptides')}
+        />
 
         <div className="mx-auto mb-10 max-w-3xl md:mb-14">
           <DisclaimerBanner disclaimer={legalDisclaimer} showAppliesTo />

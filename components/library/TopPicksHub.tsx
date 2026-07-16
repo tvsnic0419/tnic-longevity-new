@@ -5,7 +5,7 @@ import { topPickCategories } from '@/lib/top-picks';
 import { themes } from '@/lib/design-system';
 import { getHubContext } from '@/lib/hub-context';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
-import { ContextRail } from '@/components/ui/ContextRail';
+import { PageHeader } from '@/components/ui/PageHeader';
 
 /**
  * Server-rendered — every category/pick is real crawlable markup, matching
@@ -13,8 +13,6 @@ import { ContextRail } from '@/components/ui/ContextRail';
  * older library pages use.
  */
 export function TopPicksHub() {
-  const ctx = getHubContext('topPicks');
-
   return (
     <div className="py-8 md:py-10">
       <div className="container-page">
@@ -25,20 +23,14 @@ export function TopPicksHub() {
           <ArrowLeft className="w-4 h-4" /> Back to Library
         </Link>
 
-        <div className="mx-auto mb-8 max-w-3xl text-center md:mb-10">
-          <p className="text-label mb-3 text-accent-violet">Editorial Curation</p>
-          <h1 className="heading-page mb-4">Top TNiC picks by pathway.</h1>
-          <p className="text-body mx-auto max-w-2xl">
-            Sirtuin activation, PARP-mediated DNA repair, and NRF2 antioxidant signaling share more
-            biology than their names suggest — NAD+ fuels the first two, and glutathione status
-            underwrites the third. Here are TNiC&apos;s highest-conviction picks for each, and the
-            mechanistic reason each one made the list.
-          </p>
-        </div>
-
-        <div className="mx-auto mb-12 max-w-3xl md:mb-16">
-          <ContextRail what={ctx.what} why={ctx.why} next={ctx.next} theme={ctx.theme} variant="compact" />
-        </div>
+        <PageHeader
+          icon={Dna}
+          eyebrow="Editorial Curation"
+          title="Top TNiC picks by pathway."
+          description="Sirtuin activation, PARP-mediated DNA repair, and NRF2 antioxidant signaling share more biology than their names suggest — NAD+ fuels the first two, and glutathione status underwrites the third. Here are TNiC's highest-conviction picks for each, and the mechanistic reason each one made the list."
+          theme="violet"
+          context={getHubContext('topPicks')}
+        />
 
         <div className="space-y-14">
           {topPickCategories.map((category) => {
