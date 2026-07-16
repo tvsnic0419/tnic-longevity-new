@@ -2,7 +2,9 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
-import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Zap } from 'lucide-react';
+import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Zap, Pill, Library } from 'lucide-react';
+import { getCompoundsForHallmark } from '@/lib/library-graph';
+import { EvidenceTag } from '@/components/trust/EvidenceTag';
 
 export const metadata: Metadata = {
   title: 'Mitochondrial Dysfunction | Hallmarks of Aging | TNiC',
