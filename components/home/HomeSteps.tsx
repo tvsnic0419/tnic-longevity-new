@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { ClipboardList, BookOpen, Activity, ArrowRight, type LucideIcon } from 'lucide-react';
-import { GlassPanel } from '@/components/ui/GlassPanel';
-import { RevealItem } from '@/components/ui/RevealItem';
+import { RevealCard } from '@/components/ui/RevealCard';
 
 /** A calm three-step path from curiosity to a tracked protocol. Server-rendered. */
 
@@ -62,28 +61,26 @@ export function HomeSteps() {
         <ol className="grid grid-cols-1 gap-5 md:grid-cols-3">
           {steps.map(({ num, icon: Icon, title, desc, cta, href }, i) => (
             <li key={num} className="h-full">
-              <RevealItem index={i} className="h-full">
-                <GlassPanel depth="mid" className="glass-hover flex h-full flex-col rounded-2xl p-7">
-                  <div className="mb-6 flex items-center gap-4">
-                    <span className="font-mono text-3xl font-semibold text-accent-cyan/60">{num}</span>
-                    <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl icon-badge-cyan">
-                      <Icon className="h-5 w-5 text-accent-cyan" aria-hidden="true" />
-                    </span>
-                  </div>
-                  <h3 className="heading-card mb-2 text-lg">{title}</h3>
-                  <p className="text-body-sm mb-6 flex-1 leading-relaxed">{desc}</p>
-                  <Link
-                    href={href}
-                    className="focus-ring group mt-auto inline-flex items-center gap-1.5 rounded-md text-sm font-semibold text-accent-cyan"
-                  >
-                    {cta}
-                    <ArrowRight
-                      className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
-                      aria-hidden="true"
-                    />
-                  </Link>
-                </GlassPanel>
-              </RevealItem>
+              <RevealCard index={i} itemClassName="h-full" className="glass-hover flex h-full flex-col rounded-2xl p-7">
+                <div className="mb-6 flex items-center gap-4">
+                  <span className="font-mono text-3xl font-semibold text-accent-cyan/60">{num}</span>
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl icon-badge-cyan">
+                    <Icon className="h-5 w-5 text-accent-cyan" aria-hidden="true" />
+                  </span>
+                </div>
+                <h3 className="heading-card mb-2 text-lg">{title}</h3>
+                <p className="text-body-sm mb-6 flex-1 leading-relaxed">{desc}</p>
+                <Link
+                  href={href}
+                  className="focus-ring group mt-auto inline-flex items-center gap-1.5 rounded-md text-sm font-semibold text-accent-cyan"
+                >
+                  {cta}
+                  <ArrowRight
+                    className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                    aria-hidden="true"
+                  />
+                </Link>
+              </RevealCard>
             </li>
           ))}
         </ol>

@@ -4,6 +4,7 @@ import { ClipboardList, Library, ArrowRight, Sparkles } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo';
 import { StarterQuiz } from '@/components/sections/StarterQuiz';
 import { GlassPanel } from '@/components/ui/GlassPanel';
+import { TiltGlassPanel } from '@/components/ui/TiltGlassPanel';
 import { HeroSceneMount } from '@/components/home/HeroSceneMount';
 import { compounds } from '@/lib/data';
 
@@ -147,13 +148,13 @@ export function HomeHero() {
                 className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-[var(--accent-cyan)]/12 via-transparent to-[var(--accent-emerald)]/12 blur-2xl"
                 aria-hidden="true"
               />
-              <GlassPanel depth="content" tilt className="relative rounded-3xl">
+              <TiltGlassPanel depth="content" className="relative rounded-3xl">
                 <Suspense
                   fallback={<div className="h-[380px] animate-pulse rounded-3xl bg-white/5" />}
                 >
                   <StarterQuiz />
                 </Suspense>
-              </GlassPanel>
+              </TiltGlassPanel>
             </div>
           </div>
         </div>

@@ -3,7 +3,7 @@ import { ShieldCheck, Lock, BookMarked, ArrowUpRight, type LucideIcon } from 'lu
 import { citationRegistry } from '@/lib/trust';
 import { compounds } from '@/lib/data';
 import { GlassPanel } from '@/components/ui/GlassPanel';
-import { RevealItem } from '@/components/ui/RevealItem';
+import { RevealCard } from '@/components/ui/RevealCard';
 
 /**
  * Credibility band — the numbers and principles a sponsor or first-time visitor
@@ -80,15 +80,13 @@ export function HomeEvidence() {
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
           {pillars.map(({ icon: Icon, title, desc }, i) => (
-            <RevealItem key={title} index={i}>
-              <GlassPanel depth="mid" className="glass-hover h-full rounded-2xl p-6">
-                <span className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl icon-badge-emerald">
-                  <Icon className="h-5 w-5 text-accent-emerald" aria-hidden="true" />
-                </span>
-                <h3 className="heading-card mb-2">{title}</h3>
-                <p className="text-body-sm leading-relaxed">{desc}</p>
-              </GlassPanel>
-            </RevealItem>
+            <RevealCard key={title} index={i} className="glass-hover h-full rounded-2xl p-6">
+              <span className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl icon-badge-emerald">
+                <Icon className="h-5 w-5 text-accent-emerald" aria-hidden="true" />
+              </span>
+              <h3 className="heading-card mb-2">{title}</h3>
+              <p className="text-body-sm leading-relaxed">{desc}</p>
+            </RevealCard>
           ))}
         </div>
 

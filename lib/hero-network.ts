@@ -88,6 +88,16 @@ export interface HeroNetworkNode2D extends HeroNetworkNode {
   y: number;
 }
 
+// Math.cos/Math.sin aren't required by spec to be correctly-rounded, so the
+// same angle can produce a value that differs by ~1 ULP between the server's
+// V8 build and the browser's — enough for React to flag a hydration mismatch
+// on these SVG coordinates even though the drawing is visually identical.
+// Rounding to hundredths (far finer than perceptible on a 700x490 poster)
+// collapses both sides to the same value.
+function round2(n: number): number {
+  return Math.round(n * 100) / 100;
+}
+
 export function buildHeroNetworkPoster2D(width: number, height: number): HeroNetworkNode2D[] {
   const cx = width / 2;
   const cy = height / 2;
@@ -101,12 +111,16 @@ export function buildHeroNetworkPoster2D(width: number, height: number): HeroNet
 
   const hubPositions: HeroNetworkNode2D[] = hubs.map((n, i) => {
     const angle = hubCount === 1 ? 0 : Math.PI * i;
-    return { ...n, x: cx + Math.cos(angle) * hubRadius, y: cy + Math.sin(angle) * hubRadius };
+    return { ...n, x: round2(cx + Math.cos(angle) * hubRadius), y: round2(cy + Math.sin(angle) * hubRadius) };
   });
 
   const outerPositions: HeroNetworkNode2D[] = outer.map((n, i) => {
     const angle = (i / outer.length) * Math.PI * 2 - Math.PI / 2;
-    return { ...n, x: cx + Math.cos(angle) * outerRadius, y: cy + Math.sin(angle) * outerRadius };
+    return {
+      ...n,
+      x: round2(cx + Math.cos(angle) * outerRadius),
+      y: round2(cy + Math.sin(angle) * outerRadius),
+    };
   });
 
   return [...hubPositions, ...outerPositions];

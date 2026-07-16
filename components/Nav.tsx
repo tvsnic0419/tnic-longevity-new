@@ -10,6 +10,7 @@ import { Logo } from '@/components/ui/Logo';
 import { SiteSearch } from '@/components/SiteSearch';
 import { COMMAND_PALETTE_EVENT } from '@/components/os/os-events';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 
 export function Nav() {
   const pathname = usePathname();
@@ -121,20 +122,24 @@ export function Nav() {
         <div className="hidden lg:flex items-center gap-2 shrink-0">
           <ThemeToggle compact />
           <SiteSearch />
-          <Link
-            href="/quiz"
-            className="focus-ring inline-flex items-center gap-1.5 glass glass-hover px-4 py-2 rounded-full text-sm font-semibold text-muted-foreground hover:text-foreground"
-          >
-            <ClipboardList className="w-4 h-4 text-accent-violet" aria-hidden="true" />
-            Quiz
-          </Link>
-          <Link
-            href="/shop"
-            className="focus-ring inline-flex items-center gap-1.5 glass glass-hover px-4 py-2 rounded-full text-sm font-semibold text-muted-foreground hover:text-foreground"
-          >
-            <ShoppingBag className="w-4 h-4 text-accent-amber" aria-hidden="true" />
-            Shop
-          </Link>
+          <GlassPanel depth="float" className="glass-hover rounded-full">
+            <Link
+              href="/quiz"
+              className="focus-ring inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground"
+            >
+              <ClipboardList className="w-4 h-4 text-accent-violet" aria-hidden="true" />
+              Quiz
+            </Link>
+          </GlassPanel>
+          <GlassPanel depth="float" className="glass-hover rounded-full">
+            <Link
+              href="/shop"
+              className="focus-ring inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground"
+            >
+              <ShoppingBag className="w-4 h-4 text-accent-amber" aria-hidden="true" />
+              Shop
+            </Link>
+          </GlassPanel>
           <Link href="/dashboard" className="focus-ring btn-gradient text-sm !py-2.5 !px-5 !min-h-0 rounded-full">
             Open OS
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -198,20 +203,24 @@ export function Nav() {
                 ),
               )}
               <div className="flex flex-col gap-2 mt-3">
-                <Link
-                  href="/quiz"
-                  onClick={() => setMobileOpen(false)}
-                  className="focus-ring glass glass-hover text-sm text-center py-3 rounded-xl font-semibold"
-                >
-                  3-Min Stack Quiz
-                </Link>
-                <Link
-                  href="/shop"
-                  onClick={() => setMobileOpen(false)}
-                  className="focus-ring glass glass-hover text-sm text-center py-3 rounded-xl font-semibold"
-                >
-                  Protocol Shop
-                </Link>
+                <GlassPanel depth="float" className="glass-hover rounded-xl">
+                  <Link
+                    href="/quiz"
+                    onClick={() => setMobileOpen(false)}
+                    className="focus-ring block rounded-xl py-3 text-center text-sm font-semibold"
+                  >
+                    3-Min Stack Quiz
+                  </Link>
+                </GlassPanel>
+                <GlassPanel depth="float" className="glass-hover rounded-xl">
+                  <Link
+                    href="/shop"
+                    onClick={() => setMobileOpen(false)}
+                    className="focus-ring block rounded-xl py-3 text-center text-sm font-semibold"
+                  >
+                    Protocol Shop
+                  </Link>
+                </GlassPanel>
                 <Link
                   href="/dashboard"
                   onClick={() => setMobileOpen(false)}
