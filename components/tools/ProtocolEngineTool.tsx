@@ -20,6 +20,7 @@ import {
   protocolGoalOptions,
 } from '@/lib/tools/protocol-engine';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Slider } from '@/components/ui/Slider';
 import { Button } from '@/components/ui/Button';
@@ -188,7 +189,7 @@ export function ProtocolEngineTool() {
             </CardHeader>
             <CardContent>
               <div className="grid sm:grid-cols-2 gap-4 mb-6">
-                <div className="glass rounded-xl p-4">
+                <GlassPanel depth="mid" className="rounded-xl p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <Sun className="w-4 h-4 text-accent-amber" />
                     <span className="text-label text-accent-amber">AM master</span>
@@ -198,8 +199,8 @@ export function ProtocolEngineTool() {
                       <li key={line}>{line}</li>
                     ))}
                   </ul>
-                </div>
-                <div className="glass rounded-xl p-4">
+                </GlassPanel>
+                <GlassPanel depth="mid" className="rounded-xl p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <Moon className="w-4 h-4 text-accent-violet" />
                     <span className="text-label text-accent-violet">PM master</span>
@@ -209,7 +210,7 @@ export function ProtocolEngineTool() {
                       <li key={line}>{line}</li>
                     ))}
                   </ul>
-                </div>
+                </GlassPanel>
               </div>
 
               <Button
@@ -264,12 +265,13 @@ export function ProtocolEngineTool() {
                         </div>
                         <div className="flex flex-wrap gap-2 mt-3">
                           {pathway.compounds.map((c) => (
-                            <span
+                            <GlassPanel
                               key={c.compoundId}
-                              className="text-xs glass px-2 py-1 rounded-lg"
+                              depth="float"
+                              className="text-xs px-2 py-1 rounded-lg"
                             >
                               {c.name}
-                            </span>
+                            </GlassPanel>
                           ))}
                         </div>
                         <ul className="mt-2 text-xs text-caption space-y-0.5">

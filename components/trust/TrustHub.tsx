@@ -62,6 +62,8 @@ import { EvidenceTag } from './EvidenceTag';
 import { CheckCircle2 } from 'lucide-react';
 import { ContextRail } from '@/components/ui/ContextRail';
 import { getHubContext, getTrustTabContext } from '@/lib/hub-context';
+import { GlassPanel } from '@/components/ui/GlassPanel';
+import { RevealCard } from '@/components/ui/RevealCard';
 
 type Tab = 'overview' | 'evidence' | 'citations' | 'journey' | 'methodology' | 'disclaimers' | 'updates';
 
@@ -104,20 +106,21 @@ export function TrustHub() {
       />
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
-        {deepLinks.map((link) => {
+        {deepLinks.map((link, i) => {
           const Icon = link.icon;
           return (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="focus-ring interactive card-base p-4 flex items-center justify-between group hover:border-accent-emerald/30"
-            >
-              <span className="flex items-center gap-2 text-sm font-semibold text-foreground/80 group-hover:text-accent-emerald">
-                <Icon className="w-4 h-4" aria-hidden="true" />
-                {link.label}
-              </span>
-              <ArrowRight className="w-4 h-4 text-caption group-hover:text-accent-emerald" aria-hidden="true" />
-            </Link>
+            <RevealCard key={link.href} index={i} className="glass-hover rounded-xl">
+              <Link
+                href={link.href}
+                className="focus-ring interactive group flex items-center justify-between p-4"
+              >
+                <span className="flex items-center gap-2 text-sm font-semibold text-foreground/80 group-hover:text-accent-emerald">
+                  <Icon className="w-4 h-4" aria-hidden="true" />
+                  {link.label}
+                </span>
+                <ArrowRight className="w-4 h-4 text-caption group-hover:text-accent-emerald" aria-hidden="true" />
+              </Link>
+            </RevealCard>
           );
         })}
       </div>
@@ -187,14 +190,14 @@ export function TrustHub() {
             })()}
             <EvidenceTagLegend />
             <div className="space-y-4">
-              {transparencyPledge.map((item) => (
-                <div key={item.title} className="card-base p-5 flex gap-4">
+              {transparencyPledge.map((item, i) => (
+                <RevealCard key={item.title} index={i} className="rounded-xl p-5 flex gap-4">
                   <Eye className="w-5 h-5 text-accent-emerald shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
                     <h3 className="heading-card mb-1">{item.title}</h3>
                     <p className="text-body-sm">{item.desc}</p>
                   </div>
-                </div>
+                </RevealCard>
               ))}
             </div>
             <DisclaimerBanner disclaimer={disclaimers[0]} />
@@ -237,23 +240,23 @@ export function TrustHub() {
             <section>
               <h2 className="heading-section text-xl mb-4">Citation Principles</h2>
               <div className="space-y-3">
-                {citationFramework.principles.map((p) => (
-                  <div key={p.title} className="card-base p-4">
+                {citationFramework.principles.map((p, i) => (
+                  <RevealCard key={p.title} index={i} className="rounded-xl p-4">
                     <h3 className="heading-card mb-1">{p.title}</h3>
                     <p className="text-body-sm">{p.desc}</p>
-                  </div>
+                  </RevealCard>
                 ))}
               </div>
             </section>
             <section>
               <h2 className="text-label text-accent-emerald mb-3">Citation Formats</h2>
               <div className="grid sm:grid-cols-3 gap-3">
-                {citationFramework.formats.map((f) => (
-                  <div key={f.format} className="card-base p-4">
+                {citationFramework.formats.map((f, i) => (
+                  <RevealCard key={f.format} index={i} className="rounded-xl p-4">
                     <p className="heading-card text-sm mb-1">{f.format}</p>
                     <p className="text-caption mb-2">{f.example}</p>
                     <p className="text-label">{f.use}</p>
-                  </div>
+                  </RevealCard>
                 ))}
               </div>
             </section>
@@ -266,12 +269,12 @@ export function TrustHub() {
           <div className="space-y-10 max-w-4xl">
             <div className="grid md:grid-cols-2 gap-4">
               <DisclaimerBanner disclaimer={disclaimers[2]} />
-              <div className="card-base p-5">
+              <GlassPanel depth="mid" className="rounded-xl p-5">
                 <p className="text-label text-accent-emerald mb-2">Population Science</p>
                 <p className="text-body-sm">
                   PubMed-cited mechanisms and clinical trial doses apply broadly — with evidence tiers shown on every surface.
                 </p>
-              </div>
+              </GlassPanel>
             </div>
             <section>
               <h2 className="heading-section text-xl mb-6">TNiC Platform Journey</h2>

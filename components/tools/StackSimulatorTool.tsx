@@ -19,6 +19,8 @@ import { StackInteractionsPanel } from '@/components/stacks/StackInteractionsPan
 import { StackPresetsBar } from '@/components/stacks/StackPresetsBar';
 import { StackExport } from '@/components/stacks/StackExport';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
+import { GlassPanel } from '@/components/ui/GlassPanel';
+import { RevealCard } from '@/components/ui/RevealCard';
 import { Slider } from '@/components/ui/Slider';
 import { Badge } from '@/components/ui/Badge';
 import { Progress } from '@/components/ui/Progress';
@@ -96,19 +98,21 @@ export function StackSimulatorTool() {
                           <span className="text-label text-accent-amber">AM protocol</span>
                         </div>
                         <ul className="space-y-2">
-                          {result.dosingSchedule.am.map((d) => (
-                            <li key={d.compoundId} className="glass rounded-lg p-3 text-sm">
-                              <div className="flex justify-between gap-2">
-                                <span className="font-semibold text-foreground">{d.name}</span>
-                                <EvidenceTag tier={d.evidence} size="sm" />
-                              </div>
-                              <p className="text-accent-cyan font-mono text-xs mt-1">{d.adjustedDose}</p>
-                              {d.baseDose !== d.adjustedDose && (
-                                <p className="text-caption mt-0.5 line-through opacity-60">{d.baseDose}</p>
-                              )}
-                              {d.adjustmentReason && (
-                                <p className="text-caption mt-1">{d.adjustmentReason}</p>
-                              )}
+                          {result.dosingSchedule.am.map((d, i) => (
+                            <li key={d.compoundId}>
+                              <RevealCard index={i} depth="mid" className="rounded-lg p-3 text-sm">
+                                <div className="flex justify-between gap-2">
+                                  <span className="font-semibold text-foreground">{d.name}</span>
+                                  <EvidenceTag tier={d.evidence} size="sm" />
+                                </div>
+                                <p className="text-accent-cyan font-mono text-xs mt-1">{d.adjustedDose}</p>
+                                {d.baseDose !== d.adjustedDose && (
+                                  <p className="text-caption mt-0.5 line-through opacity-60">{d.baseDose}</p>
+                                )}
+                                {d.adjustmentReason && (
+                                  <p className="text-caption mt-1">{d.adjustmentReason}</p>
+                                )}
+                              </RevealCard>
                             </li>
                           ))}
                         </ul>
@@ -121,10 +125,12 @@ export function StackSimulatorTool() {
                           <span className="text-label text-accent-violet">PM protocol</span>
                         </div>
                         <ul className="space-y-2">
-                          {result.dosingSchedule.pm.map((d) => (
-                            <li key={d.compoundId} className="glass rounded-lg p-3 text-sm">
-                              <span className="font-semibold text-foreground">{d.name}</span>
-                              <p className="text-accent-violet font-mono text-xs mt-1">{d.adjustedDose}</p>
+                          {result.dosingSchedule.pm.map((d, i) => (
+                            <li key={d.compoundId}>
+                              <RevealCard index={i} depth="mid" className="rounded-lg p-3 text-sm">
+                                <span className="font-semibold text-foreground">{d.name}</span>
+                                <p className="text-accent-violet font-mono text-xs mt-1">{d.adjustedDose}</p>
+                              </RevealCard>
                             </li>
                           ))}
                         </ul>
@@ -144,11 +150,12 @@ export function StackSimulatorTool() {
                 key="empty"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="glass rounded-2xl p-8 text-center"
               >
-                <p className="text-muted-foreground text-sm">
-                  Select compounds or apply a preset to simulate synergy, dosing, and risk profile.
-                </p>
+                <GlassPanel depth="mid" className="rounded-2xl p-8 text-center">
+                  <p className="text-muted-foreground text-sm">
+                    Select compounds or apply a preset to simulate synergy, dosing, and risk profile.
+                  </p>
+                </GlassPanel>
               </motion.div>
             )}
           </AnimatePresence>

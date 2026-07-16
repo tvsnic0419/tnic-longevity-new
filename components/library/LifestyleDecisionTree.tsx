@@ -1,6 +1,7 @@
 'use client';
 
 import { GitBranch, HelpCircle, AlertOctagon } from 'lucide-react';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 
 export interface DecisionNode {
   kind: 'question' | 'branch' | 'redflag';
@@ -15,7 +16,7 @@ interface LifestyleDecisionTreeProps {
 
 export function LifestyleDecisionTree({ title, nodes }: LifestyleDecisionTreeProps) {
   return (
-    <div className="my-6 card-premium p-5 md:p-6">
+    <GlassPanel depth="mid" className="my-6 rounded-2xl p-5 md:p-6">
       <div className="flex items-center gap-2 mb-5">
         <GitBranch className="w-4 h-4 text-accent-violet" aria-hidden="true" />
         <p className="text-label text-accent-violet">{title ?? 'Decision tree'}</p>
@@ -81,7 +82,7 @@ export function LifestyleDecisionTree({ title, nodes }: LifestyleDecisionTreePro
           );
         })}
       </div>
-    </div>
+    </GlassPanel>
   );
 }
 
