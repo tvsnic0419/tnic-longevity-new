@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, FlaskConical, ShieldCheck, TrendingUp, Zap, CheckCircle2, AlertTriangle, ExternalLink, Activity } from 'lucide-react';
+import { ArrowRight, FlaskConical, ShieldCheck, TrendingUp, Zap, CheckCircle2, AlertTriangle, ExternalLink, Activity, Gauge } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
@@ -458,6 +458,58 @@ export default function BerberineGuidePage() {
                 </div>
                 <h3 className="font-semibold mb-2">{card.title}</h3>
                 <p className="text-sm text-muted-foreground">{card.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Hallmarks of Aging */}
+      <section className="py-14 border-b border-border">
+        <div className="container-page max-w-4xl">
+          <h2 className="heading-section mb-3">How Berberine Addresses the Hallmarks of Aging</h2>
+          <p className="text-body mb-8 max-w-2xl">
+            Berberine&rsquo;s AMPK-activation mechanism maps onto three of the twelve recognized Hallmarks of Aging. The connections below build on the same mechanism and trial evidence already cited on this page (Yin 2008, PMID 18442638; Lee 2006, PMID 16873688; Ju 2018, PMID 30466986) — no new claims are introduced here.
+          </p>
+          <div className="grid md:grid-cols-3 gap-5">
+            {[
+              {
+                icon: Gauge,
+                color: 'text-accent-violet',
+                badge: 'bg-accent-violet/10 border-accent-violet/20',
+                title: 'Deregulated Nutrient Sensing',
+                body: "AMPK is the cell's principal nutrient-sensing hub — it activates when energy (ATP) runs low and shifts metabolism toward catabolism (fat oxidation, glucose uptake, autophagy) while suppressing the anabolic, growth-signaling side of nutrient sensing (mTOR, fatty acid synthesis). Berberine activates AMPK by inhibiting mitochondrial Complex I, producing the same energy-deficit signal AMPK is built to detect — nearly identical to metformin's primary action. This is the most direct hallmark connection berberine has.",
+                href: '/library/disabled-macroautophagy',
+                label: 'Deregulated Nutrient Sensing hallmark',
+              },
+              {
+                icon: Zap,
+                color: 'text-accent-cyan',
+                badge: 'bg-accent-cyan/10 border-accent-cyan/20',
+                title: 'Mitochondrial Dysfunction',
+                body: "The AMPK-activation trigger itself starts at the mitochondrion: berberine's inhibition of Complex I is what creates the energy-deficit signal in the first place. Downstream, AMPK activation is a well-established driver of mitochondrial biogenesis and quality control — meaning the same upstream mitochondrial interaction that triggers berberine's metabolic effects is also mechanistically linked to mitochondrial maintenance, though the trials cited on this page measured metabolic endpoints (glucose, lipids), not mitochondrial biomarkers directly.",
+                href: '/library/mitochondrial-dysfunction',
+                label: 'Mitochondrial Dysfunction hallmark',
+              },
+              {
+                icon: ShieldCheck,
+                color: 'text-accent-emerald',
+                badge: 'bg-accent-emerald/10 border-accent-emerald/20',
+                title: 'Chronic Inflammation',
+                body: "AMPK activation suppresses NF-κB signaling, one of the central drivers of the low-grade inflammation associated with metabolic disease and aging. Berberine's glucose- and lipid-lowering effects — the human outcomes actually measured in the Yin 2008 and Ju 2018 trials cited above — are themselves partly anti-inflammatory, since chronic hyperglycemia and dyslipidemia are pro-inflammatory states in their own right.",
+                href: '/library/chronic-inflammation',
+                label: 'Chronic Inflammation hallmark',
+              },
+            ].map((card) => (
+              <div key={card.title} className={`rounded-xl border p-5 ${card.badge} bg-card/50 flex flex-col`}>
+                <div className={`inline-flex items-center justify-center w-9 h-9 rounded-lg border mb-3 ${card.badge}`}>
+                  <card.icon className={`w-4.5 h-4.5 ${card.color}`} aria-hidden="true" />
+                </div>
+                <h3 className="font-semibold mb-2">{card.title}</h3>
+                <p className="text-sm text-muted-foreground mb-4 flex-1">{card.body}</p>
+                <Link href={card.href} className={`text-xs font-mono inline-flex items-center gap-1 ${card.color} hover:underline`}>
+                  {card.label} <ArrowRight className="w-3 h-3" aria-hidden="true" />
+                </Link>
               </div>
             ))}
           </div>

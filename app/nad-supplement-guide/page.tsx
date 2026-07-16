@@ -385,6 +385,67 @@ export default function NadSupplementGuidePage() {
         </div>
       </section>
 
+      {/* Hallmarks of Aging */}
+      <section className="py-14 border-b border-border">
+        <div className="container-page max-w-4xl">
+          <h2 className="heading-section mb-3">How NMN Addresses the Hallmarks of Aging</h2>
+          <p className="text-body mb-8 max-w-2xl">
+            NMN&rsquo;s mechanism — replenishing the NAD+ pool depleted with age — fuels the enzyme families described above (sirtuins, PARP-1, Complex I, CD38), and their activity maps onto four of the twelve recognized Hallmarks of Aging. The connections below build on the same evidence already cited on this page (Igarashi et al. 2022, PMID 36482258; Yoshino et al. 2021, Science, PMID 33888596) — no new claims are introduced here.
+          </p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {[
+              {
+                icon: Zap,
+                color: 'text-accent-emerald',
+                badge: 'bg-accent-emerald/10 border-accent-emerald/20',
+                title: 'Mitochondrial Dysfunction',
+                body: 'NAD+ is the electron acceptor at Complex I of the mitochondrial electron transport chain, the same role described above under mitochondrial energy. As NAD+ availability declines with age, Complex I throughput and ATP output decline with it. Restoring the NAD+ pool via NMN directly re-fuels this step — the most immediate mechanistic link between NAD+ restoration and mitochondrial function.',
+                href: '/library/mitochondrial-dysfunction',
+                label: 'Mitochondrial Dysfunction hallmark',
+              },
+              {
+                icon: Dna,
+                color: 'text-accent-violet',
+                badge: 'bg-accent-violet/10 border-accent-violet/20',
+                title: 'Genomic Instability',
+                body: 'PARP-1 and PARP-2 use NAD+ as the obligate substrate for detecting and repairing DNA strand breaks. When NAD+ runs low, as it does with age, PARP-mediated repair capacity falls with it, leaving more DNA damage unrepaired. Reloading the NAD+ pool restores the substrate these enzymes need — the same PARP-1 DNA repair mechanism described above.',
+                href: '/library/genomic-instability',
+                label: 'Genomic Instability hallmark',
+              },
+              {
+                icon: Fingerprint,
+                color: 'text-accent-cyan',
+                badge: 'bg-accent-cyan/10 border-accent-cyan/20',
+                title: 'Epigenetic Alterations',
+                body: 'Sirtuins (SIRT1–7) are NAD+-dependent deacetylases that maintain histone acetylation patterns and broader chromatin state, core inputs to the epigenetic clocks used to estimate biological age. Sirtuin activity is directly gated by NAD+ availability, so restoring the pool restores substrate supply to this enzyme family. No trial cited on this page reports a specific epigenetic-age readout for NMN — this is a mechanistic connection, not a measured clinical outcome.',
+                href: '/library/epigenetic-alterations',
+                label: 'Epigenetic Alterations hallmark',
+              },
+              {
+                icon: Heart,
+                color: 'text-accent-amber',
+                badge: 'bg-accent-amber/10 border-accent-amber/20',
+                title: 'Cellular Senescence',
+                body: 'CD38, the NAD+-consuming enzyme described above, is upregulated in part by senescent and inflammatory immune cells — meaning senescent cell burden and NAD+ decline can reinforce each other. Restoring NAD+ through NMN does not clear senescent cells directly, but it does compete against the CD38-driven drain those cells help perpetuate.',
+                href: '/library/cellular-senescence',
+                label: 'Cellular Senescence hallmark',
+              },
+            ].map((card) => (
+              <div key={card.title} className={`rounded-xl border p-5 ${card.badge} bg-card/50 flex flex-col`}>
+                <div className={`inline-flex items-center justify-center w-9 h-9 rounded-lg border mb-3 ${card.badge}`}>
+                  <card.icon className={`w-4.5 h-4.5 ${card.color}`} aria-hidden="true" />
+                </div>
+                <h3 className="font-semibold mb-2">{card.title}</h3>
+                <p className="text-sm text-muted-foreground mb-4 flex-1">{card.body}</p>
+                <Link href={card.href} className={`text-xs font-mono inline-flex items-center gap-1 ${card.color} hover:underline`}>
+                  {card.label} <ArrowRight className="w-3 h-3" aria-hidden="true" />
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* How to Choose — HowTo section */}
       <section className="py-12 border-b border-border">
         <div className="container-page max-w-4xl">

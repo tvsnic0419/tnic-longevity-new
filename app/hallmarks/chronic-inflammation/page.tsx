@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
-import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Shield } from 'lucide-react';
+import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Shield, Pill, Library } from 'lucide-react';
+import { getCompoundsForHallmark } from '@/lib/library-graph';
 
 export const metadata: Metadata = {
   title: 'Chronic Inflammation (Inflammaging) | Hallmarks of Aging | TNiC',
@@ -71,7 +72,14 @@ const BIOMARKERS = [
   { name: 'Visceral adipose (DEXA)', normal: 'VAT < 100 cm² (men); < 80 cm² (women)', note: 'Major SASP source; tracks with waist circumference and metabolic health' },
 ];
 
+const EVIDENCE_BADGE: Record<string, string> = {
+  A: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+  B: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
+  C: 'bg-rose-500/15 text-rose-400 border-rose-500/30',
+};
+
 export default function ChronicInflammationPage() {
+  const targetingCompounds = getCompoundsForHallmark('inflammation');
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
