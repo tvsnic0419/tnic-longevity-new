@@ -207,6 +207,38 @@ export default function ChronicInflammationPage() {
         </section>
 
         <section className="py-20 border-t border-border/50">
+          <div className="container-page max-w-4xl">
+            <div className="flex items-center gap-2 mb-2">
+              <Pill className="w-5 h-5 text-cyan-400" />
+              <p className="text-xs text-cyan-400 uppercase tracking-widest font-medium">TNiC Library</p>
+            </div>
+            <h2 className="text-3xl font-black tracking-tight text-foreground mb-2">Compounds in the TNiC library that target this hallmark</h2>
+            <p className="text-muted-foreground mb-8">Structured compound profiles — dosing, mechanism, and evidence tier — for library compounds tagged as targeting chronic inflammation.</p>
+            {targetingCompounds.length > 0 ? (
+              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
+                {targetingCompounds.map((compound) => (
+                  <Link
+                    key={compound.slug}
+                    href={`/library/compounds/${compound.slug}`}
+                    className="flex items-center justify-between gap-3 rounded-2xl border border-border/60 bg-card/40 p-4 hover:border-cyan-500/40 transition-colors"
+                  >
+                    <span className="text-sm font-semibold text-foreground truncate">{compound.name}</span>
+                    <span className={`shrink-0 px-2 py-0.5 rounded-md text-[10px] font-bold border ${EVIDENCE_BADGE[compound.evidence]}`}>
+                      Tier {compound.evidence}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground italic">
+                No compounds in the library are currently tagged for this specific hallmark — see the interventions above, or explore the full{' '}
+                <Link href="/library" className="text-cyan-400 hover:underline">compound library</Link>.
+              </p>
+            )}
+          </div>
+        </section>
+
+        <section className="py-20 border-t border-border/50">
           <div className="container-page text-center max-w-2xl">
             <ShieldCheck className="w-10 h-10 text-rose-400 mx-auto mb-5" />
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-4">Extinguish inflammaging.</h2>
@@ -214,6 +246,7 @@ export default function ChronicInflammationPage() {
             <div className="flex flex-wrap justify-center gap-3">
               <Link href="/stacks" className="inline-flex items-center gap-2 bg-emerald-500 text-black px-6 py-3 rounded-xl text-sm font-bold hover:bg-emerald-400 transition-colors">Stack Architect <ArrowRight className="w-4 h-4" /></Link>
               <Link href="/hallmarks" className="inline-flex items-center gap-2 border border-border px-6 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"><BookOpen className="w-4 h-4" />All Hallmarks</Link>
+              <Link href="/library/chronic-inflammation" className="inline-flex items-center gap-2 border border-border px-6 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"><Library className="w-4 h-4" />View in Library</Link>
             </div>
           </div>
         </section>

@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
-import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Heart } from 'lucide-react';
+import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Heart, Pill, Library } from 'lucide-react';
+import { getCompoundsForHallmark } from '@/lib/library-graph';
 
 export const metadata: Metadata = {
   title: 'Stem Cell Exhaustion | Hallmarks of Aging | TNiC',
@@ -61,7 +62,14 @@ const BIOMARKERS = [
   { name: 'Muscle mass (DEXA or BIA)', normal: 'Skeletal muscle index ≥ 7.0 kg/m² men, ≥ 5.5 kg/m² women', note: 'Annual tracking; decline > 1% per year signals sarcopenia trajectory' },
 ];
 
+const EVIDENCE_BADGE: Record<string, string> = {
+  A: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+  B: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
+  C: 'bg-rose-500/15 text-rose-400 border-rose-500/30',
+};
+
 export default function StemCellExhaustionPage() {
+  const targetingCompounds = getCompoundsForHallmark('stem');
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
