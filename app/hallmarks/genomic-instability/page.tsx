@@ -30,7 +30,7 @@ export default function GenomicInstabilityPage() {
   const hallmark = getHallmarkBySlug('genomic-instability')!;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen canvas-scrim text-foreground">
       <Nav />
       <main id="main-content" tabIndex={-1}>
 

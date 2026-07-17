@@ -60,7 +60,7 @@ export function LibraryModuleDetail({
   }, [module]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground pt-6 md:pt-8 pb-20">
+    <div className="min-h-screen canvas-scrim text-foreground pt-6 md:pt-8 pb-20">
       <div className="max-w-7xl mx-auto px-6">
         <Link
           href="/library#content-modules"

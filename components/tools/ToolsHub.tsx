@@ -102,7 +102,7 @@ export function ToolsHub() {
   const activeTool = toolsRegistry.find((t) => t.id === active)!;
 
   return (
-    <section className="bg-background min-h-screen pt-6 md:pt-8 pb-20">
+    <section className="canvas-scrim min-h-screen pt-6 md:pt-8 pb-20">
       <div className="container-page">
         <PageHeader
           icon={Calculator}

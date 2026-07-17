@@ -29,7 +29,7 @@ export default function CompareIndexPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground pt-6 md:pt-8 pb-20">
+    <div className="min-h-screen canvas-scrim text-foreground pt-6 md:pt-8 pb-20">
       <StructuredData schemas={schemas} />
       <div className="container-page">
         <Link

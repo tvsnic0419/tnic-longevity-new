@@ -1106,10 +1106,80 @@ body::after {
   66% { transform: translate(-3%, 4%) scale(0.94); }
 }
 
+/* ── Molecular structure cascade ──
+   A field of authentic skeletal chemical structures drifting behind every
+   page. Sits above the aurora orbs, below all content. Kept whisper-faint so
+   body text contrast is never affected. */
+.molecule-cascade {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  /* soft glow ties the linework into the aurora field */
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent-cyan) 22%, transparent));
+}
+
+.molecule-node {
+  position: absolute;
+  transform: rotate(var(--rot, 0deg));
+  will-change: transform;
+  animation: molecule-drift 34s ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+.molecule-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.molecule-atoms text {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+/* Hue tiers map to the site accent tokens. */
+.molecule-node.hue-cyan { color: var(--accent-cyan); }
+.molecule-node.hue-emerald { color: var(--accent-emerald); }
+.molecule-node.hue-violet { color: var(--accent-violet); }
+
+/* Depth tiers: farther structures are fainter and drift more slowly, giving
+   the field a layered, parallax-like sense of space. Tuned to read as a
+   subtle-but-present texture directly over the dark base — no scrim dimming. */
+.molecule-node.depth-1 { opacity: 0.2; }
+.molecule-node.depth-2 { opacity: 0.14; animation-duration: 42s; }
+.molecule-node.depth-3 { opacity: 0.09; animation-duration: 52s; }
+
+:root[data-theme='light'] .molecule-cascade {
+  /* linework reads darker on light bg; trim glow to stay subtle */
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent-cyan) 14%, transparent));
+}
+:root[data-theme='light'] .molecule-node.depth-1 { opacity: 0.14; }
+:root[data-theme='light'] .molecule-node.depth-2 { opacity: 0.1; }
+:root[data-theme='light'] .molecule-node.depth-3 { opacity: 0.06; }
+
+@keyframes molecule-drift {
+  0%, 100% { transform: rotate(var(--rot, 0deg)) translate(0, 0); }
+  50% { transform: rotate(calc(var(--rot, 0deg) + 2deg)) translate(1.4%, -2%); }
+}
+
 .page-canvas {
   position: relative;
   z-index: 1;
   min-height: 100vh;
+}
+
+/* Page-canvas — transparent on purpose. The <body> already paints the full
+   base color *behind* the fixed ambient layer, so page wrappers must NOT
+   repaint an opaque background (that would hide the molecular cascade).
+   Leaving this transparent lets the same subtle molecule field show through
+   uniformly on every page. Replaces opaque `bg-background` on full-height
+   page wrappers. */
+.canvas-scrim {
+  background: transparent;
 }
 
 /* ── Cinematic hero ── */
@@ -1649,7 +1719,8 @@ body::after {
 
 @media (prefers-reduced-motion: reduce) {
   .ambient-orb, .hero-ring, .scroll-progress-glow,
-  .platform-ticker-track, .constellation-core, .constellation-orbit { animation: none; }
+  .platform-ticker-track, .constellation-core, .constellation-orbit,
+  .molecule-node { animation: none; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

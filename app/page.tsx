@@ -19,7 +19,7 @@ import { buildSoftwareApplicationSchema, buildItemListSchema } from '@/lib/seo';
  */
 export default function HomePage() {
   return (
-    <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
+    <div className="min-h-screen overflow-x-hidden canvas-scrim text-foreground">
       <StructuredData schemas={[buildSoftwareApplicationSchema(), buildItemListSchema()]} />
       <ScrollProgress />
       <Nav />

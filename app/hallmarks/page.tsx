@@ -47,7 +47,7 @@ const COVERAGE_BG = (pct: number) =>
 
 export default function HallmarksIndexPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen canvas-scrim text-foreground">
       <Nav />
       <main id="main-content" tabIndex={-1}>
 
