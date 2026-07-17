@@ -52,12 +52,12 @@ export default function LibraryPage() {
       {/* Lead with the page title and context, then the tools to act on it */}
       <AntiAgingLibrary asPageTitle />
 
-      <Suspense fallback={<div className="h-12 animate-pulse bg-white/5" />}>
+      <Suspense fallback={<div className="h-12 animate-pulse bg-muted/50" />}>
         <LibrarySearch />
       </Suspense>
 
       <div className="container-page pb-6">
-        <Suspense fallback={<div className="h-20 animate-pulse bg-white/5 rounded-xl" />}>
+        <Suspense fallback={<div className="h-20 animate-pulse bg-muted/50 rounded-xl" />}>
           <LibraryFacetFilters />
         </Suspense>
       </div>

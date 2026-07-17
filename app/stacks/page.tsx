@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { StacksLibrary } from '@/components/stacks/StacksLibrary';
 import { StructuredData } from '@/components/seo/StructuredData';
+import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
 import { seoRoutes } from '@/lib/seo-routes';
 import { buildHowToSchema, buildBreadcrumbSchema } from '@/lib/seo';
 
@@ -30,7 +31,7 @@ export default function StacksPage() {
           { name: 'Stack Architect', path: '/stacks' },
         ]),
       ]} />
-      <Suspense fallback={<div className="container-page py-20 text-muted-foreground">Loading stacks…</div>}>
+      <Suspense fallback={<SectionSkeleton height="lg" />}>
         <StacksLibrary />
       </Suspense>
     </>
