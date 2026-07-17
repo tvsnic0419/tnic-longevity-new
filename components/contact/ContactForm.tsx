@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { MessageSquare, Send, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { SITE } from '@/lib/site';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { Button } from '@/components/ui/Button';
 import { getHubContext } from '@/lib/hub-context';
 
 const categories = [
@@ -146,13 +147,9 @@ export function ContactForm() {
             />
           </div>
 
-          <button
-            type="submit"
-            className="focus-ring w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-black px-8 py-3.5 rounded-xl font-semibold text-sm hover:bg-accent-cyan transition"
-          >
-            <Send className="w-4 h-4" />
+          <Button type="submit" icon={Send} size="lg" className="w-full sm:w-auto">
             Open email to send
-          </button>
+          </Button>
         </form>
       )}
     </div>

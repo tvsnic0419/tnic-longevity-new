@@ -6,6 +6,7 @@ import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata } from '@/lib/seo';
 import { buildBreadcrumbSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
+import { themes, type ThemeAccent } from '@/lib/design-system';
 
 export const metadata = buildPageMetadata({
   title: 'NAD+ Supplement Guide 2026 — NMN vs NR vs Niacin, Dosing & Evidence',
@@ -39,7 +40,7 @@ const NAD_PRECURSORS = [
     pros: ['Strongest RCT footprint', 'NAMPT bypass advantage', 'TNiC stack native integration', 'AM/PM synergy with resveratrol'],
     cons: ['Higher cost vs NR', 'Bioavailability varies by form (sublingual > capsule)', 'Not FDA-regulated supplement'],
     verdict: 'Best choice for TNiC NAD+ Mito Stack integration and sirtuin activation',
-    color: '#00e0ff',
+    theme: 'cyan' as ThemeAccent,
   },
   {
     name: 'NR',
@@ -53,7 +54,7 @@ const NAD_PRECURSORS = [
     pros: ['Longer commercial track record', 'Multiple safety studies', 'TruNiagen branded capsules with QA', 'Physician familiarity'],
     cons: ['Extra enzymatic step (NRK-dependent)', 'Higher dose range needed vs NMN', 'Not native in TNiC stack presets'],
     verdict: 'Defensible alternative — choose if physician prefers NR literature or you respond well',
-    color: '#c084fc',
+    theme: 'violet' as ThemeAccent,
   },
   {
     name: 'Niacin (NAM)',
@@ -67,7 +68,7 @@ const NAD_PRECURSORS = [
     pros: ['Extremely low cost', 'Long safety history at 500 mg', 'Generic availability'],
     cons: ['Flushing at 500+ mg (nicotinic acid form)', 'CD38 still degrades NAD+ regardless', 'Less precise than NMN/NR for longevity stack'],
     verdict: 'Budget-accessible entry point — upgrade to NMN for serious longevity stacking',
-    color: '#fbbf24',
+    theme: 'amber' as ThemeAccent,
   },
 ];
 
@@ -181,7 +182,7 @@ export default function NadSupplementGuidePage() {
       <StructuredData schemas={buildNadGuideSchemas()} />
 
       {/* Hero */}
-      <section className="py-14 md:py-20 border-b border-border bg-[#020811]">
+      <section className="py-14 md:py-20 border-b border-border bg-background">
         <div className="container-page max-w-6xl">
           <div className="grid items-center gap-10 lg:grid-cols-12">
             <div className="lg:col-span-7">
@@ -292,18 +293,20 @@ export default function NadSupplementGuidePage() {
             Three human-studied NAD+ precursors — ranked by TNiC for longevity stack integration.
           </p>
           <div className="space-y-4">
-            {NAD_PRECURSORS.map((p, i) => (
+            {NAD_PRECURSORS.map((p, i) => {
+              const c = themes[p.theme].cssVar;
+              return (
               <div
                 key={p.name}
                 className="rounded-2xl border border-border/60 bg-card/20 overflow-hidden"
-                style={{ borderColor: i === 0 ? `${p.color}33` : undefined }}
+                style={{ borderColor: i === 0 ? `color-mix(in srgb, ${c} 33%, transparent)` : undefined }}
               >
                 <div className="p-5 md:p-6">
                   <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
                     <div className="flex items-center gap-3">
                       <div
                         className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-black"
-                        style={{ background: `${p.color}18`, color: p.color }}
+                        style={{ background: `color-mix(in srgb, ${c} 18%, transparent)`, color: c }}
                       >
                         #{i + 1}
                       </div>
@@ -312,7 +315,7 @@ export default function NadSupplementGuidePage() {
                           <h3 className="font-bold text-lg">{p.name}</h3>
                           <span
                             className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full border"
-                            style={{ color: p.color, background: `${p.color}12`, borderColor: `${p.color}30` }}
+                            style={{ color: c, background: `color-mix(in srgb, ${c} 12%, transparent)`, borderColor: `color-mix(in srgb, ${c} 30%, transparent)` }}
                           >
                             Tier {p.tier}
                           </span>
@@ -327,7 +330,7 @@ export default function NadSupplementGuidePage() {
                     </div>
                     <div className="text-right">
                       <p className="text-xs font-mono text-muted-foreground">Dose</p>
-                      <p className="text-sm font-bold" style={{ color: p.color }}>{p.dose}</p>
+                      <p className="text-sm font-bold" style={{ color: c }}>{p.dose}</p>
                     </div>
                   </div>
 
@@ -375,13 +378,14 @@ export default function NadSupplementGuidePage() {
 
                   <div
                     className="rounded-lg p-3 text-xs font-semibold"
-                    style={{ background: `${p.color}10`, color: p.color }}
+                    style={{ background: `color-mix(in srgb, ${c} 10%, transparent)`, color: c }}
                   >
                     Verdict: {p.verdict}
                   </div>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -434,7 +438,7 @@ export default function NadSupplementGuidePage() {
       </section>
 
       {/* Timing Protocol */}
-      <section className="py-12 border-b border-border bg-[#050a14]/50">
+      <section className="py-12 border-b border-border bg-card/50">
         <div className="container-page max-w-4xl">
           <h2 className="text-2xl font-bold mb-2">Optimal NAD+ supplement timing</h2>
           <p className="text-muted-foreground text-sm mb-8">Based on TNiC protocol research and chronobiology data on NAD+ metabolism.</p>

@@ -5,6 +5,7 @@ import { StructuredData } from '@/components/seo/StructuredData';
 import { seoRoutes } from '@/lib/seo-routes';
 import { buildHowToSchema, buildGuidePageSchema, buildBreadcrumbSchema } from '@/lib/seo';
 import { getScoredCompounds } from '@/lib/elite-8-data';
+import { themes } from '@/lib/design-system';
 
 export const metadata = seoRoutes.longevityGuide();
 
@@ -103,8 +104,12 @@ export default function LongevitySupplementsGuidePage() {
       <StructuredData schemas={schemas} />
 
       {/* Hero */}
-      <section className="relative py-16 md:py-24 border-b border-border overflow-hidden" style={{ background: '#020811' }}>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(0,224,255,0.10)_0%,transparent_60%)] pointer-events-none" aria-hidden />
+      <section className="relative py-16 md:py-24 border-b border-border overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse at top left, color-mix(in srgb, var(--accent-cyan) 10%, transparent) 0%, transparent 60%)' }}
+          aria-hidden
+        />
         <div className="container-page">
           <nav className="flex items-center gap-2 text-xs text-muted-foreground mb-8 font-mono" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-accent-cyan transition-colors">Home</Link>
@@ -118,13 +123,13 @@ export default function LongevitySupplementsGuidePage() {
               Evidence-Ranked · 2026 Edition
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white mb-6 leading-[1.05]">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-foreground mb-6 leading-[1.05]">
               Best Longevity{' '}
-              <span style={{ color: 'var(--accent-cyan)' }}>Supplements</span>{' '}
+              <span className="text-accent-cyan">Supplements</span>{' '}
               2026
             </h1>
 
-            <p className="text-lg sm:text-xl text-white/60 leading-relaxed mb-8 max-w-2xl">
+            <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed mb-8 max-w-2xl">
               Ranked by composite LQ score across 8 evidence dimensions: clinical trials, epigenetic
               biomarkers, effect size, evolutionary depth, safety, bioavailability, and human
               population data. Every claim linked to a PubMed ID.
@@ -139,13 +144,13 @@ export default function LongevitySupplementsGuidePage() {
               </Link>
               <Link
                 href="/library"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold border border-white/15 text-white/80 hover:border-white/30 hover:text-white transition-all focus-ring"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold border border-border text-muted-foreground hover:border-foreground/30 hover:text-foreground transition-all focus-ring"
               >
                 Browse Full Library
               </Link>
             </div>
 
-            <p className="mt-6 text-xs text-white/30 font-mono">
+            <p className="mt-6 text-xs text-muted-foreground/50 font-mono">
               Educational only · Not medical advice · All citations PubMed-verified
             </p>
           </div>
@@ -162,7 +167,7 @@ export default function LongevitySupplementsGuidePage() {
               { icon: Star, color: 'var(--accent-amber)', title: 'LQ composite score', body: '8-dimensional weighted score (0–100): CE · EB · ES · EE · SF · BV · HP minus Risk penalty.' },
             ].map(({ icon: Icon, color, title, body }) => (
               <div key={title} className="rounded-2xl p-5 border border-border/60 bg-card/40">
-                <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style={{ background: `${color}18` }}>
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style={{ background: `color-mix(in srgb, ${color} 18%, transparent)` }}>
                   <Icon className="w-4.5 h-4.5" style={{ color }} />
                 </div>
                 <h3 className="font-bold text-sm text-foreground mb-1.5">{title}</h3>
@@ -176,7 +181,7 @@ export default function LongevitySupplementsGuidePage() {
       {/* Ranked Compound Table */}
       <section className="py-16 md:py-20 border-b border-border bg-background">
         <div className="container-page">
-          <h2 className="text-2xl sm:text-3xl font-black text-white mb-3">
+          <h2 className="text-2xl sm:text-3xl font-black text-foreground mb-3">
             Ranked: Best Longevity Supplements 2026
           </h2>
           <p className="text-muted-foreground mb-10 max-w-2xl">
@@ -186,7 +191,7 @@ export default function LongevitySupplementsGuidePage() {
           <div className="space-y-4">
             {scored.map((c, i) => {
               const score = Math.max(0, Math.min(100, c.score));
-              const scoreColor = score >= 78 ? '#34d399' : score >= 68 ? '#00e0ff' : '#fbbf24';
+              const scoreColor = score >= 78 ? themes.emerald.cssVar : score >= 68 ? themes.cyan.cssVar : themes.amber.cssVar;
               const tier = c.evidenceTier ?? 'B';
               const tierColor = tier === 'A' ? 'text-accent-emerald' : tier === 'B' ? 'text-accent-amber' : 'text-accent-rose';
               const tierBg = tier === 'A' ? 'bg-accent-emerald/10 border-accent-emerald/25' : tier === 'B' ? 'bg-accent-amber/10 border-accent-amber/25' : 'bg-accent-rose/10 border-accent-rose/25';
@@ -196,7 +201,7 @@ export default function LongevitySupplementsGuidePage() {
                   <div className="grid sm:grid-cols-12 gap-4 items-start">
                     {/* Rank + Name */}
                     <div className="sm:col-span-5 flex items-start gap-4">
-                      <span className="text-2xl font-black text-white/15 tabular-nums w-8 shrink-0 leading-none mt-0.5">
+                      <span className="text-2xl font-black text-muted-foreground/20 tabular-nums w-8 shrink-0 leading-none mt-0.5">
                         {String(i + 1).padStart(2, '0')}
                       </span>
                       <div className="flex-1">
@@ -210,7 +215,7 @@ export default function LongevitySupplementsGuidePage() {
                           </span>
                         </div>
                         <p className="text-xs text-muted-foreground mb-2">{c.category} · {c.full}</p>
-                        <p className="text-xs text-white/55 leading-relaxed">{c.mechanism}</p>
+                        <p className="text-xs text-muted-foreground leading-relaxed">{c.mechanism}</p>
                       </div>
                     </div>
 
@@ -219,7 +224,7 @@ export default function LongevitySupplementsGuidePage() {
                       <span className="text-[10px] font-mono text-muted-foreground sm:mb-1 hidden sm:block">LQ Score</span>
                       <div className="text-2xl font-black tabular-nums" style={{ color: scoreColor }}>{score.toFixed(1)}</div>
                       <div className="flex-1 sm:w-full">
-                        <div className="h-1.5 bg-white/5 rounded-full overflow-hidden sm:w-full w-24">
+                        <div className="h-1.5 bg-border/40 rounded-full overflow-hidden sm:w-full w-24">
                           <div className="h-full rounded-full" style={{ width: `${score}%`, background: scoreColor }} />
                         </div>
                       </div>
@@ -228,8 +233,8 @@ export default function LongevitySupplementsGuidePage() {
                     {/* Clock estimate */}
                     <div className="sm:col-span-3">
                       <p className="text-[10px] font-mono text-muted-foreground mb-1 hidden sm:block">Clock estimate</p>
-                      <p className="text-xs text-white/60 font-mono leading-relaxed">{c.clock}</p>
-                      <p className="text-[9px] text-white/30 mt-1">{c.clockConfidence} confidence</p>
+                      <p className="text-xs text-muted-foreground font-mono leading-relaxed">{c.clock}</p>
+                      <p className="text-[9px] text-muted-foreground/50 mt-1">{c.clockConfidence} confidence</p>
                     </div>
 
                     {/* CTA */}
@@ -243,7 +248,7 @@ export default function LongevitySupplementsGuidePage() {
                           Deep-dive <ExternalLink className="w-3 h-3" />
                         </Link>
                       ) : (
-                        <span className="text-[10px] font-mono text-muted-foreground px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.06]">
+                        <span className="text-[10px] font-mono text-muted-foreground px-3 py-1.5 rounded-lg bg-card border border-border/60">
                           Library soon
                         </span>
                       )}
@@ -265,13 +270,13 @@ export default function LongevitySupplementsGuidePage() {
       </section>
 
       {/* How-to Guide Section */}
-      <section className="py-16 md:py-20 border-b border-border" style={{ background: 'linear-gradient(to bottom, #020811, #060d1a)' }}>
+      <section className="py-16 md:py-20 border-b border-border bg-card/20">
         <div className="container-page max-w-4xl">
           <div className="mb-10">
             <div className="inline-flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.2em] text-accent-violet border border-accent-violet/20 bg-accent-violet/[0.06] px-4 py-2 rounded-full mb-5">
               Step-by-Step Protocol
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-white mb-3">
+            <h2 className="text-2xl sm:text-3xl font-black text-foreground mb-3">
               How to Build a Longevity Supplement Stack
             </h2>
             <p className="text-muted-foreground">
@@ -281,8 +286,8 @@ export default function LongevitySupplementsGuidePage() {
 
           <div className="space-y-4">
             {HOW_TO_STEPS.map((step, i) => (
-              <div key={step.name} className="flex gap-4 rounded-2xl border border-border/50 bg-white/[0.02] p-5">
-                <div className="shrink-0 w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm" style={{ background: 'rgba(0,224,255,0.12)', color: 'var(--accent-cyan)', border: '1px solid rgba(0,224,255,0.2)' }}>
+              <div key={step.name} className="flex gap-4 rounded-2xl border border-border/50 bg-card/40 p-5">
+                <div className="shrink-0 w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm text-accent-cyan bg-accent-cyan/10 border border-accent-cyan/20">
                   {i + 1}
                 </div>
                 <div>
@@ -297,7 +302,7 @@ export default function LongevitySupplementsGuidePage() {
             <Link href="/quiz" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-accent-cyan text-black hover:bg-accent-cyan/90 transition focus-ring">
               Start Step 1 — Take the Quiz <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link href="/stacks" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border border-white/15 text-white/80 hover:border-white/30 transition focus-ring">
+            <Link href="/stacks" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border border-border text-muted-foreground hover:border-foreground/30 hover:text-foreground transition focus-ring">
               Step 5 — Stack Architect
             </Link>
           </div>
@@ -307,7 +312,7 @@ export default function LongevitySupplementsGuidePage() {
       {/* Red flags to avoid */}
       <section className="py-16 border-b border-border bg-background">
         <div className="container-page max-w-4xl">
-          <h2 className="text-2xl font-black text-white mb-3">Red Flags to Avoid When Buying</h2>
+          <h2 className="text-2xl font-black text-foreground mb-3">Red Flags to Avoid When Buying</h2>
           <p className="text-muted-foreground mb-8">Most supplement marketing is misleading. These are the concrete signals of low-quality products:</p>
 
           <div className="grid sm:grid-cols-2 gap-3 mb-8">
@@ -341,7 +346,7 @@ export default function LongevitySupplementsGuidePage() {
       {/* FAQ */}
       <section className="py-16 bg-background">
         <div className="container-page max-w-3xl">
-          <h2 className="text-2xl font-black text-white mb-10">Frequently Asked Questions</h2>
+          <h2 className="text-2xl font-black text-foreground mb-10">Frequently Asked Questions</h2>
 
           <div className="space-y-6">
             {GUIDE_FAQS.map((faq) => (
@@ -358,7 +363,7 @@ export default function LongevitySupplementsGuidePage() {
           </div>
 
           <div className="mt-10 rounded-2xl border border-accent-cyan/15 bg-accent-cyan/[0.04] p-6 text-center">
-            <p className="text-sm text-white/70 mb-4">
+            <p className="text-sm text-muted-foreground mb-4">
               More detailed answers — mechanism deep-dives, dosing nuances, interaction warnings — are in the TNiC Library.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">

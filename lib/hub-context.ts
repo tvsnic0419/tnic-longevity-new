@@ -45,7 +45,8 @@ export const hubContexts: Record<
   | 'contact'
   | 'deliverySystems'
   | 'peptides'
-  | 'topPicks',
+  | 'topPicks'
+  | 'hallmarks',
   HubContextEntry
 > = {
   dashboard: {
@@ -155,6 +156,12 @@ export const hubContexts: Record<
     what: "TNiC's highest-conviction compound picks across three overlapping pathways — sirtuin activation, PARP/DNA-repair support, and NRF2 antioxidant signaling.",
     why: 'The same NAD+ pool fuels both sirtuins and PARP, and NRF2 activation both switches on antioxidant genes and reduces the DNA damage those repair pathways face — picks here reflect that shared biology instead of treating each pathway in isolation.',
     next: 'Open a pick to read its full compound module, then check the Systems Map for how these pathways interact with the rest of the hallmarks.',
+  },
+  hallmarks: {
+    theme: 'emerald',
+    what: 'All 12 hallmarks of aging (López-Otín 2023) in one index — TNiC coverage score, top-ranked evidence-graded intervention, and key biomarkers for each.',
+    why: 'Aging has 12 distinct molecular causes, not one. Seeing coverage and evidence side-by-side across all of them shows exactly where a protocol is strong and where it still has gaps.',
+    next: "Open a hallmark's Deep Dive for its full mechanism map, or jump to its Library entry for ranked interventions and PMID citations.",
   },
 };
 
