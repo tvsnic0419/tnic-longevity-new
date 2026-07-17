@@ -15,7 +15,10 @@ export function PeptideCard({ peptide }: { peptide: Peptide }) {
       className="focus-ring interactive glass glass-hover group flex h-full flex-col gap-3 rounded-2xl p-5"
     >
       <div className="flex items-start justify-between gap-2">
-        <p className={`text-label ${themes[categoryMeta.theme].text}`}>{categoryMeta.label}</p>
+        <div>
+          <p className={`text-label ${themes[categoryMeta.theme].text}`}>{categoryMeta.label}</p>
+          <p className="text-[10px] font-mono text-muted-foreground/70 mt-0.5">{peptide.pathway}</p>
+        </div>
         <ArrowUpRight
           className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground"
           aria-hidden="true"

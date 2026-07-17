@@ -104,6 +104,10 @@ export interface Peptide {
   category: PeptideCategory;
   tagline: string;
   summary: string;
+  /** Short label matching Compound['pathway']'s style — e.g. "AMPK Activation". */
+  pathway: string;
+  /** One-sentence mechanism, matching Compound['mechanism']'s voice. */
+  mechanism: string;
   evidenceTier: EvidenceTier;
   legalStatus: PeptideLegalStatus;
   administrationRoute: string;

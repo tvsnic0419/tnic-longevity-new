@@ -47,6 +47,8 @@ export const peptideLibrary: Peptide[] = [
     tagline: 'A synthetic gastric-peptide fragment studied almost exclusively in animal models of tissue and gut repair.',
     summary:
       'BPC-157 is a synthetic 15-amino-acid fragment derived from a peptide found in human gastric juice. Decades of rat and mouse studies report accelerated healing of tendon, ligament, muscle, and gut-lining injuries. There are no completed human randomized controlled trials, and the FDA placed BPC-157 on its 2023 bulk-substances list that bars compounding pharmacies from dispensing it — meaning the legitimate US sourcing pathway that existed a few years ago no longer does.',
+    pathway: 'Angiogenesis & Growth-Factor Signaling',
+    mechanism: 'Upregulates growth-factor expression (including VEGFR2) and promotes angiogenesis at injury sites in rodent tendon, ligament, and gut-lining models — the proposed basis for its reported healing effects.',
     evidenceTier: 'C',
     legalStatus: 'compounding-restricted',
     administrationRoute: 'Subcutaneous injection (research-chemical vendors); historically oral/compounded',
@@ -71,6 +73,8 @@ export const peptideLibrary: Peptide[] = [
     tagline: 'A naturally occurring copper-binding tripeptide with real human trial data for topical skin repair.',
     summary:
       'GHK-Cu is a naturally occurring tripeptide (Gly-His-Lys) that binds copper and declines sharply with age. Topical GHK-Cu has genuine published human trials showing improved skin firmness, collagen density, and wound healing — the strongest human evidence of any peptide on this list, but confined to cosmetic/dermatological endpoints. Injectable or systemic "anti-aging" use extrapolates from gene-expression and rodent data that has not been tested the same way in people.',
+    pathway: 'Copper-Dependent Collagen Signaling',
+    mechanism: 'Binds copper and broadly modulates gene expression; in human trials the well-characterized topical effect drives fibroblast collagen/elastin synthesis and wound healing.',
     evidenceTier: 'B',
     legalStatus: 'research-use-only',
     administrationRoute: 'Topical (cosmetic products, human trial data); subcutaneous injection (research-chemical vendors, no human trial data at this route)',
@@ -95,6 +99,8 @@ export const peptideLibrary: Peptide[] = [
     tagline: 'A synthetic tetrapeptide studied in Russian aging research for telomerase activation and pineal/circadian regulation.',
     summary:
       'Epithalon (a synthetic version of the naturally occurring pineal peptide epithalamin) was developed and studied primarily by Vladimir Khavinson\'s group in St. Petersburg across several decades. Their published work reports telomerase activation in human cell culture and improved survival/biomarker trends in small, often methodologically thin human cohorts. Independent Western replication is minimal, and no large modern RCT exists.',
+    pathway: 'Telomerase Activation',
+    mechanism: 'Reported to activate telomerase in cultured human cells and modulate pineal melatonin/circadian signaling, per the Khavinson group cohort studies.',
     evidenceTier: 'C',
     legalStatus: 'research-use-only',
     administrationRoute: 'Subcutaneous injection (research-chemical vendors)',
@@ -119,6 +125,8 @@ export const peptideLibrary: Peptide[] = [
     tagline: 'An immune-modulating peptide with real regulatory approval abroad for hepatitis and as a cancer-treatment adjunct — not for longevity specifically.',
     summary:
       'Thymosin Alpha-1 is a naturally occurring thymic peptide with a genuinely unusual evidence profile among peptides: it is an approved prescription drug (branded Zadaxin) in roughly 35 countries for chronic hepatitis B/C and as an adjunct in some cancer and vaccine-response protocols — though not FDA-approved in the United States. That real regulatory and trial history is for immune modulation in specific disease contexts, not for "anti-aging" — the longevity framing is an extrapolation from its immune effects, not a studied endpoint itself.',
+    pathway: 'T-Cell & Innate Immune Modulation',
+    mechanism: 'Modulates T-cell maturation and dendritic-cell signaling — the basis for its approved use as a hepatitis B/C and vaccine-response adjunct in international markets.',
     evidenceTier: 'B',
     legalStatus: 'research-use-only',
     administrationRoute: 'Subcutaneous injection',
@@ -143,6 +151,8 @@ export const peptideLibrary: Peptide[] = [
     tagline: 'A GHRP + GHRH-analog pair almost always stacked together to raise pulsatile growth hormone output.',
     summary:
       'Ipamorelin is a selective ghrelin-receptor agonist (a "GHRP") and CJC-1295 is a growth-hormone-releasing-hormone analog — different receptors, same goal: a larger, more natural pulse of endogenous GH and downstream IGF-1. Real endocrinology literature characterizes their GH/IGF-1 pharmacodynamics in humans, but no trial has tested long-term anti-aging outcomes, and elevated IGF-1 carries a real, debated theoretical cancer-risk signal from unrelated epidemiological literature that any user should weigh.',
+    pathway: 'Pulsatile GH/IGF-1 Axis',
+    mechanism: 'Ipamorelin selectively agonizes the ghrelin receptor while CJC-1295 acts as a GHRH analog — together amplifying a single, more natural pulse of endogenous growth hormone and downstream IGF-1.',
     evidenceTier: 'B',
     legalStatus: 'research-use-only',
     administrationRoute: 'Subcutaneous injection',
@@ -167,6 +177,8 @@ export const peptideLibrary: Peptide[] = [
     tagline: 'A mitochondrial-genome-encoded peptide discovered by the Cohen lab, studied so far only in mice.',
     summary:
       'MOTS-c is one of a small class of "mitochondrial-derived peptides" encoded in mitochondrial DNA rather than the nuclear genome, discovered and characterized by Changhan David Lee and Pinchas Cohen\'s group at USC. Mouse studies report AMPK activation, improved insulin sensitivity, and exercise-mimetic metabolic effects. As of today there is no published human interventional trial of exogenous MOTS-c — everything sold is an unregulated research chemical with human dosing extrapolated entirely from animal pharmacokinetics.',
+    pathway: 'AMPK Activation',
+    mechanism: 'A mitochondrial-DNA-encoded peptide that activates AMPK and improves insulin sensitivity in mouse models, mimicking exercise-induced metabolic signaling.',
     evidenceTier: 'C',
     legalStatus: 'research-use-only',
     administrationRoute: 'Subcutaneous injection (research-chemical vendors)',
@@ -191,6 +203,8 @@ export const peptideLibrary: Peptide[] = [
     tagline: 'FDA-approved GLP-1/GIP receptor agonists with the largest human RCT evidence base of any peptide on this list — used off-label for longevity, not approved for it.',
     summary:
       'Semaglutide (GLP-1 receptor agonist) and tirzepatide (dual GLP-1/GIP agonist) are approved prescription drugs for type 2 diabetes and chronic weight management, backed by some of the largest cardiometabolic RCT programs ever run — the STEP and SURMOUNT trial programs, plus semaglutide\'s SELECT cardiovascular-outcomes trial in people without diabetes. That is genuinely Tier A evidence — for glycemic control, weight loss, and cardiovascular event reduction. "Longevity" is a real but separate extrapolation from those outcomes, not itself a primary trial endpoint, and both drugs are prescription-only.',
+    pathway: 'GLP-1/GIP Incretin Signaling',
+    mechanism: 'Agonizes GLP-1 (and, for tirzepatide, GIP) receptors to slow gastric emptying, suppress appetite, and improve glycemic control — the basis for its Tier A cardiometabolic trial evidence.',
     evidenceTier: 'A',
     legalStatus: 'fda-approved-rx',
     administrationRoute: 'Subcutaneous injection (semaglutide also available oral as Rybelsus)',
@@ -215,6 +229,8 @@ export const peptideLibrary: Peptide[] = [
     tagline: 'A mitochondrial-derived peptide with observational human data linking circulating levels to aging, but no exogenous-administration trials.',
     summary:
       'Humanin is the first-discovered mitochondrial-derived peptide, also characterized substantially by Pinchas Cohen\'s group, with cytoprotective and anti-apoptotic effects in cell and mouse models. Human evidence here is genuinely different in kind from most peptides on this list: there are real observational studies correlating circulating humanin levels with age and specific diseases in people — but that is association, not intervention. No published trial has given people exogenous humanin and measured an outcome.',
+    pathway: 'Mitochondrial Cytoprotection',
+    mechanism: 'A mitochondrial-derived peptide with cytoprotective, anti-apoptotic signaling in cell and mouse models; human data is limited to observational correlation between circulating levels and age.',
     evidenceTier: 'C',
     legalStatus: 'research-use-only',
     administrationRoute: 'Subcutaneous injection (research-chemical vendors)',

@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowLeft, BookOpen, FlaskConical, Syringe, Scale } from 'lucide-react';
+import { ArrowLeft, BookOpen, FlaskConical, Syringe, Scale, Zap } from 'lucide-react';
 import type { Peptide } from '@/lib/types';
 import { peptideCategoryMeta, peptideLibrary } from '@/lib/peptides-library';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
@@ -58,6 +58,15 @@ export function PeptideDetail({ peptide, mdxBody }: { peptide: Peptide; mdxBody:
                   </li>
                 ))}
               </ol>
+            </div>
+
+            <div className="glass rounded-xl p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <Zap className="w-4 h-4 text-accent-emerald" />
+                <p className="text-[10px] font-mono text-accent-emerald uppercase">Pathway</p>
+              </div>
+              <p className="text-sm font-semibold text-foreground mb-1">{peptide.pathway}</p>
+              <p className="text-sm text-muted-foreground">{peptide.mechanism}</p>
             </div>
 
             <div className="glass rounded-xl p-5">

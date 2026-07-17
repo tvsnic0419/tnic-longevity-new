@@ -172,7 +172,7 @@ export const compounds: Compound[] = [
     name: 'Spermidine',
     brand: 'Wheat Germ Extract',
     pathway: 'Autophagy Induction',
-    mechanism: 'Polyamine that inhibits EP300 acetyltransferase, inducing autophagy via eIF5A hypusination and histone modulation.',
+    mechanism: 'A naturally occurring polyamine that inhibits EP300, the histone acetyltransferase that normally suppresses autophagy gene transcription. EP300 inhibition triggers two parallel effects: hypusination of eIF5A (a translation factor required to synthesize autophagy proteins like ATG3), which switches on the core macroautophagy program, and a broader shift in histone acetylation state that reduces expression of pro-inflammatory and senescence-associated genes. Because EP300 inhibition is upstream of both effects, spermidine is one of the few compounds that plausibly addresses autophagy and epigenetic dysregulation from a single mechanistic lever rather than two separate ones. Levels decline with age in humans, and dietary intake correlates with reduced all-cause mortality in the Bruderholz and Malmö cohort studies.',
     desc: 'Madeo et al. 2021 (Cell) RCT in older adults showed memory improvement with wheat germ spermidine. Strong autophagy mechanism with dietary epidemiology support. Tier B — pilot human outcomes, not longevity endpoints.',
     badge: 'mito',
     bioavailability: 65,
