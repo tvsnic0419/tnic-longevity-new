@@ -4,6 +4,8 @@ import { ArrowRight, Dna, FlaskConical } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { RevealItem } from '@/components/ui/RevealItem';
+import { TiltCard } from '@/components/ui/TiltCard';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { getHubContext } from '@/lib/hub-context';
 import { themes } from '@/lib/design-system';
@@ -95,12 +97,14 @@ export default function HallmarksIndexPage() {
           </h2>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {hallmarkLibrary.map((h) => {
+            {hallmarkLibrary.map((h, i) => {
               const hasEditorial = EDITORIAL_SLUGS.has(h.slug);
               const topIntervention = [...h.interventions].sort((a, b) => a.rank - b.rank)[0];
               const coverageTheme = COVERAGE_THEME(h.coverage);
               return (
-                <div key={h.id} className="rounded-2xl border border-border/60 bg-card/40 p-5 flex flex-col">
+                <RevealItem key={h.id} index={i}>
+                <TiltCard className="h-full">
+                <div className="h-full rounded-2xl border border-border/60 bg-card/40 p-5 flex flex-col">
                   {/* Header */}
                   <div className="flex items-start justify-between gap-2 mb-3">
                     <div>
@@ -165,6 +169,8 @@ export default function HallmarksIndexPage() {
                     )}
                   </div>
                 </div>
+                </TiltCard>
+                </RevealItem>
               );
             })}
           </div>

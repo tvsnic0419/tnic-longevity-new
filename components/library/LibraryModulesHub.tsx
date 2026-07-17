@@ -11,6 +11,7 @@ import {
 } from '@/lib/library-modules';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { RevealItem } from '@/components/ui/RevealItem';
 import { getHubContext } from '@/lib/hub-context';
 
 const categoryIcons: Record<LibraryModuleCategory, typeof Pill> = {
@@ -118,27 +119,28 @@ export function LibraryModulesHub() {
                 </div>
 
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {modules.map((mod) => (
-                    <Link
-                      key={mod.slug}
-                      href={getModulePath(mod)}
-                      className="focus-ring interactive card-elevated p-5 flex flex-col h-full group"
-                    >
-                      <div className="flex items-center justify-between gap-2 mb-3">
-                        <EvidenceTag tier={mod.evidenceTier} size="sm" />
-                        {mod.requiresDisclaimer && (
-                          <span className="text-[10px] font-mono text-accent-amber">Rx</span>
-                        )}
-                      </div>
-                      <h4 className="heading-card mb-1 group-hover:text-accent-cyan transition-colors">
-                        {mod.title}
-                      </h4>
-                      <p className="text-xs text-muted-foreground mb-3">{mod.tagline}</p>
-                      <p className="text-body-sm flex-1">{mod.summary.slice(0, 120)}…</p>
-                      <span className="inline-flex items-center gap-1 mt-4 text-sm font-semibold text-accent-cyan group-hover:text-accent-emerald">
-                        Deep dive <ArrowRight className="w-4 h-4" />
-                      </span>
-                    </Link>
+                  {modules.map((mod, i) => (
+                    <RevealItem key={mod.slug} index={i}>
+                      <Link
+                        href={getModulePath(mod)}
+                        className="focus-ring interactive card-elevated p-5 flex flex-col h-full group"
+                      >
+                        <div className="flex items-center justify-between gap-2 mb-3">
+                          <EvidenceTag tier={mod.evidenceTier} size="sm" />
+                          {mod.requiresDisclaimer && (
+                            <span className="text-[10px] font-mono text-accent-amber">Rx</span>
+                          )}
+                        </div>
+                        <h4 className="heading-card mb-1 group-hover:text-accent-cyan transition-colors">
+                          {mod.title}
+                        </h4>
+                        <p className="text-xs text-muted-foreground mb-3">{mod.tagline}</p>
+                        <p className="text-body-sm flex-1">{mod.summary.slice(0, 120)}…</p>
+                        <span className="inline-flex items-center gap-1 mt-4 text-sm font-semibold text-accent-cyan group-hover:text-accent-emerald">
+                          Deep dive <ArrowRight className="w-4 h-4" />
+                        </span>
+                      </Link>
+                    </RevealItem>
                   ))}
                 </div>
               </div>
