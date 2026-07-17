@@ -13,13 +13,13 @@ describe('brief-research-sync', () => {
     const entry = researchFeedToBriefEntry(researchFeed[1]);
     expect(entry.id).toBe('brief-research-r2');
     expect(entry.source).toBe('research-intel');
-    expect(entry.pmids).toContain('36656670');
+    expect(entry.pmids).toContain('35975308');
     expect(entry.libraryHrefs.length).toBeGreaterThan(1);
   });
 
   it('excludes PMIDs already in curated briefs', () => {
     const curated = getCuratedPmids();
-    expect(curated.has('36656670')).toBe(true);
+    expect(curated.has('35975308')).toBe(true);
     const researchOnly = getResearchBriefIssues();
     expect(researchOnly.every((b) => !curated.has(b.pmids[0]))).toBe(true);
   });
