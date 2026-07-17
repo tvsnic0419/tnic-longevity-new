@@ -15,10 +15,12 @@ import { HallmarksConstellation } from '@/components/ui/HallmarksConstellation';
  * about the platform.
  */
 
+// Canonical evidence-tier colors — must match EvidenceTag / trust.ts
+// (A = clinical/emerald, B = emerging/cyan, C = preclinical/amber).
 const TIER_TEXT: Record<'A' | 'B' | 'C', string> = {
-  A: 'text-emerald-400',
-  B: 'text-amber-400',
-  C: 'text-rose-400',
+  A: 'text-accent-emerald',
+  B: 'text-accent-cyan',
+  C: 'text-accent-amber',
 };
 
 export function HomeHallmarks() {
