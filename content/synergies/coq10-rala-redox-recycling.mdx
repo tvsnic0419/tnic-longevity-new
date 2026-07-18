@@ -1,0 +1,150 @@
+---
+title: Redox Recycling Pair
+evidence_tier: B
+compounds: coq10,rala
+last_updated: 2026-07-18
+---
+
+> **TL;DR** — CoQ10 is the cell's primary fat-soluble antioxidant, embedded in the mitochondrial membrane where it also shuttles electrons through the transport chain. R-ALA is one of the few antioxidants that works in both fat and water environments, and it regenerates other antioxidants — vitamin C, vitamin E, and glutathione — after they've been spent neutralizing free radicals. CoQ10 defends the lipid phase; R-ALA recharges the whole network, including CoQ10's own oxidized form. Both compounds' own modules already name this pairing. AM CoQ10 with fat, R-ALA can go AM or split AM/PM. Tier B — each leg has real human trial data; the combination doesn't.
+
+## 1. Why this stack exists
+
+Antioxidants aren't a single pool — they're compartmentalized. **CoQ10** (as ubiquinone/ubiquinol) sits in cell membranes and the mitochondrial inner membrane, where it neutralizes lipid-phase free radicals and doubles as an electron carrier between Complex I/II and Complex III. **R-ALA** is unusual because it's amphipathic — soluble in both fat and water — which lets it patrol compartments CoQ10 can't reach, and its reduced form (dihydrolipoic acid) is a potent enough reducing agent to regenerate spent antioxidants, including vitamin C, vitamin E, glutathione, and CoQ10 itself.
+
+| Layer | Compound | Role | Analogy |
+| --- | --- | --- | --- |
+| **Lipid-phase defender** | CoQ10 | Membrane antioxidant + ETC electron shuttle | Shield |
+| **Universal recycler** | R-ALA | Regenerates spent antioxidants across compartments | Recharger |
+
+**Gap analysis — what breaks when you use only one:**
+
+- CoQ10 alone → strong membrane/ETC protection, but once oxidized it depends on the body's own recycling capacity to return to active form
+- R-ALA alone → broad recycling capacity, but without adequate CoQ10 levels there's less lipid-phase, ETC-adjacent defense to recycle in the first place
+- Combined → CoQ10 supplies front-line lipid defense and ETC support; R-ALA keeps the broader antioxidant network — including CoQ10 — cycling back to its active form instead of accumulating as spent, oxidized byproduct
+
+:::pathway title="CoQ10 ↔ R-ALA redox cycle" nodes="CoQ10 AM|Lipid antioxidant|cyan,ROS at ETC|Oxidative stress|rose,Oxidized CoQ10|Spent|amber,R-ALA|Universal recycler|violet,GSH / Vit C/E|Regenerated pool|emerald" edges="CoQ10 AM->ROS at ETC|neutralizes,ROS at ETC->Oxidized CoQ10|produces,R-ALA->Oxidized CoQ10|regenerates,R-ALA->GSH / Vit C/E|regenerates"
+:::
+
+## 2. Mechanistic synergy map
+
+```
+AM (with fat): [CoQ10] → embeds in mitochondrial membrane → ETC electron shuttle
+                    ↓                                         ↓
+              lipid-phase ROS neutralized              oxidized CoQ10 (spent)
+                    ↓                                         ↓
+AM or split:  [R-ALA] → amphipathic reach (fat + water phases) → regenerates:
+                                                                    - oxidized CoQ10
+                                                                    - oxidized glutathione (GSH)
+                                                                    - oxidized vitamin C / E
+Output: Sustained lipid + aqueous antioxidant capacity, not a one-shot defense
+```
+
+**Hallmarks addressed:** Mitochondrial dysfunction · Chronic inflammation · Genomic instability — both modules independently target these same three hallmarks; this page is the shared mechanism deep-dive.
+
+## 3. Evidence per leg
+
+| Compound | Tier | Key human data |
+| --- | --- | --- |
+| CoQ10 | A (statin-deficiency, heart failure) | Meta-analysis of 17 RCTs on hs-CRP/IL-6 (PMID 26267690); reduced heart-failure mortality (PMID 29541041); statin depletion documented (PMID 22395720) |
+| R-ALA | B | Diabetic neuropathy meta-analysis (PMID 21309862); mechanism well-characterized, general-longevity human RCTs limited |
+| Combination | — | No completed RCT; redox-recycling chemistry is established biochemistry, not a tested human combination |
+
+**Combination logic:** Both legs carry real, independent human evidence in their own domains (CoQ10 for statin-deficiency and cardiovascular outcomes, R-ALA for diabetic neuropathy and oxidative stress markers). The pairing itself is graded on biochemical plausibility — amphipathic antioxidant recycling is textbook redox chemistry — pending a dedicated combination trial.
+
+:::evidence tier="B"
+Jorat et al. 2016 (PMID 26267690): CoQ10 meta-analysis of 17 RCTs, significant hs-CRP/IL-6 reduction. Ziegler et al. (PMID 21309862): R-ALA meta-analysis in diabetic neuropathy, reduced oxidative stress markers. No trial has tested the combination directly — pair graded Tier B on mechanism strength alone.
+:::
+
+:::decision title="Is the redox recycling pair right for you?"
+node | On a statin, or diagnosed with diabetes/insulin resistance?
+yes | node | On insulin or a sulfonylurea?
+  yes | redflag | Physician clearance — R-ALA can lower blood glucose; combined with glucose-lowering drugs raises hypoglycemia risk
+  no | Start CoQ10 100–200 mg AM (statin users) or as general mitochondrial support → add R-ALA 300–600 mg week 3
+no | node | Mitochondrial dysfunction or chronic inflammation is a primary hallmark on your dashboard?
+  yes | Start CoQ10 100–200 mg AM with fat → add R-ALA 300–600 mg week 3
+  no | Lower priority — start with [GlyNAC](/library/compounds/glynac) or the [NRF2 Defense Triad](/library/synergies/glynac-nrf2-triad) first
+:::
+
+## 4. AM/PM choreography (non-negotiable spacing)
+
+| Step | Time | Compound | Dose | Notes |
+| --- | --- | --- | --- | --- |
+| 1 | AM (with fat-containing meal) | CoQ10 (ubiquinol preferred after ~40) | 100–200 mg | Fat-soluble; absorption requires dietary fat |
+| 2 | AM or split AM/PM | R-ALA (R-enantiomer only) | 300–600 mg | Racemic (DL-ALA) is far less effective — verify label specifies R-form |
+| 3 | Optional | GlyNAC AM/PM | 600/600 mg | Adds glutathione substrate to the same recycling network — see [NRF2 Defense Triad](/library/synergies/glynac-nrf2-triad) |
+
+**Why spacing matters:** CoQ10 absorption depends on co-ingested dietary fat, making an AM meal the natural anchor. R-ALA has no comparable fat dependency and can be split AM/PM for steadier plasma levels, or taken AM alongside CoQ10 for simplicity.
+
+:::practical title="Day-one setup (15 minutes)"
+1. Verify CoQ10 form: ubiquinol (reduced, better absorbed after ~40) vs ubiquinone
+2. Verify R-ALA label specifies R-alpha-lipoic acid, not racemic ALA
+3. Pair both with a fat-containing breakfast
+4. If on a statin, log baseline muscle symptoms before starting CoQ10
+5. Read [CoQ10](/library/compounds/coq10) and [R-ALA](/library/compounds/rala) deep dives
+:::
+
+## 5. Biomarker targets
+
+| Marker | Baseline | 12 wk | Stack success signal |
+| --- | --- | --- | --- |
+| hs-CRP | Log | <1.0 mg/L | **Primary** (CoQ10 leg) |
+| Fasting glucose (if diabetic/pre-diabetic) | Log | Stable or improving | Secondary (R-ALA leg) |
+| Exercise tolerance / recovery | Subjective (1–10) | ↑2 points | Secondary (CoQ10 leg) |
+| Muscle pain (statin users) | Subjective (1–10) | ↓ or resolved | Secondary (CoQ10 leg) |
+
+:::compare title="12-week success profile" before="Pre-stack" after="Week 12 target" summary="hs-CRP is the fastest-moving shared marker for this pair — track it first."
+hs-CRP (mg/L)|1.5–2.5|<1.0
+Exercise recovery (1–10)|4–5|6–7
+Muscle pain (statin users, 1–10)|4–6|≤2
+:::
+
+:::cta href="/labs" title="Track stack biomarkers" label="Open Labs hub"
+Minimum panel: hs-CRP at baseline and week 12; fasting glucose if diabetic or pre-diabetic.
+:::
+
+## 6. Red flags and contraindications
+
+:::redflag title="Hard stops — do not run this stack without clearance"
+- **Warfarin** — CoQ10 can reduce warfarin's anticoagulant effect; R-ALA has independent glucose-lowering effects that compound with diabetes medications
+- **Insulin or sulfonylurea therapy** — R-ALA may lower blood glucose; monitor closely if combined
+- **Thiamine (B1) deficiency** — rare, but R-ALA can worsen it; relevant in malnourished or bariatric-surgery patients
+- **Chemotherapy** — discuss both compounds with an oncologist before combining with active treatment
+:::
+
+:::warning title="Soft cautions"
+CoQ10 is fat-soluble — take with meals containing dietary fat or absorption drops substantially. R-ALA has a mild sulfurous odor in some formulations; this is expected. Racemic (DL) alpha-lipoic acid is a materially different, less effective product than R-ALA — check labels carefully.
+:::
+
+## 7. Stack variants by budget
+
+| Tier | Components | Monthly est. | Coverage |
+| --- | --- | --- | --- |
+| **Starter** | CoQ10 100–200 mg AM only | $ | Lipid-phase defense; no active recycling |
+| **Core pair** | CoQ10 AM + R-ALA AM/PM | $$ | Defense + recycling across both compartments |
+| **Full redox stack** | + GlyNAC | $$$ | Adds glutathione substrate — see [NRF2 Defense Triad](/library/synergies/glynac-nrf2-triad) |
+
+:::practical title="When to add GlyNAC"
+If hs-CRP responds but oxidative-stress markers (GSH/GSSG ratio, if tracked) stay flat by week 12, the glutathione substrate itself may be the limiting factor rather than recycling capacity — that's the cue to add GlyNAC per the [NRF2 Defense Triad](/library/synergies/glynac-nrf2-triad), not to increase R-ALA dose.
+:::
+
+## 8. Personal results template
+
+:::personal title="My redox recycling pair log"
+
+| Date | Week | CoQ10 ✓ | R-ALA ✓ | hs-CRP | Fasting glucose | Recovery (1–10) | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| YYYY-MM-DD | 0 | — | — | — | — | — | Baseline |
+| YYYY-MM-DD | 4 | ✓ | — | — | — | — | CoQ10 ramp |
+| YYYY-MM-DD | 12 | ✓ | ✓ | — | — | — | Primary endpoint |
+
+**Compliance target:** ≥85% daily adherence on both legs
+
+**Response criteria:**
+- **Win:** hs-CRP <1.0 mg/L + recovery score ↑2 points at week 12
+- **Iterate:** hs-CRP improved but recovery flat → add GlyNAC per NRF2 Defense Triad
+- **Stop signal:** Hypoglycemia symptoms or unexplained bleeding (warfarin users) → discontinue, physician consult
+:::
+
+:::cta href="/stacks" title="Build this pairing" label="Open Stack Architect"
+Add CoQ10 and R-ALA individually — synergy and contraindication checks update live.
+:::

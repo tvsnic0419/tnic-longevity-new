@@ -498,6 +498,46 @@ export const libraryModules: LibraryModule[] = [
     ],
     mdxSlug: 'nad-mito-stack',
   },
+  {
+    slug: 'berberine-resveratrol-ampk-sirt1',
+    category: 'synergies',
+    title: 'AMPK/SIRT1 Crosstalk Pair',
+    tagline: 'Berberine + Resveratrol',
+    summary:
+      'AMPK and SIRT1 run a bidirectional feedback loop — berberine activates AMPK, which raises the NAD+/NADH ratio SIRT1 needs, and resveratrol-activated SIRT1 deacetylates LKB1 to re-activate AMPK. Two entry points into the same loop.',
+    evidenceTier: 'B',
+    relatedHallmarkIds: ['mito', 'nutrient', 'inflammation', 'epigenetic'],
+    synergyCompoundIds: ['berberine', 'resveratrol'],
+    outline: [
+      'Rationale: energy sensor + deacetylase activator',
+      'AMPK ↔ SIRT1 feedback loop mechanism',
+      'Evidence per leg + combination logic',
+      'Meal-anchored AM / fat-paired PM timing',
+      'Biomarker targets (glucose, HbA1c)',
+      'Contraindications (CYP3A4, glucose-lowering drugs)',
+    ],
+    mdxSlug: 'berberine-resveratrol-ampk-sirt1',
+  },
+  {
+    slug: 'coq10-rala-redox-recycling',
+    category: 'synergies',
+    title: 'Redox Recycling Pair',
+    tagline: 'CoQ10 + R-ALA',
+    summary:
+      'CoQ10 is the primary fat-soluble antioxidant in cell membranes and the mitochondrial electron transport chain; R-ALA is amphipathic and regenerates spent antioxidants — including CoQ10 itself — across both fat and water compartments.',
+    evidenceTier: 'B',
+    relatedHallmarkIds: ['mito', 'inflammation', 'genomic'],
+    synergyCompoundIds: ['coq10', 'rala'],
+    outline: [
+      'Rationale: lipid-phase defender + universal recycler',
+      'Redox recycling mechanism map',
+      'Evidence per leg + combination logic',
+      'Fat-paired AM CoQ10 / flexible R-ALA timing',
+      'Biomarker targets (hs-CRP, glucose)',
+      'Contraindications (warfarin, glucose-lowering drugs)',
+    ],
+    mdxSlug: 'coq10-rala-redox-recycling',
+  },
 
   // ── Lifestyle ──────────────────────────────────────────────────────────────
   {

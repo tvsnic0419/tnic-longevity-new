@@ -1,0 +1,150 @@
+---
+title: AMPK/SIRT1 Crosstalk Pair
+evidence_tier: B
+compounds: berberine,resveratrol
+last_updated: 2026-07-18
+---
+
+> **TL;DR** — Berberine activates AMPK by mildly inhibiting mitochondrial Complex I; resveratrol allosterically activates SIRT1. The two enzymes aren't independent — AMPK activation raises the NAD+/NADH ratio that SIRT1 needs, and SIRT1 deacetylates LKB1, the upstream kinase that keeps AMPK switched on. Each compound's own module already names this pairing; no dedicated combination RCT exists. AM berberine with meals, PM resveratrol with fat. Tier B — mechanistic crosstalk is textbook, the specific combination is not trial-tested.
+
+## 1. Why this stack exists
+
+**AMPK** and **SIRT1** are the cell's two primary energy-stress sensors, and they aren't independent switches — they run a bidirectional feedback loop. AMPK activation increases the NAD+/NADH ratio (partly via NAMPT-driven NAD+ salvage), which is the exact cofactor SIRT1 requires to deacetylate its targets. SIRT1, in turn, deacetylates and activates LKB1 — the upstream kinase that phosphorylates and activates AMPK in the first place. Each enzyme reinforces the other's activation state.
+
+| Layer | Compound | Role | Analogy |
+| --- | --- | --- | --- |
+| **Energy-stress sensor** | Berberine | Mild Complex I inhibition → AMPK activation | Alarm |
+| **Deacetylase activator** | Resveratrol | Allosteric SIRT1 boost | Amplifier |
+
+**Gap analysis — what breaks when you use only one:**
+
+- Berberine alone → AMPK activates, glucose/lipid metabolism improves, but SIRT1-mediated biogenesis and epigenetic programs get only the indirect NAD+/NADH boost, not direct activation
+- Resveratrol alone → SIRT1 stimulated, but without an independent AMPK trigger the LKB1→AMPK arm of the loop is weaker
+- Combined → both entry points into the same feedback loop are engaged, rather than relying on one enzyme to indirectly recruit the other
+
+:::pathway title="AMPK ↔ SIRT1 feedback loop" nodes="Berberine AM|Complex I inhibition|cyan,AMPK|Energy sensor|amber,NAD+/NADH ratio|Cofactor pool|emerald,Resveratrol PM|SIRT1 activation|violet,LKB1|Upstream kinase|rose" edges="Berberine AM->AMPK|activates,AMPK->NAD+/NADH ratio|raises,NAD+/NADH ratio->Resveratrol PM|fuels,Resveratrol PM->LKB1|deacetylates,LKB1->AMPK|reactivates"
+:::
+
+## 2. Mechanistic synergy map
+
+```
+AM (with meals): [Berberine] → mild Complex I inhibition → ↑AMP:ATP ratio → AMPK ON
+                       ↓
+                 AMPK ON → ↑NAD+/NADH ratio (NAMPT salvage) → fuels SIRT1
+                       ↓
+PM (with fat):   [Resveratrol] → allosteric SIRT1 activation
+                       ↓
+Output: SIRT1 deacetylates LKB1 → LKB1 re-activates AMPK (positive feedback)
+        PGC-1α deacetylation → mitochondrial biogenesis
+        NF-κB deacetylation → ↓ inflammaging
+```
+
+**Hallmarks addressed:** Mitochondrial dysfunction · Deregulated nutrient sensing · Chronic inflammation · Epigenetic alterations — berberine's own module and resveratrol's own module each name the other as a complementary pairing; this page is the mechanism deep-dive neither one has room for.
+
+## 3. Evidence per leg
+
+| Compound | Tier | Key human data |
+| --- | --- | --- |
+| Berberine | A | Head-to-head RCT vs metformin, 116 T2D patients (PMID 18396172); meta-analysis of 27 RCTs (PMID 26507383) |
+| Resveratrol | B | Strong SIRT1/AMPK mechanism (PMID 30930169); mixed standalone human outcomes |
+| Combination | — | No completed RCT; AMPK↔SIRT1 crosstalk is established cell/animal biology, not a tested human combination |
+
+**Combination logic:** Berberine's glucose/lipid effects (Tier A) and resveratrol's SIRT1 mechanism (Tier B) are each independently well-evidenced. The *combination* is graded on mechanism plausibility alone — same standard as the site's other mechanistic-pair stacks — until a dedicated trial exists.
+
+:::evidence tier="B"
+Yin et al. 2008 (PMID 18396172): berberine 500 mg TID matched metformin for glycemic control in a 13-week RCT. Turner et al. and related animal work (PMID 17298901) establish berberine's Complex I → AMPK mechanism. PMID 30930169 covers the AMPK/SIRT1/NAD+ crosstalk this pairing depends on. No combination RCT exists — pair graded Tier B on mechanism strength alone.
+:::
+
+:::decision title="Is the AMPK/SIRT1 pair right for you?"
+node | On insulin, sulfonylureas, or other glucose-lowering medication?
+yes | redflag | Physician clearance required — berberine + glucose-lowering drugs can stack into hypoglycemia
+no | node | Deregulated nutrient sensing or mitochondrial dysfunction is a primary hallmark on your dashboard?
+  yes | node | On any CYP3A4-metabolized prescription drug?
+    yes | redflag | Berberine is a potent CYP3A4/P-gp inhibitor — physician review of drug levels required
+    no | Start berberine 500 mg with breakfast + dinner week 1–2 → add resveratrol 150 mg PM week 3
+  no | Run [SIRT1 pair](/library/synergies/nmn-resveratrol-sirt1) first — berberine adds most value when nutrient-sensing dysregulation (elevated fasting glucose/HbA1c) is present
+:::
+
+## 4. AM/PM choreography (non-negotiable spacing)
+
+| Step | Time | Compound | Dose | Notes |
+| --- | --- | --- | --- | --- |
+| 1 | With breakfast + dinner | Berberine | 500 mg BID → TID | Split dosing reduces GI effects; titrate over 2 weeks |
+| 2 | PM dinner (with fat) | Trans-resveratrol | 150 mg → 250–500 mg | ≥15 g dietary fat for absorption |
+| 3 | Optional week 8+ | NMN AM fasted | 250 mg | Feeds the same NAD+/NADH pool AMPK is raising — see [SIRT1 pair](/library/synergies/nmn-resveratrol-sirt1) |
+
+**Why spacing matters:** Berberine's glucose-lowering effect peaks around meals, where it does double duty blunting postprandial glucose excursions. Resveratrol's fat-dependent absorption makes it a natural PM pairing with dinner, matching the same choreography as the SIRT1 pair.
+
+:::practical title="Day-one setup (15 minutes)"
+1. Split berberine into two meal-anchored doses, not one large dose (GI tolerance)
+2. Label PM resveratrol bottle for the dinner meal specifically
+3. Baseline fasting glucose and HbA1c before starting
+4. If already on the [SIRT1 pair](/library/synergies/nmn-resveratrol-sirt1), berberine layers onto the existing PM resveratrol dose — no schedule change needed
+5. Read [Berberine](/library/compounds/berberine) and [Resveratrol](/library/compounds/resveratrol) deep dives
+:::
+
+## 5. Biomarker targets
+
+| Marker | Baseline | 12 wk | Stack success signal |
+| --- | --- | --- | --- |
+| Fasting glucose | Log | <100 mg/dL | **Primary** (berberine leg) |
+| HbA1c | Log | <5.7% | **Primary** (berberine leg) |
+| Morning energy (1–10) | Log | ≥7 | Secondary (SIRT1 leg) |
+| Fasting lipids (LDL/TG) | Log | Improving | Secondary (berberine leg) |
+
+:::compare title="12-week success profile" before="Pre-stack" after="Week 12 target" summary="Berberine's glucose effect moves faster than resveratrol's SIRT1 signal — expect glucose to lead."
+Fasting glucose (mg/dL)|105–120|<100
+HbA1c (%)|5.8–6.2|<5.7
+Morning energy (1–10)|≤5|≥7
+:::
+
+:::cta href="/labs" title="Track stack biomarkers" label="Open Labs hub"
+Minimum panel: fasting glucose at week 4 and 12; HbA1c at 12 weeks.
+:::
+
+## 6. Red flags and contraindications
+
+:::redflag title="Hard stops — do not run this stack without clearance"
+- **Insulin, sulfonylureas, or any glucose-lowering medication** — combined AMPK activation risks hypoglycemia
+- **Any CYP3A4-metabolized prescription drug** — berberine is a potent CYP3A4/P-gp inhibitor and can raise drug levels unpredictably
+- **Pregnancy or breastfeeding** — berberine may cross the placenta; insufficient safety data for the combination
+- **Scheduled surgery within 2 weeks** — resveratrol's theoretical platelet effects
+:::
+
+:::warning title="Soft cautions"
+Berberine GI effects (cramping, loose stool) are common — split into BID/TID dosing with meals rather than one large dose. Resveratrol GI upset — take with the largest fat-containing meal. Start berberine alone for 1–2 weeks before layering resveratrol, so any GI response is attributable to one compound.
+:::
+
+## 7. Stack variants by budget
+
+| Tier | Components | Monthly est. | Coverage |
+| --- | --- | --- | --- |
+| **Starter** | Berberine 500 mg BID only | $ | AMPK activation; missing direct SIRT1 activator |
+| **Core pair** | Berberine BID/TID + resveratrol PM | $$ | Both entry points into the AMPK↔SIRT1 loop |
+| **Full stack** | + NMN AM | $$$ | Adds direct NAD+ substrate — see [SIRT1 pair](/library/synergies/nmn-resveratrol-sirt1) |
+
+:::practical title="When to add NMN"
+If fasting glucose normalizes but morning energy stays flat by week 12, the NAD+ pool feeding SIRT1 may be the limiting factor rather than AMPK signaling — that's the cue to add NMN AM per the [SIRT1 pair](/library/synergies/nmn-resveratrol-sirt1) protocol, not to increase berberine dose.
+:::
+
+## 8. Personal results template
+
+:::personal title="My AMPK/SIRT1 pair log"
+
+| Date | Week | Berberine ✓ | Resv PM ✓ | Fasting glucose | HbA1c | Energy | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| YYYY-MM-DD | 0 | — | — | — | — | — | Baseline |
+| YYYY-MM-DD | 2 | ✓ | — | — | — | — | Berberine alone |
+| YYYY-MM-DD | 12 | ✓ | ✓ | — | — | — | Primary endpoint |
+
+**Compliance target:** ≥85% daily adherence on both legs
+
+**Response criteria:**
+- **Win:** Fasting glucose <100 mg/dL + energy ≥7/10 at week 12
+- **Iterate:** Glucose improved but energy flat → add NMN AM per SIRT1 pair
+- **Stop signal:** Hypoglycemia symptoms or persistent GI intolerance → discontinue, physician consult
+:::
+
+:::cta href="/stacks" title="Build this pairing" label="Open Stack Architect"
+Add berberine and resveratrol individually — synergy and contraindication checks update live.
+:::
