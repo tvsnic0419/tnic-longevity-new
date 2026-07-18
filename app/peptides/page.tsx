@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Syringe } from 'lucide-react';
 import { PeptideCard } from '@/components/peptides/PeptideCard';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { RevealItem } from '@/components/ui/RevealItem';
 import { DisclaimerBanner } from '@/components/trust/DisclaimerBanner';
 import { EvidenceTagLegend } from '@/components/trust/EvidenceTag';
 import { peptideCategoryMeta, peptideLibrary, getPeptidesByCategory } from '@/lib/peptides-library';
@@ -57,8 +58,10 @@ export default function PeptidesHubPage() {
                 <p className="text-body-sm">{meta.description}</p>
               </div>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {items.map((peptide) => (
-                  <PeptideCard key={peptide.id} peptide={peptide} />
+                {items.map((peptide, i) => (
+                  <RevealItem key={peptide.id} index={i}>
+                    <PeptideCard peptide={peptide} />
+                  </RevealItem>
                 ))}
               </div>
             </section>

@@ -199,11 +199,11 @@ function CompoundCard({
                       {d.label} <span className="opacity-60">×{d.w.toFixed(2)}</span>
                       {d.penalty && <span className="text-accent-rose/80 ml-1">(penalty)</span>}
                     </span>
-                    <span className="font-mono font-semibold" style={{ color: d.penalty ? '#fb7185' : product.color }}>
+                    <span className="font-mono font-semibold" style={{ color: d.penalty ? 'var(--accent-rose)' : product.color }}>
                       {product[d.key].toFixed(1)}
                     </span>
                   </div>
-                  <ScoreBar value={product[d.key]} max={10} color={d.penalty ? '#fb7185' : product.color} />
+                  <ScoreBar value={product[d.key]} max={10} color={d.penalty ? 'var(--accent-rose)' : product.color} />
                 </div>
               ))}
             </div>

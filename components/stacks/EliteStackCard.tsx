@@ -138,7 +138,7 @@ export function EliteStackCard({ stack, expanded: defaultExpanded = false }: Eli
                   </p>
                   {stack.rxCompounds.map((rx) => (
                     <div key={rx.id} className="glass rounded-xl p-4 border border-accent-rose/20 mb-2">
-                      <h4 className="font-semibold text-sm text-rose-300">{rx.name}</h4>
+                      <h4 className="font-semibold text-sm text-accent-rose">{rx.name}</h4>
                       <p className="text-xs text-muted-foreground mt-1">{rx.class} — {rx.typicalDose}</p>
                       <p className="text-xs text-muted-foreground mt-2">{rx.note}</p>
                     </div>
@@ -161,7 +161,10 @@ export function EliteStackCard({ stack, expanded: defaultExpanded = false }: Eli
                         : compounds.find((c) => c.id === item.compoundId)?.name ?? item.compoundId;
                       return (
                         <div key={j} className="flex justify-between text-xs py-1 border-b border-border last:border-0">
-                          <span className={isRx ? 'text-rose-300' : 'text-muted-foreground'}>{name}</span>
+                          <span className={isRx ? 'text-accent-rose' : 'text-muted-foreground'}>
+                            {name}
+                            {isRx && <span className="ml-1 text-[9px] font-mono uppercase align-super">Rx</span>}
+                          </span>
                           <span className="font-mono text-caption">{item.dose}</span>
                         </div>
                       );

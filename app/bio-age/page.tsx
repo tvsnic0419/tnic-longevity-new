@@ -21,16 +21,16 @@ export default function BioAgePage() {
         <div className="container-page py-12">
           {/* Header */}
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-xs font-medium text-emerald-400 tracking-widest uppercase">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-emerald/10 border border-accent-emerald/20 mb-5">
+              <span className="w-1.5 h-1.5 rounded-full bg-accent-emerald animate-pulse" />
+              <span className="text-xs font-medium text-accent-emerald tracking-widest uppercase">
                 Biological Age Engine · v2
               </span>
             </div>
             <h1 className="text-4xl md:text-5xl font-black tracking-tight text-foreground mb-4">
               How Old Are
               <br />
-              <span className="text-emerald-400">Your Cells?</span>
+              <span className="text-accent-emerald">Your Cells?</span>
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
               4 steps. 5 domains. One score that matters more than your birthday.
@@ -40,19 +40,19 @@ export default function BioAgePage() {
 
             <div className="flex flex-wrap items-center justify-center gap-6 mt-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                <span className="w-2 h-2 rounded-full bg-accent-emerald" />
                 Metabolic markers
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-amber-500" />
+                <span className="w-2 h-2 rounded-full bg-accent-amber" />
                 Inflammatory burden
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-cyan-500" />
+                <span className="w-2 h-2 rounded-full bg-accent-cyan" />
                 NAD+ & hormonal vitality
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-violet-500" />
+                <span className="w-2 h-2 rounded-full bg-accent-violet" />
                 Lifestyle optimization
               </div>
             </div>
