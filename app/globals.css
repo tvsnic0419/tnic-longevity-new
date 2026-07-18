@@ -690,17 +690,38 @@ body::after {
   border: 1px solid color-mix(in srgb, var(--status-critical) 25%, transparent);
 }
 
-/* ── Pathway diagram utilities ── */
+/* ── Pathway diagram utilities ──
+   .pathway-node's fill (gradient) and stroke (accent color) are set inline
+   per-node in PathwayDiagram.tsx, since they vary by accent/terminal state;
+   this class only carries the shared background fallback + transition. */
 .pathway-node {
   fill: var(--color-bg-elevated);
-  stroke: color-mix(in srgb, var(--accent-cyan) 35%, transparent);
-  stroke-width: 1.5;
 }
 
 .pathway-edge {
-  stroke: color-mix(in srgb, var(--accent-emerald) 40%, transparent);
+  stroke: color-mix(in srgb, var(--accent-emerald) 32%, transparent);
   stroke-width: 1.5;
   fill: none;
+}
+
+/* Dashed overlay animated along the same path as .pathway-edge to read as
+   directional flow — a second <path> rather than animating .pathway-edge
+   itself, so the always-visible base line never disappears mid-animation. */
+.pathway-edge-flow {
+  stroke: var(--accent-emerald);
+  stroke-width: 1.5;
+  fill: none;
+  stroke-dasharray: 3 11;
+  opacity: 0.8;
+  animation: pathway-flow-dash 1.8s linear infinite;
+}
+
+@keyframes pathway-flow-dash {
+  to { stroke-dashoffset: -28; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pathway-edge-flow { animation: none; }
 }
 
 /* ── Scrollbar ── */
