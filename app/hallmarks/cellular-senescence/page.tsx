@@ -46,23 +46,23 @@ export default function CellularSenescencePage() {
               <span>/</span>
               <span>Hallmarks</span>
               <span>/</span>
-              <span className="text-rose-400">Cellular Senescence</span>
+              <span className="text-accent-rose">Cellular Senescence</span>
             </div>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/20 mb-6">
-              <Zap className="w-3.5 h-3.5 text-rose-400" />
-              <span className="text-xs font-medium text-rose-400 tracking-widest uppercase">Hallmark #6 of 12</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-rose/10 border border-accent-rose/20 mb-6">
+              <Zap className="w-3.5 h-3.5 text-accent-rose" />
+              <span className="text-xs font-medium text-accent-rose tracking-widest uppercase">Hallmark #6 of 12</span>
             </div>
             <h1 className="text-4xl md:text-6xl font-black tracking-tight text-foreground mb-6 leading-[1.05]">
               Cellular
               <br />
-              <span className="text-rose-400">Senescence</span>
+              <span className="text-accent-rose">Senescence</span>
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mb-8">
               Senescent cells refuse to die and refuse to do their jobs. They secrete a toxic inflammatory cocktail called
               the SASP — and after age 60, they accumulate fast enough to drive tissue dysfunction across every organ system.
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link href="/stacks" className="inline-flex items-center gap-2 bg-rose-500 text-white px-5 py-3 rounded-xl text-sm font-bold hover:bg-rose-400 transition-colors">
+              <Link href="/stacks" className="btn-gradient focus-ring rounded-xl text-sm">
                 Build My Stack <ArrowRight className="w-4 h-4" />
               </Link>
               <Link href="/bio-age" className="inline-flex items-center gap-2 border border-border px-5 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
@@ -80,7 +80,7 @@ export default function CellularSenescencePage() {
         {/* Mechanism */}
         <section className="py-20 border-t border-border/50">
           <div className="container-page max-w-4xl">
-            <p className="text-xs text-rose-400 uppercase tracking-widest font-medium mb-4">The Mechanism</p>
+            <p className="text-xs text-accent-rose uppercase tracking-widest font-medium mb-4">The Mechanism</p>
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-6">The zombie cell crisis — and why the SASP is the real problem</h2>
             <div className="grid md:grid-cols-2 gap-8 text-muted-foreground leading-relaxed">
               <div className="space-y-4">
@@ -113,11 +113,11 @@ export default function CellularSenescencePage() {
             <div className="mt-10 rounded-2xl border border-border/60 bg-card/40 p-6">
               <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-4">Two Therapeutic Strategies</p>
               <div className="grid sm:grid-cols-2 gap-4">
-                <div className="rounded-xl border border-rose-500/20 bg-rose-500/5 p-4">
+                <div className="rounded-xl border border-accent-rose/20 bg-accent-rose/5 p-4">
                   <p className="font-bold text-foreground mb-1 text-sm">Senolytics</p>
                   <p className="text-xs text-muted-foreground">Kill senescent cells by blocking their survival pathways (BCL-2, PI3K/AKT). Goal: reduce total burden. Examples: Fisetin, D+Q, ABT-263.</p>
                 </div>
-                <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4">
+                <div className="rounded-xl border border-accent-amber/20 bg-accent-amber/5 p-4">
                   <p className="font-bold text-foreground mb-1 text-sm">Senomorphics</p>
                   <p className="text-xs text-muted-foreground">Suppress SASP secretion without killing senescent cells. Goal: reduce inflammatory output. Examples: Rapamycin (mTOR), Navitoclax (BCL-2), Metformin (NF-κB).</p>
                 </div>
@@ -130,8 +130,8 @@ export default function CellularSenescencePage() {
         <section className="py-20 border-t border-border/50 bg-card/10">
           <div className="container-page max-w-4xl">
             <div className="flex items-center gap-2 mb-2">
-              <Activity className="w-5 h-5 text-rose-400" />
-              <p className="text-xs text-rose-400 uppercase tracking-widest font-medium">Monitoring</p>
+              <Activity className="w-5 h-5 text-accent-rose" />
+              <p className="text-xs text-accent-rose uppercase tracking-widest font-medium">Monitoring</p>
             </div>
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-6">Biomarkers that track senescent burden</h2>
             <div className="rounded-2xl border border-border/60 bg-card/40 overflow-hidden">
@@ -155,8 +155,8 @@ export default function CellularSenescencePage() {
         <section className="py-20 border-t border-border/50">
           <div className="container-page max-w-4xl">
             <div className="flex items-center gap-2 mb-2">
-              <FlaskConical className="w-5 h-5 text-emerald-400" />
-              <p className="text-xs text-emerald-400 uppercase tracking-widest font-medium">Evidence-Graded Interventions</p>
+              <FlaskConical className="w-5 h-5 text-accent-emerald" />
+              <p className="text-xs text-accent-emerald uppercase tracking-widest font-medium">Evidence-Graded Interventions</p>
             </div>
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-2">Senolytics & senomorphics with clinical evidence</h2>
             <p className="text-muted-foreground mb-8">
@@ -169,7 +169,7 @@ export default function CellularSenescencePage() {
         {/* CTA */}
         <section className="py-20 border-t border-border/50">
           <div className="container-page text-center max-w-2xl">
-            <ShieldCheck className="w-10 h-10 text-rose-400 mx-auto mb-5" />
+            <ShieldCheck className="w-10 h-10 text-accent-rose mx-auto mb-5" />
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-4">
               Build a senolytic protocol.
             </h2>
@@ -178,7 +178,7 @@ export default function CellularSenescencePage() {
               and interactions with everything else in your stack.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
-              <Link href="/stacks" className="inline-flex items-center gap-2 bg-emerald-500 text-black px-6 py-3 rounded-xl text-sm font-bold hover:bg-emerald-400 transition-colors">
+              <Link href="/stacks" className="btn-gradient focus-ring rounded-xl text-sm">
                 Stack Architect <ArrowRight className="w-4 h-4" />
               </Link>
               <Link href="/library" className="inline-flex items-center gap-2 border border-border px-6 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">

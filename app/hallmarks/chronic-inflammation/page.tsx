@@ -41,21 +41,21 @@ export default function ChronicInflammationPage() {
             <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
               <Link href="/hallmarks" className="hover:text-foreground transition-colors">Hallmarks</Link>
               <span>/</span>
-              <span className="text-rose-400">Chronic Inflammation</span>
+              <span className="text-accent-rose">Chronic Inflammation</span>
             </div>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/20 mb-6">
-              <Shield className="w-3.5 h-3.5 text-rose-400" />
-              <span className="text-xs font-medium text-rose-400 tracking-widest uppercase">Hallmark #10 of 12</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-rose/10 border border-accent-rose/20 mb-6">
+              <Shield className="w-3.5 h-3.5 text-accent-rose" />
+              <span className="text-xs font-medium text-accent-rose tracking-widest uppercase">Hallmark #10 of 12</span>
             </div>
             <h1 className="text-4xl md:text-6xl font-black tracking-tight text-foreground mb-6 leading-[1.05]">
-              Chronic<br /><span className="text-rose-400">Inflammation</span>
+              Chronic<br /><span className="text-accent-rose">Inflammation</span>
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mb-8">
               “Inflammaging” — the slow-burning systemic inflammation that accumulates with age — predicts cardiovascular
               events, cancer risk, and cognitive decline more reliably than almost any other single biomarker.
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link href="/stacks" className="inline-flex items-center gap-2 bg-rose-500 text-white px-5 py-3 rounded-xl text-sm font-bold hover:bg-rose-400 transition-colors">Build My Stack <ArrowRight className="w-4 h-4" /></Link>
+              <Link href="/stacks" className="btn-gradient focus-ring rounded-xl text-sm">Build My Stack <ArrowRight className="w-4 h-4" /></Link>
               <Link href="/labs" className="inline-flex items-center gap-2 border border-border px-5 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Track hs-CRP</Link>
             </div>
             </div>
@@ -68,7 +68,7 @@ export default function ChronicInflammationPage() {
 
         <section className="py-20 border-t border-border/50">
           <div className="container-page max-w-4xl">
-            <p className="text-xs text-rose-400 uppercase tracking-widest font-medium mb-4">The Mechanism</p>
+            <p className="text-xs text-accent-rose uppercase tracking-widest font-medium mb-4">The Mechanism</p>
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-6">NF-κB — the master inflammatory switch of aging</h2>
             <div className="grid md:grid-cols-2 gap-8 text-muted-foreground leading-relaxed">
               <div className="space-y-4">
@@ -110,8 +110,8 @@ export default function ChronicInflammationPage() {
         <section className="py-20 border-t border-border/50 bg-card/10">
           <div className="container-page max-w-4xl">
             <div className="flex items-center gap-2 mb-2">
-              <Activity className="w-5 h-5 text-rose-400" />
-              <p className="text-xs text-rose-400 uppercase tracking-widest font-medium">Monitoring</p>
+              <Activity className="w-5 h-5 text-accent-rose" />
+              <p className="text-xs text-accent-rose uppercase tracking-widest font-medium">Monitoring</p>
             </div>
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-6">Inflammaging biomarker panel</h2>
             <div className="rounded-2xl border border-border/60 bg-card/40 overflow-hidden">
@@ -127,7 +127,7 @@ export default function ChronicInflammationPage() {
               ))}
             </div>
             <p className="text-xs text-muted-foreground mt-4">
-              Log hs-CRP, IL-6, and homocysteine in the <Link href="/labs" className="text-rose-400 hover:underline">Lab Tracker</Link> to monitor trend over time.
+              Log hs-CRP, IL-6, and homocysteine in the <Link href="/labs" className="text-accent-rose hover:underline">Lab Tracker</Link> to monitor trend over time.
             </p>
           </div>
         </section>
@@ -135,8 +135,8 @@ export default function ChronicInflammationPage() {
         <section className="py-20 border-t border-border/50">
           <div className="container-page max-w-4xl">
             <div className="flex items-center gap-2 mb-2">
-              <FlaskConical className="w-5 h-5 text-emerald-400" />
-              <p className="text-xs text-emerald-400 uppercase tracking-widest font-medium">Evidence-Graded Interventions</p>
+              <FlaskConical className="w-5 h-5 text-accent-emerald" />
+              <p className="text-xs text-accent-emerald uppercase tracking-widest font-medium">Evidence-Graded Interventions</p>
             </div>
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-2">Anti-inflammaging interventions with human evidence</h2>
             <p className="text-muted-foreground mb-8">Tier A = multiple human RCTs. Tier B = at least one human trial + mechanistic data.</p>
@@ -146,11 +146,11 @@ export default function ChronicInflammationPage() {
 
         <section className="py-20 border-t border-border/50">
           <div className="container-page text-center max-w-2xl">
-            <ShieldCheck className="w-10 h-10 text-rose-400 mx-auto mb-5" />
+            <ShieldCheck className="w-10 h-10 text-accent-rose mx-auto mb-5" />
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-4">Extinguish inflammaging.</h2>
             <p className="text-muted-foreground mb-8">Build a multi-angle NF-κB suppression protocol: NRF2 + SIRT1 + omega-3. Track hs-CRP quarterly in the Lab Tracker.</p>
             <div className="flex flex-wrap justify-center gap-3">
-              <Link href="/stacks" className="inline-flex items-center gap-2 bg-emerald-500 text-black px-6 py-3 rounded-xl text-sm font-bold hover:bg-emerald-400 transition-colors">Stack Architect <ArrowRight className="w-4 h-4" /></Link>
+              <Link href="/stacks" className="btn-gradient focus-ring rounded-xl text-sm">Stack Architect <ArrowRight className="w-4 h-4" /></Link>
               <Link href="/hallmarks" className="inline-flex items-center gap-2 border border-border px-6 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"><BookOpen className="w-4 h-4" />All Hallmarks</Link>
             </div>
           </div>

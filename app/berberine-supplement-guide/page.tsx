@@ -71,8 +71,8 @@ const EVIDENCE_TABLE = [
     finding: 'Preclinical: extended lifespan in C. elegans and Drosophila; no human longevity RCTs',
     quality: 'Preclinical only',
     pmid: '26186647',
-    color: 'text-amber-400',
-    badge: 'bg-amber-400/10 border-amber-400/20',
+    color: 'text-accent-amber',
+    badge: 'bg-accent-amber/10 border-accent-amber/20',
   },
 ];
 
@@ -317,8 +317,8 @@ export default function BerberineGuidePage() {
             </table>
           </div>
 
-          <div className="rounded-xl border border-amber-400/20 bg-amber-400/[0.04] p-5">
-            <p className="font-semibold text-amber-400 mb-2">The verdict</p>
+          <div className="rounded-xl border border-accent-amber/20 bg-accent-amber/[0.04] p-5">
+            <p className="font-semibold text-accent-amber mb-2">The verdict</p>
             <p className="text-sm text-muted-foreground">
               Berberine is a real metabolic compound with legitimate glucose and lipid evidence. The &ldquo;nature&rsquo;s Ozempic&rdquo; label is marketing — berberine does not activate GLP-1 receptors and produces a fraction of the weight loss effect. Berberine stands on its own merits as a metabolic health supplement and potential longevity tool. It does not need to be compared to Ozempic.
             </p>

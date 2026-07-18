@@ -278,8 +278,8 @@ export default function TaurineGuidePage() {
               },
               {
                 icon: FlaskConical,
-                color: 'text-amber-400',
-                badge: 'bg-amber-400/10 border-amber-400/20',
+                color: 'text-accent-amber',
+                badge: 'bg-accent-amber/10 border-accent-amber/20',
                 title: 'DNA and epigenetic protection',
                 body: 'Taurine supplementation in the Singh 2023 monkey study restored epigenetic age markers — lower methylation at aging-associated CpG sites. The mechanism is not fully characterized, but likely involves reduced oxidative damage to DNA (via antioxidant function) and indirect epigenetic effects from improved mitochondrial function and reduced inflammation.',
               },
@@ -348,10 +348,10 @@ export default function TaurineGuidePage() {
                 <li>· No known upper toxic dose at supplemental ranges; widely safe</li>
               </ul>
             </div>
-            <div className="rounded-xl border border-amber-400/20 bg-amber-400/[0.04] p-5">
+            <div className="rounded-xl border border-accent-amber/20 bg-accent-amber/[0.04] p-5">
               <div className="flex items-center gap-2 mb-3">
-                <AlertTriangle className="w-4 h-4 text-amber-400" aria-hidden="true" />
-                <p className="font-semibold text-amber-400 text-sm">Context</p>
+                <AlertTriangle className="w-4 h-4 text-accent-amber" aria-hidden="true" />
+                <p className="font-semibold text-accent-amber text-sm">Context</p>
               </div>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>· No prescription interactions known; safe with most medications</li>

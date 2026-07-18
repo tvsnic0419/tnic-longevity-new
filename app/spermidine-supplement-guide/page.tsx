@@ -426,10 +426,10 @@ export default function SpermidineSupplementGuidePage() {
                 ))}
               </ul>
             </div>
-            <div className="rounded-xl border border-amber-500/25 bg-amber-500/[0.04] p-5">
+            <div className="rounded-xl border border-accent-amber/25 bg-accent-amber/[0.04] p-5">
               <div className="flex items-center gap-2 mb-4">
-                <AlertTriangle className="w-4.5 h-4.5 text-amber-400" aria-hidden="true" />
-                <p className="font-semibold text-amber-400 text-sm">Cautions</p>
+                <AlertTriangle className="w-4.5 h-4.5 text-accent-amber" aria-hidden="true" />
+                <p className="font-semibold text-accent-amber text-sm">Cautions</p>
               </div>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 {[
@@ -441,7 +441,7 @@ export default function SpermidineSupplementGuidePage() {
                   'Not a replacement for caloric restriction or time-restricted eating — complement both',
                 ].map((c) => (
                   <li key={c} className="flex items-start gap-2">
-                    <span className="text-amber-400 mt-0.5">›</span>
+                    <span className="text-accent-amber mt-0.5">›</span>
                     {c}
                   </li>
                 ))}

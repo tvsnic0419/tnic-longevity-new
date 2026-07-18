@@ -1,5 +1,6 @@
 import type { HallmarkIntervention } from '@/lib/types';
 import { compounds } from '@/lib/data';
+import { EvidenceTag } from '@/components/trust/EvidenceTag';
 
 /**
  * Renders a hallmark's evidence-graded intervention list, sourced from
@@ -9,12 +10,6 @@ import { compounds } from '@/lib/data';
  * compoundId; lifestyle/clinical/emerging interventions show a category tag
  * in that slot instead, since they have no dosage to report.
  */
-
-const TIER_CLASSES: Record<HallmarkIntervention['evidence'], string> = {
-  A: 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30',
-  B: 'bg-amber-500/15 text-amber-400 border border-amber-500/30',
-  C: 'bg-rose-500/15 text-rose-400 border border-rose-500/30',
-};
 
 const CATEGORY_LABEL: Record<HallmarkIntervention['category'], string> = {
   compound: 'Compound',
@@ -34,9 +29,7 @@ export function InterventionCards({ interventions }: { interventions: HallmarkIn
           <div key={iv.id} className="rounded-2xl border border-border/60 bg-card/40 p-6">
             <div className="flex items-start justify-between gap-4 mb-3">
               <h3 className="font-bold text-foreground text-lg">{iv.name}</h3>
-              <span className={`shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold ${TIER_CLASSES[iv.evidence]}`}>
-                Tier {iv.evidence}
-              </span>
+              <EvidenceTag tier={iv.evidence} size="sm" showTooltip={false} />
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed mb-3">{iv.description}</p>
             <div className="flex flex-wrap gap-3 text-xs">
@@ -49,7 +42,7 @@ export function InterventionCards({ interventions }: { interventions: HallmarkIn
                   href={`https://pubmed.ncbi.nlm.nih.gov/${iv.pmid}/`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-cyan-400 hover:border-cyan-500/40 transition-colors"
+                  className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-accent-cyan hover:border-accent-cyan/40 transition-colors"
                 >
                   PMID {iv.pmid}
                 </a>
