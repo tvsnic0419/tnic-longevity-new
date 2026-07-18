@@ -134,9 +134,9 @@ export function ContextBar() {
             )}
 
             {hubNext && (
-              <p className="text-xs text-muted-foreground sm:ml-auto min-w-0 sm:max-w-[55%] lg:max-w-[48%] leading-relaxed">
+              <p className="text-xs text-muted-foreground sm:ml-auto min-w-0 sm:max-w-[65%] lg:max-w-[55%] leading-relaxed">
                 <span className={cn('font-semibold mr-1.5', theme.text)}>Next here:</span>
-                <span className="line-clamp-2 sm:line-clamp-1">{hubNext}</span>
+                <span className="line-clamp-2">{hubNext}</span>
               </p>
             )}
           </div>

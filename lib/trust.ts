@@ -34,7 +34,7 @@ export const evidenceTagDefinitions: Record<
       'Consistent preclinical healthspan data',
       'Used in established protocols',
     ],
-    color: 'cyan',
+    color: 'amber',
   },
   C: {
     label: 'Tier C — Preclinical Only',
@@ -46,7 +46,7 @@ export const evidenceTagDefinitions: Record<
       'Included only when mechanism aligns with hallmark',
       'Clearly labeled as preclinical',
     ],
-    color: 'amber',
+    color: 'rose',
   },
 };
 

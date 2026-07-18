@@ -84,8 +84,8 @@ const deepLinks = [
 
 const tierBorder: Record<EvidenceTier, string> = {
   A: 'border-accent-emerald/30',
-  B: 'border-accent-cyan/30',
-  C: 'border-accent-amber/30',
+  B: 'border-accent-amber/30',
+  C: 'border-accent-rose/30',
 };
 
 export function TrustHub() {

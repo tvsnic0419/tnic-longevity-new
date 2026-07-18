@@ -6,12 +6,12 @@ import { stackPresets, type PresetKey } from '@/lib/presets';
 import { analyzeStack, hallmarkDisplayNames } from '@/lib/stack-analysis';
 import type { EvidenceTier } from '@/lib/types';
 
-// Tier → the site's evidence color language (A Strong/emerald, B Moderate/cyan,
-// C Mechanistic/violet), kept as compact inline chips so each compound row stays tight.
+// Tier → the site's evidence color language (A Strong/emerald, B Moderate/amber,
+// C Mechanistic/rose), kept as compact inline chips so each compound row stays tight.
 const TIER_STYLE: Record<EvidenceTier, { label: string; cls: string }> = {
   A: { label: 'Tier A', cls: 'bg-accent-emerald/15 text-accent-emerald' },
-  B: { label: 'Tier B', cls: 'bg-accent-cyan/15 text-accent-cyan' },
-  C: { label: 'Tier C', cls: 'bg-accent-violet/15 text-accent-violet' },
+  B: { label: 'Tier B', cls: 'bg-accent-amber/15 text-accent-amber' },
+  C: { label: 'Tier C', cls: 'bg-accent-rose/15 text-accent-rose' },
 };
 
 function firstSentence(text: string, cap = 200): string {

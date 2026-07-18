@@ -14,7 +14,6 @@ interface SectionContext {
 
 interface SectionShellProps {
   id: string;
-  mod?: string;
   theme: ThemeAccent;
   title: string;
   subtitle: string;
@@ -35,7 +34,6 @@ interface SectionShellProps {
 
 export function SectionShell({
   id,
-  mod,
   theme,
   title,
   subtitle,
@@ -73,9 +71,6 @@ export function SectionShell({
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
             <div className="max-w-2xl">
               <div className="flex flex-wrap items-center gap-3 mb-5">
-                {mod && (
-                  <span className={`text-label ${t.text} opacity-60 hidden sm:inline font-mono`}>{mod}</span>
-                )}
                 <span className={t.sectionBadge}>
                   <span className={`w-1.5 h-1.5 rounded-full ${t.dot} animate-pulse-glow`} aria-hidden="true" />
                   {badge}

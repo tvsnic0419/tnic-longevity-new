@@ -1161,6 +1161,44 @@ body::after {
 :root[data-theme='light'] .molecule-node.depth-2 { opacity: 0.1; }
 :root[data-theme='light'] .molecule-node.depth-3 { opacity: 0.06; }
 
+/* ── Per-hub ambient tint ──
+   Retints the dominant orb + the cascade's glow to the current hub's accent,
+   so Library reads emerald, Stacks reads violet, Labs reads rose, Shop reads
+   amber — instead of every page sharing the same cyan wash. Cyan (the
+   default accent) needs no override; it's the base rule above. */
+.ambient-accent-emerald .ambient-orb-1 {
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent-emerald) 48%, transparent), transparent 70%);
+}
+.ambient-accent-violet .ambient-orb-1 {
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent-violet) 48%, transparent), transparent 70%);
+}
+.ambient-accent-rose .ambient-orb-1 {
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent-rose) 48%, transparent), transparent 70%);
+}
+.ambient-accent-amber .ambient-orb-1 {
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent-amber) 48%, transparent), transparent 70%);
+}
+
+.ambient-accent-emerald .molecule-cascade { filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent-emerald) 22%, transparent)); }
+.ambient-accent-violet .molecule-cascade { filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent-violet) 22%, transparent)); }
+.ambient-accent-rose .molecule-cascade { filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent-rose) 22%, transparent)); }
+.ambient-accent-amber .molecule-cascade { filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent-amber) 22%, transparent)); }
+
+:root[data-theme='light'] .ambient-accent-emerald .molecule-cascade { filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent-emerald) 14%, transparent)); }
+:root[data-theme='light'] .ambient-accent-violet .molecule-cascade { filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent-violet) 14%, transparent)); }
+:root[data-theme='light'] .ambient-accent-rose .molecule-cascade { filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent-rose) 14%, transparent)); }
+:root[data-theme='light'] .ambient-accent-amber .molecule-cascade { filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent-amber) 14%, transparent)); }
+
+/* Data-dense hubs (Dashboard, Labs, Tools, Shop, Trust, Contact) dial the
+   field back further so it never competes with charts, tables, or forms. */
+.ambient-subtle .ambient-orb { opacity: 0.4; }
+.ambient-subtle .molecule-node.depth-1 { opacity: 0.13; }
+.ambient-subtle .molecule-node.depth-2 { opacity: 0.09; }
+.ambient-subtle .molecule-node.depth-3 { opacity: 0.06; }
+:root[data-theme='light'] .ambient-subtle .molecule-node.depth-1 { opacity: 0.09; }
+:root[data-theme='light'] .ambient-subtle .molecule-node.depth-2 { opacity: 0.07; }
+:root[data-theme='light'] .ambient-subtle .molecule-node.depth-3 { opacity: 0.045; }
+
 @keyframes molecule-drift {
   0%, 100% { transform: rotate(var(--rot, 0deg)) translate(0, 0); }
   50% { transform: rotate(calc(var(--rot, 0deg) + 2deg)) translate(1.4%, -2%); }

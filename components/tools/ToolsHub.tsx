@@ -26,8 +26,7 @@ import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
 import { EvidenceTagLegend } from '@/components/trust/EvidenceTag';
 import { toolsRegistry, type ToolId } from '@/lib/registry';
 import { ToolDisclaimer } from './ToolDisclaimer';
-import { ContextRail } from '@/components/ui/ContextRail';
-import { getHubContext, getToolContext } from '@/lib/hub-context';
+import { ToolPreviewGlyph } from './ToolPreviewGlyph';
 
 const StackSimulatorTool = dynamic(
   () => import('./StackSimulatorTool').then((m) => ({ default: m.StackSimulatorTool })),
@@ -111,13 +110,6 @@ export function ToolsHub() {
           description="Six evidence-graded tools that turn library knowledge into actionable protocols. Rule-based engines with transparent reasoning — not generative AI."
           theme="violet"
           as="h1"
-          context={getHubContext('tools')}
-        />
-
-        <ContextRail
-          {...getToolContext(active)}
-          theme="cyan"
-          className="mb-8 max-w-4xl"
         />
 
         <Link
@@ -184,9 +176,10 @@ export function ToolsHub() {
                 <p className="font-semibold text-sm leading-tight" style={isActive ? { color: accent } : {}}>
                   {t.label}
                 </p>
-                <p className="text-[11px] text-muted-foreground mt-0.5 leading-snug line-clamp-2">
+                <p className="text-[11px] text-muted-foreground mt-0.5 mb-3 leading-snug line-clamp-2">
                   {t.shortLabel}
                 </p>
+                <ToolPreviewGlyph tool={t.id} color={accent} />
               </button>
             );
           })}

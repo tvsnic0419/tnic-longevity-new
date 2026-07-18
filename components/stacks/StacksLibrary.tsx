@@ -18,7 +18,7 @@ import { DynamicStackBuilder } from './DynamicStackBuilder';
 import { EliteStackCard } from './EliteStackCard';
 import { ToolsPromoStrip } from '@/components/tools/ToolsPromoStrip';
 import { QuizStacksBanner } from './QuizStacksBanner';
-import { getHubContext } from '@/lib/hub-context';
+import { StacksShowcase } from './StacksShowcase';
 
 // Only ever rendered behind the "Compare" tab — lazy so its compound-data
 // and DataTable weight doesn't ship on first load for the (default) Catalog tab.
@@ -65,10 +65,11 @@ export function StacksLibrary() {
         description="Pre-built evidence-graded protocols with dosing, monitoring, and cost breakdowns. Build custom stacks with real-time synergy and contraindication analysis."
         meta={`${eliteStacks.length} elite stacks · 6 evidence-graded compounds · Educational only`}
         theme="violet"
-        context={getHubContext('stacks')}
       />
 
-      <div className="flex flex-wrap gap-3 mb-6">
+      <StacksShowcase />
+
+      <div className="flex flex-wrap gap-3 mb-6 mt-10">
         <Link
           href={selected.length > 0 ? buildShopStackUrl(selected) : '/shop'}
           className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 rounded-xl glass glass-hover text-sm font-semibold text-accent-amber"

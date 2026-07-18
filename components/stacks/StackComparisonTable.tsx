@@ -20,7 +20,7 @@ const allGoals = [...new Set(eliteStacks.map((s) => s.goal))] as StackGoal[];
 const allCosts = [...new Set(eliteStacks.map((s) => s.costTier))] as CostTier[];
 const allSimplicity = [...new Set(eliteStacks.map((s) => s.simplicity))] as SimplicityTier[];
 
-const tierColor = { A: 'text-accent-emerald', B: 'text-accent-cyan', C: 'text-accent-amber' };
+const tierColor = { A: 'text-accent-emerald', B: 'text-accent-amber', C: 'text-accent-rose' };
 
 export function StackComparisonTable() {
   const { setSelected } = useStack();

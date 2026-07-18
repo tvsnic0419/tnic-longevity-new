@@ -192,3 +192,20 @@ export function getRouteContext(pathname: string, searchTab?: string | null): Ro
 export function accentForRoute(hub: HubContextEntry | null): ThemeAccent {
   return hub?.theme ?? 'cyan';
 }
+
+/** Hubs whose surfaces are already data-dense (charts, tables, forms) — the
+ *  ambient molecular background dials back so it never competes with content. */
+const SUBTLE_AMBIENT_HUBS = new Set<HubKey>(['dashboard', 'labs', 'tools', 'shop', 'trust', 'contact']);
+
+/** Per-route tint + intensity for the site-wide ambient background (see
+ *  AmbientLayer). Reuses the same hub → accent mapping as ContextBar so the
+ *  molecular field, the breadcrumb icon, and the "Next here" label all agree
+ *  on a page's color identity instead of defaulting to cyan everywhere. */
+export function ambientForPathname(pathname: string): { accent: ThemeAccent; subtle: boolean } {
+  const hubKey = resolveHubKey(pathname);
+  const hub = hubKey ? getHubContext(hubKey) : null;
+  return {
+    accent: accentForRoute(hub),
+    subtle: hubKey ? SUBTLE_AMBIENT_HUBS.has(hubKey) : false,
+  };
+}

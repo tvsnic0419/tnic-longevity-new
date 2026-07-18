@@ -34,8 +34,8 @@ const compoundHrefs: Record<string, string> = {
 
 const evidenceColors: Record<string, string> = {
   A: 'text-accent-emerald bg-accent-emerald/10 border-accent-emerald/25',
-  B: 'text-accent-cyan bg-accent-cyan/10 border-accent-cyan/25',
-  C: 'text-accent-amber bg-accent-amber/10 border-accent-amber/25',
+  B: 'text-accent-amber bg-accent-amber/10 border-accent-amber/25',
+  C: 'text-accent-rose bg-accent-rose/10 border-accent-rose/25',
 };
 
 const evidenceLabels: Record<string, string> = {

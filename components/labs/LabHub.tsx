@@ -23,7 +23,7 @@ import { UserFlowGuide } from './UserFlowGuide';
 import { BiomarkerInput } from './BiomarkerInput';
 import { ToolsPromoStrip } from '@/components/tools/ToolsPromoStrip';
 import { LabPartnerPanel } from './LabPartnerPanel';
-import { getHubContext } from '@/lib/hub-context';
+import { LabPreviewChart } from './LabPreviewChart';
 
 // 'input' is the default tab and stays a regular import. The other four are
 // only ever rendered behind a tab click, so they're lazy — same pattern as
@@ -100,8 +100,13 @@ export function LabHub() {
         title="Your Biomarkers. Your Data. Your Insights."
         description="Log lab results, visualize trends, map risks to the 12 Hallmarks of Aging, and get stack-aware recommendations — all processed locally in your browser."
         theme="rose"
-        context={getHubContext('labs')}
       />
+
+      {analysis.markersTracked === 0 && (
+        <div className="max-w-lg mx-auto mb-8">
+          <LabPreviewChart />
+        </div>
+      )}
 
       {analysis.markersTracked > 0 && (
         <StatStrip

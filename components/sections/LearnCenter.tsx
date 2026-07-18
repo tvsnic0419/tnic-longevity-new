@@ -46,7 +46,7 @@ import {
   supplementRedFlags,
 } from '@/lib/data';
 import { usePlatform } from '@/context/PlatformContext';
-import { getHubContext } from '@/lib/hub-context';
+import { LearnFeaturedGuides } from '@/components/learn/LearnFeaturedGuides';
 
 /**
  * Icon + theme per glossary term — a static lookup (not a dynamic
@@ -131,16 +131,16 @@ export function LearnCenter({ defaultTab }: { defaultTab?: TabId }) {
   return (
     <SectionShell
       id="learn"
-      mod="MOD-LRN-09"
       theme="cyan"
       badge="Consumer Intelligence"
       title="Learn Before You Stack"
       subtitle="Intelligent consumers ask hard questions. TNiC answers them openly — from first-time basics to supplement industry red flags. Quick answers also live at /faq."
-      context={getHubContext('learn')}
       mesh
       className="bg-background"
     >
-      <div className="flex flex-wrap gap-2 mb-10">
+      <LearnFeaturedGuides />
+
+      <div className="flex flex-wrap gap-2 mb-10 mt-10">
         {tabs.map((t) => (
           <button
             key={t.id}

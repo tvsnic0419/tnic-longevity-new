@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import { Syringe } from 'lucide-react';
 import { PeptideCard } from '@/components/peptides/PeptideCard';
+import { PeptideLegalMatrix } from '@/components/peptides/PeptideLegalMatrix';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { DisclaimerBanner } from '@/components/trust/DisclaimerBanner';
 import { EvidenceTagLegend } from '@/components/trust/EvidenceTag';
 import { peptideCategoryMeta, peptideLibrary, getPeptidesByCategory } from '@/lib/peptides-library';
 import { disclaimers } from '@/lib/trust';
-import { getHubContext } from '@/lib/hub-context';
 import { seoRoutes } from '@/lib/seo-routes';
 import type { PeptideCategory } from '@/lib/types';
 
@@ -31,10 +31,11 @@ export default function PeptidesHubPage() {
           title="Anti-aging peptides, graded honestly."
           description="Eight of the most-discussed longevity peptides — evidence tier, mechanism, dosing patterns reported in the literature, and the legal status of every single one, stated plainly before anything else."
           theme="rose"
-          context={getHubContext('peptides')}
         />
 
-        <div className="mx-auto mb-10 max-w-3xl md:mb-14">
+        <PeptideLegalMatrix />
+
+        <div className="mx-auto mb-10 mt-10 max-w-3xl md:mb-14">
           <DisclaimerBanner disclaimer={legalDisclaimer} showAppliesTo />
         </div>
 

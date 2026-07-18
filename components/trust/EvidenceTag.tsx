@@ -18,10 +18,14 @@ interface TierMeta {
   shell: string;
 }
 
+// A = emerald (strongest), B = amber/gold, C = rose (muted red) — mirrors the
+// tier coloring already used in LibraryFacetFilters, the supplements guide,
+// and the hallmarks page, so a Tier B compound reads the same color
+// everywhere on the site instead of cyan here and amber elsewhere.
 const tierMeta: Record<EvidenceTier, TierMeta> = {
   A: { level: 3, color: 'var(--accent-emerald)', shell: 'text-accent-emerald border-accent-emerald/25' },
-  B: { level: 2, color: 'var(--accent-cyan)', shell: 'text-accent-cyan border-accent-cyan/25' },
-  C: { level: 1, color: 'var(--accent-amber)', shell: 'text-accent-amber border-accent-amber/25' },
+  B: { level: 2, color: 'var(--accent-amber)', shell: 'text-accent-amber border-accent-amber/25' },
+  C: { level: 1, color: 'var(--accent-rose)', shell: 'text-accent-rose border-accent-rose/25' },
 };
 
 interface SizeSpec {

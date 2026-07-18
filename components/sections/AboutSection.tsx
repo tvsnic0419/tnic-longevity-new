@@ -47,7 +47,6 @@ export function AboutSection() {
   return (
     <SectionShell
       id="about"
-      mod="MOD-ABT-00"
       theme="cyan"
       badge="About TNiC"
       title="An Educational Longevity Platform"
