@@ -8,6 +8,7 @@ import { compounds } from '@/lib/data';
 import { peptideLibrary } from '@/lib/peptides-library';
 import { themes } from '@/lib/design-system';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { PathwayConstellation } from '@/components/library/PathwayConstellation';
 import { getHubContext } from '@/lib/hub-context';
 
 function leverLabel(l: PathwayLever): string {
@@ -19,17 +20,28 @@ function leverLabel(l: PathwayLever): string {
 export function PathwaysHub() {
   return (
     <section className="py-6 md:py-8">
-      <PageHeader
-        icon={Waypoints}
-        eyebrow="Library · Mechanism Tools"
-        title="Molecular Pathways"
-        description="Compound and hallmark pages each show one slice of a pathway. This is the cross-cutting view — every compound and peptide lever that engages AMPK, NRF2, the sirtuin/NAD+ axis, mTOR, mitochondrial quality control, and senescence clearance, in one place."
-        theme="violet"
-        align="left"
-        context={getHubContext('pathways')}
-      />
+      <div className="items-center gap-10 lg:grid lg:grid-cols-12">
+        <div className="lg:col-span-7">
+          <PageHeader
+            icon={Waypoints}
+            eyebrow="Library · Mechanism Tools"
+            title="Molecular Pathways"
+            description="Compound and hallmark pages each show one slice of a pathway. This is the cross-cutting view — every compound and peptide lever that engages AMPK, NRF2, the sirtuin/NAD+ axis, mTOR, mitochondrial quality control, and senescence clearance, in one place."
+            theme="violet"
+            align="left"
+            context={getHubContext('pathways')}
+          />
+        </div>
 
-      <div className="grid md:grid-cols-2 gap-4 mt-6">
+        {/* Orbital map of all 6 pathways — hover/focus any node for a live
+            preview. Same data as the grid below, browsable at a glance
+            instead of read serially; the grid stays for full ranked detail. */}
+        <div className="mt-8 lg:col-span-5 lg:mt-0">
+          <PathwayConstellation />
+        </div>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-4 mt-10">
         {pathways.map((p, i) => {
           const t = themes[p.theme];
           const primaryLevers = p.levers.filter((l) => l.strength === 'primary');

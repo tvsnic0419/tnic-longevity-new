@@ -7,6 +7,7 @@ import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { themes } from '@/lib/design-system';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { PathwayDiagram } from '@/components/library/PathwayDiagram';
 import { getHubContext } from '@/lib/hub-context';
 
 function leverHref(l: PathwayLever): string {
@@ -69,6 +70,11 @@ export function PathwayDetail({ pathway }: { pathway: Pathway }) {
           <h2 id="mechanism-heading" className={`text-label mb-4 ${t.text}`}>
             Mechanism
           </h2>
+          <PathwayDiagram
+            nodes={pathway.diagramNodes}
+            edges={pathway.diagramEdges}
+            className="mb-6"
+          />
           <div className="space-y-4 max-w-3xl">
             {pathway.synthesis.map((para, i) => (
               <p key={i} className="text-body text-muted-foreground leading-relaxed">

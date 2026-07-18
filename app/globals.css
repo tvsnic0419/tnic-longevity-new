@@ -1566,14 +1566,22 @@ body::after {
   inset: 0;
 }
 
+/* Position via left/top percentages (--cx/--cy, computed in JS with the same
+   trig as the companion SVG dots) rather than `rotate() translateX() rotate()`
+   on --angle/--radius: percentages inside translate() resolve against this
+   element's own ~36px box, not the container, so that approach put every
+   node ~8px from center regardless of --radius. left/top percentages
+   resolve against the containing block, which is what a radial layout
+   actually needs. translate(-50%, -50%) here is deliberately per-element
+   (correct use of the self-relative behavior) — it just centers the box on
+   its own (--cx, --cy) point. */
 .constellation-node {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  left: var(--cx, 50%);
+  top: var(--cy, 50%);
   width: 2.25rem;
   height: 2.25rem;
-  margin: -1.125rem;
-  transform: rotate(var(--angle)) translateX(calc(var(--radius) * 0.55)) rotate(calc(-1 * var(--angle)));
+  transform: translate(-50%, -50%);
 }
 
 .constellation-node-btn {

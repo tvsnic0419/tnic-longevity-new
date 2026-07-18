@@ -71,7 +71,17 @@ export function HallmarksConstellation() {
 
       <div className="constellation-nodes">
         {hallmarkLibrary.map((h, i) => {
-          const angle = (i / count) * 360 - 90;
+          // Same trig as the SVG dots above (0-100 viewBox units, which map
+          // 1:1 to percent-of-container since the constellation is square) —
+          // deliberately NOT the rotate()/translateX()/rotate() CSS custom-
+          // property trick this used before: percentages inside translate()
+          // resolve against the translated element's own box, not the
+          // container, so that approach put every node ~8px from center
+          // regardless of the intended radius. left/top percentages resolve
+          // against the containing block, which actually works.
+          const angle = (i / count) * Math.PI * 2 - Math.PI / 2;
+          const cx = +(50 + Math.cos(angle) * radius * 0.55).toFixed(4);
+          const cy = +(50 + Math.sin(angle) * radius * 0.55).toFixed(4);
           const visual = hallmarkVisualRegistry[h.visual];
           const isActive = active === h.id;
 
@@ -80,11 +90,11 @@ export function HallmarksConstellation() {
               key={h.id}
               className="constellation-node"
               style={{
-                '--angle': `${angle}deg`,
-                '--radius': `${radius}%`,
+                '--cx': `${cx}%`,
+                '--cy': `${cy}%`,
               } as React.CSSProperties}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.04, duration: 0.4 }}
             >
