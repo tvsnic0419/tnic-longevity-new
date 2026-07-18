@@ -33,6 +33,8 @@ export const comparisonTitles: Record<string, string> = {
   'rapamycin-vs-metformin': 'Rapamycin vs Metformin',
   'coq10-vs-ubiquinol': 'CoQ10 vs Ubiquinol',
   'omega3-vs-krill-oil': 'Omega-3 vs Krill Oil',
+  'bpc-157-vs-ghk-cu': 'BPC-157 vs GHK-Cu',
+  'glp1-vs-berberine': 'GLP-1/GIP Agonists vs Berberine',
 };
 
 export const pathwayTitles: Record<string, string> = {

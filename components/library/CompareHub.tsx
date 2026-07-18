@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Scale, ArrowRight, Pill, Layers } from 'lucide-react';
+import { Scale, ArrowRight, Pill, Layers, Syringe } from 'lucide-react';
 import { evidenceComparisons } from '@/lib/comparisons';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { CompareShareCard } from '@/components/library/CompareShareCard';
@@ -13,6 +13,7 @@ const categoryIcon = {
   compound: Pill,
   stack: Layers,
   form: Scale,
+  peptide: Syringe,
 };
 
 export function CompareHub() {

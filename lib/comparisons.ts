@@ -17,7 +17,7 @@ export interface EvidenceComparison {
   subtitle: string;
   labelA: string;
   labelB: string;
-  category: 'compound' | 'stack' | 'form';
+  category: 'compound' | 'stack' | 'form' | 'peptide';
   evidenceTier: EvidenceTier;
   summary: string;
   verdict: string;
@@ -1304,6 +1304,193 @@ export const evidenceComparisons: EvidenceComparison[] = [
       { label: 'Elite 8 LQ Ranking', href: '/elite-8' },
     ],
     keywords: ['omega-3 vs krill oil', 'fish oil vs krill oil', 'krill oil supplement', 'best omega-3 supplement', 'EPA DHA supplement', 'fish oil longevity', 'omega-3 bioavailability'],
+  },
+  {
+    slug: 'bpc-157-vs-ghk-cu',
+    title: 'BPC-157 vs GHK-Cu',
+    subtitle: 'Two "repair" peptides marketed the same way — completely different evidence tiers underneath',
+    labelA: 'BPC-157',
+    labelB: 'GHK-Cu',
+    category: 'peptide',
+    evidenceTier: 'C',
+    summary:
+      'BPC-157 and GHK-Cu get compared constantly in recovery and longevity communities because both are marketed for "tissue repair" — but they do not actually compete for the same use case, and they sit at very different points on the evidence spectrum. BPC-157 has a large, consistent rodent literature (Sikiric et al., decades of published work) reporting accelerated tendon, muscle, and gut-lining healing — and zero completed human trials of any kind. GHK-Cu has the opposite profile for its best-studied route: real, published human trials show topical GHK-Cu improves skin firmness, collagen density, and wound healing — the strongest human evidence of any peptide TNiC covers — but that evidence is confined to topical/dermatological use. The injectable, "systemic anti-aging" framing both peptides get marketed under is, for both of them, an animal or cell-culture extrapolation with no human dosing or safety data behind it.',
+    verdict:
+      'Not a "which is better" comparison — different tissues, different routes, different evidence tiers. Topical GHK-Cu is the only genuinely human-trial-backed use of either peptide. Injectable BPC-157 and injectable GHK-Cu are equally unproven in humans.',
+    rows: [
+      {
+        dimension: 'Human trial evidence',
+        a: 'None published — rodent/mouse models only (Sikiric et al.)',
+        b: 'Real published human trials — topical route (Pickart et al., dermatology/wound-care journals)',
+        verdict: 'b',
+        note: 'GHK-Cu is the only peptide on TNiC with genuine human trial data — but only topically.',
+      },
+      {
+        dimension: 'Best-evidenced use case',
+        a: 'Tendon/ligament/muscle/gut-lining injury repair (rodent models)',
+        b: 'Topical skin firmness, collagen density, wound healing (human trials)',
+        verdict: 'context',
+        note: 'Different tissues and routes entirely — not directly substitutable.',
+      },
+      {
+        dimension: 'Systemic/injectable human data',
+        a: 'None at any dose',
+        b: 'None — injectable GHK-Cu extrapolates from cell-culture/rodent data, same as BPC-157',
+        verdict: 'tie',
+        note: 'For injectable "systemic anti-aging" use specifically, both peptides are equally unproven in humans.',
+      },
+      {
+        dimension: 'Mechanism',
+        a: 'VEGFR2 upregulation, angiogenesis (rodent tendon/gut models)',
+        b: 'Copper-binding gene-expression shift, collagen/elastin synthesis (human trials + cell culture)',
+        verdict: 'context',
+      },
+      {
+        dimension: 'Legal/sourcing pathway',
+        a: 'FDA closed the compounding-pharmacy pathway in 2023 — unregulated research-chemical vendors only',
+        b: 'Topical: legitimate, widely sold cosmetic-industry ingredient. Injectable: same unregulated research-chemical vendor risk as BPC-157',
+        verdict: 'b',
+        note: "GHK-Cu's topical route has a real legal consumer pathway BPC-157 has none of.",
+      },
+      {
+        dimension: 'Primary risk profile',
+        a: 'Unknown drug interactions, injection-site infection risk, no human safety data at any dose',
+        b: 'Topical: irritation/contact dermatitis (mild). Injectable: copper overload — hepatotoxic/neurotoxic in excess, contraindicated in Wilson\'s disease',
+        verdict: 'context',
+      },
+      {
+        dimension: 'Age-related decline rationale',
+        a: 'Not applicable — mechanism is not tied to an endogenous peptide that declines with age',
+        b: "Plasma GHK measurably declines ~60% from age 20 to 60 (Pickart's own measurements) — a genuine \"restore what declines\" rationale",
+        verdict: 'b',
+      },
+      {
+        dimension: 'TNiC evidence tier',
+        a: 'C (rodent-only)',
+        b: 'B (topical, human) / C (injectable, extrapolated)',
+        verdict: 'b',
+      },
+    ],
+    whenChooseA: [
+      "You're evaluating based on a large, consistent rodent literature and accept there is zero human trial data at any dose",
+      "Your interest is specifically tendon, ligament, or gut-lining repair — BPC-157's studied models, not GHK-Cu's",
+      'You understand the FDA closed the compounding-pharmacy pathway in 2023 and any product today comes from an unregulated research-chemical vendor',
+    ],
+    whenChooseB: [
+      'Your goal is topical skin firmness or collagen support — genuine human trial evidence backs this route specifically',
+      'You want a peptide with a real, legal cosmetic-industry consumer product pathway, not just research-chemical vendors',
+      'You understand injectable/systemic GHK-Cu is just as unproven in humans as BPC-157, and carries its own distinct copper-overload risk',
+    ],
+    relatedHrefs: [
+      { label: 'BPC-157 in Peptides Library', href: '/peptides/bpc-157' },
+      { label: 'GHK-Cu in Peptides Library', href: '/peptides/ghk-cu' },
+      { label: 'Loss of Proteostasis hallmark', href: '/library/loss-of-proteostasis' },
+      { label: 'Peptides Library', href: '/peptides' },
+    ],
+    keywords: ['bpc-157', 'ghk-cu', 'copper peptide', 'peptide comparison', 'tissue repair', 'skin repair', 'research peptides'],
+  },
+  {
+    slug: 'glp1-vs-berberine',
+    title: 'GLP-1/GIP Agonists vs Berberine',
+    subtitle: 'A prescription drug with landmark cardiovascular-outcome trials vs an OTC AMPK activator — never tested head-to-head',
+    labelA: 'Semaglutide / Tirzepatide',
+    labelB: 'Berberine HCl',
+    category: 'peptide',
+    evidenceTier: 'B',
+    summary:
+      'Semaglutide/tirzepatide and berberine both get framed as "metabolic longevity" interventions, but they come from opposite ends of the evidence and regulatory spectrum — a prescription-only drug class backed by some of the largest cardiometabolic RCT programs ever run (STEP, SURMOUNT, SELECT), versus an OTC botanical with a real but much smaller head-to-head trial against metformin (Yin et al. 2008, PMID 18396172). No study has ever compared GLP-1/GIP agonists against berberine directly. This table lines up what each one\'s own trial evidence actually shows, so the comparison does not imply an equivalence that has never been tested.',
+    verdict:
+      'Not a real head-to-head — no trial has tested GLP-1/GIP agonists against berberine directly. Choose GLP-1/GIP therapy for substantial weight loss or if you fall in the populations STEP/SURMOUNT/SELECT studied, under physician supervision. Choose berberine for OTC-accessible glycemic and lipid support, understanding it targets a smaller share of the outcome and was never designed as a weight-loss agent. They are not interchangeable, and combining them is unstudied — a physician conversation, not a TNiC-endorsed stack.',
+    rows: [
+      {
+        dimension: 'Direct head-to-head human trial',
+        a: 'None — never directly compared to berberine in an RCT',
+        b: 'None — same',
+        verdict: 'tie',
+        note: "This comparison synthesizes each compound's own trial evidence; no study has pitted them against each other.",
+      },
+      {
+        dimension: 'Regulatory status',
+        a: 'FDA-approved prescription drug (T2D, chronic weight management; SELECT trial added a cardiovascular-risk-reduction indication for semaglutide)',
+        b: 'OTC — no prescription required',
+        verdict: 'context',
+      },
+      {
+        dimension: 'Primary trial evidence',
+        a: 'STEP (Wilding et al., NEJM 2021), SURMOUNT (Jastreboff et al., NEJM 2022), SELECT (Lincoff et al., NEJM 2023) — large multi-trial RCT programs',
+        b: 'Yin et al. 2008 head-to-head RCT vs metformin (PMID 18396172, n=116); 27-RCT meta-analysis (PMID 26507383)',
+        verdict: 'a',
+        pmid: '18396172',
+        note: "GLP-1/GIP trial programs are substantially larger in scale and enrollment than berberine's evidence base.",
+      },
+      {
+        dimension: 'Weight-loss magnitude',
+        a: 'Average ~15%+ body weight loss (semaglutide, STEP) to ~20%+ (tirzepatide, SURMOUNT)',
+        b: 'Not a primary studied endpoint — berberine trials measure glycemic/lipid markers, not weight loss',
+        verdict: 'a',
+        note: 'These are not equivalent interventions for a weight-loss goal specifically.',
+      },
+      {
+        dimension: 'Glycemic control (fasting glucose / HbA1c)',
+        a: 'Substantial improvement — original diabetes-indication trials',
+        b: '−20% fasting glucose, −2.0 HbA1c points — statistically equivalent to metformin 500 mg TID',
+        verdict: 'tie',
+        pmid: '18396172',
+        note: 'Both show real glycemic benefit, from entirely different trial programs and populations — not directly compared.',
+      },
+      {
+        dimension: 'Cardiovascular outcome data',
+        a: 'SELECT trial — reduced major adverse cardiovascular events, tested directly as a primary endpoint',
+        b: 'No dedicated cardiovascular-outcomes RCT — lipid improvements (PMID 26507383) are a surrogate marker, not an events trial',
+        verdict: 'a',
+        pmid: '26507383',
+      },
+      {
+        dimension: 'Mechanism',
+        a: 'GLP-1/GIP incretin receptor agonism — appetite suppression, slowed gastric emptying, improved insulin sensitivity',
+        b: 'Mitochondrial Complex I inhibition → AMPK activation — the same cellular energy-deficit pathway metformin engages',
+        verdict: 'context',
+        note: 'Different receptor systems entirely — not mechanistically related despite both improving glycemic control.',
+      },
+      {
+        dimension: 'Access & cost',
+        a: 'Prescription required; list price without insurance runs to hundreds of dollars per month',
+        b: 'OTC, low-cost, no prescription',
+        verdict: 'b',
+      },
+      {
+        dimension: 'Tolerability / interaction profile',
+        a: 'GI side effects (nausea, vomiting, constipation) are common and dose-titration-limiting; MTC/MEN2 contraindication',
+        b: 'CYP3A4/P-gp inhibition — real interaction risk with many prescription drugs; GI tolerance issues at TID dosing',
+        verdict: 'tie',
+        note: 'Both carry real, distinct tolerability and interaction profiles worth physician review.',
+      },
+      {
+        dimension: 'Can they be combined?',
+        a: '—',
+        b: '—',
+        verdict: 'context',
+        note: "Not studied together. The mechanisms are distinct enough that combination is plausible, but no trial has tested it — physician-discussion territory, not a TNiC-endorsed stack.",
+      },
+    ],
+    whenChooseA: [
+      'You have obesity, type 2 diabetes, or established cardiovascular disease with overweight/obesity — the exact populations SELECT, STEP, and SURMOUNT studied',
+      'Your primary goal is substantial weight loss — no OTC compound on TNiC approaches GLP-1/GIP trial-documented weight-loss magnitude',
+      'You want physician-supervised, FDA-regulated dosing with a large and growing post-market safety record',
+    ],
+    whenChooseB: [
+      'You want OTC accessibility without a prescription, and your primary goal is glycemic or lipid marker improvement rather than substantial weight loss',
+      "You're already on a GLP-1 and want to discuss a mechanistically distinct, unstudied-in-combination OTC option with your physician — not a replacement",
+      'Cost is a primary constraint — berberine is a fraction of GLP-1 list pricing',
+    ],
+    relatedHrefs: [
+      { label: 'Semaglutide & Tirzepatide in Peptides Library', href: '/peptides/glp1-longevity' },
+      { label: 'Berberine in Library', href: '/library/compounds/berberine' },
+      { label: 'Berberine vs Metformin', href: '/library/compare/berberine-vs-metformin' },
+      { label: 'Deregulated Nutrient Sensing hallmark', href: '/library/disabled-macroautophagy' },
+      { label: 'Peptides Library', href: '/peptides' },
+    ],
+    keywords: ['glp-1', 'semaglutide', 'tirzepatide', 'berberine', 'ozempic', 'wegovy', 'mounjaro', 'ampk', 'metabolic longevity', 'weight loss supplement'],
   },
 ];
 
