@@ -51,7 +51,74 @@ Use this when rewriting any MDX module to Examine.com-tier quality with TNiC OS 
 - [ ] `:::decision` — when to prioritize vs defer supplements
 - [ ] Labs/proxy metrics to log
 
-## Elevation status (2026-06-16)
+## Elevation status (2026-07-18)
+
+Verified by section count (`## N.` headers) against the 8-section template per
+type, plus spot-reads of every file previously marked incomplete. All 40
+content files are structurally elevated — no partial files remain. This
+supersedes the 2026-06-16 table below, which had drifted: it tracked only 6 of
+18 compounds and 3 of 5 synergies, and flagged `rapamycin.mdx`/`tudca.mdx` as
+needing work when both were already fully elevated (Rx disclaimer directives
+and all).
+
+Known real content gaps — tracked here instead, so this file stays a source of
+truth rather than pointing at already-finished work:
+- Only 5 of 18 compounds participate in Stack Architect's synergy/breadth
+  scoring (`lib/data.ts`). This is **deliberate**, not a gap to close blind —
+  NR, grape seed, and TUDCA each say so explicitly in their own MDX ("not a
+  native Stack Architect compound"); rapamycin has its own Rx-gated path via
+  `rxCompoundCatalog` in `lib/stacks-library.ts` instead. Don't add these four
+  to `lib/data.ts`'s `compounds` array without revisiting that editorial call
+  first.
+- 13 of 18 compounds still lack a dedicated synergy deep-dive for pairings
+  their own "Synergies" table already names (5 dedicated pages exist against
+  18 compounds' worth of table-cell claims).
+
+| File | Status |
+| --- | --- |
+| `hallmarks/mitochondrial-dysfunction.mdx` | ✅ Flagship |
+| `hallmarks/genomic-instability.mdx` | ✅ Elevated |
+| `hallmarks/chronic-inflammation.mdx` | ✅ Elevated |
+| `hallmarks/cellular-senescence.mdx` | ✅ Elevated |
+| `hallmarks/loss-of-proteostasis.mdx` | ✅ Elevated |
+| `hallmarks/telomere-attrition.mdx` | ✅ Elevated |
+| `hallmarks/epigenetic-alterations.mdx` | ✅ Elevated |
+| `hallmarks/disabled-autophagy.mdx` | ✅ Elevated (cross-links H12) |
+| `hallmarks/disabled-macroautophagy.mdx` | ✅ Elevated (cross-links H5) |
+| `hallmarks/stem-cell-exhaustion.mdx` | ✅ Elevated |
+| `hallmarks/altered-intercellular-communication.mdx` | ✅ Elevated |
+| `hallmarks/dysbiosis.mdx` | ✅ Elevated |
+| `compounds/glynac.mdx` | ✅ Flagship |
+| `compounds/nmn.mdx` | ✅ Elevated |
+| `compounds/sulforaphane.mdx` | ✅ Elevated |
+| `compounds/resveratrol.mdx` | ✅ Elevated |
+| `compounds/rapamycin.mdx` | ✅ Elevated (Rx disclaimer + educational-only framing throughout) |
+| `compounds/tudca.mdx` | ✅ Elevated (explicitly library-only, not a Stack Architect toggle — by design) |
+| `compounds/berberine.mdx` | ✅ Elevated |
+| `compounds/cakg.mdx` | ✅ Elevated |
+| `compounds/coq10.mdx` | ✅ Elevated |
+| `compounds/fisetin.mdx` | ✅ Elevated |
+| `compounds/grapeseed.mdx` | ✅ Elevated (explicitly not a Stack Architect toggle — mixed meta-analysis evidence, by design) |
+| `compounds/nr.mdx` | ✅ Elevated (explicitly not a Stack Architect toggle — defers to NMN, by design) |
+| `compounds/omega3.mdx` | ✅ Elevated |
+| `compounds/pterostilbene.mdx` | ✅ Elevated |
+| `compounds/rala.mdx` | ✅ Elevated |
+| `compounds/spermidine.mdx` | ✅ Elevated |
+| `compounds/taurine.mdx` | ✅ Elevated |
+| `compounds/urolithina.mdx` | ✅ Elevated |
+| `synergies/glynac-nrf2-triad.mdx` | ✅ Flagship |
+| `synergies/nad-mito-stack.mdx` | ✅ Elevated |
+| `synergies/nmn-resveratrol-sirt1.mdx` | ✅ Elevated |
+| `synergies/berberine-resveratrol-ampk-sirt1.mdx` | ✅ Elevated |
+| `synergies/coq10-rala-redox-recycling.mdx` | ✅ Elevated |
+| `lifestyle/sleep.mdx` | ✅ Elevated |
+| `lifestyle/exercise.mdx` | ✅ Elevated |
+| `lifestyle/nutrition.mdx` | ✅ Elevated |
+| `lifestyle/stress.mdx` | ✅ Elevated |
+| `guides/testing-and-monitoring.mdx` | ✅ Elevated |
+
+<details>
+<summary>Superseded 2026-06-16 table (kept for history)</summary>
 
 | File | Status |
 | --- | --- |
@@ -81,6 +148,8 @@ Use this when rewriting any MDX module to Examine.com-tier quality with TNiC OS 
 | `lifestyle/nutrition.mdx` | ✅ Elevated |
 | `lifestyle/stress.mdx` | ✅ Elevated |
 | `guides/testing-and-monitoring.mdx` | ⬜ Template pass pending |
+
+</details>
 
 ## Rewrite workflow (per file)
 

@@ -10,6 +10,7 @@ import { HallmarkVisual } from './HallmarkVisual';
 import { InterventionExplorer } from './InterventionExplorer';
 import { HallmarkNotesPanel } from './HallmarkNotesPanel';
 import { usePlatform } from '@/context/PlatformContext';
+import { getHubContext } from '@/lib/hub-context';
 
 interface AntiAgingLibraryProps {
   /** Use h1 when rendered as dedicated /library page */
@@ -51,6 +52,7 @@ export function AntiAgingLibrary({ asPageTitle = false }: AntiAgingLibraryProps)
           meta={notedCount > 0 ? `${notedCount} hallmark${notedCount > 1 ? 's' : ''} with personal notes saved locally` : undefined}
           theme="cyan"
           as={asPageTitle ? 'h1' : 'h2'}
+          context={getHubContext('library')}
         />
 
         {/* Systems Map + Top Picks CTAs */}

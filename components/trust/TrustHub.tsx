@@ -20,6 +20,7 @@ import { TabBar } from '@/components/ui/TabBar';
 import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
 import { EvidenceTagLegend } from './EvidenceTag';
 import { DisclaimerBanner } from './DisclaimerBanner';
+import { getHubContext } from '@/lib/hub-context';
 
 // 'overview' is the default tab and needs DisclaimerBanner/EvidenceTagLegend
 // immediately; the rest are only ever rendered behind a tab click.
@@ -100,6 +101,7 @@ export function TrustHub() {
         description="Evidence tagging, source citations, methodology, disclaimers, and public update history. No black boxes — every recommendation is traceable."
         theme="emerald"
         meta={`${citationRegistry.length} indexed citations · Tier A/B/C grading · N=1 clearly labeled`}
+        context={getHubContext('trust')}
       />
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
