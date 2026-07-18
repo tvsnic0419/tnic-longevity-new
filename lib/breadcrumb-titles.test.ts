@@ -6,12 +6,14 @@ import {
   libraryCategoryLabels,
   toolLabels,
   peptideTitles,
+  pathwayTitles,
 } from './breadcrumb-titles';
 import { evidenceComparisons } from './comparisons';
 import { hallmarkLibrary } from './hallmarks-library';
 import { libraryModules, libraryCategoryMeta } from './library-modules';
 import { toolsRegistry } from './registry';
 import { peptideLibrary } from './peptides-library';
+import { pathways } from './pathways';
 
 // These assertions keep the lightweight breadcrumb title maps (imported by the
 // always-loaded ContextBar via route-context) exactly in sync with the heavy
@@ -28,6 +30,11 @@ describe('breadcrumb-titles stays in sync with source data', () => {
   it('hallmark titles match hallmarks-library.ts', () => {
     const expected = Object.fromEntries(hallmarkLibrary.map((h) => [h.slug, h.title]));
     expect(hallmarkTitles).toEqual(expected);
+  });
+
+  it('pathway titles match pathways.ts', () => {
+    const expected = Object.fromEntries(pathways.map((p) => [p.slug, p.name]));
+    expect(pathwayTitles).toEqual(expected);
   });
 
   it('library module titles match library-modules.ts', () => {

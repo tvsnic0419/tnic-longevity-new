@@ -9,6 +9,7 @@ import {
   libraryCategoryLabels,
   toolLabels,
   peptideTitles,
+  pathwayTitles,
 } from './breadcrumb-titles';
 
 export type HubKey = keyof typeof hubContexts;
@@ -65,6 +66,7 @@ const SEGMENT_LABELS: Record<string, string> = {
   'elite-8': 'Elite 8',
   'site-map': 'Site Map',
   compare: 'Comparisons',
+  pathways: 'Pathways',
   compounds: 'Compounds',
   synergies: 'Synergies',
   lifestyle: 'Lifestyle',
@@ -115,6 +117,18 @@ export function buildRouteBreadcrumbs(pathname: string, searchTab?: string | nul
       {
         label: comparisonTitles[parts[2]] ?? titleCase(parts[2]),
         href: `/library/compare/${parts[2]}`,
+      },
+    ];
+  }
+
+  if (parts[0] === 'library' && parts[1] === 'pathways' && parts[2]) {
+    return [
+      ...crumbs,
+      { label: 'Library', href: '/library' },
+      { label: 'Pathways', href: '/library/pathways' },
+      {
+        label: pathwayTitles[parts[2]] ?? titleCase(parts[2]),
+        href: `/library/pathways/${parts[2]}`,
       },
     ];
   }

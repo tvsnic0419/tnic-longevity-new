@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { Search, ArrowRight, Library, Network, Trophy } from 'lucide-react';
+import { Search, ArrowRight, Library, Network, Trophy, Waypoints } from 'lucide-react';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { HallmarkVisual } from './HallmarkVisual';
@@ -71,6 +71,14 @@ export function AntiAgingLibrary({ asPageTitle = false }: AntiAgingLibraryProps)
           >
             <Trophy className="w-4 h-4" />
             Top Picks — Sirtuin, PARP & NRF2
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+          <Link
+            href="/library/pathways"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-accent-cyan glass glass-hover px-5 py-2.5 rounded-full glow-hover-cyan transition"
+          >
+            <Waypoints className="w-4 h-4" />
+            Molecular Pathways — AMPK, NRF2, mTOR &amp; more
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>

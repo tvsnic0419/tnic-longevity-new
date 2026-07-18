@@ -46,7 +46,8 @@ export const hubContexts: Record<
   | 'deliverySystems'
   | 'peptides'
   | 'topPicks'
-  | 'hallmarks',
+  | 'hallmarks'
+  | 'pathways',
   HubContextEntry
 > = {
   dashboard: {
@@ -162,6 +163,12 @@ export const hubContexts: Record<
     what: 'All 12 hallmarks of aging (López-Otín 2023) in one index — TNiC coverage score, top-ranked evidence-graded intervention, and key biomarkers for each.',
     why: 'Aging has 12 distinct molecular causes, not one. Seeing coverage and evidence side-by-side across all of them shows exactly where a protocol is strong and where it still has gaps.',
     next: "Open a hallmark's Deep Dive for its full mechanism map, or jump to its Library entry for ranked interventions and PMID citations.",
+  },
+  pathways: {
+    theme: 'violet',
+    what: 'The six molecular pathways TNiC compounds actually converge on — AMPK, NRF2/KEAP1, sirtuins/NAD+, mTOR, mitochondrial quality control, and senescence clearance — each with every compound and peptide lever that engages it.',
+    why: 'Compound and hallmark pages each show one slice of a pathway. This is the only place to see everything that touches AMPK, or everything competing for the same NAD+ pool, in one view — the relationships that explain why some stacks are complementary and others are redundant.',
+    next: 'Start from the pathway behind your primary hallmark, then compare its primary vs. secondary levers before picking compounds.',
   },
 };
 

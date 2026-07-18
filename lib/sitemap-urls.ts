@@ -3,6 +3,7 @@ import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { getAllModuleParams } from '@/lib/library-modules';
 import { peptideLibrary } from '@/lib/peptides-library';
 import { getAllComparisonSlugs } from '@/lib/comparisons';
+import { getAllPathwaySlugs } from '@/lib/pathways';
 import { PRESET_KEYS } from '@/lib/quiz-share';
 import { toolsRegistry } from '@/lib/registry';
 import { SITE } from '@/lib/site';
@@ -20,6 +21,7 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     { url: `${base}/library/systems`, lastModified, changeFrequency: 'monthly', priority: 0.84 },
     { url: `${base}/library/top-picks`, lastModified, changeFrequency: 'monthly', priority: 0.85 },
     { url: `${base}/library/compare`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${base}/library/pathways`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/learn`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/faq`, lastModified, changeFrequency: 'monthly', priority: 0.85 },
     { url: `${base}/stacks`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
@@ -77,6 +79,13 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     priority: 0.86,
   }));
 
+  const pathwayRoutes = getAllPathwaySlugs().map((slug) => ({
+    url: `${base}/library/pathways/${slug}`,
+    lastModified,
+    changeFrequency: 'monthly' as const,
+    priority: 0.87,
+  }));
+
   const moduleRoutes = getAllModuleParams().map(({ slug: category, moduleSlug }) => ({
     url: `${base}/library/${category}/${moduleSlug}`,
     lastModified,
@@ -112,6 +121,7 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     ...hallmarkRoutes,
     ...hallmarkDeepDiveRoutes,
     ...compareRoutes,
+    ...pathwayRoutes,
     ...moduleRoutes,
     ...peptideRoutes,
   ];

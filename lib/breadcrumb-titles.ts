@@ -35,6 +35,15 @@ export const comparisonTitles: Record<string, string> = {
   'omega3-vs-krill-oil': 'Omega-3 vs Krill Oil',
 };
 
+export const pathwayTitles: Record<string, string> = {
+  'ampk-activation': 'AMPK Activation',
+  'nrf2-keap1-antioxidant-response': 'NRF2/KEAP1 Antioxidant Response',
+  'sirtuin-nad-axis': 'Sirtuin / NAD+ Axis',
+  'mtor-nutrient-sensing': 'mTOR / Nutrient Sensing',
+  'mitochondrial-quality-control': 'Mitochondrial Quality Control',
+  'senescence-clearance': 'Senescence Clearance',
+};
+
 export const hallmarkTitles: Record<string, string> = {
   'genomic-instability': 'Genomic Instability',
   'telomere-attrition': 'Telomere Attrition',
