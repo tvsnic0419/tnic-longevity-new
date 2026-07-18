@@ -138,7 +138,7 @@ export function LearnCenter({ defaultTab }: { defaultTab?: TabId }) {
       subtitle="Intelligent consumers ask hard questions. TNiC answers them openly — from first-time basics to supplement industry red flags. Quick answers also live at /faq."
       context={getHubContext('learn')}
       mesh
-      className="bg-background"
+      className="canvas-scrim"
     >
       <div className="flex flex-wrap gap-2 mb-10">
         {tabs.map((t) => (

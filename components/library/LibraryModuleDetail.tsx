@@ -17,6 +17,7 @@ import { LifestylePillarPanel } from './LifestylePillarPanel';
 import { getBuyerGuideByModuleSlug } from '@/lib/buyer-guides';
 import type { LifestyleSlug } from '@/lib/lifestyle-pillars';
 import { ModuleContextStrip } from './ModuleContextStrip';
+import { CompoundGlancePanel } from './CompoundGlancePanel';
 import { recordModuleVisit } from '@/lib/recent-modules';
 
 /**
@@ -224,6 +225,8 @@ export function LibraryModuleDetail({
               <p className="text-lg text-muted-foreground mb-4">{module.tagline}</p>
               <p className="text-sm text-muted-foreground leading-relaxed">{module.summary}</p>
             </motion.div>
+
+            {relatedCompound && <CompoundGlancePanel compound={relatedCompound} />}
 
             {module.requiresDisclaimer && (
               <div className="rounded-xl p-5 border border-accent-amber/30 bg-accent-amber/5 flex gap-3">
