@@ -23,13 +23,16 @@ const compoundNames: Record<string, string> = {
 };
 
 const compoundHrefs: Record<string, string> = {
-  nmn: '/library/nmn',
-  cakg: '/library/ca-akg',
-  resveratrol: '/library/resveratrol',
-  sulforaphane: '/library/sulforaphane',
-  glynac: '/library/glynac',
-  rala: '/library/r-alpha-lipoic-acid',
-  fisetin: '/library/fisetin',
+  nmn: '/library/compounds/nmn',
+  cakg: '/library/compounds/cakg',
+  resveratrol: '/library/compounds/resveratrol',
+  sulforaphane: '/library/compounds/sulforaphane',
+  glynac: '/library/compounds/glynac',
+  rala: '/library/compounds/rala',
+  fisetin: '/library/compounds/fisetin',
+  omega3: '/library/compounds/omega3',
+  urolithina: '/library/compounds/urolithina',
+  spermidine: '/library/compounds/spermidine',
 };
 
 const evidenceColors: Record<string, string> = {
