@@ -715,14 +715,31 @@ p,
 /* ── Pathway diagram utilities ── */
 .pathway-node {
   fill: var(--color-bg-elevated);
-  stroke: color-mix(in srgb, var(--accent-cyan) 35%, transparent);
+  stroke: color-mix(in srgb, var(--accent-cyan) 40%, transparent);
   stroke-width: 1.5;
+  /* Subtle glow so nodes read as lit signalling hubs. */
+  filter: drop-shadow(0 0 3px color-mix(in srgb, var(--accent-cyan) 30%, transparent));
 }
 
 .pathway-edge {
-  stroke: color-mix(in srgb, var(--accent-emerald) 40%, transparent);
+  stroke: color-mix(in srgb, var(--accent-emerald) 45%, transparent);
   stroke-width: 1.5;
   fill: none;
+}
+
+/* Animated "molecular current" — dashes flow along each edge toward its target
+   node, visualising signal direction through the pathway. Reduced-motion users
+   keep clean solid edges. */
+@media (prefers-reduced-motion: no-preference) {
+  .pathway-edge {
+    stroke-dasharray: 5 5;
+    animation: pathway-flow 0.9s linear infinite;
+  }
+}
+@keyframes pathway-flow {
+  to {
+    stroke-dashoffset: -10;
+  }
 }
 
 /* ── Scrollbar ── */
