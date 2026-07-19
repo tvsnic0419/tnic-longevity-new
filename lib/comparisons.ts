@@ -249,6 +249,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
     ],
     relatedHrefs: [
       { label: 'Sulforaphane deep dive', href: '/library/compounds/sulforaphane' },
+      { label: 'Curcumin deep dive', href: '/library/compounds/curcumin' },
       { label: 'Chronic inflammation hallmark', href: '/library/chronic-inflammation' },
     ],
     keywords: ['sulforaphane', 'curcumin', 'nrf2', 'crp', 'inflammation'],
@@ -860,6 +861,8 @@ export const evidenceComparisons: EvidenceComparison[] = [
       'Cardiovascular or inflammation focus — quercetin has broader anti-inflammatory meta-analysis data',
     ],
     relatedHrefs: [
+      { label: 'Fisetin deep dive', href: '/library/compounds/fisetin' },
+      { label: 'Quercetin deep dive', href: '/library/compounds/quercetin' },
       { label: 'Cellular Senescence hallmark', href: '/library/cellular-senescence' },
       { label: 'Full Hybrid Stack', href: '/stacks' },
       { label: 'Berberine vs Metformin', href: '/library/compare/berberine-vs-metformin' },
