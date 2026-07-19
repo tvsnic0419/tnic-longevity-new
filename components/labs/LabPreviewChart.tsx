@@ -35,7 +35,7 @@ export function LabPreviewChart() {
   const zoneTop = toY(OPTIMAL_MAX);
 
   return (
-    <div className="rounded-2xl glass p-5">
+    <div className="card-data rounded-2xl glass p-5" style={{ ['--data-accent' as string]: 'var(--accent-rose)' }}>
       <div className="flex items-center justify-between mb-3">
         <p className="text-label text-accent-rose">Example: hs-CRP trend</p>
         <span className="text-caption">Preview — log a lab to see your own</span>

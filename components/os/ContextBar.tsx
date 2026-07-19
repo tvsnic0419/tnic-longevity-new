@@ -31,7 +31,7 @@ function getNextAction(input: {
     return { message: 'No protocol yet', href: '/stacks', label: 'Build stack' };
   }
   if (!scanned) {
-    return { message: 'Personalize your OS', href: '/tools?tab=healthspan', label: 'Defense scan' };
+    return { message: 'Personalize your protocol', href: '/tools?tab=healthspan', label: 'Defense scan' };
   }
   if (labsCount === 0) {
     return { message: 'Log baseline labs', href: '/labs', label: 'Open Labs' };
@@ -42,7 +42,7 @@ function getNextAction(input: {
   if (pathname === '/dashboard') {
     return { message: 'Explore tools', href: '/tools', label: 'Open Tools' };
   }
-  return { message: 'Command center', href: '/dashboard', label: 'Dashboard' };
+  return { message: 'Stack, labs & progress', href: '/dashboard', label: 'Dashboard' };
 }
 
 export function ContextBar() {
@@ -57,14 +57,14 @@ export function ContextBar() {
   const analysis = analyzeStack(selected);
 
   // Persisted stacks follow the visitor across every hub page. If that state is
-  // stale or unexpected, one click returns the OS to a clean 0/12 slate — with
-  // an Undo so nothing is lost by accident.
+  // stale or unexpected, one click returns to a clean 0/12 slate — with an
+  // Undo so nothing is lost by accident.
   const resetStack = () => {
     if (selected.length === 0) return;
     const previous = selected;
     setSelected([]);
     toast('Stack reset', {
-      description: 'Your OS is back to a clean slate.',
+      description: 'Your stack is back to a clean slate.',
       action: { label: 'Undo', onClick: () => setSelected(previous) },
     });
   };
@@ -98,7 +98,7 @@ export function ContextBar() {
         'sticky top-14 md:top-16 z-40 border-b border-border',
         'bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/85',
       )}
-      aria-label="Hub context and OS status"
+      aria-label="Hub context and stack status"
     >
       {(crumbs.length > 1 || hubNext) && (
         <div className="border-b border-border/50 bg-muted/20">

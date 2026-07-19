@@ -51,7 +51,7 @@ export function OnboardingStrip() {
           <p className="text-label text-accent-cyan">GET STARTED</p>
           <p className="text-sm font-semibold mt-0.5">
             {completedCount === 0
-              ? 'Set up your Longevity OS in 4 steps'
+              ? 'Set up your dashboard in 4 steps'
               : `${completedCount} of ${steps.length} setup steps complete`}
           </p>
         </div>

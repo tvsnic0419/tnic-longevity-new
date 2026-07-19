@@ -19,7 +19,8 @@ export function StacksShowcase() {
           <Link
             key={stack.id}
             href={`/stacks#${stack.slug}`}
-            className="focus-ring interactive group flex flex-col gap-4 rounded-2xl glass glass-hover p-5"
+            className="card-nav focus-ring interactive group flex flex-col gap-4 rounded-2xl glass glass-hover p-5"
+            style={{ ['--nav-accent' as string]: 'var(--accent-violet)' }}
           >
             <div className="flex items-start justify-between gap-2">
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent-violet/10 border border-accent-violet/25">

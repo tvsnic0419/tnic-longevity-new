@@ -65,7 +65,7 @@ export function OgImage({
         <div style={{ display: 'flex', gap: 24, fontSize: 18, color: '#64748b' }}>
           <span>Tier A/B/C graded</span>
           <span>·</span>
-          <span>Local-first OS</span>
+          <span>Local-first · No account needed</span>
           <span>·</span>
           <span>tnic.help</span>
         </div>

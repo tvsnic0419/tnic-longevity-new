@@ -62,7 +62,7 @@ export default function RootLayout({
       <body className="min-h-full">
         <AmbientLayer />
         <SkipLink />
-        <ErrorBoundary fallbackMessage="The Longevity OS encountered an issue loading this section.">
+        <ErrorBoundary fallbackMessage="TNiC encountered an issue loading this section.">
           <PlatformProviderWrapper>
             <div className="page-canvas">{children}</div>
           </PlatformProviderWrapper>

@@ -15,7 +15,7 @@ export interface DashboardStatusSnapshot {
 }
 
 export function buildDashboardStatusMarkdown(s: DashboardStatusSnapshot): string {
-  return `# TNiC Longevity OS — Status Snapshot
+  return `# TNiC — Stack Status Snapshot
 
 *Exported ${s.exportedAt.slice(0, 10)} · N=1 journaling*
 
@@ -56,7 +56,7 @@ export function downloadDashboardStatusPng(s: DashboardStatusSnapshot, filename?
 
   ctx.fillStyle = '#22d3ee';
   ctx.font = '600 11px system-ui, sans-serif';
-  ctx.fillText('TNiC LONGEVITY OS', 24, 32);
+  ctx.fillText('TNiC STACK STATUS', 24, 32);
 
   ctx.fillStyle = '#f8fafc';
   ctx.font = 'bold 18px system-ui, sans-serif';

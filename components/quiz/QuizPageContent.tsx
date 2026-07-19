@@ -22,7 +22,7 @@ export function QuizPageContent() {
           icon={ClipboardList}
           eyebrow="~3 minutes"
           title="Find your longevity entry point"
-          description="Answer three quick questions. Get an evidence-graded stack preset, your next OS step, and a personalized insight — no account required."
+          description="Answer three quick questions. Get an evidence-graded stack preset, your next step, and a personalized insight — no account required."
           meta="Goal · Age range · Experience"
           theme="emerald"
           context={getHubContext('quiz')}

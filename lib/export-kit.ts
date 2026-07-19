@@ -44,7 +44,7 @@ export function buildStackTextExport(payload: ExportKitPayload): string {
   const analysis = analyzeStack(payload.stack);
   const selected = compounds.filter((c) => payload.stack.includes(c.id));
   const lines: string[] = [
-    'TNiC Longevity OS — Stack Summary',
+    'TNiC — Stack Summary',
     `Generated: ${new Date().toLocaleString()}`,
     '',
     `Synergy score: ${analysis.score}`,

@@ -132,7 +132,11 @@ export function HomeExplore() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {destinations.map(({ href, icon: Icon, eyebrow, title, desc, accent }, i) => (
             <RevealItem key={title} index={i}>
-              <GlassPanel depth="mid" className="glass-hover h-full overflow-hidden rounded-2xl">
+              <GlassPanel
+                depth="mid"
+                className="card-nav glass-hover h-full overflow-hidden rounded-2xl"
+                style={{ ['--nav-accent' as string]: `var(--accent-${accent})` }}
+              >
                 <Link href={href} className="focus-ring group flex h-full flex-col p-6">
                   <div className="mb-5 flex items-center justify-between">
                     <span

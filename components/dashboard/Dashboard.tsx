@@ -20,8 +20,6 @@ import { NextUpPanel } from '@/components/os/NextUpPanel';
 import { DashboardStatusExport } from '@/components/dashboard/DashboardStatusExport';
 import { OnboardingStrip } from '@/components/dashboard/OnboardingStrip';
 import { UserNextStepsPanel } from '@/components/dashboard/UserNextStepsPanel';
-import { ContextRail } from '@/components/ui/ContextRail';
-import { getHubContext } from '@/lib/hub-context';
 
 function formatDaysAgo(dateStr: string): string {
   const days = Math.floor(
@@ -95,13 +93,13 @@ export function Dashboard() {
           <div className="inline-flex items-center gap-2 card-ultra rounded-full px-4 py-2.5 mb-4 text-body-sm">
             <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent-emerald animate-pulse-glow" aria-hidden="true" />
             <LayoutDashboard className="w-4 h-4 text-accent-emerald" aria-hidden="true" />
-            <span className="font-mono text-xs tracking-wide text-foreground/90 uppercase">Personal command center</span>
+            <span className="font-mono text-xs tracking-wide text-foreground/90 uppercase">Stack, labs & progress</span>
           </div>
-          <h1 className="heading-page">My Longevity OS</h1>
+          <h1 className="heading-page">Your Protocol Dashboard</h1>
           <p className="text-body text-muted-foreground mt-3 max-w-2xl">
             {quizResult
               ? `Goal: ${goalLabels[quizResult.goal] ?? quizResult.goal} — stack, labs, and journey in one place.`
-              : 'Your anti-aging operating system — stack, labs, and journey in one place. Data stays local unless you export it.'}
+              : 'Your compound stack, lab trends, and hallmark coverage — tracked in one place. Data stays local unless you export it.'}
           </p>
         </div>
         <button
@@ -113,20 +111,18 @@ export function Dashboard() {
         </button>
       </header>
 
-      <ContextRail {...getHubContext('dashboard')} theme="emerald" className="mb-8" />
-
       <OnboardingStrip />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         <div id="dashboard-status" className="lg:col-span-1">
-        <Card variant="elevated" className="h-full">
+        <Card variant="elevated" className="card-data h-full" style={{ ['--data-accent' as string]: 'var(--accent-emerald)' }}>
           <CardHeader>
             <CardTitle>Current status</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <div>
               <p className="text-caption text-muted-foreground">Active protocol</p>
-              <p className="text-2xl font-bold mt-1 leading-snug">{activeProtocol}</p>
+              <p className="card-data-value text-2xl font-bold mt-1 leading-snug">{activeProtocol}</p>
               <p className="text-body-sm text-muted-foreground mt-1">
                 {selected.length} compound{selected.length === 1 ? '' : 's'} · Tier {analysis.evidenceTier}
               </p>
@@ -134,7 +130,7 @@ export function Dashboard() {
 
             <div>
               <p className="text-caption text-muted-foreground">Last lab update</p>
-              <p className="text-2xl font-bold mt-1">
+              <p className="card-data-value text-2xl font-bold mt-1">
                 {latestLabDate ? formatDaysAgo(latestLabDate) : 'Not logged yet'}
               </p>
               {latestLabDate && (

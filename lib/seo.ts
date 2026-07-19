@@ -290,12 +290,12 @@ export function buildSoftwareApplicationSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'TNiC Longevity OS',
+    name: 'TNiC',
     applicationCategory: 'HealthApplication',
     operatingSystem: 'Web',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     description:
-      'Privacy-first longevity operating system: personal dashboard, stack architect, local lab hub, searchable anti-aging library, and six evidence-graded tools.',
+      'Privacy-first longevity intelligence: evidence-graded compounds and protocols, a personal dashboard, stack architect, local lab hub, searchable anti-aging library, and six evidence-graded tools.',
     url: SITE.url,
     featureList: [
       'Stack synergy simulator',
@@ -360,7 +360,7 @@ export function buildHowToSchema({
     })),
     tool: [
       { '@type': 'HowToTool', name: 'Stack Architect (TNiC)' },
-      { '@type': 'HowToTool', name: 'Longevity OS Dashboard' },
+      { '@type': 'HowToTool', name: 'TNiC Dashboard' },
     ],
     supply: [
       { '@type': 'HowToSupply', name: 'PubMed account (free)' },

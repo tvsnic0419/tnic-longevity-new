@@ -126,12 +126,12 @@ function getPageContextItems(pathname: string): PaletteItem[] {
     return [
       item('ctx-home-quiz', 'Take 3-min quiz', { href: '/quiz', kind: 'page' }),
       item('ctx-home-products', 'Verified product catalog', { href: '/products', kind: 'page' }),
-      item('ctx-home-dashboard', 'Open your OS dashboard', { href: '/dashboard', kind: 'page' }),
+      item('ctx-home-dashboard', 'Open your dashboard', { href: '/dashboard', kind: 'page' }),
       item('ctx-home-research', 'Research Intel feed', { href: '/#research', kind: 'page' }),
     ];
   }
   return [
-    item('ctx-default-dashboard', 'My Longevity OS', { href: '/dashboard', kind: 'page' }),
+    item('ctx-default-dashboard', 'My Dashboard', { href: '/dashboard', kind: 'page' }),
     item('ctx-default-library', 'Anti-Aging Library', { href: '/library', kind: 'page' }),
     item('ctx-default-quiz', '3-Min Starter Quiz', { href: '/quiz', kind: 'page' }),
   ];

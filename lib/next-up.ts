@@ -159,7 +159,7 @@ export const nextUpImprovements: NextUpItem[] = [
   {
     id: 'dashboard-status-export',
     title: 'Dashboard status card export',
-    desc: 'Copy/download markdown + canvas PNG snapshot of Longevity OS status for N=1 journaling.',
+    desc: 'Copy/download markdown + canvas PNG snapshot of stack status for N=1 journaling.',
     status: 'shipped',
     sprint: 'Sprint 14',
     href: '/dashboard#dashboard-status',

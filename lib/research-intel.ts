@@ -172,7 +172,7 @@ export function getResearchIntelContext(filters: ResearchIntelFilters): HubConte
   }
   return {
     what: 'A curated feed of longevity research headlines with protocol links to hallmarks, compounds, and stacks.',
-    why: 'Raw science news is disconnected from action. TNiC bridges every headline to your personal OS.',
+    why: 'Raw science news is disconnected from action. TNiC bridges every headline to your stack and protocol.',
     next: 'Filter by impact or compound, expand any item for protocol links, then open the matching Protocol Brief.',
   };
 }

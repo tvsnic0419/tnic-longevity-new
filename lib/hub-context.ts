@@ -51,7 +51,7 @@ export const hubContexts: Record<
   dashboard: {
     theme: 'emerald',
     what: 'Your personal longevity command center — stack status, labs, hallmark coverage, milestones, and export kit in one view.',
-    why: 'Fragmented tracking leads to bad decisions. The OS unifies what you are taking, what your labs show, and what to do next.',
+    why: 'Fragmented tracking leads to bad decisions. The dashboard unifies what you are taking, what your labs show, and what to do next.',
     next: 'Complete the onboarding strip, then log baseline labs and load a stack preset from the quiz or Stack Architect.',
   },
   stacks: {
@@ -106,7 +106,7 @@ export const hubContexts: Record<
     theme: 'emerald',
     what: 'A 3-question intake that maps your goal, age window, and experience to an evidence-graded stack preset.',
     why: 'One-size-fits-all stacks fail. The quiz routes beginners to fundamentals and advanced users to compare-and-stack paths.',
-    next: 'Answer all three questions, load your preset in Stack Architect, and open your OS dashboard to track progress.',
+    next: 'Answer all three questions, load your preset in Stack Architect, and open your dashboard to track progress.',
   },
   library: {
     theme: 'emerald',
@@ -256,9 +256,9 @@ const toolContexts: Record<ToolId, HubContext> = {
     next: 'Select your highest watch marker from Labs, then adjust stack order based on impact ranking.',
   },
   healthspan: {
-    what: 'Lifestyle-based biological age estimate and antioxidant defense scan — sets your OS profile locally.',
+    what: 'Lifestyle-based biological age estimate and antioxidant defense scan — sets your profile locally.',
     why: 'Subjective wellness needs a baseline. The scan anchors your dashboard bio-age and defense score.',
-    next: 'Complete the scan, review your OS profile on the dashboard, then fix sleep and exercise pillars first.',
+    next: 'Complete the scan, review your profile on the dashboard, then fix sleep and exercise pillars first.',
   },
 };
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, type PointerEvent, type ReactNode } from 'react';
+import { useRef, type CSSProperties, type PointerEvent, type ReactNode } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -22,10 +22,11 @@ interface GlassPanelProps {
   /** Contrast scrim behind children so text over the glass clears WCAG AA. */
   scrim?: boolean;
   className?: string;
+  style?: CSSProperties;
   children: ReactNode;
 }
 
-export function GlassPanel({ depth = 'content', tilt = false, scrim = false, className, children }: GlassPanelProps) {
+export function GlassPanel({ depth = 'content', tilt = false, scrim = false, className, style, children }: GlassPanelProps) {
   const ref = useRef<HTMLDivElement>(null);
   const px = useMotionValue(0.5);
   const py = useMotionValue(0.5);
@@ -52,7 +53,7 @@ export function GlassPanel({ depth = 'content', tilt = false, scrim = false, cla
       ref={ref}
       onPointerMove={tilt ? handleMove : undefined}
       onPointerLeave={tilt ? handleLeave : undefined}
-      style={tilt ? { rotateX, rotateY, transformPerspective: 1000 } : undefined}
+      style={tilt ? { rotateX, rotateY, transformPerspective: 1000, ...style } : style}
       className={cn('glass-deep', `glass-plane-${depth}`, className)}
     >
       {scrim && <div className="glass-scrim" aria-hidden="true" />}

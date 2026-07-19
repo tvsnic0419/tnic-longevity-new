@@ -39,10 +39,10 @@ const hubPages: PaletteItem[] = [
   {
     id: 'page-dashboard',
     kind: 'page',
-    title: 'My Longevity OS',
-    subtitle: 'Personal command center',
+    title: 'My Dashboard',
+    subtitle: 'Stack, labs & progress',
     href: '/dashboard',
-    keywords: ['dashboard', 'os', 'command center', 'status'],
+    keywords: ['dashboard', 'command center', 'status'],
   },
   {
     id: 'page-quiz',

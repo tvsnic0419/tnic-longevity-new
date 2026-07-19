@@ -80,3 +80,32 @@ export const POPULAR_GUIDE_LINKS = [
   { href: '/library/compare', label: 'All Comparisons' },
   { href: '/faq', label: 'Longevity FAQ' },
 ] as const;
+
+/**
+ * Compact, grouped subset of POPULAR_GUIDE_LINKS for the footer — favors hub
+ * pages over an exhaustive per-compound listing, so the footer reads as a
+ * sitemap rather than a second navigation bar. The full flat list above still
+ * powers /site-map, which is the right place for the exhaustive index.
+ */
+export const FOOTER_GUIDE_GROUPS = [
+  {
+    label: 'Compound Guides',
+    links: [
+      { href: '/supplement-guides', label: 'All Supplement Guides' },
+      { href: '/library', label: 'Anti-Aging Library' },
+      { href: '/longevity-supplements-guide', label: 'Best Supplements 2026' },
+      { href: '/nad-supplement-guide', label: 'NAD+ Guide' },
+      { href: '/glynac-supplement-guide', label: 'GlyNAC Guide' },
+      { href: '/berberine-supplement-guide', label: 'Berberine Guide' },
+    ],
+  },
+  {
+    label: 'Comparisons',
+    links: [
+      { href: '/library/compare', label: 'All Comparisons' },
+      { href: '/library/compare/nmn-vs-nr', label: 'NMN vs NR' },
+      { href: '/library/compare/rapamycin-vs-metformin', label: 'Rapamycin vs Metformin' },
+      { href: '/library/compare/fisetin-vs-quercetin', label: 'Fisetin vs Quercetin' },
+    ],
+  },
+] as const;

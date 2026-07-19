@@ -15,27 +15,27 @@ import { glossary, consumerFAQ } from './data';
 export const seoRoutes = {
   home: () =>
     buildPageMetadata({
-      title: 'TNiC — Your Anti-Aging Operating System',
+      title: 'The 12 Hallmarks of Aging — Evidence-Graded Compounds & Protocols',
       description:
-        'Free longevity OS: evidence-graded stacks (Tier A/B/C from human trials), 12 Hallmarks of Aging library, local biomarker tracking, and six interactive tools. Your data stays in your browser.',
+        'Evidence-graded stacks (Tier A/B/C from human trials), the 12 Hallmarks of Aging library, local biomarker tracking, and six interactive tools — free, and your data stays in your browser.',
       path: '/',
-      keywords: ['longevity OS', 'anti-aging operating system', 'healthspan dashboard', 'hallmarks of aging', 'evidence-graded supplements'],
+      keywords: ['hallmarks of aging', 'evidence-graded supplements', 'anti-aging compounds', 'healthspan protocols'],
     }),
 
   dashboard: () =>
     buildPageMetadata({
-      title: 'My Longevity OS — Personal Dashboard',
+      title: 'Your Protocol Dashboard — Stack, Labs & Progress',
       description:
-        'Your anti-aging command center: active stack with synergy scores, lab status, hallmark coverage map, outcome milestones, and export kit. Local-first — data never leaves your browser.',
+        'Your compound stack with synergy scores, lab status, hallmark coverage map, outcome milestones, and export kit. Local-first — data never leaves your browser.',
       path: '/dashboard',
-      keywords: ['longevity dashboard', 'personal health OS', 'stack tracker', 'hallmark coverage'],
+      keywords: ['longevity dashboard', 'stack tracker', 'hallmark coverage'],
     }),
 
   quiz: () =>
     buildPageMetadata({
       title: '3-Min Starter Quiz — Personalized Longevity Entry Point',
       description:
-        'Three questions: your goal, age range, and experience level. Get a mechanism-matched stack preset, a PMID-cited insight for your age group, and your next step in the TNiC Longevity OS.',
+        'Three questions: your goal, age range, and experience level. Get a mechanism-matched stack preset, a PMID-cited insight for your age group, and your next step.',
       path: '/quiz',
       keywords: ['longevity quiz', 'starter protocol', 'NMN stack quiz', 'personalized supplement stack', 'NRF2 quiz'],
     }),

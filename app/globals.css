@@ -381,6 +381,31 @@ body::after {
   box-shadow: var(--glass-shadow-mid);
 }
 
+/* ── Role shells: nav vs data ──
+   Every card on the site — a link to another page, a live number, a warning
+   — shared the exact same glass rectangle, so nothing signaled what kind of
+   thing you were looking at before you read it. These two opt-in modifiers
+   (stack on top of .glass/.card-base/GlassPanel) give navigation cards and
+   data/stat cards a distinct, permanent tell. Alerts already have their own
+   treatment — see DisclaimerBanner's severity-tinted border + icon. */
+.card-nav {
+  position: relative;
+  border-left: 3px solid color-mix(in srgb, var(--nav-accent, var(--accent-cyan)) 35%, transparent);
+  transition: border-color 0.3s ease;
+}
+.card-nav:hover {
+  border-left-color: var(--nav-accent, var(--accent-cyan));
+}
+
+.card-data {
+  position: relative;
+  border-top: 2px solid color-mix(in srgb, var(--data-accent, var(--accent-cyan)) 45%, transparent);
+}
+.card-data .card-data-value {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
 .card-elevated {
   position: relative;
   background: var(--color-bg-elevated);

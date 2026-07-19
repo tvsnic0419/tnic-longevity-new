@@ -70,7 +70,7 @@ const CATALOG: Record<
     evidence: 'Personal',
   },
   'onboarding-complete': {
-    title: 'Longevity OS initialized',
+    title: 'Dashboard set up',
     desc: 'Onboarding complete — preset stack and dashboard ready.',
     evidence: 'Personal',
   },

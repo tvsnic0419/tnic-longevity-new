@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { cardVariants } from '@/lib/design-system';
 import { cn } from '@/lib/utils';
 
@@ -7,16 +7,17 @@ type CardVariant = keyof typeof cardVariants;
 interface CardProps {
   children: ReactNode;
   className?: string;
+  style?: CSSProperties;
   variant?: CardVariant;
   /** @deprecated use variant="elevated" */
   elevated?: boolean;
 }
 
-export function Card({ children, className = '', variant, elevated = false }: CardProps) {
+export function Card({ children, className = '', style, variant, elevated = false }: CardProps) {
   const resolved = variant ?? (elevated ? 'elevated' : 'default');
 
   return (
-    <div className={cn(cardVariants[resolved], 'p-5 md:p-6', className)}>
+    <div className={cn(cardVariants[resolved], 'p-5 md:p-6', className)} style={style}>
       {children}
     </div>
   );

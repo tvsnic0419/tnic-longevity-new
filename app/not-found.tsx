@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 const recoveryLinks = [
   { href: '/library', label: 'Browse all hallmarks', desc: 'The 12 Hallmarks of Aging library', icon: Library },
   { href: '/quiz', label: 'Take the 3-min quiz', desc: 'Get a personalized stack preset', icon: HelpCircle },
-  { href: '/dashboard', label: 'Go to dashboard', desc: 'Your Longevity OS command center', icon: LayoutDashboard },
+  { href: '/dashboard', label: 'Go to dashboard', desc: 'Your stack, labs, and progress', icon: LayoutDashboard },
 ];
 
 const popularGuides = POPULAR_GUIDE_LINKS.slice(0, 4);
@@ -46,7 +46,7 @@ export default function NotFound() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="focus-ring interactive card-ultra rounded-2xl p-4 flex items-center gap-3 hover:border-accent-cyan/30"
+                className="card-nav focus-ring interactive card-ultra rounded-2xl p-4 flex items-center gap-3 hover:border-accent-cyan/30"
               >
                 <span className="shrink-0 w-9 h-9 rounded-xl bg-accent-cyan/10 border border-accent-cyan/25 flex items-center justify-center">
                   <link.icon className="w-4 h-4 text-accent-cyan" aria-hidden="true" />

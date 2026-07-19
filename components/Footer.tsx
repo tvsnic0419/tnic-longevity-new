@@ -12,7 +12,7 @@ import {
   Rocket,
   Syringe,
 } from 'lucide-react';
-import { POPULAR_GUIDE_LINKS } from '@/lib/index-priority';
+import { FOOTER_GUIDE_GROUPS } from '@/lib/index-priority';
 import { citationRegistry } from '@/lib/trust';
 import { compounds } from '@/lib/data';
 
@@ -94,18 +94,25 @@ export function Footer() {
 
           <div>
             <p className="text-label mb-4">Popular Guides</p>
-            <ul className="space-y-3">
-              {POPULAR_GUIDE_LINKS.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="focus-ring interactive text-body-sm hover:text-accent-cyan rounded-md"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
+            <div className="space-y-5">
+              {FOOTER_GUIDE_GROUPS.map((group) => (
+                <div key={group.label}>
+                  <p className="text-caption font-semibold text-muted-foreground/80 mb-2">{group.label}</p>
+                  <ul className="space-y-3">
+                    {group.links.map((link) => (
+                      <li key={link.href}>
+                        <Link
+                          href={link.href}
+                          className="focus-ring interactive text-body-sm hover:text-accent-cyan rounded-md"
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
 
           <div>

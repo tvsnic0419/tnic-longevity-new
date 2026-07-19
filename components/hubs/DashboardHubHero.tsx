@@ -61,14 +61,14 @@ export function DashboardHubHero() {
           >
             <div className="inline-flex items-center gap-2 card-ultra rounded-full px-4 py-2 mb-4 text-body-sm">
               <LayoutDashboard className="w-4 h-4 text-accent-emerald" aria-hidden="true" />
-              <span>Personal command center</span>
+              <span>Stack, labs & progress</span>
             </div>
 
-            <h1 className="heading-page mb-3">My Longevity OS</h1>
+            <h1 className="heading-page mb-3">Your Protocol Dashboard</h1>
             <p className="text-body max-w-xl mb-6">
               {quizResult
                 ? `Goal: ${goalLabels[quizResult.goal] ?? quizResult.goal} — stack, labs, and journey unified.`
-                : 'Your anti-aging operating system — stack, labs, and journey in one place. Data stays local unless you export it.'}
+                : 'Your compound stack, lab trends, and hallmark coverage — tracked in one place. Data stays local unless you export it.'}
             </p>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
