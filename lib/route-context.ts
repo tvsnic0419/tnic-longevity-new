@@ -67,6 +67,7 @@ const SEGMENT_LABELS: Record<string, string> = {
   'site-map': 'Site Map',
   compare: 'Comparisons',
   pathways: 'Pathways',
+  atlas: 'Mechanism Atlas',
   compounds: 'Compounds',
   synergies: 'Synergies',
   lifestyle: 'Lifestyle',

@@ -5,6 +5,7 @@ export const PRIORITY_INDEX_PATHS = [
   '/longevity-supplements-guide',
   '/library',
   '/library/top-picks',
+  '/library/atlas',
   '/library/pathways',
   '/library/pathways/ampk-activation',
   '/library/pathways/nrf2-keap1-antioxidant-response',

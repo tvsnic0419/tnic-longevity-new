@@ -22,6 +22,7 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     { url: `${base}/library/top-picks`, lastModified, changeFrequency: 'monthly', priority: 0.85 },
     { url: `${base}/library/compare`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/library/pathways`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${base}/library/atlas`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/learn`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/faq`, lastModified, changeFrequency: 'monthly', priority: 0.85 },
     { url: `${base}/stacks`, lastModified, changeFrequency: 'weekly', priority: 0.9 },

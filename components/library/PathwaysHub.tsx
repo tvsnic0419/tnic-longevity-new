@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Waypoints, ArrowRight } from 'lucide-react';
+import { Waypoints, ArrowRight, Orbit } from 'lucide-react';
 import { pathways, type PathwayLever } from '@/lib/pathways';
 import { compounds } from '@/lib/data';
 import { peptideLibrary } from '@/lib/peptides-library';
@@ -31,6 +31,14 @@ export function PathwaysHub() {
             align="left"
             context={getHubContext('pathways')}
           />
+          <Link
+            href="/library/atlas"
+            className="focus-ring interactive mt-4 inline-flex items-center gap-2 text-sm font-semibold text-accent-cyan glass glass-hover px-4 py-2 rounded-full glow-hover-cyan transition"
+          >
+            <Orbit className="w-4 h-4" aria-hidden="true" />
+            See all six in the Mechanism Atlas
+            <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+          </Link>
         </div>
 
         {/* Orbital map of all 6 pathways — hover/focus any node for a live

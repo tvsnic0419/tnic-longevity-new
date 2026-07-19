@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { Search, ArrowRight, Library, Network, Trophy, Waypoints } from 'lucide-react';
+import { Search, ArrowRight, Library, Network, Trophy, Waypoints, Orbit } from 'lucide-react';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { HallmarkVisual } from './HallmarkVisual';
@@ -55,8 +55,16 @@ export function AntiAgingLibrary({ asPageTitle = false }: AntiAgingLibraryProps)
           context={getHubContext('library')}
         />
 
-        {/* Systems Map + Top Picks CTAs */}
+        {/* Mechanism Atlas (flagship) + Systems Map + Top Picks CTAs */}
         <div className="flex flex-wrap justify-center gap-3 mb-6">
+          <Link
+            href="/library/atlas"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-accent-cyan glass glass-hover px-5 py-2.5 rounded-full glow-hover-cyan ring-1 ring-accent-cyan/30 transition"
+          >
+            <Orbit className="w-4 h-4" />
+            Mechanism Atlas — hallmarks, pathways &amp; levers in one map
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
           <Link
             href="/library/systems"
             className="inline-flex items-center gap-2 text-sm font-semibold text-accent-violet glass glass-hover px-5 py-2.5 rounded-full glow-hover-violet transition"

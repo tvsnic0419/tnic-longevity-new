@@ -47,7 +47,8 @@ export const hubContexts: Record<
   | 'peptides'
   | 'topPicks'
   | 'hallmarks'
-  | 'pathways',
+  | 'pathways'
+  | 'atlas',
   HubContextEntry
 > = {
   dashboard: {
@@ -169,6 +170,12 @@ export const hubContexts: Record<
     what: 'The six molecular pathways TNiC compounds actually converge on — AMPK, NRF2/KEAP1, sirtuins/NAD+, mTOR, mitochondrial quality control, and senescence clearance — each with every compound and peptide lever that engages it.',
     why: 'Compound and hallmark pages each show one slice of a pathway. This is the only place to see everything that touches AMPK, or everything competing for the same NAD+ pool, in one view — the relationships that explain why some stacks are complementary and others are redundant.',
     next: 'Start from the pathway behind your primary hallmark, then compare its primary vs. secondary levers before picking compounds.',
+  },
+  atlas: {
+    theme: 'cyan',
+    what: 'One interactive map of the whole model — all 12 hallmarks of aging on the left, the 6 convergence pathways in the middle, and every compound and peptide lever on the right, wired together by the relationships the pathway data already asserts.',
+    why: 'The library is organized three ways — by hallmark, by pathway, by compound — and each view hides the others. The atlas is the single place those axes meet: trace any hallmark to the levers that reach it, or any lever back to the hallmarks it touches, in one continuous chain.',
+    next: 'Select the hallmark that matches your primary concern, follow its pathways to the strongest-evidence levers, then open those modules to read the actual trial data.',
   },
 };
 
