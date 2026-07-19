@@ -1,9 +1,13 @@
 import Link from 'next/link';
 import { ClipboardList, BookOpen, Activity, ArrowRight, type LucideIcon } from 'lucide-react';
-import { GlassPanel } from '@/components/ui/GlassPanel';
 import { RevealItem } from '@/components/ui/RevealItem';
 
-/** A calm three-step path from curiosity to a tracked protocol. Server-rendered. */
+/**
+ * A calm three-step path from curiosity to a tracked protocol. Server-rendered.
+ * Rendered as a connected sequence (a track linking the three badges) rather
+ * than three disconnected cards — the steps happen in order, so the layout
+ * says that instead of three equally-weighted, unrelated options.
+ */
 
 interface Step {
   num: string;
@@ -59,30 +63,44 @@ export function HomeSteps() {
           </p>
         </div>
 
-        <ol className="grid grid-cols-1 gap-5 md:grid-cols-3">
+        {/* Connecting track — badges sit at the flex row's own edges via
+            justify-between, so a 22px inset (half the 44px badge) on each
+            side lands the line exactly at every badge's center. Desktop only;
+            each step shows its own badge inline below on mobile instead. */}
+        <div aria-hidden="true" className="relative mb-8 hidden items-center justify-between md:flex">
+          <div className="absolute left-[22px] right-[22px] top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-accent-cyan/50 via-border to-accent-emerald/50" />
+          {steps.map(({ num, icon: Icon }) => (
+            <span
+              key={num}
+              className="relative z-10 flex h-11 w-11 items-center justify-center rounded-full icon-badge-cyan ring-4 ring-background"
+            >
+              <Icon className="h-5 w-5 text-accent-cyan" aria-hidden="true" />
+            </span>
+          ))}
+        </div>
+
+        <ol className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-8">
           {steps.map(({ num, icon: Icon, title, desc, cta, href }, i) => (
-            <li key={num} className="h-full">
-              <RevealItem index={i} className="h-full">
-                <GlassPanel depth="mid" className="glass-hover flex h-full flex-col rounded-2xl p-7">
-                  <div className="mb-6 flex items-center gap-4">
-                    <span className="font-mono text-3xl font-semibold text-accent-cyan/60">{num}</span>
-                    <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl icon-badge-cyan">
-                      <Icon className="h-5 w-5 text-accent-cyan" aria-hidden="true" />
-                    </span>
-                  </div>
-                  <h3 className="heading-card mb-2 text-lg">{title}</h3>
-                  <p className="text-body-sm mb-6 flex-1 leading-relaxed">{desc}</p>
-                  <Link
-                    href={href}
-                    className="focus-ring group mt-auto inline-flex items-center gap-1.5 rounded-md text-sm font-semibold text-accent-cyan"
-                  >
-                    {cta}
-                    <ArrowRight
-                      className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
-                      aria-hidden="true"
-                    />
-                  </Link>
-                </GlassPanel>
+            <li key={num}>
+              <RevealItem index={i}>
+                <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-full icon-badge-cyan md:hidden">
+                  <Icon className="h-5 w-5 text-accent-cyan" aria-hidden="true" />
+                </span>
+                <p className="mb-1.5 font-mono text-xs font-bold tracking-widest text-accent-cyan/70">
+                  STEP {num}
+                </p>
+                <h3 className="heading-card mb-2 text-lg">{title}</h3>
+                <p className="text-body-sm mb-4 leading-relaxed">{desc}</p>
+                <Link
+                  href={href}
+                  className="focus-ring group inline-flex items-center gap-1.5 rounded-md text-sm font-semibold text-accent-cyan"
+                >
+                  {cta}
+                  <ArrowRight
+                    className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                    aria-hidden="true"
+                  />
+                </Link>
               </RevealItem>
             </li>
           ))}

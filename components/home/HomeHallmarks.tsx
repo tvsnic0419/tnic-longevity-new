@@ -23,8 +23,12 @@ export function HomeHallmarks() {
   return (
     <section
       aria-labelledby="home-hallmarks-heading"
-      className="border-t border-border/50 py-20 md:py-28"
+      className="relative border-t border-border/50 bg-[var(--color-bg-elevated)] py-20 md:py-28"
     >
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-emerald/40 to-transparent"
+        aria-hidden="true"
+      />
       <div className="container-page">
         <div className="mb-10 flex flex-col gap-4 md:mb-14 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
