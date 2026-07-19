@@ -10,6 +10,7 @@ import {
   HelpCircle,
   GraduationCap,
   Rocket,
+  Syringe,
 } from 'lucide-react';
 import { POPULAR_GUIDE_LINKS } from '@/lib/index-priority';
 import { citationRegistry } from '@/lib/trust';
@@ -22,6 +23,7 @@ const hubLinks = [
   { href: '/dashboard', label: 'My Dashboard', icon: LayoutDashboard },
   { href: '/quiz', label: '3-Min Quiz', icon: HelpCircle },
   { href: '/library', label: 'Anti-Aging Library', icon: Library },
+  { href: '/peptides', label: 'Peptide Library', icon: Syringe },
   { href: '/learn', label: 'Learn Hub', icon: GraduationCap },
   { href: '/stacks', label: 'Stacks & Protocols', icon: Layers },
   { href: '/labs', label: 'Lab Analysis Hub', icon: FlaskConical },

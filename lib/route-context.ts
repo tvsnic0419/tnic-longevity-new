@@ -8,6 +8,7 @@ import {
   libraryModuleTitles,
   libraryCategoryLabels,
   toolLabels,
+  peptideTitles,
 } from './breadcrumb-titles';
 
 export type HubKey = keyof typeof hubContexts;
@@ -27,7 +28,9 @@ export const HUB_PATH_MAP: Record<string, HubKey> = {
   '/quiz': 'quiz',
   '/library/compare': 'compare',
   '/library/delivery-systems': 'deliverySystems',
+  '/library/top-picks': 'topPicks',
   '/library': 'library',
+  '/peptides': 'peptides',
   '/trust': 'trust',
   '/contact': 'contact',
 };
@@ -56,6 +59,7 @@ const SEGMENT_LABELS: Record<string, string> = {
   faq: 'FAQ',
   quiz: 'Quiz',
   library: 'Library',
+  peptides: 'Peptides',
   trust: 'Trust',
   contact: 'Contact',
   'elite-8': 'Elite 8',
@@ -139,6 +143,14 @@ export function buildRouteBreadcrumbs(pathname: string, searchTab?: string | nul
         { label: hallTitle, href: pathname },
       ];
     }
+  }
+
+  if (parts[0] === 'peptides' && parts.length === 2) {
+    return [
+      ...crumbs,
+      { label: 'Peptides', href: '/peptides' },
+      { label: peptideTitles[parts[1]] ?? titleCase(parts[1]), href: pathname },
+    ];
   }
 
   if (parts[0] === 'library' && parts[1] === 'delivery-systems') {

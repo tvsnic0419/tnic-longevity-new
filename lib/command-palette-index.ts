@@ -3,6 +3,7 @@ import { hallmarkLibrary } from './hallmarks-library';
 import { libraryModules, getModulePath } from './library-modules';
 import { evidenceComparisons } from './comparisons';
 import { toolsRegistry } from './registry';
+import { peptideLibrary } from './peptides-library';
 
 export type PaletteItemKind =
   | 'page'
@@ -10,6 +11,7 @@ export type PaletteItemKind =
   | 'hallmark'
   | 'module'
   | 'compound'
+  | 'peptide'
   | 'compare'
   | 'faq'
   | 'glossary'
@@ -65,6 +67,22 @@ const hubPages: PaletteItem[] = [
     subtitle: 'NMN vs NR, stack vs stack',
     href: '/library/compare',
     keywords: ['compare', 'nmn vs nr', 'evidence table', 'comparison', 'share'],
+  },
+  {
+    id: 'page-peptides',
+    kind: 'page',
+    title: 'Peptide Library',
+    subtitle: 'Anti-aging peptides, graded honestly',
+    href: '/peptides',
+    keywords: ['peptides', 'bpc-157', 'ghk-cu', 'semaglutide', 'research chemical'],
+  },
+  {
+    id: 'page-top-picks',
+    kind: 'page',
+    title: 'Top TNiC Picks',
+    subtitle: 'Sirtuin, PARP, and NRF2 pathway picks',
+    href: '/library/top-picks',
+    keywords: ['top picks', 'sirtuin', 'parp', 'nrf2', 'editorial'],
   },
   {
     id: 'page-dashboard-export',
@@ -273,6 +291,15 @@ const compoundItems: PaletteItem[] = compounds.map((c) => ({
   keywords: [c.name.toLowerCase(), c.id, c.pathway.toLowerCase(), c.badge],
 }));
 
+const peptideItems: PaletteItem[] = peptideLibrary.map((p) => ({
+  id: `peptide-${p.id}`,
+  kind: 'peptide' as const,
+  title: p.name,
+  subtitle: p.tagline,
+  href: `/peptides/${p.slug}`,
+  keywords: [p.name.toLowerCase(), p.id, p.category, ...(p.aliases ?? []).map((a) => a.toLowerCase())],
+}));
+
 const faqItems: PaletteItem[] = consumerFAQ.map((f, i) => ({
   id: `faq-${i}`,
   kind: 'faq' as const,
@@ -333,6 +360,7 @@ export const paletteIndex: PaletteItem[] = [
   ...hallmarkItems,
   ...moduleItems,
   ...compoundItems,
+  ...peptideItems,
   ...faqItems,
   ...glossaryItems,
   ...actionItems,
@@ -370,6 +398,7 @@ export const paletteKindLabels: Record<PaletteItemKind, string> = {
   hallmark: 'Hallmark',
   module: 'Guide',
   compound: 'Compound',
+  peptide: 'Peptide',
   compare: 'Compare',
   faq: 'FAQ',
   glossary: 'Glossary',

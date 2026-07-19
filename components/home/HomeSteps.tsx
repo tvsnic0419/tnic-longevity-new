@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ClipboardList, BookOpen, Activity, ArrowRight, type LucideIcon } from 'lucide-react';
 import { RevealItem } from '@/components/ui/RevealItem';
+import { CellularDivider } from '@/components/ui/CellularDivider';
 
 /**
  * A calm three-step path from curiosity to a tracked protocol. Server-rendered.
@@ -49,10 +50,11 @@ export function HomeSteps() {
   return (
     <section
       aria-labelledby="home-steps-heading"
-      className="border-t border-border/50 py-20 md:py-28"
+      className="relative border-t border-border/50 py-20 md:py-28"
     >
+      <CellularDivider />
       <div className="container-page">
-        <div className="mx-auto mb-12 max-w-2xl text-center">
+        <RevealItem className="mx-auto mb-12 max-w-2xl text-center">
           <p className="text-label mb-3 text-accent-emerald">Get started in 3 steps</p>
           <h2 id="home-steps-heading" className="heading-section mb-3">
             From curious to a protocol you can trust.
@@ -61,7 +63,7 @@ export function HomeSteps() {
             No account, no upsell, no data leaving your device — just a clear path you can
             follow at your own pace.
           </p>
-        </div>
+        </RevealItem>
 
         {/* Connecting track — badges sit at the flex row's own edges via
             justify-between, so a 22px inset (half the 44px badge) on each

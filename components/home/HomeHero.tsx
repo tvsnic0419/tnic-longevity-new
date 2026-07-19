@@ -114,14 +114,19 @@ export function HomeHero() {
 
             {/* Mid plane — evidence stat row sits just above the backdrop.
                 gap-px against the panel's own fill, with a faint per-cell
-                overlay, reproduces the hairline grid without a hard-coded bg. */}
-            <GlassPanel depth="mid" className="overflow-hidden rounded-2xl">
+                overlay, reproduces the hairline grid without a hard-coded bg.
+                scan-overlay's hairline texture + monospace tabular figures
+                read as an instrument readout rather than a marketing stat
+                block — bracket-corner ornaments are reserved for larger
+                section-level containers (see SectionShell.tsx), too coarse
+                for this compact single row. */}
+            <GlassPanel depth="mid" className="scan-overlay relative overflow-hidden rounded-2xl">
               <dl className="grid grid-cols-2 gap-px sm:grid-cols-4">
                 {heroStats.map((stat) => (
                   <div key={stat.label} className="bg-white/[0.03] px-4 py-4 text-center lg:text-left">
                     <dt className="sr-only">{stat.label}</dt>
                     <dd>
-                      <span className="tnic-tabular block text-2xl font-bold tracking-tight text-white">
+                      <span className="tnic-tabular block font-mono text-2xl font-bold tracking-tight text-white">
                         {stat.value}
                       </span>
                       <span className="mt-1 block text-[11px] leading-tight text-white/50">
@@ -139,7 +144,11 @@ export function HomeHero() {
             <div className="relative">
               {/* Ambient 3D compound-synergy network — real product data, not
                   decoration for its own sake. Furthest-back layer (-z-10);
-                  the gradient glow and glass card paint above it in DOM order. */}
+                  the gradient glow and glass card paint above it in DOM order.
+                  Interactive (hover a node for its name/evidence tier, drag
+                  to rotate) — the caption below is the only affordance that
+                  tells a visitor that, since the network itself carries no
+                  visible cursor/button chrome. */}
               <div className="absolute -inset-20 -z-10 opacity-80" aria-hidden="true">
                 <HeroSceneMount />
               </div>
@@ -155,6 +164,9 @@ export function HomeHero() {
                 </Suspense>
               </GlassPanel>
             </div>
+            <p className="mt-4 hidden text-center text-[11px] text-white/35 lg:block lg:text-right">
+              Drag or hover the network — live compound-synergy data
+            </p>
           </div>
         </div>
       </div>

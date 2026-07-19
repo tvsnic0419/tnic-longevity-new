@@ -18,7 +18,7 @@ interface SubPageLayoutProps {
 
 export function SubPageLayout({ children, hideContextBar = false }: SubPageLayoutProps) {
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+    <div className="min-h-screen canvas-scrim text-foreground overflow-x-hidden">
       <ScrollProgress />
       <Nav />
       <div className="pt-14 md:pt-16">

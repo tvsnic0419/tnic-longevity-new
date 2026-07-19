@@ -53,7 +53,7 @@ export function AboutSection() {
       title="An Educational Longevity Platform"
       subtitle="TNiC is not a supplement store or a personal health blog. It is a structured, science-backed resource for adults optimizing healthspan — with interactive tools to turn research into actionable protocols."
       headingLevel="h1"
-      className="bg-background"
+      className="canvas-scrim"
     >
       <motion.div
         initial={{ opacity: 0, y: 16 }}

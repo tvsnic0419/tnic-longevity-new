@@ -385,11 +385,13 @@ body::after {
   position: relative;
   background: var(--color-bg-elevated);
   border-radius: var(--radius-2xl);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-}
-
-[data-theme="light"] .card-elevated {
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(15, 23, 42, 0.04);
+  /* Shares the Deep Glass mid-plane shadow recipe (Design System v8/v9)
+     instead of its own flat one-off shadow — this card read visibly
+     flatter than every other card class despite sitting at the same
+     elevation in the UI (sidebar module cards, etc). Theme-aware via the
+     token, so light mode gets a proper navy-tinted shadow instead of the
+     old hardcoded black rgba. */
+  box-shadow: var(--glass-shadow-mid);
 }
 
 .card-elevated::before,
@@ -515,9 +517,9 @@ body::after {
   animation: float 14s ease-in-out infinite;
 }
 
-.orb-1 { width: 520px; height: 520px; background: radial-gradient(circle, rgba(0,224,255,0.38) 0%, transparent 70%); top: -5%; left: 5%; }
-.orb-2 { width: 380px; height: 380px; background: radial-gradient(circle, rgba(52,211,153,0.30) 0%, transparent 70%); top: 35%; right: 3%; animation-delay: -5s; }
-.orb-3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(192,132,252,0.24) 0%, transparent 70%); bottom: 10%; left: 35%; animation-delay: -9s; }
+.orb-1 { width: 520px; height: 520px; background: radial-gradient(circle, rgba(0,224,255,0.38) 0%, transparent 70%); top: -5%; left: 5%; filter: blur(80px); opacity: 0.9; }
+.orb-2 { width: 380px; height: 380px; background: radial-gradient(circle, rgba(52,211,153,0.30) 0%, transparent 70%); top: 35%; right: 3%; animation-delay: -5s; filter: blur(70px); opacity: 0.85; }
+.orb-3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(192,132,252,0.24) 0%, transparent 70%); bottom: 10%; left: 35%; animation-delay: -9s; filter: blur(60px); opacity: 0.8; }
 
 @keyframes float {
   0%, 100% { transform: translate(0, 0) scale(1); }
@@ -656,21 +658,6 @@ body::after {
 @keyframes shimmer {
   0% { background-position: 0% center; }
   100% { background-position: 200% center; }
-}
-
-/* ── Gradient text variants ── */
-.gradient-text-violet {
-  background: linear-gradient(90deg, var(--accent-violet), var(--accent-cyan));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.gradient-text-emerald {
-  background: linear-gradient(90deg, var(--accent-emerald), var(--accent-cyan));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 .section-divider {
@@ -1119,10 +1106,80 @@ body::after {
   66% { transform: translate(-3%, 4%) scale(0.94); }
 }
 
+/* ── Molecular structure cascade ──
+   A field of authentic skeletal chemical structures drifting behind every
+   page. Sits above the aurora orbs, below all content. Kept whisper-faint so
+   body text contrast is never affected. */
+.molecule-cascade {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  /* soft glow ties the linework into the aurora field */
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent-cyan) 22%, transparent));
+}
+
+.molecule-node {
+  position: absolute;
+  transform: rotate(var(--rot, 0deg));
+  will-change: transform;
+  animation: molecule-drift 34s ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+.molecule-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.molecule-atoms text {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+/* Hue tiers map to the site accent tokens. */
+.molecule-node.hue-cyan { color: var(--accent-cyan); }
+.molecule-node.hue-emerald { color: var(--accent-emerald); }
+.molecule-node.hue-violet { color: var(--accent-violet); }
+
+/* Depth tiers: farther structures are fainter and drift more slowly, giving
+   the field a layered, parallax-like sense of space. Tuned to read as a
+   subtle-but-present texture directly over the dark base — no scrim dimming. */
+.molecule-node.depth-1 { opacity: 0.2; }
+.molecule-node.depth-2 { opacity: 0.14; animation-duration: 42s; }
+.molecule-node.depth-3 { opacity: 0.09; animation-duration: 52s; }
+
+:root[data-theme='light'] .molecule-cascade {
+  /* linework reads darker on light bg; trim glow to stay subtle */
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent-cyan) 14%, transparent));
+}
+:root[data-theme='light'] .molecule-node.depth-1 { opacity: 0.14; }
+:root[data-theme='light'] .molecule-node.depth-2 { opacity: 0.1; }
+:root[data-theme='light'] .molecule-node.depth-3 { opacity: 0.06; }
+
+@keyframes molecule-drift {
+  0%, 100% { transform: rotate(var(--rot, 0deg)) translate(0, 0); }
+  50% { transform: rotate(calc(var(--rot, 0deg) + 2deg)) translate(1.4%, -2%); }
+}
+
 .page-canvas {
   position: relative;
   z-index: 1;
   min-height: 100vh;
+}
+
+/* Page-canvas — transparent on purpose. The <body> already paints the full
+   base color *behind* the fixed ambient layer, so page wrappers must NOT
+   repaint an opaque background (that would hide the molecular cascade).
+   Leaving this transparent lets the same subtle molecule field show through
+   uniformly on every page. Replaces opaque `bg-background` on full-height
+   page wrappers. */
+.canvas-scrim {
+  background: transparent;
 }
 
 /* ── Cinematic hero ── */
@@ -1166,13 +1223,16 @@ body::after {
 .card-ultra {
   position: relative;
   background: color-mix(in srgb, var(--glass-bg) 92%, var(--color-bg-elevated));
-  backdrop-filter: blur(28px) saturate(1.2);
+  /* Deep Glass content-plane blur/shadow (Design System v8/v9) — was its
+     own one-off 28px/shadow recipe that happened to match the token's
+     blur value by coincidence but didn't track it, and used a hardcoded
+     dark-only shadow that didn't adapt in light theme. */
+  backdrop-filter: blur(var(--glass-blur-content)) saturate(1.2);
   border-radius: var(--radius-2xl);
   border: 1px solid color-mix(in srgb, var(--accent-cyan) 15%, var(--color-border-subtle));
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--accent-cyan) 6%, transparent),
-    0 4px 24px -4px rgba(0, 0, 0, 0.25),
-    0 24px 64px -24px color-mix(in srgb, var(--accent-cyan) 12%, transparent);
+    var(--glass-shadow-content);
   overflow: hidden;
 }
 
@@ -1416,11 +1476,6 @@ body::after {
   background-clip: text;
 }
 
-/* ── Enhanced orbs ── */
-.orb-1 { filter: blur(80px); opacity: 0.9; }
-.orb-2 { filter: blur(70px); opacity: 0.85; }
-.orb-3 { filter: blur(60px); opacity: 0.8; }
-
 /* ═══════════════════════════════════════════════════════════════════════════
    Design System v4 — Experimental visual upconvert (Sprint 21)
    ═══════════════════════════════════════════════════════════════════════════ */
@@ -1566,6 +1621,81 @@ body::after {
   pointer-events: none;
 }
 
+/* ── Inline glossary term tooltips (MdxRenderer prose) ── */
+.glossary-term {
+  position: relative;
+  cursor: help;
+  border-bottom: 1px dotted var(--accent-cyan);
+}
+
+.glossary-term .glossary-tooltip {
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  width: min(260px, 80vw);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow-float);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  font-weight: 400;
+  font-style: normal;
+  text-align: left;
+  color: var(--color-foreground);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 30;
+}
+
+.glossary-term:hover .glossary-tooltip,
+.glossary-term:focus .glossary-tooltip,
+.glossary-term:focus-visible .glossary-tooltip {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.glossary-tooltip-link {
+  display: block;
+  margin-top: 0.375rem;
+  color: var(--accent-cyan);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.glossary-tooltip-link:hover {
+  color: var(--accent-emerald);
+}
+
+@media (max-width: 640px) {
+  /* Anchoring to the trigger's inline position risks off-screen clipping on
+     narrow viewports since the term can fall anywhere in the text flow —
+     pin the tooltip to the viewport instead. */
+  .glossary-term .glossary-tooltip {
+    position: fixed;
+    bottom: auto;
+    top: auto;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%) translateY(8px);
+    width: min(320px, 90vw);
+  }
+
+  .glossary-term:hover .glossary-tooltip,
+  .glossary-term:focus .glossary-tooltip,
+  .glossary-term:focus-visible .glossary-tooltip {
+    bottom: 1.25rem;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
 /* ── 3D tilt cards ── */
 .tilt-card {
   transition: transform 0.15s ease-out;
@@ -1589,7 +1719,8 @@ body::after {
 
 @media (prefers-reduced-motion: reduce) {
   .ambient-orb, .hero-ring, .scroll-progress-glow,
-  .platform-ticker-track, .constellation-core, .constellation-orbit { animation: none; }
+  .platform-ticker-track, .constellation-core, .constellation-orbit,
+  .molecule-node { animation: none; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -1660,7 +1791,14 @@ body::after {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: gradient-sweep 7s linear infinite;
-  filter: drop-shadow(0 2px 16px rgba(34, 211, 238, 0.3));
+  /* text-shadow, not filter: drop-shadow — a filter on a background-clip:text
+     element with an animated background-position forces WebKit to
+     re-rasterize the whole alpha-based filter layer every frame, which iOS
+     Safari can't keep up with and falls back to blurring. text-shadow glows
+     the glyph outline directly without that rasterization cost. Two static
+     stops (cyan + emerald) instead of one so the glow doesn't visibly drift
+     out of sync with the animated fill as it sweeps through hues. */
+  text-shadow: 0 0 32px rgba(34, 211, 238, 0.3), 0 0 56px rgba(52, 211, 153, 0.14);
 }
 
 @keyframes gradient-sweep {
@@ -1738,11 +1876,11 @@ body::after {
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-2xl);
   overflow: hidden;
+  /* Deep Glass mid-plane shadow (Design System v8/v9) — replaces a
+     hardcoded dark-only shadow stack with the shared, theme-aware token. */
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--accent-cyan) 6%, transparent),
-    0 2px 4px rgba(0,0,0,0.15),
-    0 8px 32px rgba(0,0,0,0.1),
-    0 32px 80px rgba(0,0,0,0.06);
+    var(--glass-shadow-mid);
 }
 
 .card-depth::before {
@@ -1860,42 +1998,6 @@ body::after {
   height: 1px;
   background: currentColor;
   opacity: 0.5;
-}
-
-/* ── OS module card featured treatment ── */
-.card-os-featured {
-  position: relative;
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--accent-emerald) 10%, var(--glass-bg)) 0%,
-    color-mix(in srgb, var(--accent-cyan) 6%, var(--glass-bg)) 50%,
-    var(--glass-bg) 100%
-  );
-  border: 1px solid color-mix(in srgb, var(--accent-emerald) 30%, var(--color-border-subtle));
-  border-radius: var(--radius-2xl);
-  overflow: hidden;
-  backdrop-filter: blur(28px);
-  box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--accent-emerald) 15%, transparent),
-    0 8px 40px -8px color-mix(in srgb, var(--accent-emerald) 25%, transparent),
-    0 32px 80px -24px rgba(0,0,0,0.2);
-}
-
-.card-os-featured::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--accent-emerald) 60%, transparent),
-    color-mix(in srgb, var(--accent-cyan) 40%, transparent) 40%,
-    transparent 70%
-  );
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  pointer-events: none;
 }
 
 /* ── Manifesto text ── */
@@ -2317,13 +2419,12 @@ body::after {
   background: color-mix(in srgb, var(--color-bg-elevated) 98%, var(--accent-cyan) 1%);
   border-radius: var(--radius-2xl);
   border: 1px solid color-mix(in srgb, var(--accent-cyan) 10%, var(--color-border-subtle));
+  /* Deep Glass float-plane shadow (Design System v8/v9) — this card's
+     name literally says "floating", which is exactly what the float
+     plane token was built for; replaces its own 6-layer one-off stack. */
   box-shadow:
     0 0 0 1px color-mix(in srgb, white 4%, transparent),
-    0 1px 3px rgba(0,0,0,0.16),
-    0 4px 12px -2px rgba(0,0,0,0.22),
-    0 16px 40px -8px rgba(0,0,0,0.28),
-    0 40px 80px -20px rgba(0,0,0,0.18),
-    0 0 80px -20px color-mix(in srgb, var(--accent-cyan) 8%, transparent);
+    var(--glass-shadow-float);
   overflow: hidden;
 }
 
@@ -2617,43 +2718,18 @@ body::after {
 
 /* ═══════════════════════════════════════════════════════════════════════════
    Design System v7 — Premium Layer
-   Photo-background hero, gold accent, and tnic-prefixed button system.
+   tnic-prefixed glass surface and button system.
    ═══════════════════════════════════════════════════════════════════════════ */
-
-:root {
-  --tnic-accent-gold: #F4A261;
-  --tnic-surface-glass: rgba(17, 24, 39, 0.85);
-}
 
 /* ── Premium glass surface ── */
 .tnic-glass {
-  background: var(--tnic-surface-glass);
+  background: rgba(17, 24, 39, 0.85);
   /* Design System v8 mid-plane blur/shadow — was its own one-off recipe. */
   backdrop-filter: blur(var(--glass-blur-mid)) saturate(1.4);
   border: 1px solid rgba(255, 255, 255, 0.09);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.07),
     var(--glass-shadow-mid);
-}
-
-/* ── Card with lift-on-hover ── */
-.tnic-card {
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  transition: transform 0.3s cubic-bezier(0.23, 1.0, 0.32, 1),
-              box-shadow 0.3s cubic-bezier(0.23, 1.0, 0.32, 1),
-              border-color 0.3s ease;
-}
-
-@media (hover: hover) {
-  .tnic-card:hover {
-    transform: translateY(-6px);
-    border-color: rgba(0, 224, 255, 0.22) !important;
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.08),
-      0 0 0 1px rgba(0, 224, 255, 0.05),
-      0 20px 60px -12px rgba(0, 0, 0, 0.65),
-      0 0 60px -20px rgba(0, 224, 255, 0.14);
-  }
 }
 
 /* ── White solid CTA button ── */
@@ -2688,26 +2764,10 @@ body::after {
   }
 }
 
-/* ── Gold accent utilities ── */
-.text-gold  { color: var(--tnic-accent-gold); }
-.border-gold { border-color: var(--tnic-accent-gold); }
-.glow-gold  {
-  box-shadow: 0 0 24px color-mix(in srgb, var(--tnic-accent-gold) 45%, transparent),
-              0 0 48px color-mix(in srgb, var(--tnic-accent-gold) 20%, transparent);
-}
-
-/* ── Photo hero background helper ── */
-.hero-photo-bg {
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
 /* ── Tabular numbers shorthand ── */
 .tnic-tabular { font-variant-numeric: tabular-nums; }
 
 @media (prefers-reduced-motion: reduce) {
-  .tnic-card { transition: none; }
   .tnic-button-primary,
   .tnic-button-secondary { transition: none; }
 }

@@ -2,14 +2,19 @@
 
 export type ThemeAccent = 'cyan' | 'emerald' | 'amber' | 'violet' | 'rose';
 
+/**
+ * Mirrors the rendered accent tokens in app/globals.css (the source of truth).
+ * Keep in sync with the `--color-bg-*` / `--accent-*` custom properties so JS
+ * consumers (charts, canvas, inline styles) draw the same colors CSS does.
+ */
 export const palette = {
   dark: {
-    base: '#030712',
-    elevated: '#0a0f1a',
-    cyan: '#22d3ee',
+    base: '#020811',
+    elevated: '#080f1c',
+    cyan: '#00e0ff',
     emerald: '#34d399',
-    violet: '#a78bfa',
-    rose: '#fb7185',
+    violet: '#c084fc',
+    rose: '#f472b6',
     amber: '#fbbf24',
   },
   light: {

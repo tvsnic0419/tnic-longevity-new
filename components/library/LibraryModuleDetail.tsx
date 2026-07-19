@@ -2,9 +2,9 @@
 
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, BookOpen, Layers, FlaskConical, AlertTriangle, Scale } from 'lucide-react';
+import { ArrowLeft, BookOpen, Layers, FlaskConical, HeartPulse, AlertTriangle, Scale, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
-import type { LibraryModule } from '@/lib/library-modules';
+import type { LibraryModule, LibraryModuleCategory } from '@/lib/library-modules';
 import type { ComparisonLink } from '@/lib/comparison-relations';
 import type { GuideLink } from '@/lib/library-graph';
 import { libraryCategoryMeta } from '@/lib/library-modules';
@@ -17,7 +17,24 @@ import { LifestylePillarPanel } from './LifestylePillarPanel';
 import { getBuyerGuideByModuleSlug } from '@/lib/buyer-guides';
 import type { LifestyleSlug } from '@/lib/lifestyle-pillars';
 import { ModuleContextStrip } from './ModuleContextStrip';
+import { CompoundGlancePanel } from './CompoundGlancePanel';
 import { recordModuleVisit } from '@/lib/recent-modules';
+
+/**
+ * Category -> icon + full static Tailwind class strings. Deliberately not
+ * interpolated (e.g. `icon-badge-${theme}`) — Tailwind's build-time scanner
+ * only detects literal class names in source, so a runtime template
+ * literal here would silently fail to generate the CSS at all.
+ */
+const categoryVisual: Record<
+  LibraryModuleCategory,
+  { icon: LucideIcon; badgeClass: string; glowClass: string; textClass: string }
+> = {
+  compounds: { icon: FlaskConical, badgeClass: 'icon-badge-cyan', glowClass: 'glow-cyan', textClass: 'text-accent-cyan' },
+  synergies: { icon: Layers, badgeClass: 'icon-badge-violet', glowClass: 'glow-violet', textClass: 'text-accent-violet' },
+  lifestyle: { icon: HeartPulse, badgeClass: 'icon-badge-amber', glowClass: 'glow-amber', textClass: 'text-accent-amber' },
+  guides: { icon: BookOpen, badgeClass: 'icon-badge-emerald', glowClass: 'glow-emerald', textClass: 'text-accent-emerald' },
+};
 
 export function LibraryModuleDetail({
   module,
@@ -44,7 +61,7 @@ export function LibraryModuleDetail({
   }, [module]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground pt-6 md:pt-8 pb-20">
+    <div className="min-h-screen canvas-scrim text-foreground pt-6 md:pt-8 pb-20">
       <div className="max-w-7xl mx-auto px-6">
         <Link
           href="/library#content-modules"
@@ -193,10 +210,23 @@ export function LibraryModuleDetail({
           <div className="lg:col-span-8 space-y-8">
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
               <ModuleContextStrip module={module} />
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">{module.title}</h1>
+              <div className="flex items-start gap-4 mb-2">
+                <span
+                  className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${categoryVisual[module.category].badgeClass} ${categoryVisual[module.category].glowClass}`}
+                  aria-hidden="true"
+                >
+                  {(() => {
+                    const CategoryIcon = categoryVisual[module.category].icon;
+                    return <CategoryIcon className={`h-7 w-7 ${categoryVisual[module.category].textClass}`} />;
+                  })()}
+                </span>
+                <h1 className="text-3xl md:text-4xl font-bold tracking-tight pt-1">{module.title}</h1>
+              </div>
               <p className="text-lg text-muted-foreground mb-4">{module.tagline}</p>
               <p className="text-sm text-muted-foreground leading-relaxed">{module.summary}</p>
             </motion.div>
+
+            {relatedCompound && <CompoundGlancePanel compound={relatedCompound} />}
 
             {module.requiresDisclaimer && (
               <div className="rounded-xl p-5 border border-accent-amber/30 bg-accent-amber/5 flex gap-3">

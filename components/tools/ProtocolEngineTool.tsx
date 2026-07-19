@@ -327,7 +327,7 @@ export function ProtocolEngineTool() {
                 <ResponsiveContainer width="100%" height={180}>
                   <BarChart data={chartData} layout="vertical" margin={{ left: 8 }}>
                     <XAxis type="number" domain={[0, 100]} hide />
-                    <YAxis type="category" dataKey="name" tick={{ fill: 'var(--color-text-faint)', fontSize: 10 }} width={28} />
+                    <YAxis type="category" dataKey="name" tick={{ fill: 'var(--color-text-faint)', fontSize: 10, fontFamily: 'var(--font-mono)' }} width={28} />
                     <Tooltip
                       contentStyle={{
                         background: 'var(--color-bg-elevated)',

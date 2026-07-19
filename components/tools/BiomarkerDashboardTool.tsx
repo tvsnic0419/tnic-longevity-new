@@ -238,8 +238,8 @@ export function BiomarkerDashboardTool() {
                 <CardContent>
                   <ResponsiveContainer width="100%" height={220}>
                     <LineChart data={trendChartData}>
-                      <XAxis dataKey="date" tick={{ fill: 'var(--color-text-faint)', fontSize: 10 }} />
-                      <YAxis tick={{ fill: 'var(--color-text-faint)', fontSize: 10 }} width={40} />
+                      <XAxis dataKey="date" tick={{ fill: 'var(--color-text-faint)', fontSize: 10, fontFamily: 'var(--font-mono)' }} />
+                      <YAxis tick={{ fill: 'var(--color-text-faint)', fontSize: 10, fontFamily: 'var(--font-mono)' }} width={40} />
                       <Tooltip
                         contentStyle={{
                           background: 'var(--color-bg-elevated)',
@@ -273,8 +273,8 @@ export function BiomarkerDashboardTool() {
                   <CardContent>
                     <ResponsiveContainer width="100%" height={260}>
                       <ComposedChart data={forecastChartData}>
-                        <XAxis dataKey="week" tick={{ fill: 'var(--color-text-faint)', fontSize: 10 }} />
-                        <YAxis tick={{ fill: 'var(--color-text-faint)', fontSize: 10 }} width={40} />
+                        <XAxis dataKey="week" tick={{ fill: 'var(--color-text-faint)', fontSize: 10, fontFamily: 'var(--font-mono)' }} />
+                        <YAxis tick={{ fill: 'var(--color-text-faint)', fontSize: 10, fontFamily: 'var(--font-mono)' }} width={40} />
                         <Tooltip
                           contentStyle={{
                             background: 'var(--color-bg-elevated)',
