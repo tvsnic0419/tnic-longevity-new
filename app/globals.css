@@ -288,6 +288,20 @@ p,
   line-height: 1.35;
 }
 
+/* Signature accent rule — a short branded gradient bar under section and page
+   headings, giving every header one consistent, deliberate flourish. */
+.heading-accent-rule {
+  height: 3px;
+  width: 2.75rem;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-emerald));
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent-cyan) 45%, transparent);
+}
+.heading-accent-rule.is-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .text-body {
   font-size: 1rem;
   line-height: var(--leading-body);
