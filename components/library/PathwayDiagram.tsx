@@ -6,12 +6,20 @@ export interface PathwayNode {
   label: string;
   sublabel?: string;
   accent?: 'cyan' | 'emerald' | 'violet' | 'amber' | 'rose';
+  /** Grid column (0-based). Providing `col` on any node switches the whole
+   *  diagram from the linear left-to-right flow to a branched 2D layout. */
+  col?: number;
+  /** Grid row within the column (0-based, default 0). */
+  row?: number;
 }
 
 export interface PathwayEdge {
   from: string;
   to: string;
   label?: string;
+  /** Render as a feedback/crosstalk arc routed below the nodes (for loops
+   *  that point backward, e.g. AMPK↔SIRT1). */
+  feedback?: boolean;
 }
 
 interface PathwayDiagramProps {
@@ -23,30 +31,72 @@ interface PathwayDiagramProps {
 
 const ACCENTS: NonNullable<PathwayNode['accent']>[] = ['cyan', 'emerald', 'violet', 'amber', 'rose'];
 
+const NODE_W = 132;
+const NODE_H = 58;
+const PAD_X = 28;
+const PAD_TOP = 40;
+
+interface NodePos {
+  x: number;
+  y: number;
+  cx: number;
+  cy: number;
+}
+
 /**
- * Horizontal pathway flow — reused by every :::pathway MDX block across
- * hallmarks/compounds/peptides/synergies (40+ content pages), so upgrading
- * this one component lifts mechanism-diagram quality sitewide. Native SVG +
- * CSS only (no client hooks) — MdxRenderer renders this server-side.
+ * Mechanism-flow diagram — reused by every :::pathway MDX block across
+ * hallmarks/compounds/peptides/synergies (40+ content pages) AND the pathway
+ * detail pages. Two layouts share one renderer:
+ *   • Linear (default): left-to-right chain, used by all MDX blocks.
+ *   • Branched grid: opt-in when any node has a `col` — lets a flagship
+ *     pathway show real fan-out and feedback loops instead of a straight line.
+ * Native SVG + CSS only (no client hooks) so MdxRenderer can render it server-side.
  */
 export function PathwayDiagram({ title, nodes, edges, className = '' }: PathwayDiagramProps) {
-  const nodeW = 132;
-  const nodeH = 60;
+  const isGrid = nodes.some((n) => typeof n.col === 'number');
   const hasEdgeLabels = edges.some((e) => e.label);
-  const gap = hasEdgeLabels ? 68 : 52;
-  const padX = 28;
-  const padY = 40;
-  const width = padX * 2 + nodes.length * nodeW + (nodes.length - 1) * gap;
-  const height = padY * 2 + nodeH + 40;
+  const hasFeedback = edges.some((e) => e.feedback);
 
-  const positions = new Map(
-    nodes.map((n, i) => [
-      n.id,
-      { x: padX + i * (nodeW + gap), y: padY, cx: padX + i * (nodeW + gap) + nodeW / 2, cy: padY + nodeH / 2 },
-    ]),
-  );
+  let width: number;
+  let height: number;
+  let baselineY: number;
+  const positions = new Map<string, NodePos>();
+  const terminalIds = new Set<string>();
 
-  const glowAccent = nodes[nodes.length - 1]?.accent ?? nodes[0]?.accent ?? 'cyan';
+  if (isGrid) {
+    const gapX = hasEdgeLabels ? 70 : 56;
+    const gapY = 30;
+    const cols = Math.max(...nodes.map((n) => n.col ?? 0)) + 1;
+    const rows = Math.max(...nodes.map((n) => n.row ?? 0)) + 1;
+    const maxCol = cols - 1;
+    const contentW = cols * NODE_W + (cols - 1) * gapX;
+    const contentH = rows * NODE_H + (rows - 1) * gapY;
+    const arcSpace = hasFeedback ? 44 : 0;
+    width = PAD_X * 2 + contentW;
+    height = PAD_TOP + contentH + 24 + arcSpace;
+    baselineY = PAD_TOP + contentH + arcSpace - 6;
+    for (const n of nodes) {
+      const col = n.col ?? 0;
+      const row = n.row ?? 0;
+      const x = PAD_X + col * (NODE_W + gapX);
+      const y = PAD_TOP + row * (NODE_H + gapY);
+      positions.set(n.id, { x, y, cx: x + NODE_W / 2, cy: y + NODE_H / 2 });
+      if (col === maxCol) terminalIds.add(n.id);
+    }
+  } else {
+    const gap = hasEdgeLabels ? 68 : 52;
+    width = PAD_X * 2 + nodes.length * NODE_W + (nodes.length - 1) * gap;
+    height = PAD_TOP * 2 + NODE_H + 40;
+    baselineY = height - 6;
+    nodes.forEach((n, i) => {
+      const x = PAD_X + i * (NODE_W + gap);
+      positions.set(n.id, { x, y: PAD_TOP, cx: x + NODE_W / 2, cy: PAD_TOP + NODE_H / 2 });
+    });
+    if (nodes.length) terminalIds.add(nodes[nodes.length - 1].id);
+  }
+
+  const glowAccent =
+    nodes.find((n) => terminalIds.has(n.id))?.accent ?? nodes[nodes.length - 1]?.accent ?? nodes[0]?.accent ?? 'cyan';
 
   return (
     <figure className={cn('card-premium p-5 md:p-6 my-6', className)}>
@@ -79,19 +129,51 @@ export function PathwayDiagram({ title, nodes, edges, className = '' }: PathwayD
             </marker>
           </defs>
 
-          <ellipse
-            cx={width / 2}
-            cy={height / 2}
-            rx={width * 0.55}
-            ry={height * 0.9}
-            fill="url(#pw-ambient-glow)"
-          />
+          <ellipse cx={width / 2} cy={height / 2} rx={width * 0.55} ry={height * 0.9} fill="url(#pw-ambient-glow)" />
 
           {edges.map((edge, i) => {
             const from = positions.get(edge.from);
             const to = positions.get(edge.to);
             if (!from || !to) return null;
-            const x1 = from.x + nodeW;
+            const fromNode = nodes.find((n) => n.id === edge.from);
+            const accent = fromNode?.accent ?? 'cyan';
+
+            if (edge.feedback) {
+              // Return arc routed below the node band.
+              const x1 = from.cx;
+              const y1 = from.y + NODE_H;
+              const x2 = to.cx;
+              const y2 = to.y + NODE_H;
+              const path = `M${x1} ${y1} C${x1} ${baselineY}, ${x2} ${baselineY}, ${x2} ${y2}`;
+              const labelX = (x1 + x2) / 2;
+              return (
+                <g key={`${edge.from}-${edge.to}-${i}`}>
+                  <path
+                    d={path}
+                    fill="none"
+                    stroke={`var(--accent-${accent})`}
+                    strokeWidth="1.25"
+                    strokeDasharray="4 4"
+                    strokeOpacity="0.55"
+                    markerEnd="url(#pathway-arrow)"
+                  />
+                  {edge.label && (() => {
+                    const pillW = edge.label.length * 5.3 + 14;
+                    return (
+                      <g>
+                        <rect x={labelX - pillW / 2} y={baselineY - 7} width={pillW} height={13} rx="6" fill="var(--color-bg-elevated)" opacity="0.9" />
+                        <text x={labelX} y={baselineY + 2} textAnchor="middle" fill={`var(--accent-${accent})`} fontSize="9" fontFamily="var(--font-mono)" opacity="0.9">
+                          {edge.label}
+                        </text>
+                      </g>
+                    );
+                  })()}
+                </g>
+              );
+            }
+
+            // Forward edge: horizontal S-curve from right of `from` to left of `to`.
+            const x1 = from.x + NODE_W;
             const y1 = from.cy;
             const x2 = to.x;
             const y2 = to.cy;
@@ -102,22 +184,16 @@ export function PathwayDiagram({ title, nodes, edges, className = '' }: PathwayD
                 <path d={path} className="pathway-edge" markerEnd="url(#pathway-arrow)" />
                 <path d={path} className="pathway-edge-flow" />
                 {edge.label && (() => {
-                  const pillW = Math.min(gap - 8, edge.label.length * 5.5 + 12);
+                  const labelMidX = (x1 + x2) / 2;
+                  const labelMidY = (y1 + y2) / 2;
+                  const pillW = Math.min(NODE_W, edge.label.length * 5.3 + 14);
                   const textW = pillW - 8;
                   return (
                     <g>
-                      <rect
-                        x={midX - pillW / 2}
-                        y={(y1 + y2) / 2 - 17}
-                        width={pillW}
-                        height={13}
-                        rx="6"
-                        fill="var(--color-bg-elevated)"
-                        opacity="0.85"
-                      />
+                      <rect x={labelMidX - pillW / 2} y={labelMidY - 17} width={pillW} height={13} rx="6" fill="var(--color-bg-elevated)" opacity="0.88" />
                       <text
-                        x={midX}
-                        y={(y1 + y2) / 2 - 8}
+                        x={labelMidX}
+                        y={labelMidY - 8}
                         textAnchor="middle"
                         fill="var(--color-text-faint)"
                         fontSize="9"
@@ -134,11 +210,11 @@ export function PathwayDiagram({ title, nodes, edges, className = '' }: PathwayD
             );
           })}
 
-          {nodes.map((node, i) => {
+          {nodes.map((node) => {
             const pos = positions.get(node.id);
             if (!pos) return null;
             const accent = node.accent ?? 'cyan';
-            const isTerminal = i === nodes.length - 1;
+            const isTerminal = terminalIds.has(node.id);
             return (
               <g
                 key={node.id}
@@ -147,35 +223,19 @@ export function PathwayDiagram({ title, nodes, edges, className = '' }: PathwayD
                 <rect
                   x={pos.x}
                   y={pos.y}
-                  width={nodeW}
-                  height={nodeH}
+                  width={NODE_W}
+                  height={NODE_H}
                   rx="12"
                   fill={`url(#pw-fill-${accent})`}
                   className="pathway-node"
                   style={{ stroke: `color-mix(in srgb, var(--accent-${accent}) ${isTerminal ? 60 : 42}%, transparent)`, strokeWidth: isTerminal ? 1.75 : 1.25 }}
                 />
                 <circle cx={pos.x + 12} cy={pos.y + 12} r="3" fill={`var(--accent-${accent})`} opacity="0.9" />
-                <text
-                  x={pos.cx}
-                  y={pos.cy - (node.sublabel ? 5 : 0) + 3}
-                  textAnchor="middle"
-                  fill="var(--color-text-primary)"
-                  fontSize="11.5"
-                  fontWeight="600"
-                >
+                <text x={pos.cx} y={pos.cy - (node.sublabel ? 5 : 0) + 3} textAnchor="middle" fill="var(--color-text-primary)" fontSize="11.5" fontWeight="600">
                   {node.label}
                 </text>
                 {node.sublabel && (
-                  <text
-                    x={pos.cx}
-                    y={pos.cy + 15}
-                    textAnchor="middle"
-                    fill={`var(--accent-${accent})`}
-                    fontSize="8"
-                    fontFamily="var(--font-mono)"
-                    letterSpacing="0.02em"
-                    opacity="0.85"
-                  >
+                  <text x={pos.cx} y={pos.cy + 15} textAnchor="middle" fill={`var(--accent-${accent})`} fontSize="8" fontFamily="var(--font-mono)" letterSpacing="0.02em" opacity="0.85">
                     {node.sublabel.toUpperCase()}
                   </text>
                 )}

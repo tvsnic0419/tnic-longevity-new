@@ -36,12 +36,18 @@ export interface PathwayDiagramNode {
   label: string;
   sublabel?: string;
   accent?: ThemeAccent;
+  /** Grid column (0-based). Set on any node to switch to the branched layout. */
+  col?: number;
+  /** Grid row within the column (0-based, default 0). */
+  row?: number;
 }
 
 export interface PathwayDiagramEdge {
   from: string;
   to: string;
   label?: string;
+  /** Render as a feedback/crosstalk arc below the nodes. */
+  feedback?: boolean;
 }
 
 export interface Pathway {
@@ -68,15 +74,20 @@ export const pathways: Pathway[] = [
     theme: 'amber',
     keyMolecules: ['AMPK', 'LKB1', 'ACC', 'PGC-1α', 'mTORC1', 'ULK1'],
     diagramNodes: [
-      { id: 'deficit', label: 'Energy deficit', sublabel: 'AMP:ATP ↑', accent: 'rose' },
-      { id: 'ampk', label: 'AMPK', sublabel: 'active', accent: 'amber' },
-      { id: 'mtor', label: 'mTORC1', sublabel: 'suppressed', accent: 'violet' },
-      { id: 'output', label: 'Autophagy + biogenesis', sublabel: 'ULK1 / PGC-1α', accent: 'emerald' },
+      { id: 'deficit', label: 'Energy deficit', sublabel: 'AMP:ATP ↑', accent: 'rose', col: 0, row: 1 },
+      { id: 'ampk', label: 'AMPK active', sublabel: 'fuel gauge', accent: 'amber', col: 1, row: 1 },
+      { id: 'mtor', label: 'mTORC1 ↓', sublabel: 'growth brake off', accent: 'violet', col: 2, row: 0 },
+      { id: 'autophagy', label: 'Autophagy', sublabel: 'ULK1', accent: 'emerald', col: 2, row: 1 },
+      { id: 'biogenesis', label: 'Mito biogenesis', sublabel: 'PGC-1α', accent: 'cyan', col: 2, row: 2 },
+      { id: 'sirt', label: 'SIRT1 / NAD+', sublabel: 'crosstalk', accent: 'rose', col: 2, row: 3 },
     ],
     diagramEdges: [
       { from: 'deficit', to: 'ampk', label: 'berberine, metformin' },
-      { from: 'ampk', to: 'mtor', label: 'releases brake' },
-      { from: 'mtor', to: 'output', label: 'ULK1 disinhibited' },
+      { from: 'ampk', to: 'mtor', label: 'suppresses' },
+      { from: 'ampk', to: 'autophagy', label: 'activates ULK1' },
+      { from: 'ampk', to: 'biogenesis', label: 'PGC-1α' },
+      { from: 'ampk', to: 'sirt', label: 'raises NAD+' },
+      { from: 'sirt', to: 'ampk', label: 'deacetylates LKB1', feedback: true },
     ],
     synthesis: [
       'AMP-activated protein kinase (AMPK) is the cell\'s fuel gauge. When the AMP:ATP ratio rises — from fasting, exercise, or a mild metabolic stressor — AMPK phosphorylates a cascade of downstream targets that collectively shift the cell from energy-spending growth programs toward energy-conserving repair programs: it inhibits acetyl-CoA carboxylase (ACC) to redirect fat toward oxidation, activates PGC-1α to drive mitochondrial biogenesis, phosphorylates ULK1 to initiate autophagy, and suppresses mTORC1, releasing the brake mTOR normally holds on cellular cleanup.',
