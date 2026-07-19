@@ -13,10 +13,12 @@ import { GlassPanel } from '@/components/ui/GlassPanel';
  * hand-drawn diagram would.
  */
 
+// Canonical evidence-tier colors — must match EvidenceTag / trust.ts
+// (A = clinical/emerald, B = emerging/cyan, C = preclinical/amber).
 const TIER_COLOR: Record<'A' | 'B' | 'C', string> = {
   A: '#34d399',
-  B: '#fbbf24',
-  C: '#fb7185',
+  B: '#00e0ff',
+  C: '#fbbf24',
 };
 
 export function HallmarkHeroVisual({ hallmark }: { hallmark: HallmarkLibraryEntry }) {

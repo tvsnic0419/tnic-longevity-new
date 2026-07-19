@@ -162,8 +162,8 @@ export default function HallmarksIndexPage() {
                             topIntervention.evidence === 'A'
                               ? 'bg-emerald-500/15 text-emerald-400'
                               : topIntervention.evidence === 'B'
-                              ? 'bg-amber-500/15 text-amber-400'
-                              : 'bg-rose-500/15 text-rose-400'
+                              ? 'bg-cyan-500/15 text-cyan-400'
+                              : 'bg-amber-500/15 text-amber-400'
                           }`}
                         >
                           Tier {topIntervention.evidence}
