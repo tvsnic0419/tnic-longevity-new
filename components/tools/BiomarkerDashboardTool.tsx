@@ -12,6 +12,7 @@ import {
   Area,
   ComposedChart,
 } from 'recharts';
+import { ChartGrid, ChartTooltip, axisProps, chartCursor } from '@/components/ui/ChartKit';
 import Link from 'next/link';
 import {
   TrendingUp,
@@ -238,22 +239,17 @@ export function BiomarkerDashboardTool() {
                 <CardContent>
                   <ResponsiveContainer width="100%" height={220}>
                     <LineChart data={trendChartData}>
-                      <XAxis dataKey="date" tick={{ fill: 'var(--color-text-faint)', fontSize: 10, fontFamily: 'var(--font-mono)' }} />
-                      <YAxis tick={{ fill: 'var(--color-text-faint)', fontSize: 10, fontFamily: 'var(--font-mono)' }} width={40} />
-                      <Tooltip
-                        contentStyle={{
-                          background: 'var(--color-bg-elevated)',
-                          border: '1px solid var(--color-border-subtle)',
-                          borderRadius: 8,
-                          fontSize: 12,
-                        }}
-                      />
+                      <ChartGrid />
+                      <XAxis dataKey="date" {...axisProps} />
+                      <YAxis {...axisProps} width={40} />
+                      <Tooltip content={<ChartTooltip />} cursor={chartCursor} />
                       <Line
                         type="monotone"
                         dataKey="value"
                         stroke="var(--accent-cyan)"
-                        strokeWidth={2}
-                        dot={{ fill: 'var(--accent-cyan)', r: 4 }}
+                        strokeWidth={2.5}
+                        dot={false}
+                        activeDot={{ r: 4, strokeWidth: 0 }}
                       />
                     </LineChart>
                   </ResponsiveContainer>
@@ -273,17 +269,11 @@ export function BiomarkerDashboardTool() {
                   <CardContent>
                     <ResponsiveContainer width="100%" height={260}>
                       <ComposedChart data={forecastChartData}>
-                        <XAxis dataKey="week" tick={{ fill: 'var(--color-text-faint)', fontSize: 10, fontFamily: 'var(--font-mono)' }} />
-                        <YAxis tick={{ fill: 'var(--color-text-faint)', fontSize: 10, fontFamily: 'var(--font-mono)' }} width={40} />
-                        <Tooltip
-                          contentStyle={{
-                            background: 'var(--color-bg-elevated)',
-                            border: '1px solid var(--color-border-subtle)',
-                            borderRadius: 8,
-                            fontSize: 12,
-                          }}
-                        />
-                        <Legend wrapperStyle={{ fontSize: 11 }} />
+                        <ChartGrid />
+                        <XAxis dataKey="week" {...axisProps} />
+                        <YAxis {...axisProps} width={40} />
+                        <Tooltip content={<ChartTooltip />} cursor={chartCursor} />
+                        <Legend wrapperStyle={{ fontSize: 11, fontFamily: 'var(--font-mono)' }} />
                         {showForecastBands && (
                           <Area
                             type="monotone"
@@ -306,8 +296,9 @@ export function BiomarkerDashboardTool() {
                           dataKey="projected"
                           name="With intervention"
                           stroke="var(--accent-emerald)"
-                          strokeWidth={2}
-                          dot={{ r: 3 }}
+                          strokeWidth={2.5}
+                          dot={false}
+                          activeDot={{ r: 4, strokeWidth: 0 }}
                         />
                       </ComposedChart>
                     </ResponsiveContainer>
