@@ -260,6 +260,28 @@ body::after {
   line-height: 1.2;
 }
 
+/* ── Typographic coherence & polish ──────────────────────────────────────────
+   Balanced headlines and orphan-free body copy across the whole site. This is
+   the difference between type that reads as deliberately set and type that
+   wraps raggedly. Progressive enhancement — silently ignored where unsupported,
+   so there is no layout risk. */
+h1, h2, h3, h4,
+.text-display,
+.headline-editorial,
+.gradient-sweep-text,
+.heading-page,
+.heading-section,
+.heading-card {
+  text-wrap: balance;
+}
+
+p,
+.text-body,
+.text-body-sm,
+.text-lede {
+  text-wrap: pretty;
+}
+
 .heading-card {
   font-size: 1rem;
   font-weight: 600;
