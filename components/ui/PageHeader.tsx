@@ -50,6 +50,10 @@ export function PageHeader({
         <span className="font-mono text-xs tracking-wide text-foreground/90 uppercase">{eyebrow}</span>
       </div>
       <Tag id={id} className="heading-page mb-4">{title}</Tag>
+      <div
+        className={`heading-accent-rule mb-5 ${align === 'center' ? 'is-center' : ''}`}
+        aria-hidden="true"
+      />
       <p className={`text-body max-w-2xl ${align === 'center' ? 'mx-auto' : ''}`}>{description}</p>
       {meta && (
         <p className={`text-label mt-4 ${t.text}`}>{meta}</p>
