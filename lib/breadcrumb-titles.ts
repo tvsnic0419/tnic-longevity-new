@@ -93,7 +93,7 @@ export const toolLabels: Record<ToolId, string> = {
   protocol: 'Protocol Engine',
   biomarker: 'Biomarker Dashboard',
   impact: 'Biomarker Impact',
-  healthspan: 'Healthspan Estimator',
+  healthspan: 'Biological Age Trajectory',
 };
 
 export const peptideTitles: Record<string, string> = {

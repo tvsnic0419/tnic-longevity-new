@@ -256,9 +256,9 @@ const toolContexts: Record<ToolId, HubContext> = {
     next: 'Select your highest watch marker from Labs, then adjust stack order based on impact ranking.',
   },
   healthspan: {
-    what: 'Lifestyle-based biological age estimate and antioxidant defense scan — sets your profile locally.',
-    why: 'Subjective wellness needs a baseline. The scan anchors your dashboard bio-age and defense score.',
-    next: 'Complete the scan, review your profile on the dashboard, then fix sleep and exercise pillars first.',
+    what: 'A guided studio: seven lifestyle questions plus your supplement stack, modeled into a pace of aging and a multi-year biological-age trajectory.',
+    why: 'A stack only matters if it bends your aging curve. This shows whether you are modeled to age slower than, in step with, or faster than the calendar — and the biological years reclaimed.',
+    next: 'Answer the seven questions, enter up to ten supplements, then adjust the horizon and adherence to see how the trajectory responds.',
   },
 };
 

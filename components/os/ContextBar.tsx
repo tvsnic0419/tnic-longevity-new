@@ -31,7 +31,7 @@ function getNextAction(input: {
     return { message: 'No protocol yet', href: '/stacks', label: 'Build stack' };
   }
   if (!scanned) {
-    return { message: 'Personalize your protocol', href: '/tools?tab=healthspan', label: 'Defense scan' };
+    return { message: 'Model your aging pace', href: '/tools?tab=healthspan', label: 'Run trajectory' };
   }
   if (labsCount === 0) {
     return { message: 'Log baseline labs', href: '/labs', label: 'Open Labs' };

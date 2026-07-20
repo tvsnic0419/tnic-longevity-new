@@ -27,6 +27,7 @@ import { EvidenceTagLegend } from '@/components/trust/EvidenceTag';
 import { toolsRegistry, type ToolId } from '@/lib/registry';
 import { ToolDisclaimer } from './ToolDisclaimer';
 import { ToolPreviewGlyph } from './ToolPreviewGlyph';
+import { AgingPaceStudio } from './AgingPaceStudio';
 
 const StackSimulatorTool = dynamic(
   () => import('./StackSimulatorTool').then((m) => ({ default: m.StackSimulatorTool })),
@@ -42,10 +43,6 @@ const ProtocolEngineTool = dynamic(
 );
 const BiomarkerDashboardTool = dynamic(
   () => import('./BiomarkerDashboardTool').then((m) => ({ default: m.BiomarkerDashboardTool })),
-  { loading: () => <SectionSkeleton height="lg" /> },
-);
-const HealthspanEstimatorTool = dynamic(
-  () => import('./HealthspanEstimatorTool').then((m) => ({ default: m.HealthspanEstimatorTool })),
   { loading: () => <SectionSkeleton height="lg" /> },
 );
 const BiomarkerImpactTool = dynamic(
@@ -71,23 +68,36 @@ const toolAccents: Record<ToolId, string> = {
   healthspan: 'var(--accent-emerald)',
 };
 
-const tabs = toolsRegistry.map((t) => ({
+// 'healthspan' is now the flagship Biological Age Trajectory studio, rendered as
+// the featured hero at the top of the page rather than as a tab panel. It stays
+// in the registry (SEO/search-palette copy, deep-link target) but is filtered
+// out of the tab picker so it isn't offered twice.
+const TAB_TOOLS = toolsRegistry.filter((t) => t.id !== 'healthspan');
+
+const tabs = TAB_TOOLS.map((t) => ({
   id: t.id,
   label: t.label,
   icon: tabIcons[t.id],
   badge: t.badge,
 }));
 
+function isTabTool(id: string | null): id is ToolId {
+  return !!id && TAB_TOOLS.some((t) => t.id === id);
+}
+
 export function ToolsHub() {
   const searchParams = useSearchParams();
-  const tabParam = searchParams.get('tab') as ToolId | null;
-  const [active, setActive] = useState<ToolId>(
-    tabParam && toolsRegistry.some((t) => t.id === tabParam) ? tabParam : 'simulator',
-  );
+  const tabParam = searchParams.get('tab');
+  const [active, setActive] = useState<ToolId>(isTabTool(tabParam) ? tabParam : 'simulator');
 
   useEffect(() => {
-    if (tabParam && toolsRegistry.some((t) => t.id === tabParam)) {
-      setActive(tabParam);
+    if (isTabTool(tabParam)) setActive(tabParam);
+  }, [tabParam]);
+
+  // Legacy/flagship deep-link: /tools?tab=healthspan scrolls to the studio hero.
+  useEffect(() => {
+    if (tabParam === 'healthspan') {
+      document.getElementById('biological-age-trajectory')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }, [tabParam]);
 
@@ -98,7 +108,7 @@ export function ToolsHub() {
     window.history.replaceState({}, '', url.toString());
   }, []);
 
-  const activeTool = toolsRegistry.find((t) => t.id === active)!;
+  const activeTool = TAB_TOOLS.find((t) => t.id === active) ?? TAB_TOOLS[0];
 
   return (
     <section className="canvas-scrim min-h-screen pt-6 md:pt-8 pb-20">
@@ -111,6 +121,11 @@ export function ToolsHub() {
           theme="violet"
           as="h1"
         />
+
+        {/* Flagship: stack-driven biological-age trajectory studio */}
+        <div id="biological-age-trajectory" className="mb-10 scroll-mt-24">
+          <AgingPaceStudio />
+        </div>
 
         <Link
           href="/elite-8"
@@ -137,7 +152,7 @@ export function ToolsHub() {
 
         {/* Visual tool picker grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
-          {toolsRegistry.map((t) => {
+          {TAB_TOOLS.map((t) => {
             const Icon = tabIcons[t.id];
             const accent = toolAccents[t.id];
             const isActive = active === t.id;
@@ -207,7 +222,6 @@ export function ToolsHub() {
           {active === 'protocol' && <ProtocolEngineTool />}
           {active === 'biomarker' && <BiomarkerDashboardTool />}
           {active === 'impact' && <BiomarkerImpactTool />}
-          {active === 'healthspan' && <HealthspanEstimatorTool />}
         </div>
 
         <div className="mt-12">

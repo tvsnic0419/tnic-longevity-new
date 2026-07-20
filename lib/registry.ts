@@ -89,13 +89,13 @@ export const toolsRegistry: ToolRegistryEntry[] = [
   {
     id: 'healthspan',
     slug: 'healthspan',
-    label: 'Healthspan Estimator',
-    shortLabel: '24w projection',
+    label: 'Biological Age Trajectory',
+    shortLabel: 'Pace of aging',
     description:
-      'Project healthspan score and biological age over 12–24 weeks from profile, stack, and labs.',
+      'Answer seven questions, enter your stack, and model whether you are aging slower than, in step with, or faster than the calendar — with the biological years your protocol reclaims over time.',
     href: '/tools?tab=healthspan',
-    keywords: ['healthspan calculator', 'biological age estimate', 'longevity projection'],
-    evidenceNote: 'Educational model based on trial timelines — not a medical prediction.',
+    keywords: ['biological age calculator', 'pace of aging', 'epigenetic age', 'longevity projection', 'supplement stack age reduction'],
+    evidenceNote: 'Educational model from published effect sizes and TNiC evidence tiers — not a medical prediction.',
   },
 ];
 
