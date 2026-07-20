@@ -10,10 +10,12 @@ import { compounds } from '@/lib/data';
  * in that slot instead, since they have no dosage to report.
  */
 
+// Canonical evidence-tier colors — must match EvidenceTag / trust.ts
+// (A = clinical/emerald, B = emerging/cyan, C = preclinical/amber).
 const TIER_CLASSES: Record<HallmarkIntervention['evidence'], string> = {
   A: 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30',
-  B: 'bg-amber-500/15 text-amber-400 border border-amber-500/30',
-  C: 'bg-rose-500/15 text-rose-400 border border-rose-500/30',
+  B: 'bg-cyan-500/15 text-cyan-400 border border-cyan-500/30',
+  C: 'bg-amber-500/15 text-amber-400 border border-amber-500/30',
 };
 
 const CATEGORY_LABEL: Record<HallmarkIntervention['category'], string> = {

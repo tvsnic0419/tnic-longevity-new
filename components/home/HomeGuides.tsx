@@ -7,15 +7,18 @@ import { CellularDivider } from '@/components/ui/CellularDivider';
 /**
  * A curated set of high-intent guides. Rendered as real server-side <a> links so
  * crawlers pick up the internal linking, and readers get an inviting entry point
- * into the depth of the library.
+ * into the depth of the library. One guide — the ranked shortlist, the natural
+ * "start here" for anyone new — is laid out as a featured card rather than an
+ * equal-weight tile; the rest read as a supporting list, not a duplicate grid.
  */
 
+const featured = {
+  href: '/longevity-supplements-guide',
+  label: 'Best Longevity Supplements 2026',
+  kicker: 'The evidence-ranked shortlist',
+};
+
 const guides: { href: string; label: string; kicker: string }[] = [
-  {
-    href: '/longevity-supplements-guide',
-    label: 'Best Longevity Supplements 2026',
-    kicker: 'The evidence-ranked shortlist',
-  },
   {
     href: '/nad-supplement-guide',
     label: 'NAD+ Supplement Guide',
@@ -84,28 +87,49 @@ export function HomeGuides() {
           </Link>
         </RevealItem>
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {guides.map(({ href, label, kicker }, i) => (
-            <RevealItem key={href} index={i}>
-              <GlassPanel depth="mid" className="glass-hover h-full overflow-hidden rounded-2xl">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+          <RevealItem index={0} className="lg:col-span-5">
+            <GlassPanel depth="mid" className="glass-hover h-full overflow-hidden rounded-2xl">
+              <Link
+                href={featured.href}
+                className="focus-ring group flex h-full min-h-[220px] flex-col justify-between gap-8 p-7"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-label text-accent-violet">Start here</span>
+                  <ArrowUpRight
+                    className="h-4 w-4 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent-cyan"
+                    aria-hidden="true"
+                  />
+                </div>
+                <div>
+                  <p className="text-caption mb-2 text-accent-violet">{featured.kicker}</p>
+                  <h3 className="heading-section text-2xl leading-snug">{featured.label}</h3>
+                </div>
+              </Link>
+            </GlassPanel>
+          </RevealItem>
+
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:col-span-7">
+            {guides.map(({ href, label, kicker }, i) => (
+              <RevealItem key={href} index={i + 1}>
                 <Link
                   href={href}
-                  className="focus-ring group flex h-full flex-col justify-between gap-6 p-5"
+                  className="focus-ring interactive group flex h-full flex-col justify-between gap-4 rounded-xl border border-border/60 bg-card/40 p-4 hover:border-accent-violet/30"
                 >
                   <ArrowUpRight
-                    className="h-4 w-4 self-end text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent-cyan"
+                    className="h-3.5 w-3.5 self-end text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent-cyan"
                     aria-hidden="true"
                   />
                   <div>
-                    <p className="text-caption mb-1.5 text-accent-violet">{kicker}</p>
-                    <h3 className="heading-card leading-snug transition-colors group-hover:text-accent-cyan">
+                    <p className="text-caption mb-1 text-accent-violet">{kicker}</p>
+                    <h4 className="text-sm font-semibold leading-snug text-foreground transition-colors group-hover:text-accent-cyan">
                       {label}
-                    </h3>
+                    </h4>
                   </div>
                 </Link>
-              </GlassPanel>
-            </RevealItem>
-          ))}
+              </RevealItem>
+            ))}
+          </div>
         </div>
       </div>
     </section>

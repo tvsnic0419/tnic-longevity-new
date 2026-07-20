@@ -82,6 +82,7 @@ export function SectionShell({
                 </span>
               </div>
               <HeadingTag id={`${id}-heading`} className="heading-section mb-3">{title}</HeadingTag>
+              <div className="heading-accent-rule mb-4" aria-hidden="true" />
               <p className="text-body">{subtitle}</p>
             </div>
           </div>

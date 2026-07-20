@@ -260,10 +260,46 @@ body::after {
   line-height: 1.2;
 }
 
+/* ── Typographic coherence & polish ──────────────────────────────────────────
+   Balanced headlines and orphan-free body copy across the whole site. This is
+   the difference between type that reads as deliberately set and type that
+   wraps raggedly. Progressive enhancement — silently ignored where unsupported,
+   so there is no layout risk. */
+h1, h2, h3, h4,
+.text-display,
+.headline-editorial,
+.gradient-sweep-text,
+.heading-page,
+.heading-section,
+.heading-card {
+  text-wrap: balance;
+}
+
+p,
+.text-body,
+.text-body-sm,
+.text-lede {
+  text-wrap: pretty;
+}
+
 .heading-card {
   font-size: 1rem;
   font-weight: 600;
   line-height: 1.35;
+}
+
+/* Signature accent rule — a short branded gradient bar under section and page
+   headings, giving every header one consistent, deliberate flourish. */
+.heading-accent-rule {
+  height: 3px;
+  width: 2.75rem;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-emerald));
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent-cyan) 45%, transparent);
+}
+.heading-accent-rule.is-center {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .text-body {
@@ -693,14 +729,31 @@ body::after {
 /* ── Pathway diagram utilities ── */
 .pathway-node {
   fill: var(--color-bg-elevated);
-  stroke: color-mix(in srgb, var(--accent-cyan) 35%, transparent);
+  stroke: color-mix(in srgb, var(--accent-cyan) 40%, transparent);
   stroke-width: 1.5;
+  /* Subtle glow so nodes read as lit signalling hubs. */
+  filter: drop-shadow(0 0 3px color-mix(in srgb, var(--accent-cyan) 30%, transparent));
 }
 
 .pathway-edge {
-  stroke: color-mix(in srgb, var(--accent-emerald) 40%, transparent);
+  stroke: color-mix(in srgb, var(--accent-emerald) 45%, transparent);
   stroke-width: 1.5;
   fill: none;
+}
+
+/* Animated "molecular current" — dashes flow along each edge toward its target
+   node, visualising signal direction through the pathway. Reduced-motion users
+   keep clean solid edges. */
+@media (prefers-reduced-motion: no-preference) {
+  .pathway-edge {
+    stroke-dasharray: 5 5;
+    animation: pathway-flow 0.9s linear infinite;
+  }
+}
+@keyframes pathway-flow {
+  to {
+    stroke-dashoffset: -10;
+  }
 }
 
 /* ── Scrollbar ── */
@@ -2096,6 +2149,41 @@ body::after {
 @keyframes section-reveal {
   from { opacity: 0; transform: translateY(40px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Motion & interaction system ─────────────────────────────────────────────
+   Scroll-driven section reveals + tactile press feedback. Both are gated on
+   prefers-reduced-motion, and the reveal is additionally gated on
+   `animation-timeline` support — unsupported browsers and reduced-motion users
+   simply see content in its final, fully-visible state, so there is no risk of
+   hidden content. */
+
+/* Tactile press: every interactive element depresses slightly when clicked. */
+@media (prefers-reduced-motion: no-preference) {
+  .interactive:active {
+    transform: scale(0.975);
+  }
+  .btn-gradient:active,
+  .tnic-button-primary:active,
+  .tnic-button-secondary:active {
+    transform: translateY(1px) scale(0.985);
+  }
+}
+
+/* Scroll reveal: sections rise and fade as they enter the viewport. Pure CSS,
+   no JavaScript. `.reveal-on-scroll` is opt-in; top-level page sections get it
+   automatically. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Every top-level page section (at any div-nesting depth), but never a
+       section nested inside another section, so nothing double-animates. */
+    .reveal-on-scroll,
+    .page-canvas section:not(section section) {
+      animation: section-reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 4% cover 20%;
+    }
+  }
 }
 
 /* ── Footer manifesto ── */
