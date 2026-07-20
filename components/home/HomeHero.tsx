@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { Suspense } from 'react';
 import { ClipboardList, Library, ArrowRight, Sparkles } from 'lucide-react';
-import { Logo } from '@/components/ui/Logo';
 import { StarterQuiz } from '@/components/sections/StarterQuiz';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { HeroSceneMount } from '@/components/home/HeroSceneMount';
@@ -49,15 +48,10 @@ export function HomeHero() {
         <div className="items-center lg:grid lg:grid-cols-12 lg:gap-14">
           {/* Copy column */}
           <div className="text-center lg:col-span-7 lg:text-left">
-            <div className="mb-6 flex items-center justify-center gap-3 lg:justify-start">
-              <Logo variant="lockup" size="hero" />
-              <span className="badge-live">
-                <span className="badge-live-dot" />
-                Platform Active
-              </span>
-            </div>
-
-            {/* Float plane — smallest, most elevated glass accent in the hero */}
+            {/* Float plane — smallest, most elevated glass accent in the hero.
+                Doubles as the section eyebrow: the brand already lives in the
+                fixed nav, so the hero leads with what TNiC *does*, not a second
+                logo lockup. */}
             <GlassPanel
               depth="float"
               className="mb-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium text-white/80"
