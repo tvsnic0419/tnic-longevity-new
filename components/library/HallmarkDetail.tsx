@@ -51,7 +51,7 @@ export function HallmarkDetail({
         </Link>
 
         <div className="grid lg:grid-cols-12 gap-10">
-          <div className="lg:col-span-4 space-y-6">
+          <div className="order-2 lg:order-1 lg:col-span-4 space-y-6">
             <HallmarkVisual
               visual={hallmark.visual}
               coverage={hallmark.coverage}
@@ -68,7 +68,7 @@ export function HallmarkDetail({
             <HallmarkNotesPanel hallmark={hallmark} />
           </div>
 
-          <div className="lg:col-span-8 space-y-10">
+          <div className="order-1 lg:order-2 min-w-0 lg:col-span-8 space-y-10">
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
               <p className="font-mono text-[10px] text-accent-cyan tracking-widest mb-2">
                 HALLMARK {hallmark.number} OF 12

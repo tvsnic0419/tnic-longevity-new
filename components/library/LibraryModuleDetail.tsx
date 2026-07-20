@@ -71,7 +71,7 @@ export function LibraryModuleDetail({
         </Link>
 
         <div className="grid lg:grid-cols-12 gap-10">
-          <aside className="lg:col-span-4 space-y-6">
+          <aside className="order-2 lg:order-1 lg:col-span-4 space-y-6">
             {module.category === 'lifestyle' && (
               <LifestylePillarPanel slug={module.slug as LifestyleSlug} />
             )}
@@ -207,7 +207,7 @@ export function LibraryModuleDetail({
             </Link>
           </aside>
 
-          <div className="lg:col-span-8 space-y-8">
+          <div className="order-1 lg:order-2 min-w-0 lg:col-span-8 space-y-8">
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
               <ModuleContextStrip module={module} />
               <div className="flex items-start gap-4 mb-2">

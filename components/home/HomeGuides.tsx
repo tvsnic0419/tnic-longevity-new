@@ -98,7 +98,9 @@ export function HomeGuides() {
                   />
                   <div>
                     <p className="text-caption mb-1.5 text-accent-violet">{kicker}</p>
-                    <h3 className="heading-card leading-snug">{label}</h3>
+                    <h3 className="heading-card leading-snug transition-colors group-hover:text-accent-cyan">
+                      {label}
+                    </h3>
                   </div>
                 </Link>
               </GlassPanel>
