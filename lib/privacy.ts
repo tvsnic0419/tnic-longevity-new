@@ -33,6 +33,8 @@ export interface ProfileStored {
   sleep: number;
   exercise: number;
   scanned: boolean;
+  /** Optional for backward compat — older stored profiles predate this field. */
+  medications?: string[];
 }
 
 function getStorage(mode: PrivacyStorageMode): Storage | null {

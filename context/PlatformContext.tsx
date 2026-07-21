@@ -50,6 +50,9 @@ export interface Profile {
   sleep: number;
   exercise: number;
   scanned: boolean;
+  /** Self-reported medication classes (see lib/medication-classes.ts) — used
+   *  only to flag existing safety-note text, never diagnosed or inferred. */
+  medications: string[];
 }
 
 interface PlatformContextValue {
@@ -96,6 +99,7 @@ const DEFAULT_PROFILE: Profile = {
   sleep: 60,
   exercise: 45,
   scanned: false,
+  medications: [],
 };
 
 function readStackFromUrl(): string[] | null {

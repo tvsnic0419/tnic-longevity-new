@@ -7,6 +7,7 @@ import { analyzeStack } from '@/lib/stack-analysis';
 import { StackBuilder } from './StackBuilder';
 import { SynergyScorePanel } from './SynergyScorePanel';
 import { StackInteractionsPanel } from './StackInteractionsPanel';
+import { MedicationCheckPanel } from './MedicationCheckPanel';
 import { StackMechanismPanel } from './StackMechanismPanel';
 
 export function DynamicStackBuilder() {
@@ -34,6 +35,8 @@ export function DynamicStackBuilder() {
               className="space-y-4"
             >
               <StackInteractionsPanel analysis={analysis} />
+
+              <MedicationCheckPanel selectedIds={selected} />
 
               <StackMechanismPanel />
 

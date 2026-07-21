@@ -28,12 +28,26 @@ describe('validateProfile', () => {
       sleep: 60,
       exercise: 100,
       scanned: true,
+      medications: [],
     });
   });
 
   it('returns null for non-object input', () => {
     expect(validateProfile(null)).toBeNull();
     expect(validateProfile('profile')).toBeNull();
+  });
+
+  it('keeps only known medication class ids and drops unknown/malformed entries', () => {
+    const result = validateProfile({
+      age: 40,
+      stress: 50,
+      sleep: 50,
+      exercise: 50,
+      scanned: false,
+      medications: ['anticoagulants', 'not-a-real-class', 123, null, 'statins'],
+    });
+
+    expect(result?.medications).toEqual(['anticoagulants', 'statins']);
   });
 });
 

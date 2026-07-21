@@ -5,6 +5,7 @@ import type { UserMilestone, UserMilestoneKind } from '@/lib/milestone-engine';
 import { stackPresets } from '@/lib/presets';
 import type { ProfileStored } from '@/lib/privacy';
 import { validateLabEntry, type LabEntryStored } from '@/lib/privacy';
+import { medicationClasses } from '@/lib/medication-classes';
 
 const DEFAULT_STACK = stackPresets.starter.ids;
 
@@ -14,7 +15,10 @@ const DEFAULT_PROFILE: ProfileStored = {
   sleep: 60,
   exercise: 45,
   scanned: false,
+  medications: [],
 };
+
+const VALID_MEDICATION_CLASS_IDS = new Set(medicationClasses.map((m) => m.id));
 
 const VALID_MARKER_IDS = new Set(biomarkers.map((b) => b.id));
 
@@ -69,6 +73,9 @@ export function validateProfile(raw: unknown): ProfileStored | null {
     sleep: clamp(p.sleep, 0, 100, DEFAULT_PROFILE.sleep),
     exercise: clamp(p.exercise, 0, 100, DEFAULT_PROFILE.exercise),
     scanned: typeof p.scanned === 'boolean' ? p.scanned : DEFAULT_PROFILE.scanned,
+    medications: Array.isArray(p.medications)
+      ? p.medications.filter((m): m is string => typeof m === 'string' && VALID_MEDICATION_CLASS_IDS.has(m))
+      : [],
   };
 }
 

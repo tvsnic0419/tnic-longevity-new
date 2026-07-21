@@ -1,6 +1,7 @@
 import { compounds, safetyNotes } from './data';
 import { scoreStack } from './stack-engine';
 import type { EvidenceTier } from './types';
+import { medicationClasses, checkMedicationFlags } from './medication-classes';
 
 export type InteractionType = 'synergy' | 'caution' | 'contraindication';
 
@@ -409,10 +410,15 @@ export function formatStackExport(
   selectedIds: string[],
   analysis: StackAnalysis,
   shareUrl: string,
+  medicationClassIds: string[] = [],
 ): string {
   const selected = compounds.filter((c) => selectedIds.includes(c.id));
   const am = selected.filter((c) => c.timing === 'AM' || c.timing === 'AM/PM');
   const pm = selected.filter((c) => c.timing === 'PM');
+  const medLabels = medicationClassIds
+    .map((id) => medicationClasses.find((m) => m.id === id)?.label)
+    .filter((l): l is string => Boolean(l));
+  const medFlags = checkMedicationFlags(selectedIds, medicationClassIds);
 
   const lines = [
     '═══════════════════════════════════════',
@@ -446,6 +452,23 @@ export function formatStackExport(
     ...(analysis.consultIf.length
       ? ['', '── CONSULT PHYSICIAN IF ──', ...analysis.consultIf.map((c) => `  • ${c}`)]
       : []),
+    ...(medLabels.length
+      ? [
+          '',
+          '── MEDICATIONS ON FILE (self-reported) ──',
+          ...medLabels.map((l) => `  • ${l}`),
+          ...(medFlags.length
+            ? [
+                '',
+                '── FLAGGED AGAINST THIS STACK ──',
+                ...medFlags.map(
+                  (f) =>
+                    `  ⚠ ${compounds.find((c) => c.id === f.compoundId)?.name ?? f.compoundId} + ${f.medicationLabel}: "${f.note}"`,
+                ),
+              ]
+            : ['  (no published flags for these medication classes against this stack)']),
+        ]
+      : []),
     '',
     'Not medical advice. Consult your physician before starting any protocol.',
     `Exported: ${new Date().toISOString()}`,
@@ -458,8 +481,10 @@ export function formatStackJson(
   selectedIds: string[],
   analysis: StackAnalysis,
   stackName?: string,
+  medicationClassIds: string[] = [],
 ): string {
   const selected = compounds.filter((c) => selectedIds.includes(c.id));
+  const medFlags = checkMedicationFlags(selectedIds, medicationClassIds);
   return JSON.stringify(
     {
       name: stackName ?? 'Custom Stack',
@@ -479,6 +504,10 @@ export function formatStackJson(
         monthlyCostUsd: analysis.monthlyCost,
         synergies: analysis.synergies,
         interactions: analysis.interactions,
+      },
+      medications: {
+        selfReportedClassIds: medicationClassIds,
+        flaggedAgainstStack: medFlags,
       },
       disclaimer: 'Educational only — not medical advice.',
     },

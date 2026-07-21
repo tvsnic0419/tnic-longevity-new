@@ -16,6 +16,7 @@ import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { CompoundSelectorGrid } from '@/components/stacks/CompoundSelectorGrid';
 import { SynergyScorePanel } from '@/components/stacks/SynergyScorePanel';
 import { StackInteractionsPanel } from '@/components/stacks/StackInteractionsPanel';
+import { MedicationCheckPanel } from '@/components/stacks/MedicationCheckPanel';
 import { StackPresetsBar } from '@/components/stacks/StackPresetsBar';
 import { StackExport } from '@/components/stacks/StackExport';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
@@ -80,6 +81,8 @@ export function StackSimulatorTool() {
                 className="space-y-4"
               >
                 <StackInteractionsPanel analysis={result.analysis} />
+
+                <MedicationCheckPanel selectedIds={selected} />
 
                 <Card>
                   <CardHeader>

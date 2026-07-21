@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Copy, CheckCheck, Download, FileJson, Share2 } from 'lucide-react';
-import { useStack } from '@/context/PlatformContext';
+import { usePlatform } from '@/context/PlatformContext';
 import { analyzeStack, formatStackExport, formatStackJson } from '@/lib/stack-analysis';
 import {
   formatSimulatorExport,
@@ -17,16 +17,16 @@ interface StackExportProps {
 }
 
 export function StackExport({ stackName, simulatorResult, age }: StackExportProps) {
-  const { selected, shareUrl } = useStack();
+  const { selected, shareUrl, profile } = usePlatform();
   const [copied, setCopied] = useState<'text' | 'json' | 'url' | null>(null);
   const analysis = simulatorResult?.analysis ?? analyzeStack(selected);
 
   const textExport = simulatorResult
     ? formatSimulatorExport(simulatorResult, shareUrl, age ?? 48)
-    : formatStackExport(selected, analysis, shareUrl);
+    : formatStackExport(selected, analysis, shareUrl, profile.medications);
 
   const jsonExport = () => {
-    const base = JSON.parse(formatStackJson(selected, analysis, stackName));
+    const base = JSON.parse(formatStackJson(selected, analysis, stackName, profile.medications));
     if (simulatorResult) {
       return JSON.stringify(
         {

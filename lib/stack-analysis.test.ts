@@ -212,6 +212,35 @@ describe('formatStackExport', () => {
     const empty = formatStackExport([], analyzeStack([]), 'https://tnic.help/stacks?stack=x');
     expect(empty).not.toContain('CONSULT PHYSICIAN IF');
   });
+
+  it('omits the medications section entirely when no medication classes are selected', () => {
+    const text = formatStackExport(['omega3'], analyzeStack(['omega3']), 'https://tnic.help/stacks?stack=x');
+    expect(text).not.toContain('MEDICATIONS ON FILE');
+  });
+
+  it('lists a flagged match with its verbatim source note when a medication class hits the stack', () => {
+    const text = formatStackExport(
+      ['omega3'],
+      analyzeStack(['omega3']),
+      'https://tnic.help/stacks?stack=x',
+      ['anticoagulants'],
+    );
+    expect(text).toContain('MEDICATIONS ON FILE');
+    expect(text).toContain('Blood thinners / antiplatelets');
+    expect(text).toContain('FLAGGED AGAINST THIS STACK');
+    expect(text).toContain('Blood thinners (warfarin, aspirin, clopidogrel)');
+  });
+
+  it('shows the no-flags placeholder when a selected medication class has no match in the stack', () => {
+    const text = formatStackExport(
+      ['omega3'],
+      analyzeStack(['omega3']),
+      'https://tnic.help/stacks?stack=x',
+      ['thyroid'],
+    );
+    expect(text).toContain('MEDICATIONS ON FILE');
+    expect(text).toContain('(no published flags for these medication classes against this stack)');
+  });
 });
 
 describe('formatStackJson', () => {
@@ -231,5 +260,17 @@ describe('formatStackJson', () => {
     const json = JSON.parse(formatStackJson([], analyzeStack([]), undefined));
     expect(json.name).toBe('Custom Stack');
     expect(json.compounds).toEqual([]);
+  });
+
+  it('includes medications block only when medication class ids are provided', () => {
+    const noMeds = JSON.parse(formatStackJson(['omega3'], analyzeStack(['omega3']), 'Stack'));
+    expect(noMeds.medications).toEqual({ selfReportedClassIds: [], flaggedAgainstStack: [] });
+
+    const withMeds = JSON.parse(
+      formatStackJson(['omega3'], analyzeStack(['omega3']), 'Stack', ['anticoagulants']),
+    );
+    expect(withMeds.medications.selfReportedClassIds).toEqual(['anticoagulants']);
+    expect(withMeds.medications.flaggedAgainstStack).toHaveLength(1);
+    expect(withMeds.medications.flaggedAgainstStack[0]).toMatchObject({ compoundId: 'omega3' });
   });
 });
