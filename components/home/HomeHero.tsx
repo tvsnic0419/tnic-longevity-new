@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import { Suspense } from 'react';
-import { ClipboardList, Library, ArrowRight, Sparkles } from 'lucide-react';
+import { Pill, Library, ArrowRight, Sparkles } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo';
 import { StarterQuiz } from '@/components/sections/StarterQuiz';
 import { GlassPanel } from '@/components/ui/GlassPanel';
-import { HeroSceneMount } from '@/components/home/HeroSceneMount';
 import { compounds } from '@/lib/data';
+import { eliteInterventions } from '@/lib/elite-interventions';
 
 /**
  * Server-rendered homepage hero.
@@ -17,10 +17,10 @@ import { compounds } from '@/lib/data';
  */
 
 const heroStats = [
-  { value: '12', label: 'Hallmarks of aging' },
+  { value: String(eliteInterventions.length), label: 'Elite interventions' },
   { value: String(compounds.length), label: 'Graded compounds' },
+  { value: '12', label: 'Hallmarks of aging' },
   { value: 'A–C', label: 'Evidence tiers' },
-  { value: '100%', label: 'Free & private' },
 ];
 
 function Dot() {
@@ -63,7 +63,7 @@ export function HomeHero() {
               className="mb-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium text-white/80"
             >
               <Sparkles className="h-3.5 w-3.5 text-[var(--accent-cyan)]" aria-hidden="true" />
-              Interventions for the 12 hallmarks of aging
+              The evidence-graded longevity library — and where to buy well
             </GlassPanel>
 
             {/* !text-white: .headline-editorial is unlayered CSS and sets its
@@ -72,24 +72,26 @@ export function HomeHero() {
                 This hero is intentionally always-dark (bg-[#020811] above),
                 so force white with Tailwind's `!` important-modifier. */}
             <h1 id="home-hero-heading" className="headline-editorial mb-5 !text-white">
-              Understand how you age.
+              Transformative nutrition
               <br />
-              <span className="gradient-sweep-text">Then act on the evidence.</span>
+              <span className="gradient-sweep-text">for cell-health.</span>
             </h1>
 
             <p className="mx-auto mb-8 max-w-xl text-lg leading-relaxed text-white/70 md:text-xl lg:mx-0">
-              TNiC turns longevity science into one clear protocol — the 12 hallmarks of
-              aging, evidence-graded compounds, and simulators that project the impact
-              before you commit. Independent, private, and free.
+              TNiC — Transformative Nutrition in Cell-Health — is a PubMed-backed
+              library of the nutrients shown to act on the 12 hallmarks of aging,
+              graded by the strength of human evidence. Start with the elite
+              interventions and the verified products to act on them. Free, private,
+              no account.
             </p>
 
             <div className="mb-6 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
               <Link
-                href="/quiz"
+                href="/#elite-interventions"
                 className="tnic-button-primary focus-ring group inline-flex items-center justify-center gap-2.5 rounded-2xl px-7 py-3.5 text-base"
               >
-                <ClipboardList className="h-5 w-5" aria-hidden="true" />
-                Take the 3-min quiz
+                <Pill className="h-5 w-5" aria-hidden="true" />
+                See elite interventions
                 <ArrowRight
                   className="h-4 w-4 transition-transform group-hover:translate-x-1"
                   aria-hidden="true"
@@ -100,7 +102,7 @@ export function HomeHero() {
                 className="tnic-button-secondary focus-ring inline-flex items-center justify-center gap-2.5 rounded-2xl px-7 py-3.5 text-base"
               >
                 <Library className="h-5 w-5" aria-hidden="true" />
-                Explore the library
+                Explore the evidence
               </Link>
             </div>
 
@@ -142,16 +144,6 @@ export function HomeHero() {
           {/* Content plane — the hero's one primary glass moment, with pointer tilt */}
           <div className="mt-12 lg:col-span-5 lg:mt-0">
             <div className="relative">
-              {/* Ambient 3D compound-synergy network — real product data, not
-                  decoration for its own sake. Furthest-back layer (-z-10);
-                  the gradient glow and glass card paint above it in DOM order.
-                  Interactive (hover a node for its name/evidence tier, drag
-                  to rotate) — the caption below is the only affordance that
-                  tells a visitor that, since the network itself carries no
-                  visible cursor/button chrome. */}
-              <div className="absolute -inset-20 -z-10 opacity-80" aria-hidden="true">
-                <HeroSceneMount />
-              </div>
               <div
                 className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-[var(--accent-cyan)]/12 via-transparent to-[var(--accent-emerald)]/12 blur-2xl"
                 aria-hidden="true"
@@ -165,11 +157,12 @@ export function HomeHero() {
               </GlassPanel>
             </div>
             <p className="mt-4 hidden text-center text-[11px] text-white/35 lg:block lg:text-right">
-              Drag or hover the network — live compound-synergy data
+              Nutrition, down to the cell — evidence you can trace
             </p>
           </div>
         </div>
       </div>
+
     </section>
   );
 }

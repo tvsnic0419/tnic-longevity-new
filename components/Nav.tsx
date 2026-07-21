@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ArrowRight, ClipboardList, Menu, Search, ShoppingBag, X } from 'lucide-react';
+import { ArrowRight, ClipboardList, Menu, Search, ShieldCheck, X } from 'lucide-react';
 import { navLinks } from '@/lib/data';
 import { Logo } from '@/components/ui/Logo';
 import { SiteSearch } from '@/components/SiteSearch';
@@ -92,7 +92,7 @@ export function Nav() {
           href="/"
           className="focus-ring interactive flex items-center rounded-xl shrink-0 group transition-transform hover:scale-[1.02]"
         >
-          <Logo variant="lockup" size="nav" alt="TNiC – Longevity Intelligence · Home" />
+          <Logo variant="lockup" size="nav" alt="TNiC – Transformative Nutrition in Cell-Health · Home" />
         </Link>
 
         <div className="hidden lg:flex gap-0.5 xl:gap-1">
@@ -132,8 +132,8 @@ export function Nav() {
             href="/shop"
             className="focus-ring inline-flex items-center gap-1.5 glass glass-hover px-4 py-2 rounded-full text-sm font-semibold text-muted-foreground hover:text-foreground"
           >
-            <ShoppingBag className="w-4 h-4 text-accent-amber" aria-hidden="true" />
-            Shop
+            <ShieldCheck className="w-4 h-4 text-accent-amber" aria-hidden="true" />
+            Verify
           </Link>
           <Link href="/dashboard" className="focus-ring btn-gradient text-sm !py-2.5 !px-5 !min-h-0 rounded-full">
             Dashboard
@@ -210,7 +210,7 @@ export function Nav() {
                   onClick={() => setMobileOpen(false)}
                   className="focus-ring glass glass-hover text-sm text-center py-3 rounded-xl font-semibold"
                 >
-                  Protocol Shop
+                  Verify a Product
                 </Link>
                 <Link
                   href="/dashboard"

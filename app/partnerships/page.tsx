@@ -10,7 +10,7 @@ import { SITE } from '@/lib/site';
 export const metadata = seoRoutes.partnerships();
 
 const fit = [
-  'Evidence-supported education around cellular health, nutrition, biomarkers, and supplement quality.',
+  'Evidence-supported education around cell-health, nutrition, biomarkers, and supplement quality.',
   'Research communication or data visualization projects that help consumers understand mechanisms and uncertainty.',
   'Category education for brands that can tolerate transparent evidence grading and clear disclosures.',
   'Technology or lab collaborations that improve user comprehension without selling personal health data.',
@@ -35,7 +35,7 @@ function buildSchemas() {
     buildArticleSchema({
       title: 'Partner With TNiC',
       description:
-        'Partnership principles for brands, research organizations, and health technology teams interested in responsible cellular health education.',
+        'Partnership principles for brands, research organizations, and health technology teams interested in responsible cell-health education.',
       path: '/partnerships',
     }),
     buildBreadcrumbSchema([
@@ -66,7 +66,7 @@ export default function PartnershipsPage() {
             <div>
               <p className="text-label text-accent-cyan mb-2">What TNiC is building</p>
               <p className="text-body-sm text-muted-foreground leading-relaxed">
-                TNiC is a cellular health and nutrition intelligence product for advanced consumers who want to
+                TNiC is a cell-health and nutrition intelligence product for advanced consumers who want to
                 understand compounds, pathways, evidence quality, biomarkers, and stack relationships before they buy
                 or change a protocol. It is educational, local-first, and explicitly not a clinic or medical provider.
               </p>

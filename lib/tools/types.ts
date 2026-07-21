@@ -92,7 +92,7 @@ export interface NetworkNode {
   x: number;
   y: number;
   selected: boolean;
-  bioavailability: number;
+  bioavailability?: number;
 }
 
 export interface NetworkEdge {

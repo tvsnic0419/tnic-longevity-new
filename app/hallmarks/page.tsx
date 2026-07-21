@@ -4,6 +4,7 @@ import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { ArrowRight, Dna, FlaskConical } from 'lucide-react';
+import { PageHeader } from '@/components/ui/PageHeader';
 
 export const metadata: Metadata = {
   title: '12 Hallmarks of Aging | TNiC Longevity Science',
@@ -51,24 +52,17 @@ export default function HallmarksIndexPage() {
       <Nav />
       <main id="main-content" tabIndex={-1}>
 
-        {/* Hero */}
-        <section className="pt-28 pb-16 md:pt-36 md:pb-20 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,color-mix(in_srgb,var(--accent-emerald)_10%,transparent),transparent)]" />
-          <div className="relative container-page max-w-4xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6">
-              <Dna className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-xs font-medium text-emerald-400 tracking-widest uppercase">Longevity Science</span>
-            </div>
-            <h1 className="text-4xl md:text-6xl font-black tracking-tight text-foreground mb-6 leading-[1.05]">
-              The 12 Hallmarks
-              <br />
-              <span className="text-emerald-400">of Aging</span>
-            </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mb-8">
-              First systematized by López-Otín et al. (2013, updated 2023), the hallmarks are the molecular and cellular
-              mechanisms that cause organisms to age. Understanding them is the prerequisite for any rational anti-aging protocol.
-            </p>
-            <div className="flex flex-wrap gap-3">
+        {/* Hero — shared hub header pattern */}
+        <section className="pt-10 md:pt-12 lg:pt-14 pb-12 md:pb-16 relative">
+          <div className="relative container-page">
+            <PageHeader
+              icon={Dna}
+              eyebrow="Longevity Science"
+              title="The 12 Hallmarks of Aging"
+              description="First systematized by López-Otín et al. (2013, updated 2023), the hallmarks are the molecular and cellular mechanisms that cause organisms to age. Understanding them is the prerequisite for any rational anti-aging protocol."
+              theme="emerald"
+            />
+            <div className="flex flex-wrap justify-center gap-3">
               <Link href="/stacks" className="inline-flex items-center gap-2 bg-emerald-500 text-black px-5 py-3 rounded-xl text-sm font-bold hover:bg-emerald-400 transition-colors">
                 Build My Stack <ArrowRight className="w-4 h-4" />
               </Link>
@@ -105,8 +99,8 @@ export default function HallmarksIndexPage() {
         {/* Hallmark grid */}
         <section className="py-20">
           <div className="container-page max-w-5xl">
-            <p className="text-xs text-emerald-400 uppercase tracking-widest font-medium mb-3">All 12 Hallmarks</p>
-            <h2 className="text-3xl font-black tracking-tight text-foreground mb-10">
+            <p className="text-label text-accent-emerald mb-3">All 12 Hallmarks</p>
+            <h2 className="heading-section mb-10">
               The complete molecular map of aging.
             </h2>
 
@@ -219,7 +213,7 @@ export default function HallmarksIndexPage() {
         <section className="py-20 border-t border-border/50">
           <div className="container-page text-center max-w-2xl">
             <FlaskConical className="w-10 h-10 text-emerald-400 mx-auto mb-5" />
-            <h2 className="text-3xl font-black tracking-tight text-foreground mb-4">
+            <h2 className="heading-section mb-4">
               Target multiple hallmarks at once.
             </h2>
             <p className="text-muted-foreground mb-8">

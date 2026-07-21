@@ -54,7 +54,7 @@ export const compoundBuyerGuides: CompoundBuyerGuide[] = [
       'Combined high-dose NR + NMN without physician oversight',
     ],
     sourcingNote:
-      'TNiC does not sell or affiliate. Demand batch-specific COA from any supplier. Match published trial doses before judging efficacy.',
+      'TNiC does not sell supplements; verified-pick links may carry an affiliate token, disclosed at purchase, and never influence the listing. Demand batch-specific COA from any supplier. Match published trial doses before judging efficacy.',
     relatedCompareSlug: 'nmn-vs-nr',
   },
   {

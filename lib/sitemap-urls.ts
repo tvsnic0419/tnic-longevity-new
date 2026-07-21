@@ -54,6 +54,11 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     { url: `${base}/trust/sponsorship`, lastModified, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/trust/journey`, lastModified, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${base}/trust/updates`, lastModified, changeFrequency: 'weekly', priority: 0.65 },
+    { url: `${base}/privacy`, lastModified, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${base}/terms`, lastModified, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${base}/health-data`, lastModified, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${base}/editorial-policy`, lastModified, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${base}/corrections`, lastModified, changeFrequency: 'monthly', priority: 0.5 },
   ];
 
   const hallmarkRoutes = hallmarkLibrary.map((h) => ({

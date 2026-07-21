@@ -12,7 +12,7 @@ const founder = {
     'A self-taught researcher and software builder, he designed TNiC to be the platform he wished existed — one where major claims are traceable, evidence tiers are visible, and the tools help you think rather than just buy.',
     'TNiC is independently built, carries no inventory, and discloses every commercial relationship. The independence is the point.',
   ],
-  quote: 'Most longevity sites are supplement stores with a content problem. I wanted to build the opposite.',
+  quote: 'Most longevity sites are supplement stores with a content problem. I built the opposite: the evidence first, then an honest, disclosed pick of what to actually buy.',
 };
 
 const pillars = [

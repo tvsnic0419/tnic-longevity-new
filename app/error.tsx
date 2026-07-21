@@ -25,7 +25,7 @@ export default function Error({
         <div>
           <h1 className="text-xl font-bold">Something went wrong</h1>
           <p className="text-body-sm text-muted-foreground mt-2">
-            The Longevity OS hit an unexpected error. Your local data is unaffected.
+            TNiC hit an unexpected error. Your local data is unaffected.
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">

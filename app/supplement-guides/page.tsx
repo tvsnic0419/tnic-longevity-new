@@ -214,7 +214,7 @@ export default function SupplementGuidesPage() {
             </h1>
             <p className="text-body max-w-2xl mx-auto mb-8 text-muted-foreground">
               Deep-dive guides for the compounds with the strongest evidence in aging science.
-              Every claim is cited. Every protocol is honest about limitations. No affiliate rankings.
+              Every claim is cited. Every protocol is honest about limitations. Affiliate links never drive the rankings.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               <Link

@@ -72,7 +72,8 @@ export interface Compound {
   mechanism: string;
   desc: string;
   badge: StackGoal;
-  bioavailability: number;
+  /** Oral absorption %, only set when a specific published figure exists — omit rather than guess. */
+  bioavailability?: number;
   evidence: EvidenceTier;
   dose: string;
   timing: 'AM' | 'PM' | 'AM/PM';

@@ -387,7 +387,8 @@ export function analyzeStack(selectedIds: string[]): StackAnalysis {
     { low: 0, high: 0 },
   );
 
-  const bioSum = selected.reduce((s, c) => s + c.bioavailability, 0);
+  const withBioavailability = selected.filter((c) => typeof c.bioavailability === 'number');
+  const bioSum = withBioavailability.reduce((s, c) => s + (c.bioavailability ?? 0), 0);
 
   return {
     score: scoreStack(selectedIds).overall,
@@ -399,7 +400,7 @@ export function analyzeStack(selectedIds: string[]): StackAnalysis {
     hallmarkCoverage: [...hallmarkSet],
     hallmarkCount: hallmarkSet.size,
     evidenceTier: averageEvidenceTier(selectedIds),
-    avgBioavailability: selected.length ? Math.round(bioSum / selected.length) : 0,
+    avgBioavailability: withBioavailability.length ? Math.round(bioSum / withBioavailability.length) : 0,
     compoundCount: selected.length,
     monthlyCost,
   };

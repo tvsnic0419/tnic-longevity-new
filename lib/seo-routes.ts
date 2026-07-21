@@ -15,11 +15,11 @@ import { glossary, consumerFAQ } from './data';
 export const seoRoutes = {
   home: () =>
     buildPageMetadata({
-      title: 'TNiC — Your Anti-Aging Operating System',
+      title: 'TNiC — Transformative Nutrition in Cell-Health',
       description:
-        'Free longevity OS: evidence-graded stacks (Tier A/B/C from human trials), 12 Hallmarks of Aging library, local biomarker tracking, and six interactive tools. Your data stays in your browser.',
+        'TNiC — Transformative Nutrition in Cell-Health. An independent, PubMed-backed library of the nutrients and compounds graded by human evidence for the 12 hallmarks of aging, with the doses studied and how to buy well. Free, private, no account.',
       path: '/',
-      keywords: ['longevity OS', 'anti-aging operating system', 'healthspan dashboard', 'hallmarks of aging', 'evidence-graded supplements'],
+      keywords: ['transformative nutrition', 'nutrition for cell-health', 'cell-health', 'hallmarks of aging', 'evidence-graded supplements'],
     }),
 
   dashboard: () =>
@@ -125,9 +125,9 @@ export const seoRoutes = {
     buildPageMetadata({
       title: 'Partnerships — Work With TNiC',
       description:
-        'Selective partnership path for responsible cellular health education, research communication, product-category literacy, and technology collaborations. Commercial relationships cannot influence evidence grading.',
+        'Selective partnership path for responsible cell-health education, research communication, product-category literacy, and technology collaborations. Commercial relationships cannot influence evidence grading.',
       path: '/partnerships',
-      keywords: ['TNiC partnerships', 'longevity education sponsorship', 'cellular health collaboration', 'supplement brand education'],
+      keywords: ['TNiC partnerships', 'longevity education sponsorship', 'cell-health collaboration', 'supplement brand education'],
     }),
 
   libraryCompare: () =>
@@ -201,7 +201,7 @@ export const seoRoutes = {
     buildPageMetadata({
       title: 'Disclaimers — Legal & Educational Notices',
       description:
-        'Medical advice disclaimer, modeled projections labeling, N=1 data policy, zero-commission commerce policy, and data privacy statement. TNiC is an educational platform — not a medical provider.',
+        'Medical advice disclaimer, modeled projections labeling, N=1 data policy, affiliate-commission disclosure, and data privacy statement. TNiC is an educational platform — not a medical provider.',
       path: '/trust/disclaimers',
     }),
 
@@ -226,6 +226,46 @@ export const seoRoutes = {
       title: 'Update History — Platform Changelog',
       description: 'Public changelog of TNiC features, evidence tier revisions, safety updates, content additions, and research feed expansions — with dates and reasoning.',
       path: '/trust/updates',
+    }),
+
+  privacy: () =>
+    buildPageMetadata({
+      title: 'Privacy Policy — Local-First by Design',
+      description:
+        'A feature-by-feature map of what TNiC keeps in your browser versus what is transmitted when you use optional integrations (Protocol Brief email, lab-partner import, contact). No health-data sales, no server-side health database.',
+      path: '/privacy',
+    }),
+
+  terms: () =>
+    buildPageMetadata({
+      title: 'Terms of Use — Educational Platform',
+      description:
+        'The terms governing use of TNiC. Educational content only — not medical advice, diagnosis, or prescription. No warranty of clinical outcomes. Draft pending legal review.',
+      path: '/terms',
+    }),
+
+  healthData: () =>
+    buildPageMetadata({
+      title: 'Your Health Data — What Stays, What Moves',
+      description:
+        'Exactly where your labs, profile, stack, and notes live, what leaves your browser only when you choose an optional feature, retention and deletion, and why this data may be health information without being HIPAA-covered.',
+      path: '/health-data',
+    }),
+
+  editorialPolicy: () =>
+    buildPageMetadata({
+      title: 'Editorial Policy — How Evidence Is Graded & Reviewed',
+      description:
+        'How TNiC sources, grades, authors, reviews, and corrects longevity content — evidence models, author identity, independent-review status, review cadence, and conflict disclosure.',
+      path: '/editorial-policy',
+    }),
+
+  corrections: () =>
+    buildPageMetadata({
+      title: 'Corrections — Log & How to Report',
+      description:
+        'How to report an error in TNiC content, how corrections are handled, and the running log of material corrections with dates and reasoning.',
+      path: '/corrections',
     }),
 
   hallmark: (input: { title: string; summary: string; slug: string; number: number }) =>

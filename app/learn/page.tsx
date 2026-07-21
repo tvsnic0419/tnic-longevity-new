@@ -13,7 +13,7 @@ function buildLearnSchemas() {
   const howTo = buildHowToSchema({
     name: 'How to Start Your Longevity Protocol with TNiC',
     description:
-      'A 5-step onboarding guide for setting up your personalized anti-aging stack using the TNiC Longevity OS — quiz, biomarkers, stack building, safety review, and progress tracking.',
+      'A 5-step guide to getting oriented with TNiC — how evidence is graded, reading the hallmarks library, comparing nutrients and compounds, safety basics, and tracking biomarkers privately.',
     path: '/learn',
     totalTime: 'PT15M',
     steps: gettingStartedSteps.map((s) => ({

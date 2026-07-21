@@ -23,7 +23,7 @@ export function SubPageLayout({ children, hideContextBar = false }: SubPageLayou
       <Nav />
       <div className="pt-14 md:pt-16">
         {!hideContextBar && (
-          <aside aria-label="Longevity OS status">
+          <aside aria-label="Your saved workspace">
             <ContextBar />
           </aside>
         )}

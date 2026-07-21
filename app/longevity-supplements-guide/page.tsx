@@ -87,7 +87,7 @@ export default function LongevitySupplementsGuidePage() {
     }),
     buildHowToSchema({
       name: 'How to Build a Longevity Supplement Stack',
-      description: 'A 6-step evidence-based process for choosing, dosing, and tracking longevity supplements using the TNiC Longevity OS.',
+      description: 'A 6-step evidence-based process for choosing, dosing, and tracking longevity supplements with TNiC — Transformative Nutrition in Cell-Health.',
       path: '/longevity-supplements-guide',
       totalTime: 'PT90D',
       steps: HOW_TO_STEPS,

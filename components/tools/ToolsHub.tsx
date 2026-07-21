@@ -27,7 +27,7 @@ import { EvidenceTagLegend } from '@/components/trust/EvidenceTag';
 import { toolsRegistry, type ToolId } from '@/lib/registry';
 import { ToolDisclaimer } from './ToolDisclaimer';
 import { ContextRail } from '@/components/ui/ContextRail';
-import { getHubContext, getToolContext } from '@/lib/hub-context';
+import { getToolContext } from '@/lib/hub-context';
 
 const StackSimulatorTool = dynamic(
   () => import('./StackSimulatorTool').then((m) => ({ default: m.StackSimulatorTool })),
@@ -102,22 +102,22 @@ export function ToolsHub() {
   const activeTool = toolsRegistry.find((t) => t.id === active)!;
 
   return (
-    <section className="bg-background min-h-screen pt-6 md:pt-8 pb-20">
+    <section className="bg-background min-h-screen pt-10 md:pt-12 lg:pt-14 pb-16 md:pb-20 lg:pb-24">
       <div className="container-page">
         <PageHeader
           icon={Calculator}
           eyebrow="Interactive Tools"
-          title="Longevity Decision Engine"
-          description="Six evidence-graded tools that turn library knowledge into actionable protocols. Rule-based engines with transparent reasoning — not generative AI."
+          title="Longevity Tools"
+          description="Six evidence-graded calculators that turn library knowledge into practical models. Rule-based, transparent reasoning — not generative AI."
           theme="violet"
           as="h1"
-          context={getHubContext('tools')}
         />
 
         <ContextRail
           {...getToolContext(active)}
           theme="cyan"
-          className="mb-8 max-w-4xl"
+          variant="compact"
+          className="mb-8 max-w-4xl mx-auto"
         />
 
         <Link

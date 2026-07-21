@@ -116,12 +116,12 @@ function ProtocolShopPanelInner() {
     <div>
       <PageHeader
         icon={ShoppingBag}
-        eyebrow="Protocol Shop · Stack-filtered verification"
+        eyebrow="Protocol Shop"
         title="Buy Smart — Not Branded"
         description="Stack-filtered verification checklists from buyer guides. Share /shop?stack= links to pre-load any preset or custom stack."
         theme="amber"
-        align="left"
         context={getHubContext('shop')}
+        contextVariant="compact"
       />
 
       {deepLinked && items.length > 0 && (

@@ -26,13 +26,12 @@ export function FaqHub() {
       : consumerFAQ.filter((f) => f.category === faqFilter);
 
   return (
-    <div className="container-page py-10 md:py-14">
+    <div className="container-page pt-10 md:pt-12 lg:pt-14 pb-16 md:pb-20 lg:pb-24">
       <PageHeader
         icon={HelpCircle}
         eyebrow="Learn"
         title="Frequently Asked Questions"
         description={`${consumerFAQ.length} expert answers about TNiC protocols, compound and peptide science, safety, evidence tiers, data privacy, and how we differ from supplement stores.`}
-        align="left"
         context={getHubContext('faq')}
         contextVariant="compact"
       />

@@ -39,7 +39,7 @@ function buildShopSchemas() {
 
 export default function ShopPage() {
   return (
-    <div className="container-page py-8 md:py-12 max-w-4xl">
+    <div className="container-page pt-10 md:pt-12 lg:pt-14 pb-16 md:pb-20 lg:pb-24 max-w-4xl">
       <StructuredData schemas={buildShopSchemas()} />
       <ProtocolShopPanel />
     </div>

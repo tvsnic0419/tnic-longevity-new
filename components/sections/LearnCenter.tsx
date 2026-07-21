@@ -37,7 +37,8 @@ import {
   CircuitBoard,
   type LucideIcon,
 } from 'lucide-react';
-import { SectionShell } from '@/components/SectionShell';
+import { PageShell } from '@/components/ui/PageShell';
+import { PageHeader } from '@/components/ui/PageHeader';
 import {
   gettingStartedSteps,
   glossary,
@@ -129,18 +130,17 @@ export function LearnCenter({ defaultTab }: { defaultTab?: TabId }) {
     : consumerFAQ.filter((f) => f.category === faqFilter);
 
   return (
-    <SectionShell
-      id="learn"
-      mod="MOD-LRN-09"
-      theme="cyan"
-      badge="Consumer Intelligence"
-      title="Learn Before You Stack"
-      subtitle="Intelligent consumers ask hard questions. TNiC answers them openly — from first-time basics to supplement industry red flags. Quick answers also live at /faq."
-      context={getHubContext('learn')}
-      mesh
-      className="bg-background"
-    >
-      <div className="flex flex-wrap gap-2 mb-10">
+    <PageShell className="bg-background">
+      <PageHeader
+        icon={BookOpen}
+        eyebrow="Learn"
+        title="Learn Before You Stack"
+        description="Intelligent consumers ask hard questions. TNiC answers them openly — from first-time basics to supplement industry red flags."
+        theme="cyan"
+        context={getHubContext('learn')}
+        contextVariant="compact"
+      />
+      <div className="flex flex-wrap justify-center gap-2 mb-10">
         {tabs.map((t) => (
           <button
             key={t.id}
@@ -399,6 +399,6 @@ export function LearnCenter({ defaultTab }: { defaultTab?: TabId }) {
           </motion.div>
         )}
       </AnimatePresence>
-    </SectionShell>
+    </PageShell>
   );
 }

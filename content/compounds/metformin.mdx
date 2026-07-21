@@ -1,0 +1,145 @@
+---
+title: Metformin
+evidence_tier: B
+compound_id: metformin
+requires_disclaimer: true
+last_updated: 2026-07-17
+---
+
+> **TL;DR** — Metformin is a prescription biguanide that inhibits mitochondrial Complex I, lowering cellular energy charge and activating AMPK. Its glucose-lowering and diabetes-prevention data in humans are Tier-A strong (UKPDS 34, DPP). Its geroprotection case is Tier B and genuinely unsettled: it extends lifespan in some mouse models but *not* in the rigorous NIA ITP when given alone, the human TAME longevity trial has not reported, and one RCT shows it can blunt exercise adaptations. This is **not** a native Stack Architect compound — it is a prescription drug and an educational deep-dive only.
+
+## 1. What metformin does (and why it matters)
+
+Metformin is a biguanide, in clinical use for type 2 diabetes for over 60 years. Mechanistically it is a mild mitochondrial poison: it accumulates in cells (aided by OCT1 transporters) and inhibits **Complex I** of the electron transport chain, lowering ATP production and raising the AMP/ATP ratio. That energy-deficit signal activates **AMPK**, the master fuel-sensing kinase, which restrains hepatic gluconeogenesis, promotes fatty-acid oxidation, and — the reason the longevity field cares — pushes cells from a growth-dominant toward a repair-dominant state.
+
+The geroscience interest is that this is the same AMPK axis engaged by caloric restriction and by [berberine](/library/compounds/berberine), and that decades of diabetic-patient data hint at lower age-related disease incidence. Whether that translates into a **lifespan or healthspan benefit in metabolically healthy people** is unproven — and that gap is the whole point of this module.
+
+**Primary hallmarks targeted:** Deregulated nutrient sensing · Chronic inflammation · Mitochondrial dysfunction · Altered intercellular communication
+
+:::evidence tier="B"
+For **glycemic hard outcomes** the human data are strong: UKPDS 34 (PMID 9742977, *Lancet* 1998) randomized 342 overweight newly-diagnosed type 2 diabetics to metformin and, over a median 10.7 years, found reduced diabetes-related complications and all-cause mortality versus diet alone. The Diabetes Prevention Program (Knowler et al., PMID 11832527, *NEJM* 2002) showed metformin cut progression to diabetes by 31% in high-risk adults — though intensive lifestyle change (58%) beat it. For **longevity specifically**, the honest picture is Tier B: Barzilai et al. (PMID 27304507, *Cell Metabolism* 2016) lay out the mechanistic and epidemiologic rationale behind the TAME trial, but no completed human trial shows metformin extends lifespan or delays aging in non-diabetics.
+:::
+
+:::pathway title="Metformin → Complex I → AMPK" nodes="Metformin|Biguanide|cyan,Complex I inhibition|↑AMP/ATP|amber,AMPK activation|Fuel sensor|violet,↓Gluconeogenesis & ↑repair|Process|emerald,Improved glycemia (proven) / geroprotection (unproven)|Outcome|rose" edges="Metformin->Complex I inhibition|lowers ATP production,Complex I inhibition->AMPK activation|energy-deficit signal,AMPK activation->↓Gluconeogenesis & ↑repair|mTOR restraint,↓Gluconeogenesis & ↑repair->Improved glycemia (proven) / geroprotection (unproven)|outcome split"
+:::
+
+:::warning title="Educational module only — Rx compound"
+Metformin is a prescription medication. TNiC documents the evidence for informed physician discussions — we do not prescribe, source, or recommend self-medication. It is deliberately **not** a native Stack Architect compound. See [/trust/disclaimers](/trust/disclaimers).
+:::
+
+## 2. Mechanism — Complex I, AMPK, and the AMPK-independent caveats
+
+| Effect | Mechanism | Hallmark link |
+| --- | --- | --- |
+| ↓ Hepatic gluconeogenesis | AMPK-dependent and AMPK-independent (redox/energy state) | Nutrient sensing |
+| AMPK activation | ↑AMP/ATP from Complex I inhibition | Mitochondrial dysfunction |
+| ↓ Inflammatory signaling | Reduced NF-κB activity in preclinical models | Chronic inflammation |
+| Gut / microbiome effects | Altered bile acids, GLP-1, *Akkermansia* | Altered intercellular communication |
+
+The tidy "metformin = AMPK activator" story is an oversimplification. As Rena, Hardie & Pearson review (PMID 28776086, *Diabetologia* 2017), metformin also suppresses gluconeogenesis through **AMPK-independent** routes — a lowered hepatic energy state and inhibition of mitochondrial glycerophosphate dehydrogenase — and much of its Complex I effect appears at concentrations higher than typical therapeutic plasma levels, keeping the primary in-vivo mechanism a subject of genuine debate.
+
+:::practical title="Read the evidence tension honestly"
+Metformin's *diabetes* evidence is among the best in medicine. Its *anti-aging* evidence is a mechanistic hypothesis with mixed preclinical support and no positive human longevity endpoint. Treat the two claims as separate. A healthy person taking metformin "for longevity" is acting on the second, weaker case — and accepting a real, documented risk of blunting exercise gains (Section 3).
+:::
+
+## 3. Evidence summary — where it is strong and where it is not
+
+| Study | Model | Key outcome | Tier |
+| --- | --- | --- | --- |
+| UKPDS 34 (PMID 9742977) | Humans, T2D (n=342) | ↓ complications & all-cause mortality vs diet | A (glycemic) |
+| DPP, Knowler 2002 (PMID 11832527) | Humans, prediabetes | ↓ diabetes incidence 31% (lifestyle 58%) | A (prevention) |
+| Barzilai 2016 (PMID 27304507) | Review / TAME rationale | Mechanistic + epidemiologic case; trial not reported | B |
+| Martin-Montalvo 2013 (PMID 23900241) | Male mice | 0.1% diet ↑ healthspan & lifespan; 1% dose toxic | Preclinical → B |
+| NIA ITP, Strong 2016 (PMID 27312235) | Heterogeneous mice | Metformin **alone did not** extend lifespan; benefit only with rapamycin | Preclinical |
+| Konopka 2019 (PMID 30548390) | Humans, older adults (RCT) | Metformin **blunted** exercise-induced VO₂max, insulin-sensitivity & mitochondrial gains | B (negative) |
+
+**Consensus:** Tier A for glucose control and diabetes prevention. Tier B — and honestly contested — for geroprotection in healthy people. The strongest single caution is that the most rigorous mouse lifespan program (ITP) found no lifespan extension from metformin alone, and a human RCT found it antagonizes some benefits of exercise. TAME, if funded and completed, is the trial that would move this to Tier A.
+
+:::decision title="Is metformin appropriate to discuss with your physician?"
+node | Do you have type 2 diabetes, prediabetes, or a clinical metabolic indication?
+yes | Standard evidence-based therapy — your physician manages dose and monitoring per guidelines
+no | node | Are you pursuing it purely for longevity while metabolically healthy and exercising?
+  yes | The evidence does not support this — exercise-blunting risk is real and lifespan benefit is unproven; discuss whether the tradeoff makes sense for you specifically
+  no | Fix lifestyle foundation and better-evidenced levers first; revisit with a physician
+redflag | eGFR <30, acute illness, contrast imaging, heavy alcohol use, or pregnancy → hard stop, physician clearance required
+:::
+
+## 4. Dosing (educational — physician sets actual dose)
+
+:::warning title="Physician-supervised only"
+The figures below reflect published clinical and trial protocols — **not** a TNiC recommendation to self-start. Metformin requires a prescription and renal-function monitoring.
+:::
+
+| Parameter | Reference point | Notes |
+| --- | --- | --- |
+| Diabetes titration | 500 mg once daily → up to 2000 mg/day, extended-release | Titrate slowly to manage GI tolerance |
+| TAME longevity protocol | 1500 mg/day | Trial dose in non-diabetics (PMID 27304507) |
+| DPP prevention dose | 850 mg twice daily | PMID 11832527 |
+| Timing | With meals; ER form at evening meal | Reduces GI upset |
+| Duration to reassess | 12 weeks minimum for glycemic markers | Matches trial windows |
+
+:::practical title="Physician visit checklist"
+- [ ] Bring this module and your full lab history
+- [ ] Baseline eGFR/creatinine, HbA1c, fasting glucose, and serum B12
+- [ ] Disclose all supplements, alcohol intake, and your exercise program
+- [ ] Ask directly about the exercise-adaptation tradeoff (Konopka 2019) if you train
+- [ ] Agree a B12 re-check cadence before starting
+:::
+
+## 5. Monitoring (physician-managed)
+
+| Test | Frequency | Red flag |
+| --- | --- | --- |
+| eGFR / creatinine | Baseline, then annually (more if impaired) | eGFR <30 → discontinue |
+| HbA1c / fasting glucose | Baseline, 12 weeks | No movement → reassess with physician |
+| Serum vitamin B12 | Baseline, then periodically | Low B12 → supplement; long-term use depletes it |
+| GI tolerance | Ongoing | Persistent diarrhea/cramping → ER form or dose reduction |
+| Lactic acidosis vigilance | Ongoing | Malaise, myalgia, dyspnea, especially with renal decline → urgent care |
+
+:::compare title="12-week expected trajectory (diabetic/prediabetic context)" before="Baseline" after="Week 12 target" summary="These targets apply to a glycemic indication — not a validated 'anti-aging' readout."
+Fasting glucose|Elevated|Trending toward normal
+HbA1c|Above target|Downward trend
+Serum B12|In range|Monitored, not falling
+:::
+
+## 6. Safety, red flags, and contraindications
+
+- **Common:** GI upset (diarrhea, nausea, metallic taste) — usually improves with extended-release and slow titration.
+- **Long-term:** Vitamin B12 depletion — monitor and supplement as needed.
+
+:::redflag title="Do not self-start without clearance"
+- **Renal impairment (eGFR <30)** — contraindicated; raises lactic-acidosis risk.
+- **Iodinated contrast imaging, acute illness, dehydration, heavy alcohol** — temporarily hold; lactic-acidosis risk.
+- **Exercise adaptation** — in a randomized trial (PMID 30548390) metformin blunted training-induced gains in cardiorespiratory fitness, insulin sensitivity, and muscle mitochondrial respiration in older adults. If exercise is your primary healthspan lever, this is a direct antagonism to weigh.
+- **Pregnancy / research-chemical sourcing** — use only pharmacy-grade metformin under prescription; never source or self-dose.
+:::
+
+## 7. Synergies (educational — mechanism overlap, not a stack recommendation)
+
+| Intervention | Relationship to metformin |
+| --- | --- |
+| [Berberine](/library/compounds/berberine) | Near-identical Complex-I → AMPK mechanism — **redundant**, and additive hypoglycemia risk; do not combine casually |
+| [Acarbose](/library/compounds/acarbose) | Different mechanism (α-glucosidase inhibition); the ITP lifespan winner where metformin alone was not |
+| [Canagliflozin](/library/compounds/canagliflozin) | SGLT2 inhibitor; complementary glucose-lowering axis, physician-managed only |
+| [Rapamycin](/library/compounds/rapamycin) | ITP data show lifespan extension for the *combination*, not metformin alone (PMID 27312235) |
+
+## 8. Personal results template (physician-supervised)
+
+:::personal title="My metformin log (Rx only)"
+
+| Date | Week | Dose | Fasting glucose | HbA1c | B12 OK? | GI tolerance (1–10) | Physician notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| YYYY-MM-DD | 0 | — | — | — | — | — | Baseline labs |
+| YYYY-MM-DD | 12 | — | — | — | Yes/No | — | Primary review |
+
+**Response criteria (personal, not clinical):**
+- **Meaningful:** Glycemic markers trending toward target with tolerable GI effects and stable B12.
+- **No effect:** No lab movement at 12 weeks with confirmed adherence — reassess with physician.
+- **Stop and reassess:** Any lactic-acidosis warning sign, renal decline, or — if longevity is your only goal — a measured drop in training performance.
+
+**Never self-adjust dose.** All changes require your prescribing physician.
+:::
+
+:::cta href="/trust/disclaimers" title="Read full disclaimers" label="Trust Center disclaimers"
+Rx compound policy, educational-use-only framing, and physician-consultation requirements.
+:::
