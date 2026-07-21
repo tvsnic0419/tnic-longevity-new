@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, RotateCcw, Check, Layers, Compass, ShoppingBag, BookOpen, Mail, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useBriefSubscribe } from '@/hooks/useBriefSubscribe';
 import { DetailedStackSuggestion } from '@/components/quiz/DetailedStackSuggestion';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 import { usePlatform } from '@/context/PlatformContext';
 import type { PresetKey } from '@/lib/presets';
 import type { getQuizResult } from '@/lib/homepage';
@@ -100,9 +101,10 @@ export function QuizResultPanel({ result, answers, onRetake }: QuizResultPanelPr
           </div>
         </button>
 
+        <GlassPanel depth="mid" className="glass-hover rounded-xl">
         <Link
           href={buildShopPresetUrl(result.preset as PresetKey)}
-          className="focus-ring block w-full text-left rounded-xl glass glass-hover p-4 transition-all hover:border-accent-amber/30"
+          className="focus-ring block w-full text-left rounded-xl p-4"
         >
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-start gap-3">
@@ -117,10 +119,12 @@ export function QuizResultPanel({ result, answers, onRetake }: QuizResultPanelPr
             <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0" aria-hidden="true" />
           </div>
         </Link>
+        </GlassPanel>
 
+        <GlassPanel depth="mid" className="glass-hover rounded-xl">
         <Link
           href="/brief"
-          className="focus-ring block w-full text-left rounded-xl glass glass-hover p-4 transition-all hover:border-accent-violet/30"
+          className="focus-ring block w-full text-left rounded-xl p-4"
         >
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-start gap-3">
@@ -135,10 +139,12 @@ export function QuizResultPanel({ result, answers, onRetake }: QuizResultPanelPr
             <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0" aria-hidden="true" />
           </div>
         </Link>
+        </GlassPanel>
 
+        <GlassPanel depth="mid" className="glass-hover rounded-xl">
         <Link
           href={result.primary.href}
-          className="focus-ring block w-full text-left rounded-xl glass glass-hover p-4 transition-all hover:border-accent-cyan/30"
+          className="focus-ring block w-full text-left rounded-xl p-4"
         >
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-start gap-3">
@@ -151,6 +157,7 @@ export function QuizResultPanel({ result, answers, onRetake }: QuizResultPanelPr
             <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0" aria-hidden="true" />
           </div>
         </Link>
+        </GlassPanel>
 
         <div className="glass-deep glass-plane-mid rounded-xl border border-accent-violet/20 p-4">
           <p className="text-xs font-semibold mb-2">Get weekly Protocol Brief</p>
