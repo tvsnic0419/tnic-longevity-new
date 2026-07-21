@@ -146,7 +146,7 @@ function ProtocolShopPanelInner() {
       </div>
 
       {items.length > 0 && (
-        <div className="glass rounded-xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center gap-3">
+        <div className="glass-deep glass-plane-mid rounded-xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center gap-3">
           <div className="flex items-center gap-2 min-w-0 flex-1">
             <Link2 className="w-4 h-4 text-accent-cyan shrink-0" />
             <code className="text-[10px] sm:text-xs font-mono text-muted-foreground truncate">{shareUrl}</code>
@@ -301,7 +301,7 @@ function ProtocolShopPanelInner() {
             ))}
 
             {nrAlternative && (
-              <div className="glass rounded-2xl p-5 border border-accent-violet/25 bg-accent-violet/5">
+              <div className="glass-deep glass-plane-mid rounded-2xl p-5 border border-accent-violet/25 bg-accent-violet/5">
                 <p className="text-label text-accent-violet mb-2">Chose NR instead of NMN?</p>
                 <p className="text-body-sm text-muted-foreground mb-4">
                   Your stack includes NMN. If you or your physician prefer nicotinamide riboside, use this

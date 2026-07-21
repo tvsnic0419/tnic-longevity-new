@@ -38,7 +38,7 @@ export function QuizShareCard({ answers, preset, stackLabel }: QuizShareCardProp
   const shopUrl = buildQuizShopUrl(preset);
 
   return (
-    <div className="glass rounded-xl p-4 border border-accent-violet/20 mt-4">
+    <div className="glass-deep glass-plane-mid rounded-xl p-4 border border-accent-violet/20 mt-4">
       <div className="flex items-center gap-2 mb-2">
         <Link2 className="w-4 h-4 text-accent-violet" aria-hidden="true" />
         <p className="text-label text-accent-violet">Share your result</p>

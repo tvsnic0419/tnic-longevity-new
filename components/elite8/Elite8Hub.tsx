@@ -210,11 +210,11 @@ function CompoundCard({
           </div>
 
           <div className="grid md:grid-cols-2 gap-4 mt-6">
-            <div className="glass rounded-xl p-5 text-sm leading-relaxed">
+            <div className="glass-deep glass-plane-mid rounded-xl p-5 text-sm leading-relaxed">
               <p className="text-label text-accent-cyan mb-2">Mechanism of action</p>
               {product.mechanism}
             </div>
-            <div className="glass rounded-xl p-5 text-sm leading-relaxed">
+            <div className="glass-deep glass-plane-mid rounded-xl p-5 text-sm leading-relaxed">
               <p className="text-label text-accent-cyan mb-2">Key human study</p>
               {product.topStudy}
               <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">

@@ -66,11 +66,11 @@ export function SynergyScorePanel({ score, analysis, verdict, className = '' }: 
 
       {/* Evidence tier + cost pills */}
       <div className="grid grid-cols-2 gap-2 mt-4">
-        <div className="glass rounded-xl py-2.5 px-3 text-center">
+        <div className="glass-deep glass-plane-mid rounded-xl py-2.5 px-3 text-center">
           <p className="text-sm font-bold text-accent-emerald">Tier {analysis.evidenceTier}</p>
           <p className="text-[9px] font-mono text-muted-foreground mt-0.5">EVIDENCE GRADE</p>
         </div>
-        <div className="glass rounded-xl py-2.5 px-3 text-center">
+        <div className="glass-deep glass-plane-mid rounded-xl py-2.5 px-3 text-center">
           <p className="text-sm font-bold text-accent-amber">
             ${analysis.monthlyCost.low}–{analysis.monthlyCost.high}
           </p>

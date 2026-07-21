@@ -63,7 +63,7 @@ export function PrivacyPanel() {
 
   return (
     <div className="space-y-6">
-      <div className="glass rounded-2xl p-6 border border-accent-emerald/20">
+      <div className="glass-deep glass-plane-mid rounded-2xl p-6 border border-accent-emerald/20">
         <div className="flex items-center gap-3 mb-4">
           <div className="p-2 rounded-lg bg-accent-emerald/10">
             <Shield className="w-5 h-5 text-accent-emerald" aria-hidden="true" />
@@ -86,7 +86,7 @@ export function PrivacyPanel() {
           {principles.map((p) => {
             const Icon = p.icon;
             return (
-              <div key={p.title} className="glass rounded-xl p-4">
+              <div key={p.title} className="glass-deep glass-plane-mid rounded-xl p-4">
                 <Icon className="w-4 h-4 text-accent-emerald mb-2" aria-hidden="true" />
                 <h4 className="font-semibold text-xs mb-1">{p.title}</h4>
                 <p className="text-[11px] text-muted-foreground leading-relaxed">{p.desc}</p>
@@ -96,7 +96,7 @@ export function PrivacyPanel() {
         </div>
       </div>
 
-      <div className="glass rounded-xl p-5">
+      <div className="glass-deep glass-plane-mid rounded-xl p-5">
         <p className="text-[10px] font-mono text-muted-foreground uppercase mb-3">Storage mode</p>
         <div className="flex flex-wrap gap-2 mb-4">
           <button
@@ -131,7 +131,7 @@ export function PrivacyPanel() {
         </div>
       </div>
 
-      <div className="glass rounded-xl p-5">
+      <div className="glass-deep glass-plane-mid rounded-xl p-5">
         <p className="text-[10px] font-mono text-muted-foreground uppercase mb-3">Data controls</p>
         <div className="flex flex-wrap gap-3">
           <button

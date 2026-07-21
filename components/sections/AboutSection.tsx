@@ -89,7 +89,7 @@ export function AboutSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.08 }}
-            className="glass rounded-2xl p-6"
+            className="glass-deep glass-plane-mid rounded-2xl p-6"
           >
             <p.icon className="w-6 h-6 text-accent-cyan mb-4" />
             <h3 className="font-bold mb-2">{p.title}</h3>

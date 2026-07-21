@@ -31,7 +31,7 @@ export function LabRecommendations({ recommendations }: LabRecommendationsProps)
 
   if (recommendations.length === 0) {
     return (
-      <div className="glass rounded-2xl p-8 text-center">
+      <div className="glass-deep glass-plane-mid rounded-2xl p-8 text-center">
         <p className="text-muted-foreground text-sm">Log lab data to unlock personalized recommendations.</p>
       </div>
     );
@@ -51,7 +51,7 @@ export function LabRecommendations({ recommendations }: LabRecommendationsProps)
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.04 }}
-            className="glass rounded-xl p-5 border border-border"
+            className="glass-deep glass-plane-mid rounded-xl p-5 border border-border"
             style={{
               borderColor: rec.priority === 'high'
                 ? 'color-mix(in srgb, var(--accent-rose) 25%, transparent)'
