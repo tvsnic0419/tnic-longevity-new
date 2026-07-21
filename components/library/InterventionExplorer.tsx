@@ -64,7 +64,7 @@ export function InterventionExplorer({
         {sorted.map((item) => (
           <div
             key={item.id}
-            className={`glass rounded-xl p-4 flex gap-4 ${item.tnicAvailable ? 'border border-accent-cyan/10' : ''}`}
+            className={`glass-deep glass-plane-mid rounded-xl p-4 flex gap-4 ${item.tnicAvailable ? 'border border-accent-cyan/10' : ''}`}
           >
             <div className="w-8 h-8 rounded-lg bg-muted/50 flex items-center justify-center shrink-0 font-mono text-sm font-bold text-muted-foreground">
               {item.rank}
