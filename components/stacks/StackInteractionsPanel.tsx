@@ -3,6 +3,7 @@
 import { AlertTriangle, Link2, ShieldAlert, Sparkles } from 'lucide-react';
 import type { StackAnalysis, StackInteraction } from '@/lib/stack-analysis';
 import { cn } from '@/lib/utils';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 
 const interactionIcon = (type: StackInteraction['type']) => {
   if (type === 'synergy') return <Sparkles className="w-3.5 h-3.5 text-accent-emerald" aria-hidden="true" />;
@@ -36,7 +37,7 @@ export function StackInteractionsPanel({ analysis, className = '' }: StackIntera
   return (
     <div className={cn('space-y-4', className)}>
       {hasSynergies && (
-        <div className="glass rounded-2xl p-5">
+        <GlassPanel depth="mid" className="rounded-2xl p-5">
           <p className="text-label text-accent-emerald mb-3 flex items-center gap-2">
             <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
             Active synergies
@@ -55,11 +56,11 @@ export function StackInteractionsPanel({ analysis, className = '' }: StackIntera
               </div>
             ))}
           </div>
-        </div>
+        </GlassPanel>
       )}
 
       {hasCautions && (
-        <div className="glass rounded-2xl p-5 border border-accent-amber/20">
+        <GlassPanel depth="mid" className="rounded-2xl p-5 border border-accent-amber/20">
           <p className="text-label text-accent-amber mb-3 flex items-center gap-2">
             <AlertTriangle className="w-3.5 h-3.5" aria-hidden="true" />
             Cautions & contraindications
@@ -85,7 +86,7 @@ export function StackInteractionsPanel({ analysis, className = '' }: StackIntera
               </p>
             )}
           </div>
-        </div>
+        </GlassPanel>
       )}
     </div>
   );
