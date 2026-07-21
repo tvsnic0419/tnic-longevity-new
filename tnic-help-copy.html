@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TNiC Help — Anti-Aging Operating System</title>
+  <meta name="description" content="TNiC turns longevity science into one clear protocol — the 12 hallmarks of aging, evidence-graded compounds, and simulators that project the impact before you commit. Independent, private, and free." />
+  <!--
+    Single-file, dependency-free copy of the TNiC.help homepage.
+    Open in any browser — no build step, no network, no framework.
+    Reproduces the live site's content and dark glassmorphic design system.
+    Live site: https://tnic.help
+  -->
+  <style>
+    /* ---- Design tokens (mirrors app/globals.css) ---- */
+    :root[data-theme="dark"] {
+      --background: #030712;
+      --surface: #060d1a;
+      --foreground: #fafafa;
+      --card: hsl(222 44% 6% / 0.6);
+      --muted-foreground: hsl(240 5% 65%);
+      --border: rgba(255,255,255,0.08);
+      --glass-bg: rgba(255,255,255,0.03);
+      --glass-border: rgba(255,255,255,0.09);
+      --accent-cyan: #00e0ff;
+      --accent-emerald: #34d399;
+      --accent-violet: #c084fc;
+      --accent-rose: #f472b6;
+      --accent-amber: #fbbf24;
+      --hero-bg: #020811;
+    }
+    :root[data-theme="light"] {
+      --background: #f8fafc;
+      --surface: #ffffff;
+      --foreground: #0f172a;
+      --card: rgba(255,255,255,0.75);
+      --muted-foreground: hsl(215 16% 40%);
+      --border: hsl(214 32% 88%);
+      --glass-bg: rgba(255,255,255,0.6);
+      --glass-border: rgba(15,23,42,0.08);
+      --accent-cyan: #0891b2;
+      --accent-emerald: #059669;
+      --accent-violet: #7c3aed;
+      --accent-rose: #e11d48;
+      --accent-amber: #d97706;
+      --hero-bg: #0a1628;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    .mono { font-family: ui-monospace, "SF Mono", Menlo, Monaco, "Cascadia Code", Consolas, monospace; }
+    a { color: inherit; text-decoration: none; }
+    .container { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 1.25rem; }
+
+    /* ---- Scroll progress bar ---- */
+    #progress {
+      position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-emerald));
+      box-shadow: 0 0 12px color-mix(in srgb, var(--accent-cyan) 45%, transparent);
+      z-index: 100; transition: width 0.05s linear;
+    }
+
+    /* ---- Nav ---- */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 50;
+      backdrop-filter: blur(14px) saturate(160%);
+      -webkit-backdrop-filter: blur(14px) saturate(160%);
+      background: color-mix(in srgb, var(--background) 70%, transparent);
+      border-bottom: 1px solid transparent;
+      transition: border-color .3s, background .3s;
+    }
+    nav.scrolled {
+      border-bottom-color: var(--border);
+      background: color-mix(in srgb, var(--background) 85%, transparent);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .85rem 0; }
+    .logo { display: inline-flex; align-items: center; gap: .55rem; font-weight: 800; font-size: 1.15rem; letter-spacing: -.02em; }
+    .logo .mark {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-emerald));
+      color: #04121a; font-weight: 900; font-size: .95rem;
+    }
+    .logo .sub { color: var(--muted-foreground); font-weight: 500; font-size: .68rem; letter-spacing: .04em; text-transform: uppercase; }
+    .nav-links { display: none; gap: .1rem; }
+    .nav-links a {
+      padding: .5rem .85rem; border-radius: 12px; font-size: .875rem; font-weight: 500;
+      color: var(--muted-foreground); transition: color .2s, background .2s;
+    }
+    .nav-links a:hover { color: var(--foreground); background: color-mix(in srgb, var(--accent-cyan) 10%, transparent); }
+    .nav-actions { display: flex; align-items: center; gap: .5rem; }
+    .theme-toggle {
+      width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--glass-border);
+      background: var(--glass-bg); color: var(--foreground); cursor: pointer; font-size: 1rem;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .theme-toggle:hover { border-color: color-mix(in srgb, var(--accent-cyan) 40%, var(--glass-border)); }
+
+    /* ---- Buttons ---- */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+      font-weight: 600; font-size: .95rem; border-radius: 16px; padding: .85rem 1.5rem;
+      cursor: pointer; border: 1px solid transparent; transition: transform .15s, box-shadow .2s, background .2s;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-emerald));
+      color: #04121a;
+      box-shadow: 0 8px 30px color-mix(in srgb, var(--accent-cyan) 25%, transparent);
+    }
+    .btn-secondary { background: var(--glass-bg); border-color: var(--glass-border); color: var(--foreground); }
+    .btn-pill { border-radius: 999px; }
+    .btn-sm { padding: .55rem 1.1rem; font-size: .82rem; }
+
+    /* ---- Glass panels ---- */
+    .glass {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 18px;
+    }
+    .glass-hover { transition: border-color .25s, transform .25s, box-shadow .25s; }
+    .glass-hover:hover {
+      transform: translateY(-3px);
+      border-color: color-mix(in srgb, var(--accent-cyan) 25%, var(--glass-border));
+      box-shadow: 0 12px 40px color-mix(in srgb, var(--accent-cyan) 8%, transparent);
+    }
+
+    /* ---- Typography helpers ---- */
+    .eyebrow { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .75rem; }
+    .heading-section { font-size: clamp(1.6rem, 3.5vw, 2.35rem); font-weight: 800; letter-spacing: -.025em; line-height: 1.15; }
+    .body { color: var(--muted-foreground); font-size: 1.02rem; }
+    .body-sm { color: var(--muted-foreground); font-size: .9rem; }
+    .caption { color: var(--muted-foreground); font-size: .78rem; }
+
+    .c-cyan { color: var(--accent-cyan); }
+    .c-emerald { color: var(--accent-emerald); }
+    .c-violet { color: var(--accent-violet); }
+    .c-rose { color: var(--accent-rose); }
+    .c-amber { color: var(--accent-amber); }
+
+    /* ---- Hero ---- */
+    .hero {
+      position: relative; overflow: hidden; background: var(--hero-bg);
+      padding: 8rem 0 4rem; isolation: isolate;
+    }
+    .hero-bg { position: absolute; inset: 0; z-index: -1; }
+    .hero-bg .dots {
+      position: absolute; inset: 0; opacity: .5;
+      background-image: radial-gradient(#12203c .8px, transparent 1px);
+      background-size: 22px 22px;
+    }
+    .hero-bg .glow1 {
+      position: absolute; left: -8rem; top: -10rem; width: 38rem; height: 38rem; border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,224,255,.16), transparent 60%); filter: blur(40px);
+    }
+    .hero-bg .glow2 {
+      position: absolute; right: -10rem; top: 33%; width: 34rem; height: 34rem; border-radius: 50%;
+      background: radial-gradient(circle, rgba(192,132,252,.10), transparent 60%); filter: blur(40px);
+    }
+    .hero-bg .fade { position: absolute; inset-inline: 0; bottom: 0; height: 10rem; background: linear-gradient(to bottom, transparent, var(--background)); }
+    .hero-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; }
+    .hero-copy { text-align: center; }
+    .badge {
+      display: inline-flex; align-items: center; gap: .5rem; border-radius: 999px;
+      padding: .4rem 1rem; font-size: .78rem; font-weight: 500; color: rgba(255,255,255,.8);
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.09); margin-bottom: 1.25rem;
+    }
+    .hero h1 {
+      color: #fff; font-size: clamp(2.2rem, 6vw, 3.6rem); font-weight: 800;
+      letter-spacing: -.03em; line-height: 1.08; margin-bottom: 1.25rem;
+    }
+    .gradient-text {
+      background: linear-gradient(100deg, var(--accent-cyan), var(--accent-emerald) 55%, var(--accent-violet));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .hero-lede { color: rgba(255,255,255,.72); font-size: 1.15rem; max-width: 36rem; margin: 0 auto 2rem; }
+    .hero-cta { display: flex; flex-direction: column; gap: .75rem; margin-bottom: 1.5rem; }
+    .hero-trust { display: flex; flex-wrap: wrap; justify-content: center; gap: .35rem .75rem; font-size: .78rem; color: rgba(255,255,255,.6); margin-bottom: 2.5rem; }
+    .hero-trust .dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,.25); align-self: center; }
+    .stat-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; border-radius: 16px; overflow: hidden; }
+    .stat { background: rgba(255,255,255,.03); padding: 1rem; text-align: center; }
+    .stat .v { display: block; font-size: 1.6rem; font-weight: 800; color: #fff; letter-spacing: -.02em; }
+    .stat .l { display: block; font-size: .68rem; color: rgba(255,255,255,.5); margin-top: .25rem; }
+
+    /* hero side card — the interactive quiz island, shown here as a static preview */
+    .hero-card { position: relative; }
+    .hero-card .halo { position: absolute; inset: -1rem; border-radius: 24px; background: linear-gradient(135deg, rgba(0,224,255,.12), transparent, rgba(52,211,153,.12)); filter: blur(40px); z-index: -1; }
+    .quiz-card { padding: 1.75rem; border-radius: 24px; }
+    .quiz-card .qhead { display: flex; align-items: center; gap: .6rem; margin-bottom: 1.1rem; }
+    .quiz-card .qhead .ic { width: 40px; height: 40px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--accent-violet) 18%, transparent); color: var(--accent-violet); font-size: 1.1rem; }
+    .quiz-card h3 { font-size: 1.05rem; font-weight: 700; }
+    .quiz-card p.small { font-size: .8rem; color: var(--muted-foreground); }
+    .quiz-opt { display: flex; align-items: center; justify-content: space-between; padding: .8rem 1rem; border-radius: 12px; border: 1px solid var(--glass-border); background: color-mix(in srgb, var(--glass-bg) 60%, transparent); margin-top: .6rem; font-size: .9rem; font-weight: 500; transition: border-color .2s; }
+    .quiz-opt:hover { border-color: color-mix(in srgb, var(--accent-cyan) 40%, var(--glass-border)); cursor: pointer; }
+
+    /* ---- Sections ---- */
+    section.band { border-top: 1px solid color-mix(in srgb, var(--border) 60%, transparent); padding: 4.5rem 0; position: relative; }
+    .sec-head { max-width: 42rem; margin-bottom: 2.5rem; }
+    .sec-head.center { margin-left: auto; margin-right: auto; text-align: center; }
+    .sec-head p.body { margin-top: .75rem; }
+    .see-all { display: inline-flex; align-items: center; gap: .35rem; font-size: .875rem; font-weight: 500; color: var(--muted-foreground); }
+    .see-all:hover { color: var(--foreground); }
+
+    /* Explore grid */
+    .grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+    .card { border-radius: 18px; padding: 1.5rem; display: flex; flex-direction: column; height: 100%; }
+    .card .ic-badge { width: 44px; height: 44px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.25rem; margin-bottom: 1.15rem; }
+    .card .arrow { margin-left: auto; color: var(--muted-foreground); }
+    .card .toprow { display: flex; align-items: center; justify-content: space-between; }
+    .card h3 { font-size: 1.02rem; font-weight: 700; margin: .35rem 0 .5rem; }
+    .card .kick { font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .35rem; }
+    .badge-cyan { background: color-mix(in srgb, var(--accent-cyan) 15%, transparent); }
+    .badge-violet { background: color-mix(in srgb, var(--accent-violet) 15%, transparent); }
+    .badge-emerald { background: color-mix(in srgb, var(--accent-emerald) 15%, transparent); }
+    .badge-rose { background: color-mix(in srgb, var(--accent-rose) 15%, transparent); }
+    .badge-amber { background: color-mix(in srgb, var(--accent-amber) 15%, transparent); }
+
+    /* Steps */
+    .steps { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+    .step .snum { font-family: ui-monospace, monospace; font-size: .72rem; font-weight: 700; letter-spacing: .18em; color: color-mix(in srgb, var(--accent-cyan) 75%, transparent); margin-bottom: .4rem; }
+    .step .sbadge { width: 44px; height: 44px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--accent-cyan) 15%, transparent); color: var(--accent-cyan); font-size: 1.2rem; margin-bottom: 1rem; }
+    .step h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: .5rem; }
+    .step .link { color: var(--accent-cyan); font-weight: 600; font-size: .875rem; display: inline-flex; gap: .35rem; align-items: center; margin-top: .5rem; }
+
+    /* Hallmarks */
+    .hall-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+    .hall { border-radius: 16px; padding: 1.15rem; height: 100%; display: flex; flex-direction: column; }
+    .hall .toprow { display: flex; align-items: center; justify-content: space-between; margin-bottom: .9rem; }
+    .hall .hb { width: 36px; height: 36px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-size: 1rem; }
+    .hall .num { font-family: ui-monospace, monospace; font-size: .72rem; color: color-mix(in srgb, var(--muted-foreground) 70%, transparent); }
+    .hall h3 { font-size: .92rem; font-weight: 700; margin-bottom: .75rem; line-height: 1.25; }
+    .hall ul { list-style: none; margin-top: auto; display: flex; flex-direction: column; gap: .4rem; }
+    .hall li { display: flex; align-items: baseline; gap: .4rem; font-size: .82rem; color: var(--muted-foreground); }
+    .hall li .tier { font-family: ui-monospace, monospace; font-size: .65rem; font-weight: 800; flex-shrink: 0; }
+
+    /* Guides */
+    .guides-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+    .guide-featured { border-radius: 18px; padding: 1.75rem; display: flex; flex-direction: column; justify-content: space-between; gap: 2rem; min-height: 200px; }
+    .guide-featured .kick { font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .guide-featured h3 { font-size: 1.5rem; font-weight: 800; line-height: 1.2; letter-spacing: -.02em; }
+    .guide-list { display: grid; grid-template-columns: 1fr; gap: .75rem; }
+    .guide-item { border: 1px solid color-mix(in srgb, var(--border) 70%, transparent); background: color-mix(in srgb, var(--card) 40%, transparent); border-radius: 12px; padding: 1rem; display: flex; flex-direction: column; justify-content: space-between; gap: 1rem; transition: border-color .2s; }
+    .guide-item:hover { border-color: color-mix(in srgb, var(--accent-violet) 30%, transparent); }
+    .guide-item .kick { font-size: .68rem; color: var(--accent-violet); font-weight: 600; margin-bottom: .25rem; text-transform: uppercase; letter-spacing: .06em; }
+    .guide-item h4 { font-size: .9rem; font-weight: 600; line-height: 1.3; }
+    .guide-item .arrow { align-self: flex-end; color: var(--muted-foreground); }
+
+    /* CTA */
+    .cta { position: relative; overflow: hidden; text-align: center; padding: 5.5rem 0; }
+    .cta .glow { position: absolute; left: 50%; top: 0; width: 42rem; height: 26rem; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--accent-cyan) 16%, transparent), transparent 65%); filter: blur(40px); z-index: -1; }
+    .cta-inner { max-width: 42rem; margin: 0 auto; }
+    .cta .btn-row { display: flex; flex-direction: column; gap: .75rem; justify-content: center; margin-top: 2rem; }
+
+    /* Footer */
+    footer { border-top: 1px solid color-mix(in srgb, var(--border) 60%, transparent); padding: 3.5rem 0 2.5rem; position: relative; }
+    footer .top-line { position: absolute; top: 0; inset-inline: 0; height: 1px; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent-cyan) 50%, transparent), transparent); }
+    .manifesto { text-align: center; border-bottom: 1px solid color-mix(in srgb, var(--border) 50%, transparent); padding-bottom: 2.5rem; margin-bottom: 3rem; }
+    .manifesto p.lead { font-size: 1.25rem; font-weight: 600; max-width: 48rem; margin: 0 auto .75rem; letter-spacing: -.01em; }
+    .footer-cols { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-bottom: 2.5rem; }
+    .footer-cols .label { font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-foreground); margin-bottom: 1rem; }
+    .footer-cols ul { list-style: none; display: flex; flex-direction: column; gap: .65rem; }
+    .footer-cols a { font-size: .875rem; color: var(--muted-foreground); }
+    .footer-cols a:hover { color: var(--accent-cyan); }
+    .footer-bottom { border-top: 1px solid color-mix(in srgb, var(--border) 50%, transparent); padding-top: 1.5rem; display: flex; flex-direction: column; gap: 1rem; justify-content: space-between; }
+    .footer-bottom .stats { display: flex; flex-wrap: wrap; gap: .35rem 1rem; }
+
+    /* Reveal-on-scroll */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } html { scroll-behavior: auto; } }
+
+    /* ---- Responsive ---- */
+    @media (min-width: 640px) {
+      .hero-cta, .cta .btn-row { flex-direction: row; justify-content: center; }
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      .stat-row { grid-template-columns: repeat(4, 1fr); }
+      .hall-grid { grid-template-columns: repeat(2, 1fr); }
+      .guide-list { grid-template-columns: repeat(2, 1fr); }
+      .footer-cols { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 900px) {
+      .nav-links { display: flex; }
+      .grid { grid-template-columns: repeat(3, 1fr); }
+      .steps { grid-template-columns: repeat(3, 1fr); }
+      .hall-grid { grid-template-columns: repeat(3, 1fr); }
+      .hero-grid { grid-template-columns: 1.35fr 1fr; }
+      .hero-copy { text-align: left; }
+      .hero-lede { margin-left: 0; }
+      .hero-cta, .hero-trust { justify-content: flex-start; }
+      .stat { text-align: left; }
+      .guides-grid { grid-template-columns: 5fr 7fr; }
+      .footer-cols { grid-template-columns: 1.4fr repeat(3, 1fr); }
+      .footer-bottom { flex-direction: row; align-items: center; }
+      section.band { padding: 6rem 0; }
+    }
+    @media (min-width: 1100px) {
+      .hall-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div id="progress"></div>
+
+  <!-- ============ NAV ============ -->
+  <nav id="nav">
+    <div class="container nav-inner">
+      <a href="#top" class="logo" aria-label="TNiC – Longevity Intelligence · Home">
+        <span class="mark">Tn</span>
+        <span>TNiC<span class="sub" style="margin-left:.4rem">Longevity Intelligence</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="#explore">Library</a>
+        <a href="#explore">Peptides</a>
+        <a href="#explore">Learn</a>
+        <a href="#explore">Stacks</a>
+        <a href="#explore">Labs</a>
+        <a href="#explore">Tools</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeBtn" aria-label="Toggle color theme" title="Toggle theme">🌙</button>
+        <a href="#cta" class="btn btn-primary btn-pill btn-sm">Dashboard →</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <div class="hero-bg" aria-hidden="true">
+        <div class="dots"></div><div class="glow1"></div><div class="glow2"></div><div class="fade"></div>
+      </div>
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <span class="badge">✦ Interventions for the 12 hallmarks of aging</span>
+            <h1>Understand how you age.<br /><span class="gradient-text">Then act on the evidence.</span></h1>
+            <p class="hero-lede">TNiC turns longevity science into one clear protocol — the 12 hallmarks of aging, evidence-graded compounds, and simulators that project the impact before you commit. Independent, private, and free.</p>
+            <div class="hero-cta">
+              <a href="#cta" class="btn btn-primary">📋 Take the 3-min quiz →</a>
+              <a href="#hallmarks" class="btn btn-secondary">📚 Explore the library</a>
+            </div>
+            <div class="hero-trust">
+              <span>Free forever</span><span class="dot"></span>
+              <span>Data stays on your device</span><span class="dot"></span>
+              <span>No account needed</span>
+            </div>
+            <div class="glass stat-row">
+              <div class="stat"><span class="v mono">12</span><span class="l">Hallmarks of aging</span></div>
+              <div class="stat"><span class="v mono">14</span><span class="l">Graded compounds</span></div>
+              <div class="stat"><span class="v mono">A–C</span><span class="l">Evidence tiers</span></div>
+              <div class="stat"><span class="v mono">100%</span><span class="l">Free &amp; private</span></div>
+            </div>
+          </div>
+          <div class="hero-card">
+            <div class="halo" aria-hidden="true"></div>
+            <div class="glass quiz-card">
+              <div class="qhead">
+                <span class="ic">📋</span>
+                <div>
+                  <h3>Starter quiz</h3>
+                  <p class="small">3 minutes · mechanism-matched stack</p>
+                </div>
+              </div>
+              <p class="body-sm" style="margin-bottom:.4rem">What's your primary longevity goal?</p>
+              <div class="quiz-opt"><span>Energy &amp; mitochondrial health</span><span class="c-cyan">→</span></div>
+              <div class="quiz-opt"><span>Metabolic &amp; healthy aging</span><span class="c-cyan">→</span></div>
+              <div class="quiz-opt"><span>Cognitive &amp; longevity span</span><span class="c-cyan">→</span></div>
+              <p class="caption" style="margin-top:1rem; text-align:right">Live compound-synergy data on the real site</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ EXPLORE ============ -->
+    <section class="band" id="explore">
+      <div class="container">
+        <div class="sec-head reveal" style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:1rem; max-width:none">
+          <div style="max-width:42rem">
+            <p class="eyebrow c-cyan">Explore the platform</p>
+            <h2 class="heading-section">Everything you need, one clear path.</h2>
+            <p class="body">Six hubs, each doing one thing well — from the science, to the protocol, to the labs that prove it worked.</p>
+          </div>
+          <a href="#" class="see-all">See the full site map ↗</a>
+        </div>
+        <div class="grid">
+          <div class="glass glass-hover card reveal">
+            <div class="toprow"><span class="ic-badge badge-cyan c-cyan">📚</span><span class="arrow">↗</span></div>
+            <p class="kick c-cyan">Reference</p><h3>Anti-Aging Library</h3>
+            <p class="body-sm">The 12 hallmarks of aging and 14 evidence-graded compounds — each tiered A–C from human trials, with PubMed citations.</p>
+          </div>
+          <div class="glass glass-hover card reveal">
+            <div class="toprow"><span class="ic-badge badge-violet c-violet">🎓</span><span class="arrow">↗</span></div>
+            <p class="kick c-violet">Understand</p><h3>Learn Hub</h3>
+            <p class="body-sm">Plain-language explainers, in-depth supplement guides, and a research digest — the science before the supplement.</p>
+          </div>
+          <div class="glass glass-hover card reveal">
+            <div class="toprow"><span class="ic-badge badge-emerald c-emerald">🧬</span><span class="arrow">↗</span></div>
+            <p class="kick c-emerald">Build</p><h3>Stacks &amp; Protocols</h3>
+            <p class="body-sm">Assemble protocols that target the pathways driving your aging, with synergy scoring and clear, sourced dosing.</p>
+          </div>
+          <div class="glass glass-hover card reveal">
+            <div class="toprow"><span class="ic-badge badge-rose c-rose">🧪</span><span class="arrow">↗</span></div>
+            <p class="kick c-rose">Measure</p><h3>Lab Analysis</h3>
+            <p class="body-sm">Turn bloodwork into signal — track biomarkers over time and see what your protocol is actually moving.</p>
+          </div>
+          <div class="glass glass-hover card reveal">
+            <div class="toprow"><span class="ic-badge badge-amber c-amber">📈</span><span class="arrow">↗</span></div>
+            <p class="kick c-amber">Simulate</p><h3>Longevity Tools</h3>
+            <p class="body-sm">A healthspan estimator, biomarker-impact ranking, and stack synergy simulator — model the effect before you commit.</p>
+          </div>
+          <div class="glass glass-hover card reveal">
+            <div class="toprow"><span class="ic-badge badge-cyan c-cyan">📊</span><span class="arrow">↗</span></div>
+            <p class="kick c-cyan">Track</p><h3>Your Dashboard</h3>
+            <p class="body-sm">One private dashboard tying your quiz, stack, and labs into a single clear next action — no account required.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ STEPS ============ -->
+    <section class="band">
+      <div class="container">
+        <div class="sec-head center reveal">
+          <p class="eyebrow c-emerald">Get started in 3 steps</p>
+          <h2 class="heading-section">From curious to a protocol you can trust.</h2>
+          <p class="body" style="max-width:36rem; margin-inline:auto">No account, no upsell, no data leaving your device — just a clear path you can follow at your own pace.</p>
+        </div>
+        <div class="steps">
+          <div class="step reveal">
+            <span class="sbadge">📋</span>
+            <p class="snum">STEP 01</p>
+            <h3>Take the 3-minute quiz</h3>
+            <p class="body-sm">Answer a few questions and get a mechanism-matched starting stack, tuned to your goal and experience.</p>
+            <a href="#cta" class="link">Start the quiz →</a>
+          </div>
+          <div class="step reveal">
+            <span class="sbadge">📖</span>
+            <p class="snum">STEP 02</p>
+            <h3>Explore the evidence</h3>
+            <p class="body-sm">See how each hallmark of aging actually works, and why every compound sits where it does on the A–C scale.</p>
+            <a href="#hallmarks" class="link">Open the library →</a>
+          </div>
+          <div class="step reveal">
+            <span class="sbadge">📈</span>
+            <p class="snum">STEP 03</p>
+            <h3>Build &amp; track your protocol</h3>
+            <p class="body-sm">Design a protocol, model its projected impact, then log labs to watch it move — all private to your device.</p>
+            <a href="#cta" class="link">Open the dashboard →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ HALLMARKS ============ -->
+    <section class="band" id="hallmarks">
+      <div class="container">
+        <div class="sec-head reveal" style="max-width:52rem">
+          <p class="eyebrow c-emerald">Interventions by hallmark</p>
+          <h2 class="heading-section">Twelve mechanisms of aging. A ranked, cited intervention for each.</h2>
+          <p class="body">Every hallmark links to its highest-evidence levers — compounds, lifestyle changes, and clinical options — ranked by impact and traced to PubMed, not marketing copy.</p>
+        </div>
+        <div class="hall-grid" id="hallGrid"><!-- injected by script --></div>
+      </div>
+    </section>
+
+    <!-- ============ GUIDES ============ -->
+    <section class="band">
+      <div class="container">
+        <div class="sec-head reveal" style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:1rem; max-width:none">
+          <div style="max-width:42rem">
+            <p class="eyebrow c-violet">Start reading</p>
+            <h2 class="heading-section">Deep, sourced guides — not sales copy.</h2>
+            <p class="body">Each guide walks the mechanism, the human data, and the honest limits before it ever mentions a dose.</p>
+          </div>
+          <a href="#" class="see-all">Browse all guides ↗</a>
+        </div>
+        <div class="guides-grid">
+          <div class="glass glass-hover guide-featured reveal">
+            <div style="display:flex; justify-content:space-between; align-items:center">
+              <span class="kick c-violet">Start here</span><span class="c-violet">↗</span>
+            </div>
+            <div>
+              <p class="kick c-violet" style="margin-bottom:.5rem">The evidence-ranked shortlist</p>
+              <h3>Best Longevity Supplements 2026</h3>
+            </div>
+          </div>
+          <div class="guide-list" id="guideList"><!-- injected by script --></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="band cta" id="cta">
+      <div class="glow" aria-hidden="true"></div>
+      <div class="container cta-inner reveal">
+        <p class="eyebrow c-cyan">Your first move</p>
+        <h2 class="heading-section">Find the protocol that fits you — in three minutes.</h2>
+        <p class="body" style="max-width:36rem; margin:1rem auto 0">Start with the quiz, or jump straight into building your protocol. Either way it stays private, stays free, and never asks you to sign up.</p>
+        <div class="btn-row">
+          <a href="https://tnic.help" class="btn btn-primary btn-pill">📋 Take the 3-min quiz →</a>
+          <a href="https://tnic.help" class="btn btn-secondary btn-pill">📊 Open Your Dashboard</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <span class="top-line" aria-hidden="true"></span>
+    <div class="container">
+      <div class="manifesto">
+        <p class="lead">Independent longevity intelligence — built on evidence, designed for privacy, free for everyone.</p>
+        <p class="body-sm" style="max-width:34rem; margin:0 auto">No supplement inventory to move. No user health data sales model. Just cellular health research made easier to inspect, question, and apply responsibly.</p>
+      </div>
+      <div class="footer-cols">
+        <div>
+          <a href="#top" class="logo" style="margin-bottom:1rem"><span class="mark">Tn</span><span>TNiC</span></a>
+          <p class="body-sm" style="max-width:20rem">Independent longevity intelligence. Evidence-graded compounds, transparent methodology, and consumer safety at the center of every recommendation.</p>
+        </div>
+        <div>
+          <p class="label">Hubs</p>
+          <ul>
+            <li><a href="#cta">My Dashboard</a></li>
+            <li><a href="#cta">3-Min Quiz</a></li>
+            <li><a href="#hallmarks">Anti-Aging Library</a></li>
+            <li><a href="#explore">Peptide Library</a></li>
+            <li><a href="#explore">Learn Hub</a></li>
+            <li><a href="#explore">Stacks &amp; Protocols</a></li>
+            <li><a href="#explore">Lab Analysis Hub</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="label">Popular Guides</p>
+          <ul>
+            <li><a href="#">Best Longevity Supplements 2026</a></li>
+            <li><a href="#">NAD+ Supplement Guide</a></li>
+            <li><a href="#">GlyNAC Supplement Guide</a></li>
+            <li><a href="#">Berberine Guide</a></li>
+            <li><a href="#">Taurine Longevity Guide</a></li>
+            <li><a href="#">Sulforaphane &amp; NRF2 Guide</a></li>
+            <li><a href="#">Elite 8 Ranking</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="label">Important Notice</p>
+          <p class="body-sm" style="margin-bottom:.75rem">TNiC is educational — not a medical provider. Biological age and biomarker projections are modeled estimates, not lab diagnostics.</p>
+          <p class="caption">Consult a physician before starting any protocol. <a href="#" class="c-cyan">Transparency Pledge</a></p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="caption mono">© 2026 TNiC · Independent · Evidence-First</p>
+        <div class="stats caption mono">
+          <span>Tier A: 7 compounds</span>
+          <span>Tier B: 7 compounds</span>
+          <span>40+ indexed PMIDs</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ---- Theme toggle (mirrors the site's light/dark switch) ----
+    (function () {
+      var root = document.documentElement, btn = document.getElementById('themeBtn');
+      function set(t) { root.setAttribute('data-theme', t); btn.textContent = t === 'dark' ? '🌙' : '☀️'; try { localStorage.setItem('tnic-theme', t); } catch (e) {} }
+      var saved; try { saved = localStorage.getItem('tnic-theme'); } catch (e) {}
+      if (saved) set(saved);
+      else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) set('light');
+      btn.addEventListener('click', function () { set(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); });
+    })();
+
+    // ---- Scroll progress + nav state ----
+    (function () {
+      var bar = document.getElementById('progress'), nav = document.getElementById('nav');
+      function onScroll() {
+        var h = document.documentElement, max = h.scrollHeight - h.clientHeight;
+        bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+        nav.classList.toggle('scrolled', window.scrollY > 24);
+      }
+      window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+    })();
+
+    // ---- Reveal-on-scroll ----
+    (function () {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+    })();
+
+    // ---- The 12 hallmarks + their top-2 ranked interventions (from lib/hallmarks-library.ts) ----
+    var TIER = { A: 'c-emerald', B: 'c-cyan', C: 'c-amber' };
+    var hallmarks = [
+      { n: 1, t: 'Genomic Instability', ic: '🧬', th: 'badge-cyan c-cyan', iv: [['A','NMN / NAD+ restoration'],['A','Sulforaphane (NRF2)']] },
+      { n: 2, t: 'Telomere Attrition', ic: '🔬', th: 'badge-violet c-violet', iv: [['A','Stress reduction / HRV training'],['B','NMN / NAD+ support']] },
+      { n: 3, t: 'Epigenetic Alterations', ic: '🧩', th: 'badge-emerald c-emerald', iv: [['A','Ca-AKG'],['A','NMN → SIRT1 epigenetic control']] },
+      { n: 4, t: 'Loss of Proteostasis', ic: '🧷', th: 'badge-rose c-rose', iv: [['A','GlyNAC (glutathione restoration)'],['B','R-Alpha Lipoic Acid']] },
+      { n: 5, t: 'Disabled Autophagy', ic: '♻️', th: 'badge-amber c-amber', iv: [['A','Time-restricted eating (16:8+)'],['B','NMN → SIRT1 autophagy axis']] },
+      { n: 6, t: 'Mitochondrial Dysfunction', ic: '⚡', th: 'badge-cyan c-cyan', iv: [['A','NMN / NAD+ precursors'],['A','Ca-AKG (TCA cycle)']] },
+      { n: 7, t: 'Cellular Senescence', ic: '🕰️', th: 'badge-violet c-violet', iv: [['B','Fisetin (senolytic)'],['B','NMN (senescence prevention)']] },
+      { n: 8, t: 'Stem Cell Exhaustion', ic: '🌱', th: 'badge-emerald c-emerald', iv: [['A','Ca-AKG (stem niche support)'],['B','NMN (NAD+ stem maintenance)']] },
+      { n: 9, t: 'Altered Intercellular Communication', ic: '📡', th: 'badge-rose c-rose', iv: [['A','Anti-inflammatory stack (NRF2)'],['B','Resveratrol (NF-κB modulation)']] },
+      { n: 10, t: 'Chronic Inflammation', ic: '🔥', th: 'badge-amber c-amber', iv: [['A','Sulforaphane (NRF2 anti-inflammatory)'],['A','GlyNAC (glutathione / ROS)']] },
+      { n: 11, t: 'Dysbiosis', ic: '🦠', th: 'badge-cyan c-cyan', iv: [['A','Diverse fiber / prebiotics'],['A','Fermented foods (6 servings/day)']] },
+      { n: 12, t: 'Disabled Macroautophagy', ic: '🍽️', th: 'badge-violet c-violet', iv: [['A','Caloric moderation / fasting'],['B','Resveratrol → AMPK']] }
+    ];
+    document.getElementById('hallGrid').innerHTML = hallmarks.map(function (h) {
+      var ivs = h.iv.map(function (i) {
+        return '<li><span class="tier ' + TIER[i[0]] + '">' + i[0] + '</span><span>' + i[1] + '</span></li>';
+      }).join('');
+      return '<div class="glass glass-hover hall reveal">' +
+        '<div class="toprow"><span class="hb ' + h.th + '">' + h.ic + '</span>' +
+        '<span class="num mono">#' + h.n + ' ↗</span></div>' +
+        '<h3>' + h.t + '</h3><ul>' + ivs + '</ul></div>';
+    }).join('');
+
+    // ---- Supplement guides (from HomeGuides.tsx) ----
+    var guides = [
+      ['NMN, NR & precursors, compared', 'NAD+ Supplement Guide'],
+      ['The most-studied aging RCT pair', 'GlyNAC Supplement Guide'],
+      ['A reality check on the hype', "Berberine — Nature's Ozempic?"],
+      ['What the 2023 Science paper showed', 'Taurine Longevity Guide'],
+      ["The body's master antioxidant switch", 'Sulforaphane & NRF2 Guide'],
+      ['Cellular cleanup, and the ITP data', 'Spermidine & Autophagy'],
+      ['Our highest-conviction compounds', 'The Elite 8 Ranking']
+    ];
+    document.getElementById('guideList').innerHTML = guides.map(function (g) {
+      return '<a href="#" class="guide-item reveal"><span class="arrow">↗</span>' +
+        '<div><p class="kick">' + g[0] + '</p><h4>' + g[1] + '</h4></div></a>';
+    }).join('');
+
+    // re-observe injected reveal elements
+    (function () {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('#hallGrid .reveal, #guideList .reveal').forEach(function (el) { io.observe(el); });
+    })();
+  </script>
+</body>
+</html>
