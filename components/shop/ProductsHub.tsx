@@ -9,6 +9,8 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { ContextRail } from '@/components/ui/ContextRail';
 import { getHubContext } from '@/lib/hub-context';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { GlassPanel } from '@/components/ui/GlassPanel';
+import { RevealCard } from '@/components/ui/RevealCard';
 import type { EvidenceTier } from '@/lib/types';
 
 const picks = Object.values(PRODUCT_PICKS).filter((p) => p.compoundId !== 'nr');
@@ -27,8 +29,17 @@ function ProductCard({ pick }: { pick: ProductPick }) {
   const tier = compound?.evidence as EvidenceTier | undefined;
   const hallmarkTargets = compound?.hallmarks?.slice(0, 3) ?? [];
 
+  /*
+    Deep Glass surface (matches every other card on the page), but the stretched
+    link + content are held in ONE inner wrapper so they are grandchildren of
+    `.glass-deep`, not direct children. `.glass-deep > *` forces
+    `position: relative` on its direct children via unlayered CSS that outranks
+    Tailwind's `absolute` utility; keeping the overlay a grandchild is what lets
+    the whole-card click target survive the conversion.
+  */
   return (
-    <div className="group relative card-premium glow-hover-emerald rounded-2xl border border-border/80 overflow-hidden flex flex-col h-full">
+    <div className="group relative glass-deep glass-plane-mid glow-hover-emerald rounded-2xl border border-border/80 overflow-hidden flex flex-col h-full">
+      <div className="relative flex flex-1 flex-col">
       {/*
         Whole-card "stretched link" to the affiliate offer, layered *behind*
         the card content instead of wrapping it. The card also needs the
@@ -110,6 +121,7 @@ function ProductCard({ pick }: { pick: ProductPick }) {
           Read {pick.compoundName} evidence module →
         </Link>
       </div>
+      </div>
     </div>
   );
 }
@@ -151,24 +163,31 @@ export function ProductsHub() {
             These Tier B compounds have full library deep-dives and stack integration. TNiC adds manufacturer picks only after dose-matched COA verification — not before.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {libraryOnlyCompounds.map((c) => (
-              <Link
+            {libraryOnlyCompounds.map((c, i) => (
+              <RevealCard
                 key={c.id}
-                href={`/library/compounds/${c.id}`}
-                className="focus-ring card-premium border border-border/60 rounded-2xl p-5 hover:border-accent-violet/40 transition group h-full"
+                index={i}
+                depth="mid"
+                itemClassName="h-full"
+                className="glass-hover h-full rounded-2xl border border-border/60"
               >
-                <p className="text-[11px] font-semibold text-accent-cyan uppercase tracking-widest mb-1">
-                  Tier {c.evidence} · Library only
-                </p>
-                <h3 className="font-bold text-foreground group-hover:text-accent-violet transition-colors mb-2">
-                  {c.name}
-                </h3>
-                <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3 mb-3">{c.desc}</p>
-                <p className="text-[11px] text-muted-foreground/80">{c.dose}</p>
-                <span className="inline-block mt-3 text-xs font-semibold text-accent-violet group-hover:underline">
-                  Read evidence module →
-                </span>
-              </Link>
+                <Link
+                  href={`/library/compounds/${c.id}`}
+                  className="focus-ring block rounded-2xl p-5 hover:border-accent-violet/40 transition group h-full"
+                >
+                  <p className="text-[11px] font-semibold text-accent-cyan uppercase tracking-widest mb-1">
+                    Tier {c.evidence} · Library only
+                  </p>
+                  <h3 className="font-bold text-foreground group-hover:text-accent-violet transition-colors mb-2">
+                    {c.name}
+                  </h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3 mb-3">{c.desc}</p>
+                  <p className="text-[11px] text-muted-foreground/80">{c.dose}</p>
+                  <span className="inline-block mt-3 text-xs font-semibold text-accent-violet group-hover:underline">
+                    Read evidence module →
+                  </span>
+                </Link>
+              </RevealCard>
             ))}
           </div>
         </div>
@@ -182,7 +201,7 @@ export function ProductsHub() {
         className="mb-8"
       />
 
-      <div className="rounded-2xl card-premium border border-border/60 p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+      <GlassPanel depth="mid" className="rounded-2xl border border-border/60 p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
         <div className="flex-1">
           <p className="font-semibold mb-1">Want stack-filtered verification checklists?</p>
           <p className="text-sm text-muted-foreground">
@@ -195,7 +214,7 @@ export function ProductsHub() {
         >
           Open Protocol Shop →
         </Link>
-      </div>
+      </GlassPanel>
     </div>
   );
 }

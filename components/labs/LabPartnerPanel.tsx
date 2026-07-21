@@ -62,7 +62,7 @@ export function LabPartnerPanel() {
 
       <div className="grid md:grid-cols-3 gap-4 mb-6">
         {labPartnerPanels.map((panel) => (
-          <div key={panel.id} className="glass rounded-xl p-5">
+          <div key={panel.id} className="glass-deep glass-plane-mid rounded-xl p-5">
             <span className="text-[10px] font-mono text-accent-amber uppercase tracking-wider">
               {panel.status} · {panel.eta}
             </span>
@@ -83,7 +83,7 @@ export function LabPartnerPanel() {
       </div>
 
       {joined ? (
-        <div className="flex items-center gap-3 glass rounded-xl p-4 max-w-md">
+        <div className="flex items-center gap-3 glass-deep glass-plane-mid rounded-xl p-4 max-w-md">
           <CheckCircle2 className="w-5 h-5 text-accent-emerald shrink-0" />
           <p className="text-sm text-muted-foreground">
             Waitlist request prepared — complete send in your mail client.

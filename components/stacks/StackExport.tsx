@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Copy, CheckCheck, Download, FileJson, Share2 } from 'lucide-react';
 import { useStack } from '@/context/PlatformContext';
 import { analyzeStack, formatStackExport, formatStackJson } from '@/lib/stack-analysis';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 import {
   formatSimulatorExport,
   type StackSimulatorResult,
@@ -81,33 +82,39 @@ export function StackExport({ stackName, simulatorResult, age }: StackExportProp
   if (selected.length === 0) return null;
 
   return (
-    <div className="glass rounded-2xl p-5">
+    <GlassPanel depth="mid" className="rounded-2xl p-5">
       <p className="text-label text-accent-violet mb-4">Export protocol</p>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-        <button
-          type="button"
-          onClick={copyText}
-          className="focus-ring interactive flex flex-col items-center gap-1.5 glass py-3 rounded-xl text-xs font-semibold hover:border-accent-violet/30"
-        >
-          {copied === 'text' ? <CheckCheck className="w-4 h-4 text-accent-emerald" /> : <Copy className="w-4 h-4" />}
-          {copied === 'text' ? 'Copied!' : 'Copy Text'}
-        </button>
-        <button
-          type="button"
-          onClick={copyJson}
-          className="focus-ring interactive flex flex-col items-center gap-1.5 glass py-3 rounded-xl text-xs font-semibold hover:border-accent-violet/30"
-        >
-          {copied === 'json' ? <CheckCheck className="w-4 h-4 text-accent-emerald" /> : <FileJson className="w-4 h-4" />}
-          {copied === 'json' ? 'Copied!' : 'Copy JSON'}
-        </button>
-        <button
-          type="button"
-          onClick={downloadJson}
-          className="focus-ring interactive flex flex-col items-center gap-1.5 glass py-3 rounded-xl text-xs font-semibold hover:border-accent-violet/30"
-        >
-          <Download className="w-4 h-4" aria-hidden="true" />
-          Download
-        </button>
+        <GlassPanel depth="mid" className="h-full rounded-xl">
+          <button
+            type="button"
+            onClick={copyText}
+            className="focus-ring interactive flex h-full w-full flex-col items-center gap-1.5 rounded-xl py-3 text-xs font-semibold"
+          >
+            {copied === 'text' ? <CheckCheck className="w-4 h-4 text-accent-emerald" /> : <Copy className="w-4 h-4" />}
+            {copied === 'text' ? 'Copied!' : 'Copy Text'}
+          </button>
+        </GlassPanel>
+        <GlassPanel depth="mid" className="h-full rounded-xl">
+          <button
+            type="button"
+            onClick={copyJson}
+            className="focus-ring interactive flex h-full w-full flex-col items-center gap-1.5 rounded-xl py-3 text-xs font-semibold"
+          >
+            {copied === 'json' ? <CheckCheck className="w-4 h-4 text-accent-emerald" /> : <FileJson className="w-4 h-4" />}
+            {copied === 'json' ? 'Copied!' : 'Copy JSON'}
+          </button>
+        </GlassPanel>
+        <GlassPanel depth="mid" className="h-full rounded-xl">
+          <button
+            type="button"
+            onClick={downloadJson}
+            className="focus-ring interactive flex h-full w-full flex-col items-center gap-1.5 rounded-xl py-3 text-xs font-semibold"
+          >
+            <Download className="w-4 h-4" aria-hidden="true" />
+            Download
+          </button>
+        </GlassPanel>
         <button
           type="button"
           onClick={share}
@@ -117,6 +124,6 @@ export function StackExport({ stackName, simulatorResult, age }: StackExportProp
           {copied === 'url' ? 'Copied!' : 'Share'}
         </button>
       </div>
-    </div>
+    </GlassPanel>
   );
 }

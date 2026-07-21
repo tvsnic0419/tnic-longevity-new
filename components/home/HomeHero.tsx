@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import { ClipboardList, Library, ArrowRight, Sparkles } from 'lucide-react';
 import { StarterQuiz } from '@/components/sections/StarterQuiz';
 import { GlassPanel } from '@/components/ui/GlassPanel';
+import { TiltGlassPanel } from '@/components/ui/TiltGlassPanel';
 import { HeroSceneMount } from '@/components/home/HeroSceneMount';
 import { compounds } from '@/lib/data';
 
@@ -150,13 +151,13 @@ export function HomeHero() {
                 className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-[var(--accent-cyan)]/12 via-transparent to-[var(--accent-emerald)]/12 blur-2xl"
                 aria-hidden="true"
               />
-              <GlassPanel depth="content" tilt className="relative rounded-3xl">
+              <TiltGlassPanel depth="content" className="relative rounded-3xl">
                 <Suspense
                   fallback={<div className="h-[380px] animate-pulse rounded-3xl bg-white/5" />}
                 >
                   <StarterQuiz />
                 </Suspense>
-              </GlassPanel>
+              </TiltGlassPanel>
             </div>
             <p className="mt-4 hidden text-center text-[11px] text-white/35 lg:block lg:text-right">
               Drag or hover the network — live compound-synergy data

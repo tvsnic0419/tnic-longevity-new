@@ -3,6 +3,7 @@ import type { SourceCitation as CitationType } from '@/lib/types';
 import { citationTypeLabels, formatCitationShort, pubmedUrl } from '@/lib/trust';
 import { EvidenceTag } from './EvidenceTag';
 import type { EvidenceTier } from '@/lib/types';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 
 interface SourceCitationProps {
   citation: CitationType;
@@ -34,33 +35,35 @@ export function SourceCitation({ citation, compact = false, showType = true, evi
   }
 
   return (
-    <article className="card-base p-4 md:p-5">
-      <div className="flex flex-wrap items-start gap-2 mb-2">
-        {evidenceTier && <EvidenceTag tier={evidenceTier} size="sm" />}
-        {showType && (
-          <span className="text-label text-muted-foreground">{citationTypeLabels[citation.type]}</span>
+    <GlassPanel depth="mid" className="rounded-xl p-4 md:p-5">
+      <article>
+        <div className="flex flex-wrap items-start gap-2 mb-2">
+          {evidenceTier && <EvidenceTag tier={evidenceTier} size="sm" />}
+          {showType && (
+            <span className="text-label text-muted-foreground">{citationTypeLabels[citation.type]}</span>
+          )}
+        </div>
+        <h4 className="heading-card mb-1 leading-snug">{citation.title}</h4>
+        <p className="text-caption mb-2">
+          {citation.authors && <span>{citation.authors} · </span>}
+          <em>{citation.journal}</em> · {citation.year}
+        </p>
+        {citation.summary && (
+          <p className="text-body-sm mb-3">{citation.summary}</p>
         )}
-      </div>
-      <h4 className="heading-card mb-1 leading-snug">{citation.title}</h4>
-      <p className="text-caption mb-2">
-        {citation.authors && <span>{citation.authors} · </span>}
-        <em>{citation.journal}</em> · {citation.year}
-      </p>
-      {citation.summary && (
-        <p className="text-body-sm mb-3">{citation.summary}</p>
-      )}
-      {link && (
-        <a
-          href={link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="focus-ring interactive text-sm font-semibold text-accent-cyan hover:text-accent-emerald inline-flex items-center gap-1.5 rounded"
-        >
-          {citation.pmid ? `PubMed ${citation.pmid}` : 'View source'}
-          <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
-        </a>
-      )}
-    </article>
+        {link && (
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="focus-ring interactive text-sm font-semibold text-accent-cyan hover:text-accent-emerald inline-flex items-center gap-1.5 rounded"
+          >
+            {citation.pmid ? `PubMed ${citation.pmid}` : 'View source'}
+            <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
+          </a>
+        )}
+      </article>
+    </GlassPanel>
   );
 }
 

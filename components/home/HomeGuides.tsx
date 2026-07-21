@@ -89,10 +89,10 @@ export function HomeGuides() {
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
           <RevealItem index={0} className="lg:col-span-5">
-            <GlassPanel depth="mid" className="glass-hover h-full overflow-hidden rounded-2xl">
+            <GlassPanel depth="mid" className="glass-hover h-full rounded-2xl">
               <Link
                 href={featured.href}
-                className="focus-ring group flex h-full min-h-[220px] flex-col justify-between gap-8 p-7"
+                className="focus-ring group flex h-full min-h-[220px] flex-col justify-between gap-8 rounded-2xl p-7"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-label text-accent-violet">Start here</span>

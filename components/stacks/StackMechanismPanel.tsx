@@ -2,6 +2,7 @@
 
 import { TrendingDown } from 'lucide-react';
 import { usePlatform } from '@/context/PlatformContext';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 
 export function StackMechanismPanel() {
   const { selected, defenseProfile, profile } = usePlatform();
@@ -11,7 +12,7 @@ export function StackMechanismPanel() {
   const yearsShown = profile.scanned ? Math.abs(defenseProfile.ageDelta) : 0;
 
   return (
-    <div className="glass rounded-2xl p-5 md:p-6">
+    <GlassPanel depth="mid" className="rounded-2xl p-5 md:p-6">
       <div className="flex items-center gap-2 mb-3">
         <TrendingDown className="w-4 h-4 text-accent-emerald" aria-hidden="true" />
         <p className="text-label">Modeled bio-age impact</p>
@@ -24,6 +25,6 @@ export function StackMechanismPanel() {
           ? 'applied to your defense scan'
           : 'run a defense scan to apply this to your profile'}
       </p>
-    </div>
+    </GlassPanel>
   );
 }

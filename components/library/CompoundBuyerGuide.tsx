@@ -11,6 +11,7 @@ import {
 import type { CompoundBuyerGuide as BuyerGuide } from '@/lib/buyer-guides';
 import { getProductPick } from '@/lib/product-picks';
 import { ProductPickCard } from '@/components/shop/ProductPickCard';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 import { cn } from '@/lib/utils';
 
 interface CompoundBuyerGuideProps {
@@ -90,7 +91,7 @@ export function CompoundBuyerGuidePanel({
         </div>
 
         <div className="grid sm:grid-cols-2 gap-4">
-          <div className="glass rounded-xl p-4">
+          <GlassPanel depth="mid" className="rounded-xl p-4">
             <p className="text-label mb-3">COA demands</p>
             <ul className="space-y-2">
               {guide.coaDemands.map((item) => (
@@ -100,9 +101,9 @@ export function CompoundBuyerGuidePanel({
                 </li>
               ))}
             </ul>
-          </div>
+          </GlassPanel>
 
-          <div className="glass rounded-xl p-4">
+          <GlassPanel depth="mid" className="rounded-xl p-4">
             <p className="text-label mb-3 flex items-center gap-2">
               <Scale className="w-3.5 h-3.5" />
               RCT dose anchors
@@ -128,7 +129,7 @@ export function CompoundBuyerGuidePanel({
                 </li>
               ))}
             </ul>
-          </div>
+          </GlassPanel>
         </div>
 
         <div className="rounded-xl border border-accent-rose/20 bg-accent-rose/5 p-4">

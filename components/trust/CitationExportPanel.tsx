@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Download, Copy, FileText, Braces, CheckCircle2 } from 'lucide-react';
 import { citationRegistry } from '@/lib/trust';
 import { buildCitationBibTeX, buildCitationJson } from '@/lib/citation-export';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 
 type CopyKind = 'bibtex' | 'json' | null;
 
@@ -34,7 +35,7 @@ export function CitationExportPanel() {
   };
 
   return (
-    <div className="glass rounded-xl p-5 border border-accent-emerald/20">
+    <GlassPanel depth="mid" className="rounded-xl p-5 border border-accent-emerald/20">
       <div className="flex items-center gap-2 mb-2">
         <Download className="w-4 h-4 text-accent-emerald" aria-hidden="true" />
         <p className="text-label text-accent-emerald">Export citation bundle</p>
@@ -53,31 +54,37 @@ export function CitationExportPanel() {
           {copied === 'bibtex' ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
           {copied === 'bibtex' ? 'Copied' : 'Copy BibTeX'}
         </button>
-        <button
-          type="button"
-          onClick={() => downloadFile('tnic-citations.bib', bibtex, 'application/x-bibtex')}
-          className="focus-ring inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold glass hover:border-accent-emerald/30 transition"
-        >
-          <FileText className="w-3.5 h-3.5" />
-          Download .bib
-        </button>
-        <button
-          type="button"
-          onClick={() => copy('json', json)}
-          className="focus-ring inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold glass hover:border-accent-cyan/30 transition"
-        >
-          {copied === 'json' ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Braces className="w-3.5 h-3.5" />}
-          {copied === 'json' ? 'Copied' : 'Copy JSON'}
-        </button>
-        <button
-          type="button"
-          onClick={() => downloadFile('tnic-citations.json', json, 'application/json')}
-          className="focus-ring inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold glass hover:border-accent-cyan/30 transition"
-        >
-          <Download className="w-3.5 h-3.5" />
-          Download .json
-        </button>
+        <GlassPanel depth="mid" className="glass-hover rounded-lg">
+          <button
+            type="button"
+            onClick={() => downloadFile('tnic-citations.bib', bibtex, 'application/x-bibtex')}
+            className="focus-ring inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold transition"
+          >
+            <FileText className="w-3.5 h-3.5" />
+            Download .bib
+          </button>
+        </GlassPanel>
+        <GlassPanel depth="mid" className="glass-hover rounded-lg">
+          <button
+            type="button"
+            onClick={() => copy('json', json)}
+            className="focus-ring inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold transition"
+          >
+            {copied === 'json' ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Braces className="w-3.5 h-3.5" />}
+            {copied === 'json' ? 'Copied' : 'Copy JSON'}
+          </button>
+        </GlassPanel>
+        <GlassPanel depth="mid" className="glass-hover rounded-lg">
+          <button
+            type="button"
+            onClick={() => downloadFile('tnic-citations.json', json, 'application/json')}
+            className="focus-ring inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold transition"
+          >
+            <Download className="w-3.5 h-3.5" />
+            Download .json
+          </button>
+        </GlassPanel>
       </div>
-    </div>
+    </GlassPanel>
   );
 }

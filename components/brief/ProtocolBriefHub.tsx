@@ -31,7 +31,7 @@ export function ProtocolBriefHub() {
           <article
             key={entry.id}
             id={entry.id}
-            className="glass rounded-2xl p-6 md:p-8 border border-border/80 scroll-mt-24"
+            className="glass-deep glass-plane-mid rounded-2xl p-6 md:p-8 border border-border/80 scroll-mt-24"
           >
             <div className="flex flex-wrap items-center gap-3 mb-3">
               <time className="text-caption font-mono">{entry.date}</time>

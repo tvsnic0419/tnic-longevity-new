@@ -45,7 +45,7 @@ export function OnboardingStrip() {
   const nextStep = steps.find((s) => !s.done);
 
   return (
-    <div className="glass rounded-2xl border border-accent-cyan/20 p-5 mb-8">
+    <div className="glass-deep glass-plane-mid rounded-2xl border border-accent-cyan/20 p-5 mb-8">
       <div className="flex items-center justify-between mb-4">
         <div>
           <p className="text-label text-accent-cyan">GET STARTED</p>

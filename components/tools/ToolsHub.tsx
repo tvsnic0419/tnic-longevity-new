@@ -23,6 +23,8 @@ import {
 import { PageHeader } from '@/components/ui/PageHeader';
 import { TabBar } from '@/components/ui/TabBar';
 import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
+import { GlassPanel } from '@/components/ui/GlassPanel';
+import { RevealCard } from '@/components/ui/RevealCard';
 import { EvidenceTagLegend } from '@/components/trust/EvidenceTag';
 import { toolsRegistry, type ToolId } from '@/lib/registry';
 import { ToolDisclaimer } from './ToolDisclaimer';
@@ -120,74 +122,81 @@ export function ToolsHub() {
           className="mb-8 max-w-4xl"
         />
 
-        <Link
-          href="/elite-8"
-          className="focus-ring block mb-8 card-premium border border-accent-amber/25 bg-gradient-to-br from-accent-amber/8 to-transparent rounded-2xl p-5 md:p-6 hover:border-accent-amber/40 transition group"
-        >
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-            <div className="flex items-start gap-3 flex-1">
-              <div className="icon-badge-amber w-10 h-10 rounded-xl flex items-center justify-center shrink-0">
-                <Trophy className="w-5 h-5 text-accent-amber" aria-hidden="true" />
+        <GlassPanel depth="mid" className="mb-8 rounded-2xl">
+          <Link
+            href="/elite-8"
+            className="focus-ring group block border border-accent-amber/25 bg-gradient-to-br from-accent-amber/8 to-transparent rounded-2xl p-5 md:p-6 hover:border-accent-amber/40 transition"
+          >
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="flex items-start gap-3 flex-1">
+                <div className="icon-badge-amber w-10 h-10 rounded-xl flex items-center justify-center shrink-0">
+                  <Trophy className="w-5 h-5 text-accent-amber" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-label text-accent-amber mb-1">Featured tool</p>
+                  <h2 className="font-bold text-lg group-hover:text-accent-amber transition">Elite 8 Longevity Quotient</h2>
+                  <p className="text-sm text-muted-foreground mt-1 max-w-xl">
+                    Eight interventions ranked by modeled LQ score — head-to-head compare, weight tuner, Rx disclaimers, and links to evidence modules.
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-label text-accent-amber mb-1">Featured tool</p>
-                <h2 className="font-bold text-lg group-hover:text-accent-amber transition">Elite 8 Longevity Quotient</h2>
-                <p className="text-sm text-muted-foreground mt-1 max-w-xl">
-                  Eight interventions ranked by modeled LQ score — head-to-head compare, weight tuner, Rx disclaimers, and links to evidence modules.
-                </p>
-              </div>
+              <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-amber shrink-0">
+                Open ranking <ArrowRight className="w-4 h-4" />
+              </span>
             </div>
-            <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-amber shrink-0">
-              Open ranking <ArrowRight className="w-4 h-4" />
-            </span>
-          </div>
-        </Link>
+          </Link>
+        </GlassPanel>
 
         {/* Visual tool picker grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
-          {toolsRegistry.map((t) => {
+          {toolsRegistry.map((t, i) => {
             const Icon = tabIcons[t.id];
             const accent = toolAccents[t.id];
             const isActive = active === t.id;
             return (
-              <button
+              <RevealCard
                 key={t.id}
-                type="button"
-                onClick={() => onTabChange(t.id)}
-                className={`focus-ring group text-left rounded-xl p-4 border transition-all duration-200 ${
-                  isActive
-                    ? 'card-premium border-opacity-60 shadow-lg'
-                    : 'glass glass-hover border-border/40'
-                }`}
-                style={isActive ? { borderColor: `color-mix(in srgb, ${accent} 40%, transparent)` } : {}}
+                index={i}
+                className={`h-full rounded-xl${isActive ? '' : ' glass-hover'}`}
               >
-                <div className="flex items-start justify-between gap-2 mb-3">
-                  <div
-                    className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-                    style={{ background: `color-mix(in srgb, ${accent} 14%, transparent)` }}
-                  >
-                    <Icon
-                      className="w-4.5 h-4.5"
-                      style={{ color: accent }}
-                      aria-hidden="true"
-                    />
-                  </div>
-                  {t.badge && (
-                    <span
-                      className="text-[9px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-full border"
-                      style={{ color: accent, borderColor: `color-mix(in srgb, ${accent} 30%, transparent)`, background: `color-mix(in srgb, ${accent} 10%, transparent)` }}
+                <button
+                  type="button"
+                  onClick={() => onTabChange(t.id)}
+                  className={`focus-ring group h-full w-full text-left rounded-xl p-4 border transition-all duration-200 ${
+                    isActive
+                      ? 'border-opacity-60 shadow-lg'
+                      : 'border-border/40'
+                  }`}
+                  style={isActive ? { borderColor: `color-mix(in srgb, ${accent} 40%, transparent)` } : {}}
+                >
+                  <div className="flex items-start justify-between gap-2 mb-3">
+                    <div
+                      className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                      style={{ background: `color-mix(in srgb, ${accent} 14%, transparent)` }}
                     >
-                      {t.badge}
-                    </span>
-                  )}
-                </div>
-                <p className="font-semibold text-sm leading-tight" style={isActive ? { color: accent } : {}}>
-                  {t.label}
-                </p>
-                <p className="text-[11px] text-muted-foreground mt-0.5 leading-snug line-clamp-2">
-                  {t.shortLabel}
-                </p>
-              </button>
+                      <Icon
+                        className="w-4.5 h-4.5"
+                        style={{ color: accent }}
+                        aria-hidden="true"
+                      />
+                    </div>
+                    {t.badge && (
+                      <span
+                        className="text-[9px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-full border"
+                        style={{ color: accent, borderColor: `color-mix(in srgb, ${accent} 30%, transparent)`, background: `color-mix(in srgb, ${accent} 10%, transparent)` }}
+                      >
+                        {t.badge}
+                      </span>
+                    )}
+                  </div>
+                  <p className="font-semibold text-sm leading-tight" style={isActive ? { color: accent } : {}}>
+                    {t.label}
+                  </p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5 leading-snug line-clamp-2">
+                    {t.shortLabel}
+                  </p>
+                </button>
+              </RevealCard>
             );
           })}
         </div>

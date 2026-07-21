@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Sun, Moon } from 'lucide-react';
 import { useStack } from '@/context/PlatformContext';
 import { analyzeStack } from '@/lib/stack-analysis';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 import { StackBuilder } from './StackBuilder';
 import { SynergyScorePanel } from './SynergyScorePanel';
 import { StackInteractionsPanel } from './StackInteractionsPanel';
@@ -37,7 +38,7 @@ export function DynamicStackBuilder() {
 
               <StackMechanismPanel />
 
-              <div className="glass rounded-2xl p-5">
+              <GlassPanel depth="mid" className="rounded-2xl p-5">
                 <p className="text-label text-muted-foreground mb-3">Dosing protocol</p>
                 <div className="space-y-3">
                   {amDose.length > 0 && (
@@ -73,18 +74,15 @@ export function DynamicStackBuilder() {
                     </div>
                   )}
                 </div>
-              </div>
+              </GlassPanel>
             </motion.div>
           ) : (
-            <motion.div
-              key="empty"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="glass rounded-2xl p-8 text-center"
-            >
-              <p className="text-muted-foreground text-sm">
-                Toggle compounds to see real-time synergy and safety analysis.
-              </p>
+            <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <GlassPanel depth="mid" className="rounded-2xl p-8 text-center">
+                <p className="text-muted-foreground text-sm">
+                  Toggle compounds to see real-time synergy and safety analysis.
+                </p>
+              </GlassPanel>
             </motion.div>
           )}
         </AnimatePresence>

@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import { HeartPulse, ArrowRight, GitBranch, FlaskConical } from 'lucide-react';
 import { ContextRail } from '@/components/ui/ContextRail';
+import { RevealCard } from '@/components/ui/RevealCard';
 import { getModulePath } from '@/lib/library-modules';
 import { lifestylePillarOrder, lifestylePillars } from '@/lib/lifestyle-pillars';
 import { libraryModules } from '@/lib/library-modules';
@@ -71,17 +71,16 @@ export function LifestylePillarsHub() {
             const cardStyle = pillarCardStyles[pillar.accent];
 
             return (
-              <motion.div
+              <RevealCard
                 key={mod.slug}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.06 }}
+                index={i}
+                depth="mid"
+                className="h-full rounded-2xl"
               >
                 <Link
                   href={getModulePath(mod)}
                   className={[
-                    'focus-ring group block h-full card-premium p-5',
+                    'focus-ring group block h-full rounded-2xl p-5',
                     'bg-gradient-to-br to-transparent',
                     cardStyle.grad,
                     cardStyle.hover,
@@ -112,7 +111,7 @@ export function LifestylePillarsHub() {
                     Open protocol <ArrowRight className="w-4 h-4" />
                   </span>
                 </Link>
-              </motion.div>
+              </RevealCard>
             );
           })}
         </div>

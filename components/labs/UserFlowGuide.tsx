@@ -41,7 +41,7 @@ interface UserFlowGuideProps {
 
 export function UserFlowGuide({ currentStep = 1 }: UserFlowGuideProps) {
   return (
-    <div className="glass rounded-2xl p-5 mb-8">
+    <div className="glass-deep glass-plane-mid rounded-2xl p-5 mb-8">
       <p className="text-[10px] font-mono text-accent-rose uppercase tracking-wider mb-4">User Flow</p>
 
       {/* Step indicator row */}

@@ -51,7 +51,7 @@ export function DetailedStackSuggestion({ preset }: { preset: PresetKey }) {
   return (
     <section className="mb-4" aria-label={`Recommended protocol: ${stack.label}`}>
       {/* Stack-level summary */}
-      <div className="glass rounded-xl p-4 mb-3">
+      <div className="glass-deep glass-plane-mid rounded-xl p-4 mb-3">
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="min-w-0">
             <p className="text-[10px] font-mono text-accent-violet uppercase tracking-wider mb-1">
@@ -92,7 +92,7 @@ export function DetailedStackSuggestion({ preset }: { preset: PresetKey }) {
           const t = TIER_STYLE[c.evidence];
           const study = c.studies[0];
           return (
-            <li key={c.id} className="glass rounded-xl p-3">
+            <li key={c.id} className="glass-deep glass-plane-mid rounded-xl p-3">
               <div className="flex items-start gap-3">
                 <span className="shrink-0 mt-0.5 w-5 h-5 rounded-md bg-accent-violet/15 text-accent-violet text-[10px] font-bold font-mono flex items-center justify-center">
                   {i + 1}
@@ -143,7 +143,7 @@ export function DetailedStackSuggestion({ preset }: { preset: PresetKey }) {
 
       {/* Synergy pairs inside the stack */}
       {analysis.synergies.length > 0 && (
-        <div className="glass rounded-xl p-3 mt-2">
+        <div className="glass-deep glass-plane-mid rounded-xl p-3 mt-2">
           <p className="flex items-center gap-1.5 text-[10px] font-mono text-accent-violet uppercase tracking-wider mb-2">
             <Sparkles className="w-3 h-3" aria-hidden="true" />
             Synergy pairs in this stack

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePlatform } from '@/context/PlatformContext';
 import { NotebookPen, TrendingUp } from 'lucide-react';
 import type { HallmarkLibraryEntry } from '@/lib/types';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 
 export function HallmarkNotesPanel({ hallmark }: { hallmark: HallmarkLibraryEntry }) {
   const { hallmarkNotes, setHallmarkNote, selected } = usePlatform();
@@ -59,7 +60,7 @@ export function HallmarkNotesPanel({ hallmark }: { hallmark: HallmarkLibraryEntr
         )}
       </div>
 
-      <div className="glass rounded-xl p-4 mb-4">
+      <GlassPanel depth="mid" className="rounded-xl p-4 mb-4">
         <p className="text-[10px] font-mono text-muted-foreground uppercase mb-2">Tracking prompts</p>
         <ul className="space-y-1">
           {hallmark.personalPrompts.map((p) => (
@@ -69,9 +70,9 @@ export function HallmarkNotesPanel({ hallmark }: { hallmark: HallmarkLibraryEntr
             </li>
           ))}
         </ul>
-      </div>
+      </GlassPanel>
 
-      <div className="glass rounded-xl p-4">
+      <GlassPanel depth="mid" className="rounded-xl p-4">
         <p className="text-[10px] font-mono text-muted-foreground uppercase mb-2">Your stack coverage</p>
         {activeCompounds.length > 0 ? (
           <p className="text-xs text-accent-emerald">
@@ -88,7 +89,7 @@ export function HallmarkNotesPanel({ hallmark }: { hallmark: HallmarkLibraryEntr
           {' — '}
           <Link href="/labs" className="text-accent-rose hover:underline">Log in Lab Hub</Link>
         </p>
-      </div>
+      </GlassPanel>
     </div>
   );
 }

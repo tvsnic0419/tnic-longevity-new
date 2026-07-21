@@ -9,6 +9,7 @@ import { buildStackNetwork, filterNetworkGraph } from '@/lib/tools/stack-network
 import { CompoundSelectorGrid } from '@/components/stacks/CompoundSelectorGrid';
 import { StackPresetsBar } from '@/components/stacks/StackPresetsBar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 import { Badge } from '@/components/ui/Badge';
 import { TabBar } from '@/components/ui/TabBar';
 import { StackNetworkGraph } from './StackNetworkGraph';
@@ -121,18 +122,18 @@ export function StackNetworkTool() {
                 }
               />
               <div className="grid grid-cols-3 gap-2 mt-4 text-center">
-                <div className="glass rounded-lg py-2">
+                <GlassPanel depth="mid" className="rounded-lg py-2">
                   <p className="text-lg font-bold text-accent-cyan">{fullGraph.stats.networkDensity}</p>
                   <p className="text-[9px] font-mono text-muted-foreground">DENSITY</p>
-                </div>
-                <div className="glass rounded-lg py-2">
+                </GlassPanel>
+                <GlassPanel depth="mid" className="rounded-lg py-2">
                   <p className="text-lg font-bold text-accent-emerald">{synergies.length}</p>
                   <p className="text-[9px] font-mono text-muted-foreground">ACTIVE EDGES</p>
-                </div>
-                <div className="glass rounded-lg py-2">
+                </GlassPanel>
+                <GlassPanel depth="mid" className="rounded-lg py-2">
                   <p className="text-lg font-bold text-accent-violet">{selected.length}</p>
                   <p className="text-[9px] font-mono text-muted-foreground">COMPOUNDS</p>
-                </div>
+                </GlassPanel>
               </div>
             </CardContent>
           </Card>

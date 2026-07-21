@@ -169,9 +169,13 @@ export function HeroScene3D() {
     drag.current.active = true;
     drag.current.lastX = e.clientX;
     drag.current.lastY = e.clientY;
+    e.currentTarget.setPointerCapture(e.pointerId);
   };
-  const onPointerUp = () => {
+  const onPointerUp = (e: PointerEvent<HTMLDivElement>) => {
     drag.current.active = false;
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
   };
   const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
     if (!drag.current.active) return;
@@ -186,7 +190,7 @@ export function HeroScene3D() {
       className="relative h-full w-full touch-none"
       onPointerDown={onPointerDown}
       onPointerUp={onPointerUp}
-      onPointerLeave={onPointerUp}
+      onPointerCancel={onPointerUp}
       onPointerMove={onPointerMove}
     >
       <Canvas camera={{ position: [0, 0, 6], fov: 40 }} dpr={[1, 2]} gl={{ antialias: true, alpha: true }}>
