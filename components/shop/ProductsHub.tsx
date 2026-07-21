@@ -30,15 +30,16 @@ function ProductCard({ pick }: { pick: ProductPick }) {
   const hallmarkTargets = compound?.hallmarks?.slice(0, 3) ?? [];
 
   /*
-    Intentionally NOT a GlassPanel: this card uses a "stretched link" overlay
-    (the absolute inset-0 <a> below, layered behind pointer-events-none
-    content). GlassPanel's `.glass-deep > *` rule forces `position: relative`
-    on every direct child via unlayered CSS that outranks Tailwind's `absolute`
-    utility, which would collapse that overlay and break the whole-card click
-    target. card-premium stays here on purpose.
+    Deep Glass surface (matches every other card on the page), but the stretched
+    link + content are held in ONE inner wrapper so they are grandchildren of
+    `.glass-deep`, not direct children. `.glass-deep > *` forces
+    `position: relative` on its direct children via unlayered CSS that outranks
+    Tailwind's `absolute` utility; keeping the overlay a grandchild is what lets
+    the whole-card click target survive the conversion.
   */
   return (
-    <div className="group relative card-premium glow-hover-emerald rounded-2xl border border-border/80 overflow-hidden flex flex-col h-full">
+    <div className="group relative glass-deep glass-plane-mid glow-hover-emerald rounded-2xl border border-border/80 overflow-hidden flex flex-col h-full">
+      <div className="relative flex flex-1 flex-col">
       {/*
         Whole-card "stretched link" to the affiliate offer, layered *behind*
         the card content instead of wrapping it. The card also needs the
@@ -119,6 +120,7 @@ function ProductCard({ pick }: { pick: ProductPick }) {
         >
           Read {pick.compoundName} evidence module →
         </Link>
+      </div>
       </div>
     </div>
   );
