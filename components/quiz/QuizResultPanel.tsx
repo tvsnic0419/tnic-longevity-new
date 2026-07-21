@@ -152,7 +152,7 @@ export function QuizResultPanel({ result, answers, onRetake }: QuizResultPanelPr
           </div>
         </Link>
 
-        <div className="rounded-xl card-premium border border-accent-violet/20 p-4">
+        <div className="glass-deep glass-plane-mid rounded-xl border border-accent-violet/20 p-4">
           <p className="text-xs font-semibold mb-2">Get weekly Protocol Brief</p>
           {subscribed ? (
             <div className="flex items-center gap-2 text-xs text-accent-emerald">

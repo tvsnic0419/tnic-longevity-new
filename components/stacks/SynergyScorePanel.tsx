@@ -26,7 +26,7 @@ export function SynergyScorePanel({ score, analysis, verdict, className = '' }: 
   const color = gaugeColor(score);
 
   return (
-    <div className={cn('card-premium border border-border/60 rounded-2xl p-5', className)}>
+    <div className={cn('glass-deep glass-plane-mid border border-border/60 rounded-2xl p-5', className)}>
       <p className="text-label text-accent-violet mb-4">Live Synergy Score</p>
 
       {/* Gauge + coverage ring side by side */}

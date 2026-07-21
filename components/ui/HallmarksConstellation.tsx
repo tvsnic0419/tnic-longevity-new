@@ -109,7 +109,7 @@ export function HallmarksConstellation() {
           key={active}
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
-          className="constellation-tooltip card-premium"
+          className="constellation-tooltip glass-deep glass-plane-float rounded-2xl"
         >
           {(() => {
             const h = hallmarkLibrary.find((x) => x.id === active);
