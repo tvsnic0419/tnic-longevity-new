@@ -26,7 +26,13 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   ...buildRootMetadata(),
-  verification: { google: 'JXl9PzynZw-9rloI6NeoW8CNLPJ6wGrpdKu9GdZtAL4' },
+  verification: {
+    google: 'JXl9PzynZw-9rloI6NeoW8CNLPJ6wGrpdKu9GdZtAL4',
+    // Apple Business Register verifies domain ownership via DNS TXT lookup,
+    // not this meta tag — this is a redundant record only, not a substitute
+    // for the apple-domain-verification TXT record on the domain itself.
+    other: { 'apple-domain-verification': 'Zg8sSlsVG0C6gwD4' },
+  },
 };
 
 export const viewport: Viewport = {

@@ -61,7 +61,7 @@ export function SystemsPage() {
   const leverage = leverageByHallmark.get(selected);
 
   return (
-    <div className="min-h-screen bg-background pt-6 md:pt-8 pb-24">
+    <div className="min-h-screen canvas-scrim pt-6 md:pt-8 pb-24">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mb-10">

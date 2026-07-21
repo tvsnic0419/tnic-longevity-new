@@ -4,9 +4,11 @@ import { ScrollProgress } from '@/components/ScrollProgress';
 import { HomeHero } from '@/components/home/HomeHero';
 import { HomeExplore } from '@/components/home/HomeExplore';
 import { HomeSteps } from '@/components/home/HomeSteps';
-import { HomeEvidence } from '@/components/home/HomeEvidence';
+import { HomeHallmarks } from '@/components/home/HomeHallmarks';
 import { HomeGuides } from '@/components/home/HomeGuides';
 import { HomeCTA } from '@/components/home/HomeCTA';
+import { StructuredData } from '@/components/seo/StructuredData';
+import { buildSoftwareApplicationSchema, buildItemListSchema } from '@/lib/seo';
 
 /**
  * Homepage — a server component so the full page renders to HTML on the server
@@ -17,14 +19,15 @@ import { HomeCTA } from '@/components/home/HomeCTA';
  */
 export default function HomePage() {
   return (
-    <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
+    <div className="min-h-screen overflow-x-hidden canvas-scrim text-foreground">
+      <StructuredData schemas={[buildSoftwareApplicationSchema(), buildItemListSchema()]} />
       <ScrollProgress />
       <Nav />
       <main id="main-content" tabIndex={-1}>
         <HomeHero />
         <HomeExplore />
         <HomeSteps />
-        <HomeEvidence />
+        <HomeHallmarks />
         <HomeGuides />
         <HomeCTA />
       </main>

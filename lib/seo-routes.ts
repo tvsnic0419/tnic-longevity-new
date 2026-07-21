@@ -10,6 +10,7 @@
  */
 
 import { buildPageMetadata } from './seo';
+import { glossary, consumerFAQ } from './data';
 
 export const seoRoutes = {
   home: () =>
@@ -42,17 +43,15 @@ export const seoRoutes = {
   learn: () =>
     buildPageMetadata({
       title: 'Learn Hub — Getting Started, Glossary & Red Flags',
-      description:
-        'Start here before you stack: 5-step onboarding checklist, 20-term longevity glossary, seven supplement red flags to avoid, outcome timelines, and evidence tier explainer.',
+      description: `Start here before you stack: 5-step onboarding checklist, ${glossary.length}-term longevity glossary, seven supplement red flags to avoid, outcome timelines, and evidence tier explainer.`,
       path: '/learn',
       keywords: ['longevity FAQ', 'getting started biohacking', 'supplement red flags', 'longevity glossary', 'evidence tier A B C'],
     }),
 
   faq: () =>
     buildPageMetadata({
-      title: 'FAQ — Twenty-Five Longevity Protocol Questions Answered',
-      description:
-        'Twenty-five honest answers about TNiC evidence tiers, rapamycin safety, epigenetic clocks, sleep and biological aging, daily vs cycling dosing, medications, and how we differ from supplement stores.',
+      title: `FAQ — ${consumerFAQ.length} Longevity Protocol Questions Answered`,
+      description: `${consumerFAQ.length} honest answers about TNiC evidence tiers, rapamycin safety, epigenetic clocks, sleep and biological aging, daily vs cycling dosing, medications, and how we differ from supplement stores.`,
       path: '/faq',
       keywords: ['longevity FAQ', 'NMN safety', 'evidence tier A B C', 'rapamycin longevity', 'epigenetic clock', 'supplement protocol questions'],
     }),
@@ -64,6 +63,23 @@ export const seoRoutes = {
         'Search and explore the longevity library: 12 Hallmarks of Aging with mechanism maps, compound deep-dives with PMID citations, synergy guides, and testing protocols — all evidence-graded Tier A/B/C.',
       path: '/library',
       keywords: ['hallmarks of aging', 'GlyNAC deep dive', 'longevity library', 'anti-aging education', 'NMN evidence', 'Ca-AKG epigenetic clock'],
+    }),
+
+  peptidesHub: () =>
+    buildPageMetadata({
+      title: 'Anti-Aging Peptides — Evidence Graded, Legal Status Explained',
+      description:
+        'BPC-157, GHK-Cu, Epithalon, Thymosin Alpha-1, GH secretagogues, MOTS-c, semaglutide/tirzepatide, and Humanin — evidence-graded Tier A/B/C, with legal status (FDA-approved vs. research-chemical vs. compounding-restricted) stated plainly for every peptide.',
+      path: '/peptides',
+      keywords: ['anti-aging peptides', 'BPC-157', 'GHK-Cu', 'epithalon', 'thymosin alpha-1', 'MOTS-c', 'peptide therapy longevity'],
+    }),
+
+  peptide: (input: { name: string; tagline: string; slug: string }) =>
+    buildPageMetadata({
+      title: `${input.name} — Evidence, Dosing & Legal Status`,
+      description: input.tagline,
+      path: `/peptides/${input.slug}`,
+      keywords: [input.name, 'peptide therapy', 'anti-aging peptide', 'longevity evidence'],
     }),
 
   shop: () =>

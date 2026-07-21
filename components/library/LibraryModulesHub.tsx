@@ -54,7 +54,7 @@ export function LibraryModulesHub() {
     <section
       id="content-modules"
       aria-labelledby="modules-heading"
-      className="py-8 md:py-12 bg-background border-b border-border"
+      className="py-8 md:py-12 canvas-scrim border-b border-border"
     >
       <div className="container-page">
         <PageHeader
@@ -66,6 +66,7 @@ export function LibraryModulesHub() {
           theme="emerald"
           as="h2"
           context={getHubContext('libraryModules')}
+          contextVariant="compact"
         />
 
         <div className="flex flex-wrap justify-center gap-3 mb-8">

@@ -181,16 +181,17 @@ export function StackSimulatorTool() {
               <CardContent>
                 <ResponsiveContainer width="100%" height={240}>
                   <RadarChart data={radarData}>
-                    <PolarGrid stroke="var(--color-border-subtle)" />
+                    <PolarGrid stroke="var(--color-border-subtle)" strokeOpacity={0.5} />
                     <PolarAngleAxis
                       dataKey="hallmark"
-                      tick={{ fill: 'var(--color-text-faint)', fontSize: 9 }}
+                      tick={{ fill: 'var(--color-text-muted)', fontSize: 9, fontFamily: 'var(--font-mono)' }}
                     />
                     <Radar
                       dataKey="coverage"
                       stroke="var(--accent-violet)"
+                      strokeWidth={2}
                       fill="var(--accent-violet)"
-                      fillOpacity={0.35}
+                      fillOpacity={0.28}
                     />
                   </RadarChart>
                 </ResponsiveContainer>

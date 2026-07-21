@@ -43,7 +43,7 @@ function buildLearnSchemas() {
 
 export default function LearnPage() {
   return (
-    <SubPageLayout>
+    <SubPageLayout hideContextBar>
       <StructuredData schemas={buildLearnSchemas()} />
       <Suspense fallback={<div className="container-page py-20 text-muted-foreground">Loading…</div>}>
         <LearnPageClient />

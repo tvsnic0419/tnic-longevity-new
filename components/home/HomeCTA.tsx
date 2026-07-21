@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { ClipboardList, LayoutDashboard, ArrowRight } from 'lucide-react';
 import { GlassPanel } from '@/components/ui/GlassPanel';
+import { CellularDivider } from '@/components/ui/CellularDivider';
+import { RevealItem } from '@/components/ui/RevealItem';
 
 /** Final conversion band — one confident ask, server-rendered. */
 export function HomeCTA() {
@@ -9,19 +11,20 @@ export function HomeCTA() {
       aria-labelledby="home-cta-heading"
       className="relative overflow-hidden border-t border-border/50 py-24 md:py-32"
     >
+      <CellularDivider />
       <div aria-hidden="true" className="absolute inset-0 -z-10">
         <div className="absolute left-1/2 top-0 h-[26rem] w-[42rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,color-mix(in_srgb,var(--accent-cyan)_16%,transparent),transparent_65%)] blur-2xl" />
       </div>
 
       <div className="container-page">
-        <div className="mx-auto max-w-2xl text-center">
+        <RevealItem className="mx-auto max-w-2xl text-center">
           <p className="text-label mb-4 text-accent-cyan">Your first move</p>
           <h2 id="home-cta-heading" className="heading-section mb-4">
             Find the protocol that fits you — in three minutes.
           </h2>
           <p className="text-body mx-auto mb-9 max-w-xl">
-            Start with the quiz, or open the OS and build from scratch. Either way it stays
-            private, stays free, and never asks you to sign up.
+            Start with the quiz, or jump straight into building your protocol. Either way it
+            stays private, stays free, and never asks you to sign up.
           </p>
           <div className="flex flex-col justify-center gap-3 sm:flex-row">
             <Link
@@ -41,11 +44,11 @@ export function HomeCTA() {
                 className="focus-ring inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-semibold text-foreground"
               >
                 <LayoutDashboard className="h-5 w-5 text-accent-cyan" aria-hidden="true" />
-                Open the Longevity OS
+                Open Your Dashboard
               </Link>
             </GlassPanel>
           </div>
-        </div>
+        </RevealItem>
       </div>
     </section>
   );

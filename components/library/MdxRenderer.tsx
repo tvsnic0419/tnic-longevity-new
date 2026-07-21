@@ -22,6 +22,7 @@ import {
   parseDecisionNodes,
 } from '@/components/library/LifestyleDecisionTree';
 import { citationRegistry } from '@/lib/trust';
+import { glossary } from '@/lib/data';
 
 const PMID_PATTERN = /\bPMID:?\s?(\d{7,8})\b/g;
 const LINK_CLASS =
@@ -33,12 +34,52 @@ function pubmedUrl(pmid: string): string {
   return `https://pubmed.ncbi.nlm.nih.gov/${pmid}/`;
 }
 
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function escapeRegExp(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/** Longest-term-first so e.g. "Epigenetic Clock" is tried before any shorter overlap. */
+const GLOSSARY_TERMS_BY_LENGTH = [...glossary].sort((a, b) => b.term.length - a.term.length);
+
 /**
- * Inline markdown → HTML. Handles links and PMID citations in addition to
- * emphasis/code. Links are tokenized out first so later regexes (emphasis,
- * PMID auto-linking) never rewrite characters inside an href.
+ * Links the first on-page occurrence of each glossary term to an inline,
+ * hover/focus tooltip carrying its plain-English definition — readers hit
+ * jargon (AMPK, incretin, immunosenescence, ...) without leaving the page.
+ * Only the first occurrence per page is linked (via the shared `linkedTerms`
+ * set) so dense tables don't turn into a wall of underlined spans.
  */
-function renderInline(text: string): string {
+function linkGlossaryTerms(text: string, linkedTerms: Set<string>): string {
+  let out = text;
+  for (const { term, simple } of GLOSSARY_TERMS_BY_LENGTH) {
+    if (linkedTerms.has(term)) continue;
+    const pattern = new RegExp(`(?<![a-zA-Z0-9])(${escapeRegExp(term)})(?![a-zA-Z0-9])`, 'i');
+    if (!pattern.test(out)) continue;
+    linkedTerms.add(term);
+    out = out.replace(
+      pattern,
+      (matched) =>
+        `<span class="glossary-term" tabindex="0">${matched}<span class="glossary-tooltip" role="tooltip">${escapeHtml(simple)} <a href="/learn?tab=glossary" class="glossary-tooltip-link">Full glossary →</a></span></span>`,
+    );
+  }
+  return out;
+}
+
+/**
+ * Inline markdown → HTML. Handles links, PMID citations, and first-occurrence
+ * glossary tooltips in addition to emphasis/code. Links are tokenized out
+ * first so later regexes (emphasis, PMID auto-linking, glossary linking)
+ * never rewrite characters inside an href or double-wrap an already-linked
+ * phrase.
+ */
+function renderInline(text: string, linkedTerms: Set<string>): string {
   const tokens: string[] = [];
   const stash = (html: string): string => {
     tokens.push(html);
@@ -61,6 +102,8 @@ function renderInline(text: string): string {
       `<a href="${pubmedUrl(id)}" target="_blank" rel="noopener noreferrer" class="${PMID_CLASS}">PMID ${id}</a>`,
     ),
   );
+
+  out = linkGlossaryTerms(out, linkedTerms);
 
   return out.replace(/\uE000T(\d+)\uE000/g, (_m, i: string) => tokens[Number(i)] ?? '');
 }
@@ -131,16 +174,35 @@ function extractPmids(content: string): string[] {
 
 const citationByPmid = new Map(citationRegistry.map((c) => [c.pmid, c]));
 
-function TableOfContents({ headings }: { headings: Heading[] }) {
+const WORDS_PER_MINUTE = 200;
+
+/** Rough word-count-based estimate — strips directive markers/attrs and
+ * table separator rows so they don't inflate the count, then counts
+ * whitespace-separated tokens at a standard ~200 wpm reading speed. */
+function estimateReadingMinutes(content: string): number {
+  const stripped = content
+    .replace(/^:::.*$/gm, '')
+    .replace(/^\|[\s-|]+\|$/gm, '')
+    .replace(/[|#>*_`-]/g, ' ');
+  const words = stripped.split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / WORDS_PER_MINUTE));
+}
+
+function TableOfContents({ headings, readingMinutes }: { headings: Heading[]; readingMinutes: number }) {
   return (
     <nav
       aria-label="On this page"
       className="not-prose mb-8 rounded-xl border border-border bg-muted/20 p-5"
     >
-      <div className="mb-3 flex items-center gap-2">
-        <ListTree className="h-4 w-4 text-accent-cyan" aria-hidden="true" />
+      <div className="mb-3 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <ListTree className="h-4 w-4 text-accent-cyan" aria-hidden="true" />
+          <p className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+            On this page
+          </p>
+        </div>
         <p className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-          On this page
+          ~{readingMinutes} min read
         </p>
       </div>
       <ul className="space-y-1.5">
@@ -262,7 +324,11 @@ function parseBlocks(content: string): ParsedBlock[] {
   return blocks;
 }
 
-function renderDirective(block: Extract<ParsedBlock, { kind: 'directive' }>, key: number) {
+function renderDirective(
+  block: Extract<ParsedBlock, { kind: 'directive' }>,
+  key: number,
+  linkedTerms: Set<string>,
+) {
   const { type, attrs, body } = block;
 
   if (type === 'cta') {
@@ -283,7 +349,7 @@ function renderDirective(block: Extract<ParsedBlock, { kind: 'directive' }>, key
         {body && (
           <p
             className="text-sm text-muted-foreground mb-4"
-            dangerouslySetInnerHTML={{ __html: renderInline(body) }}
+            dangerouslySetInnerHTML={{ __html: renderInline(body, linkedTerms) }}
           />
         )}
         <Link
@@ -308,7 +374,7 @@ function renderDirective(block: Extract<ParsedBlock, { kind: 'directive' }>, key
         </div>
         <p
           className="text-sm text-foreground/80 leading-relaxed"
-          dangerouslySetInnerHTML={{ __html: renderInline(body || attrs.description || '') }}
+          dangerouslySetInnerHTML={{ __html: renderInline(body || attrs.description || '', linkedTerms) }}
         />
       </div>
     );
@@ -327,7 +393,7 @@ function renderDirective(block: Extract<ParsedBlock, { kind: 'directive' }>, key
         </div>
         <p
           className="text-sm text-muted-foreground leading-relaxed"
-          dangerouslySetInnerHTML={{ __html: renderInline(body) }}
+          dangerouslySetInnerHTML={{ __html: renderInline(body, linkedTerms) }}
         />
       </div>
     );
@@ -347,7 +413,7 @@ function renderDirective(block: Extract<ParsedBlock, { kind: 'directive' }>, key
         </div>
         <p
           className="text-sm text-foreground/80 leading-relaxed"
-          dangerouslySetInnerHTML={{ __html: renderInline(body) }}
+          dangerouslySetInnerHTML={{ __html: renderInline(body, linkedTerms) }}
         />
       </div>
     );
@@ -365,7 +431,7 @@ function renderDirective(block: Extract<ParsedBlock, { kind: 'directive' }>, key
             {attrs.title ?? 'Practical application'}
           </p>
         </div>
-        {renderMarkdownBlock(body, key)}
+        {renderMarkdownBlock(body, key, linkedTerms)}
       </div>
     );
   }
@@ -383,7 +449,7 @@ function renderDirective(block: Extract<ParsedBlock, { kind: 'directive' }>, key
             {attrs.title ?? 'Red flags'}
           </p>
         </div>
-        {renderMarkdownBlock(body, key)}
+        {renderMarkdownBlock(body, key, linkedTerms)}
       </div>
     );
   }
@@ -410,7 +476,7 @@ function renderDirective(block: Extract<ParsedBlock, { kind: 'directive' }>, key
             {attrs.title ?? 'Personal results template'}
           </p>
         </div>
-        {renderMarkdownBlock(body, key)}
+        {renderMarkdownBlock(body, key, linkedTerms)}
       </div>
     );
   }
@@ -477,7 +543,7 @@ function renderDirective(block: Extract<ParsedBlock, { kind: 'directive' }>, key
           {body && (
             <p
               className="text-sm text-muted-foreground mt-1"
-              dangerouslySetInnerHTML={{ __html: renderInline(body) }}
+              dangerouslySetInnerHTML={{ __html: renderInline(body, linkedTerms) }}
             />
           )}
         </div>
@@ -492,7 +558,7 @@ function renderDirective(block: Extract<ParsedBlock, { kind: 'directive' }>, key
   );
 }
 
-function renderMarkdownBlock(content: string, blockKey: number) {
+function renderMarkdownBlock(content: string, blockKey: number, linkedTerms: Set<string>) {
   const paragraphs = content.split(/\n\n+/);
   const elements: ReactNode[] = [];
 
@@ -512,13 +578,24 @@ function renderMarkdownBlock(content: string, blockKey: number) {
 
     if (trimmed.startsWith('## ')) {
       const text = trimmed.slice(3);
+      const numbered = text.match(/^(\d+)\.\s+(.*)$/);
       elements.push(
         <h2
           key={key}
           id={slugify(text)}
-          className="scroll-mt-24 text-xl font-bold mt-8 mb-3 text-foreground"
-          dangerouslySetInnerHTML={{ __html: renderInline(text) }}
-        />,
+          className="scroll-mt-24 mt-8 mb-3 flex items-baseline gap-3 text-xl font-bold text-foreground"
+        >
+          {numbered ? (
+            <>
+              <span className="shrink-0 font-mono text-sm text-accent-cyan" aria-hidden="true">
+                {numbered[1].padStart(2, '0')}
+              </span>
+              <span dangerouslySetInnerHTML={{ __html: renderInline(numbered[2], linkedTerms) }} />
+            </>
+          ) : (
+            <span dangerouslySetInnerHTML={{ __html: renderInline(text, linkedTerms) }} />
+          )}
+        </h2>,
       );
       return;
     }
@@ -530,7 +607,7 @@ function renderMarkdownBlock(content: string, blockKey: number) {
           key={key}
           id={slugify(text)}
           className="scroll-mt-24 text-lg font-semibold mt-6 mb-2 text-foreground"
-          dangerouslySetInnerHTML={{ __html: renderInline(text) }}
+          dangerouslySetInnerHTML={{ __html: renderInline(text, linkedTerms) }}
         />,
       );
       return;
@@ -541,7 +618,7 @@ function renderMarkdownBlock(content: string, blockKey: number) {
         <blockquote
           key={key}
           className="border-l-2 border-accent-cyan/50 pl-4 my-4 text-sm text-muted-foreground italic"
-          dangerouslySetInnerHTML={{ __html: renderInline(trimmed.slice(2)) }}
+          dangerouslySetInnerHTML={{ __html: renderInline(trimmed.slice(2), linkedTerms) }}
         />,
       );
       return;
@@ -551,39 +628,46 @@ function renderMarkdownBlock(content: string, blockKey: number) {
       const rows = trimmed.split('\n').filter((r) => !r.match(/^\|[\s-|]+\|$/));
       const headerCells = rows[0]?.split('|').filter(Boolean).map((c) => c.trim()) ?? [];
       elements.push(
-        <div key={key} className="overflow-x-auto my-4" role="region" aria-label="Data table">
-          <table className="w-full text-sm border-collapse">
-            {rows.length > 0 && (
-              <thead>
-                <tr className="border-b border-border">
-                  {headerCells.map((cell, ci) => (
-                    <th
-                      key={ci}
-                      scope="col"
-                      className="py-2 px-3 text-left text-[10px] font-mono text-muted-foreground uppercase"
-                      dangerouslySetInnerHTML={{ __html: renderInline(cell) }}
-                    />
-                  ))}
-                </tr>
-              </thead>
-            )}
-            <tbody>
-              {rows.slice(1).map((row, ri) => {
-                const cells = row.split('|').filter(Boolean).map((c) => c.trim());
-                return (
-                  <tr key={ri} className="border-b border-border">
-                    {cells.map((cell, ci) => (
-                      <td
+        <div key={key} className="my-4">
+          <div className="overflow-x-auto" role="region" aria-label="Data table">
+            <table className="w-full text-sm border-collapse">
+              {rows.length > 0 && (
+                <thead>
+                  <tr className="border-b border-accent-cyan/20">
+                    {headerCells.map((cell, ci) => (
+                      <th
                         key={ci}
-                        className="py-2 px-3 text-left text-muted-foreground"
-                        dangerouslySetInnerHTML={{ __html: renderInline(cell) }}
+                        scope="col"
+                        className="py-2 px-3 text-left text-[10px] font-mono text-muted-foreground uppercase whitespace-nowrap"
+                        dangerouslySetInnerHTML={{ __html: renderInline(cell, linkedTerms) }}
                       />
                     ))}
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                </thead>
+              )}
+              <tbody>
+                {rows.slice(1).map((row, ri) => {
+                  const cells = row.split('|').filter(Boolean).map((c) => c.trim());
+                  return (
+                    <tr key={ri} className="border-b border-border even:bg-muted/20 hover:bg-muted/40 transition-colors">
+                      {cells.map((cell, ci) => (
+                        <td
+                          key={ci}
+                          className="py-2 px-3 text-left text-muted-foreground"
+                          dangerouslySetInnerHTML={{ __html: renderInline(cell, linkedTerms) }}
+                        />
+                      ))}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          {headerCells.length > 3 && (
+            <p className="mt-1.5 text-[10px] font-mono uppercase tracking-wider text-muted-foreground md:hidden">
+              ← Swipe for more columns →
+            </p>
+          )}
         </div>,
       );
       return;
@@ -594,7 +678,7 @@ function renderMarkdownBlock(content: string, blockKey: number) {
       elements.push(
         <ol key={key} className="list-decimal list-inside space-y-1 my-4 text-sm text-muted-foreground">
           {items.map((item, li) => (
-            <li key={li} dangerouslySetInnerHTML={{ __html: renderInline(item.replace(/^\d+\.\s/, '')) }} />
+            <li key={li} dangerouslySetInnerHTML={{ __html: renderInline(item.replace(/^\d+\.\s/, ''), linkedTerms) }} />
           ))}
         </ol>,
       );
@@ -606,7 +690,7 @@ function renderMarkdownBlock(content: string, blockKey: number) {
       elements.push(
         <ul key={key} className="list-disc list-inside space-y-1 my-4 text-sm text-muted-foreground">
           {items.map((item, li) => (
-            <li key={li} dangerouslySetInnerHTML={{ __html: renderInline(item.slice(2)) }} />
+            <li key={li} dangerouslySetInnerHTML={{ __html: renderInline(item.slice(2), linkedTerms) }} />
           ))}
         </ul>,
       );
@@ -617,7 +701,7 @@ function renderMarkdownBlock(content: string, blockKey: number) {
       <p
         key={key}
         className="text-sm text-muted-foreground leading-relaxed my-3"
-        dangerouslySetInnerHTML={{ __html: renderInline(trimmed) }}
+        dangerouslySetInnerHTML={{ __html: renderInline(trimmed, linkedTerms) }}
       />,
     );
   });
@@ -636,21 +720,23 @@ export function MdxRenderer({
 }) {
   const blocks = parseBlocks(content);
   const elements: ReactNode[] = [];
+  const linkedTerms = new Set<string>();
 
   blocks.forEach((block, i) => {
     if (block.kind === 'directive') {
-      elements.push(renderDirective(block, i));
+      elements.push(renderDirective(block, i, linkedTerms));
     } else {
-      elements.push(<div key={i}>{renderMarkdownBlock(block.content, i)}</div>);
+      elements.push(<div key={i}>{renderMarkdownBlock(block.content, i, linkedTerms)}</div>);
     }
   });
 
   const headings = showToc ? extractHeadings(content) : [];
   const pmids = showReferences ? extractPmids(content) : [];
+  const readingMinutes = estimateReadingMinutes(content);
 
   return (
     <article className="max-w-none">
-      {headings.length >= 3 && <TableOfContents headings={headings} />}
+      {headings.length >= 3 && <TableOfContents headings={headings} readingMinutes={readingMinutes} />}
       {elements}
       {pmids.length > 0 && <ReferencesSection pmids={pmids} />}
     </article>

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { getAllModuleParams } from '@/lib/library-modules';
+import { peptideLibrary } from '@/lib/peptides-library';
 import { getAllComparisonSlugs } from '@/lib/comparisons';
 import { PRESET_KEYS } from '@/lib/quiz-share';
 import { toolsRegistry } from '@/lib/registry';
@@ -14,8 +15,10 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
   const coreRoutes: MetadataRoute.Sitemap = [
     { url: base, lastModified, changeFrequency: 'weekly', priority: 1 },
     { url: `${base}/library`, lastModified, changeFrequency: 'weekly', priority: 0.95 },
+    { url: `${base}/peptides`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/library/delivery-systems`, lastModified, changeFrequency: 'monthly', priority: 0.84 },
     { url: `${base}/library/systems`, lastModified, changeFrequency: 'monthly', priority: 0.84 },
+    { url: `${base}/library/top-picks`, lastModified, changeFrequency: 'monthly', priority: 0.85 },
     { url: `${base}/library/compare`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/learn`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/faq`, lastModified, changeFrequency: 'monthly', priority: 0.85 },
@@ -81,6 +84,13 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     priority: 0.88,
   }));
 
+  const peptideRoutes = peptideLibrary.map((p) => ({
+    url: `${base}/peptides/${p.slug}`,
+    lastModified,
+    changeFrequency: 'monthly' as const,
+    priority: 0.85,
+  }));
+
   const quizShareRoutes = PRESET_KEYS.map((preset) => ({
     url: `${base}/quiz/share/${preset}`,
     lastModified,
@@ -103,5 +113,6 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     ...hallmarkDeepDiveRoutes,
     ...compareRoutes,
     ...moduleRoutes,
+    ...peptideRoutes,
   ];
 }

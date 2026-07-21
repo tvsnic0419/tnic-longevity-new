@@ -1,6 +1,7 @@
 'use client';
 
-import { AlertTriangle, Link2, ShieldAlert, Sparkles } from 'lucide-react';
+import { useState } from 'react';
+import { AlertTriangle, ChevronDown, Link2, ShieldAlert, Sparkles } from 'lucide-react';
 import type { StackAnalysis, StackInteraction } from '@/lib/stack-analysis';
 import { cn } from '@/lib/utils';
 import { GlassPanel } from '@/components/ui/GlassPanel';
@@ -17,6 +18,7 @@ interface StackInteractionsPanelProps {
 }
 
 export function StackInteractionsPanel({ analysis, className = '' }: StackInteractionsPanelProps) {
+  const [showAllConsultIf, setShowAllConsultIf] = useState(false);
   const synergyInteractions = analysis.interactions.filter((i) => i.type === 'synergy');
   const cautionInteractions = analysis.interactions.filter((i) => i.type !== 'synergy');
 
@@ -75,15 +77,24 @@ export function StackInteractionsPanel({ analysis, className = '' }: StackIntera
                 </div>
               </div>
             ))}
-            {analysis.consultIf.slice(0, 4).map((c) => (
+            {(showAllConsultIf ? analysis.consultIf : analysis.consultIf.slice(0, 4)).map((c) => (
               <p key={c} className="text-xs text-muted-foreground pl-5">
                 • {c}
               </p>
             ))}
             {analysis.consultIf.length > 4 && (
-              <p className="text-[10px] font-mono text-caption pl-5">
-                +{analysis.consultIf.length - 4} more — export for full list
-              </p>
+              <button
+                type="button"
+                onClick={() => setShowAllConsultIf((prev) => !prev)}
+                className="focus-ring interactive flex items-center gap-1 text-[10px] font-mono text-accent-amber pl-5 uppercase tracking-wide"
+                aria-expanded={showAllConsultIf}
+              >
+                <ChevronDown
+                  className={cn('w-3 h-3 transition-transform', showAllConsultIf && 'rotate-180')}
+                  aria-hidden="true"
+                />
+                {showAllConsultIf ? 'Show less' : `+${analysis.consultIf.length - 4} more — show all`}
+              </button>
             )}
           </div>
         </GlassPanel>

@@ -19,14 +19,14 @@
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| `--color-bg-base` | `#030712` | Page background |
-| `--color-bg-elevated` | `#0a0f1a` | Gradient-border cards |
+| `--color-bg-base` | `#020811` | Page background |
+| `--color-bg-elevated` | `#080f1c` | Gradient-border cards |
 | `--color-text-primary` | `#fafafa` | Headings, values |
 | `--color-text-secondary` | `#d4d4d8` | Body copy (AA on base) |
 | `--color-text-muted` | `#a1a1aa` | Supporting text |
-| `--color-text-faint` | `#71717a` | Labels, captions |
-| `--color-border-subtle` | `rgba(255,255,255,0.06)` | Card borders |
-| `--color-border-focus` | `rgba(34,211,238,0.6)` | Focus rings |
+| `--color-text-faint` | `#8b8c96` | Labels, captions (bumped from `#71717a` to clear WCAG AA 4.5:1 on the base) |
+| `--color-border-subtle` | `rgba(255,255,255,0.07)` | Card borders |
+| `--color-border-focus` | `rgba(0,224,255,0.75)` | Focus rings |
 
 ### Theme accents (one per hub/section)
 

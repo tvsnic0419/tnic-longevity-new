@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, ExternalLink, CheckCircle2, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
+import { GuideHeroPanel } from '@/components/guides/GuideHeroPanel';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
@@ -150,53 +151,54 @@ function buildSulforaphaneSchemas() {
 
 export default function SulforaphaneGuidePage() {
   return (
-    <SubPageLayout>
+    <SubPageLayout hideContextBar>
       <StructuredData schemas={buildSulforaphaneSchemas()} />
 
       {/* Hero */}
       <section className="py-16 md:py-20 border-b border-border">
-        <div className="container-page max-w-4xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-emerald/10 border border-accent-emerald/20 mb-6">
-            <ShieldCheck className="w-3.5 h-3.5 text-accent-emerald" aria-hidden="true" />
-            <span className="text-xs font-mono text-accent-emerald uppercase tracking-wider">Evidence Tier A · NRF2 Activator · Sulforaphane</span>
-          </div>
-
-          <h1 className="heading-hero mb-4">
-            Sulforaphane Supplement Guide 2026
-          </h1>
-          <p className="text-xl text-muted-foreground mb-6 max-w-2xl">
-            The most potent known natural activator of NRF2 — the transcription factor that switches on 200+ cytoprotective genes. Here is what broccoli sprout extract actually does, how to take it, and why form matters enormously.
-          </p>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-            {[
-              { value: '200+', label: 'Genes activated via NRF2', color: 'text-accent-emerald' },
-              { value: '10–100×', label: 'Sprouts vs. mature broccoli', color: 'text-accent-cyan' },
-              { value: '~4h', label: 'NRF2 peak post-dose', color: 'text-accent-violet' },
-              { value: 'Tier A', label: 'Evidence tier', color: 'text-accent-rose' },
-            ].map((stat) => (
-              <div key={stat.label} className="rounded-xl border border-border/60 bg-card p-4 text-center">
-                <p className={`text-xl font-bold font-mono ${stat.color}`}>{stat.value}</p>
-                <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
+        <div className="container-page max-w-6xl">
+          <div className="grid items-center gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-emerald/10 border border-accent-emerald/20 mb-6">
+                <ShieldCheck className="w-3.5 h-3.5 text-accent-emerald" aria-hidden="true" />
+                <span className="text-xs font-mono text-accent-emerald uppercase tracking-wider">Evidence Tier A · NRF2 Activator · Sulforaphane</span>
               </div>
-            ))}
-          </div>
 
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/library/compounds/sulforaphane"
-              className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-accent-emerald text-bg-base font-semibold text-sm hover:bg-accent-emerald/90 transition"
-            >
-              Compound deep-dive
-              <ArrowRight className="w-4 h-4" aria-hidden="true" />
-            </Link>
-            <Link
-              href="/library/compare/sulforaphane-vs-curcumin"
-              className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-border/60 bg-card text-foreground font-medium text-sm hover:border-accent-emerald/30 transition"
-            >
-              Sulforaphane vs Curcumin
-              <ArrowRight className="w-4 h-4" aria-hidden="true" />
-            </Link>
+              <h1 className="heading-hero mb-4">
+                Sulforaphane Supplement Guide 2026
+              </h1>
+              <p className="text-xl text-muted-foreground mb-6 max-w-2xl">
+                The most potent known natural activator of NRF2 — the transcription factor that switches on 200+ cytoprotective genes. Here is what broccoli sprout extract actually does, how to take it, and why form matters enormously.
+              </p>
+
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/library/compounds/sulforaphane"
+                  className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-accent-emerald text-bg-base font-semibold text-sm hover:bg-accent-emerald/90 transition"
+                >
+                  Compound deep-dive
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </Link>
+                <Link
+                  href="/library/compare/sulforaphane-vs-curcumin"
+                  className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-border/60 bg-card text-foreground font-medium text-sm hover:border-accent-emerald/30 transition"
+                >
+                  Sulforaphane vs Curcumin
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </Link>
+              </div>
+            </div>
+            <div className="lg:col-span-5">
+              <GuideHeroPanel
+                glowColor="var(--accent-emerald)"
+                stats={[
+                  { value: '200+', label: 'Genes activated via NRF2', colorClass: 'text-accent-emerald' },
+                  { value: '10–100×', label: 'Sprouts vs. mature broccoli', colorClass: 'text-accent-cyan' },
+                  { value: '~4h', label: 'NRF2 peak post-dose', colorClass: 'text-accent-violet' },
+                  { value: 'Tier A', label: 'Evidence tier', colorClass: 'text-accent-rose' },
+                ]}
+              />
+            </div>
           </div>
         </div>
       </section>

@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { Search, ArrowRight, Library, Network } from 'lucide-react';
+import { Search, ArrowRight, Library, Network, Trophy } from 'lucide-react';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { HallmarkVisual } from './HallmarkVisual';
@@ -39,7 +39,7 @@ export function AntiAgingLibrary({ asPageTitle = false }: AntiAgingLibraryProps)
     <section
       id="anti-aging-library"
       aria-labelledby="library-heading"
-      className="py-8 md:py-12 bg-background border-b border-border"
+      className="py-8 md:py-12 canvas-scrim border-b border-border"
     >
       <div className="container-page">
         <PageHeader
@@ -53,14 +53,22 @@ export function AntiAgingLibrary({ asPageTitle = false }: AntiAgingLibraryProps)
           as={asPageTitle ? 'h1' : 'h2'}
         />
 
-        {/* Systems Map CTA */}
-        <div className="flex justify-center mb-6">
+        {/* Systems Map + Top Picks CTAs */}
+        <div className="flex flex-wrap justify-center gap-3 mb-6">
           <Link
             href="/library/systems"
             className="inline-flex items-center gap-2 text-sm font-semibold text-accent-violet glass glass-hover px-5 py-2.5 rounded-full glow-hover-violet transition"
           >
             <Network className="w-4 h-4" />
             Explore Systems Map — cross-hallmark synthesis
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+          <Link
+            href="/library/top-picks"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-accent-emerald glass glass-hover px-5 py-2.5 rounded-full glow-hover-emerald transition"
+          >
+            <Trophy className="w-4 h-4" />
+            Top Picks — Sirtuin, PARP & NRF2
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>

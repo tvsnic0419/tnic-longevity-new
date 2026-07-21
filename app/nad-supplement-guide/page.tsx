@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, FlaskConical, ShieldCheck, Clock, ExternalLink, CheckCircle2, AlertTriangle, Zap } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
+import { GuideHeroPanel } from '@/components/guides/GuideHeroPanel';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata } from '@/lib/seo';
 import { buildBreadcrumbSchema } from '@/lib/seo';
@@ -176,53 +177,53 @@ function buildNadGuideSchemas() {
 
 export default function NadSupplementGuidePage() {
   return (
-    <SubPageLayout>
+    <SubPageLayout hideContextBar>
       <StructuredData schemas={buildNadGuideSchemas()} />
 
       {/* Hero */}
       <section className="py-14 md:py-20 border-b border-border bg-[#020811]">
-        <div className="container-page max-w-4xl">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="text-[10px] font-mono font-semibold uppercase tracking-widest text-accent-cyan bg-accent-cyan/10 border border-accent-cyan/20 px-3 py-1 rounded-full">
-              Evidence Guide · Updated 2026
-            </span>
-          </div>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-5 leading-[1.1]">
-            NAD<span className="text-accent-cyan">+</span> Supplement Guide 2026
-          </h1>
-          <p className="text-lg text-muted-foreground leading-relaxed mb-8 max-w-2xl">
-            NAD+ declines ~50% by age 60. Restoring it activates sirtuins, accelerates DNA repair,
-            and supports mitochondrial energy production — but only if you choose the right precursor
-            at the right dose. Here’s what the human trials actually show.
-          </p>
-          <div className="flex flex-wrap gap-4 mb-10">
-            <Link
-              href="/library/compare/nmn-vs-nr"
-              className="inline-flex items-center gap-2 bg-accent-cyan/10 border border-accent-cyan/25 text-accent-cyan px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-accent-cyan/20 transition"
-            >
-              NMN vs NR — full comparison <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link
-              href="/library/compounds/nmn"
-              className="inline-flex items-center gap-2 glass px-5 py-2.5 rounded-xl text-sm font-semibold text-muted-foreground hover:text-foreground transition"
-            >
-              NMN deep dive <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          {/* Key stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {[
-              { val: '~50%', label: 'NAD+ decline by age 60' },
-              { val: '38%', label: 'NAD+ boost — NMN 250 mg/day (Igarashi 2022)' },
-              { val: 'Tier A', label: 'Evidence grade for NMN + NR' },
-              { val: '3', label: 'Human-studied NAD+ precursors reviewed' },
-            ].map((s) => (
-              <div key={s.label} className="rounded-xl border border-border/60 bg-accent-cyan/[0.04] p-4 text-center">
-                <p className="text-2xl font-bold text-accent-cyan tabular-nums">{s.val}</p>
-                <p className="text-[10px] font-mono text-muted-foreground mt-1 leading-tight">{s.label}</p>
+        <div className="container-page max-w-6xl">
+          <div className="grid items-center gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-[10px] font-mono font-semibold uppercase tracking-widest text-accent-cyan bg-accent-cyan/10 border border-accent-cyan/20 px-3 py-1 rounded-full">
+                  Evidence Guide · Updated 2026
+                </span>
               </div>
-            ))}
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-5 leading-[1.1]">
+                NAD<span className="text-accent-cyan">+</span> Supplement Guide 2026
+              </h1>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-8 max-w-2xl">
+                NAD+ declines ~50% by age 60. Restoring it activates sirtuins, accelerates DNA repair,
+                and supports mitochondrial energy production — but only if you choose the right precursor
+                at the right dose. Here’s what the human trials actually show.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Link
+                  href="/library/compare/nmn-vs-nr"
+                  className="inline-flex items-center gap-2 bg-accent-cyan/10 border border-accent-cyan/25 text-accent-cyan px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-accent-cyan/20 transition"
+                >
+                  NMN vs NR — full comparison <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  href="/library/compounds/nmn"
+                  className="inline-flex items-center gap-2 glass px-5 py-2.5 rounded-xl text-sm font-semibold text-muted-foreground hover:text-foreground transition"
+                >
+                  NMN deep dive <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+            <div className="lg:col-span-5">
+              <GuideHeroPanel
+                glowColor="var(--accent-cyan)"
+                headline={{ score: 50, label: 'NAD+ DECLINE', sublabel: 'by age 60', color: 'var(--accent-cyan)' }}
+                stats={[
+                  { value: '38%', label: 'NAD+ boost — NMN 250 mg/day (Igarashi 2022)', colorClass: 'text-accent-cyan' },
+                  { value: 'Tier A', label: 'Evidence grade for NMN + NR', colorClass: 'text-accent-cyan' },
+                  { value: '3', label: 'Human-studied NAD+ precursors reviewed', colorClass: 'text-accent-cyan' },
+                ]}
+              />
+            </div>
           </div>
         </div>
       </section>

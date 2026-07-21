@@ -11,6 +11,7 @@ import {
   ResponsiveContainer,
   Cell,
 } from 'recharts';
+import { axisProps, barCursor, tooltipContentStyle, tooltipItemStyle, tooltipLabelStyle } from '@/components/ui/ChartKit';
 import { Sun, Moon, Brain, Sparkles, ChevronRight, FlaskConical } from 'lucide-react';
 import Link from 'next/link';
 import { usePlatform } from '@/context/PlatformContext';
@@ -329,14 +330,12 @@ export function ProtocolEngineTool() {
                 <ResponsiveContainer width="100%" height={180}>
                   <BarChart data={chartData} layout="vertical" margin={{ left: 8 }}>
                     <XAxis type="number" domain={[0, 100]} hide />
-                    <YAxis type="category" dataKey="name" tick={{ fill: 'var(--color-text-faint)', fontSize: 10 }} width={28} />
+                    <YAxis type="category" dataKey="name" {...axisProps} width={28} />
                     <Tooltip
-                      contentStyle={{
-                        background: 'var(--color-bg-elevated)',
-                        border: '1px solid var(--color-border-subtle)',
-                        borderRadius: 8,
-                        fontSize: 12,
-                      }}
+                      contentStyle={tooltipContentStyle}
+                      itemStyle={tooltipItemStyle}
+                      labelStyle={tooltipLabelStyle}
+                      cursor={barCursor}
                       formatter={(v) => [`${v}`, 'Priority']}
                       labelFormatter={(_, payload) => payload?.[0]?.payload?.title ?? ''}
                     />

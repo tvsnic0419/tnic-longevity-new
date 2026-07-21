@@ -449,6 +449,13 @@ export const disclaimers: DisclaimerBlock[] = [
     appliesTo: ['Rapamycin Combo stack', 'Clinical-tier protocols'],
   },
   {
+    id: 'peptides-legal-status',
+    title: 'Peptide Legal Status Varies Widely — Read Before Sourcing',
+    severity: 'legal',
+    body: 'Peptides on this site span very different legal categories. Semaglutide and tirzepatide are FDA-approved prescription drugs — legitimate use requires a prescription and pharmacy dispensing. Most others (BPC-157, GHK-Cu injectable, Epithalon, Thymosin Alpha-1, GH secretagogues, MOTS-c, Humanin) have no FDA-approved human-use pathway in the US and are sold almost exclusively as "research chemicals, not for human consumption" — a real legal designation, not a formality. BPC-157 specifically lost its compounding-pharmacy pathway when the FDA placed it on the 2023 bulk-substances exclusion list. TNiC does not sell, source, or recommend acquiring any peptide, and describes legal status per peptide for harm-reduction and accuracy — not as sourcing guidance.',
+    appliesTo: ['/peptides hub', 'Every peptide detail page'],
+  },
+  {
     id: 'supplement-quality',
     title: 'Third-Party Product Quality',
     severity: 'info',

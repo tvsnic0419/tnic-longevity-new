@@ -93,7 +93,7 @@ export function Nav() {
           href="/"
           className="focus-ring interactive flex items-center rounded-xl shrink-0 group transition-transform hover:scale-[1.02]"
         >
-          <Logo variant="lockup" size="nav" alt="TNiC – Longevity OS · Home" />
+          <Logo variant="lockup" size="nav" alt="TNiC – Longevity Intelligence · Home" />
         </Link>
 
         <div className="hidden lg:flex gap-0.5 xl:gap-1">
@@ -141,7 +141,7 @@ export function Nav() {
             </Link>
           </GlassPanel>
           <Link href="/dashboard" className="focus-ring btn-gradient text-sm !py-2.5 !px-5 !min-h-0 rounded-full">
-            Open OS
+            Dashboard
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </Link>
         </div>
@@ -226,7 +226,7 @@ export function Nav() {
                   onClick={() => setMobileOpen(false)}
                   className="focus-ring btn-gradient text-sm text-center justify-center"
                 >
-                  Open Longevity OS
+                  Open Dashboard
                 </Link>
               </div>
             </div>

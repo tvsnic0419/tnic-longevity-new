@@ -3,6 +3,9 @@ import Link from 'next/link';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Shield } from 'lucide-react';
+import { getHallmarkBySlug } from '@/lib/hallmarks-library';
+import { InterventionCards } from '@/components/hallmarks/InterventionCards';
+import { HallmarkHeroVisual } from '@/components/hallmarks/HallmarkHeroVisual';
 
 export const metadata: Metadata = {
   title: 'Chronic Inflammation (Inflammaging) | Hallmarks of Aging | TNiC',
@@ -14,54 +17,6 @@ export const metadata: Metadata = {
   },
 };
 
-const INTERVENTIONS = [
-  {
-    name: 'Sulforaphane (NRF2 / NF-κB)',
-    tier: 'A',
-    dose: '30–60 mg glucoraphanin or 10–30 mg SFN daily; best from fresh broccoli sprouts or standardized extract',
-    mechanism:
-      'The most mechanistically complete anti-inflammatory compound with human evidence. NRF2 activation upregulates HO-1, NQO1, and GCLC — which neutralize the ROS that drive NF-κB activation. Simultaneously, NRF2 directly suppresses NF-κB transcriptional activity via IκBα. A human airway study (PMID: 27356680) demonstrated significant CRP and IL-6 reduction.',
-    pmids: ['27356680', '28515065'],
-    tier_color: 'emerald',
-  },
-  {
-    name: 'GlyNAC (Glutathione / Oxidative Stress)',
-    tier: 'A',
-    dose: '600 mg glycine + 600 mg NAC daily',
-    mechanism:
-      'Oxidative stress is the upstream activator of NF-κB. When ROS oxidize IκB kinase (IKK), it phosphorylates IκB, releasing NF-κB to the nucleus. GlyNAC rebuilds glutathione — the primary intracellular ROS scavenger — breaking this chain at its root. Three human RCTs confirm reduced inflammatory markers alongside oxidative stress restoration.',
-    pmids: ['36656670', '35975308'],
-    tier_color: 'emerald',
-  },
-  {
-    name: 'Omega-3 (EPA + DHA)',
-    tier: 'A',
-    dose: '2–4 g EPA+DHA daily; fish oil or algae-based',
-    mechanism:
-      'EPA and DHA are precursors to specialized pro-resolving mediators (SPMs): resolvins, protectins, and maresins. SPMs actively terminate inflammation by clearing cellular debris, reducing neutrophil infiltration, and reprogramming macrophages from M1 (pro-inflammatory) to M2 (resolving) phenotype. The REDUCE-IT trial (PMID: 30145941) showed 25% reduction in MACE with 4g icosapentaenoic acid.',
-    pmids: ['30145941', '33167080'],
-    tier_color: 'emerald',
-  },
-  {
-    name: 'Zone 2 + Resistance Exercise',
-    tier: 'A',
-    dose: '150+ min/week Zone 2; 2–3× resistance training',
-    mechanism:
-      'Exercise has a biphasic inflammatory effect: acute transient IL-6 spike triggers sustained anti-inflammatory IL-10 and IL-1Ra. Chronic training reprograms macrophage phenotype, reduces visceral adipose (major SASP source), and upregulates NRF2 in skeletal muscle. Sedentary individuals have 30–50% higher hs-CRP than aerobically fit age-matched controls.',
-    pmids: ['29204594'],
-    tier_color: 'emerald',
-  },
-  {
-    name: 'Resveratrol (SIRT1 / NF-κB)',
-    tier: 'B',
-    dose: '250–500 mg daily',
-    mechanism:
-      'SIRT1 deacetylates the p65 subunit of NF-κB at K310, suppressing its transcriptional activity without blocking upstream signaling. This is a particularly targeted anti-inflammatory mechanism — it reduces chronic NF-κB output while preserving acute inflammatory responses needed for infection defense.',
-    pmids: ['17909917'],
-    tier_color: 'amber',
-  },
-];
-
 const BIOMARKERS = [
   { name: 'hs-CRP', normal: '< 1.0 mg/L (optimal longevity); < 3.0 mg/L (low CV risk)', note: 'Most accessible inflammaging marker; included in standard lipid panels; re-test quarterly' },
   { name: 'IL-6 (serum)', normal: '< 3.0 pg/mL', note: 'Primary driver of CRP production in liver; tracks SASP intensity more directly than CRP' },
@@ -72,13 +27,17 @@ const BIOMARKERS = [
 ];
 
 export default function ChronicInflammationPage() {
+  const hallmark = getHallmarkBySlug('chronic-inflammation')!;
+
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen canvas-scrim text-foreground">
       <Nav />
       <main id="main-content" tabIndex={-1}>
         <section className="pt-28 pb-16 md:pt-36 md:pb-20 relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,color-mix(in_srgb,var(--accent-rose)_10%,transparent),transparent)]" />
-          <div className="relative container-page max-w-4xl">
+          <div className="relative container-page max-w-6xl">
+            <div className="grid items-center gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-7">
             <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
               <Link href="/hallmarks" className="hover:text-foreground transition-colors">Hallmarks</Link>
               <span>/</span>
@@ -98,6 +57,11 @@ export default function ChronicInflammationPage() {
             <div className="flex flex-wrap gap-3">
               <Link href="/stacks" className="inline-flex items-center gap-2 bg-rose-500 text-white px-5 py-3 rounded-xl text-sm font-bold hover:bg-rose-400 transition-colors">Build My Stack <ArrowRight className="w-4 h-4" /></Link>
               <Link href="/labs" className="inline-flex items-center gap-2 border border-border px-5 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Track hs-CRP</Link>
+            </div>
+            </div>
+            <div className="lg:col-span-5">
+              <HallmarkHeroVisual hallmark={hallmark} />
+            </div>
             </div>
           </div>
         </section>
@@ -176,25 +140,7 @@ export default function ChronicInflammationPage() {
             </div>
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-2">Anti-inflammaging interventions with human evidence</h2>
             <p className="text-muted-foreground mb-8">Tier A = multiple human RCTs. Tier B = at least one human trial + mechanistic data.</p>
-            <div className="space-y-5">
-              {INTERVENTIONS.map((iv) => (
-                <div key={iv.name} className="rounded-2xl border border-border/60 bg-card/40 p-6">
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <h3 className="font-bold text-foreground text-lg">{iv.name}</h3>
-                    <span className={`shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold ${iv.tier === 'A' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'}`}>
-                      Tier {iv.tier}
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">{iv.mechanism}</p>
-                  <div className="flex flex-wrap gap-3 text-xs">
-                    <span className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-muted-foreground"><strong className="text-foreground">Dose:</strong> {iv.dose}</span>
-                    {iv.pmids.map((pmid) => (
-                      <a key={pmid} href={`https://pubmed.ncbi.nlm.nih.gov/${pmid}/`} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-cyan-400 hover:border-cyan-500/40 transition-colors">PMID {pmid}</a>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <InterventionCards interventions={hallmark.interventions} />
           </div>
         </section>
 

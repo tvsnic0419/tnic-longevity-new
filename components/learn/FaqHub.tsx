@@ -31,9 +31,10 @@ export function FaqHub() {
         icon={HelpCircle}
         eyebrow="Learn"
         title="Frequently Asked Questions"
-        description="Thirty-three expert answers about TNiC protocols, compound science, safety, evidence tiers, data privacy, and how we differ from supplement stores."
+        description={`${consumerFAQ.length} expert answers about TNiC protocols, compound and peptide science, safety, evidence tiers, data privacy, and how we differ from supplement stores.`}
         align="left"
         context={getHubContext('faq')}
+        contextVariant="compact"
       />
 
       <div className="flex flex-wrap gap-2 mb-8">

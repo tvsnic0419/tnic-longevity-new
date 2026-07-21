@@ -1,8 +1,9 @@
 import type { ThemeAccent } from './design-system';
 import type { ToolId } from './registry';
 import type { LibraryModule, LibraryModuleCategory } from './library-modules';
-import type { HallmarkLibraryEntry } from './types';
+import type { HallmarkLibraryEntry, Peptide } from './types';
 import type { EvidenceComparison } from './comparisons';
+import { consumerFAQ } from './data';
 
 export interface HubContext {
   what: string;
@@ -42,7 +43,9 @@ export const hubContexts: Record<
   | 'trust'
   | 'faq'
   | 'contact'
-  | 'deliverySystems',
+  | 'deliverySystems'
+  | 'peptides'
+  | 'topPicks',
   HubContextEntry
 > = {
   dashboard: {
@@ -125,7 +128,7 @@ export const hubContexts: Record<
   },
   faq: {
     theme: 'cyan',
-    what: 'Twenty-five curated answers on protocols, safety, evidence tiers, and how TNiC differs from supplement stores.',
+    what: `${consumerFAQ.length} curated answers on protocols, safety, evidence tiers, and how TNiC differs from supplement stores.`,
     why: 'Smart consumers ask hard questions before spending on compounds. Honest FAQ beats marketing copy every time.',
     next: 'Filter by your concern (Safety or Products), then follow links to the Learn hub or Protocol Shop verification.',
   },
@@ -140,6 +143,18 @@ export const hubContexts: Record<
     what: 'Comparison guide for lipid delivery technologies — liposomes, phytosomes, NLCs, and LNPs — and when each improves bioavailability.',
     why: 'Premium brands charge more for liposomal labels that may not improve absorption. Delivery chemistry determines whether dose dollars work.',
     next: 'Match your compound to phytosome or NLC rows, then verify branded forms at Protocol Shop before buying.',
+  },
+  peptides: {
+    theme: 'rose',
+    what: 'Eight of the most-discussed anti-aging peptides — evidence tier, mechanism, and legal status (FDA-approved vs. compounding-restricted vs. research-use-only) stated plainly for each.',
+    why: 'Peptides span a wider legal and evidence range than oral supplements in one catalog. Sorting by pathway alone hides that a Tier-A prescription drug and an unregulated research chemical are very different decisions.',
+    next: 'Read the legal-status banner on any peptide before anything else, then check its related hallmark for compounds with a deeper human evidence base.',
+  },
+  topPicks: {
+    theme: 'emerald',
+    what: "TNiC's highest-conviction compound picks across three overlapping pathways — sirtuin activation, PARP/DNA-repair support, and NRF2 antioxidant signaling.",
+    why: 'The same NAD+ pool fuels both sirtuins and PARP, and NRF2 activation both switches on antioxidant genes and reduces the DNA damage those repair pathways face — picks here reflect that shared biology instead of treating each pathway in isolation.',
+    next: 'Open a pick to read its full compound module, then check the Systems Map for how these pathways interact with the rest of the hallmarks.',
   },
 };
 
@@ -283,10 +298,73 @@ const moduleSlugOverrides: Partial<Record<string, Partial<HubContext>>> = {
   'nad-mito-stack': {
     next: 'Ramp Ca-AKG per module schedule, simulate full stack in Tools, log NAD+ index at 12 weeks.',
   },
+  'glynac-nrf2-triad': {
+    next: 'Run the AM choreography (GlyNAC → 20 min → sulforaphane → breakfast + R-ALA) for 24 weeks; log GSH and hs-CRP at baseline, week 12, and week 24 in Labs.',
+  },
+  'nmn-resveratrol-sirt1': {
+    next: 'Titrate NMN AM fasted and resveratrol PM with fat over 4 weeks; log a baseline NAD+ index now and retest at week 4.',
+  },
+  exercise: {
+    next: 'Establish your Zone 2 heart-rate zone with one 30-minute session this week, then log resting HR and hs-CRP in Labs before adding resistance or VO2max work.',
+  },
+  sleep: {
+    next: 'Fix your wake time first — don’t touch bedtime yet — and log actual sleep duration nightly; add outdoor AM light on day 4.',
+  },
+  nutrition: {
+    next: 'Log your current eating window and fiber grams for 3 days with no other changes, then tighten to a 10-hour window and add one high-fiber food.',
+  },
+  stress: {
+    next: 'Record a 7-day HRV baseline each morning in the same position, then add one 5-minute box-breathing session before extending to full biofeedback.',
+  },
+  'testing-and-monitoring': {
+    next: 'Order the Tier 1 baseline panel first, log results in Lab Hub, and set retest reminders from the cadence matrix before adding Tier 2 markers.',
+  },
   rapamycin: {
     what: 'Educational deep-dive on mTORC1 inhibition — prescription-only, physician-supervised contexts only.',
     why: 'Rapamycin has the strongest preclinical lifespan data but serious immunosuppressive risks. This module is for informed physician discussions.',
     next: 'Complete physician checklist in module, do not self-source — read disclaimers before any discussion.',
+  },
+  sulforaphane: {
+    next: 'See how this ranks against other NRF2 and PARP-support picks at /library/top-picks, then verify broccoli-sprout-extract form at shop.',
+  },
+  resveratrol: {
+    next: 'Compare against Pterostilbene\'s bioavailability advantage at /library/top-picks before choosing a form.',
+  },
+  pterostilbene: {
+    next: 'See the full Sirtuin Activation ranking at /library/top-picks, then verify micronized/liposomal form at shop.',
+  },
+  rala: {
+    next: 'See how this ranks for NRF2 support at /library/top-picks, then log GSH alongside 8-OHdG in Labs.',
+  },
+  tudca: {
+    next: 'Simulate alongside NAD+/mitochondrial compounds in Stack Architect, then verify UDCA-content purity at Protocol Shop.',
+  },
+  grapeseed: {
+    next: 'Log hs-CRP and a lipid panel in Labs — the endothelial and oxidative markers this compound is meant to move.',
+  },
+  cakg: {
+    next: 'Compare against Spermidine\'s autophagy-first approach at the Ca-AKG vs Spermidine comparison, then verify calcium-salt form at Protocol Shop.',
+  },
+  taurine: {
+    next: 'Compare against NMN\'s approach to the same mitochondrial-buffer hallmark at Taurine vs NMN, then verify pharmaceutical-grade sourcing at Protocol Shop.',
+  },
+  spermidine: {
+    next: 'Compare against Ca-AKG\'s epigenetic-cofactor approach at Ca-AKG vs Spermidine, then verify wheat-germ-extract purity at Protocol Shop.',
+  },
+  berberine: {
+    next: 'See the metformin head-to-head at Berberine vs Metformin, then verify dihydroberberine form (5x bioavailability) at Protocol Shop.',
+  },
+  urolithina: {
+    next: 'Compare against CoQ10\'s electron-transport-chain approach at Urolithin A vs CoQ10, then verify Mitopure-licensed form at Protocol Shop.',
+  },
+  fisetin: {
+    next: 'See the quercetin comparison at Fisetin vs Quercetin, then verify the pulse-dose protocol (2 consecutive days/month) at Protocol Shop.',
+  },
+  coq10: {
+    next: 'Compare ubiquinol vs ubiquinone forms at CoQ10 vs Ubiquinol, then verify statin-interaction dosing at Protocol Shop.',
+  },
+  omega3: {
+    next: 'Compare against krill oil\'s phospholipid-bound form at Omega-3 vs Krill Oil, then verify EPA:DHA ratio and third-party oxidation testing at Protocol Shop.',
   },
 };
 
@@ -326,6 +404,24 @@ export function getHallmarkContext(hallmark: HallmarkLibraryEntry): HubContext {
     next: top
       ? `Top intervention: ${top.name} (Tier ${top.evidence}). Open linked module, add to stack, log ${hallmark.biomarkers.slice(0, 2).join(' or ') || 'relevant markers'} in Labs.`
       : 'Review ranked interventions below, then open linked library modules.',
+  };
+}
+
+export function getPeptideContext(peptide: Peptide): HubContext {
+  const legalNote =
+    peptide.legalStatus === 'fda-approved-rx'
+      ? 'It is FDA-approved for a specific indication — the longevity use discussed here is off-label.'
+      : peptide.legalStatus === 'compounding-restricted'
+        ? 'It has no legal US compounding pathway — sourcing means an unregulated research-chemical vendor.'
+        : 'It has no FDA-approved human-use pathway — sourcing means an unregulated research-chemical vendor.';
+
+  return {
+    what: `${peptide.name} (Tier ${peptide.evidenceTier}) — ${peptide.tagline}`,
+    why: `${legalNote} Evidence quality and legal status are independent questions; both are covered in full below.`,
+    next:
+      peptide.relatedHallmarkIds.length > 0
+        ? 'Read the mechanism and safety sections below, then check the related hallmark for compounds with a deeper human evidence base.'
+        : 'Read the mechanism and safety sections below before treating this as anything more than exploratory.',
   };
 }
 

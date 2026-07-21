@@ -42,9 +42,9 @@ export function MarkerChart({ markerId, entries, height = 120 }: MarkerChartProp
   const status = getLabStatus(markerId, latest.value);
 
   const statusStroke = {
-    optimal: '#34d399',
-    watch: '#fbbf24',
-    critical: '#fb7185',
+    optimal: 'var(--status-optimal)',
+    watch: 'var(--status-watch)',
+    critical: 'var(--status-critical)',
   }[status];
 
   return (
@@ -55,7 +55,8 @@ export function MarkerChart({ markerId, entries, height = 120 }: MarkerChartProp
           y={toY(range.max)}
           width={w - pad * 2}
           height={Math.max(2, toY(range.min) - toY(range.max))}
-          fill="rgba(52,211,153,0.08)"
+          fill="var(--status-optimal)"
+          fillOpacity={0.08}
           rx={2}
         />
       )}

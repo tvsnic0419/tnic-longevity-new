@@ -35,6 +35,11 @@ export function LongevityGaugeArc({
   const cx = size / 2;
   const cy = size * 0.57;         // slightly below center so the arc reads well
   const sw = size * 0.055;        // stroke width
+  // The sublabel line sits below the primary label and needs more headroom
+  // than the arc's own stroke — without it, its baseline falls outside the
+  // viewBox and gets silently clipped (verified against every existing
+  // sublabel-passing caller: Dashboard, SynergyScorePanel, HallmarkRiskPanel).
+  const bottomPad = sublabel ? size * 0.16 : sw * 0.6;
 
   // Semicircular arc: left → right through the top
   const lx = cx - r, rx = cx + r; // left and right endpoints
@@ -46,7 +51,7 @@ export function LongevityGaugeArc({
   return (
     <svg
       ref={ref}
-      viewBox={`0 0 ${size} ${(cy + sw * 0.6).toFixed(2)}`}
+      viewBox={`0 0 ${size} ${(cy + bottomPad).toFixed(2)}`}
       className={`w-full ${className}`}
       aria-hidden="true"
     >

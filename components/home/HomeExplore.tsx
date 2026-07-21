@@ -10,7 +10,9 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { compounds } from '@/lib/data';
-import { RevealCard } from '@/components/ui/RevealCard';
+import { GlassPanel } from '@/components/ui/GlassPanel';
+import { RevealItem } from '@/components/ui/RevealItem';
+import { CellularDivider } from '@/components/ui/CellularDivider';
 
 /**
  * The homepage's primary navigation surface — six clean, crawlable cards that
@@ -73,8 +75,8 @@ const destinations: Destination[] = [
   {
     href: '/dashboard',
     icon: LayoutDashboard,
-    eyebrow: 'Operate',
-    title: 'Your Longevity OS',
+    eyebrow: 'Track',
+    title: 'Your Dashboard',
     desc: 'One private dashboard tying your quiz, stack, and labs into a single clear next action — no account required.',
     accent: 'cyan',
   },
@@ -100,10 +102,11 @@ export function HomeExplore() {
   return (
     <section
       aria-labelledby="home-explore-heading"
-      className="border-t border-border/50 py-20 md:py-28"
+      className="relative border-t border-border/50 py-20 md:py-28"
     >
+      <CellularDivider />
       <div className="container-page">
-        <div className="mb-10 flex flex-col gap-4 md:mb-14 md:flex-row md:items-end md:justify-between">
+        <RevealItem className="mb-10 flex flex-col gap-4 md:mb-14 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
             <p className="text-label mb-3 text-accent-cyan">Explore the platform</p>
             <h2 id="home-explore-heading" className="heading-section mb-3">
@@ -116,33 +119,38 @@ export function HomeExplore() {
           </div>
           <Link
             href="/site-map"
-            className="focus-ring hidden shrink-0 items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+            className="focus-ring group hidden shrink-0 items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
           >
             See the full site map
-            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            <ArrowUpRight
+              className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              aria-hidden="true"
+            />
           </Link>
-        </div>
+        </RevealItem>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {destinations.map(({ href, icon: Icon, eyebrow, title, desc, accent }, i) => (
-            <RevealCard key={title} index={i} className="glass-hover h-full rounded-2xl">
-              <Link href={href} className="focus-ring group flex h-full flex-col rounded-2xl p-6">
-                <div className="mb-5 flex items-center justify-between">
-                  <span
-                    className={`inline-flex h-11 w-11 items-center justify-center rounded-xl ${accentBadge[accent]}`}
-                  >
-                    <Icon className={`h-5 w-5 ${accentText[accent]}`} aria-hidden="true" />
-                  </span>
-                  <ArrowUpRight
-                    className="h-4 w-4 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground"
-                    aria-hidden="true"
-                  />
-                </div>
-                <p className={`text-label mb-1.5 ${accentText[accent]}`}>{eyebrow}</p>
-                <h3 className="heading-card mb-2 text-base">{title}</h3>
-                <p className="text-body-sm leading-relaxed">{desc}</p>
-              </Link>
-            </RevealCard>
+            <RevealItem key={title} index={i}>
+              <GlassPanel depth="mid" className="glass-hover h-full rounded-2xl">
+                <Link href={href} className="focus-ring group flex h-full flex-col rounded-2xl p-6">
+                  <div className="mb-5 flex items-center justify-between">
+                    <span
+                      className={`inline-flex h-11 w-11 items-center justify-center rounded-xl ${accentBadge[accent]}`}
+                    >
+                      <Icon className={`h-5 w-5 ${accentText[accent]}`} aria-hidden="true" />
+                    </span>
+                    <ArrowUpRight
+                      className="h-4 w-4 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <p className={`text-label mb-1.5 ${accentText[accent]}`}>{eyebrow}</p>
+                  <h3 className="heading-card mb-2 text-base">{title}</h3>
+                  <p className="text-body-sm leading-relaxed">{desc}</p>
+                </Link>
+              </GlassPanel>
+            </RevealItem>
           ))}
         </div>
       </div>

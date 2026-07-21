@@ -1,0 +1,113 @@
+---
+title: Fisetin
+evidence_tier: B
+compound_id: fisetin
+last_updated: 2026-07-16
+---
+
+> **TL;DR** — Fisetin is a dietary flavonoid with the highest senolytic potency tested against senescent cells among flavonoids studied — eliminating 25–50% of senescent cells in vitro at physiological doses. A Mayo Clinic pilot RCT using an intermittent pulse protocol reduced senescence markers and improved physical function in older adults. Tier B — human pilot data is real, but larger longevity RCTs are still pending.
+
+## 1. Overview: senolytics and the SASP problem
+
+Senescent ("zombie") cells stop dividing but don't die — instead they secrete a cocktail of inflammatory cytokines and proteases called the Senescence-Associated Secretory Phenotype (SASP), which damages surrounding healthy tissue. Senolytics are compounds that selectively clear these cells rather than merely suppressing the inflammation they cause.
+
+**Primary hallmarks targeted:** Cellular senescence · Altered intercellular communication · Chronic inflammation
+
+:::evidence tier="B"
+Yousefzadeh et al. 2018 (PMID 30279143, *EBioMedicine*, Kirkland lab): fisetin eliminates senescent cells and extends health/lifespan in mouse models, identifying it as the most potent senolytic among flavonoids tested. A Mayo Clinic pilot RCT (PMID 31760212, *EBioMedicine* 2019) in older adults using intermittent high-dose fisetin significantly reduced p16INK4A and p21 senescence markers in blood and adipose tissue and improved composite physical function. Multiple Phase 2 trials are underway (NCT03675724, NCT04733534) for age-related conditions.
+:::
+
+:::pathway title="Fisetin → selective senescent-cell apoptosis" nodes="Fisetin|Flavonol|cyan,BCL-2/BCL-XL inhibition|Signaling|amber,Senescent cells lose survival signal|Process|violet,Selective apoptosis|Senescent cells only|rose,Reduced SASP & improved function|Outcome|emerald" edges="Fisetin->BCL-2/BCL-XL inhibition|anti-apoptotic protein blockade,BCL-2/BCL-XL inhibition->Senescent cells lose survival signal|senescent cells uniquely depend on this pathway,Senescent cells lose survival signal->Selective apoptosis|normal cells unaffected,Selective apoptosis->Reduced SASP & improved function|Mayo Clinic pilot outcome"
+:::
+
+## 2. Senolytic potency ranking vs quercetin, navitoclax
+
+| Reported effect | Study | Hallmark link |
+| --- | --- | --- |
+| Eliminates 25–50% of senescent cells in vitro | Kirkland lab, 2018 | Cellular senescence |
+| Highest senolytic potency of flavonoids tested | Kirkland lab, 2018 | Cellular senescence |
+| Reduced p16INK4A and p21 markers | Mayo Clinic pilot RCT (2019) | Cellular senescence |
+| Improved composite physical function | Mayo Clinic pilot RCT (2019) | Altered intercellular communication |
+
+Fisetin's selectivity comes from inhibiting BCL-2 and BCL-XL — anti-apoptotic proteins that senescent cells become uniquely dependent on for survival. Normal cells, which don't rely on that same survival signaling, are largely unaffected — this is the defining property that makes a compound a senolytic rather than a general cytotoxic agent.
+
+:::practical title="Fisetin vs the dasatinib+quercetin protocol"
+Quercetin is most studied in combination with the prescription drug dasatinib (the "D+Q" protocol). Fisetin has a standalone Mayo Clinic pilot behind it — a meaningfully different evidence shape. Neither has completed a large longevity-endpoint RCT; see the full comparison for how the two evidence bases actually differ.
+:::
+
+## 3. Mayo Clinic pilot RCT — design and outcomes
+
+| Study type | Population | Key reported outcome | Tier |
+| --- | --- | --- | --- |
+| Kirkland lab, in vitro/mouse (PMID 30279143) | Cell culture, mouse | Senescent cell clearance, extended healthspan/lifespan | B (preclinical) |
+| Mayo Clinic pilot RCT (PMID 31760212) | Human, older adults | ↓p16INK4A/p21, improved physical function | B |
+| Ongoing Phase 2 trials | Human (NCT03675724, NCT04733534) | Results not yet published | — |
+
+**Consensus:** Tier B — the human pilot data is genuinely encouraging and the mechanism is well-characterized, but this stays short of Tier A until a larger, completed human RCT with a longevity or hard clinical endpoint is published.
+
+## 4. Pulse-dose protocol: why 2-day burst, not daily
+
+| Parameter | Recommendation |
+| --- | --- |
+| Dose | 100–500 mg fisetin |
+| Protocol | Pulse: 2 consecutive days per month (matches the Mayo Clinic pilot design) |
+| Bioavailability | ~40% — liposomal or fat-based delivery preferred |
+| Timing | AM |
+| Why pulse, not daily | Senolytics are designed to clear existing senescent cells in a short window, not provide continuous background suppression — daily dosing has not been the studied protocol |
+
+:::decision title="Should you run a fisetin pulse protocol?"
+node | Do you have a scheduled surgery within the next 2 weeks?
+yes | Do not start — fisetin may inhibit platelet aggregation at pulse doses
+no | node | Are you on blood thinners or chemotherapy?
+  yes | Consult a physician before any pulse protocol — real interaction risk
+  no | Run the 2-consecutive-day pulse monthly, tracking inflammation markers and subjective function
+redflag | Pregnant or nursing — avoid entirely; insufficient safety data
+:::
+
+## 5. Monitoring: p16/p21 proxies, inflammation markers
+
+| Biomarker | Target | Frequency | Action if off-target |
+| --- | --- | --- | --- |
+| hs-CRP | <1.0 mg/L | Baseline, each pulse cycle | Persistently high → review broader inflammation drivers, not just senescence burden |
+| Subjective physical function | Improving trend | Monthly | No change after 3 pulse cycles → reassess whether senescence is your primary target |
+| Platelet/bleeding signs | None | Ongoing during pulse days | Any unusual bruising or bleeding → discontinue and consult a physician |
+
+## 6. Safety — low adverse event profile
+
+:::redflag title="Pulse-specific risks — not a daily-supplement safety profile"
+- **Poor bioavailability** — liposomal or fat-based delivery is preferred over standard capsules.
+- **May inhibit platelet aggregation and CYP enzymes** at high pulse doses — real interaction risk with blood thinners and CYP-metabolized medications.
+- **Avoid if scheduled surgery is within 2 weeks** — bleeding-risk precaution.
+- **Avoid if pregnant or nursing** — insufficient safety data.
+:::
+
+- Consult a physician if taking warfarin or aspirin.
+- Consult a physician if undergoing chemotherapy.
+- Consult a physician for any CYP-metabolized medication before starting a pulse protocol.
+
+## 7. Synergies
+
+| Partner | Rationale | Guide |
+| --- | --- | --- |
+| Resveratrol | Fisetin clears senescent cells outright; resveratrol has partial SASP-suppressive effects on any that remain | [Resveratrol module](/library/compounds/resveratrol) |
+| NMN | Clearing senescent cells reduces the SASP burden that consumes NAD+ via CD38; NMN restores the pool | [NMN module](/library/compounds/nmn) |
+
+## 8. Personal results template
+
+:::personal title="My Fisetin pulse log"
+
+| Date | Pulse cycle | Dose (2-day) | hs-CRP | Physical function (1–10) | Notes |
+| --- | --- | --- | --- | --- | --- |
+| YYYY-MM-DD | 0 | — | — | — | Baseline before first pulse |
+| YYYY-MM-DD | 1 | 100–500 mg × 2 days | — | — | First pulse cycle |
+| YYYY-MM-DD | 3 | 100–500 mg × 2 days | — | — | Reassessment point |
+
+**Response criteria (personal, not clinical):**
+- **Meaningful:** Improving hs-CRP and subjective physical function across 2–3 pulse cycles.
+- **No effect:** No change after 3 monthly pulses with confirmed liposomal/fat-based delivery.
+- **Stop and reassess:** Any bruising, bleeding, or unusual symptom during a pulse window.
+:::
+
+:::cta href="/library/compare/fisetin-vs-quercetin" title="Compare the two flavonoid senolytics" label="Fisetin vs Quercetin"
+Mayo Clinic pilot vs. the dasatinib+quercetin protocol — see how the evidence bases actually differ before choosing one.
+:::

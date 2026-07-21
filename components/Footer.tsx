@@ -10,6 +10,7 @@ import {
   HelpCircle,
   GraduationCap,
   Rocket,
+  Syringe,
 } from 'lucide-react';
 import { POPULAR_GUIDE_LINKS } from '@/lib/index-priority';
 import { citationRegistry } from '@/lib/trust';
@@ -19,9 +20,10 @@ const tierACount = compounds.filter((c) => c.evidence === 'A').length;
 const tierBCount = compounds.filter((c) => c.evidence === 'B').length;
 
 const hubLinks = [
-  { href: '/dashboard', label: 'My Longevity OS', icon: LayoutDashboard },
+  { href: '/dashboard', label: 'My Dashboard', icon: LayoutDashboard },
   { href: '/quiz', label: '3-Min Quiz', icon: HelpCircle },
   { href: '/library', label: 'Anti-Aging Library', icon: Library },
+  { href: '/peptides', label: 'Peptide Library', icon: Syringe },
   { href: '/learn', label: 'Learn Hub', icon: GraduationCap },
   { href: '/stacks', label: 'Stacks & Protocols', icon: Layers },
   { href: '/labs', label: 'Lab Analysis Hub', icon: FlaskConical },
@@ -65,7 +67,7 @@ export function Footer() {
               href="/"
               className="focus-ring inline-flex items-center mb-4 rounded-xl group transition-transform hover:scale-[1.02]"
             >
-              <Logo variant="lockup" size="md" alt="TNiC – Longevity OS · Home" />
+              <Logo variant="lockup" size="md" alt="TNiC – Longevity Intelligence · Home" />
             </Link>
             <p className="text-body-sm max-w-xs">
               Independent longevity intelligence. Evidence-graded compounds,
