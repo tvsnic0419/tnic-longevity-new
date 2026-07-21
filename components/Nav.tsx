@@ -95,7 +95,7 @@ export function Nav() {
           <Logo variant="lockup" size="nav" alt="TNiC – Longevity Intelligence · Home" />
         </Link>
 
-        <div className="hidden lg:flex gap-0.5 xl:gap-1">
+        <div className="hidden xl:flex gap-1">
           {navLinks.map((link) =>
             isInternal(link.href) ? (
               <Link
@@ -118,7 +118,7 @@ export function Nav() {
           )}
         </div>
 
-        <div className="hidden lg:flex items-center gap-2 shrink-0">
+        <div className="hidden xl:flex items-center gap-2 shrink-0">
           <ThemeToggle compact />
           <SiteSearch />
           <Link
@@ -141,7 +141,7 @@ export function Nav() {
           </Link>
         </div>
 
-        <div className="flex items-center gap-1 lg:hidden">
+        <div className="flex items-center gap-1 xl:hidden">
           <ThemeToggle compact />
           <button
             onClick={() => window.dispatchEvent(new Event(COMMAND_PALETTE_EVENT))}
@@ -174,7 +174,7 @@ export function Nav() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden relative nav-glass nav-glass-scrolled border-b border-border"
+            className="xl:hidden relative nav-glass nav-glass-scrolled border-b border-border"
           >
             <div className="container-page py-4 flex flex-col gap-1">
               {navLinks.map((link) =>
