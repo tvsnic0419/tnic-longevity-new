@@ -18,13 +18,18 @@ export default function UpdatesPage() {
     >
       <div className="mb-16">
         <NextUpPanel
-          defaultFilter="in_progress"
+          defaultFilter="all"
           showFilters
           changelogHref="#changelog"
           changelogLabel="Version history →"
         />
       </div>
-      <UpdateHistoryList entries={updateHistory} />
+      <section id="changelog" aria-labelledby="changelog-heading">
+        <h2 id="changelog-heading" className="heading-section text-xl mb-6">
+          Version History
+        </h2>
+        <UpdateHistoryList entries={updateHistory} />
+      </section>
     </TrustPageTemplate>
   );
 }

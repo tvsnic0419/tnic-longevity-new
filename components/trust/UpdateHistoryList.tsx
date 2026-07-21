@@ -14,7 +14,7 @@ interface UpdateHistoryListProps {
 
 export function UpdateHistoryList({ entries }: UpdateHistoryListProps) {
   return (
-    <div id="changelog" className="space-y-4" role="feed" aria-label="Platform update history">
+    <div className="space-y-4" role="feed" aria-label="Platform update history">
       {entries.map((entry) => (
         <article key={`${entry.version}-${entry.date}`} className="card-base p-5 md:p-6">
           <div className="flex flex-wrap items-center gap-2 mb-3">

@@ -225,7 +225,7 @@ export function Dashboard() {
 
         <Card variant="default" className="lg:col-span-3">
           <CardContent className="pt-6">
-            <NextUpPanel compact defaultFilter="in_progress" limit={3} showFilters={false} />
+            <NextUpPanel compact defaultFilter="shipped" limit={3} showFilters={false} />
           </CardContent>
         </Card>
 

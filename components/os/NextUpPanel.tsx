@@ -196,9 +196,14 @@ export function NextUpPanel({
       )}
 
       <div className={cn('space-y-2', !compact && 'space-y-3')}>
-        {visible.map((item) => (
-          <NextUpRow key={item.id} item={item} compact={compact} />
-        ))}
+        {visible.length > 0 ? (
+          visible.map((item) => <NextUpRow key={item.id} item={item} compact={compact} />)
+        ) : (
+          <p className={cn('text-muted-foreground glass rounded-xl', compact ? 'text-xs p-3' : 'text-body-sm p-4')}>
+            Nothing in the &ldquo;{filters.find((f) => f.id === filter)?.label ?? filter}&rdquo; bucket right now.
+            {showFilters ? ' Try the All or Shipped tabs.' : ''}
+          </p>
+        )}
       </div>
     </section>
   );
