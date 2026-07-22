@@ -260,6 +260,11 @@ const toolContexts: Record<ToolId, HubContext> = {
     why: 'Subjective wellness needs a baseline. The scan anchors your dashboard bio-age and defense score.',
     next: 'Complete the scan, review your OS profile on the dashboard, then fix sleep and exercise pillars first.',
   },
+  inventory: {
+    what: 'Adherence-weighted supply projection for your active stack over a full 24-week cycle.',
+    why: 'Protocols fail when compounds run out mid-cycle. Plan container counts and reorder cadence before you commit.',
+    next: 'Set your realistic adherence, review per-compound container counts, then stock or schedule reorders.',
+  },
 };
 
 const moduleCategoryDefaults: Record<LibraryModuleCategory, HubContext> = {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import type { NetworkEdge, NetworkNode, StackNetworkGraph as Graph } from '@/lib/tools/types';
 import { edgeColors } from '@/lib/tools/stack-network';
 import { cn } from '@/lib/utils';
@@ -29,16 +29,42 @@ export function StackNetworkGraph({
   onNodeClick,
   className = '',
 }: StackNetworkGraphProps) {
+  // Local hover state drives the "intersecting network" highlight. It layers on
+  // top of the click-driven `highlightNodeId` without replacing it — hover wins
+  // when present, otherwise the externally-selected node stays focused.
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const focusId = hoveredId ?? highlightNodeId ?? null;
+
   const nodeMap = useMemo(
     () => new Map(graph.nodes.map((n) => [n.id, n])),
     [graph.nodes],
   );
 
-  const visibleEdges = graph.edges.filter((e) => {
-    const s = nodeMap.get(e.source);
-    const t = nodeMap.get(e.target);
-    return s && t;
-  });
+  const visibleEdges = useMemo(
+    () =>
+      graph.edges.filter((e) => nodeMap.has(e.source) && nodeMap.has(e.target)),
+    [graph.edges, nodeMap],
+  );
+
+  // The focused node's "intersecting network": itself, every node it shares an
+  // edge with, and every node on the same physiological pathway. Empty when
+  // nothing is focused, in which case the graph renders at full contrast.
+  const relatedIds = useMemo(() => {
+    if (!focusId) return null;
+    const focusNode = nodeMap.get(focusId);
+    if (!focusNode) return null;
+    const related = new Set<string>([focusId]);
+    visibleEdges.forEach((e) => {
+      if (e.source === focusId) related.add(e.target);
+      if (e.target === focusId) related.add(e.source);
+    });
+    graph.nodes.forEach((n) => {
+      if (n.pathway === focusNode.pathway) related.add(n.id);
+    });
+    return related;
+  }, [focusId, nodeMap, visibleEdges, graph.nodes]);
+
+  const isDimmed = (id: string) => relatedIds !== null && !relatedIds.has(id);
 
   return (
     <div className={cn('relative w-full', className)}>
@@ -46,7 +72,7 @@ export function StackNetworkGraph({
         viewBox="0 0 400 400"
         className="w-full h-auto max-h-[420px]"
         role="img"
-        aria-label="Supplement interaction network graph"
+        aria-label="Supplement interaction network graph — hover a compound to highlight its intersecting pathway network"
       >
         <defs>
           {(['synergy', 'potential', 'caution', 'contraindication'] as const).map((type) => (
@@ -68,8 +94,16 @@ export function StackNetworkGraph({
           const source = nodeMap.get(edge.source)!;
           const target = nodeMap.get(edge.target)!;
           const color = edgeColors[edge.type];
-          const opacity = edge.active ? 0.85 : 0.2;
-          const strokeWidth = edge.active ? (edge.type === 'contraindication' ? 2.5 : 2) : 1;
+          // An edge is "in focus" when it touches the focused node directly.
+          const touchesFocus =
+            focusId !== null && (edge.source === focusId || edge.target === focusId);
+          const dimmed =
+            relatedIds !== null && !touchesFocus && (isDimmed(edge.source) || isDimmed(edge.target));
+
+          const baseOpacity = edge.active ? 0.85 : 0.2;
+          const opacity = touchesFocus ? 0.95 : dimmed ? 0.05 : baseOpacity;
+          const strokeWidth =
+            (touchesFocus ? 2.5 : edge.active ? (edge.type === 'contraindication' ? 2.5 : 2) : 1);
 
           return (
             <g key={edge.id}>
@@ -79,26 +113,34 @@ export function StackNetworkGraph({
                 stroke={color}
                 strokeWidth={strokeWidth}
                 strokeOpacity={opacity}
-                strokeDasharray={edge.type === 'potential' ? '4 3' : edge.active ? undefined : '2 4'}
-                markerEnd={edge.active ? `url(#arrow-${edge.type})` : undefined}
+                strokeDasharray={
+                  edge.type === 'potential' ? '4 3' : edge.active || touchesFocus ? undefined : '2 4'
+                }
+                markerEnd={edge.active || touchesFocus ? `url(#arrow-${edge.type})` : undefined}
               />
             </g>
           );
         })}
 
         {graph.nodes.map((node) => {
-          const isHighlighted = highlightNodeId === node.id;
+          const isFocused = focusId === node.id;
           const isSelected = node.selected;
-          const r = isHighlighted ? 22 : isSelected ? 18 : 14;
+          const dimmed = isDimmed(node.id);
+          const r = isFocused ? 22 : isSelected ? 18 : 14;
 
           return (
             <g
               key={node.id}
               className={onNodeClick ? 'cursor-pointer' : undefined}
               onClick={() => onNodeClick?.(node.id)}
+              onMouseEnter={() => setHoveredId(node.id)}
+              onMouseLeave={() => setHoveredId(null)}
+              onFocus={() => setHoveredId(node.id)}
+              onBlur={() => setHoveredId(null)}
               role="button"
               tabIndex={onNodeClick ? 0 : undefined}
-              aria-label={`${node.label}${isSelected ? ', selected' : ''}`}
+              aria-label={`${node.label}, ${node.pathway} pathway${isSelected ? ', selected' : ''}`}
+              style={{ opacity: dimmed ? 0.3 : 1, transition: 'opacity 150ms ease' }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') onNodeClick?.(node.id);
               }}
@@ -119,9 +161,9 @@ export function StackNetworkGraph({
                 cy={node.y}
                 r={r}
                 fill={isSelected ? 'var(--accent-violet)' : 'var(--color-bg-elevated)'}
-                stroke={isHighlighted ? 'var(--accent-cyan)' : 'var(--color-border-strong)'}
-                strokeWidth={isHighlighted ? 2.5 : 1.5}
-                opacity={isSelected || isHighlighted ? 1 : 0.75}
+                stroke={isFocused ? 'var(--accent-cyan)' : 'var(--color-border-strong)'}
+                strokeWidth={isFocused ? 2.5 : 1.5}
+                opacity={isSelected || isFocused ? 1 : 0.75}
               />
               <text
                 x={node.x}
