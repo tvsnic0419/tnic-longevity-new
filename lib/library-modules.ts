@@ -1586,3 +1586,14 @@ export function getAllModuleParams(): { slug: LibraryModuleCategory; moduleSlug:
 export function getModulePath(module: LibraryModule): string {
   return `/library/${module.category}/${module.slug}`;
 }
+
+/**
+ * Single source of truth for compound counts. Anything user-facing that names a
+ * number of compounds MUST derive it from here so the count can never drift out
+ * of sync with the actual library again. `content-integrity` locks the expected
+ * total, so a dropped compound fails the build rather than silently vanishing.
+ */
+export const compoundModules: LibraryModule[] = libraryModules.filter(
+  (m) => m.category === 'compounds',
+);
+export const COMPOUND_COUNT = compoundModules.length;

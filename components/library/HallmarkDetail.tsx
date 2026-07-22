@@ -120,14 +120,22 @@ export function HallmarkDetail({
 
             {targetingCompounds.length > 0 && (
               <div>
-                <div className="flex items-center gap-2 mb-4">
-                  <Pill className="w-4 h-4 text-accent-cyan" />
-                  <p className="text-[10px] font-mono text-accent-cyan uppercase tracking-wider">
-                    Compounds targeting {hallmark.title}
-                  </p>
+                <div className="flex items-center justify-between gap-3 mb-4">
+                  <div className="flex items-center gap-2">
+                    <Pill className="w-4 h-4 text-accent-cyan" />
+                    <p className="text-[10px] font-mono text-accent-cyan uppercase tracking-wider">
+                      Compounds targeting {hallmark.title}
+                    </p>
+                  </div>
+                  <Link
+                    href="/library/compounds"
+                    className="text-xs font-semibold text-accent-cyan hover:text-accent-emerald transition shrink-0"
+                  >
+                    All compounds →
+                  </Link>
                 </div>
                 <ul className="grid gap-3 sm:grid-cols-2">
-                  {targetingCompounds.map((compound, i) => (
+                  {targetingCompounds.slice(0, 12).map((compound, i) => (
                     <li key={compound.slug}>
                       <RevealCard index={i} depth="mid" className="glass-hover rounded-xl">
                         <Link
@@ -143,6 +151,18 @@ export function HallmarkDetail({
                     </li>
                   ))}
                 </ul>
+                {targetingCompounds.length > 12 && (
+                  <p className="mt-4 text-xs text-muted-foreground">
+                    Showing the 12 best-evidenced of{' '}
+                    <Link
+                      href="/library/compounds"
+                      className="font-semibold text-accent-cyan hover:text-accent-emerald transition"
+                    >
+                      {targetingCompounds.length} compounds mapped to {hallmark.title}
+                    </Link>
+                    .
+                  </p>
+                )}
               </div>
             )}
 

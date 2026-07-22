@@ -33,16 +33,32 @@ for (const m of libraryModules) {
 /**
  * Compounds that target a given hallmark (by hallmark id, e.g. 'mito'), limited
  * to compounds that have a library page. Strongest evidence first.
+ *
+ * Unions two sources so every hallmark links its FULL evidence set:
+ *  1. Structured `compounds` (data.ts) — the stack-buildable subset, mapped by
+ *     their richer display name.
+ *  2. Library-first compound modules whose `relatedHallmarkIds` include the
+ *     hallmark — the deep-dive compounds that have no dataset entry. Without
+ *     this, half the library is invisible to the hallmark knowledge graph.
  */
 export function getCompoundsForHallmark(hallmarkId: string): CompoundLink[] {
-  return compounds
-    .filter((c) => Array.isArray(c.hallmarks) && c.hallmarks.includes(hallmarkId))
-    .map((c) => {
-      const slug = compoundIdToModuleSlug.get(c.id);
-      return slug ? { slug, name: c.name, evidence: c.evidence } : null;
-    })
-    .filter((x): x is CompoundLink => x !== null)
-    .sort((a, b) => a.evidence.localeCompare(b.evidence) || a.name.localeCompare(b.name));
+  const bySlug = new Map<string, CompoundLink>();
+
+  for (const c of compounds) {
+    if (!Array.isArray(c.hallmarks) || !c.hallmarks.includes(hallmarkId)) continue;
+    const slug = compoundIdToModuleSlug.get(c.id);
+    if (slug) bySlug.set(slug, { slug, name: c.name, evidence: c.evidence });
+  }
+
+  for (const m of libraryModules) {
+    if (m.category !== 'compounds' || !m.relatedHallmarkIds.includes(hallmarkId)) continue;
+    if (bySlug.has(m.slug)) continue;
+    bySlug.set(m.slug, { slug: m.slug, name: m.title, evidence: m.evidenceTier });
+  }
+
+  return [...bySlug.values()].sort(
+    (a, b) => a.evidence.localeCompare(b.evidence) || a.name.localeCompare(b.name),
+  );
 }
 
 /**

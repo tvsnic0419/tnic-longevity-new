@@ -1,15 +1,24 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { HallmarkDetail } from '@/components/library/HallmarkDetail';
+import { LibraryCategoryIndex } from '@/components/library/LibraryCategoryIndex';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { getHallmarkBySlug, hallmarkLibrary } from '@/lib/hallmarks-library';
 import { loadMdx } from '@/lib/mdx';
-import { buildArticleSchema, buildBreadcrumbSchema } from '@/lib/seo';
+import { buildArticleSchema, buildBreadcrumbSchema, buildPageMetadata } from '@/lib/seo';
 import { getCompoundsForHallmark, getCompoundIdToSlugMap } from '@/lib/library-graph';
+import { libraryCategoryMeta, type LibraryModuleCategory } from '@/lib/library-modules';
 import { seoRoutes } from '@/lib/seo-routes';
 
+const CATEGORY_SLUGS = Object.keys(libraryCategoryMeta) as LibraryModuleCategory[];
+const isCategorySlug = (slug: string): slug is LibraryModuleCategory =>
+  (CATEGORY_SLUGS as string[]).includes(slug);
+
 export function generateStaticParams() {
-  return hallmarkLibrary.map((h) => ({ slug: h.slug }));
+  return [
+    ...hallmarkLibrary.map((h) => ({ slug: h.slug })),
+    ...CATEGORY_SLUGS.map((slug) => ({ slug })),
+  ];
 }
 
 export async function generateMetadata({
@@ -18,6 +27,14 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
+  if (isCategorySlug(slug)) {
+    const meta = libraryCategoryMeta[slug];
+    return buildPageMetadata({
+      title: `${meta.label} — Evidence-Graded Library`,
+      description: meta.description,
+      path: `/library/${slug}`,
+    });
+  }
   const hallmark = getHallmarkBySlug(slug);
   if (!hallmark) return { title: 'Not Found' };
   return seoRoutes.hallmark({
@@ -34,6 +51,9 @@ export default async function HallmarkPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  if (isCategorySlug(slug)) {
+    return <LibraryCategoryIndex category={slug} />;
+  }
   const hallmark = getHallmarkBySlug(slug);
   if (!hallmark) notFound();
 

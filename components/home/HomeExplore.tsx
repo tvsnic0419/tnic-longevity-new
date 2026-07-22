@@ -10,7 +10,7 @@ import {
   ArrowUpRight,
   type LucideIcon,
 } from 'lucide-react';
-import { compounds } from '@/lib/data';
+import { COMPOUND_COUNT } from '@/lib/library-modules';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { RevealItem } from '@/components/ui/RevealItem';
 import { CellularDivider } from '@/components/ui/CellularDivider';
@@ -46,7 +46,7 @@ const destinations: Destination[] = [
     icon: Library,
     eyebrow: 'Reference',
     title: 'The Evidence Library',
-    desc: `The 12 hallmarks of aging and ${compounds.length} nutrients and compounds — each graded A–C by the strength of human evidence, with PubMed citations.`,
+    desc: `The 12 hallmarks of aging and ${COMPOUND_COUNT} nutrients and compounds — each graded A–C by the strength of human evidence, with PubMed citations.`,
     accent: 'cyan',
   },
   {

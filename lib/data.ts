@@ -13,10 +13,12 @@ import {
   Scale,
 } from 'lucide-react';
 import type { Compound, Hallmark, PathwayNode, RoadmapItem } from './types';
+import { COMPOUND_COUNT } from './library-modules';
 
 export const navLinks = [
   { href: '/products', label: 'Products', mod: 'MOD-PRD-16' },
   { href: '/library', label: 'Library', mod: 'MOD-LIB-13' },
+  { href: '/library/compounds', label: 'Compounds', mod: 'MOD-CMP-17' },
   { href: '/peptides', label: 'Peptides', mod: 'MOD-PEP-15' },
   { href: '/learn', label: 'Learn', mod: 'MOD-LRN-09' },
   { href: '/stacks', label: 'Stacks', mod: 'MOD-ARC-04' },
@@ -25,7 +27,7 @@ export const navLinks = [
 ];
 
 export const communityPulse = [
-  { metric: '14', label: 'Evidence-Graded Compounds' },
+  { metric: String(COMPOUND_COUNT), label: 'Evidence-Graded Compounds' },
   { metric: '12', label: 'Hallmarks Explained' },
   { metric: '33', label: 'FAQ Answers' },
   { metric: '20', label: 'Glossary Terms' },

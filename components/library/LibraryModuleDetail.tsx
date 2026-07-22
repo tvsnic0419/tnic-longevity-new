@@ -18,6 +18,7 @@ import { getBuyerGuideByModuleSlug } from '@/lib/buyer-guides';
 import type { LifestyleSlug } from '@/lib/lifestyle-pillars';
 import { ModuleContextStrip } from './ModuleContextStrip';
 import { CompoundGlancePanel } from './CompoundGlancePanel';
+import { ModuleGlancePanel } from './ModuleGlancePanel';
 import { recordModuleVisit } from '@/lib/recent-modules';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 
@@ -56,6 +57,13 @@ export function LibraryModuleDetail({
     .filter(Boolean) ?? [];
   const buyerGuide =
     module.category === 'compounds' ? getBuyerGuideByModuleSlug(module.slug) : undefined;
+  // Library-first compounds have no canonical dataset entry to drive the rich
+  // glance panel; surface the same shape from a live count of the PMIDs cited
+  // in the deep-dive body so all 55 compound pages stay coherent.
+  const mdxStudyCount =
+    module.category === 'compounds' && !relatedCompound && mdxBody
+      ? new Set(mdxBody.match(/\bPMID:?\s*(\d{7,8})\b/g)?.map((m) => m.replace(/\D/g, '')) ?? []).size
+      : 0;
 
   useEffect(() => {
     recordModuleVisit(module);
@@ -231,7 +239,13 @@ export function LibraryModuleDetail({
               <p className="text-sm text-muted-foreground leading-relaxed">{module.summary}</p>
             </motion.div>
 
-            {relatedCompound && <CompoundGlancePanel compound={relatedCompound} />}
+            {relatedCompound ? (
+              <CompoundGlancePanel compound={relatedCompound} />
+            ) : (
+              module.category === 'compounds' && (
+                <ModuleGlancePanel module={module} studyCount={mdxStudyCount} />
+              )
+            )}
 
             {module.requiresDisclaimer && (
               <div className="rounded-xl p-5 border border-accent-amber/30 bg-accent-amber/5 flex gap-3">
