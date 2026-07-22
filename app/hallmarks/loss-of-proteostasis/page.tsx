@@ -5,7 +5,7 @@ import { Footer } from '@/components/Footer';
 import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Brain } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Loss of Proteostasis | Hallmarks of Aging | TNiC',
+  title: 'Loss of Proteostasis | Hallmarks of Aging',
   description:
     'Deep-dive into loss of proteostasis — the protein folding crisis underlying neurodegeneration. Mechanisms, chaperones, ubiquitin-proteasome, evidence-graded interventions (GlyNAC, sulforaphane, R-ALA), and biomarkers.',
   openGraph: {

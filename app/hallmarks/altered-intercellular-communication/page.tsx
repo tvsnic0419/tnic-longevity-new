@@ -5,7 +5,7 @@ import { Footer } from '@/components/Footer';
 import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Network } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Altered Intercellular Communication | Hallmarks of Aging | TNiC',
+  title: 'Altered Intercellular Communication | Hallmarks of Aging',
   description:
     'Deep-dive into altered intercellular communication — the signaling breakdown driving inflammaging. SASP, hormonal decline, insulin resistance, evidence-graded interventions, and biomarkers.',
   openGraph: {

@@ -5,7 +5,7 @@ import { Footer } from '@/components/Footer';
 import { Zap, ArrowRight, FlaskConical, Activity, ShieldCheck, BookOpen } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Cellular Senescence | Hallmarks of Aging | TNiC',
+  title: 'Cellular Senescence | Hallmarks of Aging',
   description:
     'Deep-dive into cellular senescence — the zombie cell crisis driving chronic inflammation and tissue dysfunction. Mechanisms, SASP, evidence-graded senolytics (fisetin, quercetin + dasatinib), and monitoring biomarkers.',
   openGraph: {

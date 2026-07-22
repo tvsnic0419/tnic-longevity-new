@@ -788,7 +788,7 @@ export const researchFeed = [
     pmid: '18396172',
     impact: 'clinical' as const,
     relatedHrefs: [
-      { label: 'Disabled Macroautophagy', href: '/library/disabled-macroautophagy' },
+      { label: 'Deregulated Nutrient-Sensing', href: '/library/deregulated-nutrient-sensing' },
       { label: 'Mitochondrial preset', href: '/stacks?preset=mito' },
       { label: 'Protocol Brief digest', href: '/brief' },
     ],
@@ -878,7 +878,7 @@ export const researchFeed = [
     pmid: '32910831',
     impact: 'breakthrough' as const,
     relatedHrefs: [
-      { label: 'Disabled Macroautophagy', href: '/library/disabled-macroautophagy' },
+      { label: 'Deregulated Nutrient-Sensing', href: '/library/deregulated-nutrient-sensing' },
       { label: 'Mitochondrial Dysfunction', href: '/library/mitochondrial-dysfunction' },
       { label: 'Protocol Brief digest', href: '/brief' },
     ],
@@ -970,7 +970,7 @@ export const hallmarks: Hallmark[] = [
   { id: 'communication', title: 'Altered Intercellular Communication', desc: 'Signaling networks become dysregulated', coverage: 55, icon: Network, intervention: 'SASP cytokine signaling is the primary driver — reducing senescent cell burden (senolytics) lowers IL-6, IL-8, and TNF-α. NRF2 stack blocks NF-κB, the master switch for pro-inflammatory intercellular signaling.' },
   { id: 'inflammation', title: 'Chronic Inflammation', desc: 'Inflammaging drives systemic tissue damage', coverage: 88, icon: Activity, intervention: 'Sulforaphane and GlyNAC form the core NRF2 anti-inflammatory stack — restoring glutathione and blocking NF-κB. Resveratrol activates SIRT1-FOXO3a axis that directly suppresses inflammatory gene transcription (PMID 22055504).' },
   { id: 'dysbiosis', title: 'Dysbiosis', desc: 'Gut microbiome imbalance affects systemic aging', coverage: 40, icon: Radio, intervention: 'Sulforaphane reshapes gut flora toward longevity-associated species (Lactobacillus, Bifidobacterium) and reduces Firmicutes:Bacteroidetes ratio (PMID 37689001). Taurine also modulates gut barrier integrity and bile acid composition.' },
-  { id: 'nutrient', title: 'Disabled Macroautophagy', desc: 'Nutrient sensing pathways (mTOR/AMPK) dysregulate', coverage: 72, icon: Shield, intervention: 'Resveratrol activates AMPK to inhibit mTORC1 and restore autophagic signaling. Berberine activates AMPK with metformin-comparable potency (PMID 18396172). NMN supports SIRT1-mTOR axis balance via NAD+.' },
+  { id: 'nutrient', title: 'Deregulated Nutrient-Sensing', desc: 'Nutrient sensing pathways (mTOR/AMPK) dysregulate', coverage: 72, icon: Shield, intervention: 'Resveratrol activates AMPK to inhibit mTORC1 and restore autophagic signaling. Berberine activates AMPK with metformin-comparable potency (PMID 18396172). NMN supports SIRT1-mTOR axis balance via NAD+.' },
 ];
 
 export const pathways: PathwayNode[] = [

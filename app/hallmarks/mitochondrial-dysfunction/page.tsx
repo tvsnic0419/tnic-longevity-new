@@ -5,7 +5,7 @@ import { Footer } from '@/components/Footer';
 import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Zap } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Mitochondrial Dysfunction | Hallmarks of Aging | TNiC',
+  title: 'Mitochondrial Dysfunction | Hallmarks of Aging',
   description:
     'Deep-dive into mitochondrial dysfunction — the energy crisis underlying aging. Mechanisms, electron transport chain decline, NAD+/AMPK axes, evidence-graded interventions (GlyNAC, NMN, CoQ10, urolithin A), and monitoring biomarkers.',
   openGraph: {

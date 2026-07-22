@@ -5,7 +5,7 @@ import { Footer } from '@/components/Footer';
 import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Timer } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Telomere Attrition | Hallmarks of Aging | TNiC',
+  title: 'Telomere Attrition | Hallmarks of Aging',
   description:
     'Deep-dive into telomere attrition — the molecular clock at chromosome ends. Mechanisms, biomarkers, evidence-graded interventions (NMN, omega-3, stress reduction), and monitoring templates.',
   openGraph: {

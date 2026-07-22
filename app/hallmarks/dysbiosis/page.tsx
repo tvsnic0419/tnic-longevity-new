@@ -5,7 +5,7 @@ import { Footer } from '@/components/Footer';
 import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Radio } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Dysbiosis | Hallmarks of Aging | TNiC',
+  title: 'Dysbiosis | Hallmarks of Aging',
   description:
     'Deep-dive into dysbiosis — the gut microbiome crisis driving inflammaging. Mechanisms, leaky gut, SCFA decline, evidence-graded interventions (fermented foods, fiber, sulforaphane), and biomarkers.',
   openGraph: {

@@ -5,7 +5,7 @@ import { Footer } from '@/components/Footer';
 import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Layers } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Disabled Autophagy | Hallmarks of Aging | TNiC',
+  title: 'Disabled Autophagy | Hallmarks of Aging',
   description:
     'Deep-dive into disabled autophagy — cellular recycling that fails with age. mTOR/AMPK axis, evidence-graded interventions (spermidine, NMN, resveratrol, fasting), and biomarkers.',
   openGraph: {

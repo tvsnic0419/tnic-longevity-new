@@ -5,7 +5,7 @@ import { Footer } from '@/components/Footer';
 import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Dna } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Epigenetic Alterations | Hallmarks of Aging | TNiC',
+  title: 'Epigenetic Alterations | Hallmarks of Aging',
   description:
     'Deep-dive into epigenetic alterations — the aging clock written in methylation. Mechanisms, Horvath clock, evidence-graded interventions (Ca-AKG, NMN, resveratrol), and tracking templates.',
   openGraph: {

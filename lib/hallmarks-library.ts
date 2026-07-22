@@ -278,10 +278,10 @@ export const hallmarkLibrary: HallmarkLibraryEntry[] = [
   },
   {
     id: 'nutrient',
-    slug: 'disabled-macroautophagy',
+    slug: 'deregulated-nutrient-sensing',
     number: 12,
-    title: 'Disabled Macroautophagy',
-    tagline: 'Nutrient sensing gone wrong',
+    title: 'Deregulated Nutrient-Sensing',
+    tagline: 'The growth-vs-repair switch tips toward growth',
     summary: 'mTOR and AMPK — the nutrient sensing kinases — become dysregulated. Chronic nutrient surplus suppresses autophagy; AMPK activity declines with age.',
     mechanism: 'Two antagonistic kinase complexes implement nutrient sensing: mTORC1 (activated by amino acids via Ragulator/Rag GTPases sensing intra-lysosomal amino acids, by growth factors via PI3K/Akt, and by ROS) promotes protein synthesis, lipogenesis, and ribosome biogenesis while directly phosphorylating and inactivating ULK1 at Ser757 to suppress autophagy; AMPK (activated by rising AMP:ATP ratio via LKB1, and by CAMKK2 during Ca2+ transients) counteracts mTORC1 by phosphorylating Raptor at Ser792 and activating ULK1 at Ser317/777. With age, mTORC1 becomes chronically hyperactivated via three mechanisms: impaired AMPK sensitivity as mitochondrial efficiency declines; elevated branched-chain amino acids from sarcopenic muscle catabolism constitutively stimulating Ragulator; and broken S6K1 negative feedback (S6K1 normally phosphorylates IRS-1 Ser307 to limit insulin signaling, but chronic S6K1 activity converts this to pathological insulin resistance). Rapamycin inhibits mTORC1 by forming an FKBP12 complex that occludes the active site; this mechanism explains its 10–15% mean lifespan extension across 20+ mammalian studies. Metformin and berberine activate AMPK via Complex I inhibition, raising AMP:ATP; caloric restriction works by reducing Ragulator amino acid sensing input — all three therefore restore autophagy and reduce anabolic mTOR overdrive via the same AMPK/mTOR balance.',
     keyMolecules: ['mTORC1', 'AMPK', 'Raptor', 'ULK1', 'S6K1', 'FKBP12', 'Ragulator', 'LKB1'],
@@ -290,7 +290,7 @@ export const hallmarkLibrary: HallmarkLibraryEntry[] = [
     coverage: 72,
     biomarkers: ['Fasting insulin', 'IGF-1', 'Ketone bodies', 'mTOR activity proxies'],
     relatedCompoundIds: ['resveratrol', 'nmn'],
-    mdxSlug: 'disabled-macroautophagy',
+    mdxSlug: 'deregulated-nutrient-sensing',
     personalPrompts: ['Log daily eating window', 'Track fasting glucose', 'Note protein intake timing'],
     interventions: [
       { id: 'n1', name: 'Caloric moderation / fasting', category: 'lifestyle', evidence: 'A', rank: 1, impact: 9, description: 'Caloric restriction is the oldest lifespan intervention in mammals. mTOR suppression is the mechanism.', tnicAvailable: false },

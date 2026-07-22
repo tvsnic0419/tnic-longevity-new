@@ -47,7 +47,7 @@ export const hallmarkTitles: Record<string, string> = {
   'altered-intercellular-communication': 'Altered Intercellular Communication',
   'chronic-inflammation': 'Chronic Inflammation',
   dysbiosis: 'Dysbiosis',
-  'disabled-macroautophagy': 'Disabled Macroautophagy',
+  'deregulated-nutrient-sensing': 'Deregulated Nutrient-Sensing',
 };
 
 /** Keyed by `${category}/${slug}`. */

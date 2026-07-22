@@ -5,7 +5,7 @@ import { Footer } from '@/components/Footer';
 import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Shield } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Chronic Inflammation (Inflammaging) | Hallmarks of Aging | TNiC',
+  title: 'Chronic Inflammation (Inflammaging) | Hallmarks of Aging',
   description:
     'Deep-dive into chronic inflammation — the "inflammaging" hallmark driving cardiovascular disease, cancer, and neurodegeneration. Mechanisms, hs-CRP targets, evidence-graded interventions, and biomarkers.',
   openGraph: {

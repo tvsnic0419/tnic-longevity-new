@@ -5,7 +5,7 @@ import { Footer } from '@/components/Footer';
 import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Heart } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Stem Cell Exhaustion | Hallmarks of Aging | TNiC',
+  title: 'Stem Cell Exhaustion | Hallmarks of Aging',
   description:
     'Deep-dive into stem cell exhaustion — the regenerative decline driving muscle loss, immune aging, and poor wound healing. Mechanisms, evidence-graded interventions (Ca-AKG, NMN, exercise), and biomarkers.',
   openGraph: {

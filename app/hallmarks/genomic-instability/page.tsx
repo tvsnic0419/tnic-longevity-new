@@ -5,7 +5,7 @@ import { Footer } from '@/components/Footer';
 import { Dna, ArrowRight, FlaskConical, Activity, ShieldCheck, BookOpen } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Genomic Instability | Hallmarks of Aging | TNiC',
+  title: 'Genomic Instability | Hallmarks of Aging',
   description:
     'Deep-dive into genomic instability — the first hallmark of aging. Mechanisms, biomarkers, evidence-graded interventions (NMN, sulforaphane, GlyNAC), and a monitoring template.',
   openGraph: {
