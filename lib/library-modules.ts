@@ -437,6 +437,969 @@ export const libraryModules: LibraryModule[] = [
     mdxSlug: 'omega3',
   },
 
+  {
+    "slug": "metformin",
+    "category": "compounds",
+    "title": "Metformin",
+    "tagline": "Prescription biguanide with Tier-A diabetes data and a genuinely unsettled Tier-B geroprotection case.",
+    "summary": "Metformin inhibits mitochondrial Complex I and activates AMPK, with strong human evidence for glucose control and diabetes prevention but no completed human trial showing a lifespan or healthspan benefit in healthy people; the NIA ITP found no lifespan extension from metformin alone and one RCT shows it can blunt exercise adaptations.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "nutrient",
+      "mito",
+      "inflammation",
+      "communication"
+    ],
+    "requiresDisclaimer": true,
+    "outline": [
+      "What metformin does & why it matters",
+      "Mechanism: Complex I, AMPK & caveats",
+      "Evidence summary: strong vs. contested",
+      "Dosing (educational, physician-set)",
+      "Monitoring & B12 depletion",
+      "Safety, red flags & exercise-blunting",
+      "Synergies & mechanism overlap"
+    ],
+    "mdxSlug": "metformin",
+  },
+
+  {
+    "slug": "creatine",
+    "category": "compounds",
+    "title": "Creatine Monohydrate",
+    "tagline": "Phosphocreatine ATP buffer — Tier A for muscle and strength in aging",
+    "summary": "The best-evidenced legal amplifier of resistance training for defending against sarcopenia, with a large older-adult RCT base for lean mass and strength; cognition benefit is real but weaker and concentrated in older/stressed brains.",
+    "evidenceTier": "A",
+    "relatedHallmarkIds": [
+      "mito",
+      "stem",
+      "nutrient"
+    ],
+    "compoundId": "creatine",
+    "requiresDisclaimer": false,
+    "outline": [
+      "What creatine does (and why it matters)",
+      "Mechanism — a phosphate buffer, not an anabolic drug",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety, red flags, and contraindications",
+      "Synergies and personal results template"
+    ],
+    "mdxSlug": "creatine",
+  },
+
+  {
+    "slug": "vitamin-d3",
+    "category": "compounds",
+    "title": "Vitamin D3 (Cholecalciferol)",
+    "tagline": "Correcting deficiency is Tier A; the hard-outcome longevity data is mostly null.",
+    "summary": "A secosteroid hormone precursor where fixing a real deficiency is well-established, but large RCTs (VITAL, D-Health) show no cancer, cardiovascular, fracture, or mortality benefit in replete people. Softer signals for autoimmune-disease incidence and cancer mortality keep the longevity case at Tier B.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "inflammation",
+      "communication",
+      "genomic"
+    ],
+    "compoundId": "vitamin-d3",
+    "requiresDisclaimer": false,
+    "outline": [
+      "What vitamin D3 does (and why it matters)",
+      "Mechanism — a nuclear hormone, not an antioxidant",
+      "Evidence summary — honest about the hard outcomes",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety, red flags, and contraindications",
+      "Synergies"
+    ],
+    "mdxSlug": "vitamin-d3",
+  },
+
+  {
+    "slug": "magnesium",
+    "category": "compounds",
+    "title": "Magnesium (Glycinate / Threonate)",
+    "tagline": "Essential ATP-Mg2+ cofactor — modest, repletion-shaped RCT wins for BP, insulin sensitivity, and sleep",
+    "summary": "Cofactor for 300+ enzymes including ATP-Mg2+, DNA repair, and insulin signaling; deficiency is common. Tier B: real meta-analyses show modest BP (-2.0/-1.8 mmHg) and HOMA-IR improvements plus a small sleep-latency signal, but no longevity-endpoint trial exists. Form matters: glycinate for repletion/tolerance, L-threonate for CNS targeting.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "genomic",
+      "mito",
+      "nutrient"
+    ],
+    "compoundId": "magnesium",
+    "requiresDisclaimer": false,
+    "outline": [
+      "What magnesium does & ATP-Mg mechanism",
+      "Mechanism — repletion, not pharmacology",
+      "Evidence: BP, HOMA-IR, sleep, cognition",
+      "Dosing & form selection (glycinate vs threonate)",
+      "Monitoring: RBC magnesium, BP, glucose",
+      "Safety, red flags & drug interactions",
+      "Synergies & personal results template"
+    ],
+    "mdxSlug": "magnesium",
+  },
+
+  {
+    "slug": "curcumin",
+    "category": "compounds",
+    "title": "Curcumin (Curcuminoids)",
+    "tagline": "Turmeric polyphenol with Tier-A knee-OA symptom relief, Tier-B systemic inflammation effects, and a defining bioavailability problem",
+    "summary": "Curcumin suppresses NF-κB and activates Nrf2, with strong human RCT evidence for knee-osteoarthritis pain (as effective as ibuprofen at 1,500 mg/day) and modest, formulation-dependent reductions in CRP/TNF-α. Plain curcumin is barely absorbed, so trial results apply only to phytosome, piperine-combined, or nano/micellar forms.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "inflammation",
+      "senescence",
+      "communication"
+    ],
+    "compoundId": "curcumin",
+    "requiresDisclaimer": false,
+    "outline": [
+      "What curcumin does (and why it matters)",
+      "Mechanism — promiscuous anti-inflammatory, not a clean single target",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety, red flags, and contraindications",
+      "Synergies"
+    ],
+    "mdxSlug": "curcumin",
+  },
+
+  {
+    "slug": "quercetin",
+    "category": "compounds",
+    "title": "Quercetin",
+    "tagline": "Founding senolytic flavonoid — strong mechanism, early human outcomes",
+    "summary": "The 'Q' in the dasatinib + quercetin senolytic protocol. Well-established preclinically with promising but small, mostly uncontrolled human pilots (diabetic kidney disease, IPF), plus a modest anti-hypertensive signal at >500 mg/day. Bioavailability is poor unless a phytosome/EMIQ form is used.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "senescence",
+      "inflammation"
+    ],
+    "compoundId": "quercetin",
+    "requiresDisclaimer": false,
+    "outline": [
+      "What quercetin does (and why it matters)",
+      "Mechanism: senolysis plus flavonoid anti-inflammation",
+      "Evidence summary: strong mechanism, early human outcomes",
+      "Dosing protocol (daily vs D+Q senolytic)",
+      "Monitoring: BP, hs-CRP, kidney function",
+      "Safety, red flags, and contraindications",
+      "Synergies and personal results template"
+    ],
+    "mdxSlug": "quercetin",
+  },
+
+  {
+    "slug": "glucosamine",
+    "category": "compounds",
+    "title": "Glucosamine Sulfate",
+    "tagline": "Large observational cohorts link regular use to lower mortality — associational, not causal.",
+    "summary": "An aminosaccharide joint supplement with a striking but confounded UK Biobank association to lower cardiovascular and all-cause mortality, a modest AMPK/low-carb-mimicking lifespan effect in animals, and genuinely mixed osteoarthritis RCT data.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "inflammation",
+      "nutrient"
+    ],
+    "compoundId": "glucosamine",
+    "requiresDisclaimer": false,
+    "outline": [
+      "What glucosamine does",
+      "Mechanism — low-carb mimic",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety & red flags",
+      "Synergies & personal log"
+    ],
+    "mdxSlug": "glucosamine",
+  },
+
+  {
+    "slug": "vitamin-k2",
+    "category": "compounds",
+    "title": "Vitamin K2 (MK-7)",
+    "tagline": "The calcium-routing cofactor: activates MGP and osteocalcin, with mixed 3-year RCT outcomes",
+    "summary": "MK-7 is the vitamin K2 form that carboxylates matrix Gla protein and osteocalcin, steering calcium away from arteries and into bone. Human RCTs support improved arterial stiffness and slowed bone loss at 180 mcg/day, but a matched osteopenia trial found no BMD benefit, keeping the evidence honestly at Tier B.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "communication",
+      "inflammation"
+    ],
+    "compoundId": "vitamin-k2",
+    "requiresDisclaimer": false,
+    "outline": [
+      "What Vitamin K2 does (and why it matters)",
+      "Mechanism — carboxylation as a molecular on switch",
+      "Evidence summary — where the RCTs agree and disagree",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety, red flags, and contraindications",
+      "Synergies and personal results template"
+    ],
+    "mdxSlug": "vitamin-k2",
+  },
+
+  {
+    "slug": "melatonin",
+    "category": "compounds",
+    "title": "Melatonin",
+    "tagline": "Circadian hormone and mitochondrial antioxidant — Tier A for sleep, Tier B/C for longevity.",
+    "summary": "Pineal indoleamine that sets circadian timing and doubles as a mitochondria-concentrated antioxidant; secretion declines with age. Strong human RCT evidence for reducing sleep latency, with anti-inflammatory and metabolic signals modest and geroprotection still preclinical.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "mito",
+      "inflammation",
+      "communication"
+    ],
+    "compoundId": "melatonin",
+    "requiresDisclaimer": false,
+    "outline": [
+      "What melatonin does (and why it matters)",
+      "Mechanism — a hormone that is also an antioxidant",
+      "Evidence summary — strong for sleep, thinner for longevity",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety, red flags, and contraindications",
+      "Synergies and personal results template"
+    ],
+    "mdxSlug": "melatonin",
+  },
+
+  {
+    "slug": "glycine",
+    "category": "compounds",
+    "title": "Glycine",
+    "tagline": "Conditionally-essential amino acid: glutathione substrate, methyl-group buffer, and NMDA-mediated sleep aid — small but real human RCTs, preclinical lifespan signal.",
+    "summary": "Glycine is the third glutathione residue and a co-limiting substrate with cysteine in aging. Small human RCTs support 3 g at night for sleep and 15 g/day for oxidative stress and systolic BP in metabolic syndrome; direct lifespan evidence is preclinical (NIA ITP mouse). Strongest aging data is for the glycine+NAC (GlyNAC) combination.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "proteostasis",
+      "mito",
+      "nutrient"
+    ],
+    "compoundId": "glycine",
+    "requiresDisclaimer": false,
+    "outline": [
+      "What glycine does (and why it matters)",
+      "Mechanism: glutathione, methylation, CNS sleep",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety, red flags, and contraindications",
+      "Synergies and personal results"
+    ],
+    "mdxSlug": "glycine",
+  },
+
+  {
+    "slug": "nac",
+    "category": "compounds",
+    "title": "N-Acetylcysteine (NAC)",
+    "tagline": "Cysteine donor that refills glutathione — strong mechanism and safety, thin standalone longevity data (Tier B).",
+    "summary": "NAC is a plasma-stable cysteine precursor that raises glutathione, with decades of approved mucolytic and acetaminophen-antidote use. The direct human aging evidence is for the GlyNAC combination (NAC + glycine), not NAC alone, so standalone NAC is honestly Tier B.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "proteostasis",
+      "inflammation",
+      "mito"
+    ],
+    "compoundId": "nac",
+    "requiresDisclaimer": false,
+    "outline": [
+      "What NAC does (and why it matters)",
+      "Mechanism — a substrate, not a signaling drug",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety, red flags, and contraindications",
+      "Synergies and personal results"
+    ],
+    "mdxSlug": "nac",
+  },
+
+  {
+    "slug": "zinc",
+    "category": "compounds",
+    "title": "Zinc",
+    "tagline": "Essential trace mineral; corrects age-related immune decline in the deficient, with genuine RCT infection data and indirect longevity rationale.",
+    "summary": "Zinc is a cofactor for ~300 enzymes including antioxidant SOD and thymulin; deficiency is common in older adults and mirrors immunosenescence. Human RCT and meta-analytic data support immune/infection endpoints, but longevity benefit is inferred, not demonstrated. Tier B; watch copper depletion at higher doses.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "inflammation",
+      "genomic",
+      "communication"
+    ],
+    "compoundId": "zinc",
+    "requiresDisclaimer": false,
+    "outline": [
+      "What zinc does (and why it matters)",
+      "Mechanism - cofactor biology, not a druglike target",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety, red flags, and contraindications",
+      "Synergies"
+    ],
+    "mdxSlug": "zinc",
+  },
+
+  {
+    "slug": "l-citrulline",
+    "category": "compounds",
+    "title": "L-Citrulline",
+    "tagline": "Nitric-oxide support — evidence-graded deep dive",
+    "summary": "Oral citrulline raises arginine availability and supports nitric-oxide signaling; human evidence focuses on vascular function, blood pressure, and exercise rather than lifespan.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "communication",
+      "mito"
+    ],
+    "compoundId": "l-citrulline",
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "l-citrulline"
+  },
+
+  {
+    "slug": "egcg",
+    "category": "compounds",
+    "title": "EGCG (Green Tea Catechin)",
+    "tagline": "AMPK and redox signaling — evidence-graded deep dive",
+    "summary": "Green-tea catechins influence AMPK and inflammatory signaling, but isolated high-dose extracts can injure the liver and longevity outcomes remain unproven.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "epigenetic",
+      "inflammation",
+      "mito"
+    ],
+    "compoundId": "egcg",
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "egcg"
+  },
+
+  {
+    "slug": "astaxanthin",
+    "category": "compounds",
+    "title": "Astaxanthin",
+    "tagline": "Membrane antioxidant defense — evidence-graded deep dive",
+    "summary": "This lipid-soluble carotenoid spans cell membranes and has human studies in skin, oxidative stress, and exercise; direct healthspan evidence is limited.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "mito",
+      "inflammation",
+      "communication"
+    ],
+    "compoundId": "astaxanthin",
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "astaxanthin"
+  },
+
+  {
+    "slug": "apigenin",
+    "category": "compounds",
+    "title": "Apigenin",
+    "tagline": "CD38 and inflammatory signaling — evidence-graded deep dive",
+    "summary": "Apigenin inhibits CD38 and inflammatory pathways in laboratory models, but oral human intervention evidence is sparse and no longevity outcome has been shown.",
+    "evidenceTier": "C",
+    "relatedHallmarkIds": [
+      "inflammation",
+      "senescence"
+    ],
+    "compoundId": "apigenin",
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "apigenin"
+  },
+
+  {
+    "slug": "luteolin",
+    "category": "compounds",
+    "title": "Luteolin",
+    "tagline": "Neuroinflammatory signaling — evidence-graded deep dive",
+    "summary": "Luteolin is a preclinical anti-inflammatory and senotherapeutic candidate; available human work uses small studies or combination formulations.",
+    "evidenceTier": "C",
+    "relatedHallmarkIds": [
+      "senescence",
+      "inflammation"
+    ],
+    "compoundId": "luteolin",
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "luteolin"
+  },
+
+  {
+    "slug": "ergothioneine",
+    "category": "compounds",
+    "title": "Ergothioneine",
+    "tagline": "OCTN1 cytoprotective transport — evidence-graded deep dive",
+    "summary": "This diet-derived thiol has a dedicated transporter and strong observational or mechanistic rationale, while supplementation trials and longevity endpoints remain scarce.",
+    "evidenceTier": "C",
+    "relatedHallmarkIds": [
+      "mito",
+      "inflammation",
+      "genomic"
+    ],
+    "compoundId": "ergothioneine",
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "ergothioneine"
+  },
+
+  {
+    "slug": "l-carnosine",
+    "category": "compounds",
+    "title": "L-Carnosine",
+    "tagline": "Carbonyl and glycation defense — evidence-graded deep dive",
+    "summary": "Carnosine scavenges reactive carbonyls and buffers pH, but oral hydrolysis by carnosinase and small heterogeneous trials limit confidence.",
+    "evidenceTier": "C",
+    "relatedHallmarkIds": [
+      "proteostasis",
+      "senescence"
+    ],
+    "compoundId": "l-carnosine",
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "l-carnosine"
+  },
+
+  {
+    "slug": "tmg",
+    "category": "compounds",
+    "title": "TMG (Trimethylglycine / Betaine)",
+    "tagline": "BHMT methyl donation — evidence-graded deep dive",
+    "summary": "Betaine donates methyl groups through BHMT and reliably lowers homocysteine; performance and longevity implications are less certain.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "epigenetic",
+      "communication"
+    ],
+    "compoundId": "tmg",
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "tmg"
+  },
+
+  {
+    "slug": "tocotrienols",
+    "category": "compounds",
+    "title": "Tocotrienols (Vitamin E)",
+    "tagline": "Lipid redox protection — evidence-graded deep dive",
+    "summary": "Tocotrienols are vitamin-E isoforms distinct from alpha-tocopherol, with human trials in lipids and metabolic or liver endpoints but no direct lifespan evidence.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "inflammation",
+      "mito"
+    ],
+    "compoundId": "tocotrienols",
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "tocotrienols"
+  },
+
+  {
+    "slug": "butyrate",
+    "category": "compounds",
+    "title": "Butyrate (Sodium / Tributyrin)",
+    "tagline": "SCFA and HDAC signaling — evidence-graded deep dive",
+    "summary": "Butyrate is a colonocyte fuel and HDAC-active microbial metabolite; oral-product evidence is emerging and increasing fermentable fiber is usually the better-supported first step.",
+    "evidenceTier": "C",
+    "relatedHallmarkIds": [
+      "dysbiosis",
+      "epigenetic",
+      "inflammation"
+    ],
+    "compoundId": "butyrate",
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "butyrate"
+  },
+
+  {
+    "slug": "ashwagandha",
+    "category": "compounds",
+    "title": "Ashwagandha (Withania somnifera)",
+    "tagline": "Stress-response modulation — evidence-graded deep dive",
+    "summary": "Standardized extracts have human evidence for perceived stress and sleep, while longevity claims are indirect and rare liver injury is a material caution.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "inflammation",
+      "communication"
+    ],
+    "compoundId": "ashwagandha",
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "ashwagandha"
+  },
+
+  {
+    "slug": "rhodiola",
+    "category": "compounds",
+    "title": "Rhodiola rosea",
+    "tagline": "Stress and fatigue signaling — evidence-graded deep dive",
+    "summary": "Rhodiola has modest human evidence for fatigue and stress, but study quality varies and lifespan findings are preclinical.",
+    "evidenceTier": "C",
+    "relatedHallmarkIds": [
+      "mito",
+      "inflammation"
+    ],
+    "compoundId": "rhodiola",
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "rhodiola"
+  },
+
+  {
+    "slug": "nicotinamide",
+    "category": "compounds",
+    "title": "Nicotinamide (NAM)",
+    "tagline": "NAD precursor and DNA repair — evidence-graded deep dive",
+    "summary": "Nicotinamide is a non-flushing vitamin-B3 form with strong evidence for reducing new non-melanoma skin cancers in high-risk patients; high doses are not interchangeable with general NAD support.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "genomic",
+      "epigenetic"
+    ],
+    "compoundId": "nicotinamide",
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "nicotinamide"
+  },
+
+  {
+    "slug": "hesperidin",
+    "category": "compounds",
+    "title": "Hesperidin",
+    "tagline": "Endothelial flavanone signaling — evidence-graded deep dive",
+    "summary": "This citrus flavanone has human vascular and inflammatory studies, with effects influenced by formulation and individual metabolism; longevity outcomes are absent.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "communication",
+      "inflammation"
+    ],
+    "compoundId": "hesperidin",
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "hesperidin"
+  },
+
+  {
+    "slug": "boswellia",
+    "category": "compounds",
+    "title": "Boswellia serrata (AKBA)",
+    "tagline": "5-LOX inflammatory signaling — evidence-graded deep dive",
+    "summary": "Standardized boswellic-acid extracts have reasonable evidence for osteoarthritis pain and function, while systemic longevity claims extend beyond the data.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "inflammation"
+    ],
+    "compoundId": "boswellia",
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "boswellia"
+  },
+
+  {
+    "slug": "gynostemma",
+    "category": "compounds",
+    "title": "Gynostemma pentaphyllum (Jiaogulan)",
+    "tagline": "AMPK-linked metabolic signaling — evidence-graded deep dive",
+    "summary": "Small human studies suggest metabolic effects from gypenosides, but replication, product standardization, and healthspan evidence are limited.",
+    "evidenceTier": "C",
+    "relatedHallmarkIds": [
+      "nutrient",
+      "mito"
+    ],
+    "compoundId": "gynostemma",
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "gynostemma"
+  },
+
+  {
+    "slug": "lithium",
+    "category": "compounds",
+    "title": "Low-Dose Lithium",
+    "tagline": "GSK-3 and autophagy signaling — evidence-graded deep dive",
+    "summary": "Ecological and preclinical signals are hypothesis-generating only; even low exposure can affect thyroid and kidney function, and lithium orotate lacks robust longevity trials.",
+    "evidenceTier": "C",
+    "relatedHallmarkIds": [
+      "autophagy",
+      "communication"
+    ],
+    "compoundId": "lithium",
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "lithium"
+  },
+
+  {
+    "slug": "hyaluronic-acid",
+    "category": "compounds",
+    "title": "Hyaluronic Acid (Oral)",
+    "tagline": "Extracellular-matrix hydration — evidence-graded deep dive",
+    "summary": "Oral hyaluronic acid has modest trials for skin hydration and knee symptoms, but absorption mechanisms and long-term healthspan relevance remain uncertain.",
+    "evidenceTier": "C",
+    "relatedHallmarkIds": [
+      "communication",
+      "inflammation"
+    ],
+    "compoundId": "hyaluronic-acid",
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "hyaluronic-acid"
+  },
+
+  {
+    "slug": "inulin",
+    "category": "compounds",
+    "title": "Inulin / Prebiotic Fiber",
+    "tagline": "Microbiome SCFA production — evidence-graded deep dive",
+    "summary": "Inulin-type fructans feed saccharolytic microbes and can improve bowel and selected metabolic outcomes; tolerance is dose-dependent and benefits vary by baseline microbiome.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "dysbiosis",
+      "inflammation",
+      "nutrient"
+    ],
+    "compoundId": "inulin",
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "inulin"
+  },
+
+  {
+    "slug": "acarbose",
+    "category": "compounds",
+    "title": "Acarbose",
+    "tagline": "Post-meal glucose attenuation — evidence-graded deep dive",
+    "summary": "Acarbose extends mouse lifespan in the NIA Intervention Testing Program and improves postprandial glucose in humans, but healthy-human longevity benefit is unproven and gastrointestinal effects are common.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "nutrient",
+      "inflammation"
+    ],
+    "requiresDisclaimer": true,
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "acarbose"
+  },
+
+  {
+    "slug": "canagliflozin",
+    "category": "compounds",
+    "title": "Canagliflozin (SGLT2 inhibitor)",
+    "tagline": "Renal glucose excretion — evidence-graded deep dive",
+    "summary": "SGLT2 inhibition has strong cardiorenal outcome data in indicated patients and male-mouse lifespan data, but it is not a healthy-person longevity supplement and carries ketoacidosis and infection risks.",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "nutrient",
+      "communication"
+    ],
+    "requiresDisclaimer": true,
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "canagliflozin"
+  },
+
+  {
+    "slug": "17a-estradiol",
+    "category": "compounds",
+    "title": "17-alpha-Estradiol",
+    "tagline": "Sex-specific metabolic signaling — evidence-graded deep dive",
+    "summary": "17-alpha-estradiol extends lifespan in male mice in the NIA program, but has no human longevity evidence and should be treated strictly as an experimental research compound.",
+    "evidenceTier": "C",
+    "relatedHallmarkIds": [
+      "nutrient",
+      "inflammation"
+    ],
+    "requiresDisclaimer": true,
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "17a-estradiol"
+  },
+
+  {
+    "slug": "dasatinib",
+    "category": "compounds",
+    "title": "Dasatinib",
+    "tagline": "Senolytic tyrosine-kinase inhibition — evidence-graded deep dive",
+    "summary": "Dasatinib plus quercetin has early human senolytic studies, but dasatinib is a potent leukemia drug with serious hematologic and infectious risks and no role in self-experimentation.",
+    "evidenceTier": "C",
+    "relatedHallmarkIds": [
+      "senescence",
+      "inflammation"
+    ],
+    "requiresDisclaimer": true,
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "dasatinib"
+  },
+
+  {
+    "slug": "selenium",
+    "category": "compounds",
+    "title": "Selenium",
+    "tagline": "Selenoprotein Redox Defense — evidence-graded deep dive",
+    "summary": "Tier B for correcting insufficiency, not for general longevity. SELECT found no cancer-prevention benefit in largely replete men (PMID 19066370), while randomized and meta-analytic evidence raises a type-2-diabetes concern at high intake (PMIDs 17620655, 29974401).",
+    "evidenceTier": "B",
+    "relatedHallmarkIds": [
+      "genomic",
+      "inflammation"
+    ],
+    "compoundId": "selenium",
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "selenium"
+  },
+
+  {
+    "slug": "pqq",
+    "category": "compounds",
+    "title": "PQQ (Pyrroloquinoline Quinone)",
+    "tagline": "PGC-1alpha Mitochondrial Signaling — evidence-graded deep dive",
+    "summary": "Tier C: a 10-person crossover reported inflammatory and metabolic-marker shifts (PMID 24231099), while small cognition trials provide preliminary rather than decisive evidence (PMIDs 26782228, 36807425). No human longevity endpoint has been demonstrated.",
+    "evidenceTier": "C",
+    "relatedHallmarkIds": [
+      "mito",
+      "inflammation"
+    ],
+    "compoundId": "pqq",
+    "relatedSynergySlugs": [],
+    "outline": [
+      "What it does and hallmark mapping",
+      "Mechanism and biological context",
+      "Evidence summary",
+      "Dosing protocol",
+      "Monitoring",
+      "Safety and red flags",
+      "Synergies and stack integration",
+      "Personal results template"
+    ],
+    "mdxSlug": "pqq"
+  },
+
   // ── Synergies ──────────────────────────────────────────────────────────────
   {
     slug: 'glynac-nrf2-triad',
@@ -623,3 +1586,14 @@ export function getAllModuleParams(): { slug: LibraryModuleCategory; moduleSlug:
 export function getModulePath(module: LibraryModule): string {
   return `/library/${module.category}/${module.slug}`;
 }
+
+/**
+ * Single source of truth for compound counts. Anything user-facing that names a
+ * number of compounds MUST derive it from here so the count can never drift out
+ * of sync with the actual library again. `content-integrity` locks the expected
+ * total, so a dropped compound fails the build rather than silently vanishing.
+ */
+export const compoundModules: LibraryModule[] = libraryModules.filter(
+  (m) => m.category === 'compounds',
+);
+export const COMPOUND_COUNT = compoundModules.length;

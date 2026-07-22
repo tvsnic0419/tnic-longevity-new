@@ -8,10 +8,10 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { getHubContext } from '@/lib/hub-context';
 
 const categories = [
-  { id: 'stack', label: 'Stack / protocol question' },
-  { id: 'labs', label: 'Labs & biomarker interpretation' },
+  { id: 'correction', label: 'Content correction / evidence question' },
   { id: 'library', label: 'Library content / evidence tier' },
   { id: 'platform', label: 'Platform bug or feature' },
+  { id: 'privacy', label: 'Privacy / data request' },
   { id: 'partnership', label: 'Partnership / sponsorship / lab integration' },
   { id: 'other', label: 'Other (non-medical)' },
 ] as const;
@@ -21,7 +21,7 @@ type Category = (typeof categories)[number]['id'];
 const STORAGE_KEY = 'tnic:contact-drafts';
 
 export function ContactForm() {
-  const [category, setCategory] = useState<Category>('stack');
+  const [category, setCategory] = useState<Category>('correction');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [sent, setSent] = useState(false);
@@ -30,7 +30,7 @@ export function ContactForm() {
     e.preventDefault();
     if (!message.trim()) return;
 
-    const subjectLabel = category === 'partnership' ? 'Partnership inquiry' : 'Protocol question';
+    const subjectLabel = category === 'partnership' ? 'Partnership inquiry' : 'Educational question';
     const subject = encodeURIComponent(`[TNiC ${category}] ${subjectLabel}`);
     const body = encodeURIComponent(
       [
@@ -61,9 +61,9 @@ export function ContactForm() {
     <div>
       <PageHeader
         icon={MessageSquare}
-        eyebrow="Protocol Questions"
-        title="Ask TNiC — Not Your Doctor"
-        description="Structured channel for stack, lab, and library questions. We respond to educational inquiries — never medical advice, diagnoses, or dose prescriptions."
+        eyebrow="Contact"
+        title="Contact TNiC"
+        description="A channel for content corrections, evidence and platform questions, privacy requests, and partnerships. TNiC is educational only — it cannot answer individual medical, dosing, or lab-interpretation questions."
         theme="cyan"
         align="left"
         context={getHubContext('contact')}
@@ -81,9 +81,9 @@ export function ContactForm() {
       <div className="rounded-xl border border-accent-amber/25 bg-accent-amber/5 p-4 mb-8 flex gap-3">
         <AlertTriangle className="w-5 h-5 text-accent-amber shrink-0" />
         <p className="text-sm text-muted-foreground">
-          <strong className="text-foreground">Not for emergencies or clinical decisions.</strong>{' '}
-          Active symptoms, medication changes, and Rx compounds (rapamycin, metformin) require your
-          physician. TNiC provides evidence education only.
+          <strong className="text-foreground">Not for emergencies, clinical decisions, or personal health data.</strong>{' '}
+          Symptoms, medication changes, dosing, and lab interpretation require your physician. Please
+          don&apos;t send lab values or medical details by email — TNiC provides evidence education only.
         </p>
       </div>
 
@@ -141,7 +141,7 @@ export function ContactForm() {
               onChange={(e) => setMessage(e.target.value)}
               required
               rows={6}
-              placeholder="e.g. My hs-CRP rose on Starter Elite week 8 — should I add sulforaphane or fix sleep first?"
+              placeholder="e.g. The evidence tier on the sulforaphane page looks like it cites mechanistic studies — can you check it? (Please don't include personal lab values.)"
               className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm focus-ring resize-y min-h-[140px]"
             />
           </div>

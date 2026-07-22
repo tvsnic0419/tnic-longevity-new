@@ -60,8 +60,8 @@ export function StacksLibrary() {
     <PageShell>
       <PageHeader
         icon={Layers}
-        eyebrow="Stacks & Protocols Library"
-        title="Elite Interactive Stack Intelligence"
+        eyebrow="Stacks & Protocols"
+        title="Stack Architect"
         description="Pre-built evidence-graded protocols with dosing, monitoring, and cost breakdowns. Build custom stacks with real-time synergy and contraindication analysis."
         meta={`${eliteStacks.length} elite stacks · 6 evidence-graded compounds · Educational only`}
         theme="violet"

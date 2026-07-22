@@ -508,7 +508,7 @@ export const updateHistory: UpdateHistoryEntry[] = [
     category: 'safety',
     changes: [
       'Replaced suspect research-feed PMIDs with verified PubMed IDs (FGF21, NRF2, aging economics)',
-      'Unified zero-commission disclosure sitewide — removed contradictory affiliate copy',
+      'Unified affiliate-disclosure copy sitewide — commission never influences listings or evidence tiers',
       'FAQ + lab-analysis stale counts fixed (9 compounds, 8 biomarkers); Tier B library links on dashboard',
     ],
   },

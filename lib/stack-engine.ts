@@ -165,7 +165,7 @@ export function bioavailabilityFactor(bioavailability: number): number {
 export function compoundContribution(compoundId: string): number {
   const c = compoundById.get(compoundId);
   if (!c) return 0;
-  return EVIDENCE_WEIGHT[c.evidence] * bioavailabilityFactor(c.bioavailability);
+  return EVIDENCE_WEIGHT[c.evidence] * bioavailabilityFactor(c.bioavailability ?? 0);
 }
 
 /** Diminishing-returns sum: sort desc, weight by DECAY^n. */

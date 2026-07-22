@@ -90,10 +90,10 @@ export function getNrShopItems(): StackShopItem[] {
 
 /** Canonical commerce language — import everywhere; do not contradict elsewhere */
 export const commerceDisclosure = {
-  headline: 'TNiC earns $0 from product links',
-  body: 'TNiC does not sell supplements or hold inventory. Verified picks link directly to manufacturer websites — always request batch COA before purchase.',
+  headline: 'TNiC may earn a commission — never for placement',
+  body: 'TNiC does not sell supplements or hold inventory. Verified picks link directly to manufacturer websites and may carry an affiliate token at no extra cost to you — always request batch COA before purchase.',
   policy:
-    'No Amazon affiliate CTAs. Any future commercial relationship would be disclosed per product before activation.',
+    'Affiliate commission never influences which products are listed or their evidence tier, and is disclosed at the point of purchase.',
 };
 
 export const shopDisclosure = {

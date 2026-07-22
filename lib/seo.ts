@@ -143,14 +143,14 @@ export function buildRootMetadata(): Metadata {
       template: `%s | ${SITE.name}`,
     },
     description:
-      'Learn the 12 Hallmarks of Aging, build evidence-graded supplement stacks, and track biomarkers — free, private, and PubMed-cited longevity science.',
+      'Transformative Nutrition in Cell-Health. Learn the 12 Hallmarks of Aging and explore an independent, PubMed-backed library of nutrients and compounds — graded by human evidence, with the doses studied and how to buy well. Private, local-first, free.',
     keywords: [...LONGEVITY_KEYWORDS],
     authors: [{ name: SITE.name }],
     creator: SITE.name,
     openGraph: {
       title: SITE.fullName,
       description:
-        'Authoritative longevity science made accessible. Interactive tools, safety guidance, and PubMed-cited protocols for health-optimized adults.',
+        'Transformative Nutrition in Cell-Health — an independent, PubMed-backed library grading the nutrients and compounds that act on the 12 hallmarks of aging by strength of human evidence.',
       type: 'website',
       locale: SITE.locale,
       siteName: SITE.fullName,
@@ -161,7 +161,7 @@ export function buildRootMetadata(): Metadata {
       site: SITE.twitter,
       creator: SITE.twitter,
       title: SITE.fullName,
-      description: 'Evidence-based longevity education, stacks, labs, and interactive tools.',
+      description: 'Transformative Nutrition in Cell-Health — evidence-graded nutrients and compounds for the 12 hallmarks of aging.',
     },
     robots: { index: true, follow: true },
     alternates: {
@@ -290,12 +290,12 @@ export function buildSoftwareApplicationSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'TNiC Longevity OS',
+    name: 'TNiC — Transformative Nutrition in Cell-Health',
     applicationCategory: 'HealthApplication',
     operatingSystem: 'Web',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     description:
-      'Privacy-first longevity operating system: personal dashboard, stack architect, local lab hub, searchable anti-aging library, and six evidence-graded tools.',
+      'Privacy-first, PubMed-backed nutrition library for cell-health: a searchable, evidence-graded catalogue of nutrients and compounds for the 12 hallmarks of aging, plus local biomarker tracking and evidence tools.',
     url: SITE.url,
     featureList: [
       'Stack synergy simulator',

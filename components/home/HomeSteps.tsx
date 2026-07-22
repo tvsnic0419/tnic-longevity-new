@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ClipboardList, BookOpen, Activity, ArrowRight, type LucideIcon } from 'lucide-react';
+import { BookOpen, Scale, ShieldCheck, ArrowRight, type LucideIcon } from 'lucide-react';
 import { RevealItem } from '@/components/ui/RevealItem';
 import { CellularDivider } from '@/components/ui/CellularDivider';
 
@@ -22,27 +22,27 @@ interface Step {
 const steps: Step[] = [
   {
     num: '01',
-    icon: ClipboardList,
-    title: 'Take the 3-minute quiz',
-    desc: 'Answer a few questions and get a mechanism-matched starting stack, tuned to your goal and experience.',
-    cta: 'Start the quiz',
-    href: '/quiz',
-  },
-  {
-    num: '02',
     icon: BookOpen,
-    title: 'Explore the evidence',
-    desc: 'See how each hallmark of aging actually works, and why every compound sits where it does on the A–C scale.',
+    title: 'Start with a hallmark or compound',
+    desc: 'Pick an aging mechanism you want to act on, or a nutrient you keep hearing about, and open its evidence page.',
     cta: 'Open the library',
     href: '/library',
   },
   {
+    num: '02',
+    icon: Scale,
+    title: 'Read the graded evidence',
+    desc: 'See the human studies, the doses actually tested, and where each claim sits on the A–C scale — with every source linked.',
+    cta: 'See the 12 hallmarks',
+    href: '/hallmarks',
+  },
+  {
     num: '03',
-    icon: Activity,
-    title: 'Build & track your protocol',
-    desc: 'Design a protocol, model its projected impact, then log labs to watch it move — all private to your device.',
-    cta: 'Open the dashboard',
-    href: '/dashboard',
+    icon: ShieldCheck,
+    title: 'Decide what’s worth it',
+    desc: 'Use the buyer checklist to verify a product before you spend — and take your questions to a clinician before you start.',
+    cta: 'Open the buyer checklist',
+    href: '/shop',
   },
 ];
 
@@ -57,11 +57,11 @@ export function HomeSteps() {
         <RevealItem className="mx-auto mb-12 max-w-2xl text-center">
           <p className="text-label mb-3 text-accent-emerald">Get started in 3 steps</p>
           <h2 id="home-steps-heading" className="heading-section mb-3">
-            From curious to a protocol you can trust.
+            From curious to confident — no account needed.
           </h2>
           <p className="text-body mx-auto max-w-xl">
-            No account, no upsell, no data leaving your device — just a clear path you can
-            follow at your own pace.
+            No sign-up, no upsell, no data leaving your device — just a clear path from the
+            science to a decision you can stand behind.
           </p>
         </RevealItem>
 

@@ -35,15 +35,24 @@ const nextConfig: NextConfig = {
         source: '/(.*)',
         headers: securityHeaders,
       },
-      {
-        source: '/_next/static/(.*)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
+      // In production Next.js already serves content-hashed /_next/static
+      // assets with this exact header. Re-declaring it unconditionally also
+      // applied it in `next dev`, where chunk URLs are NOT content-hashed —
+      // browsers then kept executing year-old cached JS after every code
+      // change (the dev server logs a warning about precisely this).
+      ...(process.env.NODE_ENV === 'production'
+        ? [
+            {
+              source: '/_next/static/(.*)',
+              headers: [
+                {
+                  key: 'Cache-Control',
+                  value: 'public, max-age=31536000, immutable',
+                },
+              ],
+            },
+          ]
+        : []),
     ];
   },
 };

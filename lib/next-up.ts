@@ -431,7 +431,7 @@ export const nextUpImprovements: NextUpItem[] = [
   {
     id: 'sprint36-trust-indexing',
     title: 'Sprint 36 — Trust & indexing emergency',
-    desc: 'Verified PMIDs, zero-commission copy unification, FAQ/lab stale counts, Tier B dashboard library links.',
+    desc: 'Verified PMIDs, affiliate-disclosure copy unification, FAQ/lab stale counts, Tier B dashboard library links.',
     status: 'shipped',
     sprint: 'Sprint 36',
     href: '/trust/methodology',

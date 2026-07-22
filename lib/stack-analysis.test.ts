@@ -91,7 +91,7 @@ describe('analyzeStack', () => {
     const glynac = compounds.find((c) => c.id === 'glynac')!;
     const sulforaphane = compounds.find((c) => c.id === 'sulforaphane')!;
     expect(a.avgBioavailability).toBe(
-      Math.round((glynac.bioavailability + sulforaphane.bioavailability) / 2),
+      Math.round(((glynac.bioavailability ?? 0) + (sulforaphane.bioavailability ?? 0)) / 2),
     );
   });
 

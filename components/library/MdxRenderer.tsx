@@ -456,11 +456,17 @@ function renderDirective(
 
   if (type === 'decision') {
     return (
-      <LifestyleDecisionTree
-        key={key}
-        title={attrs.title ?? 'Decision tree'}
-        nodes={parseDecisionNodes(body)}
-      />
+      <div key={key} className="my-6">
+        <LifestyleDecisionTree
+          title={attrs.title ?? 'Decision tree'}
+          nodes={parseDecisionNodes(body)}
+        />
+        <p className="mt-2 text-caption text-muted-foreground/80">
+          Educational decision aid — a way to organize the evidence, not a prescription. Doses and
+          timing shown are those used in studies; confirm anything you act on with a clinician or
+          pharmacist.
+        </p>
+      </div>
     );
   }
 

@@ -5,19 +5,20 @@ import {
   Layers,
   FlaskConical,
   LineChart,
-  LayoutDashboard,
+  Pill,
+  ShoppingBag,
   ArrowUpRight,
   type LucideIcon,
 } from 'lucide-react';
-import { compounds } from '@/lib/data';
+import { COMPOUND_COUNT } from '@/lib/library-modules';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { RevealItem } from '@/components/ui/RevealItem';
 import { CellularDivider } from '@/components/ui/CellularDivider';
 
 /**
- * The homepage's primary navigation surface — six clean, crawlable cards that
- * route to every hub on the site. Server-rendered so search engines see real
- * internal links and descriptions, and users get one purposeful path in.
+ * The homepage's primary navigation surface — clean, crawlable cards that route
+ * to the site's hubs. Server-rendered so search engines see real internal links
+ * and descriptions, and users get one purposeful path in.
  */
 
 type Accent = 'cyan' | 'violet' | 'emerald' | 'rose' | 'amber';
@@ -33,11 +34,19 @@ interface Destination {
 
 const destinations: Destination[] = [
   {
+    href: '/products',
+    icon: Pill,
+    eyebrow: 'Buy well',
+    title: 'Recommended Products',
+    desc: 'One evidence-aligned pick per compound — brand, form, and dose matched to the studies, with affiliate links disclosed.',
+    accent: 'emerald',
+  },
+  {
     href: '/library',
     icon: Library,
     eyebrow: 'Reference',
-    title: 'Anti-Aging Library',
-    desc: `The 12 hallmarks of aging and ${compounds.length} evidence-graded compounds — each tiered A–C from human trials, with PubMed citations.`,
+    title: 'The Evidence Library',
+    desc: `The 12 hallmarks of aging and ${COMPOUND_COUNT} nutrients and compounds — each graded A–C by the strength of human evidence, with PubMed citations.`,
     accent: 'cyan',
   },
   {
@@ -73,11 +82,11 @@ const destinations: Destination[] = [
     accent: 'amber',
   },
   {
-    href: '/dashboard',
-    icon: LayoutDashboard,
-    eyebrow: 'Track',
-    title: 'Your Dashboard',
-    desc: 'One private dashboard tying your quiz, stack, and labs into a single clear next action — no account required.',
+    href: '/shop',
+    icon: ShoppingBag,
+    eyebrow: 'Buy well',
+    title: 'Verify Before You Buy',
+    desc: 'What to check on a label — third-party testing, the form used in studies, and a real dose — so you spend on what actually works.',
     accent: 'cyan',
   },
 ];
@@ -108,13 +117,13 @@ export function HomeExplore() {
       <div className="container-page">
         <RevealItem className="mb-10 flex flex-col gap-4 md:mb-14 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
-            <p className="text-label mb-3 text-accent-cyan">Explore the platform</p>
+            <p className="text-label mb-3 text-accent-cyan">Explore the library</p>
             <h2 id="home-explore-heading" className="heading-section mb-3">
-              Everything you need, one clear path.
+              From the science to the shelf — one honest path.
             </h2>
             <p className="text-body">
-              Six hubs, each doing one thing well — from the science, to the protocol, to
-              the labs that prove it worked.
+              Six places to look, each doing one thing well: understand the biology, read the
+              graded evidence, and know what&apos;s genuinely worth buying.
             </p>
           </div>
           <Link

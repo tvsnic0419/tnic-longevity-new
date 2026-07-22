@@ -2,11 +2,11 @@
 
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, BookOpen, Layers, FlaskConical, HeartPulse, AlertTriangle, Scale, type LucideIcon } from 'lucide-react';
+import { ArrowLeft, BookOpen, Layers, FlaskConical, HeartPulse, AlertTriangle, Scale, Pill, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import type { LibraryModule, LibraryModuleCategory } from '@/lib/library-modules';
 import type { ComparisonLink } from '@/lib/comparison-relations';
-import type { GuideLink } from '@/lib/library-graph';
+import type { GuideLink, RelatedCompoundLink } from '@/lib/library-graph';
 import { libraryCategoryMeta } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { compounds } from '@/lib/data';
@@ -18,6 +18,7 @@ import { getBuyerGuideByModuleSlug } from '@/lib/buyer-guides';
 import type { LifestyleSlug } from '@/lib/lifestyle-pillars';
 import { ModuleContextStrip } from './ModuleContextStrip';
 import { CompoundGlancePanel } from './CompoundGlancePanel';
+import { ModuleGlancePanel } from './ModuleGlancePanel';
 import { recordModuleVisit } from '@/lib/recent-modules';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 
@@ -42,11 +43,13 @@ export function LibraryModuleDetail({
   mdxBody,
   comparisons = [],
   guide,
+  relatedCompounds = [],
 }: {
   module: LibraryModule;
   mdxBody: string | null;
   comparisons?: ComparisonLink[];
   guide?: GuideLink;
+  relatedCompounds?: RelatedCompoundLink[];
 }) {
   const categoryMeta = libraryCategoryMeta[module.category];
   const relatedHallmarks = hallmarkLibrary.filter((h) => module.relatedHallmarkIds.includes(h.id));
@@ -56,6 +59,13 @@ export function LibraryModuleDetail({
     .filter(Boolean) ?? [];
   const buyerGuide =
     module.category === 'compounds' ? getBuyerGuideByModuleSlug(module.slug) : undefined;
+  // Library-first compounds have no canonical dataset entry to drive the rich
+  // glance panel; surface the same shape from a live count of the PMIDs cited
+  // in the deep-dive body so all 55 compound pages stay coherent.
+  const mdxStudyCount =
+    module.category === 'compounds' && !relatedCompound && mdxBody
+      ? new Set(mdxBody.match(/\bPMID:?\s*(\d{7,8})\b/g)?.map((m) => m.replace(/\D/g, '')) ?? []).size
+      : 0;
 
   useEffect(() => {
     recordModuleVisit(module);
@@ -183,6 +193,36 @@ export function LibraryModuleDetail({
               </GlassPanel>
             )}
 
+            {relatedCompounds.length > 0 && (
+              <GlassPanel depth="mid" className="rounded-xl p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <Pill className="w-4 h-4 text-accent-emerald" />
+                  <p className="text-[10px] font-mono text-accent-emerald uppercase">Related compounds</p>
+                </div>
+                <ul className="space-y-2.5">
+                  {relatedCompounds.map((rc) => (
+                    <li key={rc.slug}>
+                      <Link
+                        href={`/library/compounds/${rc.slug}`}
+                        className="focus-ring interactive group flex items-center justify-between gap-2 rounded-md"
+                      >
+                        <span className="text-sm text-muted-foreground group-hover:text-accent-cyan transition truncate">
+                          {rc.name}
+                        </span>
+                        <EvidenceTag tier={rc.evidence} size="sm" className="shrink-0" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href="/library/compounds"
+                  className="text-xs text-accent-cyan hover:text-accent-emerald mt-3 inline-block"
+                >
+                  All compounds →
+                </Link>
+              </GlassPanel>
+            )}
+
             {guide && (
               <GlassPanel depth="mid" className="glass-hover rounded-xl">
                 <Link
@@ -231,7 +271,13 @@ export function LibraryModuleDetail({
               <p className="text-sm text-muted-foreground leading-relaxed">{module.summary}</p>
             </motion.div>
 
-            {relatedCompound && <CompoundGlancePanel compound={relatedCompound} />}
+            {relatedCompound ? (
+              <CompoundGlancePanel compound={relatedCompound} />
+            ) : (
+              module.category === 'compounds' && (
+                <ModuleGlancePanel module={module} studyCount={mdxStudyCount} />
+              )
+            )}
 
             {module.requiresDisclaimer && (
               <div className="rounded-xl p-5 border border-accent-amber/30 bg-accent-amber/5 flex gap-3">

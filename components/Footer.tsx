@@ -40,9 +40,18 @@ const resourceLinks = [
   { href: '/trust/methodology', label: 'Methodology', icon: BookOpen },
   { href: '/trust/disclaimers', label: 'Disclaimers', icon: BookOpen },
   { href: '/trust/sponsorship', label: 'Sponsorship Principles', icon: Shield },
+  { href: '/editorial-policy', label: 'Editorial Policy', icon: BookOpen },
+  { href: '/corrections', label: 'Corrections', icon: BookOpen },
   { href: '/partnerships', label: 'Partnerships', icon: Rocket },
   { href: '/contact', label: 'Contact', icon: HelpCircle },
   { href: '/site-map', label: 'Site Map', icon: BookOpen },
+];
+
+const legalLinks = [
+  { href: '/privacy', label: 'Privacy' },
+  { href: '/terms', label: 'Terms' },
+  { href: '/health-data', label: 'Health Data' },
+  { href: '/trust/disclaimers', label: 'Disclaimers' },
 ];
 
 export function Footer() {
@@ -56,7 +65,7 @@ export function Footer() {
           </p>
           <p className="text-body-sm max-w-xl mx-auto">
             No supplement inventory to move. No user health data sales model.
-            Just cellular health research made easier to inspect, question, and apply responsibly.
+            Just cell-health research made easier to inspect, question, and apply responsibly.
           </p>
         </div>
 
@@ -67,7 +76,7 @@ export function Footer() {
               href="/"
               className="focus-ring inline-flex items-center mb-4 rounded-xl group transition-transform hover:scale-[1.02]"
             >
-              <Logo variant="lockup" size="md" alt="TNiC – Longevity Intelligence · Home" />
+              <Logo variant="lockup" size="md" alt="TNiC – Transformative Nutrition in Cell-Health · Home" />
             </Link>
             <p className="text-body-sm max-w-xs">
               Independent longevity intelligence. Evidence-graded compounds,
@@ -131,18 +140,41 @@ export function Footer() {
               TNiC is educational — not a medical provider. Biological age
               and biomarker projections are modeled estimates, not lab diagnostics.
             </p>
+            <p className="text-caption mb-3">
+              TNiC does not sell supplements. Verified product links may carry an
+              affiliate token at no extra cost to you — commission never influences
+              which products are listed or their evidence tier.
+            </p>
             <p className="text-caption">
               Consult a physician before starting any protocol.{' '}
-              <a href="/trust/disclaimers" className="text-accent-cyan hover:underline focus-ring rounded">
-                Transparency Pledge
-              </a>
+              <Link href="/privacy" className="text-accent-cyan hover:underline focus-ring rounded">
+                Privacy
+              </Link>{' '}·{' '}
+              <Link href="/trust/disclaimers" className="text-accent-cyan hover:underline focus-ring rounded">
+                Disclaimers
+              </Link>
             </p>
           </div>
         </div>
 
+        <nav aria-label="Legal" className="pt-6 flex flex-wrap gap-x-5 gap-y-2 mb-4">
+          {legalLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="focus-ring interactive text-caption hover:text-accent-cyan rounded"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+
         <div className="relative pt-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent-emerald/25 to-transparent" />
-          <p className="text-caption font-mono">© 2026 TNiC · Independent · Evidence-First</p>
+          <p className="text-caption font-mono">
+            © 2026 TNiC · Independent · Evidence-First
+            <span className="text-muted-foreground/60"> · Longevity OS coming soon</span>
+          </p>
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-caption font-mono">
             <span>Tier A: {tierACount} compounds</span>
             <span>Tier B: {tierBCount} compounds</span>

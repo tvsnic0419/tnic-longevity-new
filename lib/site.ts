@@ -24,8 +24,8 @@ export const SOCIAL_PROFILES = [
 /** Canonical site configuration — single source for URLs and branding */
 export const SITE = {
   name: 'TNiC',
-  fullName: 'TNiC — Evidence-Based Longevity Education',
-  tagline: 'Longevity Intelligence Platform',
+  fullName: 'TNiC — Transformative Nutrition in Cell-Health',
+  tagline: 'Transformative Nutrition in Cell-Health',
   url: resolveSiteUrl(),
   locale: 'en_US',
   twitter: '@tnic_help',
@@ -35,6 +35,11 @@ export const SITE = {
 } as const;
 
 export const LONGEVITY_KEYWORDS = [
+  'transformative nutrition',
+  'nutrition for cell-health',
+  'cell-health',
+  'cell-health nutrition',
+  'nutraceuticals',
   'longevity',
   'healthspan',
   'anti-aging',

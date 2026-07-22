@@ -59,16 +59,22 @@ export function CompoundGlancePanel({ compound }: { compound: Compound }) {
         </Metric>
 
         <Metric icon={Activity} label="Bioavailability">
-          <p className="text-lg font-bold leading-none text-accent-cyan">
-            {compound.bioavailability}
-            <span className="text-xs font-medium text-muted-foreground">%</span>
-          </p>
-          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted/40">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-accent-cyan to-accent-emerald"
-              style={{ width: `${Math.min(100, Math.max(0, compound.bioavailability))}%` }}
-            />
-          </div>
+          {compound.bioavailability != null ? (
+            <>
+              <p className="text-lg font-bold leading-none text-accent-cyan">
+                {compound.bioavailability}
+                <span className="text-xs font-medium text-muted-foreground">%</span>
+              </p>
+              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted/40">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-accent-cyan to-accent-emerald"
+                  style={{ width: `${Math.min(100, Math.max(0, compound.bioavailability))}%` }}
+                />
+              </div>
+            </>
+          ) : (
+            <p className="text-sm font-semibold text-muted-foreground">—</p>
+          )}
         </Metric>
 
         <Metric icon={Clock} label="Protocol">

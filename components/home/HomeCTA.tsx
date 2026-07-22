@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ClipboardList, LayoutDashboard, ArrowRight } from 'lucide-react';
+import { Library, ClipboardList, ArrowRight } from 'lucide-react';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { CellularDivider } from '@/components/ui/CellularDivider';
 import { RevealItem } from '@/components/ui/RevealItem';
@@ -20,19 +20,19 @@ export function HomeCTA() {
         <RevealItem className="mx-auto max-w-2xl text-center">
           <p className="text-label mb-4 text-accent-cyan">Your first move</p>
           <h2 id="home-cta-heading" className="heading-section mb-4">
-            Find the protocol that fits you — in three minutes.
+            See what the evidence actually supports.
           </h2>
           <p className="text-body mx-auto mb-9 max-w-xl">
-            Start with the quiz, or jump straight into building your protocol. Either way it
-            stays private, stays free, and never asks you to sign up.
+            Browse the library by hallmark or compound, or start with a 3-minute guide that points
+            you to the right pages. Private, free, and no account — ever.
           </p>
           <div className="flex flex-col justify-center gap-3 sm:flex-row">
             <Link
-              href="/quiz"
+              href="/library"
               className="btn-gradient focus-ring group justify-center rounded-full text-base"
             >
-              <ClipboardList className="h-5 w-5" aria-hidden="true" />
-              Take the 3-min quiz
+              <Library className="h-5 w-5" aria-hidden="true" />
+              Explore the evidence
               <ArrowRight
                 className="h-4 w-4 transition-transform group-hover:translate-x-1"
                 aria-hidden="true"
@@ -40,11 +40,11 @@ export function HomeCTA() {
             </Link>
             <GlassPanel depth="float" className="glass-hover rounded-full">
               <Link
-                href="/dashboard"
+                href="/quiz"
                 className="focus-ring inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-semibold text-foreground"
               >
-                <LayoutDashboard className="h-5 w-5 text-accent-cyan" aria-hidden="true" />
-                Open Your Dashboard
+                <ClipboardList className="h-5 w-5 text-accent-cyan" aria-hidden="true" />
+                Start with a 3-min guide
               </Link>
             </GlassPanel>
           </div>
