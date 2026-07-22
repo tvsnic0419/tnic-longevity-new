@@ -143,7 +143,7 @@ export function buildRootMetadata(): Metadata {
       template: `%s | ${SITE.name}`,
     },
     description:
-      'Free educational platform for healthspan optimization. Learn the 12 Hallmarks of Aging, build evidence-graded supplement stacks, track biomarkers locally, and access PubMed-cited longevity research.',
+      'Learn the 12 Hallmarks of Aging, build evidence-graded supplement stacks, and track biomarkers — free, private, and PubMed-cited longevity science.',
     keywords: [...LONGEVITY_KEYWORDS],
     authors: [{ name: SITE.name }],
     creator: SITE.name,

@@ -136,7 +136,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
         a: '24-week GSH restoration (Kumar)',
         b: 'Acute plasma rise; limited long-term trials',
         verdict: 'a',
-        pmid: '34129059',
+        pmid: '33783984',
       },
       {
         dimension: 'Mechanism',
@@ -204,7 +204,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
         a: 'KEAP1 covalent modification — direct',
         b: 'Indirect; weak KEAP1 data',
         verdict: 'a',
-        pmid: '18454171',
+        pmid: '38772511',
       },
       {
         dimension: 'Bioavailability',
@@ -360,7 +360,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
         a: 'Kumar GlyNAC RCT + NRF2 literature',
         b: 'Igarashi NMN RCT + AKG mouse data',
         verdict: 'tie',
-        pmid: '34129059',
+        pmid: '33783984',
       },
       {
         dimension: 'Quiz preset mapping',

@@ -76,7 +76,7 @@ export const hubContexts: Record<
     theme: 'amber',
     what: 'Stack-filtered buyer verification — COA demands, dose anchors, form requirements, and red flags. Affiliate links disclosed; commission never influences what is listed.',
     why: 'Most longevity sites are affiliate stores in disguise. This is an intelligence checklist, not a catalog — verify before you buy.',
-    next: 'Share /shop?stack= with your preset URL, export the checklist, and cross-check against compound deep-dives in the library.',
+    next: 'Share your preset stack link, export the checklist, and cross-check against compound deep-dives in the library.',
   },
   products: {
     theme: 'emerald',
@@ -292,10 +292,10 @@ const moduleCategoryDefaults: Record<LibraryModuleCategory, HubContext> = {
 
 const moduleSlugOverrides: Partial<Record<string, Partial<HubContext>>> = {
   nmn: {
-    next: 'Compare NMN vs NR table first if undecided, then verify Tru Niagen or NMN form at /shop?stack=mito.',
+    next: 'Compare the NMN vs NR table first if undecided, then verify Tru Niagen or NMN form in the Protocol Shop.',
   },
   nr: {
-    next: 'Read NMN vs NR compare, then open /shop?stack=nr for NR-Cl verification checklist.',
+    next: 'Read the NMN vs NR comparison, then open the Protocol Shop for the NR-Cl verification checklist.',
   },
   glynac: {
     next: 'Pair with NRF2 Triad synergy guide, log GSH and 8-OHdG in Labs, verify glycine/NAC forms at shop.',

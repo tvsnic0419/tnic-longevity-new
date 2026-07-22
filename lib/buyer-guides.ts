@@ -104,8 +104,8 @@ export const compoundBuyerGuides: CompoundBuyerGuide[] = [
       { id: 'fillers', label: 'Excipient disclosure', detail: 'No hidden niacin or alpha-lipoic acid "boosters" changing stack math' },
     ],
     doseAnchors: [
-      { label: 'Kumar RCT', dose: '600 mg glycine + 600 mg NAC', pmid: '34129059', note: '24 weeks, restored GSH' },
-      { label: 'Follow-up trial', dose: 'Same ratio', pmid: '36656670', note: 'Mitochondrial function improved' },
+      { label: 'Kumar RCT', dose: '600 mg glycine + 600 mg NAC', pmid: '33783984', note: '24 weeks, restored GSH' },
+      { label: 'Follow-up trial', dose: 'Same ratio', pmid: '35975308', note: 'Mitochondrial function improved' },
       { label: 'Entry titration', dose: '300+300 → 600+600', note: 'GI tolerance week 1–2' },
     ],
     redFlags: [
@@ -194,8 +194,8 @@ export const compoundBuyerGuides: CompoundBuyerGuide[] = [
       { id: 'batch', label: 'Batch COA', detail: 'Mouse lifespan paper used specific purity — demand same rigor' },
     ],
     doseAnchors: [
-      { label: 'Mouse lifespan', dose: '~1–2 g AKG equivalent', pmid: '33027664', note: 'Median lifespan extension' },
-      { label: 'Human pilot', dose: '1–2 g/day Ca-AKG', pmid: '38247127', note: 'Middle-aged adults' },
+      { label: 'Mouse lifespan', dose: '~1–2 g AKG equivalent', pmid: '32877690', note: 'Median lifespan extension' },
+      { label: 'Human pilot', dose: '1–2 g/day Ca-AKG', pmid: '34847066', note: 'Middle-aged adults' },
       { label: 'Stack timing', dose: 'AM with breakfast', note: 'Pairs with NMN in NAD+ Mito Stack' },
     ],
     redFlags: [
