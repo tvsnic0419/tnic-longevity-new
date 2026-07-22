@@ -22,7 +22,7 @@ export function HallmarksConstellation() {
   const radius = 42;
 
   return (
-    <div className="hallmarks-constellation" role="img" aria-label="Interactive map of 12 Hallmarks of Aging">
+    <div className="hallmarks-constellation" role="group" aria-label="Interactive map of the 12 Hallmarks of Aging">
       <svg viewBox="0 0 100 100" className="constellation-svg" aria-hidden="true">
         <defs>
           <radialGradient id="core-glow">
@@ -96,8 +96,9 @@ export function HallmarksConstellation() {
                 onFocus={() => setActive(h.id)}
                 onBlur={() => setActive(null)}
                 title={h.title}
+                aria-label={`Hallmark ${h.number}: ${h.title}`}
               >
-                <span className={`constellation-node-num constellation-theme-${visual.theme}`}>{h.number}</span>
+                <span aria-hidden="true" className={`constellation-node-num constellation-theme-${visual.theme}`}>{h.number}</span>
               </Link>
             </motion.div>
           );

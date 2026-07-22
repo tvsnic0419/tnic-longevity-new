@@ -159,7 +159,7 @@ export function HomeHero() {
                 </Suspense>
               </TiltGlassPanel>
             </div>
-            <p className="mt-4 hidden text-center text-[11px] text-white/35 lg:block lg:text-right">
+            <p className="mt-4 hidden text-center text-[11px] text-white/70 lg:block lg:text-right">
               Drag or hover the network — live compound-synergy data
             </p>
           </div>
