@@ -104,7 +104,7 @@ function ladderStep(age: string | undefined, experience: string | undefined): 0 
  * strongest rung backward. A single-rung goal (metabolic, longevity — there's
  * no gentle mid-tier for them) only activates on the strongest combined
  * signal (step 2: advanced + accelerated age); a lone step-1 nudge isn't
- * enough to justify jumping straight to the 14-compound Full-Spectrum stack.
+ * enough to justify jumping straight to the full Full-Spectrum stack.
  * A two-rung goal (defense, energy — bridged by 'hybrid') can take the softer
  * step first. See UpgradeRungs — this indexing is only valid for 1–2 rungs.
  */
@@ -115,14 +115,14 @@ function resolveRung(rungs: UpgradeRungs, step: 1 | 2): PresetKey | null {
 
 // The open-ended "build a complete protocol" goal scales its breadth to the
 // user's experience (and, once experience shows readiness, to age) so a
-// first-timer isn't handed 14 compounds and an advanced user in an
+// first-timer isn't handed the full protocol and an advanced user in an
 // accelerated-decline age band isn't capped at five. Age is only consulted
 // once experience is affirmatively 'some' — an *unanswered* experience must
 // stay on the same neutral 'hybrid' default as a totally blank quiz, not
 // silently borrow the age signal. This matters beyond the final result: the
 // live quiz preview (see StarterQuiz.tsx) calls this mid-flow with age known
 // but experience not yet picked — if age alone could push it to 'full' here,
-// the preview would promise Full-Spectrum 14 and then drop to Foundation the
+// the preview would promise Full-Spectrum and then drop to Foundation the
 // instant the user picked "Brand new".
 function resolveFullGoalPreset(age?: string, experience?: string): PresetKey {
   if (experience === 'new') return 'starter';
@@ -157,7 +157,7 @@ const PRESET_INSIGHT: Record<PresetKey, string> = {
   hybrid:
     'Your Full Hybrid stack spans GlyNAC, sulforaphane, NMN, Ca-AKG, and R-ALA — NRF2 activation, mitochondrial substrate restoration, and glutathione support in the broadest five-compound protocol TNiC offers.',
   full:
-    'Your Full-Spectrum protocol loads all 14 evidence-graded compounds across every mechanism family — NRF2, NAD+, senolytic, and cardio-metabolic — built for side-by-side comparison and synergy tuning.',
+    'Your Full-Spectrum protocol loads every core evidence-graded compound across every mechanism family — NRF2, NAD+, senolytic, and cardio-metabolic — built for side-by-side comparison and synergy tuning.',
 };
 
 // A closing sentence tuned to the remaining answers (stated goal, then age, then

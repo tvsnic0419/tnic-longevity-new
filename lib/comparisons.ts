@@ -689,7 +689,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
     summary:
       'NMN restores NAD⁺ levels that decline ~50% by age 60, fueling SIRT1-mediated DNA repair and mitochondrial biogenesis. Spermidine inhibits the acetyltransferase EP300, directly triggering autophagy — the cellular recycling process that clears damaged proteins and organelles. Both are credible longevity starters but act at entirely different nodes; stacking them provides complementary coverage rather than redundancy.',
     verdict:
-      'NMN leads on NAD⁺-sensitive domains: DNA repair, mitochondrial biogenesis, vascular endothelium. Spermidine leads on autophagy flux and immune T-cell rejuvenation. Do not force a choice — the Full Hybrid and Full-Spectrum 14 stacks include both for orthogonal pathway coverage.',
+      'NMN leads on NAD⁺-sensitive domains: DNA repair, mitochondrial biogenesis, vascular endothelium. Spermidine leads on autophagy flux and immune T-cell rejuvenation. Do not force a choice — the Full Hybrid and Full-Spectrum stacks include both for orthogonal pathway coverage.',
     rows: [
       {
         dimension: 'Primary mechanism',
@@ -756,7 +756,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
         a: 'NMN + Resveratrol = SIRT1 dual activation (core NAD⁺ pair)',
         b: 'Spermidine + NMN = orthogonal coverage: polyamine autophagy + NAD⁺ repair',
         verdict: 'tie',
-        note: 'Both are included in Full Hybrid and Full-Spectrum 14 — the combination is the point',
+        note: 'Both are included in Full Hybrid and Full-Spectrum — the combination is the point',
       },
     ],
     whenChooseA: [
@@ -877,7 +877,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
     summary:
       'Taurine exploded onto the longevity stage in 2023 when a landmark Science paper (Singh et al.) showed taurine deficiency drives aging across worms, mice, and monkeys — and that taurine supplementation extended median lifespan 10–12% in middle-aged mice and improved multiple aging biomarkers in primates. NMN has a longer track record of controlled human RCTs confirming NAD+ elevation. Both are Tier A compounds operating through fundamentally different mechanisms — taurine is a systemic deficiency corrector; NMN is a pathway-specific fuel for sirtuin/PARP repair.',
     verdict:
-      'Both deserve a place in a serious longevity stack. NMN leads on RCT evidence in humans and SIRT1 pathway specificity. Taurine leads on lifespan extension breadth (multi-species), cost-efficiency, and systemic marker coverage. The Full Hybrid and Full-Spectrum 14 stacks include both — this is not an either/or decision.',
+      'Both deserve a place in a serious longevity stack. NMN leads on RCT evidence in humans and SIRT1 pathway specificity. Taurine leads on lifespan extension breadth (multi-species), cost-efficiency, and systemic marker coverage. The Full Hybrid and Full-Spectrum stacks include both — this is not an either/or decision.',
     rows: [
       {
         dimension: 'Landmark human evidence',
@@ -936,7 +936,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
       },
       {
         dimension: 'TNiC stack integration',
-        a: 'Full-Spectrum 14 and Full Hybrid stacks',
+        a: 'Full-Spectrum and Full Hybrid stacks',
         b: 'Starter, Mito-NAD+, Full Hybrid, Longevity Pro presets',
         verdict: 'context',
       },

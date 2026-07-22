@@ -127,7 +127,7 @@ export const seoRoutes = {
     buildPageMetadata({
       title: 'Stack Architect — Build Evidence-Graded Longevity Protocols',
       description:
-        'Interactive stack builder: real-time synergy scoring, hallmark coverage map, contraindication checks, and seven preset protocols — Starter, NRF2 Defense, Mito-NAD+, Full Hybrid, Longevity Pro, Cardio-Metabolic, and Full-Spectrum 14.',
+        'Interactive stack builder: real-time synergy scoring, hallmark coverage map, contraindication checks, and seven preset protocols — Starter, NRF2 Defense, Mito-NAD+, Full Hybrid, Longevity Pro, Cardio-Metabolic, and Full-Spectrum.',
       path: '/stacks',
       keywords: ['longevity stack', 'GlyNAC protocol', 'NRF2 stack', 'supplement synergy', 'mitochondrial stack', 'NMN stack'],
     }),

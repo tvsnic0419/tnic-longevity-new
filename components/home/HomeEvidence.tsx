@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ShieldCheck, Lock, BookMarked, ArrowUpRight, type LucideIcon } from 'lucide-react';
 import { citationRegistry } from '@/lib/trust';
+import { GRADED_COMPOUND_COUNT } from '@/lib/library-modules';
 
 type Accent = 'emerald' | 'cyan' | 'violet';
 
@@ -31,7 +32,7 @@ const accentVar: Record<Accent, string> = {
 const citationCount = citationRegistry.length;
 
 const stats: { value: string; label: string }[] = [
-  { value: '49', label: 'Evidence-graded compounds' },
+  { value: String(GRADED_COMPOUND_COUNT), label: 'Evidence-graded compounds' },
   { value: '12', label: 'Hallmarks of aging mapped' },
   { value: `${citationCount}`, label: 'Indexed PubMed citations' },
   { value: '100%', label: 'Free & independent' },

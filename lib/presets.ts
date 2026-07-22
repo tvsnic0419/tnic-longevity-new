@@ -30,9 +30,12 @@ export const stackPresets = {
     ids: ['berberine', 'omega3', 'coq10', 'rala'],
   },
   full: {
-    label: 'Full-Spectrum 14',
-    desc: 'All 14 evidence-graded compounds',
-    ids: ['glynac', 'sulforaphane', 'nmn', 'cakg', 'rala', 'resveratrol', 'taurine', 'spermidine', 'pterostilbene', 'berberine', 'urolithina', 'fisetin', 'coq10', 'omega3'],
+    label: 'Full-Spectrum',
+    desc: 'Every core evidence-graded compound in one protocol',
+    // Draws the whole stack-buildable set except NR — NR is an alternative to
+    // NMN (same NAD+ pathway), so it is offered in the compound picker but never
+    // auto-bundled alongside NMN in a single "take everything" protocol.
+    ids: ['glynac', 'sulforaphane', 'nmn', 'cakg', 'rala', 'resveratrol', 'taurine', 'spermidine', 'pterostilbene', 'berberine', 'urolithina', 'fisetin', 'coq10', 'omega3', 'grapeseed'],
   },
 } as const;
 

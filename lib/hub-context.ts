@@ -1,6 +1,6 @@
 import type { ThemeAccent } from './design-system';
 import type { ToolId } from './registry';
-import type { LibraryModule, LibraryModuleCategory } from './library-modules';
+import { GRADED_COMPOUND_COUNT, type LibraryModule, type LibraryModuleCategory } from './library-modules';
 import type { HallmarkLibraryEntry } from './types';
 import type { EvidenceComparison } from './comparisons';
 
@@ -113,7 +113,7 @@ export const hubContexts: Record<
   },
   libraryModules: {
     theme: 'emerald',
-    what: '20 evidence-graded MDX modules — compounds, synergies, lifestyle pillars, and testing guides with personal tracking templates.',
+    what: `${GRADED_COMPOUND_COUNT} evidence-graded compound deep-dives — plus synergy guides, lifestyle pillars, and testing modules, each with dosing, monitoring, and personal tracking templates.`,
     why: 'Shallow blog posts cannot support protocol decisions. Every module includes dosing, monitoring, decision trees, and PMID citations.',
     next: 'Search by compound or hallmark, read the decision tree, then log relevant labs and add compounds to your stack.',
   },

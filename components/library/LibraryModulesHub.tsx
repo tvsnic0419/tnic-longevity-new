@@ -2,11 +2,12 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { Search, ArrowRight, Pill, Layers, HeartPulse, FlaskConical, Scale } from 'lucide-react';
+import { Search, ArrowRight, Pill, Layers, HeartPulse, FlaskConical, Scale, Dna } from 'lucide-react';
 import {
   libraryModules,
   libraryCategoryMeta,
   getModulePath,
+  GRADED_COMPOUND_COUNT,
   type LibraryModuleCategory,
 } from '@/lib/library-modules';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
@@ -24,7 +25,7 @@ const categoryOrder = (Object.keys(libraryCategoryMeta) as LibraryModuleCategory
   (a, b) => libraryCategoryMeta[a].hubOrder - libraryCategoryMeta[b].hubOrder,
 );
 
-export function LibraryModulesHub() {
+export function LibraryModulesHub({ asPageTitle = false }: { asPageTitle?: boolean }) {
   const [query, setQuery] = useState('');
 
   const filtered = useMemo(() => {
@@ -60,15 +61,24 @@ export function LibraryModulesHub() {
         <PageHeader
           id="modules-heading"
           icon={FlaskConical}
-          eyebrow="Content Modules"
-          title="Elite Anti-Aging Library"
-          description="Compound deep-dives, synergy guides, lifestyle pillars, and testing protocols — evidence-graded, MDX-ready, with personal tracking templates."
+          eyebrow="Anti-Aging Library"
+          title="The Compound Library"
+          description={`${GRADED_COMPOUND_COUNT} evidence-graded compound deep-dives — mechanism, evidence tiers, dosing, and monitoring — plus synergy guides, lifestyle pillars, and testing protocols. Each compound maps to the hallmarks of aging it targets.`}
           theme="emerald"
-          as="h2"
+          as={asPageTitle ? 'h1' : 'h2'}
+          graphic={asPageTitle}
           context={getHubContext('libraryModules')}
         />
 
         <div className="flex flex-wrap justify-center gap-3 mb-8">
+          <Link
+            href="/library/hallmarks"
+            className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-accent-violet/30 bg-accent-violet/10 text-sm font-semibold text-accent-violet hover:bg-accent-violet/15 transition-colors"
+          >
+            <Dna className="w-4 h-4" />
+            The 12 Hallmarks of Aging
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
           <Link
             href="/library/compare"
             className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 rounded-xl glass glass-hover text-sm font-semibold text-accent-cyan"

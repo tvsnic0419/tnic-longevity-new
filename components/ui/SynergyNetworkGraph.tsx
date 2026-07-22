@@ -146,7 +146,7 @@ export function SynergyNetworkGraph() {
         viewBox="0 0 700 490"
         className="w-full"
         style={{ overflow: 'visible' }}
-        aria-label="Compound synergy network — 14 evidence-graded compounds and their mechanistic connections"
+        aria-label="Compound synergy network — 14 core evidence-graded compounds and their mechanistic connections"
         role="img"
       >
         <defs>

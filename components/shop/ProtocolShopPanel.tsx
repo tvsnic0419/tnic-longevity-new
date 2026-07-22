@@ -40,7 +40,7 @@ const presetOptions: { key: PresetKey; label: string }[] = [
   { key: 'hybrid', label: 'Full Hybrid' },
   { key: 'longevity', label: 'Longevity Pro' },
   { key: 'metabolic', label: 'Cardio-Metabolic' },
-  { key: 'full', label: 'Full-Spectrum 14' },
+  { key: 'full', label: 'Full-Spectrum' },
 ];
 
 function ProtocolShopPanelInner() {

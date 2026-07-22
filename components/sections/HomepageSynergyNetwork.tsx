@@ -13,12 +13,12 @@ export function HomepageSynergyNetwork() {
         <div className="text-center mb-14">
           <div className="section-badge mb-4">Compound Intelligence</div>
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-4">
-            14 Compounds.{' '}
+            14 Core Compounds.{' '}
             <span className="gradient-sweep-text">23 Synergy Edges.</span>
           </h2>
           <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-            Every compound in our library was selected not just for its solo efficacy, but for
-            how it connects. Hover any node to reveal its mechanistic alliances — and why the
+            These core compounds were selected not just for their solo efficacy, but for
+            how they connect. Hover any node to reveal its mechanistic alliances — and why the
             whole stack outperforms the sum of its parts.
           </p>
         </div>
@@ -31,7 +31,7 @@ export function HomepageSynergyNetwork() {
         {/* Supporting stats */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8">
           {[
-            { value: '14', label: 'Evidence-Graded Compounds' },
+            { value: '14', label: 'Core compounds mapped' },
             { value: '23', label: 'Unique Synergy Connections' },
             { value: '5',  label: 'Biological Pathways' },
             { value: '6',  label: 'Optimized Stack Presets' },

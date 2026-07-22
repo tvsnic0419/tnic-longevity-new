@@ -103,6 +103,7 @@ export const libraryModules: LibraryModule[] = [
       'Legitimate NAD+ precursor with human trial footprint. TNiC defaults to NMN for stack integration; this module covers when NR is the right choice, dosing, buyer verification, and compare-table evidence.',
     evidenceTier: 'A',
     relatedHallmarkIds: ['mito', 'genomic', 'epigenetic', 'senescence', 'nutrient'],
+    compoundId: 'nr',
     relatedSynergySlugs: ['nad-mito-stack', 'nmn-resveratrol-sirt1'],
     outline: [
       'Overview & NR → NMN → NAD+ pathway',
@@ -609,6 +610,18 @@ export const libraryModules: LibraryModule[] = [
     mdxSlug: 'testing-and-monitoring',
   },
 ];
+
+/**
+ * Total number of evidence-graded compound deep-dives in the library — derived
+ * from the module list so it can never drift from the real content. This is the
+ * headline "evidence-graded compounds" figure surfaced sitewide, and it
+ * includes library-only references (e.g. Rx-only Rapamycin, TUDCA) that are
+ * intentionally excluded from the stack builder. For the stack-buildable subset
+ * see STACKABLE_COMPOUND_COUNT in ./data.
+ */
+export const GRADED_COMPOUND_COUNT = libraryModules.filter(
+  (m) => m.category === 'compounds',
+).length;
 
 export function getModuleBySlug(category: LibraryModuleCategory, slug: string): LibraryModule | undefined {
   return libraryModules.find((m) => m.category === category && m.slug === slug);

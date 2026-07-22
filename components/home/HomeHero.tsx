@@ -4,6 +4,7 @@ import { ClipboardList, Library, ArrowRight, Sparkles, Dna, FlaskConical, Shield
 import { Logo } from '@/components/ui/Logo';
 import { StarterQuiz } from '@/components/sections/StarterQuiz';
 import { MolecularMotif } from '@/components/illustrations/MolecularMotif';
+import { GRADED_COMPOUND_COUNT } from '@/lib/library-modules';
 
 /**
  * Server-rendered homepage hero.
@@ -16,7 +17,7 @@ import { MolecularMotif } from '@/components/illustrations/MolecularMotif';
 
 const heroStats = [
   { value: '12', label: 'Hallmarks of aging', icon: Dna },
-  { value: '49', label: 'Graded compounds', icon: FlaskConical },
+  { value: String(GRADED_COMPOUND_COUNT), label: 'Graded compounds', icon: FlaskConical },
   { value: 'A–C', label: 'Evidence tiers', icon: ShieldCheck },
   { value: '100%', label: 'Free & private', icon: Lock },
 ];

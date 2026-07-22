@@ -65,7 +65,7 @@ describe('getQuizPreset', () => {
   it('never lets age alone (experience not yet answered) preview a bigger stack than "new" would give', () => {
     // Regression: the live quiz preview calls getQuizPreset mid-flow with age
     // known but experience not yet picked. Age must not borrow the "some"
-    // upgrade path on its own, or the preview promises Full-Spectrum 14 and
+    // upgrade path on its own, or the preview promises Full-Spectrum and
     // then drops to Foundation the instant the user answers "Brand new".
     expect(getQuizPreset({ goal: 'full', age: '60+' })).toBe('hybrid');
     expect(getQuizPreset({ goal: 'full', age: '51-60' })).toBe('hybrid');

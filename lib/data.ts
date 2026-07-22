@@ -13,6 +13,7 @@ import {
   Scale,
 } from 'lucide-react';
 import type { Compound, Hallmark, PathwayNode, RoadmapItem } from './types';
+import { GRADED_COMPOUND_COUNT } from './library-modules';
 
 export const navLinks = [
   { href: '/library', label: 'Library', mod: 'MOD-LIB-13' },
@@ -23,7 +24,7 @@ export const navLinks = [
 ];
 
 export const communityPulse = [
-  { metric: '14', label: 'Evidence-Graded Compounds' },
+  { metric: String(GRADED_COMPOUND_COUNT), label: 'Evidence-Graded Compounds' },
   { metric: '12', label: 'Hallmarks Explained' },
   { metric: '33', label: 'FAQ Answers' },
   { metric: '20', label: 'Glossary Terms' },
@@ -302,7 +303,54 @@ export const compounds: Compound[] = [
       { title: 'EPA and DHA reduce inflammatory biomarkers via specialized pro-resolving mediators: meta-analysis', journal: 'Crit Rev Food Sci Nutr', year: 2021, pmid: '32835509' },
     ],
   },
+  {
+    id: 'nr',
+    name: 'NR (Nicotinamide Riboside)',
+    brand: 'NR-Cl',
+    pathway: 'NAD+ Salvage',
+    mechanism: 'Nicotinamide riboside enters the NAD+ salvage pathway one step upstream of NMN: nicotinamide riboside kinase (NRK1/2) phosphorylates NR to NMN, which is then adenylylated to NAD+. Restored NAD+ pools fuel SIRT1/3 deacylation, PARP-mediated DNA repair, and CD38 balance. NR and NMN converge on the same NAD+ endpoint — NR is the precursor with the deepest human pharmacokinetic record, though the choice between them is dose economics and stack fit, not whether NAD+ restoration works.',
+    desc: 'Human RCTs confirm NR is orally bioavailable and elevates whole-blood NAD+ in healthy middle-aged and older adults (Martens 2018, PMID 29599478; Trammell 2016, PMID 27721479). TNiC standardizes on NMN for native stack integration, but NR is a defensible NAD+ precursor when a physician prefers it or you already respond to it. Use nicotinamide riboside chloride (NR-Cl) with a batch COA, and judge response on whole-blood NAD+ at week 4. Never combine high-dose NR and NMN without oversight — they feed the same pathway.',
+    badge: 'mito',
+    bioavailability: 82,
+    evidence: 'A',
+    dose: '300–1000mg NR-Cl',
+    timing: 'AM',
+    synergies: ['resveratrol', 'cakg'],
+    hallmarks: ['mito', 'genomic', 'epigenetic'],
+    studies: [
+      { title: 'Chronic nicotinamide riboside supplementation is well-tolerated and elevates NAD+ in healthy middle-aged and older adults', journal: 'Nat Commun', year: 2018, pmid: '29599478' },
+      { title: 'Nicotinamide riboside is uniquely and orally bioavailable in mice and humans', journal: 'Nat Commun', year: 2016, pmid: '27721479' },
+    ],
+  },
+  {
+    id: 'grapeseed',
+    name: 'Grape Seed Extract',
+    brand: '95% OPC',
+    pathway: 'OPC Antioxidant / Vascular',
+    mechanism: 'Grape seed oligomeric proanthocyanidins (OPCs, standardized to ≥95%) act on four pathways at once: direct scavenging of reactive oxygen species, activation of the KEAP1-NRF2 antioxidant program, upregulation of endothelial nitric oxide synthase (eNOS/NO) for vasodilation, and suppression of NF-κB inflammatory signaling. Standardization is decisive — only ≥95% OPC extracts deliver the active content used in trials; generic "grape seed" without an OPC percentage is unreliable.',
+    desc: 'A meta-analysis of 16 randomized controlled trials (810 subjects) found grape seed extract significantly lowers systolic blood pressure (−6 mmHg), with the largest effect in younger and metabolically at-risk subgroups (Zhang 2016, PMID 27537554). OPCs are a broad vascular antioxidant — 20–50× stronger than vitamin C in ROS assays — best positioned as an adjunct to targeted NRF2 agents rather than a stack foundation. Verify ≥95% OPC standardization. Mild antiplatelet activity — coordinate with anticoagulant use and pause before surgery.',
+    badge: 'nrf2',
+    bioavailability: 68,
+    evidence: 'B',
+    dose: '150–300mg 95% OPC',
+    timing: 'AM/PM',
+    synergies: ['sulforaphane', 'rala', 'omega3'],
+    hallmarks: ['inflammation', 'genomic', 'communication'],
+    studies: [
+      { title: 'The impact of grape seed extract treatment on blood pressure changes: a meta-analysis of 16 randomized controlled trials', journal: 'Medicine (Baltimore)', year: 2016, pmid: '27537554' },
+    ],
+  },
 ];
+
+/**
+ * Number of stack-buildable / quiz-eligible compounds — every entry in the
+ * `compounds` array above. This is the OTC set the stack builder, quiz presets,
+ * and synergy analysis draw from; it excludes library-only references (Rx-only
+ * Rapamycin, TUDCA) that live in the deep-dive library but never enter a
+ * self-built stack. For the full evidence-graded library figure (which includes
+ * those references) see GRADED_COMPOUND_COUNT in ./library-modules.
+ */
+export const STACKABLE_COMPOUND_COUNT = compounds.length;
 
 export const biomarkers = [
   {
@@ -960,7 +1008,7 @@ export const roadmap: RoadmapItem[] = [
     phase: 'LIVE',
     title: 'Defense Stack Architect',
     desc: 'Synergy-scored compound protocols with AM/PM dosing intelligence.',
-    specs: ['14 evidence-graded compounds', 'Synergy matrix', 'Hallmark coverage mapping', 'Evidence tier grading'],
+    specs: [`${GRADED_COMPOUND_COUNT} evidence-graded compounds`, 'Synergy matrix', 'Hallmark coverage mapping', 'Evidence tier grading'],
     active: true,
   },
   {
@@ -1225,6 +1273,18 @@ export const safetyNotes = [
     avoidIf: ['Scheduled surgery within 1–2 weeks (bleeding risk)'],
     consultIf: ['Blood thinners (warfarin, aspirin, clopidogrel)', 'Known fish or shellfish allergy', 'Atrial fibrillation history'],
   },
+  {
+    compoundId: 'nr',
+    cautions: ['Feeds the same NAD+ pathway as NMN — do not run high-dose NR and NMN together without oversight', 'Use nicotinamide riboside chloride (NR-Cl) with a batch COA — quality varies between brands', 'Long-term high-dose NAD+ precursors can drain methyl donors — ensure adequate B12, folate, and betaine'],
+    avoidIf: [],
+    consultIf: ['Active cancer treatment', 'Pregnant or nursing', 'Already taking NMN or another NAD+ precursor'],
+  },
+  {
+    compoundId: 'grapeseed',
+    cautions: ['Mild antiplatelet activity — relevant on anticoagulants or before surgery', 'Verify ≥95% OPC standardization; under-standardized products deliver far less active OPC than the label implies', 'Additive blood-pressure lowering — monitor if on antihypertensives'],
+    avoidIf: ['Scheduled surgery within 1–2 weeks (bleeding risk)'],
+    consultIf: ['Anticoagulant or antiplatelet drugs', 'Antihypertensive medication', 'Pregnant or nursing'],
+  },
 ];
 
 export const generalSafetyGuidance = [
@@ -1355,8 +1415,8 @@ export const consumerFAQ = [
   {
     id: 'faq8',
     category: 'products' as const,
-    question: 'Why 14 compounds and not dozens like other sites?',
-    answer: 'More is not better. Each additional compound increases interaction risk and usually means sub-therapeutic doses. TNiC curates 14 evidence-graded compounds — every one with PubMed-cited human data — selected for the strongest mechanistic coverage across all 12 hallmarks. Quality and synergy beat quantity. A stack of 30 unverified compounds with zero clinical evidence is not a protocol — it is a guess.',
+    question: `Why ${GRADED_COMPOUND_COUNT} compounds and not dozens like other sites?`,
+    answer: `More is not better. Each additional compound increases interaction risk and usually means sub-therapeutic doses. TNiC curates ${GRADED_COMPOUND_COUNT} evidence-graded compounds — every one with PubMed-cited human data — selected for the strongest mechanistic coverage across all 12 hallmarks. Quality and synergy beat quantity. A stack of 30 unverified compounds with zero clinical evidence is not a protocol — it is a guess.`,
   },
   {
     id: 'faq9',
@@ -1500,7 +1560,7 @@ export const consumerFAQ = [
     id: 'faq32',
     category: 'science' as const,
     question: 'How does the TNiC quiz generate a personalized stack preset?',
-    answer: 'The quiz maps three inputs — primary goal (learn the science, cellular defense, mitochondrial energy, full optimization, longevity/healthspan, or cardio-metabolic health), age range, and supplement experience — to one of six mechanistic presets: Starter, NRF2 Defense, Mito-NAD+, Full Hybrid, Longevity Pro (senolytic focus), or Cardio-Metabolic (AMPK/lipid focus). Each preset is a curated subset drawn from 14 evidence-graded compounds optimized for synergy coverage across the relevant hallmarks. No black-box algorithm — every mapping is transparent in the methodology section.',
+    answer: `The quiz maps three inputs — primary goal (learn the science, cellular defense, mitochondrial energy, full optimization, longevity/healthspan, or cardio-metabolic health), age range, and supplement experience — to one of six mechanistic presets: Starter, NRF2 Defense, Mito-NAD+, Full Hybrid, Longevity Pro (senolytic focus), or Cardio-Metabolic (AMPK/lipid focus). Each preset is a curated subset drawn from ${STACKABLE_COMPOUND_COUNT} stack-ready compounds optimized for synergy coverage across the relevant hallmarks. No black-box algorithm — every mapping is transparent in the methodology section.`,
   },
   {
     id: 'faq33',
