@@ -17,6 +17,7 @@ import {
   Calculator,
   Network,
   BarChart3,
+  Package,
   Trophy,
   ArrowRight,
 } from 'lucide-react';
@@ -51,6 +52,10 @@ const HealthspanEstimatorTool = dynamic(
   () => import('./HealthspanEstimatorTool').then((m) => ({ default: m.HealthspanEstimatorTool })),
   { loading: () => <SectionSkeleton height="lg" /> },
 );
+const InventoryForecastTool = dynamic(
+  () => import('./InventoryForecastTool').then((m) => ({ default: m.InventoryForecastTool })),
+  { loading: () => <SectionSkeleton height="lg" /> },
+);
 const BiomarkerImpactTool = dynamic(
   () => import('./BiomarkerImpactTool').then((m) => ({ default: m.BiomarkerImpactTool })),
   { loading: () => <SectionSkeleton height="lg" /> },
@@ -63,6 +68,7 @@ const tabIcons = {
   biomarker: FlaskConical,
   impact: BarChart3,
   healthspan: TrendingUp,
+  inventory: Package,
 } as const;
 
 const toolAccents: Record<ToolId, string> = {
@@ -72,6 +78,7 @@ const toolAccents: Record<ToolId, string> = {
   biomarker:  'var(--accent-amber)',
   impact:     'var(--accent-rose)',
   healthspan: 'var(--accent-emerald)',
+  inventory:  'var(--accent-cyan)',
 };
 
 const tabs = toolsRegistry.map((t) => ({
@@ -224,6 +231,7 @@ export function ToolsHub() {
           {active === 'biomarker' && <BiomarkerDashboardTool />}
           {active === 'impact' && <BiomarkerImpactTool />}
           {active === 'healthspan' && <HealthspanEstimatorTool />}
+          {active === 'inventory' && <InventoryForecastTool />}
         </div>
 
         <div className="mt-12">

@@ -12,7 +12,8 @@ export type ToolId =
   | 'protocol'
   | 'biomarker'
   | 'impact'
-  | 'healthspan';
+  | 'healthspan'
+  | 'inventory';
 
 export interface ToolRegistryEntry {
   id: ToolId;
@@ -96,6 +97,18 @@ export const toolsRegistry: ToolRegistryEntry[] = [
     href: '/tools?tab=healthspan',
     keywords: ['healthspan calculator', 'biological age estimate', 'longevity projection'],
     evidenceNote: 'Educational model based on trial timelines — not a medical prediction.',
+  },
+  {
+    id: 'inventory',
+    slug: 'inventory',
+    label: 'Inventory Forecast',
+    shortLabel: 'Stock + reorder',
+    description:
+      'Project supply requirements for your active stack over a 24-week cycle: adherence-weighted consumption, container counts, and reorder cadence.',
+    href: '/tools?tab=inventory',
+    keywords: ['supplement inventory calculator', 'reorder cadence', 'stack supply planner'],
+    evidenceNote: 'Deterministic arithmetic from compound dose timing and your adherence input.',
+    badge: 'New',
   },
 ];
 
