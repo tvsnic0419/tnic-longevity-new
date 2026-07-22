@@ -61,6 +61,43 @@ export function getCompoundsForHallmark(hallmarkId: string): CompoundLink[] {
   );
 }
 
+export interface RelatedCompoundLink extends CompoundLink {
+  /** How many hallmarks this compound shares with the anchor compound. */
+  shared: number;
+}
+
+/**
+ * Other compound deep-dives that share at least one hallmark with the given
+ * compound module, ranked by overlap then evidence. Powers the reciprocal
+ * "Related compounds" rail so every compound page links laterally into the
+ * library instead of being a dead end. Operates purely on module data, so all
+ * 55 compounds participate — not just the stack-buildable subset.
+ */
+export function getRelatedCompounds(moduleSlug: string, limit = 6): RelatedCompoundLink[] {
+  const self = libraryModules.find(
+    (m) => m.category === 'compounds' && m.slug === moduleSlug,
+  );
+  if (!self) return [];
+  const selfHallmarks = new Set(self.relatedHallmarkIds);
+
+  return libraryModules
+    .filter((m) => m.category === 'compounds' && m.slug !== moduleSlug)
+    .map((m) => ({
+      slug: m.slug,
+      name: m.title,
+      evidence: m.evidenceTier,
+      shared: m.relatedHallmarkIds.filter((h) => selfHallmarks.has(h)).length,
+    }))
+    .filter((r) => r.shared > 0)
+    .sort(
+      (a, b) =>
+        b.shared - a.shared ||
+        a.evidence.localeCompare(b.evidence) ||
+        a.name.localeCompare(b.name),
+    )
+    .slice(0, limit);
+}
+
 /**
  * The supplement-guide landing page for a compound (by module slug), when one
  * exists. These are high-intent SEO pages, so compound deep-dives funnel to
