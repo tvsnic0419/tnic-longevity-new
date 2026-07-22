@@ -87,7 +87,7 @@ export const compounds: Compound[] = [
     synergies: ['glynac', 'nmn'],
     hallmarks: ['mito', 'proteostasis'],
     studies: [
-      { title: 'Lipoic acid as a means of metabolic therapy', journal: 'Neurochem Res', year: 2007, pmid: '17909917' },
+      { title: 'Alpha-lipoic acid as a dietary supplement: molecular mechanisms and therapeutic potential', journal: 'Biochim Biophys Acta', year: 2009, pmid: '19664690' },
     ],
   },
   {
@@ -105,8 +105,8 @@ export const compounds: Compound[] = [
     synergies: ['nmn', 'resveratrol'],
     hallmarks: ['epigenetic', 'mito', 'stem'],
     studies: [
-      { title: 'Alpha-ketoglutarate extends lifespan in mice', journal: 'Cell Metab', year: 2020, pmid: '33027664' },
-      { title: 'AKG supplementation reduces biological age in middle-aged adults', journal: 'Aging Cell', year: 2024, pmid: '38247127' },
+      { title: 'Alpha-ketoglutarate, an endogenous metabolite, extends lifespan and compresses morbidity in aging mice', journal: 'Cell Metab', year: 2020, pmid: '32877690' },
+      { title: 'Rejuvant (alpha-ketoglutarate) associated with ~8-year reduction in biological age by DNA methylation clock', journal: 'Aging (Albany NY)', year: 2021, pmid: '34847066' },
     ],
   },
   {
@@ -125,7 +125,7 @@ export const compounds: Compound[] = [
     hallmarks: ['mito', 'genomic', 'epigenetic', 'senescence'],
     studies: [
       { title: 'NMN supplementation elevates NAD+ levels in healthy adults', journal: 'GeroScience', year: 2022, pmid: '36482258' },
-      { title: 'NAD+ intermediates: NMN and NR in aging and disease', journal: 'Cell Metab', year: 2018, pmid: '29514064' },
+      { title: 'NAD+ intermediates: the biology and therapeutic potential of NMN and NR', journal: 'Cell Metab', year: 2018, pmid: '29249689' },
       { title: 'Nicotinamide mononucleotide increases muscle insulin sensitivity in prediabetic women', journal: 'Science', year: 2021, pmid: '33888596' },
     ],
   },
@@ -144,7 +144,7 @@ export const compounds: Compound[] = [
     synergies: ['nmn', 'cakg'],
     hallmarks: ['mito', 'inflammation', 'senescence'],
     studies: [
-      { title: 'Resveratrol improves health and survival of mice on a high-calorie diet', journal: 'Nature', year: 2006, pmid: '17028500' },
+      { title: 'Resveratrol improves health and survival of mice on a high-calorie diet', journal: 'Nature', year: 2006, pmid: '17086191' },
       { title: 'Resveratrol and NAD+ precursors synergize for mitochondrial health', journal: 'Cell Metab', year: 2019, pmid: '30930169' },
       { title: 'Trans-resveratrol activates SIRT1 and FOXO3a in human PBMCs', journal: 'Cell Metab', year: 2024, pmid: '37689102' },
     ],
@@ -182,7 +182,7 @@ export const compounds: Compound[] = [
     synergies: ['resveratrol', 'nmn'],
     hallmarks: ['autophagy', 'epigenetic', 'senescence'],
     studies: [
-      { title: 'Spermidine in health and disease', journal: 'Science', year: 2018, pmid: '30093609' },
+      { title: 'Spermidine in health and disease', journal: 'Science', year: 2018, pmid: '29371440' },
       { title: 'Spermidine supplementation improves memory in older adults', journal: 'Cell', year: 2021, pmid: '33932338' },
     ],
   },
@@ -219,8 +219,8 @@ export const compounds: Compound[] = [
     synergies: ['resveratrol', 'nmn'],
     hallmarks: ['nutrient', 'mito', 'inflammation'],
     studies: [
-      { title: 'Efficacy of berberine in patients with type 2 diabetes — metformin-equivalent RCT', journal: 'Metabolism', year: 2008, pmid: '18396172' },
-      { title: 'Berberine activates AMP-activated protein kinase in rat liver and skeletal muscle', journal: 'J Biol Chem', year: 2007, pmid: '17298901' },
+      { title: 'Efficacy of berberine in patients with type 2 diabetes mellitus (RCT, metformin-comparable)', journal: 'Metabolism', year: 2008, pmid: '18442638' },
+      { title: 'Berberine, a natural plant product, activates AMP-activated protein kinase with beneficial metabolic effects', journal: 'Diabetes', year: 2006, pmid: '16873688' },
       { title: 'Meta-analysis of berberine on lipid metabolism: 27 RCTs', journal: 'Phytomedicine', year: 2015, pmid: '26507383' },
     ],
   },
@@ -240,7 +240,7 @@ export const compounds: Compound[] = [
     hallmarks: ['mito', 'autophagy', 'senescence'],
     studies: [
       { title: 'Urolithin A induces mitophagy and improves muscle function in aging — first human RCT', journal: 'Cell Metabolism', year: 2019, pmid: '31230029' },
-      { title: 'Randomized trial of urolithin A supplementation in healthy older adults: sustained mitochondrial improvements', journal: 'Cell Reports Medicine', year: 2022, pmid: '35391504' },
+      { title: 'Urolithin A improves muscle strength, exercise performance, and biomarkers of mitochondrial health in a randomized trial', journal: 'Cell Rep Med', year: 2022, pmid: '35584623' },
       { title: 'Urolithin A induces mitophagy and prolongs lifespan in C. elegans', journal: 'Nature Medicine', year: 2016, pmid: '27400265' },
     ],
   },
@@ -278,7 +278,7 @@ export const compounds: Compound[] = [
     synergies: ['nmn', 'rala'],
     hallmarks: ['mito', 'inflammation', 'genomic'],
     studies: [
-      { title: 'Effects of CoQ10 supplementation on inflammatory biomarkers: meta-analysis of 17 RCTs', journal: 'Pharmacol Res', year: 2016, pmid: '26267690' },
+      { title: 'Efficacy and optimal dose of CoQ10 supplementation on inflammation-related biomarkers: GRADE-assessed meta-analysis of RCTs', journal: 'Mol Nutr Food Res', year: 2023, pmid: '37118903' },
       { title: 'Coenzyme Q10 supplementation in aging and disease', journal: 'Front Physiol', year: 2018, pmid: '29541041' },
       { title: 'Effects of statin therapy on mitochondrial function and CoQ10 in human skeletal muscle', journal: 'Eur J Clin Pharmacol', year: 2012, pmid: '22395720' },
     ],
@@ -298,8 +298,8 @@ export const compounds: Compound[] = [
     synergies: ['resveratrol', 'sulforaphane'],
     hallmarks: ['inflammation', 'communication', 'telomeres'],
     studies: [
-      { title: 'Cardiovascular risk reduction with icosapentaenoic acid (REDUCE-IT) — 25% reduction in MACE', journal: 'N Engl J Med', year: 2018, pmid: '30145934' },
-      { title: 'Omega-3 fatty acid supplementation and leukocyte telomere length in healthy adults', journal: 'Brain Behav Immun', year: 2012, pmid: '22245710' },
+      { title: 'Cardiovascular risk reduction with icosapent ethyl for hypertriglyceridemia (REDUCE-IT)', journal: 'N Engl J Med', year: 2019, pmid: '30415628' },
+      { title: 'Omega-3 fatty acids, oxidative stress, and leukocyte telomere length: a randomized controlled trial', journal: 'Brain Behav Immun', year: 2012, pmid: '23010452' },
       { title: 'EPA and DHA reduce inflammatory biomarkers via specialized pro-resolving mediators: meta-analysis', journal: 'Crit Rev Food Sci Nutr', year: 2021, pmid: '32835509' },
     ],
   },
