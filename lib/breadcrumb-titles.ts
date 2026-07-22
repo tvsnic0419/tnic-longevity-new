@@ -131,6 +131,7 @@ export const toolLabels: Record<ToolId, string> = {
   biomarker: 'Biomarker Dashboard',
   impact: 'Biomarker Impact',
   healthspan: 'Healthspan Estimator',
+  inventory: 'Inventory Forecast',
 };
 
 export const peptideTitles: Record<string, string> = {

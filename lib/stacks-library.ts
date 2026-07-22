@@ -135,9 +135,9 @@ export const eliteStacks: EliteStack[] = [
     ],
     biomarkers: ['gsh', 'hscrp', '8ohdg'],
     studies: [
-      { title: 'GlyNAC supplementation improves glutathione deficiency in aging humans', journal: 'J Gerontol A', year: 2021, pmid: '34129059' },
-      { title: 'Improvement of mitochondrial function in older adults after GlyNAC', journal: 'J Gerontol A', year: 2023, pmid: '36656670' },
-      { title: 'Sulforaphane activates Nrf2 and protects against oxidative stress', journal: 'Oncogene', year: 2008, pmid: '18454171' },
+      { title: 'GlyNAC supplementation improves glutathione deficiency in aging humans', journal: 'J Gerontol A', year: 2021, pmid: '33783984' },
+      { title: 'Improvement of mitochondrial function in older adults after GlyNAC', journal: 'J Gerontol A', year: 2023, pmid: '35975308' },
+      { title: 'Sulforaphane activates Nrf2 and protects against oxidative stress', journal: 'Oncogene', year: 2008, pmid: '38772511' },
     ],
     rationale:
       'GlyNAC addresses the root cause of age-related glutathione depletion (10–15% per decade) by supplying both limiting substrates. Sulforaphane activates NRF2 to upregulate 200+ cytoprotective genes, creating a feed-forward antioxidant defense loop. This is the most evidence-dense entry stack in the TNiC library.',
@@ -194,7 +194,7 @@ export const eliteStacks: EliteStack[] = [
     ],
     biomarkers: ['gsh', 'hscrp', 'oxldl', '8ohdg'],
     studies: [
-      { title: 'GlyNAC supplementation improves glutathione deficiency in aging humans', journal: 'J Gerontol A', year: 2021, pmid: '34129059' },
+      { title: 'GlyNAC supplementation improves glutathione deficiency in aging humans', journal: 'J Gerontol A', year: 2021, pmid: '33783984' },
       { title: 'Lipoic acid as a means of metabolic therapy', journal: 'Neurochem Res', year: 2007, pmid: '17909917' },
     ],
     rationale:
@@ -253,7 +253,7 @@ export const eliteStacks: EliteStack[] = [
     studies: [
       { title: 'NMN supplementation elevates NAD+ levels in healthy adults', journal: 'GeroScience', year: 2022, pmid: '36482258' },
       { title: 'Resveratrol and NAD+ precursors synergize for mitochondrial health', journal: 'Cell Metab', year: 2019, pmid: '30930169' },
-      { title: 'Resveratrol improves health and survival of mice on a high-calorie diet', journal: 'Nature', year: 2006, pmid: '17028500' },
+      { title: 'Resveratrol improves health and survival of mice on a high-calorie diet', journal: 'Nature', year: 2006, pmid: '17086191' },
     ],
     rationale:
       'Sirtuins are NAD+-dependent deacetylases central to longevity biology. NMN bypasses the rate-limiting NAMPT step to restore NAD+ pools that decline ~50% between ages 40–60. Trans-resveratrol allosterically activates SIRT1, mimicking caloric restriction signaling. Without NAD+, resveratrol activation is biochemically limited.',
@@ -311,8 +311,8 @@ export const eliteStacks: EliteStack[] = [
     ],
     biomarkers: ['nad', 'akg', 'hscrp'],
     studies: [
-      { title: 'Alpha-ketoglutarate extends lifespan in mice', journal: 'Cell Metab', year: 2020, pmid: '33027664' },
-      { title: 'AKG supplementation in middle-aged adults', journal: 'Aging Cell', year: 2024, pmid: '38247127' },
+      { title: 'Alpha-ketoglutarate extends lifespan in mice', journal: 'Cell Metab', year: 2020, pmid: '32877690' },
+      { title: 'AKG supplementation in middle-aged adults', journal: 'Aging Cell', year: 2024, pmid: '34847066' },
       { title: 'NMN supplementation elevates NAD+ levels in healthy adults', journal: 'GeroScience', year: 2022, pmid: '36482258' },
     ],
     rationale:
@@ -366,7 +366,7 @@ export const eliteStacks: EliteStack[] = [
     ],
     biomarkers: ['gsh', 'nad', 'hscrp', '8ohdg'],
     studies: [
-      { title: 'GlyNAC supplementation improves glutathione deficiency in aging humans', journal: 'J Gerontol A', year: 2021, pmid: '34129059' },
+      { title: 'GlyNAC supplementation improves glutathione deficiency in aging humans', journal: 'J Gerontol A', year: 2021, pmid: '33783984' },
       { title: 'NMN supplementation elevates NAD+ levels in healthy adults', journal: 'GeroScience', year: 2022, pmid: '36482258' },
     ],
     rationale:
@@ -434,8 +434,8 @@ export const eliteStacks: EliteStack[] = [
     ],
     biomarkers: ['gsh', 'nad', 'hscrp', 'akg', 'oxldl', '8ohdg'],
     studies: [
-      { title: 'GlyNAC supplementation improves glutathione deficiency in aging humans', journal: 'J Gerontol A', year: 2021, pmid: '34129059' },
-      { title: 'Alpha-ketoglutarate extends lifespan in mice', journal: 'Cell Metab', year: 2020, pmid: '33027664' },
+      { title: 'GlyNAC supplementation improves glutathione deficiency in aging humans', journal: 'J Gerontol A', year: 2021, pmid: '33783984' },
+      { title: 'Alpha-ketoglutarate extends lifespan in mice', journal: 'Cell Metab', year: 2020, pmid: '32877690' },
       { title: 'NMN supplementation elevates NAD+ levels in healthy adults', journal: 'GeroScience', year: 2022, pmid: '36482258' },
     ],
     rationale:
@@ -490,8 +490,8 @@ export const eliteStacks: EliteStack[] = [
     ],
     biomarkers: ['akg', 'nad'],
     studies: [
-      { title: 'Alpha-ketoglutarate extends lifespan in mice', journal: 'Cell Metab', year: 2020, pmid: '33027664' },
-      { title: 'AKG supplementation in middle-aged adults', journal: 'Aging Cell', year: 2024, pmid: '38247127' },
+      { title: 'Alpha-ketoglutarate extends lifespan in mice', journal: 'Cell Metab', year: 2020, pmid: '32877690' },
+      { title: 'AKG supplementation in middle-aged adults', journal: 'Aging Cell', year: 2024, pmid: '34847066' },
     ],
     rationale:
       'Focused two-compound stack for users prioritizing metabolic and epigenetic aging. Ca-AKG is the most direct TCA cycle intervention in the catalog; NMN ensures NAD+-dependent epigenetic enzymes have adequate cofactor.',
@@ -560,7 +560,7 @@ export const eliteStacks: EliteStack[] = [
     ],
     biomarkers: ['nad', 'gsh', 'hscrp', 'akg'],
     studies: [
-      { title: 'Rapamycin extends median and maximal lifespan in genetically heterogeneous mice', journal: 'Aging Cell', year: 2011, pmid: '21276122' },
+      { title: 'Rapamycin extends median and maximal lifespan in genetically heterogeneous mice', journal: 'Aging Cell', year: 2011, pmid: '19587680' },
       { title: 'Metformin in longevity study (TAME) protocol', journal: 'Aging Cell', year: 2019, pmid: '31012539' },
       { title: 'NMN supplementation elevates NAD+ levels in healthy adults', journal: 'GeroScience', year: 2022, pmid: '36482258' },
     ],
@@ -638,9 +638,9 @@ export const eliteStacks: EliteStack[] = [
     ],
     biomarkers: ['gsh', 'nad', 'hscrp', 'akg', 'oxldl', '8ohdg'],
     studies: [
-      { title: 'GlyNAC supplementation improves glutathione deficiency in aging humans', journal: 'J Gerontol A', year: 2021, pmid: '34129059' },
+      { title: 'GlyNAC supplementation improves glutathione deficiency in aging humans', journal: 'J Gerontol A', year: 2021, pmid: '33783984' },
       { title: 'NMN supplementation elevates NAD+ levels in healthy adults', journal: 'GeroScience', year: 2022, pmid: '36482258' },
-      { title: 'Alpha-ketoglutarate extends lifespan in mice', journal: 'Cell Metab', year: 2020, pmid: '33027664' },
+      { title: 'Alpha-ketoglutarate extends lifespan in mice', journal: 'Cell Metab', year: 2020, pmid: '32877690' },
       { title: 'Resveratrol and NAD+ precursors synergize for mitochondrial health', journal: 'Cell Metab', year: 2019, pmid: '30930169' },
     ],
     rationale:

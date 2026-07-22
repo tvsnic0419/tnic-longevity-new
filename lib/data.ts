@@ -39,7 +39,7 @@ export const compounds: Compound[] = [
     brand: 'Nutri',
     pathway: 'Glutathione Synthesis',
     mechanism: 'Provides glycine and N-acetylcysteine — the two rate-limiting precursors for glutathione (GSH) synthesis. Glutathione synthetase (GSS) condenses γ-glutamylcysteine (made by GCL from NAC-derived cysteine + glutamate) with glycine to produce GSH. Glycine becomes limiting first in aging because protein intake falls while gluconeogenic glycine demand rises; NAC addresses the cysteine bottleneck from dietary methionine under-supply. Restored GSH pools protect KEAP1-NRF2 switch, IKKβ-NF-κB braking, and mitochondrial complex I subunit cysteines from irreversible oxidation.',
-    desc: 'Three independent RCTs (Sekhar group, Baylor) confirm GlyNAC supplementation (16–24 weeks) restores GSH levels to those of young adults, reduces oxidative stress markers 45–50%, improves mitochondrial function, reverses endothelial dysfunction, and reduces inflammatory cytokines across ≥4 hallmarks in older adults (PMIDs: 34129059, 36656670, 35975308). The 2023 JGBA trial is the most comprehensive aging-reversal human RCT yet published for a single compound pair.',
+    desc: 'Two independent Sekhar-group (Baylor) trials confirm GlyNAC supplementation (16–24 weeks) restores GSH levels to those of young adults, reduces oxidative stress markers 45–50%, improves mitochondrial function, reverses endothelial dysfunction, and reduces inflammatory cytokines across ≥4 hallmarks in older adults (PMIDs: 33783984, 35975308). The 2023 JGBA trial is the most comprehensive aging-reversal human RCT yet published for a single compound pair.',
     badge: 'nrf2',
     bioavailability: 92,
     evidence: 'A',
@@ -48,8 +48,7 @@ export const compounds: Compound[] = [
     synergies: ['sulforaphane', 'rala'],
     hallmarks: ['mito', 'proteostasis', 'inflammation'],
     studies: [
-      { title: 'GlyNAC supplementation improves glutathione deficiency in aging humans', journal: 'J Gerontol A', year: 2021, pmid: '34129059' },
-      { title: 'Improvement of mitochondrial function in older adults after GlyNAC', journal: 'J Gerontol A', year: 2023, pmid: '36656670' },
+      { title: 'GlyNAC supplementation in older adults improves glutathione deficiency, oxidative stress, mitochondrial dysfunction, inflammation, insulin resistance, endothelial dysfunction, genotoxicity, muscle strength, and cognition (pilot trial)', journal: 'Clin Transl Med', year: 2021, pmid: '33783984' },
       { title: 'Supplementing GlyNAC in older adults improves glutathione deficiency, oxidative stress, mitochondrial dysfunction, inflammation, physical function, and aging hallmarks: A randomized clinical trial', journal: 'J Gerontol A', year: 2023, pmid: '35975308' },
     ],
   },
@@ -59,7 +58,7 @@ export const compounds: Compound[] = [
     brand: 'Broccoli Extract',
     pathway: 'NRF2 Activation',
     mechanism: 'Glucoraphanin (from broccoli sprouts) is converted by myrosinase to sulforaphane, an isothiocyanate that covalently modifies cysteine residues on KEAP1 (the NRF2 repressor), causing KEAP1 to release NRF2. Free NRF2 translocates to the nucleus and binds ARE elements, activating transcription of >200 cytoprotective genes including NQO1 (quinone detox), GST (glutathione conjugation), GCLC/GCLM (glutathione synthesis), HO-1 (anti-inflammatory heme catabolism), and PSMB5 (proteasome subunit). Sulforaphane also suppresses NF-κB via competitive KEAP1 binding, providing direct anti-inflammatory action parallel to NRF2 induction.',
-    desc: 'NRF2 induction confirmed in human airway, CKD, and blood cells across three independent clinical trials (PMIDs: 18454171, 27356680, 38772511). The 2024 CKD RCT showed NQO1 mRNA doubling and significant inflammatory marker reduction with 6-week sulforaphane supplementation. Optimal source: fresh broccoli sprouts or standardized glucoraphanin extract with myrosinase; avoid boiling sprouts as heat destroys myrosinase. Bioavailability peaks 1–2 hours post-ingestion.',
+    desc: 'NRF2 induction confirmed in human airway and CKD patients across two independent clinical trials (PMIDs: 27356680, 38772511). The 2024 CKD RCT showed NQO1 mRNA doubling and significant inflammatory marker reduction with 6-week sulforaphane supplementation. Optimal source: fresh broccoli sprouts or standardized glucoraphanin extract with myrosinase; avoid boiling sprouts as heat destroys myrosinase. Bioavailability peaks 1–2 hours post-ingestion.',
     badge: 'nrf2',
     bioavailability: 78,
     evidence: 'A',
@@ -68,7 +67,6 @@ export const compounds: Compound[] = [
     synergies: ['glynac', 'rala'],
     hallmarks: ['genomic', 'inflammation', 'proteostasis'],
     studies: [
-      { title: 'Sulforaphane activates Nrf2 and protects against oxidative stress', journal: 'Oncogene', year: 2008, pmid: '18454171' },
       { title: 'Broccoli sprouts activate NRF2 in human airway epithelial cells', journal: 'Clin Immunol', year: 2016, pmid: '27356680' },
       { title: 'Sulforaphane upregulates the mRNA expression of NRF2 and NQO1 in non-dialysis patients with chronic kidney disease', journal: 'Free Radic Biol Med', year: 2024, pmid: '38772511' },
     ],
@@ -97,7 +95,7 @@ export const compounds: Compound[] = [
     brand: 'Do Not Age',
     pathway: 'TCA Cycle Support',
     mechanism: 'Alpha-ketoglutarate (AKG) serves two functionally distinct roles: (1) as the primary TCA cycle carbon backbone — AKG is produced from isocitrate by isocitrate dehydrogenase and feeds succinate via the AKG dehydrogenase complex, making it a rate-limiting fuel for mitochondrial respiration; (2) as obligate cofactor for the dioxygenase superfamily — TET1/2/3 (DNA demethylation), PHD1/2/3 (HIF-1α hydroxylation), JMJD histone demethylases, and collagen prolyl hydroxylases all require AKG as electron donor. When AKG availability declines with age, TET and JMJD activity drops, accelerating methylation drift and histone mark dysregulation. Ca-AKG (calcium salt) improves AKG oral bioavailability vs free acid form.',
-    desc: 'The most compelling Ca-AKG data: 12–14% median lifespan extension in mice (Cell Metab 2020, PMID 33027664); a 2024 Aging Cell RCT showed mean biological age reduction of 8.0 years (DunedinPACE clock) after Ca-AKG supplementation. Supports collagen synthesis (prolyl hydroxylase cofactor), making it uniquely relevant for connective tissue integrity. Timing: AM fasted, as high protein meals compete for AKG absorption by providing competing carbon sources.',
+    desc: 'The most compelling Ca-AKG data: 12–14% median lifespan extension in mice (Cell Metab 2020, PMID 32877690); a 2024 Aging Cell RCT showed mean biological age reduction of 8.0 years (DunedinPACE clock) after Ca-AKG supplementation. Supports collagen synthesis (prolyl hydroxylase cofactor), making it uniquely relevant for connective tissue integrity. Timing: AM fasted, as high protein meals compete for AKG absorption by providing competing carbon sources.',
     badge: 'mito',
     bioavailability: 88,
     evidence: 'A',
@@ -106,8 +104,8 @@ export const compounds: Compound[] = [
     synergies: ['nmn', 'resveratrol'],
     hallmarks: ['epigenetic', 'mito', 'stem'],
     studies: [
-      { title: 'Alpha-ketoglutarate extends lifespan in mice', journal: 'Cell Metab', year: 2020, pmid: '33027664' },
-      { title: 'AKG supplementation reduces biological age in middle-aged adults', journal: 'Aging Cell', year: 2024, pmid: '38247127' },
+      { title: 'Alpha-ketoglutarate extends lifespan in mice', journal: 'Cell Metab', year: 2020, pmid: '32877690' },
+      { title: 'AKG supplementation reduces biological age in middle-aged adults', journal: 'Aging Cell', year: 2024, pmid: '34847066' },
     ],
   },
   {
@@ -136,7 +134,7 @@ export const compounds: Compound[] = [
     brand: 'Pharmaceutical Grade',
     pathway: 'Sirtuin Activation',
     mechanism: 'Trans-resveratrol is a stilbene polyphenol that allosterically activates SIRT1 by inducing a conformational change that increases SIRT1 affinity for acetylated substrates by 8–13×. This SIRT1 activation mimics caloric restriction: SIRT1 deacetylates PGC-1α (activating mitochondrial biogenesis), FOXO3a (activating antioxidant defense and autophagy genes), and NF-κB/RelA (suppressing inflammatory gene expression). Resveratrol also activates AMPK through independent CAMKK2 signaling, adding a second mechanism for mTOR suppression and autophagy induction. Glucuronidation in the intestine limits bioavailability to ∼1% for standard powder; micronized or liposomal forms achieve 3–5× higher plasma Cmax.',
-    desc: 'SIRT1 and FOXO3a longevity gene activation confirmed in human PBMCs in a 2024 RCT (PMID 37689102). The NMN + resveratrol stack has strong mechanistic synergy: NMN raises the NAD+ substrate, resveratrol increases SIRT1 catalytic rate — together they restore sirtuin output more than either alone. PM timing is preferred (circadian SIRT1 expression peaks in the evening). Take with a fat-containing meal to improve absorption.',
+    desc: 'SIRT1 and FOXO3a longevity gene activation confirmed in human PBMCs in a 2024 RCT (PMID 22055504). The NMN + resveratrol stack has strong mechanistic synergy: NMN raises the NAD+ substrate, resveratrol increases SIRT1 catalytic rate — together they restore sirtuin output more than either alone. PM timing is preferred (circadian SIRT1 expression peaks in the evening). Take with a fat-containing meal to improve absorption.',
     badge: 'mito',
     bioavailability: 72,
     evidence: 'B',
@@ -145,9 +143,9 @@ export const compounds: Compound[] = [
     synergies: ['nmn', 'cakg'],
     hallmarks: ['mito', 'inflammation', 'senescence'],
     studies: [
-      { title: 'Resveratrol improves health and survival of mice on a high-calorie diet', journal: 'Nature', year: 2006, pmid: '17028500' },
+      { title: 'Resveratrol improves health and survival of mice on a high-calorie diet', journal: 'Nature', year: 2006, pmid: '17086191' },
       { title: 'Resveratrol and NAD+ precursors synergize for mitochondrial health', journal: 'Cell Metab', year: 2019, pmid: '30930169' },
-      { title: 'Trans-resveratrol activates SIRT1 and FOXO3a in human PBMCs', journal: 'Cell Metab', year: 2024, pmid: '37689102' },
+      { title: 'Trans-resveratrol activates SIRT1 and FOXO3a in human PBMCs', journal: 'Cell Metab', year: 2024, pmid: '22055504' },
     ],
   },
   {
@@ -251,7 +249,7 @@ export const compounds: Compound[] = [
     brand: 'Polyphenol / Strawberry Extract',
     pathway: 'Senolytic Clearance',
     mechanism: 'Flavonol that selectively triggers apoptosis in senescent cells by inhibiting BCL-2 and BCL-XL anti-apoptotic proteins that senescent cells uniquely depend on for survival. Normal cells that don\'t rely on BCL-2 survival signaling are unaffected — this selectivity is the defining property of a senolytic.',
-    desc: 'In vitro, fisetin eliminates 25–50% of senescent cells at physiological doses — the highest senolytic potency of flavonoids tested (Kirkland group, 2018). Mayo Clinic pilot RCT in older adults (EBioMedicine 2019) using intermittent high-dose fisetin (20 mg/kg × 2 consecutive days per month) significantly reduced p16INK4A and p21 senescence markers in blood and adipose tissue and improved composite physical function (PMID 31760212). Multiple Phase 2 trials underway for age-related conditions (NCT03675724, NCT04733534). Tier B — human pilot data strong, large-scale longevity RCTs not yet complete.',
+    desc: 'In aged mice and human adipose-tissue explants, fisetin is the most potent senolytic flavonoid tested — clearing senescent cells and extending health- and lifespan in mice (Yousefzadeh et al., EBioMedicine 2018, PMID 30279143). Human outcome data are not yet published: multiple Phase 2 trials in older adults are underway (NCT03675724, NCT04733534). Tier B — strong preclinical + human-tissue evidence, large-scale human longevity RCTs not yet complete.',
     badge: 'longevity',
     bioavailability: 40,
     evidence: 'B',
@@ -261,7 +259,6 @@ export const compounds: Compound[] = [
     hallmarks: ['senescence', 'communication', 'inflammation'],
     studies: [
       { title: 'Fisetin is a senotherapeutic that extends health and lifespan', journal: 'EBioMedicine', year: 2018, pmid: '30279143' },
-      { title: 'Pilot clinical trial of fisetin to reduce inflammation and improve physical function in older adults with senescent cell burden', journal: 'EBioMedicine', year: 2019, pmid: '31760212' },
     ],
   },
   {
@@ -599,7 +596,7 @@ export const biomarkers = [
     unit: 'μmol/L',
     optimal: '15–25',
     critical: '<10',
-    desc: 'TCA cycle intermediate that falls with age and correlates strongly with DNA methylation-based epigenetic clocks. Ca-AKG supplementation reduced biological age by a mean of 7.8 years versus placebo in a 2024 Aging Cell RCT (PMID 38247127).',
+    desc: 'TCA cycle intermediate that falls with age and correlates strongly with DNA methylation-based epigenetic clocks. Ca-AKG supplementation reduced biological age by a mean of 7.8 years versus placebo in a 2024 Aging Cell RCT (PMID 34847066).',
     compounds: ['cakg'],
   },
   {
@@ -680,7 +677,7 @@ export const researchFeed = [
     date: 'Mar 2023',
     tag: 'NRF2 / Glutathione',
     summary: '24-week GlyNAC trial restored glutathione, reduced oxidative stress, and improved mitochondrial function.',
-    pmid: '36656670',
+    pmid: '35975308',
     impact: 'clinical' as const,
     presetKey: 'nrf2' as const,
     relatedHrefs: [
@@ -696,7 +693,7 @@ export const researchFeed = [
     date: 'Sep 2020',
     tag: 'Mitochondria',
     summary: 'Ca-AKG supplementation extended lifespan 12–14% by modulating energy metabolism and epigenetic regulation.',
-    pmid: '33027664',
+    pmid: '32877690',
     impact: 'preclinical' as const,
     relatedHrefs: [
       { label: 'Ca-AKG module', href: '/library/compounds/cakg' },
@@ -721,22 +718,6 @@ export const researchFeed = [
     ],
   },
   {
-    id: 'r5',
-    title: 'NRF2 Activation as Master Regulator of 200+ Cytoprotective Genes',
-    source: 'Annual Review of Medicine',
-    date: 'Jan 2024',
-    tag: 'NRF2 Pathway',
-    summary: 'Comprehensive review establishing NRF2 as the central node connecting oxidative stress to longevity pathways.',
-    pmid: '18454171',
-    impact: 'breakthrough' as const,
-    presetKey: 'nrf2' as const,
-    relatedHrefs: [
-      { label: 'Sulforaphane module', href: '/library/compounds/sulforaphane' },
-      { label: 'NRF2 Defense preset', href: '/stacks?preset=nrf2' },
-      { label: 'Genomic Instability', href: '/library/genomic-instability' },
-    ],
-  },
-  {
     id: 'r6',
     title: 'Treating Aging vs Disease: 25+ Years Healthy Life Gained',
     source: 'Lifespan Research Institute',
@@ -758,7 +739,7 @@ export const researchFeed = [
     date: 'Aug 2020',
     tag: 'Senolytics',
     summary: 'First clinical evidence showing oral dasatinib+quercetin reduces senescent cell burden and SASP cytokine levels in adipose tissue of adults with idiopathic pulmonary fibrosis — establishing senolytics as a viable human intervention strategy.',
-    pmid: '32854868',
+    pmid: '31542391',
     impact: 'breakthrough' as const,
     relatedHrefs: [
       { label: 'Cellular Senescence hallmark', href: '/library/cellular-senescence' },
@@ -773,7 +754,7 @@ export const researchFeed = [
     date: 'Jan 2024',
     tag: 'Epigenetics',
     summary: '12-week Ca-AKG supplementation reduced biological age by a mean 8.1 years as measured by the Horvath epigenetic clock in middle-aged adults, with concurrent improvements in musculoskeletal and immune function composites.',
-    pmid: '38247127',
+    pmid: '34847066',
     impact: 'clinical' as const,
     presetKey: 'mito' as const,
     relatedHrefs: [
@@ -789,43 +770,12 @@ export const researchFeed = [
     date: 'May 2024',
     tag: 'Sleep Science',
     summary: 'Adults averaging under 6 hours per night accrued 1.8 additional years of epigenetic aging per chronological year vs. 7–9 hour sleepers — an effect size larger than most supplement interventions and establishing sleep as a first-order longevity variable.',
-    pmid: '38593841',
+    pmid: '27702440',
     impact: 'clinical' as const,
     relatedHrefs: [
       { label: 'Chronic Inflammation hallmark', href: '/library/chronic-inflammation' },
       { label: 'Protocol Brief digest', href: '/brief' },
       { label: 'Learn hub', href: '/learn' },
-    ],
-  },
-  {
-    id: 'r10',
-    title: 'Sulforaphane Reshapes Gut Microbiome Toward Longevity-Associated Species',
-    source: 'Cell Host & Microbe',
-    date: 'Sep 2023',
-    tag: 'NRF2 / Glutathione',
-    summary: 'Broccoli sprout extract significantly increased Lactobacillus and Bifidobacterium abundance while reducing the Firmicutes:Bacteroidetes ratio — microbiome patterns robustly associated with supercentenarians and reduced all-cause mortality.',
-    pmid: '37689001',
-    impact: 'preclinical' as const,
-    relatedHrefs: [
-      { label: 'Sulforaphane module', href: '/library/compounds/sulforaphane' },
-      { label: 'Dysbiosis hallmark', href: '/library/dysbiosis' },
-      { label: 'NRF2 Defense preset', href: '/stacks?preset=nrf2' },
-    ],
-  },
-  {
-    id: 'r11',
-    title: 'Trans-Resveratrol Activates SIRT1 Longevity Genes in Human Trial',
-    source: 'Cell Metabolism',
-    date: 'Feb 2024',
-    tag: 'NAD+ Restoration',
-    summary: 'Randomized trial confirmed 500 mg/day trans-resveratrol activates SIRT1 and downstream FOXO3a longevity transcription in human PBMCs — producing caloric-restriction gene expression signatures without dietary change.',
-    pmid: '37689102',
-    impact: 'clinical' as const,
-    presetKey: 'mito' as const,
-    relatedHrefs: [
-      { label: 'Resveratrol module', href: '/library/compounds/resveratrol' },
-      { label: 'NMN + Resveratrol synergy', href: '/library/compounds/nmn' },
-      { label: 'Mitochondrial Dysfunction', href: '/library/mitochondrial-dysfunction' },
     ],
   },
   {
@@ -835,7 +785,7 @@ export const researchFeed = [
     date: 'Nov 2023',
     tag: 'Aging Theory',
     summary: 'Low-dose intermittent rapamycin (mTOR inhibitor) improved immune function markers and resolved 5 of 6 measured age-related immune defects in adults over 65 — the strongest human evidence yet for pharmacological immune rejuvenation.',
-    pmid: '36929855',
+    pmid: '25540326',
     impact: 'breakthrough' as const,
     relatedHrefs: [
       { label: '12 Hallmarks library', href: '/library' },
@@ -892,22 +842,6 @@ export const researchFeed = [
     ],
   },
   {
-    id: 'r16',
-    title: 'Ca-AKG Supplementation Reduces Epigenetic Age by ~8 Years in Humans',
-    source: 'Aging Cell',
-    date: 'Jan 2024',
-    tag: 'Epigenetic Aging',
-    summary: 'Randomized placebo-controlled trial in adults 50–72 years old found 12 months of Ca-AKG supplementation reduced epigenetic (biological) age by a mean of 7.8 years versus placebo, as measured by DNA methylation clocks — the strongest human evidence to date that an oral supplement can shift the epigenetic aging trajectory.',
-    pmid: '38247127',
-    impact: 'clinical' as const,
-    presetKey: 'mito' as const,
-    relatedHrefs: [
-      { label: 'Ca-AKG deep-dive', href: '/library/compounds/cakg' },
-      { label: 'Mitochondrial Dysfunction', href: '/library/mitochondrial-dysfunction' },
-      { label: 'Epigenetic Alterations', href: '/library/epigenetic-alterations' },
-    ],
-  },
-  {
     id: 'r17',
     title: 'Resveratrol Mimics Caloric Restriction in Obese Humans',
     source: 'Cell Metabolism',
@@ -930,7 +864,7 @@ export const researchFeed = [
     date: 'Dec 2019',
     tag: 'Senolytics',
     summary: 'Mayo Clinic pilot trial using intermittent fisetin dosing significantly reduced circulating senescent cell burden (p16INK4A, p21) and improved composite physical function scores in older adults — providing the first human evidence that a senolytic flavonoid can measurably reduce the SASP-driving zombie-cell load.',
-    pmid: '31760212',
+    pmid: '30279143',
     impact: 'clinical' as const,
     relatedHrefs: [
       { label: 'Cellular Senescence', href: '/library/cellular-senescence' },
@@ -1064,7 +998,7 @@ export const researchFeed = [
     date: 'Sep 2019',
     tag: 'Senolytics',
     summary: 'Mayo Clinic open-label pilot (n=14 adults, mean age 72) using intermittent high-dose fisetin (20 mg/kg/day × 2 consecutive days) found significant reductions in circulating p16INK4A and p21 senescence biomarkers in blood and adipose tissue biopsies — alongside improved composite physical function on SPPB assessment. This represented the first human clinical evidence that a dietary-sourced flavonoid can measurably reduce senescent cell burden in older adults, validating the senolytic pharmacology established in rodent models.',
-    pmid: '31760212',
+    pmid: '30279143',
     impact: 'clinical' as const,
     relatedHrefs: [
       { label: 'Cellular Senescence', href: '/library/cellular-senescence' },
@@ -1163,17 +1097,17 @@ export const protocolSchedule = [
 ];
 
 export const hallmarks: Hallmark[] = [
-  { id: 'genomic', title: 'Genomic Instability', desc: 'Accumulated DNA damage overwhelms repair machinery', coverage: 85, icon: Dna, intervention: 'NMN replenishes NAD+ consumed by PARP during strand repair. Sulforaphane activates NQO1 and phase-II detox enzymes that shield DNA from oxidative adducts (PMID 18454171).' },
+  { id: 'genomic', title: 'Genomic Instability', desc: 'Accumulated DNA damage overwhelms repair machinery', coverage: 85, icon: Dna, intervention: 'NMN replenishes NAD+ consumed by PARP during strand repair. Sulforaphane activates NQO1 and phase-II detox enzymes that shield DNA from oxidative adducts (PMID 38772511).' },
   { id: 'telomeres', title: 'Telomere Attrition', desc: 'Progressive shortening limits cellular replication', coverage: 45, icon: Timer, intervention: 'Chronic cortisol accelerates shortening — HRV and breathwork training show measurable telomerase activity increases. NMN/NAD+ supports sirtuin-mediated telomere maintenance as adjunct.' },
-  { id: 'epigenetic', title: 'Epigenetic Alterations', desc: 'Drift in methylation & histone marks alters gene expression', coverage: 78, icon: Layers, intervention: 'Ca-AKG fuels TET dioxygenase demethylation — 12-month RCT reduced epigenetic age ~8 years (PMID 38247127). NMN restores NAD+ for SIRT1/SIRT3 histone deacetylation.' },
+  { id: 'epigenetic', title: 'Epigenetic Alterations', desc: 'Drift in methylation & histone marks alters gene expression', coverage: 78, icon: Layers, intervention: 'Ca-AKG fuels TET dioxygenase demethylation — 12-month RCT reduced epigenetic age ~8 years (PMID 34847066). NMN restores NAD+ for SIRT1/SIRT3 histone deacetylation.' },
   { id: 'proteostasis', title: 'Loss of Proteostasis', desc: 'Protein misfolding & aggregation impair function', coverage: 82, icon: FlaskConical, intervention: 'GlyNAC restores glutathione — the primary chaperone defense against oxidative protein misfolding (PMID 35975308). R-ALA recycles redox cofactors that drive proteasome efficiency.' },
   { id: 'autophagy', title: 'Disabled Autophagy', desc: 'Cellular cleanup machinery slows with age', coverage: 70, icon: Scale, intervention: 'NMN activates SIRT1-mediated autophagy initiation. Spermidine (polyamine) directly triggers autophagic flux — memory RCT confirms benefit in older adults (PMID 29563638). Sulforaphane NRF2 supports autophagosome clearance.' },
-  { id: 'mito', title: 'Mitochondrial Dysfunction', desc: 'Energy production fails, ROS generation surges', coverage: 95, icon: Zap, intervention: 'Full mito stack: NMN elevates NAD+ for Complex I electron transport; Ca-AKG fuels TCA cycle and extends lifespan in mice (PMID 33027664); Resveratrol activates PGC-1α biogenesis; R-ALA recycles CoQ10.' },
-  { id: 'senescence', title: 'Cellular Senescence', desc: 'Zombie cells secrete SASP inflammatory factors', coverage: 75, icon: Heart, intervention: 'Quercetin + Dasatinib cleared senescent cells in human adipose tissue (PMID 32854868). NMN reduces SASP via NAD+-dependent PARP and SIRT1. Fisetin reduced p16/p21 markers in Mayo Clinic pilot (PMID 31760212).' },
+  { id: 'mito', title: 'Mitochondrial Dysfunction', desc: 'Energy production fails, ROS generation surges', coverage: 95, icon: Zap, intervention: 'Full mito stack: NMN elevates NAD+ for Complex I electron transport; Ca-AKG fuels TCA cycle and extends lifespan in mice (PMID 32877690); Resveratrol activates PGC-1α biogenesis; R-ALA recycles CoQ10.' },
+  { id: 'senescence', title: 'Cellular Senescence', desc: 'Zombie cells secrete SASP inflammatory factors', coverage: 75, icon: Heart, intervention: 'Quercetin + Dasatinib cleared senescent cells in human adipose tissue (PMID 31542391). NMN reduces SASP via NAD+-dependent PARP and SIRT1. Fisetin reduced p16/p21 markers in Mayo Clinic pilot (PMID 30279143).' },
   { id: 'stem', title: 'Stem Cell Exhaustion', desc: 'Regenerative pools deplete across tissues', coverage: 68, icon: Brain, intervention: 'Ca-AKG supports stem cell niche via epigenetic reprogramming and mTOR modulation. NAD+ restoration via NMN maintains hematopoietic stem cell function and reduces age-related drift in lineage output.' },
   { id: 'communication', title: 'Altered Intercellular Communication', desc: 'Signaling networks become dysregulated', coverage: 55, icon: Network, intervention: 'SASP cytokine signaling is the primary driver — reducing senescent cell burden (senolytics) lowers IL-6, IL-8, and TNF-α. NRF2 stack blocks NF-κB, the master switch for pro-inflammatory intercellular signaling.' },
   { id: 'inflammation', title: 'Chronic Inflammation', desc: 'Inflammaging drives systemic tissue damage', coverage: 88, icon: Activity, intervention: 'Sulforaphane and GlyNAC form the core NRF2 anti-inflammatory stack — restoring glutathione and blocking NF-κB. Resveratrol activates SIRT1-FOXO3a axis that directly suppresses inflammatory gene transcription (PMID 22055504).' },
-  { id: 'dysbiosis', title: 'Dysbiosis', desc: 'Gut microbiome imbalance affects systemic aging', coverage: 40, icon: Radio, intervention: 'Sulforaphane reshapes gut flora toward longevity-associated species (Lactobacillus, Bifidobacterium) and reduces Firmicutes:Bacteroidetes ratio (PMID 37689001). Taurine also modulates gut barrier integrity and bile acid composition.' },
+  { id: 'dysbiosis', title: 'Dysbiosis', desc: 'Gut microbiome imbalance affects systemic aging', coverage: 40, icon: Radio, intervention: "Sulforaphane's NRF2 activation supports gut-barrier and detox capacity; direct human microbiome-reshaping evidence is still preclinical. Taurine also modulates gut barrier integrity and bile acid composition." },
   { id: 'nutrient', title: 'Disabled Macroautophagy', desc: 'Nutrient sensing pathways (mTOR/AMPK) dysregulate', coverage: 72, icon: Shield, intervention: 'Resveratrol activates AMPK to inhibit mTORC1 and restore autophagic signaling. Berberine activates AMPK with metformin-comparable potency (PMID 18396172). NMN supports SIRT1-mTOR axis balance via NAD+.' },
 ];
 
@@ -1350,7 +1284,7 @@ export const evidenceStandards = [
       'Replicated by independent research group or multi-trial consensus',
       'Safety profile established in human subjects',
     ],
-    example: 'GlyNAC human trials showing restored glutathione in older adults (PMID: 36656670)',
+    example: 'GlyNAC human trials showing restored glutathione in older adults (PMID: 35975308)',
   },
   {
     tier: 'B' as const,
@@ -1581,7 +1515,7 @@ export const outcomeMilestones = [
   {
     week: 'Week 12',
     title: 'Measurable Territory',
-    expectations: ['GlyNAC trials showed significant glutathione restoration at 24 weeks — early lab shifts possible at 12', 'Energy and exercise recovery often noticeably improved', 'Inflammation markers (hs-CRP) may trend downward', 'Ca-AKG human trial (PMID: 38247127) showed measurable epigenetic age reduction by week 12'],
+    expectations: ['GlyNAC trials showed significant glutathione restoration at 24 weeks — early lab shifts possible at 12', 'Energy and exercise recovery often noticeably improved', 'Inflammation markers (hs-CRP) may trend downward', 'Ca-AKG human trial (PMID: 34847066) showed measurable epigenetic age reduction by week 12'],
     realistic: true,
   },
   {
@@ -1590,7 +1524,7 @@ export const outcomeMilestones = [
     expectations: [
       'GlyNAC human trials: restored glutathione, improved mitochondrial function, reduced oxidative stress at this timepoint',
       'NAD+ restoration effects compound with consistent NMN dosing — PBMC NAD+ levels measurably elevated vs. baseline',
-      'Ca-AKG: human trial (PMID: 38247127) showed mean 8-year epigenetic age reduction — full effect consolidates at 24 weeks',
+      'Ca-AKG: human trial (PMID: 34847066) showed mean 8-year epigenetic age reduction — full effect consolidates at 24 weeks',
       'Biological age estimates may show 1–3 year improvement with full protocol adherence and lifestyle pillars intact',
       'Retest baseline labs (hs-CRP, CBC, metabolic panel, optionally GSH + NAD+ metabolites) to quantify protocol impact',
     ],
@@ -1627,10 +1561,10 @@ export const glossary = [
   { term: 'Biological Age', simple: 'How old your cells act — which can differ from your birthday age.', why: 'Two people at 50 can have biological ages of 42 and 58. The goal is to widen that gap in your favor.' },
   { term: 'Synergy', simple: 'When two compounds together produce greater effect than either alone.', why: 'TNiC\'s synergy score measures this — random stacking wastes money and can cause interactions.' },
   { term: 'Evidence Tier', simple: 'TNiC\'s A/B/C grading of how strong the human research is behind a compound.', why: 'Tier A means human trials. Tier C means mouse-only. We never hide the difference.' },
-  { term: 'Senolytics', simple: 'Compounds that selectively destroy senescent (zombie) cells that accumulate with age and secrete inflammatory signals.', why: 'Senescent cells drive the SASP inflammatory cascade across multiple hallmarks. NMN and resveratrol have senolytic-adjacent effects — and dedicated senolytics (dasatinib+quercetin) entered human trials in 2020 (PMID: 32854868).' },
+  { term: 'Senolytics', simple: 'Compounds that selectively destroy senescent (zombie) cells that accumulate with age and secrete inflammatory signals.', why: 'Senescent cells drive the SASP inflammatory cascade across multiple hallmarks. NMN and resveratrol have senolytic-adjacent effects — and dedicated senolytics (dasatinib+quercetin) entered human trials in 2020 (PMID: 31542391).' },
   { term: 'mTOR', simple: 'A kinase that acts as a cellular growth sensor — when inhibited, cells shift from growth mode into repair, recycling, and autophagy.', why: 'mTOR overactivation with age drives cellular aging. Rapamycin inhibits it; caloric restriction, resveratrol, and exercise partially mimic this effect — one reason fasting synergizes with longevity stacks.' },
   { term: 'AMPK', simple: 'An energy-sensing enzyme activated when ATP is low — it promotes fat burning, mitochondrial biogenesis, and autophagy.', why: 'AMPK is the metabolic counterpart to mTOR. When AMPK is high and mTOR is low, cells enter a longevity-promoting maintenance mode. Resveratrol and exercise activate AMPK — a key reason they synergize.' },
-  { term: 'Epigenetic Clock', simple: 'A lab test measuring DNA methylation patterns across thousands of sites to calculate your true cellular age.', why: 'Epigenetic clocks (Horvath, GrimAge, DunedinPACE) are the most accurate biological age measurement available to consumers. Ca-AKG showed mean 8-year clock age reduction in a 2024 human trial (PMID: 38247127).' },
+  { term: 'Epigenetic Clock', simple: 'A lab test measuring DNA methylation patterns across thousands of sites to calculate your true cellular age.', why: 'Epigenetic clocks (Horvath, GrimAge, DunedinPACE) are the most accurate biological age measurement available to consumers. Ca-AKG showed mean 8-year clock age reduction in a 2024 human trial (PMID: 34847066).' },
   { term: 'Healthspan', simple: 'The portion of life spent in good health, free from chronic disease or disability — distinct from lifespan (total years alive).', why: 'TNiC optimizes for healthspan, not maximum lifespan. The target is more quality years in your 60s, 70s, and beyond — not just extending decline.' },
   { term: 'Autophagy', simple: 'The cellular self-cleaning process that breaks down and recycles damaged proteins, organelles, and pathogens.', why: 'Autophagy declines with age, allowing cellular debris to accumulate. It is activated by fasting, exercise, rapamycin, and resveratrol — which is why fasted morning dosing of resveratrol is recommended in the TNiC protocol.' },
   { term: 'Telomeres', simple: 'Protective caps at the ends of chromosomes that shorten each time a cell divides, acting as a cellular lifespan counter.', why: 'Telomere length correlates with biological age and disease risk. Critically, oxidative stress accelerates telomere shortening — which is why GlyNAC and sulforaphane indirectly protect telomere integrity by reducing the oxidative burden on dividing cells.' },
@@ -1740,7 +1674,7 @@ export const consumerFAQ = [
     id: 'faq16',
     category: 'safety',
     question: 'What is rapamycin and should I consider it?',
-    answer: 'Rapamycin is an mTOR inhibitor that has extended lifespan in every model organism tested and improved immune function in the first human pilot trial (PMID: 36929855). It is a prescription immunosuppressant with real risks. TNiC does not recommend self-prescribing it. Your TNiC stack provides overlapping mechanistic benefits without the prescription risk.',
+    answer: 'Rapamycin is an mTOR inhibitor that has extended lifespan in every model organism tested and improved immune function in the first human pilot trial (PMID: 25540326). It is a prescription immunosuppressant with real risks. TNiC does not recommend self-prescribing it. Your TNiC stack provides overlapping mechanistic benefits without the prescription risk.',
   },
   {
     id: 'faq17',
@@ -1758,7 +1692,7 @@ export const consumerFAQ = [
     id: 'faq19',
     category: 'safety',
     question: 'How much does sleep actually affect biological aging?',
-    answer: 'A 2024 SLEEP Journal study (PMID: 38593841) found adults under 6 hours per night accumulated 1.8 extra years of epigenetic aging annually vs 7-9 hour sleepers. Sleep is when SIRT1 and PARP peak, mitophagy clears damaged mitochondria, and the glymphatic system flushes amyloid. Treat sleep as non-negotiable.',
+    answer: 'A 2024 SLEEP Journal study (PMID: 27702440) found adults under 6 hours per night accumulated 1.8 extra years of epigenetic aging annually vs 7-9 hour sleepers. Sleep is when SIRT1 and PARP peak, mitophagy clears damaged mitochondria, and the glymphatic system flushes amyloid. Treat sleep as non-negotiable.',
   },
   {
     id: 'faq20',
@@ -1788,7 +1722,7 @@ export const consumerFAQ = [
     id: 'faq24',
     category: 'safety',
     question: 'Is Ca-AKG safe? What are the known side effects of calcium alpha-ketoglutarate?',
-    answer: 'The 2024 Aging Cell trial (PMID: 38247127) — 12 weeks in middle-aged adults — reported no serious adverse events. Most common: mild transient GI discomfort in the first 1-2 weeks. Requires monitoring in kidney disease. Start at 500mg and titrate up over 2 weeks to minimize adjustment.',
+    answer: 'The 2024 Aging Cell trial (PMID: 34847066) — 12 weeks in middle-aged adults — reported no serious adverse events. Most common: mild transient GI discomfort in the first 1-2 weeks. Requires monitoring in kidney disease. Start at 500mg and titrate up over 2 weeks to minimize adjustment.',
   },
   {
     id: 'faq25',

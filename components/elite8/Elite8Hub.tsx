@@ -279,7 +279,7 @@ function EquationBlock() {
       </div>
       <p className="mt-6 pt-4 border-t border-border/50 text-caption leading-relaxed">
         Dimension scores (0–10) are editorially synthesized from peer-reviewed literature. Weights reflect TNiC&apos;s evidence hierarchy — not a peer-reviewed meta-score. LQ rankings are modeled synthesis, not clinical recommendations. See{' '}
-        <Link href="/trust/methodology" className="text-accent-cyan hover:underline">
+        <Link href="/trust/methodology" className="text-accent-cyan underline underline-offset-2">
           evidence tier grading
         </Link>{' '}
         for study-level analysis.
@@ -590,7 +590,7 @@ export function Elite8Hub() {
 
         <p className="text-center text-caption mt-16 max-w-2xl mx-auto leading-relaxed">
           Scores synthesized from peer-reviewed literature. This tool is for educational and research purposes only. Rx compounds require physician oversight. Part of the{' '}
-          <Link href="/trust" className="text-accent-cyan hover:underline">
+          <Link href="/trust" className="text-accent-cyan underline underline-offset-2">
             TNiC Trust Center
           </Link>
           .
