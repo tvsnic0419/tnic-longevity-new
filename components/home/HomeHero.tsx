@@ -27,19 +27,27 @@ export function HomeHero() {
   return (
     <section
       aria-labelledby="home-hero-heading"
-      className="relative isolate overflow-hidden bg-[#020811] pt-28 pb-16 md:pt-32 md:pb-24"
+      className="relative isolate overflow-hidden bg-[var(--color-bg-base)] pt-28 pb-16 md:pt-32 md:pb-24"
     >
-      {/* Backdrop — pure CSS so it renders on the server and stays lightweight */}
+      {/* Backdrop — dot grid + twin blur orbs carry the navy/cyan atmosphere;
+          the molecular motif is bled full-bleed behind the whole hero at real
+          visual weight so it reads as a genuine graphic centerpiece rather
+          than a faint corner texture. */}
       <div aria-hidden="true" className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[radial-gradient(#12203c_0.8px,transparent_1px)] [background-size:22px_22px] opacity-50" />
-        <div className="absolute -left-32 -top-40 h-[38rem] w-[38rem] rounded-full bg-[radial-gradient(circle,rgba(0,224,255,0.16),transparent_60%)] blur-2xl" />
-        <div className="absolute -right-40 top-1/3 h-[34rem] w-[34rem] rounded-full bg-[radial-gradient(circle,rgba(52,211,153,0.12),transparent_60%)] blur-2xl" />
+        <div
+          className="absolute -left-32 -top-40 h-[38rem] w-[38rem] rounded-full blur-2xl"
+          style={{ background: 'radial-gradient(circle, color-mix(in srgb, var(--accent-cyan) 16%, transparent), transparent 60%)' }}
+        />
+        <div
+          className="absolute -right-40 top-1/3 h-[34rem] w-[34rem] rounded-full blur-2xl"
+          style={{ background: 'radial-gradient(circle, color-mix(in srgb, var(--accent-emerald) 12%, transparent), transparent 60%)' }}
+        />
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-background" />
-
         <MolecularMotif
           theme="cyan"
           size="hero"
-          className="absolute -right-10 top-0 hidden opacity-40 md:block lg:-right-4 [mask-image:linear-gradient(to_right,transparent,black_16%)]"
+          className="absolute -right-16 top-0 hidden opacity-60 md:block lg:-right-8 [mask-image:linear-gradient(to_right,transparent,black_14%)]"
         />
       </div>
 
@@ -55,12 +63,12 @@ export function HomeHero() {
               </span>
             </div>
 
-            <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium text-white/80">
-              <Sparkles className="h-3.5 w-3.5 text-[var(--accent-cyan)]" aria-hidden="true" />
+            <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-foreground/10 bg-foreground/5 px-4 py-1.5 text-xs font-medium text-foreground/80">
+              <Sparkles className="h-3.5 w-3.5 text-accent-cyan" aria-hidden="true" />
               The anti-aging operating system
             </span>
 
-            <h1 id="home-hero-heading" className="headline-editorial mb-2 text-white">
+            <h1 id="home-hero-heading" className="headline-editorial mb-2">
               Understand how you age.
               <br />
               <span className="relative inline-block">
@@ -97,7 +105,7 @@ export function HomeHero() {
               </span>
             </h1>
 
-            <p className="mx-auto mb-8 mt-6 max-w-xl text-lg leading-relaxed text-white/70 md:text-xl lg:mx-0">
+            <p className="mx-auto mb-8 mt-6 max-w-xl text-lg leading-relaxed text-foreground/70 md:text-xl lg:mx-0">
               TNiC turns longevity science into one clear protocol — the 12 hallmarks of
               aging, evidence-graded compounds, and simulators that project the impact
               before you commit. Independent, private, and free.
@@ -124,23 +132,24 @@ export function HomeHero() {
               </Link>
             </div>
 
-            <div className="mb-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-xs font-medium tracking-wide text-white/55 lg:justify-start">
+            <div className="mb-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-xs font-medium tracking-wide text-foreground/50 lg:justify-start">
               {trustMarkers.map((marker, i) => (
                 <span key={marker} className="flex items-center gap-4">
-                  {i > 0 && <span className="h-3 w-px bg-white/15" aria-hidden="true" />}
+                  {i > 0 && <span className="h-3 w-px bg-foreground/15" aria-hidden="true" />}
                   <span>{marker}</span>
                 </span>
               ))}
             </div>
 
-            {/* Evidence stat rail — premium HUD treatment with per-stat icons */}
+            {/* Evidence stat rail — premium HUD treatment with per-stat icons;
+                each cell carries its own elevation and lifts on hover. */}
             <dl className="platform-hud">
               {heroStats.map((stat) => (
                 <div key={stat.label} className="platform-hud-cell text-center lg:text-left">
                   <dt className="sr-only">{stat.label}</dt>
                   <dd>
                     <stat.icon
-                      className="mx-auto mb-1.5 h-4 w-4 text-[var(--accent-cyan)] opacity-80 lg:mx-0"
+                      className="mx-auto mb-1.5 h-4 w-4 text-accent-cyan opacity-80 lg:mx-0"
                       aria-hidden="true"
                     />
                     <span className="platform-hud-value">{stat.value}</span>
@@ -152,16 +161,16 @@ export function HomeHero() {
           </div>
 
           {/* Interactive quiz — the single client island in the hero */}
-          <div className="mt-12 lg:col-span-5 lg:mt-0">
+          <div className="mt-12 lg:col-span-5 lg:mt-6">
             <div className="relative">
               <div
-                className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-[var(--accent-cyan)]/14 via-transparent to-[var(--accent-emerald)]/14 blur-2xl"
+                className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-accent-cyan/14 via-transparent to-accent-emerald/14 blur-2xl"
                 aria-hidden="true"
               />
               <div className="card-depth relative rounded-3xl">
                 <div className="tnic-glass rounded-3xl">
                   <Suspense
-                    fallback={<div className="h-[380px] animate-pulse rounded-3xl bg-white/5" />}
+                    fallback={<div className="h-[380px] animate-pulse rounded-3xl bg-foreground/5" />}
                   >
                     <StarterQuiz />
                   </Suspense>
