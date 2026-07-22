@@ -29,7 +29,7 @@ export default function TelomereAttritionPage() {
   const hallmark = getHallmarkBySlug('telomere-attrition')!;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen canvas-scrim text-foreground">
       <Nav />
       <main id="main-content" tabIndex={-1}>
         <section className="pt-28 pb-16 md:pt-36 md:pb-20 relative overflow-hidden">

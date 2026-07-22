@@ -162,7 +162,7 @@ export function PartnerImportPanel() {
         </div>
       </div>
 
-      <details className="glass rounded-xl p-4">
+      <details className="glass-deep glass-plane-mid rounded-xl p-4">
         <summary className="text-xs font-semibold cursor-pointer">Partner CSV template</summary>
         <pre className="mt-3 text-[10px] font-mono text-caption overflow-x-auto whitespace-pre">
           {PARTNER_CSV_TEMPLATE}

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, Calculator } from 'lucide-react';
 import { toolsRegistry } from '@/lib/registry';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 
 interface ToolsPromoStripProps {
   headline?: string;
@@ -29,16 +30,17 @@ export function ToolsPromoStrip({
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 flex-1">
           {toolsRegistry.map((t) => (
-            <Link
-              key={t.id}
-              href={t.href}
-              className="focus-ring interactive glass glass-hover rounded-xl p-3 text-center group"
-            >
-              <p className="text-xs font-semibold text-foreground/80 group-hover:text-accent-cyan transition-colors">
-                {t.label}
-              </p>
-              <p className="text-[10px] text-caption mt-0.5">{t.shortLabel}</p>
-            </Link>
+            <GlassPanel key={t.id} depth="mid" className="glass-hover h-full rounded-xl">
+              <Link
+                href={t.href}
+                className="focus-ring interactive block h-full rounded-xl p-3 text-center group"
+              >
+                <p className="text-xs font-semibold text-foreground/80 group-hover:text-accent-cyan transition-colors">
+                  {t.label}
+                </p>
+                <p className="text-[10px] text-caption mt-0.5">{t.shortLabel}</p>
+              </Link>
+            </GlassPanel>
           ))}
         </div>
         <Link

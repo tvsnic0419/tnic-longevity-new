@@ -7,6 +7,7 @@ import { evidenceComparisons } from '@/lib/comparisons';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { CompareShareCard } from '@/components/library/CompareShareCard';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 
 const categoryIcon = {
   compound: Pill,
@@ -36,9 +37,10 @@ export function CompareHub() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
             >
+              <GlassPanel depth="mid" className="glass-hover h-full rounded-2xl">
               <Link
                 href={`/library/compare/${comp.slug}`}
-                className="focus-ring block glass glass-hover rounded-2xl p-6 h-full group"
+                className="focus-ring block rounded-2xl p-6 h-full group"
               >
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <div className="flex items-center gap-2">
@@ -61,6 +63,7 @@ export function CompareHub() {
                 </div>
                 <CompareShareCard comparison={comp} compact />
               </Link>
+              </GlassPanel>
             </motion.div>
           );
         })}

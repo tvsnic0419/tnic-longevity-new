@@ -30,7 +30,7 @@ export function PeptideDetail({ peptide, mdxBody }: { peptide: Peptide; mdxBody:
     .filter((p): p is Peptide => Boolean(p));
 
   return (
-    <div className="min-h-screen bg-background text-foreground pt-6 md:pt-8 pb-20">
+    <div className="min-h-screen canvas-scrim text-foreground pt-6 md:pt-8 pb-20">
       <div className="max-w-7xl mx-auto px-6">
         <Link
           href="/peptides"
@@ -40,7 +40,7 @@ export function PeptideDetail({ peptide, mdxBody }: { peptide: Peptide; mdxBody:
         </Link>
 
         <div className="grid lg:grid-cols-12 gap-10">
-          <aside className="lg:col-span-4 space-y-6">
+          <aside className="order-2 lg:order-1 lg:col-span-4 space-y-6">
             <div className="card-elevated p-6">
               <p className="text-[10px] font-mono text-accent-cyan tracking-widest mb-2 uppercase">
                 {categoryMeta.label}
@@ -127,7 +127,7 @@ export function PeptideDetail({ peptide, mdxBody }: { peptide: Peptide; mdxBody:
             </Link>
           </aside>
 
-          <div className="lg:col-span-8 space-y-8">
+          <div className="order-1 lg:order-2 min-w-0 lg:col-span-8 space-y-8">
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
               <PeptideContextStrip peptide={peptide} />
               <div className="flex items-start gap-4 mb-2">

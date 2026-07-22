@@ -8,8 +8,8 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  CartesianGrid,
 } from 'recharts';
+import { ChartGrid, ChartTooltip, axisProps, chartCursor } from '@/components/ui/ChartKit';
 import { TrendingUp, TrendingDown, Activity, Scan } from 'lucide-react';
 import Link from 'next/link';
 import { usePlatform } from '@/context/PlatformContext';
@@ -153,20 +153,13 @@ export function HealthspanEstimatorTool() {
             <CardContent>
               <ResponsiveContainer width="100%" height={240}>
                 <LineChart data={chartData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
-                  <CartesianGrid stroke="var(--color-border-subtle)" />
-                  <XAxis dataKey="name" tick={{ fill: 'var(--color-text-faint)', fontSize: 11, fontFamily: 'var(--font-mono)' }} />
-                  <YAxis yAxisId="left" domain={[0, 100]} tick={{ fill: 'var(--color-text-faint)', fontSize: 10, fontFamily: 'var(--font-mono)' }} />
-                  <YAxis yAxisId="right" orientation="right" domain={['dataMin - 2', 'dataMax + 2']} tick={{ fill: 'var(--color-text-faint)', fontSize: 10, fontFamily: 'var(--font-mono)' }} />
-                  <Tooltip
-                    contentStyle={{
-                      background: 'var(--color-bg-elevated)',
-                      border: '1px solid var(--color-border-subtle)',
-                      borderRadius: 8,
-                      fontSize: 12,
-                    }}
-                  />
-                  <Line yAxisId="left" type="monotone" dataKey="healthspan" stroke="var(--accent-emerald)" strokeWidth={2} dot={{ fill: 'var(--accent-emerald)' }} name="Healthspan" />
-                  <Line yAxisId="right" type="monotone" dataKey="bioAge" stroke="var(--accent-violet)" strokeWidth={2} dot={{ fill: 'var(--accent-violet)' }} name="Bio age" />
+                  <ChartGrid />
+                  <XAxis dataKey="name" {...axisProps} />
+                  <YAxis yAxisId="left" domain={[0, 100]} {...axisProps} />
+                  <YAxis yAxisId="right" orientation="right" domain={['dataMin - 2', 'dataMax + 2']} {...axisProps} />
+                  <Tooltip content={<ChartTooltip />} cursor={chartCursor} />
+                  <Line yAxisId="left" type="monotone" dataKey="healthspan" stroke="var(--accent-emerald)" strokeWidth={2.5} dot={false} activeDot={{ r: 4, strokeWidth: 0 }} name="Healthspan" />
+                  <Line yAxisId="right" type="monotone" dataKey="bioAge" stroke="var(--accent-violet)" strokeWidth={2.5} dot={false} activeDot={{ r: 4, strokeWidth: 0 }} name="Bio age" />
                 </LineChart>
               </ResponsiveContainer>
               <p className="text-body-sm mt-4">{estimate.summary}</p>

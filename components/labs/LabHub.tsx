@@ -150,7 +150,7 @@ export function LabHub() {
       })()}
 
       {analysis.topConcern && (
-        <div className="card-base px-4 py-3 mb-6 border-accent-amber/20 text-body-sm" role="status">
+        <div className="glass-deep glass-plane-mid rounded-xl border border-accent-amber/20 px-4 py-3 mb-6 text-body-sm" role="status">
           <strong className="text-accent-amber">Top concern:</strong> {analysis.topConcern}
           {analysis.topWin && <span className="text-muted-foreground"> · Win: {analysis.topWin}</span>}
         </div>
@@ -206,7 +206,7 @@ export function LabHub() {
 
 function EmptyState({ message, onAction }: { message: string; onAction: () => void }) {
   return (
-    <div className="card-base p-10 md:p-12 text-center">
+    <div className="glass-deep glass-plane-mid rounded-xl p-10 md:p-12 text-center">
       <p className="text-body-sm mb-5">{message}</p>
       <Button variant="secondary" theme="rose" onClick={onAction}>
         Go to Input →

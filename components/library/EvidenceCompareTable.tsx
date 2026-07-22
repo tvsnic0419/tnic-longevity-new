@@ -5,6 +5,8 @@ import { ArrowRight, Scale, ExternalLink } from 'lucide-react';
 import type { EvidenceComparison, CompareVerdict } from '@/lib/comparisons';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { CompareShareCard } from '@/components/library/CompareShareCard';
+import { GlassPanel } from '@/components/ui/GlassPanel';
+import { RevealCard } from '@/components/ui/RevealCard';
 import { cn } from '@/lib/utils';
 
 const verdictStyle: Record<CompareVerdict, string> = {
@@ -102,7 +104,7 @@ export function EvidenceCompareTable({ comparison }: EvidenceCompareTableProps) 
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">
-        <div className="glass rounded-xl p-5">
+        <GlassPanel depth="mid" className="rounded-xl p-5">
           <p className="text-label text-accent-cyan mb-3">Choose {labelA} when</p>
           <ul className="space-y-2">
             {comparison.whenChooseA.map((item) => (
@@ -112,8 +114,8 @@ export function EvidenceCompareTable({ comparison }: EvidenceCompareTableProps) 
               </li>
             ))}
           </ul>
-        </div>
-        <div className="glass rounded-xl p-5">
+        </GlassPanel>
+        <GlassPanel depth="mid" className="rounded-xl p-5">
           <p className="text-label text-accent-violet mb-3">Choose {labelB} when</p>
           <ul className="space-y-2">
             {comparison.whenChooseB.map((item) => (
@@ -123,20 +125,21 @@ export function EvidenceCompareTable({ comparison }: EvidenceCompareTableProps) 
               </li>
             ))}
           </ul>
-        </div>
+        </GlassPanel>
       </div>
 
       <CompareShareCard comparison={comparison} />
 
       <div className="flex flex-wrap gap-3">
-        {comparison.relatedHrefs.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className="focus-ring interactive glass glass-hover px-4 py-2 rounded-lg text-sm font-semibold"
-          >
-            {link.label}
-          </Link>
+        {comparison.relatedHrefs.map((link, i) => (
+          <RevealCard key={link.href} index={i} depth="mid" className="glass-hover rounded-lg">
+            <Link
+              href={link.href}
+              className="focus-ring interactive px-4 py-2 rounded-lg text-sm font-semibold"
+            >
+              {link.label}
+            </Link>
+          </RevealCard>
         ))}
       </div>
     </div>

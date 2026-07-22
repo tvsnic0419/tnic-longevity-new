@@ -141,8 +141,8 @@ export function HomeExplore() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {destinations.map(({ href, icon: Icon, eyebrow, title, desc, accent }, i) => (
             <RevealItem key={title} index={i}>
-              <GlassPanel depth="mid" className="glass-hover h-full overflow-hidden rounded-2xl">
-                <Link href={href} className="focus-ring group flex h-full flex-col p-6">
+              <GlassPanel depth="mid" className="glass-hover h-full rounded-2xl">
+                <Link href={href} className="focus-ring group flex h-full flex-col rounded-2xl p-6">
                   <div className="mb-5 flex items-center justify-between">
                     <span
                       className={`inline-flex h-11 w-11 items-center justify-center rounded-xl ${accentBadge[accent]}`}

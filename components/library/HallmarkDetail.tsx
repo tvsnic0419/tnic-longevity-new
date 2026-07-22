@@ -6,6 +6,8 @@ import Link from 'next/link';
 import type { HallmarkLibraryEntry } from '@/lib/types';
 import type { CompoundLink } from '@/lib/library-graph';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { GlassPanel } from '@/components/ui/GlassPanel';
+import { RevealCard } from '@/components/ui/RevealCard';
 import { HallmarkVisual } from './HallmarkVisual';
 import { HallmarkIcon } from './HallmarkIcon';
 import { getHallmarkVisual } from '@/lib/hallmark-visuals';
@@ -41,7 +43,7 @@ export function HallmarkDetail({
   const glowClass = glowClassByTheme[visualMeta.theme] ?? 'glow-cyan';
 
   return (
-    <div className="min-h-screen bg-background text-foreground pt-6 md:pt-8 pb-20">
+    <div className="min-h-screen canvas-scrim text-foreground pt-6 md:pt-8 pb-20">
       <div className="max-w-7xl mx-auto px-6">
         <Link
           href="/library"
@@ -51,24 +53,24 @@ export function HallmarkDetail({
         </Link>
 
         <div className="grid lg:grid-cols-12 gap-10">
-          <div className="lg:col-span-4 space-y-6">
+          <div className="order-2 lg:order-1 lg:col-span-4 space-y-6">
             <HallmarkVisual
               visual={hallmark.visual}
               coverage={hallmark.coverage}
               number={hallmark.number}
             />
             {MechanismVisual && (
-              <div className="glass rounded-xl overflow-hidden">
+              <GlassPanel depth="mid" className="overflow-hidden rounded-xl">
                 <p className="text-[9px] font-mono text-muted-foreground uppercase tracking-wider px-4 pt-3 pb-1">
                   Mechanism Diagram
                 </p>
                 <MechanismVisual className="w-full" />
-              </div>
+              </GlassPanel>
             )}
             <HallmarkNotesPanel hallmark={hallmark} />
           </div>
 
-          <div className="lg:col-span-8 space-y-10">
+          <div className="order-1 lg:order-2 min-w-0 lg:col-span-8 space-y-10">
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
               <p className="font-mono text-[10px] text-accent-cyan tracking-widest mb-2">
                 HALLMARK {hallmark.number} OF 12
@@ -81,7 +83,7 @@ export function HallmarkDetail({
               </div>
               <p className="text-lg text-muted-foreground mb-6">{hallmark.tagline}</p>
               <p className="text-sm text-muted-foreground leading-relaxed mb-4">{hallmark.summary}</p>
-              <div className="glass rounded-xl p-5 mb-4">
+              <GlassPanel depth="mid" className="rounded-xl p-5 mb-4">
                 <p className="text-[10px] font-mono text-accent-violet uppercase mb-2">Mechanism</p>
                 <p className="text-sm text-foreground/80 leading-relaxed">{hallmark.mechanism}</p>
                 {hallmark.keyMolecules && hallmark.keyMolecules.length > 0 && (
@@ -97,11 +99,11 @@ export function HallmarkDetail({
                     ))}
                   </div>
                 )}
-              </div>
-              <div className="glass rounded-xl p-5">
+              </GlassPanel>
+              <GlassPanel depth="mid" className="rounded-xl p-5">
                 <p className="text-[10px] font-mono text-accent-amber uppercase mb-2">Why it matters</p>
                 <p className="text-sm text-foreground/80 leading-relaxed">{hallmark.whyItMatters}</p>
-              </div>
+              </GlassPanel>
             </motion.div>
 
             <ContextRail {...getHallmarkContext(hallmark)} theme="cyan" variant="compact" />
@@ -125,17 +127,19 @@ export function HallmarkDetail({
                   </p>
                 </div>
                 <ul className="grid gap-3 sm:grid-cols-2">
-                  {targetingCompounds.map((compound) => (
+                  {targetingCompounds.map((compound, i) => (
                     <li key={compound.slug}>
-                      <Link
-                        href={`/library/compounds/${compound.slug}`}
-                        className="focus-ring interactive group flex items-center justify-between gap-3 glass glass-hover rounded-xl p-4"
-                      >
-                        <span className="text-sm font-semibold text-foreground group-hover:text-accent-cyan transition truncate">
-                          {compound.name}
-                        </span>
-                        <EvidenceTag tier={compound.evidence} size="sm" className="shrink-0" />
-                      </Link>
+                      <RevealCard index={i} depth="mid" className="glass-hover rounded-xl">
+                        <Link
+                          href={`/library/compounds/${compound.slug}`}
+                          className="focus-ring interactive group flex items-center justify-between gap-3 rounded-xl p-4"
+                        >
+                          <span className="text-sm font-semibold text-foreground group-hover:text-accent-cyan transition truncate">
+                            {compound.name}
+                          </span>
+                          <EvidenceTag tier={compound.evidence} size="sm" className="shrink-0" />
+                        </Link>
+                      </RevealCard>
                     </li>
                   ))}
                 </ul>

@@ -286,7 +286,7 @@ export function LearnCenter({ defaultTab }: { defaultTab?: TabId }) {
             exit={{ opacity: 0 }}
             className="space-y-6"
           >
-            <p className="text-sm text-muted-foreground glass rounded-xl p-4 border border-accent-cyan/10">
+            <p className="text-sm text-muted-foreground glass-deep glass-plane-mid rounded-xl p-4 border border-accent-cyan/10">
               TNiC sets realistic expectations. Anyone promising overnight biological age reversal is not credible.
               Here is what peer-reviewed timelines actually show.
             </p>
@@ -329,7 +329,7 @@ export function LearnCenter({ defaultTab }: { defaultTab?: TabId }) {
               here is what to reject before you spend a dollar.
             </p>
             {supplementRedFlags.map((r, i) => (
-              <div key={r.flag} className="glass rounded-2xl p-6">
+              <div key={r.flag} className="glass-deep glass-plane-mid rounded-2xl p-6">
                 <div className="flex items-start gap-4">
                   <span className="w-8 h-8 rounded-lg bg-accent-rose/10 text-accent-rose font-mono text-sm flex items-center justify-center shrink-0">
                     {i + 1}

@@ -153,7 +153,7 @@ export default function LongevitySupplementsGuidePage() {
       </section>
 
       {/* Quick context: what makes this different */}
-      <section className="py-12 border-b border-border bg-background">
+      <section className="py-12 border-b border-border canvas-scrim">
         <div className="container-page">
           <div className="grid sm:grid-cols-3 gap-6 max-w-4xl">
             {[
@@ -174,7 +174,7 @@ export default function LongevitySupplementsGuidePage() {
       </section>
 
       {/* Ranked Compound Table */}
-      <section className="py-16 md:py-20 border-b border-border bg-background">
+      <section className="py-16 md:py-20 border-b border-border canvas-scrim">
         <div className="container-page">
           <h2 className="text-2xl sm:text-3xl font-black text-white mb-3">
             Ranked: Best Longevity Supplements 2026
@@ -305,7 +305,7 @@ export default function LongevitySupplementsGuidePage() {
       </section>
 
       {/* Red flags to avoid */}
-      <section className="py-16 border-b border-border bg-background">
+      <section className="py-16 border-b border-border canvas-scrim">
         <div className="container-page max-w-4xl">
           <h2 className="text-2xl font-black text-white mb-3">Red Flags to Avoid When Buying</h2>
           <p className="text-muted-foreground mb-8">Most supplement marketing is misleading. These are the concrete signals of low-quality products:</p>
@@ -339,7 +339,7 @@ export default function LongevitySupplementsGuidePage() {
       </section>
 
       {/* FAQ */}
-      <section className="py-16 bg-background">
+      <section className="py-16 canvas-scrim">
         <div className="container-page max-w-3xl">
           <h2 className="text-2xl font-black text-white mb-10">Frequently Asked Questions</h2>
 

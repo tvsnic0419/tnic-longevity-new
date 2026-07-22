@@ -17,7 +17,9 @@ import { LifestylePillarPanel } from './LifestylePillarPanel';
 import { getBuyerGuideByModuleSlug } from '@/lib/buyer-guides';
 import type { LifestyleSlug } from '@/lib/lifestyle-pillars';
 import { ModuleContextStrip } from './ModuleContextStrip';
+import { CompoundGlancePanel } from './CompoundGlancePanel';
 import { recordModuleVisit } from '@/lib/recent-modules';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 
 /**
  * Category -> icon + full static Tailwind class strings. Deliberately not
@@ -60,7 +62,7 @@ export function LibraryModuleDetail({
   }, [module]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground pt-6 md:pt-8 pb-20">
+    <div className="min-h-screen canvas-scrim text-foreground pt-6 md:pt-8 pb-20">
       <div className="max-w-7xl mx-auto px-6">
         <Link
           href="/library#content-modules"
@@ -70,7 +72,7 @@ export function LibraryModuleDetail({
         </Link>
 
         <div className="grid lg:grid-cols-12 gap-10">
-          <aside className="lg:col-span-4 space-y-6">
+          <aside className="order-2 lg:order-1 lg:col-span-4 space-y-6">
             {module.category === 'lifestyle' && (
               <LifestylePillarPanel slug={module.slug as LifestyleSlug} />
             )}
@@ -92,7 +94,7 @@ export function LibraryModuleDetail({
             </div>
 
             {relatedHallmarks.length > 0 && (
-              <div className="glass rounded-xl p-5">
+              <GlassPanel depth="mid" className="rounded-xl p-5">
                 <p className="text-[10px] font-mono text-accent-violet uppercase mb-3">Related hallmarks</p>
                 <ul className="space-y-2">
                   {relatedHallmarks.map((h) => (
@@ -106,22 +108,22 @@ export function LibraryModuleDetail({
                     </li>
                   ))}
                 </ul>
-              </div>
+              </GlassPanel>
             )}
 
             {relatedCompound && (
-              <div className="glass rounded-xl p-5">
+              <GlassPanel depth="mid" className="rounded-xl p-5">
                 <p className="text-[10px] font-mono text-accent-emerald uppercase mb-3">TNiC compound</p>
                 <p className="text-sm font-semibold text-foreground">{relatedCompound.name}</p>
                 <p className="text-xs text-muted-foreground mt-1">{relatedCompound.dose} · {relatedCompound.timing}</p>
                 <Link href="/stacks" className="text-xs text-accent-cyan hover:text-accent-emerald mt-3 inline-block">
                   Add to stack →
                 </Link>
-              </div>
+              </GlassPanel>
             )}
 
             {synergyCompounds.length > 0 && (
-              <div className="glass rounded-xl p-5">
+              <GlassPanel depth="mid" className="rounded-xl p-5">
                 <p className="text-[10px] font-mono text-accent-emerald uppercase mb-3">Stack compounds</p>
                 <ul className="space-y-2">
                   {synergyCompounds.map((c) => (
@@ -133,11 +135,11 @@ export function LibraryModuleDetail({
                 <Link href="/stacks" className="text-xs text-accent-cyan hover:text-accent-emerald mt-3 inline-block">
                   Open Stack Architect →
                 </Link>
-              </div>
+              </GlassPanel>
             )}
 
             {module.relatedSynergySlugs && module.relatedSynergySlugs.length > 0 && (
-              <div className="glass rounded-xl p-5">
+              <GlassPanel depth="mid" className="rounded-xl p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <Layers className="w-4 h-4 text-accent-cyan" />
                   <p className="text-[10px] font-mono text-accent-cyan uppercase">Related synergies</p>
@@ -154,11 +156,11 @@ export function LibraryModuleDetail({
                     </li>
                   ))}
                 </ul>
-              </div>
+              </GlassPanel>
             )}
 
             {comparisons.length > 0 && (
-              <div className="glass rounded-xl p-5">
+              <GlassPanel depth="mid" className="rounded-xl p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <Scale className="w-4 h-4 text-accent-cyan" />
                   <p className="text-[10px] font-mono text-accent-cyan uppercase">Compare {module.title}</p>
@@ -178,35 +180,39 @@ export function LibraryModuleDetail({
                     </li>
                   ))}
                 </ul>
-              </div>
+              </GlassPanel>
             )}
 
             {guide && (
-              <Link
-                href={guide.href}
-                className="focus-ring interactive flex items-center gap-3 glass glass-hover rounded-xl p-4"
-              >
-                <BookOpen className="w-5 h-5 text-accent-emerald shrink-0" />
-                <div>
-                  <p className="text-sm font-semibold">{guide.label}</p>
-                  <p className="text-xs text-muted-foreground">Full buyer&rsquo;s guide — dosing, forms, evidence</p>
-                </div>
-              </Link>
+              <GlassPanel depth="mid" className="glass-hover rounded-xl">
+                <Link
+                  href={guide.href}
+                  className="focus-ring interactive flex items-center gap-3 p-4"
+                >
+                  <BookOpen className="w-5 h-5 text-accent-emerald shrink-0" />
+                  <div>
+                    <p className="text-sm font-semibold">{guide.label}</p>
+                    <p className="text-xs text-muted-foreground">Full buyer&rsquo;s guide — dosing, forms, evidence</p>
+                  </div>
+                </Link>
+              </GlassPanel>
             )}
 
-            <Link
-              href="/labs"
-              className="focus-ring interactive flex items-center gap-3 glass glass-hover rounded-xl p-4"
-            >
-              <FlaskConical className="w-5 h-5 text-accent-cyan shrink-0" />
-              <div>
-                <p className="text-sm font-semibold">Labs hub</p>
-                <p className="text-xs text-muted-foreground">Track biomarkers for this module</p>
-              </div>
-            </Link>
+            <GlassPanel depth="mid" className="glass-hover rounded-xl">
+              <Link
+                href="/labs"
+                className="focus-ring interactive flex items-center gap-3 p-4"
+              >
+                <FlaskConical className="w-5 h-5 text-accent-cyan shrink-0" />
+                <div>
+                  <p className="text-sm font-semibold">Labs hub</p>
+                  <p className="text-xs text-muted-foreground">Track biomarkers for this module</p>
+                </div>
+              </Link>
+            </GlassPanel>
           </aside>
 
-          <div className="lg:col-span-8 space-y-8">
+          <div className="order-1 lg:order-2 min-w-0 lg:col-span-8 space-y-8">
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
               <ModuleContextStrip module={module} />
               <div className="flex items-start gap-4 mb-2">
@@ -224,6 +230,8 @@ export function LibraryModuleDetail({
               <p className="text-lg text-muted-foreground mb-4">{module.tagline}</p>
               <p className="text-sm text-muted-foreground leading-relaxed">{module.summary}</p>
             </motion.div>
+
+            {relatedCompound && <CompoundGlancePanel compound={relatedCompound} />}
 
             {module.requiresDisclaimer && (
               <div className="rounded-xl p-5 border border-accent-amber/30 bg-accent-amber/5 flex gap-3">
@@ -253,9 +261,9 @@ export function LibraryModuleDetail({
                 <MdxRenderer content={mdxBody} />
               </div>
             ) : (
-              <div className="glass rounded-xl p-8 text-center text-muted-foreground">
+              <GlassPanel depth="mid" className="rounded-xl p-8 text-center text-muted-foreground">
                 Content module in progress. Outline available in sidebar.
-              </div>
+              </GlassPanel>
             )}
 
             <div className="flex flex-wrap gap-3">
@@ -265,18 +273,22 @@ export function LibraryModuleDetail({
               >
                 Build your stack
               </Link>
-              <Link
-                href="/labs"
-                className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 rounded-lg glass glass-hover text-sm font-semibold text-foreground/80"
-              >
-                Open Labs hub
-              </Link>
-              <Link
-                href="/trust"
-                className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 rounded-lg glass glass-hover text-sm font-semibold text-foreground/80"
-              >
-                Evidence methodology
-              </Link>
+              <GlassPanel depth="mid" className="glass-hover rounded-lg">
+                <Link
+                  href="/labs"
+                  className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-foreground/80"
+                >
+                  Open Labs hub
+                </Link>
+              </GlassPanel>
+              <GlassPanel depth="mid" className="glass-hover rounded-lg">
+                <Link
+                  href="/trust"
+                  className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-foreground/80"
+                >
+                  Evidence methodology
+                </Link>
+              </GlassPanel>
             </div>
           </div>
         </div>

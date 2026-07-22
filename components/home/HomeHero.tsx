@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { Suspense } from 'react';
 import { Pill, Library, ArrowRight, Sparkles } from 'lucide-react';
-import { Logo } from '@/components/ui/Logo';
 import { StarterQuiz } from '@/components/sections/StarterQuiz';
 import { GlassPanel } from '@/components/ui/GlassPanel';
+import { TiltGlassPanel } from '@/components/ui/TiltGlassPanel';
 import { compounds } from '@/lib/data';
 import { eliteInterventions } from '@/lib/elite-interventions';
 
@@ -49,15 +49,10 @@ export function HomeHero() {
         <div className="items-center lg:grid lg:grid-cols-12 lg:gap-14">
           {/* Copy column */}
           <div className="text-center lg:col-span-7 lg:text-left">
-            <div className="mb-6 flex items-center justify-center gap-3 lg:justify-start">
-              <Logo variant="lockup" size="hero" />
-              <span className="badge-live">
-                <span className="badge-live-dot" />
-                Platform Active
-              </span>
-            </div>
-
-            {/* Float plane — smallest, most elevated glass accent in the hero */}
+            {/* Float plane — smallest, most elevated glass accent in the hero.
+                Doubles as the section eyebrow: the brand already lives in the
+                fixed nav, so the hero leads with what TNiC *does*, not a second
+                logo lockup. */}
             <GlassPanel
               depth="float"
               className="mb-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium text-white/80"
@@ -148,13 +143,13 @@ export function HomeHero() {
                 className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-[var(--accent-cyan)]/12 via-transparent to-[var(--accent-emerald)]/12 blur-2xl"
                 aria-hidden="true"
               />
-              <GlassPanel depth="content" tilt className="relative rounded-3xl">
+              <TiltGlassPanel depth="content" className="relative rounded-3xl">
                 <Suspense
                   fallback={<div className="h-[380px] animate-pulse rounded-3xl bg-white/5" />}
                 >
                   <StarterQuiz />
                 </Suspense>
-              </GlassPanel>
+              </TiltGlassPanel>
             </div>
             <p className="mt-4 hidden text-center text-[11px] text-white/35 lg:block lg:text-right">
               Nutrition, down to the cell — evidence you can trace

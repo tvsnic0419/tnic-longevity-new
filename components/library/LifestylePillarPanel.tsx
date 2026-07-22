@@ -10,6 +10,7 @@ import {
   type LifestyleSlug,
 } from '@/lib/lifestyle-pillars';
 import { themes } from '@/lib/design-system';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 
 interface LifestylePillarPanelProps {
   slug: LifestyleSlug;
@@ -23,7 +24,7 @@ export function LifestylePillarPanel({ slug }: LifestylePillarPanelProps) {
 
   return (
     <div className="space-y-5">
-      <div className={`card-premium p-5 border ${t.border}`}>
+      <GlassPanel depth="mid" className={`rounded-2xl p-5 border ${t.border}`}>
         <p className={`text-label ${t.text} mb-2`}>Pillar priority #{pillar.priority}</p>
         <p className="text-sm font-semibold leading-snug mb-3">{pillar.headline}</p>
         <div className="flex items-start gap-2 rounded-xl p-3 bg-muted/30 border border-border/50">
@@ -31,9 +32,9 @@ export function LifestylePillarPanel({ slug }: LifestylePillarPanelProps) {
           <p className="text-xs text-muted-foreground leading-relaxed">{pillar.decisionSummary}</p>
         </div>
         <p className="text-caption mt-3">{pillar.stackPrerequisite}</p>
-      </div>
+      </GlassPanel>
 
-      <div className="glass rounded-xl p-5">
+      <GlassPanel depth="mid" className="rounded-xl p-5">
         <p className={`text-label ${t.text} mb-3`}>Hallmark impact</p>
         <ul className="space-y-2.5">
           {pillar.hallmarkWeights.map((hw) => {
@@ -63,9 +64,9 @@ export function LifestylePillarPanel({ slug }: LifestylePillarPanelProps) {
             );
           })}
         </ul>
-      </div>
+      </GlassPanel>
 
-      <div className="glass rounded-xl p-5">
+      <GlassPanel depth="mid" className="rounded-xl p-5">
         <div className="flex items-center gap-2 mb-3">
           <FlaskConical className={`w-4 h-4 ${t.text}`} aria-hidden="true" />
           <p className={`text-label ${t.text}`}>Lab tie-ins</p>
@@ -95,9 +96,9 @@ export function LifestylePillarPanel({ slug }: LifestylePillarPanelProps) {
             );
           })}
         </ul>
-      </div>
+      </GlassPanel>
 
-      <div className="glass rounded-xl p-5">
+      <GlassPanel depth="mid" className="rounded-xl p-5">
         <div className="flex items-center gap-2 mb-3">
           <Activity className={`w-4 h-4 ${t.text}`} aria-hidden="true" />
           <p className={`text-label ${t.text}`}>Wearable signals</p>
@@ -113,7 +114,7 @@ export function LifestylePillarPanel({ slug }: LifestylePillarPanelProps) {
             </li>
           ))}
         </ul>
-      </div>
+      </GlassPanel>
     </div>
   );
 }

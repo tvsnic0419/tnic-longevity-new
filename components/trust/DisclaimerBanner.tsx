@@ -1,5 +1,6 @@
 import { AlertTriangle, Info, Scale } from 'lucide-react';
 import type { DisclaimerBlock } from '@/lib/types';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 
 const severityStyle = {
   info: { icon: Info, border: 'border-accent-cyan/20', bg: 'bg-accent-cyan/5', text: 'text-cyan-300' },
@@ -17,12 +18,12 @@ export function DisclaimerBanner({ disclaimer, showAppliesTo = false }: Disclaim
   const Icon = style.icon;
 
   return (
-    <aside
-      className={`card-base p-4 md:p-5 border ${style.border} ${style.bg}`}
-      role="note"
-      aria-label={`Disclaimer: ${disclaimer.title}`}
-    >
-      <div className="flex gap-3">
+    <GlassPanel depth="mid" className={`rounded-xl p-4 md:p-5 border ${style.border} ${style.bg}`}>
+      <aside
+        className="flex gap-3"
+        role="note"
+        aria-label={`Disclaimer: ${disclaimer.title}`}
+      >
         <Icon className={`w-5 h-5 shrink-0 mt-0.5 ${style.text}`} aria-hidden="true" />
         <div>
           <h4 className={`heading-card mb-1 ${style.text}`}>{disclaimer.title}</h4>
@@ -33,8 +34,8 @@ export function DisclaimerBanner({ disclaimer, showAppliesTo = false }: Disclaim
             </p>
           )}
         </div>
-      </div>
-    </aside>
+      </aside>
+    </GlassPanel>
   );
 }
 

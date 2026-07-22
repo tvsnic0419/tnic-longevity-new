@@ -1,5 +1,5 @@
 import { LongevityGaugeArc } from '@/components/ui/LongevityGaugeArc';
-import { GlassPanel } from '@/components/ui/GlassPanel';
+import { TiltGlassPanel } from '@/components/ui/TiltGlassPanel';
 
 /**
  * The guide hero's companion panel — fills the blank right-hand column at
@@ -33,7 +33,7 @@ export function GuideHeroPanel({
   glowColor?: string;
 }) {
   return (
-    <GlassPanel depth="content" tilt className="relative overflow-hidden rounded-3xl p-7">
+    <TiltGlassPanel depth="content" className="relative overflow-hidden rounded-3xl p-7">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-10"
@@ -66,6 +66,6 @@ export function GuideHeroPanel({
           </li>
         ))}
       </ul>
-    </GlassPanel>
+    </TiltGlassPanel>
   );
 }

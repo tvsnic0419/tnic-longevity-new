@@ -24,7 +24,7 @@ export function HallmarkRiskPanel({ risks, healthspanScore }: HallmarkRiskPanelP
 
   if (risks.length === 0) {
     return (
-      <div className="glass rounded-2xl p-8 text-center">
+      <div className="glass-deep glass-plane-mid rounded-2xl p-8 text-center">
         <Shield className="w-8 h-8 text-caption mx-auto mb-3" />
         <p className="text-muted-foreground text-sm">Log biomarkers to generate hallmark-linked risk insights.</p>
         <p className="text-xs text-caption mt-2">Each marker maps to 1–4 hallmarks of aging for prognosis analysis.</p>
@@ -70,7 +70,7 @@ export function HallmarkRiskPanel({ risks, healthspanScore }: HallmarkRiskPanelP
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.03 }}
-              className={`glass rounded-xl p-5 border border-border`}
+              className={`glass-deep glass-plane-mid rounded-xl p-5 border border-border`}
             >
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div>

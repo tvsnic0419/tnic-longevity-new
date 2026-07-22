@@ -244,7 +244,7 @@ export function BiomarkerInput() {
           <p className="text-[10px] font-mono text-accent-rose uppercase">Enter values from your blood panel (leave blank to skip)</p>
           <div className="grid sm:grid-cols-2 gap-3 max-h-[320px] overflow-y-auto pr-1">
             {biomarkers.map((b) => (
-              <div key={b.id} className="glass rounded-xl p-3">
+              <div key={b.id} className="glass-deep glass-plane-mid rounded-xl p-3">
                 <label htmlFor={`panel-marker-${b.id}`} className="text-xs font-semibold text-foreground/80 block mb-1">{b.name}</label>
                 <div className="flex items-center gap-2">
                   <input
@@ -318,7 +318,7 @@ export function BiomarkerInput() {
             </button>
           </div>
 
-          <details className="glass rounded-xl p-4">
+          <details className="glass-deep glass-plane-mid rounded-xl p-4">
             <summary className="text-xs font-semibold text-muted-foreground cursor-pointer flex items-center gap-2">
               <FileText className="w-3.5 h-3.5" /> CSV Template Format
             </summary>

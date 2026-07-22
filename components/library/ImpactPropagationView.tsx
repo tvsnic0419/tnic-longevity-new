@@ -5,6 +5,7 @@ import { ArrowDown, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { RelationBadge } from './RelationBadge';
 import { getImpactPropagation } from '@/lib/relations';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 
 const hallmarkNames: Record<string, string> = {
   genomic:      'Genomic Instability',
@@ -92,14 +93,14 @@ export function ImpactPropagationView({ hallmarkId, className }: ImpactPropagati
   return (
     <div className={cn('space-y-6', className)}>
       {/* Leverage Score */}
-      <div className="glass rounded-xl p-5">
+      <GlassPanel depth="mid" className="rounded-xl p-5">
         <div className="flex items-center gap-2 mb-3">
           <Zap className="w-4 h-4 text-accent-amber" />
           <p className="text-xs font-bold uppercase tracking-wider">Systems Leverage Score</p>
         </div>
         <LeverageBar score={propagation.leverageScore} />
         <p className="text-xs text-muted-foreground mt-3 leading-relaxed">{propagation.pathway}</p>
-      </div>
+      </GlassPanel>
 
       {/* Direct Effects */}
       <div>

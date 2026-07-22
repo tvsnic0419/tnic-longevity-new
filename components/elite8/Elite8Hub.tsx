@@ -145,8 +145,8 @@ function CompoundCard({
     <button
       type="button"
       onClick={onToggle}
-      className={`w-full text-left rounded-2xl border transition-all duration-300 overflow-hidden focus-ring ${
-        expanded ? 'card-premium border-accent-emerald/40 glow-hover-emerald' : 'card-premium border-border/60 glow-hover-emerald'
+      className={`glass-deep glass-plane-mid w-full text-left rounded-2xl border transition-all duration-300 overflow-hidden focus-ring ${
+        expanded ? 'border-accent-emerald/40 glow-hover-emerald' : 'border-border/60 glow-hover-emerald'
       }`}
     >
       <div className="p-6 md:p-8">
@@ -210,11 +210,11 @@ function CompoundCard({
           </div>
 
           <div className="grid md:grid-cols-2 gap-4 mt-6">
-            <div className="glass rounded-xl p-5 text-sm leading-relaxed">
+            <div className="glass-deep glass-plane-mid rounded-xl p-5 text-sm leading-relaxed">
               <p className="text-label text-accent-cyan mb-2">Mechanism of action</p>
               {product.mechanism}
             </div>
-            <div className="glass rounded-xl p-5 text-sm leading-relaxed">
+            <div className="glass-deep glass-plane-mid rounded-xl p-5 text-sm leading-relaxed">
               <p className="text-label text-accent-cyan mb-2">Key human study</p>
               {product.topStudy}
               <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
@@ -263,7 +263,7 @@ function CompoundCard({
 
 function EquationBlock() {
   return (
-    <div className="card-premium border border-accent-emerald/25 bg-gradient-to-br from-accent-emerald/8 to-transparent rounded-2xl p-6 md:p-8">
+    <div className="glass-deep glass-plane-mid border border-accent-emerald/25 rounded-2xl p-6 md:p-8">
       <p className="text-label text-accent-emerald mb-3">The Longevity Quotient equation</p>
       <p className="font-mono text-sm md:text-base leading-relaxed text-foreground/90">
         <span className="font-bold text-accent-amber">LQ(p)</span> = 0.22·CE + 0.18·EB + 0.16·ES + 0.14·EE + 0.12·SF + 0.10·BV + 0.05·HP − 0.03·R
@@ -312,7 +312,7 @@ function CompareTool({ scored }: { scored: ScoredLQCompound[] }) {
   if (!pA || !pB) return null;
 
   return (
-    <div className="card-premium border border-border/60 rounded-2xl p-6 md:p-8">
+    <div className="glass-deep glass-plane-mid border border-border/60 rounded-2xl p-6 md:p-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <p className="text-label">Head-to-head comparison</p>
         <div className="flex flex-wrap items-center gap-2 text-sm">
@@ -409,7 +409,7 @@ function WeightTuner() {
   };
 
   return (
-    <div className="card-premium border border-border/60 rounded-2xl p-6 md:p-8">
+    <div className="glass-deep glass-plane-mid border border-border/60 rounded-2xl p-6 md:p-8">
       <p className="text-label mb-1">Weight tuner — customize priorities</p>
       <p className="text-sm text-muted-foreground mb-6">
         Drag sliders to re-weight the Longevity Quotient. Custom weights are for exploration only — default weights reflect TNiC editorial consensus.
@@ -485,7 +485,7 @@ export function Elite8Hub() {
       </section>
 
       <div className="container-page -mt-6 relative z-10">
-        <div className="card-premium border border-border/60 rounded-2xl p-6 md:p-8 mb-8">
+        <div className="glass-deep glass-plane-mid border border-border/60 rounded-2xl p-6 md:p-8 mb-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
             <div>
               <p className="text-label text-accent-amber flex items-center gap-2">
@@ -510,7 +510,7 @@ export function Elite8Hub() {
                   setTab('ranking');
                   setExpanded(p.id);
                 }}
-                className="focus-ring card-premium border border-border/50 rounded-xl p-5 text-center hover:border-accent-emerald/40 transition group"
+                className="focus-ring glass-deep glass-plane-mid border border-border/50 rounded-xl p-5 text-center hover:border-accent-emerald/40 transition group"
               >
                 <div className="flex items-center justify-between mb-1">
                   <span

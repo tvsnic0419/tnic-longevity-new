@@ -279,7 +279,7 @@ function LabPartnerOAuthFlowInner() {
   const activePending = pendingOrders.filter((o) => o.status === 'pending');
 
   return (
-    <div id="lab-partner-oauth" className="glass rounded-xl p-5 mb-6">
+    <div id="lab-partner-oauth" className="glass-deep glass-plane-mid rounded-xl p-5 mb-6">
       <div className="flex items-center gap-2 mb-2">
         <Link2 className="w-4 h-4 text-accent-cyan" />
         <p className="text-label text-accent-cyan">Order at home · OAuth</p>
@@ -381,7 +381,7 @@ function LabPartnerOAuthFlowInner() {
               {activePending.map((order) => (
                 <div
                   key={order.order_id}
-                  className="flex flex-wrap items-center justify-between gap-2 text-xs glass rounded-lg px-3 py-2"
+                  className="flex flex-wrap items-center justify-between gap-2 text-xs glass-deep glass-plane-mid rounded-lg px-3 py-2"
                 >
                   <span className="font-mono text-accent-cyan">{order.order_id}</span>
                   <span className="text-muted-foreground">{order.panel_id}</span>

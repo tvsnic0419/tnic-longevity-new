@@ -1,7 +1,7 @@
 import type { HallmarkLibraryEntry } from '@/lib/types';
 import { getHallmarkVisual } from '@/lib/hallmark-visuals';
 import { HallmarkIcon } from '@/components/library/HallmarkIcon';
-import { GlassPanel } from '@/components/ui/GlassPanel';
+import { TiltGlassPanel } from '@/components/ui/TiltGlassPanel';
 
 /**
  * The hallmark hero's one primary glass moment (see GlassPanel's own
@@ -13,10 +13,12 @@ import { GlassPanel } from '@/components/ui/GlassPanel';
  * hand-drawn diagram would.
  */
 
+// Canonical evidence-tier colors — must match EvidenceTag / trust.ts
+// (A = clinical/emerald, B = emerging/cyan, C = preclinical/amber).
 const TIER_COLOR: Record<'A' | 'B' | 'C', string> = {
   A: '#34d399',
-  B: '#fbbf24',
-  C: '#fb7185',
+  B: '#00e0ff',
+  C: '#fbbf24',
 };
 
 export function HallmarkHeroVisual({ hallmark }: { hallmark: HallmarkLibraryEntry }) {
@@ -29,7 +31,7 @@ export function HallmarkHeroVisual({ hallmark }: { hallmark: HallmarkLibraryEntr
   const ringOffset = ringCircumference - (hallmark.coverage / 100) * ringCircumference;
 
   return (
-    <GlassPanel depth="content" tilt className="relative overflow-hidden rounded-3xl p-7">
+    <TiltGlassPanel depth="content" className="relative overflow-hidden rounded-3xl p-7">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-10"
@@ -135,6 +137,6 @@ export function HallmarkHeroVisual({ hallmark }: { hallmark: HallmarkLibraryEntr
           ))}
         </div>
       )}
-    </GlassPanel>
+    </TiltGlassPanel>
   );
 }

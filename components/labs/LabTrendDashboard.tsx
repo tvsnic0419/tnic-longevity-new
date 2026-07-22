@@ -53,7 +53,7 @@ export function LabTrendDashboard({ snapshots }: LabTrendDashboardProps) {
                 key={snap.markerId}
                 layout
                 onClick={() => setSelected(snap.markerId)}
-                className={`glass rounded-xl p-4 text-left transition-all ${
+                className={`glass-deep glass-plane-mid rounded-xl p-4 text-left transition-all ${
                   isActive ? 'ring-1 ring-rose-400/40 bg-accent-rose/5' : 'hover:border-border'
                 }`}
               >
@@ -138,7 +138,7 @@ export function LabTrendDashboard({ snapshots }: LabTrendDashboardProps) {
                 {chartEntries
                   .sort((a, b) => a.date.localeCompare(b.date))
                   .map((e: LabEntry) => (
-                    <div key={e.id} className="glass rounded-lg py-2 px-1">
+                    <div key={e.id} className="glass-deep glass-plane-mid rounded-lg py-2 px-1">
                       <p className="text-[9px] text-caption">{e.date}</p>
                       <p className="text-sm font-mono font-bold">{e.value}</p>
                       <p className={`text-[9px] ${statusColor[getLabStatus(e.markerId, e.value)].split(' ')[0]}`}>

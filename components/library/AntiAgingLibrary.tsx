@@ -39,7 +39,7 @@ export function AntiAgingLibrary({ asPageTitle = false }: AntiAgingLibraryProps)
     <section
       id="anti-aging-library"
       aria-labelledby="library-heading"
-      className="py-8 md:py-12 bg-background border-b border-border"
+      className="py-8 md:py-12 canvas-scrim border-b border-border"
     >
       <div className="container-page">
         <PageHeader
