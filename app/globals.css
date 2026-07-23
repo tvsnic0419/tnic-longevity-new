@@ -187,6 +187,12 @@
 
 html {
   scroll-behavior: smooth;
+  /* Anchor targets (TOC links, References, heading anchors) clear the fixed nav
+     and sticky context bar instead of hiding beneath them. */
+  scroll-padding-top: 7rem;
+  /* Branded thin scrollbar for Firefox, matching the webkit styling below. */
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -223,6 +229,11 @@ body {
   font-size: 1rem;
   line-height: var(--leading-body);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  /* No grey flash on tap for mobile — interactive elements have their own
+     press/hover states. */
+  -webkit-tap-highlight-color: transparent;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
@@ -757,9 +768,19 @@ p,
 }
 
 /* ── Scrollbar ── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--color-bg-base); }
-::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background 0.2s;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--accent-cyan) 45%, var(--scrollbar-thumb));
+  background-clip: padding-box;
+}
 
 /* ── Slider ── */
 .age-slider {
