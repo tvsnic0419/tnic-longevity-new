@@ -3,11 +3,13 @@
 import Link from "next/link";
 import {
   useState, useRef, useEffect, useMemo, useCallback,
-  type MouseEvent, type TouchEvent, type WheelEvent, type ChangeEvent,
+  type ChangeEvent,
 } from "react";
 import { eliteInterventions } from "@/lib/elite-interventions";
 import { COMPOUND_COUNT } from "@/lib/library-modules";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { MoleculeStage } from "@/components/viz/MoleculeStage";
+import { HUES } from "@/components/viz/tokens";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TNiC · "Descent" — a captivate-on-arrival scrollytelling section
@@ -379,47 +381,6 @@ const CSS = `
 .tnic-descent[data-reduced="true"] .node-pulse { animation: none !important; }
 `;
 
-type Atom = { x: number; y: number; z: number; el: "C" | "O" };
-type Bond = [number, number, 1 | 2];
-
-function buildMolecule(): { atoms: Atom[]; bonds: Bond[] } {
-  const atoms: Atom[] = [];
-  const bonds: Bond[] = [];
-  const R = 1.15;
-  function ring(cx: number, cy: number, cz: number): number {
-    const start = atoms.length;
-    for (let k = 0; k < 6; k++) {
-      const a = (Math.PI / 3) * k - Math.PI / 6;
-      atoms.push({
-        x: cx + Math.cos(a) * R,
-        y: cy + Math.sin(a) * R,
-        z: cz + Math.sin(a * 2) * 0.18,
-        el: "C",
-      });
-    }
-    for (let k = 0; k < 6; k++) bonds.push([start + k, start + ((k + 1) % 6), k % 2 === 0 ? 2 : 1]);
-    return start;
-  }
-  const aBase = ring(-2.35, 0, 0);
-  const bBase = ring(2.35, 0, 0);
-  const c1 = atoms.length; atoms.push({ x: -0.75, y: 0.15, z: 0.05, el: "C" });
-  const c2 = atoms.length; atoms.push({ x: 0.75, y: -0.15, z: -0.05, el: "C" });
-  bonds.push([c1, c2, 2]);
-  bonds.push([aBase + 0, c1, 1]);
-  bonds.push([bBase + 3, c2, 1]);
-  function addOH(nearIdx: number, dx: number, dy: number, dz: number) {
-    const na = atoms[nearIdx];
-    const o = atoms.length;
-    atoms.push({ x: na.x + dx, y: na.y + dy, z: na.z + dz, el: "O" });
-    bonds.push([nearIdx, o, 1]);
-  }
-  addOH(aBase + 2, -0.55, 1.0, 0.1);
-  addOH(aBase + 4, -0.55, -1.0, -0.1);
-  addOH(bBase + 1, 0.9, 0.7, 0.1);
-  return { atoms, bonds };
-}
-
-const MOL = buildMolecule();
 
 type TierKey = "established" | "mechanistic" | "exploratory" | "caution";
 const TIER: Record<TierKey, { color: string; label: string }> = {
@@ -532,9 +493,7 @@ export function HomeDescent() {
   const reducedRef = useRef(false);
   const shimmerRef = useRef<HTMLCanvasElement | null>(null);
   const cursorRef = useRef<HTMLCanvasElement | null>(null);
-  const molRef = useRef<HTMLCanvasElement | null>(null);
   const activeRef = useRef(0);
-  const molDrag = useRef({ down: false, x: 0, y: 0, rx: -0.15, ry: 0.5, vx: 0, vy: 0, zoom: 1 });
   const rootRef = useRef<HTMLDivElement | null>(null);
   const s0 = useRef<HTMLElement | null>(null);
   const s1 = useRef<HTMLElement | null>(null);
@@ -680,144 +639,6 @@ export function HomeDescent() {
     };
   }, []);
 
-  // ── 3D molecule with Phong-like shading, element labels, wheel zoom ──
-  useEffect(() => {
-    const cv = molRef.current; if (!cv) return;
-    const ctx = cv.getContext("2d"); if (!ctx) return;
-    let raf = 0, w = 0, h = 0;
-    const dpr = Math.min(window.devicePixelRatio || 1, 3);
-    function resize() {
-      if (!cv || !ctx) return;
-      w = cv.clientWidth; h = cv.clientHeight;
-      cv.width = w * dpr; cv.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-    resize();
-    const ro = new ResizeObserver(resize); ro.observe(cv);
-
-    function draw() {
-      if (!ctx) return;
-      const d = molDrag.current;
-      if (!d.down) {
-        if (!reducedRef.current) d.ry += 0.005;
-        d.rx += d.vx; d.ry += d.vy;
-        d.vx *= 0.94; d.vy *= 0.94;
-      }
-      const zoom = d.zoom;
-      const scale = (Math.min(w, h) / 7.2) * zoom;
-      const cx = w / 2, cy = h / 2;
-      const cosY = Math.cos(d.ry), sinY = Math.sin(d.ry);
-      const cosX = Math.cos(d.rx), sinX = Math.sin(d.rx);
-      const proj = MOL.atoms.map((a) => {
-        const x = a.x * cosY - a.z * sinY;
-        let z = a.x * sinY + a.z * cosY;
-        const y = a.y * cosX - z * sinX;
-        z = a.y * sinX + z * cosX;
-        const persp = 6 / (6 + z);
-        return { sx: cx + x * scale * persp, sy: cy + y * scale * persp, z, persp, el: a.el };
-      });
-      ctx.clearRect(0, 0, w, h);
-      // depth-of-field-ish scrim on the back plane
-      const back = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(w, h) * 0.7);
-      back.addColorStop(0, "rgba(20,30,60,0.35)");
-      back.addColorStop(1, "rgba(5,7,16,0)");
-      ctx.fillStyle = back;
-      ctx.beginPath(); ctx.arc(cx, cy, Math.max(w, h) * 0.7, 0, Math.PI * 2); ctx.fill();
-      ctx.lineCap = "round";
-      // bonds sorted back-to-front, with gradient stroke for a metallic feel
-      const bordered = MOL.bonds.map(([i, j, order]) => ({ i, j, order, z: (proj[i].z + proj[j].z) / 2 }))
-        .sort((p, q) => q.z - p.z);
-      for (const bd of bordered) {
-        const p = proj[bd.i], q = proj[bd.j];
-        const depth = (bd.z + 3) / 6;
-        const alpha = 0.35 + (1 - depth) * 0.55;
-        const lw = (1.9 + (1 - depth) * 3) * ((p.persp + q.persp) / 2);
-        const grad = ctx.createLinearGradient(p.sx, p.sy, q.sx, q.sy);
-        grad.addColorStop(0, `rgba(190,215,255,${alpha})`);
-        grad.addColorStop(1, `rgba(140,170,220,${alpha * 0.85})`);
-        if (bd.order === 2) {
-          const dx = q.sy - p.sy, dy = -(q.sx - p.sx);
-          const len = Math.hypot(dx, dy) || 1; const off = 2.6;
-          for (const s of [-1, 1]) {
-            ctx.strokeStyle = grad;
-            ctx.lineWidth = lw * 0.7;
-            ctx.beginPath();
-            ctx.moveTo(p.sx + (dx / len) * off * s, p.sy + (dy / len) * off * s);
-            ctx.lineTo(q.sx + (dx / len) * off * s, q.sy + (dy / len) * off * s);
-            ctx.stroke();
-          }
-        } else {
-          ctx.strokeStyle = grad;
-          ctx.lineWidth = lw;
-          ctx.beginPath(); ctx.moveTo(p.sx, p.sy); ctx.lineTo(q.sx, q.sy); ctx.stroke();
-        }
-      }
-      // atoms front-to-back with Phong-ish shading + rim light + bloom
-      const order = proj.map((p, idx) => ({ ...p, idx })).sort((a, b) => a.z - b.z);
-      for (const p of order) {
-        const depth = (p.z + 3) / 6;
-        const rad = (p.el === "O" ? 11 : 9) * p.persp * (1.2 - depth * 0.3);
-        const isO = p.el === "O";
-        const core: [number, number, number] = isO ? [244,142,126] : [216,234,255];
-        const hi: [number, number, number] = isO ? [255,220,210] : [255,255,255];
-        const glow = isO ? "rgba(240,138,122," : "rgba(95,227,224,";
-        const a = 0.94 - depth * 0.35;
-        // bloom
-        const bloom = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, rad * 3);
-        bloom.addColorStop(0, `${glow}${0.55 * a})`);
-        bloom.addColorStop(1, `${glow}0)`);
-        ctx.fillStyle = bloom;
-        ctx.beginPath(); ctx.arc(p.sx, p.sy, rad * 3, 0, Math.PI * 2); ctx.fill();
-        // sphere with off-center highlight
-        const sphere = ctx.createRadialGradient(p.sx - rad * 0.4, p.sy - rad * 0.45, rad * 0.05, p.sx, p.sy, rad);
-        sphere.addColorStop(0, `rgba(${hi[0]},${hi[1]},${hi[2]},${a})`);
-        sphere.addColorStop(0.35, `rgba(${core[0]},${core[1]},${core[2]},${a})`);
-        sphere.addColorStop(1, `rgba(${Math.round(core[0] * 0.35)},${Math.round(core[1] * 0.4)},${Math.round(core[2] * 0.5)},${a})`);
-        ctx.fillStyle = sphere;
-        ctx.beginPath(); ctx.arc(p.sx, p.sy, rad, 0, Math.PI * 2); ctx.fill();
-        // rim light
-        ctx.strokeStyle = `rgba(180,220,255,${0.4 * a})`;
-        ctx.lineWidth = 0.9;
-        ctx.beginPath(); ctx.arc(p.sx, p.sy, rad, Math.PI * 0.15, Math.PI * 0.85); ctx.stroke();
-        // element label for oxygens only (carbons stay unlabeled per convention)
-        if (isO) {
-          ctx.fillStyle = `rgba(255,240,235,${0.9 * a})`;
-          ctx.font = `600 ${Math.round(11 * p.persp)}px 'JetBrains Mono', monospace`;
-          ctx.textAlign = "center"; ctx.textBaseline = "middle";
-          ctx.fillText("OH", p.sx, p.sy);
-        }
-      }
-      raf = requestAnimationFrame(draw);
-    }
-    raf = requestAnimationFrame(draw);
-    return () => { cancelAnimationFrame(raf); ro.disconnect(); };
-  }, []);
-
-  const pointerFrom = (e: MouseEvent | TouchEvent) => {
-    if ("touches" in e && e.touches.length > 0) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    const m = e as MouseEvent;
-    return { x: m.clientX, y: m.clientY };
-  };
-  const onMolDown = (e: MouseEvent | TouchEvent) => {
-    const d = molDrag.current; d.down = true;
-    const pt = pointerFrom(e);
-    d.x = pt.x; d.y = pt.y; d.vx = 0; d.vy = 0;
-  };
-  const onMolMove = (e: MouseEvent | TouchEvent) => {
-    const d = molDrag.current; if (!d.down) return;
-    const pt = pointerFrom(e);
-    const dx = pt.x - d.x, dy = pt.y - d.y;
-    d.ry += dx * 0.01; d.rx += dy * 0.01;
-    d.vy = dx * 0.01; d.vx = dy * 0.01;
-    d.x = pt.x; d.y = pt.y;
-  };
-  const onMolUp = () => { molDrag.current.down = false; };
-  const onMolWheel = (e: WheelEvent) => {
-    e.preventDefault();
-    const d = molDrag.current;
-    d.zoom = Math.max(0.55, Math.min(2.4, d.zoom * (e.deltaY < 0 ? 1.08 : 0.92)));
-  };
-
   useEffect(() => {
     const obs = new IntersectionObserver((entries) => {
       entries.forEach((en) => {
@@ -949,14 +770,8 @@ export function HomeDescent() {
         </p>
 
         <div className="tnic-molwrap">
-          <div
-            className="tnic-stage"
-            onMouseDown={onMolDown} onMouseMove={onMolMove} onMouseUp={onMolUp} onMouseLeave={onMolUp}
-            onTouchStart={onMolDown} onTouchMove={onMolMove} onTouchEnd={onMolUp}
-            onWheel={onMolWheel}
-            style={{ cursor: "grab" }}
-          >
-            <canvas ref={molRef} />
+          <div className="tnic-stage">
+            <MoleculeStage geometryId="resveratrol" hue={HUES.cyan} />
             <div className="tnic-molhint"><span className="dot" />drag · scroll to zoom</div>
           </div>
 
