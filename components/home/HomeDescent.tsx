@@ -746,7 +746,7 @@ export function HomeDescent() {
         <h1 className="tnic-h1">See what<br />you&apos;re <em>protecting</em>.</h1>
         <p className="tnic-lead">
           You can&apos;t feel a cell aging. So we made it visible — the real biology
-          behind your stack, rendered instead of promised. Four scenes. One
+          behind your stack, rendered instead of promised. Five scenes. One
           continuous descent, from a molecule to the life it defends.
         </p>
         <div className="tnic-hero-badges">
