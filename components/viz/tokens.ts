@@ -37,6 +37,7 @@ export const HUES: Record<string, RGB> = {
   rose: [240, 138, 122],
   amber: [234, 162, 74],
   teal: [87, 212, 176],
+  emerald: [52, 211, 153],
 };
 
 /** Curated signature-hue rotation — every compound gets a stable, on-brand color. */
