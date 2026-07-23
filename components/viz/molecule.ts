@@ -6,7 +6,15 @@
 // field (see MoleculeStage `mode="field"`). This keeps the honesty contract:
 // we never render a fabricated structure and pass it off as the literal
 // molecule. New skeletons can be added to REGISTRY over time.
+//
+// The compounds below reuse the site's own hand-verified 2D skeletal
+// structures from components/ui/molecules.ts (the same data driving the
+// ambient molecule cascade) via `fromSkeletal` — a geometric projection into
+// 3D, not a new structure. That keeps every rendered molecule traceable to a
+// structure someone on this project actually drew and checked.
 // ─────────────────────────────────────────────────────────────────────────────
+
+import { MOLECULES, type Molecule as SkeletalMolecule } from "@/components/ui/molecules";
 
 export type Atom = { x: number; y: number; z: number; el: "C" | "O" | "N" | "S" };
 export type Bond = [number, number, 1 | 2];
@@ -67,10 +75,97 @@ function buildPterostilbene(): Geometry {
   return { atoms: g.atoms, bonds: g.bonds, formula: "C₁₆H₁₆O₃", label: "trans-3,5-dimethoxy-4′-hydroxystilbene" };
 }
 
+// ── convert a hand-verified 2D skeletal structure into 3D ball-and-stick ──
+
+function elementFromLabel(text?: string): Atom["el"] {
+  if (!text) return "C"; // unlabeled vertex = implicit carbon, per skeletal-formula convention
+  if (text.includes("O")) return "O";
+  if (text.includes("N")) return "N";
+  if (text.includes("S")) return "S";
+  return "C";
+}
+
+function pointKey(p: readonly [number, number]): string {
+  return `${Math.round(p[0] * 10)},${Math.round(p[1] * 10)}`;
+}
+
+// Cheap deterministic pseudo-noise, keyed on position — gives the flat
+// skeletal drawing a subtle z-pucker so it doesn't rotate as a perfect disc.
+function pseudoNoise(x: number, y: number): number {
+  const s = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453;
+  return s - Math.floor(s);
+}
+
+const SKELETAL_SPAN = 6.2; // target 3D span, matched to buildResveratrol's scale
+
+function fromSkeletal(m: SkeletalMolecule, formula: string, label: string): Geometry {
+  const atoms: Atom[] = [];
+  const bonds: Bond[] = [];
+  const index = new Map<string, number>();
+  const labelByKey = new Map<string, string>();
+  for (const l of m.labels) labelByKey.set(pointKey(l.at), l.text);
+
+  const scale = SKELETAL_SPAN / Math.max(m.w, m.h);
+  const cx = m.w / 2, cy = m.h / 2;
+
+  function atomIndex(p: readonly [number, number]): number {
+    const key = pointKey(p);
+    const existing = index.get(key);
+    if (existing !== undefined) return existing;
+    const x = (p[0] - cx) * scale;
+    const y = -(p[1] - cy) * scale; // flip: skeletal y grows downward, 3D "up" should read up
+    const z = (pseudoNoise(p[0], p[1]) - 0.5) * 0.4;
+    const idx = atoms.length;
+    atoms.push({ x, y, z, el: elementFromLabel(labelByKey.get(key)) });
+    index.set(key, idx);
+    return idx;
+  }
+
+  for (const b of m.bonds) bonds.push([atomIndex(b.a), atomIndex(b.b), b.order]);
+  return { atoms, bonds, formula, label };
+}
+
+const skeletalById = new Map(MOLECULES.map((m) => [m.id, m]));
+
+function buildFromSkeletal(id: string, formula: string, label: string): () => Geometry {
+  return () => {
+    const m = skeletalById.get(id);
+    if (!m) throw new Error(`No skeletal structure registered for "${id}" in components/ui/molecules.ts`);
+    return fromSkeletal(m, formula, label);
+  };
+}
+
 /** Registry of compounds we have real stylized geometry for. */
 export const REGISTRY: Record<string, () => Geometry> = {
   resveratrol: buildResveratrol,
   pterostilbene: buildPterostilbene,
+  // Projected from the site's own verified skeletal structures — see the
+  // module comment above.
+  nmn: buildFromSkeletal(
+    "nicotinamide",
+    "C₆H₆N₂O",
+    "nicotinamide — the redox-active core NMN restores to NAD⁺",
+  ),
+  spermidine: buildFromSkeletal(
+    "spermidine",
+    "C₇H₁₉N₃",
+    "N-(3-aminopropyl)butane-1,4-diamine",
+  ),
+  sulforaphane: buildFromSkeletal(
+    "sulforaphane",
+    "C₆H₁₁NOS₂",
+    "1-isothiocyanato-4-(methylsulfinyl)butane",
+  ),
+  fisetin: buildFromSkeletal(
+    "fisetin",
+    "C₁₅H₁₀O₆",
+    "3,7,3′,4′-tetrahydroxyflavone",
+  ),
+  berberine: buildFromSkeletal(
+    "berberine",
+    "C₂₀H₁₈NO₄⁺",
+    "isoquinoline alkaloid (quaternary ammonium)",
+  ),
 };
 
 export function hasGeometry(id: string): boolean {
