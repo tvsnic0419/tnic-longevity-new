@@ -22,6 +22,9 @@ import { AlteredIntercellularCommunicationVisual } from '@/components/illustrati
 import { ChronicInflammationVisual } from '@/components/illustrations/ChronicInflammationVisual';
 import { DysbiosisVisual } from '@/components/illustrations/DysbiosisVisual';
 import { DisabledMacroautophagyVisual } from '@/components/illustrations/DisabledMacroautophagyVisual';
+import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
+import { COMPOUND_COUNT } from '@/lib/library-modules';
+import { eliteInterventions } from '@/lib/elite-interventions';
 
 export const metadata = buildPageMetadata({
   title: 'Anti-Aging Library — The 12 Hallmarks of Aging, Evidence-Graded',
@@ -49,6 +52,20 @@ const visuals = [
 export default function LibraryPage() {
   return (
     <>
+      <CinematicHubHero
+        hue="cyan"
+        kicker="The Library"
+        title={<>Every intervention, <em>graded</em>.</>}
+        lead="The 12 hallmarks of aging, each paired with PMID-cited interventions and mechanistic visuals — the free, evidence-first reference the whole site is built on."
+        stats={[
+          { value: String(COMPOUND_COUNT), label: 'Graded compounds' },
+          { value: '12', label: 'Hallmarks of aging' },
+          { value: 'A–C', label: 'Evidence tiers' },
+          { value: String(eliteInterventions.length), label: 'Elite interventions' },
+        ]}
+        primary={{ href: '/quiz', label: 'Find your stack in 90 seconds' }}
+        secondary={{ href: '/stacks', label: 'Open the Stack Architect' }}
+      />
       {/* Lead with the page title and context, then the tools to act on it */}
       <AntiAgingLibrary asPageTitle />
 
