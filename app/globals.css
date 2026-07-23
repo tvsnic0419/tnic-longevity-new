@@ -1195,6 +1195,54 @@ p,
   66% { transform: translate(-3%, 4%) scale(0.94); }
 }
 
+/* ── Cellular divider — chaptered section seam ──
+   The primary cluster inherits its color from the seam hue so each divider
+   previews the section it introduces; an optional chapter marker floats in the
+   preceding section's padding without shifting the glyph. */
+.cellular-divider {
+  color: var(--seam-hue, var(--accent-cyan));
+}
+.cd-chapter {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+.cd-chapter b {
+  font-weight: 500;
+  color: var(--seam-hue, var(--accent-cyan));
+}
+.cd-flow {
+  animation: cd-flow-l 3.8s ease-in-out infinite;
+}
+.cd-flow-r {
+  animation-name: cd-flow-r;
+}
+@keyframes cd-flow-l {
+  0% { transform: translateX(0); opacity: 0; }
+  15% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: translateX(40px); opacity: 0; }
+}
+@keyframes cd-flow-r {
+  0% { transform: translateX(0); opacity: 0; }
+  15% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: translateX(-40px); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cd-flow { animation: none; opacity: 0; }
+}
+
 /* ── Molecular structure cascade ──
    A field of authentic skeletal chemical structures drifting behind every
    page. Sits above the aurora orbs, below all content. Kept whisper-faint so

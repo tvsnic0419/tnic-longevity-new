@@ -131,7 +131,7 @@ export function HomeEliteInterventions() {
       aria-labelledby="home-elite-heading"
       className="relative scroll-mt-24 border-t border-border/50 py-20 md:py-28"
     >
-      <CellularDivider />
+      <CellularDivider hue="var(--accent-emerald)" index="01" label="The interventions" />
       <div className="container-page">
         <RevealItem className="mb-10 max-w-3xl md:mb-14">
           <p className="text-label mb-3 text-accent-emerald">Elite interventions</p>

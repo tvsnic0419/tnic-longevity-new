@@ -29,7 +29,7 @@ export function HomeHallmarks() {
       aria-labelledby="home-hallmarks-heading"
       className="relative border-t border-border/50 py-20 md:py-28"
     >
-      <CellularDivider />
+      <CellularDivider hue="var(--accent-emerald)" index="02" label="The hallmarks" />
       <div className="container-page">
         <div className="mb-10 items-center gap-10 lg:mb-14 lg:grid lg:grid-cols-12">
           <RevealItem className="lg:col-span-7">
