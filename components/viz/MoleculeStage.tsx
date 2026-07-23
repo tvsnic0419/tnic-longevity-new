@@ -7,6 +7,7 @@ import {
 import { getGeometry, type Geometry } from "./molecule";
 import type { RGB } from "./tokens";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { runWhenVisible, cappedDpr } from "@/lib/raf-visibility";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // MoleculeStage — the shared cinematic renderer for the viz family.
@@ -54,8 +55,8 @@ export function MoleculeStage({
   useEffect(() => {
     const cv = canvasRef.current; if (!cv) return;
     const ctx = cv.getContext("2d"); if (!ctx) return;
-    let raf = 0, w = 0, h = 0;
-    const dpr = Math.min(window.devicePixelRatio || 1, 3);
+    let w = 0, h = 0;
+    const dpr = cappedDpr();
 
     // field-mode particles (only used when there is no geometry)
     const N = 64;
@@ -216,13 +217,12 @@ export function MoleculeStage({
       ctx.beginPath(); ctx.arc(cx, cy, R * 0.32, 0, Math.PI * 2); ctx.fill();
     }
 
-    function frame() {
+    const draw = () => {
       const geom = geomRef.current;
       if (geom) drawMolecule(geom); else drawField();
-      raf = requestAnimationFrame(frame);
-    }
-    raf = requestAnimationFrame(frame);
-    return () => { cancelAnimationFrame(raf); ro.disconnect(); };
+    };
+    const stopLoop = runWhenVisible(cv, draw);
+    return () => { stopLoop(); ro.disconnect(); };
   }, []);
 
   const pointerFrom = (e: MouseEvent | TouchEvent) => {

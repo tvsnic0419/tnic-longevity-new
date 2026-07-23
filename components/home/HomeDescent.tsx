@@ -10,6 +10,7 @@ import { COMPOUND_COUNT } from "@/lib/library-modules";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { MoleculeStage } from "@/components/viz/MoleculeStage";
 import { HUES } from "@/components/viz/tokens";
+import { runWhenVisible, cappedDpr } from "@/lib/raf-visibility";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TNiC · "Descent" — a captivate-on-arrival scrollytelling section
@@ -510,8 +511,8 @@ export function HomeDescent() {
   useEffect(() => {
     const cv = shimmerRef.current; if (!cv) return;
     const ctx = cv.getContext("2d"); if (!ctx) return;
-    let raf = 0, w = 0, h = 0;
-    const dpr = Math.min(window.devicePixelRatio || 1, 3);
+    let w = 0, h = 0;
+    const dpr = cappedDpr();
     const layers = [
       { n: 130, sp: 0.00012, dxr: 0.00008, rMin: 0.3, rMax: 1.2, alpha: 0.55 },
       { n: 60,  sp: 0.00020, dxr: 0.00014, rMin: 0.8, rMax: 2.2, alpha: 0.75 },
@@ -584,18 +585,17 @@ export function HomeDescent() {
           }
         }
       }
-      raf = requestAnimationFrame(draw);
     }
-    raf = requestAnimationFrame(draw);
-    return () => { cancelAnimationFrame(raf); ro.disconnect(); };
+    const stopLoop = runWhenVisible(cv, draw);
+    return () => { stopLoop(); ro.disconnect(); };
   }, []);
 
   // ── cursor glow: follows the pointer over the section ──
   useEffect(() => {
     const cv = cursorRef.current; const root = rootRef.current; if (!cv || !root) return;
     const ctx = cv.getContext("2d"); if (!ctx) return;
-    const dpr = Math.min(window.devicePixelRatio || 1, 3);
-    let raf = 0, w = 0, h = 0;
+    const dpr = cappedDpr();
+    let w = 0, h = 0;
     const state = { x: 0, y: 0, tx: 0, ty: 0, on: false };
     function resize() {
       if (!cv || !ctx) return;
@@ -629,11 +629,10 @@ export function HomeDescent() {
         ctx.fillStyle = g;
         ctx.beginPath(); ctx.arc(state.x, state.y, rad, 0, Math.PI * 2); ctx.fill();
       }
-      raf = requestAnimationFrame(draw);
     }
-    raf = requestAnimationFrame(draw);
+    const stopLoop = runWhenVisible(cv, draw);
     return () => {
-      cancelAnimationFrame(raf); ro.disconnect();
+      stopLoop(); ro.disconnect();
       root.removeEventListener("pointermove", onMove);
       root.removeEventListener("pointerleave", onLeave);
     };
