@@ -1121,6 +1121,25 @@ p,
 }
 
 /* ── Site-wide ambient canvas ── */
+/* ── Route-aware ambient tint ──
+   The two lead aurora orbs take their color from registered <color> custom
+   properties so a route's <AmbientTone/> can cross-fade the whole site's
+   ambience between hubs (cyan library → violet stacks → rose labs …) instead of
+   snapping. Registering them with @property is what makes the gradient animate;
+   the var() fallbacks keep the original palette if a browser lacks @property or
+   no route tone is set. The third orb is intentionally left constant as a
+   cohesion anchor. */
+@property --ambient-tint-1 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: rgba(56, 189, 248, 0.5);
+}
+@property --ambient-tint-2 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: rgba(129, 140, 248, 0.4);
+}
+
 .ambient-layer {
   position: fixed;
   inset: 0;
@@ -1135,6 +1154,7 @@ p,
   filter: blur(90px);
   opacity: 0.62;
   animation: aurora-drift 28s ease-in-out infinite;
+  transition: --ambient-tint-1 1.4s ease, --ambient-tint-2 1.4s ease;
 }
 
 .ambient-orb-1 {
@@ -1144,7 +1164,7 @@ p,
   max-height: 700px;
   top: -15%;
   left: -10%;
-  background: radial-gradient(circle, color-mix(in srgb, var(--accent-cyan) 48%, transparent), transparent 70%);
+  background: radial-gradient(circle, var(--ambient-tint-1, color-mix(in srgb, var(--accent-cyan) 48%, transparent)), transparent 70%);
 }
 
 .ambient-orb-2 {
@@ -1154,7 +1174,7 @@ p,
   max-height: 560px;
   bottom: -10%;
   right: -8%;
-  background: radial-gradient(circle, color-mix(in srgb, var(--accent-violet) 38%, transparent), transparent 70%);
+  background: radial-gradient(circle, var(--ambient-tint-2, color-mix(in srgb, var(--accent-violet) 38%, transparent)), transparent 70%);
   animation-delay: -12s;
 }
 
@@ -1796,6 +1816,8 @@ p,
   .ambient-orb, .hero-ring, .scroll-progress-glow,
   .platform-ticker-track, .constellation-core, .constellation-orbit,
   .molecule-node { animation: none; }
+  /* Route palette still changes, but instantly — no cross-fade. */
+  .ambient-orb { transition: none; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
