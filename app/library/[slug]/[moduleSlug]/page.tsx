@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { LibraryModuleDetail } from '@/components/library/LibraryModuleDetail';
+import { CompoundHero, type CompoundHeroData } from '@/components/viz/CompoundHero';
 import { StructuredData } from '@/components/seo/StructuredData';
+import { compounds } from '@/lib/data';
+import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import {
   getAllModuleParams,
   getModuleBySlug,
@@ -63,6 +66,29 @@ export default async function LibraryModulePage({
   const relatedCompounds =
     mod.category === 'compounds' ? getRelatedCompounds(mod.slug) : [];
 
+  // Cinematic overture for compound pages — real fields joined from lib/data.ts.
+  const heroCompound =
+    mod.category === 'compounds' && mod.compoundId
+      ? compounds.find((c) => c.id === mod.compoundId)
+      : undefined;
+  const heroData: CompoundHeroData | null = heroCompound
+    ? {
+        id: heroCompound.id,
+        name: heroCompound.name,
+        pathway: heroCompound.pathway,
+        mechanism: heroCompound.mechanism,
+        evidence: heroCompound.evidence,
+        dose: heroCompound.dose,
+        timing: heroCompound.timing,
+        bioavailability: heroCompound.bioavailability,
+        studyCount: heroCompound.studies.length,
+        synergyCount: heroCompound.synergies.length,
+        hallmarks: heroCompound.hallmarks
+          .map((hid) => hallmarkLibrary.find((h) => h.id === hid)?.title ?? hid)
+          .filter(Boolean),
+      }
+    : null;
+
   const breadcrumb = buildBreadcrumbSchema([
     { name: 'Library', path: '/library' },
     { name: libraryCategoryMeta[mod.category].label, path: `/library#content-modules` },
@@ -96,6 +122,7 @@ export default async function LibraryModulePage({
   return (
     <>
       <StructuredData schemas={schemas} />
+      {heroData && <CompoundHero {...heroData} />}
       <LibraryModuleDetail
         module={mod}
         mdxBody={mdx?.body ?? null}
