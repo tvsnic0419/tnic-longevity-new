@@ -47,7 +47,10 @@ export function CinematicHubHero({
 
       <div className="hh-inner">
         <p className="hh-kicker">{kicker}</p>
-        <h1 className="hh-title">{title}</h1>
+        {/* Decorative cover headline — the page's semantic <h1> lives in the
+            hub's own PageHeader below, so this stays a non-heading to avoid a
+            duplicate top-level heading. */}
+        <p className="hh-title">{title}</p>
         <p className="hh-lead">{lead}</p>
 
         {stats.length > 0 && (
