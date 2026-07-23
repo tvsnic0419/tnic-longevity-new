@@ -2,6 +2,7 @@ import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { HomeHero } from '@/components/home/HomeHero';
+import { HomeDescent } from '@/components/home/HomeDescent';
 import { HomeEliteInterventions } from '@/components/home/HomeEliteInterventions';
 import { HomeHallmarks } from '@/components/home/HomeHallmarks';
 import { HomeGuides } from '@/components/home/HomeGuides';
@@ -62,6 +63,7 @@ export default function HomePage() {
       <ScrollProgress />
       <Nav />
       <main id="main-content" tabIndex={-1}>
+        <HomeDescent />
         <HomeHero />
         <HomeEliteInterventions />
         <HomeHallmarks />
