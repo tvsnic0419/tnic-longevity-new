@@ -81,13 +81,13 @@ export const EASE = {
   exit: "cubic-bezier(0.4, 0, 1, 1)",
 } as const;
 
-/** Font stacks — align with the Descent scene until Phase 1 self-hosts them. */
+/**
+ * Font stacks — resolve to the site's self-hosted next/font faces via the CSS
+ * variables set on <html> in app/layout.tsx (Phase 1). The literal fallbacks
+ * keep the viz family legible even if a component renders outside that root.
+ */
 export const FONT = {
-  display: "'Fraunces', Georgia, serif",
-  sans: "'Inter', system-ui, sans-serif",
-  mono: "'JetBrains Mono', ui-monospace, monospace",
+  display: "var(--font-display, 'Fraunces', Georgia, serif)",
+  sans: "var(--font-sans, 'Inter', system-ui, sans-serif)",
+  mono: "var(--font-mono, 'JetBrains Mono', ui-monospace, monospace)",
 } as const;
-
-/** One import line the viz components share, injected once per page via <style>. */
-export const VIZ_FONT_IMPORT =
-  "@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');";

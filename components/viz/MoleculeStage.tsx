@@ -1,11 +1,12 @@
 "use client";
 
 import {
-  useRef, useEffect, useSyncExternalStore,
+  useRef, useEffect,
   type MouseEvent, type TouchEvent, type WheelEvent,
 } from "react";
 import { getGeometry, type Geometry } from "./molecule";
 import type { RGB } from "./tokens";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // MoleculeStage — the shared cinematic renderer for the viz family.
@@ -16,18 +17,6 @@ import type { RGB } from "./tokens";
 //                    nothing fabricated is ever passed off as a real molecule.
 // Both honor prefers-reduced-motion.
 // ─────────────────────────────────────────────────────────────────────────────
-
-function subscribeReducedMotion(cb: () => void) {
-  const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-  mq.addEventListener("change", cb);
-  return () => mq.removeEventListener("change", cb);
-}
-function getReducedMotion() {
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
-function getServerReducedMotion() {
-  return false;
-}
 
 const ELEMENT_COLOR: Record<string, { core: RGB; hi: RGB; glow: string }> = {
   C: { core: [216, 234, 255], hi: [255, 255, 255], glow: "rgba(95,227,224," },
@@ -49,7 +38,7 @@ export function MoleculeStage({
   className?: string;
   style?: React.CSSProperties;
 }) {
-  const reduced = useSyncExternalStore(subscribeReducedMotion, getReducedMotion, getServerReducedMotion);
+  const reduced = useReducedMotion();
   const reducedRef = useRef(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const drag = useRef({ down: false, x: 0, y: 0, rx: -0.15, ry: 0.5, vx: 0, vy: 0, zoom: 1 });

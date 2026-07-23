@@ -2,7 +2,7 @@
 
 import { MoleculeStage } from "./MoleculeStage";
 import { hasGeometry, getGeometry } from "./molecule";
-import { VIZ, FONT, VIZ_FONT_IMPORT, tierColor, signatureHue } from "./tokens";
+import { VIZ, FONT, tierColor, signatureHue } from "./tokens";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CompoundHero — a "mini-Descent" overture band for every compound page.
@@ -101,7 +101,6 @@ export function CompoundHero(data: CompoundHeroData) {
 }
 
 const CHERO_CSS = `
-${VIZ_FONT_IMPORT}
 .tnic-chero {
   position: relative;
   max-width: 80rem; margin: 0 auto; padding: clamp(20px, 4vw, 40px) 24px 8px;

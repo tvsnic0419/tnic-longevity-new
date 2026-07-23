@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Inter, JetBrains_Mono, Fraunces } from 'next/font/google';
 import { Toaster } from 'sonner';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -12,16 +12,28 @@ import { buildRootMetadata } from '@/lib/seo';
 import { AmbientLayer } from '@/components/ui/AmbientLayer';
 import './globals.css';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+// One typography source of truth — the cinematic stack used by the Descent
+// scene and the viz family now drives the entire site. Self-hosted via
+// next/font (no layout-shift, no external @import), exposed as CSS variables.
+const inter = Inter({
+  variable: '--font-inter',
   subsets: ['latin'],
   display: 'swap',
 });
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const jetbrainsMono = JetBrains_Mono({
+  variable: '--font-jetbrains-mono',
   subsets: ['latin'],
   display: 'swap',
+});
+
+const fraunces = Fraunces({
+  variable: '--font-fraunces',
+  subsets: ['latin'],
+  display: 'swap',
+  // Optical-size + weights the display headings actually use.
+  weight: ['300', '400', '500', '600'],
+  style: ['normal', 'italic'],
 });
 
 export const metadata: Metadata = {
@@ -53,7 +65,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${jetbrainsMono.variable} ${fraunces.variable} h-full antialiased`}
     >
       <head>
         <ThemeScript />

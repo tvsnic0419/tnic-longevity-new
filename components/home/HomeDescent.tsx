@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import {
-  useState, useRef, useEffect, useMemo, useCallback, useSyncExternalStore,
+  useState, useRef, useEffect, useMemo, useCallback,
   type MouseEvent, type TouchEvent, type WheelEvent, type ChangeEvent,
 } from "react";
 import { eliteInterventions } from "@/lib/elite-interventions";
 import { COMPOUND_COUNT } from "@/lib/library-modules";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TNiC · "Descent" — a captivate-on-arrival scrollytelling section
@@ -519,25 +520,12 @@ function interp(pts: Array<[number, number]>, x: number): number {
 // Star SVG path used for elite badges in the network and readout.
 const STAR_D = "M0 -6 L1.7 -1.9 L6 -1.9 L2.6 0.7 L3.9 5 L0 2.5 L-3.9 5 L-2.6 0.7 L-6 -1.9 L-1.7 -1.9 Z";
 
-// External-store hook wiring for `prefers-reduced-motion` — avoids the
-// "setState inside effect" cascade that the react-hooks lint rule flags.
-function subscribeReducedMotion(cb: () => void) {
-  const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-  mq.addEventListener("change", cb);
-  return () => mq.removeEventListener("change", cb);
-}
-function getReducedMotion() {
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
-function getServerReducedMotion() {
-  return false;
-}
 
 export function HomeDescent() {
   const [active, setActive] = useState(0);
   const [selNode, setSelNode] = useState<string | null>(null);
   const [age, setAge] = useState(50);
-  const reduced = useSyncExternalStore(subscribeReducedMotion, getReducedMotion, getServerReducedMotion);
+  const reduced = useReducedMotion();
   const [search, setSearch] = useState("");
   const [tierFilter, setTierFilter] = useState<Set<TierKey>>(new Set());
   const [showElite, setShowElite] = useState(true);
