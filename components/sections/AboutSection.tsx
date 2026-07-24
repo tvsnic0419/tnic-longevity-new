@@ -9,8 +9,8 @@ const founder = {
   title: 'Founder, TNiC',
   bio: [
     'Tommy Nichols built TNiC after spending years navigating the longevity supplement industry and finding it dominated by marketing noise, undisclosed affiliate conflicts, and preclinical mouse studies dressed up as clinical proof.',
-    'A self-taught researcher and software builder, he designed TNiC to be the platform he wished existed — one where major claims are traceable, evidence tiers are visible, and the tools help you think rather than just buy.',
-    'TNiC is independently built, carries no inventory, and discloses every commercial relationship. The independence is the point.',
+    'A self-taught researcher and software builder, he designed it to be the platform he wished existed — one where major claims are traceable, evidence tiers are visible, and the tools help you think rather than just buy.',
+    "It's independently built, carries no inventory, and discloses every commercial relationship. The independence is the point.",
   ],
   quote: 'Most longevity sites are supplement stores with a content problem. I built the opposite: the evidence first, then an honest, disclosed pick of what to actually buy.',
 };
@@ -34,7 +34,7 @@ const pillars = [
   {
     icon: User,
     title: 'Personal + General',
-    desc: 'Modeled biomarker projections help you explore scenarios. Your lab results (when available) remain the gold standard — TNiC never replaces clinical diagnostics.',
+    desc: 'Modeled biomarker projections help you explore scenarios. Your lab results (when available) remain the gold standard — this never replaces clinical diagnostics.',
   },
 ];
 
@@ -51,7 +51,7 @@ export function AboutSection() {
       theme="cyan"
       badge="About TNiC"
       title="An Educational Longevity Platform"
-      subtitle="TNiC is not a supplement store or a personal health blog. It is a structured, science-backed resource for adults optimizing healthspan — with interactive tools to turn research into actionable protocols."
+      subtitle="Not a supplement store or a personal health blog. A structured, science-backed resource for adults optimizing healthspan — with interactive tools to turn research into actionable protocols."
       headingLevel="h1"
       className="canvas-scrim"
     >
@@ -119,7 +119,7 @@ export function AboutSection() {
             ))}
           </ul>
           <p className="text-xs text-caption mt-4 border-t border-border pt-3">
-            Advanced interventions like rapamycin require physician supervision. TNiC will document evidence and risks — never promote unsupervised use.
+            Advanced interventions like rapamycin require physician supervision. We&apos;ll document evidence and risks — never promote unsupervised use.
           </p>
         </div>
       </div>
