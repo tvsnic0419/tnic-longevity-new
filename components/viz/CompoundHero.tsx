@@ -24,6 +24,8 @@ export type CompoundHeroData = {
   formula?: string;
   molarMass?: string;
   chemFamily?: string;
+  halfLife?: string;
+  firstIsolated?: string;
   studyCount: number;
   synergyCount: number;
   hallmarks: string[];
@@ -54,6 +56,8 @@ export function CompoundHero(data: CompoundHeroData) {
   if (data.formula) facts.push({ k: "Formula", v: data.formula });
   if (data.molarMass) facts.push({ k: "Molar mass", v: data.molarMass });
   if (data.chemFamily) facts.push({ k: "Family", v: data.chemFamily });
+  if (data.halfLife) facts.push({ k: "Half-life", v: data.halfLife });
+  if (data.firstIsolated) facts.push({ k: "First isolated", v: data.firstIsolated });
 
   return (
     <div className="tnic-chero" style={{ "--hue": hueCss } as React.CSSProperties}>

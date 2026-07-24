@@ -96,7 +96,7 @@ export function MoleculeStage({
         const y = a.y * cosX - z * sinX;
         z = a.y * sinX + z * cosX;
         const persp = 6 / (6 + z);
-        return { sx: cx + x * scale * persp, sy: cy + y * scale * persp, z, persp, el: a.el };
+        return { sx: cx + x * scale * persp, sy: cy + y * scale * persp, z, persp, el: a.el, label: a.label };
       });
       ctx.clearRect(0, 0, w, h);
       const back = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(w, h) * 0.7);
@@ -150,11 +150,12 @@ export function MoleculeStage({
         ctx.beginPath(); ctx.arc(p.sx, p.sy, rad, 0, Math.PI * 2); ctx.fill();
         ctx.strokeStyle = `rgba(180,220,255,${0.4 * a})`; ctx.lineWidth = 0.9;
         ctx.beginPath(); ctx.arc(p.sx, p.sy, rad, Math.PI * 0.15, Math.PI * 0.85); ctx.stroke();
-        if (p.el === "O") {
+        const labelText = p.label ?? (p.el === "O" ? "OH" : undefined);
+        if (labelText) {
           ctx.fillStyle = `rgba(255,240,235,${0.9 * a})`;
           ctx.font = `600 ${Math.round(11 * p.persp)}px 'JetBrains Mono', monospace`;
           ctx.textAlign = "center"; ctx.textBaseline = "middle";
-          ctx.fillText("OH", p.sx, p.sy);
+          ctx.fillText(labelText, p.sx, p.sy);
         }
       }
     }

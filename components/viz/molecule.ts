@@ -16,7 +16,7 @@
 
 import { MOLECULES, type Molecule as SkeletalMolecule } from "@/components/ui/molecules";
 
-export type Atom = { x: number; y: number; z: number; el: "C" | "O" | "N" | "S" };
+export type Atom = { x: number; y: number; z: number; el: "C" | "O" | "N" | "S"; label?: string };
 export type Bond = [number, number, 1 | 2];
 export type Geometry = { atoms: Atom[]; bonds: Bond[]; formula: string; label: string };
 
@@ -73,6 +73,134 @@ function buildPterostilbene(): Geometry {
     g.bonds.push([oi, c, 1]);
   }
   return { atoms: g.atoms, bonds: g.bonds, formula: "C₁₆H₁₆O₃", label: "trans-3,5-dimethoxy-4′-hydroxystilbene" };
+}
+
+// ── curcumin (C21H20O6) — two guaiacol rings + a diketone heptadiene bridge ──
+function buildCurcumin(): Geometry {
+  const atoms: Atom[] = [
+    { x: -1.405, y: 0.047, z: -0.045, el: "C" },
+    { x: -0.947, y: -0.353, z: -0.013, el: "C" },
+    { x: -0.488, y: 0.047, z: -0.045, el: "C" },
+    { x: -0.029, y: -0.353, z: -0.013, el: "C" },
+    { x: 0.429, y: 0.047, z: -0.045, el: "C" },
+    { x: 0.888, y: -0.353, z: -0.013, el: "C" },
+    { x: 1.346, y: 0.047, z: -0.045, el: "C" },
+    { x: -0.488, y: 0.448, z: 0.003, el: "O" },
+    { x: 0.429, y: 0.448, z: -0.062, el: "O" },
+    { x: -2.168, y: 0.476, z: -0.109, el: "C" },
+    { x: -1.9, y: 0.147, z: -0.255, el: "C" },
+    { x: -2.016, y: -0.282, z: -0.192, el: "C" },
+    { x: -2.4, y: -0.382, z: 0.018, el: "C" },
+    { x: -2.668, y: -0.052, z: 0.164, el: "C" },
+    { x: -2.552, y: 0.376, z: 0.101, el: "C" },
+    { x: -3.093, y: -0.163, z: 0.164, el: "O", label: "OH" },
+    { x: -2.515, y: -0.806, z: 0.018, el: "O" },
+    { x: -2.636, y: -1.248, z: 0.147, el: "C", label: "OCH₃" },
+    { x: 2.109, y: 0.476, z: -0.109, el: "C" },
+    { x: 2.493, y: 0.376, z: 0.101, el: "C" },
+    { x: 2.609, y: -0.052, z: 0.164, el: "C" },
+    { x: 2.341, y: -0.382, z: 0.018, el: "C" },
+    { x: 1.957, y: -0.282, z: -0.192, el: "C" },
+    { x: 1.841, y: 0.147, z: -0.255, el: "C" },
+    { x: 3.034, y: -0.163, z: 0.164, el: "O", label: "OH" },
+    { x: 2.77, y: 0.717, z: 0.101, el: "O" },
+    { x: 3.059, y: 1.073, z: 0.23, el: "C", label: "OCH₃" },
+  ];
+  const bonds: Bond[] = [
+    [0, 1, 2], [1, 2, 1], [2, 3, 1], [3, 4, 1], [4, 5, 1], [5, 6, 2],
+    [2, 7, 2], [4, 8, 2],
+    [9, 10, 2], [10, 11, 1], [11, 12, 2], [12, 13, 1], [13, 14, 2], [14, 9, 1],
+    [0, 10, 1], [13, 15, 1], [12, 16, 1], [16, 17, 1],
+    [18, 19, 2], [19, 20, 1], [20, 21, 2], [21, 22, 1], [22, 23, 2], [23, 18, 1],
+    [6, 23, 1], [20, 24, 1], [19, 25, 1], [25, 26, 1],
+  ];
+  return {
+    atoms,
+    bonds,
+    formula: "C₂₁H₂₀O₆",
+    label: "(1E,6E)-1,7-bis(4-hydroxy-3-methoxyphenyl)hepta-1,6-diene-3,5-dione",
+  };
+}
+
+// ── quercetin (C15H10O7) — flavonol: chromen-4-one fused to a catechol B-ring ──
+function buildQuercetin(): Geometry {
+  const atoms: Atom[] = [
+    { x: -0.989, y: 0.003, z: -0.022, el: "C" },
+    { x: -0.989, y: -0.76, z: -0.022, el: "C" },
+    { x: -1.65, y: -1.142, z: -0.022, el: "C" },
+    { x: -2.311, y: -0.76, z: -0.022, el: "C" },
+    { x: -2.311, y: 0.003, z: -0.022, el: "C" },
+    { x: -1.65, y: 0.385, z: -0.022, el: "C" },
+    { x: -0.327, y: -1.142, z: -0.022, el: "C" },
+    { x: 0.334, y: -0.76, z: -0.022, el: "C" },
+    { x: 0.334, y: 0.003, z: -0.022, el: "C" },
+    { x: -0.327, y: 0.385, z: -0.022, el: "O" },
+    { x: -0.327, y: -1.823, z: -0.022, el: "O" },
+    { x: 0.981, y: -1.134, z: -0.022, el: "O", label: "OH" },
+    { x: -2.958, y: 0.377, z: -0.022, el: "O", label: "OH" },
+    { x: -1.65, y: -1.889, z: -0.022, el: "O", label: "OH" },
+    { x: 1.52, y: 1.378, z: 0.386, el: "C" },
+    { x: 2.194, y: 1.222, z: 0.063, el: "C" },
+    { x: 2.283, y: 0.583, z: -0.346, el: "C" },
+    { x: 1.697, y: 0.101, z: -0.431, el: "C" },
+    { x: 1.023, y: 0.257, z: -0.108, el: "C" },
+    { x: 0.935, y: 0.896, z: 0.301, el: "C" },
+    { x: 1.418, y: 2.118, z: 0.386, el: "O", label: "OH" },
+    { x: 2.771, y: 1.697, z: 0.063, el: "O", label: "OH" },
+  ];
+  const bonds: Bond[] = [
+    [1, 2, 2], [2, 3, 1], [3, 4, 2], [4, 5, 1], [5, 0, 2], [0, 1, 1],
+    [1, 6, 1], [6, 7, 1], [7, 8, 2], [8, 9, 1], [9, 0, 1],
+    [6, 10, 2], [7, 11, 1], [4, 12, 1], [2, 13, 1],
+    [14, 15, 2], [15, 16, 1], [16, 17, 2], [17, 18, 1], [18, 19, 2], [19, 14, 1],
+    [8, 18, 1], [14, 20, 1], [15, 21, 1],
+  ];
+  return {
+    atoms,
+    bonds,
+    formula: "C₁₅H₁₀O₇",
+    label: "2-(3,4-dihydroxyphenyl)-3,5,7-trihydroxy-4H-chromen-4-one",
+  };
+}
+
+// ── fisetin (C15H10O6) — quercetin minus the 5-hydroxyl ──
+function buildFisetin(): Geometry {
+  const atoms: Atom[] = [
+    { x: -1.106, y: -0.09, z: -0.024, el: "C" },
+    { x: -1.106, y: -0.881, z: -0.024, el: "C" },
+    { x: -1.791, y: -1.277, z: -0.024, el: "C" },
+    { x: -2.477, y: -0.881, z: -0.024, el: "C" },
+    { x: -2.477, y: -0.09, z: -0.024, el: "C" },
+    { x: -1.791, y: 0.306, z: -0.024, el: "C" },
+    { x: -0.421, y: -1.277, z: -0.024, el: "C" },
+    { x: 0.265, y: -0.881, z: -0.024, el: "C" },
+    { x: 0.265, y: -0.09, z: -0.024, el: "C" },
+    { x: -0.421, y: 0.306, z: -0.024, el: "O" },
+    { x: -0.421, y: -1.983, z: -0.024, el: "O" },
+    { x: 0.935, y: -1.268, z: -0.024, el: "O", label: "OH" },
+    { x: -3.147, y: 0.298, z: -0.024, el: "O", label: "OH" },
+    { x: 1.494, y: 1.335, z: 0.399, el: "C" },
+    { x: 2.192, y: 1.173, z: 0.064, el: "C" },
+    { x: 2.284, y: 0.511, z: -0.359, el: "C" },
+    { x: 1.677, y: 0.011, z: -0.448, el: "C" },
+    { x: 0.979, y: 0.173, z: -0.113, el: "C" },
+    { x: 0.887, y: 0.835, z: 0.31, el: "C" },
+    { x: 1.388, y: 2.102, z: 0.399, el: "O", label: "OH" },
+    { x: 2.79, y: 1.666, z: 0.064, el: "O", label: "OH" },
+  ];
+  const bonds: Bond[] = [
+    [1, 2, 2], [2, 3, 1], [3, 4, 2], [4, 5, 1], [5, 0, 2], [0, 1, 1],
+    [1, 6, 1], [6, 7, 1], [7, 8, 2], [8, 9, 1], [9, 0, 1],
+    [6, 10, 2], [7, 11, 1], [4, 12, 1],
+    [13, 14, 2], [14, 15, 1], [15, 16, 2], [16, 17, 1], [17, 18, 2], [18, 13, 1],
+    [8, 17, 1], [13, 19, 1], [14, 20, 1],
+  ];
+  return {
+    atoms,
+    bonds,
+    formula: "C₁₅H₁₀O₆",
+    label: "2-(3,4-dihydroxyphenyl)-3,7-dihydroxy-4H-chromen-4-one",
+  };
 }
 
 // ── convert a hand-verified 2D skeletal structure into 3D ball-and-stick ──
@@ -139,6 +267,9 @@ function buildFromSkeletal(id: string, formula: string, label: string): () => Ge
 export const REGISTRY: Record<string, () => Geometry> = {
   resveratrol: buildResveratrol,
   pterostilbene: buildPterostilbene,
+  curcumin: buildCurcumin,
+  quercetin: buildQuercetin,
+  fisetin: buildFisetin,
   // Projected from the site's own verified skeletal structures — see the
   // module comment above.
   nmn: buildFromSkeletal(
@@ -155,11 +286,6 @@ export const REGISTRY: Record<string, () => Geometry> = {
     "sulforaphane",
     "C₆H₁₁NOS₂",
     "1-isothiocyanato-4-(methylsulfinyl)butane",
-  ),
-  fisetin: buildFromSkeletal(
-    "fisetin",
-    "C₁₅H₁₀O₆",
-    "3,7,3′,4′-tetrahydroxyflavone",
   ),
   berberine: buildFromSkeletal(
     "berberine",

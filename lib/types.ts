@@ -82,6 +82,10 @@ export interface Compound {
   molarMass?: string;
   /** Chemical class, e.g. "Stilbenoid polyphenol" — omit if not a clean single-class fit. */
   chemFamily?: string;
+  /** Approximate elimination half-life, only set when a specific published figure exists — omit rather than guess. */
+  halfLife?: string;
+  /** Historical first-isolation note (year + source), only set when confidently known — omit rather than guess. */
+  firstIsolated?: string;
   evidence: EvidenceTier;
   dose: string;
   timing: 'AM' | 'PM' | 'AM/PM';
