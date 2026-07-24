@@ -32,9 +32,12 @@ const impactColor = (label: string) => {
 };
 
 export function BiomarkerImpactTool() {
-  const [markerId, setMarkerId] = useState(biomarkers[0].id);
+  const [markerId, setMarkerId] = useState('');
 
-  const result = useMemo(() => calculateBiomarkerImpact(markerId), [markerId]);
+  const result = useMemo(
+    () => (markerId ? calculateBiomarkerImpact(markerId) : null),
+    [markerId],
+  );
 
   const chartData = useMemo(() => {
     if (!result) return [];
@@ -49,8 +52,6 @@ export function BiomarkerImpactTool() {
         label: i.impactLabel,
       }));
   }, [result]);
-
-  if (!result) return null;
 
   return (
     <div className="space-y-6">
@@ -70,25 +71,40 @@ export function BiomarkerImpactTool() {
                 label="Biomarker"
                 value={markerId}
                 onChange={setMarkerId}
-                options={biomarkers.map((b) => ({ value: b.id, label: b.name }))}
+                options={[
+                  { value: '', label: 'Choose a biomarker…' },
+                  ...biomarkers.map((b) => ({ value: b.id, label: b.name })),
+                ]}
               />
-              <div className="mt-4 space-y-2 text-sm">
-                <p>
-                  <span className="text-muted-foreground">Optimal:</span>{' '}
-                  <span className="text-accent-emerald font-mono">{result.optimal}</span>{' '}
-                  {result.unit}
-                </p>
-                <p className="text-body-sm">{result.desc}</p>
-                <div className="flex flex-wrap gap-1 mt-2">
-                  {getHallmarkLabelsForMarker(markerId).map((h) => (
-                    <Badge key={h} variant="info">{h}</Badge>
-                  ))}
+              {result && (
+                <div className="mt-4 space-y-2 text-sm">
+                  <p>
+                    <span className="text-muted-foreground">Optimal:</span>{' '}
+                    <span className="text-accent-emerald font-mono">{result.optimal}</span>{' '}
+                    {result.unit}
+                  </p>
+                  <p className="text-body-sm">{result.desc}</p>
+                  <div className="flex flex-wrap gap-1 mt-2">
+                    {getHallmarkLabelsForMarker(markerId).map((h) => (
+                      <Badge key={h} variant="info">{h}</Badge>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </CardContent>
           </Card>
 
-          {result.topPick && (
+          {!result && (
+            <Card>
+              <CardContent>
+                <p className="text-body-sm text-muted-foreground py-2">
+                  Pick a biomarker above to run the impact ranking.
+                </p>
+              </CardContent>
+            </Card>
+          )}
+
+          {result?.topPick && (
             <Card className="border-accent-emerald/20">
               <CardHeader>
                 <CardTitle className="text-base">Top intervention</CardTitle>
@@ -123,17 +139,29 @@ export function BiomarkerImpactTool() {
             </Card>
           )}
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Interpretation</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-body-sm">{result.interpretationGuide}</p>
-            </CardContent>
-          </Card>
+          {result && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Interpretation</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-body-sm">{result.interpretationGuide}</p>
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         <div className="lg:col-span-8 space-y-5">
+          {!result ? (
+            <Card elevated>
+              <CardContent>
+                <p className="text-body-sm text-muted-foreground py-12 text-center">
+                  Impact ranking, compound list, and lifestyle modifiers will appear here once you choose a biomarker.
+                </p>
+              </CardContent>
+            </Card>
+          ) : (
+          <>
           <Card elevated>
             <CardHeader>
               <CardTitle>Impact ranking</CardTitle>
@@ -228,6 +256,8 @@ export function BiomarkerImpactTool() {
               </CardContent>
             </Card>
           </div>
+          </>
+          )}
 
           <div className="flex flex-wrap gap-3">
             <Link href="/labs">

@@ -175,6 +175,16 @@ export function ProtocolEngineTool() {
         </div>
 
         <div className="lg:col-span-8 space-y-5">
+          {protocolGoals.length === 0 ? (
+            <Card variant="elevated">
+              <CardContent>
+                <p className="text-body-sm text-muted-foreground py-12 text-center">
+                  Pick at least one health goal to generate your recommended plan.
+                </p>
+              </CardContent>
+            </Card>
+          ) : (
+          <>
           <Card variant="elevated" className="border-l-2 border-l-accent-violet">
             <CardHeader>
               <div className="flex flex-wrap items-start justify-between gap-3">
@@ -374,6 +384,8 @@ export function ProtocolEngineTool() {
           <p className="text-caption border border-border rounded-xl p-4 bg-muted/20">
             {result.disclaimer}
           </p>
+          </>
+          )}
         </div>
       </div>
     </div>
