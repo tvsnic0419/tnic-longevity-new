@@ -23,6 +23,7 @@ import {
 } from '@/components/library/LifestyleDecisionTree';
 import { citationRegistry } from '@/lib/trust';
 import { glossary } from '@/lib/data';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 
 const PMID_PATTERN = /\bPMID:?\s?(\d{7,8})\b/g;
 const LINK_CLASS =
@@ -190,33 +191,37 @@ function estimateReadingMinutes(content: string): number {
 
 function TableOfContents({ headings, readingMinutes }: { headings: Heading[]; readingMinutes: number }) {
   return (
-    <nav
-      aria-label="On this page"
-      className="not-prose mb-8 rounded-xl border border-border bg-muted/20 p-5"
-    >
-      <div className="mb-3 flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <ListTree className="h-4 w-4 text-accent-cyan" aria-hidden="true" />
+    <nav aria-label="On this page" className="not-prose mb-8">
+      <GlassPanel depth="mid" className="rounded-xl p-5">
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <ListTree className="h-4 w-4 text-accent-cyan" aria-hidden="true" />
+            <p className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+              On this page
+            </p>
+          </div>
           <p className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-            On this page
+            ~{readingMinutes} min read
           </p>
         </div>
-        <p className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-          ~{readingMinutes} min read
-        </p>
-      </div>
-      <ul className="space-y-1.5">
-        {headings.map((h) => (
-          <li key={h.id} className={h.level === 3 ? 'ml-4' : ''}>
-            <a
-              href={`#${h.id}`}
-              className="focus-ring rounded text-sm text-muted-foreground transition-colors hover:text-accent-cyan"
-            >
-              {h.text}
-            </a>
-          </li>
-        ))}
-      </ul>
+        <ul className="space-y-2">
+          {headings.map((h, i) => (
+            <li key={h.id} className={h.level === 3 ? 'ml-4' : ''}>
+              <a href={`#${h.id}`} className="focus-ring block">
+                <GlassPanel
+                  depth="float"
+                  className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-accent-cyan"
+                >
+                  <span className="font-mono text-[10px] text-accent-cyan/60 shrink-0">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  {h.text}
+                </GlassPanel>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </GlassPanel>
     </nav>
   );
 }
