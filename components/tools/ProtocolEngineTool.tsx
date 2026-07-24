@@ -29,6 +29,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Select } from '@/components/ui/Select';
 import { ToolDisclaimer } from './ToolDisclaimer';
 import { cn } from '@/lib/utils';
+import { libraryModules, getModulePath } from '@/lib/library-modules';
 
 export function ProtocolEngineTool() {
   const { profile, setProfile, labs, selected, setSelected } = usePlatform();
@@ -275,15 +276,27 @@ export function ProtocolEngineTool() {
                           <Badge variant="info">{pathway.confidence}%</Badge>
                         </div>
                         <div className="flex flex-wrap gap-2 mt-3">
-                          {pathway.compounds.map((c) => (
-                            <GlassPanel
-                              key={c.compoundId}
-                              depth="float"
-                              className="text-xs px-2 py-1 rounded-lg"
-                            >
-                              {c.name}
-                            </GlassPanel>
-                          ))}
+                          {pathway.compounds.map((c) => {
+                            const libraryModule = libraryModules.find((m) => m.compoundId === c.compoundId);
+                            return (
+                              <GlassPanel
+                                key={c.compoundId}
+                                depth="float"
+                                className="text-xs px-2 py-1 rounded-lg"
+                              >
+                                {libraryModule ? (
+                                  <Link
+                                    href={getModulePath(libraryModule)}
+                                    className="hover:text-accent-cyan transition-colors"
+                                  >
+                                    {c.name}
+                                  </Link>
+                                ) : (
+                                  c.name
+                                )}
+                              </GlassPanel>
+                            );
+                          })}
                         </div>
                         <ul className="mt-2 text-xs text-caption space-y-0.5">
                           {pathway.lifestyleActions.map((a) => (
