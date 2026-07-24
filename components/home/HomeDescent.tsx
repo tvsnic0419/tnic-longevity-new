@@ -10,7 +10,7 @@ import { COMPOUND_COUNT } from "@/lib/library-modules";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { MoleculeStage } from "@/components/viz/MoleculeStage";
 import { HUES } from "@/components/viz/tokens";
-import { runWhenVisible, cappedDpr } from "@/lib/raf-visibility";
+import { runWhenVisible, cappedDpr, onDprChange } from "@/lib/raf-visibility";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TNiC · "Descent" — a captivate-on-arrival scrollytelling section
@@ -512,7 +512,6 @@ export function HomeDescent() {
     const cv = shimmerRef.current; if (!cv) return;
     const ctx = cv.getContext("2d"); if (!ctx) return;
     let w = 0, h = 0;
-    const dpr = cappedDpr();
     const layers = [
       { n: 130, sp: 0.00012, dxr: 0.00008, rMin: 0.3, rMax: 1.2, alpha: 0.55 },
       { n: 60,  sp: 0.00020, dxr: 0.00014, rMin: 0.8, rMax: 2.2, alpha: 0.75 },
@@ -527,12 +526,16 @@ export function HomeDescent() {
     })));
     function resize() {
       if (!cv || !ctx) return;
+      // Read the ratio per resize, not once on mount — zoom and monitor changes
+      // move it, and a stale value leaves the backing store under-scaled.
+      const dpr = cappedDpr();
       w = cv.clientWidth; h = cv.clientHeight;
       cv.width = w * dpr; cv.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
     resize();
     const ro = new ResizeObserver(resize); ro.observe(cv);
+    const offDpr = onDprChange(resize);
 
     const palettes: Array<[number, number, number]> = [
       [95,227,224], [95,227,224], [140,140,245], [240,196,106], [95,227,224],
@@ -587,24 +590,27 @@ export function HomeDescent() {
       }
     }
     const stopLoop = runWhenVisible(cv, draw);
-    return () => { stopLoop(); ro.disconnect(); };
+    return () => { stopLoop(); ro.disconnect(); offDpr(); };
   }, []);
 
   // ── cursor glow: follows the pointer over the section ──
   useEffect(() => {
     const cv = cursorRef.current; const root = rootRef.current; if (!cv || !root) return;
     const ctx = cv.getContext("2d"); if (!ctx) return;
-    const dpr = cappedDpr();
     let w = 0, h = 0;
     const state = { x: 0, y: 0, tx: 0, ty: 0, on: false };
     function resize() {
       if (!cv || !ctx) return;
+      // Read the ratio per resize, not once on mount — zoom and monitor changes
+      // move it, and a stale value leaves the backing store under-scaled.
+      const dpr = cappedDpr();
       w = cv.clientWidth; h = cv.clientHeight;
       cv.width = w * dpr; cv.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
     resize();
     const ro = new ResizeObserver(resize); ro.observe(cv);
+    const offDpr = onDprChange(resize);
     function onMove(e: PointerEvent) {
       if (!root) return;
       const rect = root.getBoundingClientRect();
@@ -632,7 +638,7 @@ export function HomeDescent() {
     }
     const stopLoop = runWhenVisible(cv, draw);
     return () => {
-      stopLoop(); ro.disconnect();
+      stopLoop(); ro.disconnect(); offDpr();
       root.removeEventListener("pointermove", onMove);
       root.removeEventListener("pointerleave", onLeave);
     };

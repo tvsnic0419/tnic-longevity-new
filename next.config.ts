@@ -17,6 +17,11 @@ const nextConfig: NextConfig = {
   compress: true,
 
   images: {
+    // AVIF ahead of WebP: at the byte budget a 2x/3x srcset entry costs, AVIF
+    // holds detail and gradients that WebP smears — which is exactly what reads
+    // as "soft" on a high-density display. Next content-negotiates and falls
+    // back to WebP, then the original, so older clients are unaffected.
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       { protocol: 'https', hostname: 'www.codeage.com', pathname: '/cdn/shop/**' },
       { protocol: 'https', hostname: 'www.avmacol.com', pathname: '/cdn/shop/**' },

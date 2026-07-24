@@ -14,6 +14,41 @@ export function cappedDpr(max = 3): number {
 }
 
 /**
+ * Call `cb` whenever devicePixelRatio changes — browser zoom, or dragging the
+ * window between a Retina and a non-Retina display. Both change the ratio
+ * without necessarily changing the canvas's CSS size, so a ResizeObserver
+ * alone will not catch them and the backing store is left at the old scale
+ * (a canvas sized for 1x stretched onto a 2x screen is exactly the "soft on a
+ * Retina display" symptom). `matchMedia` on the current resolution fires once
+ * on change; we re-arm against the new ratio each time.
+ */
+export function onDprChange(cb: () => void): () => void {
+  if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+    return () => {};
+  }
+  let mql: MediaQueryList | null = null;
+  let stopped = false;
+
+  const arm = () => {
+    if (stopped) return;
+    mql?.removeEventListener("change", handler);
+    mql = window.matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`);
+    mql.addEventListener("change", handler);
+  };
+  function handler() {
+    if (stopped) return;
+    cb();
+    arm(); // re-arm against the ratio we just moved to
+  }
+
+  arm();
+  return () => {
+    stopped = true;
+    mql?.removeEventListener("change", handler);
+  };
+}
+
+/**
  * Drive `draw` on requestAnimationFrame, but only while `el` is in (or near)
  * the viewport and the tab is visible. Returns a cleanup that stops the loop
  * and detaches its observers. `draw` renders exactly one frame — it must not

@@ -7,7 +7,7 @@ import {
 import { getGeometry, type Geometry } from "./molecule";
 import type { RGB } from "./tokens";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { runWhenVisible, cappedDpr } from "@/lib/raf-visibility";
+import { runWhenVisible, cappedDpr, onDprChange } from "@/lib/raf-visibility";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // MoleculeStage — the shared cinematic renderer for the viz family.
@@ -57,7 +57,6 @@ export function MoleculeStage({
     const cv = canvasRef.current; if (!cv) return;
     const ctx = cv.getContext("2d"); if (!ctx) return;
     let w = 0, h = 0;
-    const dpr = cappedDpr();
 
     // field-mode particles (only used when there is no geometry)
     const N = 64;
@@ -72,12 +71,16 @@ export function MoleculeStage({
 
     function resize() {
       if (!cv || !ctx) return;
+      // Read the ratio per resize, not once on mount — zoom and monitor changes
+      // move it, and a stale value leaves the backing store under-scaled.
+      const dpr = cappedDpr();
       w = cv.clientWidth; h = cv.clientHeight;
       cv.width = w * dpr; cv.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
     resize();
     const ro = new ResizeObserver(resize); ro.observe(cv);
+    const offDpr = onDprChange(resize);
 
     function drawMolecule(geom: Geometry) {
       if (!ctx) return;
@@ -223,7 +226,7 @@ export function MoleculeStage({
       if (geom) drawMolecule(geom); else drawField();
     };
     const stopLoop = runWhenVisible(cv, draw);
-    return () => { stopLoop(); ro.disconnect(); };
+    return () => { stopLoop(); ro.disconnect(); offDpr(); };
   }, []);
 
   const pointerFrom = (e: MouseEvent | TouchEvent) => {
