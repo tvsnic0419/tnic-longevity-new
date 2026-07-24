@@ -10,6 +10,12 @@
 [data-theme="dark"] {
   color-scheme: dark;
 
+  /* Grayscale smoothing is a dark-mode tool, not a global one: light text on a
+     dark ground optically blooms, and thinning the strokes is what keeps it
+     crisp instead of blobby. The light theme deliberately opts back out below. */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
   /* shadcn-compatible HSL tokens */
   --background: 222 47% 4%;
   --foreground: 0 0% 98%;
@@ -76,6 +82,12 @@
 /* ── Light theme ── */
 [data-theme="light"] {
   color-scheme: light;
+
+  /* Back to the platform default. Dark-on-light text has no bloom to correct,
+     so forcing grayscale AA here only thins the strokes — that washed-out,
+     insubstantial look is precisely what reads as cheap on a light ground. */
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
 
   --background: 210 40% 98%;
   --foreground: 222 47% 11%;
@@ -238,8 +250,8 @@ body {
   color: var(--color-text-primary);
   font-size: 1rem;
   line-height: var(--leading-body);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Font smoothing is set per theme (see the token blocks above) — declaring it
+     here too would win on the body element and defeat that. */
   /* Common + contextual ligatures: the typesetting these faces were drawn for,
      not enabled by default in every browser. */
   font-variant-ligatures: common-ligatures contextual;
