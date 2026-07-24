@@ -1,5 +1,7 @@
+import Link from 'next/link';
 import type { HallmarkIntervention } from '@/lib/types';
 import { compounds } from '@/lib/data';
+import { libraryModules, getModulePath } from '@/lib/library-modules';
 
 /**
  * Renders a hallmark's evidence-graded intervention list, sourced from
@@ -32,10 +34,23 @@ export function InterventionCards({ interventions }: { interventions: HallmarkIn
     <div className="space-y-5">
       {sorted.map((iv) => {
         const compound = iv.compoundId ? compounds.find((c) => c.id === iv.compoundId) : undefined;
+        const module = iv.compoundId
+          ? libraryModules.find((m) => m.compoundId === iv.compoundId)
+          : undefined;
+        const href = module ? getModulePath(module) : undefined;
         return (
           <div key={iv.id} className="rounded-2xl border border-border/60 bg-card/40 p-6">
             <div className="flex items-start justify-between gap-4 mb-3">
-              <h3 className="font-bold text-foreground text-lg">{iv.name}</h3>
+              {href ? (
+                <Link
+                  href={href}
+                  className="font-bold text-foreground text-lg hover:text-cyan-400 transition-colors underline decoration-dotted decoration-muted-foreground/40 underline-offset-4"
+                >
+                  {iv.name}
+                </Link>
+              ) : (
+                <h3 className="font-bold text-foreground text-lg">{iv.name}</h3>
+              )}
               <span className={`shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold ${TIER_CLASSES[iv.evidence]}`}>
                 Tier {iv.evidence}
               </span>
