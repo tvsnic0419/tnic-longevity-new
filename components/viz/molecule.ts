@@ -16,7 +16,7 @@
 
 import { MOLECULES, type Molecule as SkeletalMolecule } from "@/components/ui/molecules";
 
-export type Atom = { x: number; y: number; z: number; el: "C" | "O" | "N" | "S"; label?: string };
+export type Atom = { x: number; y: number; z: number; el: "C" | "O" | "N" | "S" | "Ca"; label?: string };
 export type Bond = [number, number, 1 | 2];
 export type Geometry = { atoms: Atom[]; bonds: Bond[]; formula: string; label: string };
 
@@ -292,6 +292,149 @@ function buildSulforaphane(): Geometry {
   };
 }
 
+// ── calcium alpha-ketoglutarate (C10H10CaO10) — Ca²⁺ bridging two AKG anions ──
+// Shown as the real salt (two 5-carbon alpha-keto-diacid chains + one calcium),
+// not simplified to a single organic anion, so the heavy-atom count matches
+// the compound's stated formula exactly (10 C, 10 O, 1 Ca).
+function buildCaAKG(): Geometry {
+  const atoms: Atom[] = [];
+  const bonds: Bond[] = [];
+
+  // One alpha-ketoglutarate chain: C1(carboxylate)-C2(keto)-C3H2-C4H2-C5(carboxylate).
+  // `mirror` flips the chain to the other side of the shared calcium ion.
+  function akgChain(mirror: 1 | -1): { chainStart: number; ionicO: number } {
+    const s = mirror;
+    const chainStart = atoms.length;
+    const c1 = atoms.length; atoms.push({ x: s * 1.05, y: 0.35, z: 0, el: "C" });
+    const o1a = atoms.length; atoms.push({ x: s * 1.65, y: 0.95, z: 0.1, el: "O" });
+    const o1b = atoms.length; atoms.push({ x: s * 1.35, y: -0.55, z: -0.1, el: "O" }); // ionic O, bonds to Ca
+    const c2 = atoms.length; atoms.push({ x: s * 0.3, y: -0.05, z: 0, el: "C" });
+    const o2 = atoms.length; atoms.push({ x: s * 0.3, y: -0.85, z: 0.05, el: "O" });
+    const c3 = atoms.length; atoms.push({ x: s * -0.4, y: 0.35, z: -0.05, el: "C" });
+    const c4 = atoms.length; atoms.push({ x: s * -1.1, y: -0.05, z: 0.05, el: "C" });
+    const c5 = atoms.length; atoms.push({ x: s * -1.8, y: 0.35, z: -0.05, el: "C" });
+    const o5a = atoms.length; atoms.push({ x: s * -2.4, y: -0.15, z: 0.05, el: "O", label: "COO⁻" });
+    const o5b = atoms.length; atoms.push({ x: s * -2.1, y: 1.15, z: -0.1, el: "O" });
+    bonds.push(
+      [c1, o1a, 2], [c1, o1b, 1], [c1, c2, 1],
+      [c2, o2, 2], [c2, c3, 1],
+      [c3, c4, 1], [c4, c5, 1],
+      [c5, o5a, 1], [c5, o5b, 2],
+    );
+    return { chainStart, ionicO: o1b };
+  }
+
+  const chainA = akgChain(1);
+  const chainB = akgChain(-1);
+  const ca = atoms.length; atoms.push({ x: 0, y: -0.9, z: 0.15, el: "Ca", label: "Ca²⁺" });
+  bonds.push([ca, chainA.ionicO, 1], [ca, chainB.ionicO, 1]);
+
+  return {
+    atoms,
+    bonds,
+    formula: "C₁₀H₁₀CaO₁₀",
+    label: "calcium bis(2-oxopentanedioate) — Ca²⁺ salt of alpha-ketoglutarate",
+  };
+}
+
+// ── EPA (C20H30O2) — eicosapentaenoic acid, one of the two omega-3s in "omega3" ──
+// omega3 is a stated two-fatty-acid mixture (EPA + DHA), not one molecule — no
+// single geometry can honestly stand in for "omega-3." This renders EPA alone,
+// labeled as such, rather than fabricating a structure for the whole mixture.
+function buildEPA(): Geometry {
+  const atoms: Atom[] = [];
+  const bonds: Bond[] = [];
+  // 20-carbon chain, 5 cis double bonds (5,8,11,14,17), carboxylic acid at C1.
+  const dbAfter = new Set([1, 4, 7, 10, 13]); // 0-indexed bond i->i+1 that is a double bond
+  const dx = 0.62, dy = 0.34;
+  const cIdx: number[] = [];
+  for (let i = 0; i < 20; i++) {
+    const idx = atoms.length;
+    atoms.push({ x: -3 + i * dx, y: (i % 2 === 0 ? 1 : -1) * dy, z: Math.sin(i * 1.3) * 0.12, el: "C" });
+    cIdx.push(idx);
+    if (i > 0) bonds.push([cIdx[i - 1], idx, dbAfter.has(i - 1) ? 2 : 1]);
+  }
+  const oA = atoms.length; atoms.push({ x: -3.6, y: 1.6, z: 0.1, el: "O" });
+  const oB = atoms.length; atoms.push({ x: -3.6, y: 0.3, z: -0.1, el: "O", label: "COOH" });
+  bonds.push([cIdx[0], oA, 2], [cIdx[0], oB, 1]);
+
+  return {
+    atoms,
+    bonds,
+    formula: "C₂₀H₃₀O₂",
+    label: "EPA (eicosapentaenoic acid) — one of the two omega-3s here; DHA not pictured",
+  };
+}
+
+// ── astaxanthin (C40H52O4) — two 3-hydroxy-4-oxo-2,6,6-trimethylcyclohexenyl
+// rings joined by an 18-carbon conjugated polyene chain with 4 methyl branches.
+// Built procedurally (chain + ring helpers, same approach as buildResveratrol's
+// `ring()`) rather than hand-placed, since there is no user-supplied reference
+// for this one — every ring/chain carbon and both rings' OH/keto oxygens are
+// generated from the real substitution pattern, then checked against the
+// formula's heavy-atom count (40 C, 4 O) below.
+function buildAstaxanthin(): Geometry {
+  const atoms: Atom[] = [];
+  const bonds: Bond[] = [];
+
+  // One terminal ring: 6-carbon ring, gem-dimethyl + one ring methyl, one
+  // ring C=C, an exocyclic hydroxyl and an exocyclic ketone — mirrored via `s`.
+  function ionoRing(s: 1 | -1): { exo: number } {
+    const R = 1.1, ringCx = s * 7.6, ringCy = 1.1;
+    const ring: number[] = [];
+    for (let k = 0; k < 6; k++) {
+      const a = (Math.PI / 3) * k;
+      const idx = atoms.length;
+      atoms.push({ x: ringCx + Math.cos(a) * R * s, y: ringCy + Math.sin(a) * R, z: Math.sin(a * 2) * 0.15, el: "C" });
+      ring.push(idx);
+    }
+    for (let k = 0; k < 6; k++) bonds.push([ring[k], ring[(k + 1) % 6], k === 0 ? 2 : 1]);
+    // gem-dimethyl on ring[5], one methyl on ring[1], OH on ring[2], keto O on ring[3]
+    const gem1 = atoms.length; atoms.push({ x: atoms[ring[5]].x + s * 0.7, y: atoms[ring[5]].y + 0.6, z: 0.1, el: "C" });
+    bonds.push([ring[5], gem1, 1]);
+    const gem2 = atoms.length; atoms.push({ x: atoms[ring[5]].x + s * 0.7, y: atoms[ring[5]].y - 0.6, z: -0.1, el: "C" });
+    bonds.push([ring[5], gem2, 1]);
+    const me1 = atoms.length; atoms.push({ x: atoms[ring[1]].x + s * 0.3, y: atoms[ring[1]].y + 0.8, z: 0.15, el: "C" });
+    bonds.push([ring[1], me1, 1]);
+    const oh = atoms.length; atoms.push({ x: atoms[ring[2]].x, y: atoms[ring[2]].y - 0.9, z: 0.05, el: "O", label: "OH" });
+    bonds.push([ring[2], oh, 1]);
+    const keto = atoms.length; atoms.push({ x: atoms[ring[3]].x, y: atoms[ring[3]].y - 0.9, z: -0.05, el: "O" });
+    bonds.push([ring[3], keto, 2]);
+    return { exo: ring[0] }; // ring[0] carries the exocyclic bond out to the chain
+  }
+
+  const ringA = ionoRing(1);
+  const ringB = ionoRing(-1);
+
+  // 18-carbon conjugated chain between the rings, 4 evenly-spaced methyl
+  // branches (the standard carotenoid methylation pattern), symmetric about
+  // the center so it reads the same rotated end-for-end.
+  const chainLen = 18;
+  const chain: number[] = [];
+  const half = (chainLen - 1) / 2;
+  for (let i = 0; i < chainLen; i++) {
+    const idx = atoms.length;
+    const x = (i - half) * 0.62;
+    atoms.push({ x, y: (i % 2 === 0 ? 1 : -1) * 0.32, z: 0, el: "C" });
+    chain.push(idx);
+    if (i > 0) bonds.push([chain[i - 1], idx, i % 2 === 1 ? 2 : 1]);
+  }
+  bonds.push([ringA.exo, chain[chainLen - 1], 1]);
+  bonds.push([ringB.exo, chain[0], 1]);
+  for (const i of [3, 7, 10, 14]) {
+    const idx = atoms.length;
+    atoms.push({ x: atoms[chain[i]].x, y: atoms[chain[i]].y + (atoms[chain[i]].y > 0 ? 0.7 : -0.7), z: 0.15, el: "C" });
+    bonds.push([chain[i], idx, 1]);
+  }
+
+  return {
+    atoms,
+    bonds,
+    formula: "C₄₀H₅₂O₄",
+    label: "3,3′-dihydroxy-β,β-carotene-4,4′-dione",
+  };
+}
+
 // ── convert a hand-verified 2D skeletal structure into 3D ball-and-stick ──
 
 function elementFromLabel(text?: string): Atom["el"] {
@@ -362,6 +505,9 @@ export const REGISTRY: Record<string, () => Geometry> = {
   rala: buildAlphaLipoicAcid,
   nr: buildNR,
   sulforaphane: buildSulforaphane,
+  cakg: buildCaAKG,
+  omega3: buildEPA,
+  astaxanthin: buildAstaxanthin,
   // Projected from the site's own verified skeletal structures — see the
   // module comment above.
   nmn: buildFromSkeletal(
