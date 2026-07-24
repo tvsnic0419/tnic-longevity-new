@@ -95,11 +95,11 @@ const FAQ = [
   },
   {
     q: 'Does berberine extend lifespan?',
-    a: 'In C. elegans and Drosophila: yes, meaningfully. In mammals: the data is promising but limited — berberine activates AMPK (the same pathway as metformin and caloric restriction) and reduces inflammaging markers in animal models. No human longevity RCTs exist as of 2026. The longevity case for berberine is mechanistic and extrapolated, not proven by outcome data in humans. TNiC rates it Tier B for longevity and Tier A for metabolic health endpoints.',
+    a: 'In C. elegans and Drosophila: yes, meaningfully. In mammals: the data is promising but limited — berberine activates AMPK (the same pathway as metformin and caloric restriction) and reduces inflammaging markers in animal models. No human longevity RCTs exist as of 2026. The longevity case for berberine is mechanistic and extrapolated, not proven by outcome data in humans. It rates Tier B for longevity and Tier A for metabolic health endpoints.',
   },
   {
     q: 'Can I stack berberine with NMN or GlyNAC?',
-    a: "Yes — berberine is a standard component in TNiC's Foundation and Full-Spectrum stacks. It doesn't directly interact with NMN or GlyNAC. Note that berberine + metformin is generally not recommended (redundant mechanism + additive hypoglycemia risk). Berberine + resveratrol is a reasonable combination — both activate AMPK/SIRT1 pathway with partially distinct mechanisms. Always check with your physician if on blood sugar medications.",
+    a: "Yes — berberine is a standard component in the Foundation and Full-Spectrum stack presets. It doesn't directly interact with NMN or GlyNAC. Note that berberine + metformin is generally not recommended (redundant mechanism + additive hypoglycemia risk). Berberine + resveratrol is a reasonable combination — both activate AMPK/SIRT1 pathway with partially distinct mechanisms. Always check with your physician if on blood sugar medications.",
   },
   {
     q: 'Should I take berberine with or without food?',

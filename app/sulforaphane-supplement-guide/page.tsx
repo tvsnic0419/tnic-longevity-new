@@ -53,7 +53,7 @@ const FAQ = [
   },
   {
     q: 'Does sulforaphane prevent cancer?',
-    a: "There is strong preclinical evidence and meaningful phase II/III clinical trial data for sulforaphane in cancer prevention — particularly for prostate, breast, colon, and lung cancers. The AIFA RCT (Traka 2019, PMID 31375680) showed sulforaphane reduced prostate cancer progression markers. The Fahey 2002 H. pylori trial (PMID 12226120) showed broccoli sprout reduction of gastric cancer risk markers. However: sulforaphane is NOT FDA-approved for cancer prevention, and the evidence standard for claiming cancer prevention is very high. TNiC rates sulforaphane Tier A for NRF2 activation and Tier B for cancer risk reduction — meaningful evidence, but not a proven cancer preventive.",
+    a: "There is strong preclinical evidence and meaningful phase II/III clinical trial data for sulforaphane in cancer prevention — particularly for prostate, breast, colon, and lung cancers. The AIFA RCT (Traka 2019, PMID 31375680) showed sulforaphane reduced prostate cancer progression markers. The Fahey 2002 H. pylori trial (PMID 12226120) showed broccoli sprout reduction of gastric cancer risk markers. However: sulforaphane is NOT FDA-approved for cancer prevention, and the evidence standard for claiming cancer prevention is very high. It rates Tier A for NRF2 activation and Tier B for cancer risk reduction — meaningful evidence, but not a proven cancer preventive.",
   },
   {
     q: 'Can I grow my own broccoli sprouts instead of buying supplements?',
@@ -61,7 +61,7 @@ const FAQ = [
   },
   {
     q: 'Should I take sulforaphane with GlyNAC?',
-    a: "Yes — this is one of TNiC's most evidence-backed stacking decisions. GlyNAC provides glycine and NAC, both precursors for glutathione synthesis. Sulforaphane upregulates GCLC/GCLM (the rate-limiting enzymes in glutathione synthesis) via NRF2. They work via complementary mechanisms: GlyNAC supplies the substrate; sulforaphane increases the enzymatic capacity to use it. The combination produces higher glutathione than either alone. This is the foundation of TNiC's NRF2 Defense Triad: Sulforaphane + GlyNAC + R-ALA.",
+    a: "Yes — this is one of the most evidence-backed stacking decisions here. GlyNAC provides glycine and NAC, both precursors for glutathione synthesis. Sulforaphane upregulates GCLC/GCLM (the rate-limiting enzymes in glutathione synthesis) via NRF2. They work via complementary mechanisms: GlyNAC supplies the substrate; sulforaphane increases the enzymatic capacity to use it. The combination produces higher glutathione than either alone. This is the foundation of the NRF2 Defense Triad: Sulforaphane + GlyNAC + R-ALA.",
   },
 ];
 
@@ -87,7 +87,7 @@ function buildSulforaphaneSchemas() {
       },
       {
         name: 'Stack with GlyNAC and R-ALA for the NRF2 Triad',
-        text: 'The TNiC NRF2 Defense Triad pairs sulforaphane (NRF2 inducer) + GlyNAC (glutathione precursors) + R-ALA (NRF2 inducer + cofactor). Sulforaphane upregulates glutathione synthesis genes; GlyNAC provides the substrate; R-ALA amplifies NRF2 via a complementary cysteine alkylation pathway. Together, these three address cellular redox capacity more completely than any single compound.',
+        text: 'The NRF2 Defense Triad pairs sulforaphane (NRF2 inducer) + GlyNAC (glutathione precursors) + R-ALA (NRF2 inducer + cofactor). Sulforaphane upregulates glutathione synthesis genes; GlyNAC provides the substrate; R-ALA amplifies NRF2 via a complementary cysteine alkylation pathway. Together, these three address cellular redox capacity more completely than any single compound.',
       },
       {
         name: 'Take sulforaphane 5 days on, 2 days off',
@@ -436,7 +436,7 @@ export default function SulforaphaneGuidePage() {
           <div className="rounded-2xl border border-accent-emerald/20 bg-accent-emerald/[0.04] p-8 md:p-10 text-center">
             <h2 className="heading-section mb-3">Build the NRF2 Defense Triad</h2>
             <p className="text-body text-muted-foreground mb-8 max-w-xl mx-auto">
-              Sulforaphane is the anchor of TNiC&rsquo;s NRF2 Defense preset. Pair it with GlyNAC and R-ALA for the complete antioxidant defense stack.
+              Sulforaphane is the anchor of the NRF2 Defense preset. Pair it with GlyNAC and R-ALA for the complete antioxidant defense stack.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               <Link

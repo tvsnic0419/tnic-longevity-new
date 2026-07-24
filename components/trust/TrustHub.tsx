@@ -98,7 +98,7 @@ export function TrustHub() {
       <PageHeader
         icon={Shield}
         eyebrow="Trust & Transparency Hub"
-        title="How TNiC Earns Your Trust"
+        title="How This Evidence Is Verified"
         description="Evidence tagging, source citations, methodology, disclaimers, and public update history. No black boxes — every recommendation is traceable."
         theme="emerald"
         meta={`${citationRegistry.length} indexed citations · Tier A/B/C grading · N=1 clearly labeled`}

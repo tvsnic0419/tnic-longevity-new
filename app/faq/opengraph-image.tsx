@@ -7,7 +7,7 @@ export const contentType = 'image/png';
 export default function Image() {
   return OgImage({
     title: '12 honest FAQ answers',
-    subtitle: 'Safety · Evidence tiers · Protocols · How TNiC differs from supplement stores',
+    subtitle: 'Safety · Evidence tiers · Protocols · How this differs from a supplement store',
     accent: '#a78bfa',
   });
 }
