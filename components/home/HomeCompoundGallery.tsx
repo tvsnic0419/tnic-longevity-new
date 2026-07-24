@@ -1,0 +1,79 @@
+import Link from 'next/link';
+import { ArrowUpRight } from 'lucide-react';
+import { compoundModules, getModulePath, COMPOUND_COUNT } from '@/lib/library-modules';
+import { hasGeometry } from '@/components/viz/molecule';
+import { MoleculeStage } from '@/components/viz/MoleculeStage';
+import { signatureHue } from '@/components/viz/tokens';
+import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { RevealItem } from '@/components/ui/RevealItem';
+import { CellularDivider } from '@/components/ui/CellularDivider';
+
+/**
+ * Every compound in the library, rendered — a real ball-and-stick structure
+ * where one has been hand-verified (see components/viz/molecule.ts), an
+ * honestly-labeled illustrative orbital field otherwise. Never a fabricated
+ * structure passed off as literal; MoleculeStage/CompoundHero already enforce
+ * that same rule on each compound's own deep-dive page. This is the "look at
+ * everything at once" view of the same 55 compounds, not a new claim.
+ */
+
+export function HomeCompoundGallery() {
+  return (
+    <section
+      aria-labelledby="home-compound-gallery-heading"
+      className="relative border-t border-border/50 py-20 md:py-28"
+    >
+      <CellularDivider hue="var(--accent-cyan)" index="06" label="The compounds" />
+      <div className="container-page">
+        <div className="mb-10 items-center gap-10 lg:mb-14 lg:grid lg:grid-cols-12">
+          <RevealItem className="lg:col-span-7">
+            <p className="text-label mb-3 text-accent-cyan">Every compound, rendered</p>
+            <h2 id="home-compound-gallery-heading" className="heading-section mb-3">
+              {COMPOUND_COUNT} compounds — every one graded, every one linked to its deep-dive.
+            </h2>
+            <p className="text-body mb-4">
+              Real hand-verified structures where we have them; an honestly-labeled illustrative
+              field otherwise. Click any compound for mechanism, dosing, and citations.
+            </p>
+            <Link
+              href="/library/compounds"
+              className="focus-ring group hidden items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+            >
+              Browse the full compound library
+              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
+            </Link>
+          </RevealItem>
+        </div>
+
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          {compoundModules.map((m, i) => {
+            const structured = m.compoundId ? hasGeometry(m.compoundId) : false;
+            const hue = signatureHue(m.compoundId ?? m.slug);
+            return (
+              <RevealItem key={m.slug} index={i} className="h-full">
+                <Link
+                  href={getModulePath(m)}
+                  className="focus-ring interactive group flex h-full flex-col overflow-hidden rounded-2xl border border-border/60 bg-card/40 transition-colors hover:border-accent-cyan/40"
+                >
+                  <div className="relative aspect-square w-full bg-black/20">
+                    <MoleculeStage
+                      geometryId={structured ? m.compoundId : undefined}
+                      hue={hue}
+                      interactive={false}
+                    />
+                  </div>
+                  <div className="flex items-center justify-between gap-2 p-3">
+                    <span className="truncate text-sm font-semibold text-foreground group-hover:text-accent-cyan transition-colors">
+                      {m.title.replace(/\s*\(.*\)\s*$/, '')}
+                    </span>
+                    <EvidenceTag tier={m.evidenceTier} size="sm" className="shrink-0" />
+                  </div>
+                </Link>
+              </RevealItem>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}

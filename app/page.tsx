@@ -5,6 +5,7 @@ import { HomeHero } from '@/components/home/HomeHero';
 import { HomeDescent } from '@/components/home/HomeDescent';
 import { HomeEliteInterventions } from '@/components/home/HomeEliteInterventions';
 import { HomeHallmarks } from '@/components/home/HomeHallmarks';
+import { HomeCompoundGallery } from '@/components/home/HomeCompoundGallery';
 import { HomeGuides } from '@/components/home/HomeGuides';
 import { HomeExplore } from '@/components/home/HomeExplore';
 import { HomeSteps } from '@/components/home/HomeSteps';
@@ -67,6 +68,7 @@ export default function HomePage() {
         <HomeHero />
         <HomeEliteInterventions />
         <HomeHallmarks />
+        <HomeCompoundGallery />
         <HomeGuides />
         <HomeExplore />
         <HomeSteps />
