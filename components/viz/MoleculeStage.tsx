@@ -2,7 +2,7 @@
 
 import {
   useRef, useEffect,
-  type MouseEvent, type TouchEvent, type WheelEvent,
+  type MouseEvent, type TouchEvent,
 } from "react";
 import { getGeometry, type Geometry } from "./molecule";
 import type { RGB } from "./tokens";
@@ -247,12 +247,25 @@ export function MoleculeStage({
     d.x = pt.x; d.y = pt.y;
   };
   const onUp = () => { drag.current.down = false; };
-  const onWheel = (e: WheelEvent) => {
-    if (!canInteract) return;
-    e.preventDefault();
-    const d = drag.current;
-    d.zoom = Math.max(0.55, Math.min(2.4, d.zoom * (e.deltaY < 0 ? 1.08 : 0.92)));
-  };
+
+  // Attached as a native, non-passive listener — React's synthetic `onWheel`
+  // is registered passive by default, so `preventDefault()` inside it silently
+  // fails (browsers log "Unable to preventDefault inside passive event
+  // listener invocation") and the page scrolls underneath the zoom gesture at
+  // the same time the molecule tries to zoom, which reads as the stage
+  // freezing/fighting the scroll. A manual `{ passive: false }` listener is
+  // the only way to actually claim the wheel gesture here.
+  useEffect(() => {
+    const cv = canvasRef.current; if (!cv) return;
+    const onWheel = (e: WheelEvent) => {
+      if (!canInteract) return;
+      e.preventDefault();
+      const d = drag.current;
+      d.zoom = Math.max(0.55, Math.min(2.4, d.zoom * (e.deltaY < 0 ? 1.08 : 0.92)));
+    };
+    cv.addEventListener("wheel", onWheel, { passive: false });
+    return () => cv.removeEventListener("wheel", onWheel);
+  }, [canInteract]);
 
   return (
     <canvas
@@ -261,7 +274,6 @@ export function MoleculeStage({
       style={{ width: "100%", height: "100%", display: "block", cursor: canInteract ? "grab" : "default", ...style }}
       onMouseDown={onDown} onMouseMove={onMove} onMouseUp={onUp} onMouseLeave={onUp}
       onTouchStart={onDown} onTouchMove={onMove} onTouchEnd={onUp}
-      onWheel={onWheel}
     />
   );
 }
