@@ -174,10 +174,25 @@
   /* ── Typography scale (modular, minor third ~1.25) ──
      Three roles only: DISPLAY (3xl–6xl), BODY (sm–lg), LABEL (xs mono).
      Hand-picked clamp curves are fluid from mobile → 1440px. */
-  --type-xs:   0.75rem;                                  /* 12px — captions, eyebrows */
-  --type-sm:   0.875rem;                                 /* 14px — body small */
+  --type-xs:   0.8125rem;                                /* 13px — captions, eyebrows */
+  --type-sm:   0.9375rem;                                /* 15px — body small */
   --type-base: 1rem;                                     /* 16px — body */
   --type-lg:   1.125rem;                                 /* 18px — body emphasis */
+
+  /* ── Tailwind v4 font-size utilities ──
+     `text-*` reads the `--text-*` namespace, NOT `--type-*`. Without these the
+     1,100+ text-xs/text-sm usages silently fall back to Tailwind's stock 12/14px,
+     which is what made dense pages read small and undesigned. Bound to the scale
+     above so there is one source of truth, with line-heights opened up from
+     Tailwind's tight defaults (1.33/1.43) for editorial legibility. */
+  --text-xs:   var(--type-xs);
+  --text-xs--line-height: 1.5;
+  --text-sm:   var(--type-sm);
+  --text-sm--line-height: 1.6;
+  --text-base: var(--type-base);
+  --text-base--line-height: var(--leading-body);
+  --text-lg:   var(--type-lg);
+  --text-lg--line-height: 1.6;
   --type-xl:   clamp(1.25rem, 0.5vw + 1.125rem, 1.5rem); /* lede */
   --type-2xl:  clamp(1.5rem,  1vw + 1.25rem,  2rem);    /* card titles */
   --type-3xl:  clamp(1.875rem, 2vw + 1.25rem, 2.5rem);  /* section heads */
@@ -224,7 +239,34 @@ body {
   font-size: 1rem;
   line-height: var(--leading-body);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Common + contextual ligatures: the typesetting these faces were drawn for,
+     not enabled by default in every browser. */
+  font-variant-ligatures: common-ligatures contextual;
   transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* ── Typesetting quality pass ──
+   Two rules that do more for "professionally set" than any size change:
+   headings never leave a single orphaned word on the last line, and body
+   copy avoids orphans/ragged breaks. Progressive enhancement — browsers
+   without text-wrap simply ignore them. */
+h1, h2, h3, h4, h5, h6,
+.heading-page, .heading-section, .heading-card {
+  text-wrap: balance;
+}
+
+p, li, dd, blockquote, figcaption {
+  text-wrap: pretty;
+}
+
+/* Lab values, doses, biomarker ranges and any numeric column must align on the
+   decimal — proportional figures in a data table are the fastest way to look
+   untrustworthy on a site built around numbers. */
+table, th, td,
+.stat-value, .metric-value, .biomarker-value, [data-numeric] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
 }
 
 /* ── Film grain noise overlay — tactile premium texture (Linear / Vercel / Anthropic pattern) ──
@@ -1155,6 +1197,22 @@ p,
   opacity: 0.62;
   animation: aurora-drift 28s ease-in-out infinite;
   transition: --ambient-tint-1 1.4s ease, --ambient-tint-2 1.4s ease;
+  /* A 90px blur over a ~700px box is the most expensive paint on the page, and
+     it sits on every route. Promoting to its own compositor layer lets the blur
+     rasterize once and the 28s drift run as a pure GPU transform instead of
+     re-blurring each frame. (Deliberately no `contain: paint` — the blur is
+     meant to bleed outside the box, and containment would clip it to a hard
+     circular edge.) */
+  will-change: transform;
+}
+
+/* Nothing to promote when the animation is off — release the layers so we are
+   not holding three large GPU buffers for a static gradient. */
+@media (prefers-reduced-motion: reduce) {
+  .ambient-orb {
+    will-change: auto;
+    animation: none;
+  }
 }
 
 .ambient-orb-1 {
@@ -1212,8 +1270,8 @@ p,
   gap: 9px;
   white-space: nowrap;
   font-family: var(--font-mono);
-  font-size: 10.5px;
-  letter-spacing: 0.2em;
+  font-size: 11.5px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-text-faint);
 }

@@ -195,10 +195,10 @@ const CSS = `
 .tnic-molcard .formula { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--cyan); letter-spacing: .08em; }
 .tnic-molcard .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; margin-top: 4px; }
 .tnic-molcard .fact { display: flex; flex-direction: column; gap: 3px; }
-.tnic-molcard .fact .k { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--faint); }
+.tnic-molcard .fact .k { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--faint); }
 .tnic-molcard .fact .v { font-size: 15px; color: var(--ink); }
 .tnic-molcard .why { font-size: 13.5px; color: var(--muted); line-height: 1.55; margin-top: 4px; border-top: 1px solid var(--line); padding-top: 14px; }
-.tnic-molcard .cite { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--faint); letter-spacing: .1em; }
+.tnic-molcard .cite { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--faint); letter-spacing: .1em; }
 
 .tnic-netwrap { display: grid; grid-template-columns: 1.5fr 1fr; gap: 28px; align-items: start; margin-top: 10px; }
 @media (max-width: 900px){ .tnic-netwrap { grid-template-columns: 1fr; } }
@@ -243,7 +243,7 @@ const CSS = `
 .tnic-chip {
   display: inline-flex; align-items: center; gap: 7px; padding: 8px 12px;
   background: rgba(14,20,38,0.6); border: 1px solid var(--line); color: var(--muted);
-  border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+  border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: 11.5px;
   letter-spacing: .14em; text-transform: uppercase; cursor: pointer; transition: all .2s ease;
 }
 .tnic-chip.on { color: var(--ink); border-color: currentColor; background: rgba(255,255,255,0.03); }
@@ -262,12 +262,12 @@ const CSS = `
 .tnic-readout .r-elite svg { width: 11px; height: 11px; }
 .tnic-readout .r-name { font-family: 'Fraunces', serif; font-size: 30px; margin: 6px 0 2px; letter-spacing: -.01em; }
 .tnic-readout .r-role { font-size: 13.5px; color: var(--muted); margin-bottom: 12px; }
-.tnic-readout .r-meta { display: flex; gap: 12px; margin-bottom: 12px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: .1em; color: var(--faint); text-transform: uppercase; }
+.tnic-readout .r-meta { display: flex; gap: 12px; margin-bottom: 12px; font-family: 'JetBrains Mono', monospace; font-size: 11.5px; letter-spacing: .1em; color: var(--faint); text-transform: uppercase; }
 .tnic-readout .r-meta b { color: var(--ink); font-weight: 500; letter-spacing: .04em; }
 .tnic-readout .r-link { display: flex; gap: 11px; padding: 12px 0; border-top: 1px solid var(--line); }
 .tnic-readout .r-link .r-dot { width: 9px; height: 9px; border-radius: 50%; margin-top: 5px; flex: none; box-shadow: 0 0 8px currentColor; }
 .tnic-readout .r-link .r-to { font-size: 14px; font-weight: 600; color: var(--ink); }
-.tnic-readout .r-link .r-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; margin-left: 8px; }
+.tnic-readout .r-link .r-tag { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; margin-left: 8px; }
 .tnic-readout .r-link .r-why { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin-top: 3px; }
 .tnic-readout .r-cta {
   display: inline-flex; align-items: center; gap: 8px; margin-top: 16px;
@@ -279,7 +279,7 @@ const CSS = `
 .tnic-readout .r-empty { color: var(--faint); font-size: 14px; line-height: 1.6; padding-top: 8px; }
 
 .tnic-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 16px; }
-.tnic-legend .lg { display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
+.tnic-legend .lg { display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 11.5px; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
 .tnic-legend .lg .sw { width: 10px; height: 10px; border-radius: 50%; }
 
 .tnic-tl { margin-top: 8px; }
@@ -301,7 +301,7 @@ const CSS = `
   display: flex; flex-direction: column; gap: 4px;
 }
 .tnic-tl-stat b { font-family: 'Fraunces', serif; font-size: 26px; color: var(--gold); letter-spacing: -.01em; }
-.tnic-tl-stat .k { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); }
+.tnic-tl-stat .k { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); }
 .tnic-tl-stat .n { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
 .tnic-honest { font-size: 13px; color: var(--faint); font-style: italic; margin-top: 14px; max-width: 60ch; line-height: 1.55; }
 .tnic-tl-toggle { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
@@ -345,7 +345,7 @@ const CSS = `
 .tnic-elite-card .body .name { font-size: 15px; font-weight: 600; color: var(--ink); }
 .tnic-elite-card .body .path { font-size: 12px; color: var(--muted); margin-top: 2px; }
 .tnic-elite-card .tier {
-  font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .18em;
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .18em;
   text-transform: uppercase; padding: 4px 8px; border-radius: 999px;
   border: 1px solid currentColor;
 }
@@ -371,7 +371,7 @@ const CSS = `
   background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 10px;
   padding: 6px 0; color: var(--faint); justify-content: flex-end;
 }
-.tnic-rail .lbl { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; opacity: 0; transform: translateX(6px); transition: all .3s ease; }
+.tnic-rail .lbl { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; letter-spacing: .16em; text-transform: uppercase; opacity: 0; transform: translateX(6px); transition: all .3s ease; }
 .tnic-rail button:hover .lbl, .tnic-rail button.on .lbl { opacity: 1; transform: none; color: var(--ink); }
 .tnic-rail .tick { width: 26px; height: 2px; background: currentColor; border-radius: 2px; transition: all .3s ease; }
 .tnic-rail button.on { color: var(--cyan); }

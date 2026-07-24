@@ -133,7 +133,7 @@ const HUBHERO_CSS = `
   line-height: 1; letter-spacing: -0.02em; color: var(--hue);
 }
 .hh-stat .k {
-  font-family: ${FONT.mono}; font-size: 10.5px; letter-spacing: 0.16em;
+  font-family: ${FONT.mono}; font-size: 11.5px; letter-spacing: 0.16em;
   text-transform: uppercase; color: ${VIZ.faint};
 }
 .hh-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
