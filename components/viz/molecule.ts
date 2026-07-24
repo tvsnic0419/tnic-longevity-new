@@ -16,7 +16,7 @@
 
 import { MOLECULES, type Molecule as SkeletalMolecule } from "@/components/ui/molecules";
 
-export type Atom = { x: number; y: number; z: number; el: "C" | "O" | "N" | "S" };
+export type Atom = { x: number; y: number; z: number; el: "C" | "O" | "N" | "S" | "P" };
 export type Bond = [number, number, 1 | 2];
 export type Geometry = { atoms: Atom[]; bonds: Bond[]; formula: string; label: string };
 
@@ -73,6 +73,71 @@ function buildPterostilbene(): Geometry {
     g.bonds.push([oi, c, 1]);
   }
   return { atoms: g.atoms, bonds: g.bonds, formula: "C₁₆H₁₆O₃", label: "trans-3,5-dimethoxy-4′-hydroxystilbene" };
+}
+
+// Center a hand-built structure on the origin and scale it to a target span so
+// it frames the same way as the other skeletons under MoleculeStage's fixed
+// (viewport / 7.2) camera — which does no per-geometry bounding-box fit.
+function normalizeGeometry(atoms: Atom[], targetSpan: number): void {
+  let minx = Infinity, maxx = -Infinity, miny = Infinity, maxy = -Infinity;
+  for (const a of atoms) {
+    minx = Math.min(minx, a.x); maxx = Math.max(maxx, a.x);
+    miny = Math.min(miny, a.y); maxy = Math.max(maxy, a.y);
+  }
+  const cx = (minx + maxx) / 2, cy = (miny + maxy) / 2;
+  const span = Math.max(maxx - minx, maxy - miny) || 1;
+  const s = targetSpan / span;
+  for (const a of atoms) { a.x = (a.x - cx) * s; a.y = (a.y - cy) * s; a.z *= s; }
+}
+
+// ── astaxanthin (C40H52O4) — ketocarotenoid: a conjugated polyene chain
+//    spanning two oxygenated ionone rings. Ported from this project's own
+//    batch-01/02 "Descent" geometry (the same hand-laid structure shipped in
+//    the library bundle), so it stays traceable to a structure we drew. ──
+function buildAstaxanthin(): Geometry {
+  const atoms: Atom[] = [];
+  const bonds: Bond[] = [];
+  const R = 1.15;
+  function hexRing(cx: number, cy: number, pucker: number, dbl: number[]): number {
+    const start = atoms.length;
+    for (let k = 0; k < 6; k++) {
+      const a = (Math.PI / 3) * k - Math.PI / 6;
+      atoms.push({ x: cx + Math.cos(a) * R, y: cy + Math.sin(a) * R, z: Math.sin(a * 2) * pucker, el: "C" });
+    }
+    for (let k = 0; k < 6; k++) bonds.push([start + k, start + ((k + 1) % 6), dbl.includes(k) ? 2 : 1]);
+    return start;
+  }
+  function attach(nearIdx: number, dx: number, dy: number, dz: number, el: Atom["el"] = "O", order: 1 | 2 = 1): void {
+    const na = atoms[nearIdx];
+    atoms.push({ x: na.x + dx, y: na.y + dy, z: na.z + dz, el });
+    bonds.push([nearIdx, atoms.length - 1, order]);
+  }
+  // polyene backbone — alternating double/single bonds are the antioxidant machinery
+  const chain: number[] = [];
+  const N = 11;
+  for (let i = 0; i < N; i++) {
+    chain.push(atoms.length);
+    atoms.push({ x: -3.1 + i * 0.62, y: i % 2 === 0 ? 0.3 : -0.3, z: Math.sin(i * 0.9) * 0.16, el: "C" });
+  }
+  for (let i = 0; i < N - 1; i++) bonds.push([chain[i], chain[i + 1], i % 2 === 0 ? 2 : 1]);
+  // methyl branches along the backbone
+  attach(chain[2], -0.1, 1.02, 0.12, "C");
+  attach(chain[5], 0.1, 1.02, -0.12, "C");
+  attach(chain[8], -0.1, -1.02, 0.12, "C");
+  // left ring — 3-hydroxy, 4-keto
+  const L = hexRing(-5.0, 0.7, 0.26, [1]);
+  bonds.push([L + 0, chain[0], 1]);
+  attach(L + 3, -0.9, 0.62, 0.14, "O");
+  attach(L + 5, 0.0, -1.0, -0.14, "O", 2);
+  attach(L + 2, 0.0, 1.0, 0.16, "C");
+  // right ring — 3′-hydroxy, 4′-keto
+  const Rr = hexRing(5.0, 0.9, 0.26, [5]);
+  bonds.push([Rr + 4, chain[N - 1], 1]);
+  attach(Rr + 1, 0.9, 0.62, -0.14, "O");
+  attach(Rr + 2, 0.0, 1.0, 0.14, "O", 2);
+  attach(Rr + 0, 0.9, -0.62, 0.16, "C");
+  normalizeGeometry(atoms, 6.4);
+  return { atoms, bonds, formula: "C₄₀H₅₂O₄", label: "astaxanthin — 3,3′-dihydroxy-β,β-carotene-4,4′-dione" };
 }
 
 // ── convert a hand-verified 2D skeletal structure into 3D ball-and-stick ──
@@ -135,17 +200,63 @@ function buildFromSkeletal(id: string, formula: string, label: string): () => Ge
   };
 }
 
+// ── NMN (C11H15N2O8P) — nicotinamide mononucleotide. Full nucleotide, not the
+//    bare core: nicotinamide pyridinium ring → N-glycosidic bond → ribose
+//    furanose (2′,3′-OH) → 5′-phosphate. This is what distinguishes NMN from
+//    both nicotinamide and NR (which lacks the phosphate). Hand-laid here. ──
+function buildNMN(): Geometry {
+  const atoms: Atom[] = [];
+  const bonds: Bond[] = [];
+  const add = (x: number, y: number, z: number, el: Atom["el"]): number => {
+    atoms.push({ x, y, z, el });
+    return atoms.length - 1;
+  };
+
+  // nicotinamide pyridinium ring — v0 is the ring N⁺ (glycosidic attachment)
+  const pcx = -3.2, pcy = 0, Rr = 1.0;
+  const ring: number[] = [];
+  for (let k = 0; k < 6; k++) {
+    const a = (Math.PI / 3) * k;
+    ring.push(add(pcx + Math.cos(a) * Rr, pcy + Math.sin(a) * Rr, Math.sin(a * 2) * 0.12, k === 0 ? "N" : "C"));
+  }
+  for (let k = 0; k < 6; k++) bonds.push([ring[k], ring[(k + 1) % 6], k % 2 === 0 ? 2 : 1]);
+  const N1 = ring[0], C3 = ring[2];
+
+  // C3 carboxamide — C(=O)NH2
+  const cc = add(-3.9, 1.9, 0.1, "C"); bonds.push([C3, cc, 1]);
+  const oam = add(-3.2, 2.6, 0.15, "O"); bonds.push([cc, oam, 2]);
+  const nam = add(-4.9, 2.3, 0.05, "N"); bonds.push([cc, nam, 1]);
+
+  // ribose furanose — C1′-C2′-C3′-C4′-O4′, C1′ bonded to ring N1
+  const c1 = add(-1.2, -0.1, 0.1, "C"); bonds.push([N1, c1, 1]);
+  const c2 = add(-0.55, -0.95, -0.1, "C"); bonds.push([c1, c2, 1]);
+  const c3 = add(0.35, -0.4, 0.12, "C"); bonds.push([c2, c3, 1]);
+  const c4 = add(0.15, 0.65, -0.08, "C"); bonds.push([c3, c4, 1]);
+  const o4 = add(-0.9, 0.85, 0.1, "O"); bonds.push([c4, o4, 1]); bonds.push([o4, c1, 1]);
+  // 2′-OH, 3′-OH
+  const o2 = add(-0.75, -1.9, -0.2, "O"); bonds.push([c2, o2, 1]);
+  const o3 = add(1.35, -0.6, 0.2, "O"); bonds.push([c3, o3, 1]);
+
+  // 5′-CH2 → 5′-phosphate
+  const c5 = add(0.7, 1.6, -0.1, "C"); bonds.push([c4, c5, 1]);
+  const o5 = add(1.7, 1.9, 0.05, "O"); bonds.push([c5, o5, 1]);
+  const p = add(2.7, 1.5, 0, "P"); bonds.push([o5, p, 1]);
+  const opa = add(3.1, 2.5, 0.15, "O"); bonds.push([p, opa, 2]);
+  const opb = add(3.7, 1.2, -0.1, "O"); bonds.push([p, opb, 1]);
+  const opc = add(2.9, 0.5, 0.1, "O"); bonds.push([p, opc, 1]);
+
+  normalizeGeometry(atoms, 6.4);
+  return { atoms, bonds, formula: "C₁₁H₁₅N₂O₈P", label: "nicotinamide mononucleotide — nicotinamide riboside 5′-phosphate" };
+}
+
 /** Registry of compounds we have real stylized geometry for. */
 export const REGISTRY: Record<string, () => Geometry> = {
   resveratrol: buildResveratrol,
   pterostilbene: buildPterostilbene,
+  astaxanthin: buildAstaxanthin,
   // Projected from the site's own verified skeletal structures — see the
   // module comment above.
-  nmn: buildFromSkeletal(
-    "nicotinamide",
-    "C₆H₆N₂O",
-    "nicotinamide — the redox-active core NMN restores to NAD⁺",
-  ),
+  nmn: buildNMN,
   spermidine: buildFromSkeletal(
     "spermidine",
     "C₇H₁₉N₃",

@@ -24,6 +24,7 @@ const ELEMENT_COLOR: Record<string, { core: RGB; hi: RGB; glow: string }> = {
   O: { core: [244, 142, 126], hi: [255, 220, 210], glow: "rgba(240,138,122," },
   N: { core: [140, 160, 245], hi: [220, 228, 255], glow: "rgba(140,140,245," },
   S: { core: [240, 210, 120], hi: [255, 244, 210], glow: "rgba(240,196,106," },
+  P: { core: [248, 170, 96], hi: [255, 226, 190], glow: "rgba(245,165,90," },
 };
 
 export function MoleculeStage({
