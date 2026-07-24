@@ -203,6 +203,95 @@ function buildFisetin(): Geometry {
   };
 }
 
+// ── alpha-lipoic acid (C8H14O2S2) — dithiolane ring + pentanoic acid tail ──
+function buildAlphaLipoicAcid(): Geometry {
+  const atoms: Atom[] = [
+    { x: -1.957, y: 2.419, z: 0.379, el: "S" },
+    { x: -0.929, y: 2.02, z: -0.182, el: "S" },
+    { x: -0.945, y: 0.783, z: -0.174, el: "C" },
+    { x: -1.982, y: 0.417, z: 0.393, el: "C" },
+    { x: -2.607, y: 1.428, z: 0.735, el: "C" },
+    { x: -0.642, y: -0.006, z: -0.141, el: "C" },
+    { x: 0.185, y: -0.18, z: -0.174, el: "C" },
+    { x: 0.488, y: -0.969, z: -0.141, el: "C" },
+    { x: 1.314, y: -1.144, z: -0.174, el: "C" },
+    { x: 2.103, y: -1.286, z: -0.174, el: "C", label: "COOH" },
+    { x: 2.07, y: -2.028, z: -0.174, el: "O" },
+    { x: 2.902, y: -1.453, z: -0.174, el: "O" },
+  ];
+  const bonds: Bond[] = [
+    [0, 1, 1], [1, 2, 1], [2, 3, 1], [3, 4, 1], [4, 0, 1],
+    [2, 5, 1], [5, 6, 1], [6, 7, 1], [7, 8, 1], [8, 9, 1], [9, 10, 2], [9, 11, 1],
+  ];
+  return {
+    atoms,
+    bonds,
+    formula: "C₈H₁₄O₂S₂",
+    label: "(R)-5-(1,2-dithiolan-3-yl)pentanoic acid",
+  };
+}
+
+// ── nicotinamide riboside (C11H15N2O5+) — pyridinium + ribofuranose ──
+function buildNR(): Geometry {
+  const atoms: Atom[] = [
+    { x: -0.288, y: 1.873, z: 0.227, el: "C" },
+    { x: 0.389, y: 1.482, z: 0.227, el: "C" },
+    { x: 0.389, y: 0.7, z: 0.227, el: "C" },
+    { x: -0.288, y: 0.309, z: 0.227, el: "N" },
+    { x: -0.966, y: 0.7, z: 0.227, el: "C" },
+    { x: -0.966, y: 1.482, z: 0.227, el: "C" },
+    { x: 1.126, y: 1.908, z: 0.227, el: "C" },
+    { x: 1.758, y: 1.613, z: 0.341, el: "O" },
+    { x: 1.059, y: 2.594, z: 0.113, el: "N", label: "NH₂" },
+    { x: -0.79, y: -0.87, z: 0.295, el: "C" },
+    { x: -0.01, y: -0.567, z: 0.477, el: "C" },
+    { x: 0.543, y: -0.908, z: -0.081, el: "O" },
+    { x: 0.105, y: -1.422, z: -0.608, el: "C" },
+    { x: -0.719, y: -1.399, z: -0.375, el: "C" },
+    { x: -1.574, y: -0.663, z: 0.467, el: "O", label: "OH" },
+    { x: -1.392, y: -1.85, z: -0.204, el: "O", label: "OH" },
+    { x: 0.611, y: -2.127, z: -0.836, el: "C" },
+    { x: 1.011, y: -2.855, z: -1.179, el: "O", label: "OH" },
+  ];
+  const bonds: Bond[] = [
+    [3, 2, 1], [2, 1, 2], [1, 0, 1], [0, 5, 2], [5, 4, 1], [4, 3, 2],
+    [1, 6, 1], [6, 7, 2], [6, 8, 1],
+    [9, 10, 1], [10, 11, 1], [11, 12, 1], [12, 13, 1], [13, 9, 1], [3, 10, 1],
+    [9, 14, 1], [13, 15, 1], [12, 16, 1], [16, 17, 1],
+  ];
+  return {
+    atoms,
+    bonds,
+    formula: "C₁₁H₁₅N₂O₅⁺",
+    label: "3-carbamoyl-1-(β-D-ribofuranosyl)pyridin-1-ium",
+  };
+}
+
+// ── sulforaphane (C6H11NOS2) — isothiocyanate on a methylsulfinyl butane chain ──
+function buildSulforaphane(): Geometry {
+  const atoms: Atom[] = [
+    { x: -2.022, y: -0.188, z: -0.035, el: "S" },
+    { x: -2.261, y: 0.618, z: 0.085, el: "C" },
+    { x: -2.201, y: -0.905, z: 0.264, el: "O" },
+    { x: -1.306, y: 0.17, z: -0.07, el: "C" },
+    { x: -0.589, y: -0.188, z: -0.035, el: "C" },
+    { x: 0.128, y: 0.17, z: -0.07, el: "C" },
+    { x: 0.844, y: -0.188, z: -0.035, el: "C" },
+    { x: 1.722, y: 0.17, z: -0.035, el: "N", label: "N=C=S" },
+    { x: 2.439, y: 0.17, z: -0.035, el: "C" },
+    { x: 3.245, y: 0.17, z: -0.035, el: "S" },
+  ];
+  const bonds: Bond[] = [
+    [0, 1, 1], [0, 2, 2], [0, 3, 1], [3, 4, 1], [4, 5, 1], [5, 6, 1], [6, 7, 1], [7, 8, 2], [8, 9, 2],
+  ];
+  return {
+    atoms,
+    bonds,
+    formula: "C₆H₁₁NOS₂",
+    label: "1-isothiocyanato-4-(methylsulfinyl)butane",
+  };
+}
+
 // ── convert a hand-verified 2D skeletal structure into 3D ball-and-stick ──
 
 function elementFromLabel(text?: string): Atom["el"] {
@@ -270,6 +359,9 @@ export const REGISTRY: Record<string, () => Geometry> = {
   curcumin: buildCurcumin,
   quercetin: buildQuercetin,
   fisetin: buildFisetin,
+  rala: buildAlphaLipoicAcid,
+  nr: buildNR,
+  sulforaphane: buildSulforaphane,
   // Projected from the site's own verified skeletal structures — see the
   // module comment above.
   nmn: buildFromSkeletal(
@@ -281,11 +373,6 @@ export const REGISTRY: Record<string, () => Geometry> = {
     "spermidine",
     "C₇H₁₉N₃",
     "N-(3-aminopropyl)butane-1,4-diamine",
-  ),
-  sulforaphane: buildFromSkeletal(
-    "sulforaphane",
-    "C₆H₁₁NOS₂",
-    "1-isothiocyanato-4-(methylsulfinyl)butane",
   ),
   berberine: buildFromSkeletal(
     "berberine",

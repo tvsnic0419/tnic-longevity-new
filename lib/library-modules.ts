@@ -103,6 +103,7 @@ export const libraryModules: LibraryModule[] = [
       'Legitimate NAD+ precursor with human trial footprint. TNiC defaults to NMN for stack integration; this module covers when NR is the right choice, dosing, buyer verification, and compare-table evidence.',
     evidenceTier: 'A',
     relatedHallmarkIds: ['mito', 'genomic', 'epigenetic', 'senescence', 'nutrient'],
+    compoundId: 'nr',
     relatedSynergySlugs: ['nad-mito-stack', 'nmn-resveratrol-sirt1'],
     outline: [
       'Overview & NR → NMN → NAD+ pathway',
