@@ -304,7 +304,7 @@ export function LibraryModuleDetail({
                   <BookOpen className="w-4 h-4 text-accent-cyan" />
                   <p className="text-[10px] font-mono text-accent-cyan uppercase">Deep dive</p>
                 </div>
-                <MdxRenderer content={mdxBody} />
+                <MdxRenderer content={mdxBody} currentCompoundId={module.compoundId} />
               </div>
             ) : (
               <GlassPanel depth="mid" className="rounded-xl p-8 text-center text-muted-foreground">

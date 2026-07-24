@@ -24,6 +24,7 @@ import {
 import { citationRegistry } from '@/lib/trust';
 import { glossary } from '@/lib/data';
 import { GlassPanel } from '@/components/ui/GlassPanel';
+import { libraryModules, getModulePath } from '@/lib/library-modules';
 
 const PMID_PATTERN = /\bPMID:?\s?(\d{7,8})\b/g;
 const LINK_CLASS =
@@ -49,6 +50,38 @@ function escapeRegExp(text: string): string {
 
 /** Longest-term-first so e.g. "Epigenetic Clock" is tried before any shorter overlap. */
 const GLOSSARY_TERMS_BY_LENGTH = [...glossary].sort((a, b) => b.term.length - a.term.length);
+
+/** Compound module title minus its parenthetical/suffix, e.g. "NMN (Nicotinamide
+ * Mononucleotide)" -> "NMN", "Berberine HCl" -> "Berberine" — the short form
+ * prose actually uses when naming the substance mid-sentence. */
+function canonicalCompoundName(title: string): string {
+  return title.replace(/\s*\(.*\)\s*$/, '').replace(/\s+HCl$/i, '').trim();
+}
+
+/** Longest-name-first so e.g. "Urolithin A" is tried before a shorter overlap. */
+const COMPOUND_TERMS_BY_LENGTH = libraryModules
+  .filter((m) => m.category === 'compounds')
+  .map((m) => ({ name: canonicalCompoundName(m.title), href: getModulePath(m) }))
+  .filter((c) => c.name.length >= 3)
+  .sort((a, b) => b.name.length - a.name.length);
+
+/**
+ * Links the first on-page occurrence of each other compound's canonical name
+ * to its library deep-dive — the same "cite once, first mention" convention
+ * as glossary terms, sharing the same `linkedTerms` set so a name pre-seeded
+ * by the caller (e.g. the page's own compound) is never self-linked.
+ */
+function linkCompoundTerms(text: string, linkedTerms: Set<string>): string {
+  let out = text;
+  for (const { name, href } of COMPOUND_TERMS_BY_LENGTH) {
+    if (linkedTerms.has(name)) continue;
+    const pattern = new RegExp(`(?<![a-zA-Z0-9-])(${escapeRegExp(name)})(?![a-zA-Z0-9-])`);
+    if (!pattern.test(out)) continue;
+    linkedTerms.add(name);
+    out = out.replace(pattern, (matched) => `<a href="${href}" class="${LINK_CLASS}">${matched}</a>`);
+  }
+  return out;
+}
 
 /**
  * Links the first on-page occurrence of each glossary term to an inline,
@@ -104,6 +137,7 @@ function renderInline(text: string, linkedTerms: Set<string>): string {
     ),
   );
 
+  out = linkCompoundTerms(out, linkedTerms);
   out = linkGlossaryTerms(out, linkedTerms);
 
   return out.replace(/\uE000T(\d+)\uE000/g, (_m, i: string) => tokens[Number(i)] ?? '');
@@ -724,14 +758,23 @@ export function MdxRenderer({
   content,
   showToc = true,
   showReferences = true,
+  currentCompoundId,
 }: {
   content: string;
   showToc?: boolean;
   showReferences?: boolean;
+  /** The compound this page is already about, if any — pre-seeded into the
+   * linked-terms set so the auto-linker never links a compound's name back
+   * to the page it's already on. */
+  currentCompoundId?: string;
 }) {
   const blocks = parseBlocks(content);
   const elements: ReactNode[] = [];
   const linkedTerms = new Set<string>();
+  const selfModule = currentCompoundId
+    ? libraryModules.find((m) => m.compoundId === currentCompoundId)
+    : undefined;
+  if (selfModule) linkedTerms.add(canonicalCompoundName(selfModule.title));
 
   blocks.forEach((block, i) => {
     if (block.kind === 'directive') {
