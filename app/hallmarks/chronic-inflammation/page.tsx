@@ -98,7 +98,7 @@ export default function ChronicInflammationPage() {
                 <p>
                   The good news: inflammaging is highly modifiable. Omega-3 index moving from 4% to 8% reduces
                   hs-CRP ~30%. Sulforaphane reduces CRP in human airway models within 4 weeks. Exercise training
-                  reduces hs-CRP ~20% in sedentary adults at 3 months. The TNiC stack targets NF-κB
+                  reduces hs-CRP ~20% in sedentary adults at 3 months. A well-built stack targets NF-κB
                   from three independent angles — NRF2 (upstream ROS), SIRT1 (direct NF-κB deacetylation),
                   and SPM precursors (active resolution).
                 </p>

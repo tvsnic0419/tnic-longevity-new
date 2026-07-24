@@ -40,7 +40,7 @@ const FAQ = [
   },
   {
     q: 'Does taurine work differently from NMN?',
-    a: 'Yes — taurine and NMN target different but complementary pathways. NMN restores intracellular NAD+ (via SIRT1 activation, DNA repair, and mitochondrial biogenesis). Taurine addresses a separate set of age-related declines: mitochondrial membrane stabilization, osmotic regulation, antioxidant defense, and bile acid metabolism. The 2023 Singh paper explicitly positions taurine as a "longevity nutrient" independent of NAD+ biology. This is why TNiC stacks taurine + NMN — they address different nodes.',
+    a: 'Yes — taurine and NMN target different but complementary pathways. NMN restores intracellular NAD+ (via SIRT1 activation, DNA repair, and mitochondrial biogenesis). Taurine addresses a separate set of age-related declines: mitochondrial membrane stabilization, osmotic regulation, antioxidant defense, and bile acid metabolism. The 2023 Singh paper explicitly positions taurine as a "longevity nutrient" independent of NAD+ biology. This is why many stacks pair taurine with NMN — they address different nodes.',
   },
   {
     q: 'What are taurine\'s main mechanisms in aging?',

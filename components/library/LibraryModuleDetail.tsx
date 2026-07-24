@@ -123,7 +123,7 @@ export function LibraryModuleDetail({
 
             {relatedCompound && (
               <GlassPanel depth="mid" className="rounded-xl p-5">
-                <p className="text-[10px] font-mono text-accent-emerald uppercase mb-3">TNiC compound</p>
+                <p className="text-[10px] font-mono text-accent-emerald uppercase mb-3">Compound</p>
                 <p className="text-sm font-semibold text-foreground">{relatedCompound.name}</p>
                 <p className="text-xs text-muted-foreground mt-1">{relatedCompound.dose} · {relatedCompound.timing}</p>
                 <Link href="/stacks" className="text-xs text-accent-cyan hover:text-accent-emerald mt-3 inline-block">

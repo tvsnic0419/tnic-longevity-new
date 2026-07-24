@@ -93,7 +93,7 @@ export function InterventionExplorer({
             onChange={(e) => setTnicOnly(e.target.checked)}
             className="h-3.5 w-3.5 accent-[var(--accent-cyan)]"
           />
-          TNiC compounds only
+          Verified picks only
         </label>
       </div>
 
@@ -111,7 +111,7 @@ export function InterventionExplorer({
                   : 'border-[var(--color-border-subtle)]'
               } hover:border-[var(--color-border-strong)]`}
             >
-              {/* Accent spine for TNiC-stocked interventions */}
+              {/* Accent spine for interventions with a verified product pick */}
               {item.tnicAvailable && (
                 <span
                   aria-hidden="true"
@@ -142,7 +142,7 @@ export function InterventionExplorer({
                     {item.tnicAvailable && (
                       <span className="inline-flex items-center gap-1 rounded-full bg-accent-cyan/10 px-2 py-0.5 text-[10px] font-semibold text-accent-cyan">
                         <Sparkles className="h-3 w-3" aria-hidden="true" />
-                        In TNiC stack
+                        Verified pick
                       </span>
                     )}
                   </div>

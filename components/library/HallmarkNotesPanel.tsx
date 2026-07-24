@@ -76,7 +76,7 @@ export function HallmarkNotesPanel({ hallmark }: { hallmark: HallmarkLibraryEntr
         <p className="text-[10px] font-mono text-muted-foreground uppercase mb-2">Your stack coverage</p>
         {activeCompounds.length > 0 ? (
           <p className="text-xs text-accent-emerald">
-            {activeCompounds.length} of {hallmark.relatedCompoundIds.length} TNiC compounds active in your stack
+            {activeCompounds.length} of {hallmark.relatedCompoundIds.length} targeting compounds active in your stack
           </p>
         ) : (
           <p className="text-xs text-muted-foreground">

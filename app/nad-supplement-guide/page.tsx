@@ -10,7 +10,7 @@ import { SITE } from '@/lib/site';
 export const metadata = buildPageMetadata({
   title: 'NAD+ Supplement Guide 2026 — NMN vs NR vs Niacin, Dosing & Evidence',
   description:
-    'Complete guide to NAD+ supplements: why NAD+ declines 50% by age 60, what NMN, NR, and niacin actually do, human trial evidence for each, dosing protocols, and the PMID-cited research behind TNiC stacks.',
+    'Complete guide to NAD+ supplements: why NAD+ declines 50% by age 60, what NMN, NR, and niacin actually do, human trial evidence for each, dosing protocols, and the PMID-cited research behind common NAD+ stacks.',
   path: '/nad-supplement-guide',
   keywords: [
     'NAD+ supplement guide',
@@ -36,9 +36,9 @@ const NAD_PRECURSORS = [
     mechanism: 'Direct NAD+ precursor in salvage pathway — bypasses NAMPT rate-limiting step',
     keyStudy: 'Igarashi et al. 2022: 250 mg/day raised whole-blood NAD+ 38%, improved muscle function in 65+ adults',
     pmid: '36482258',
-    pros: ['Strongest RCT footprint', 'NAMPT bypass advantage', 'TNiC stack native integration', 'AM/PM synergy with resveratrol'],
+    pros: ['Strongest RCT footprint', 'NAMPT bypass advantage', 'Easy stack integration', 'AM/PM synergy with resveratrol'],
     cons: ['Higher cost vs NR', 'Bioavailability varies by form (sublingual > capsule)', 'Not FDA-regulated supplement'],
-    verdict: 'Best choice for TNiC NAD+ Mito Stack integration and sirtuin activation',
+    verdict: 'Best choice for NAD+/mitochondrial stack integration and sirtuin activation',
     color: '#00e0ff',
   },
   {
@@ -51,7 +51,7 @@ const NAD_PRECURSORS = [
     keyStudy: 'Brennan et al. 2019: NR raised blood NAD+ metabolites in healthy older adults; multiple safety RCTs',
     pmid: '30940148',
     pros: ['Longer commercial track record', 'Multiple safety studies', 'TruNiagen branded capsules with QA', 'Physician familiarity'],
-    cons: ['Extra enzymatic step (NRK-dependent)', 'Higher dose range needed vs NMN', 'Not native in TNiC stack presets'],
+    cons: ['Extra enzymatic step (NRK-dependent)', 'Higher dose range needed vs NMN', 'Less common in NAD+ stack presets'],
     verdict: 'Defensible alternative — choose if physician prefers NR literature or you respond well',
     color: '#c084fc',
   },
@@ -82,11 +82,11 @@ const GUIDE_FAQS = [
   },
   {
     question: 'What is the best dose of NMN for longevity?',
-    answer: 'The most-studied dose is 250–500 mg/day. The Liao 2021 double-blind RCT confirmed muscle/physical performance benefits at 300 mg/day. TNiC stacks use 250–500 mg in the morning, typically fasted or with a light protein source. Higher doses (600–1000 mg) exist in some commercial products but lack proportional RCT evidence for greater benefit — and cost significantly more.',
+    answer: 'The most-studied dose is 250–500 mg/day. The Liao 2021 double-blind RCT confirmed muscle/physical performance benefits at 300 mg/day. Most protocols use 250–500 mg in the morning, typically fasted or with a light protein source. Higher doses (600–1000 mg) exist in some commercial products but lack proportional RCT evidence for greater benefit — and cost significantly more.',
   },
   {
     question: 'Should I take NMN with resveratrol?',
-    answer: 'This is one of the most evidence-adjacent pairings in longevity: NMN raises NAD+, which is the cofactor sirtuins (SIRT1) require to function. Resveratrol is a SIRT1 activator — it amplifies sirtuin activity but requires NAD+ to do so. Together they create a substrate + activator combination. TNiC\'s SIRT1 stack pairs 250–500 mg NMN (AM, fasted) with 150–500 mg trans-resveratrol (PM, with fat). This is a Tier B synergy with mechanistic support.',
+    answer: "This is one of the most evidence-adjacent pairings in longevity: NMN raises NAD+, which is the cofactor sirtuins (SIRT1) require to function. Resveratrol is a SIRT1 activator — it amplifies sirtuin activity but requires NAD+ to do so. Together they create a substrate + activator combination. A common SIRT1 stack pairs 250–500 mg NMN (AM, fasted) with 150–500 mg trans-resveratrol (PM, with fat). This is a Tier B synergy with mechanistic support.",
   },
   {
     question: 'Does NAD+ supplementation affect the epigenetic clock?',
@@ -98,7 +98,7 @@ const GUIDE_FAQS = [
   },
   {
     question: 'Can I stack NMN with taurine, GlyNAC, and spermidine?',
-    answer: 'Yes — these four compounds target four completely different nodes with no known antagonistic interactions. NMN replenishes NAD+. GlyNAC restores glutathione. Taurine addresses the multi-system deficiency described in Singh 2023 (Science). Spermidine induces autophagy via EP300 inhibition. This combination (with Sulforaphane as a 5th addition) is the TNiC Full Hybrid preset — the broadest evidence-graded stack available.',
+    answer: 'Yes — these four compounds target four completely different nodes with no known antagonistic interactions. NMN replenishes NAD+. GlyNAC restores glutathione. Taurine addresses the multi-system deficiency described in Singh 2023 (Science). Spermidine induces autophagy via EP300 inhibition. This combination (with Sulforaphane as a 5th addition) matches the broadest evidence-graded preset available in the stack builder.',
   },
 ];
 
@@ -119,12 +119,12 @@ function buildNadGuideSchemas() {
       {
         '@type': 'HowToStep',
         name: 'Check your stack integration',
-        text: 'If you use TNiC stacks (Mito-NAD+, Full Hybrid, SIRT1 Stack), NMN is the native choice. If pairing with resveratrol, take NMN in the morning fasted and resveratrol in the evening with fat.',
+        text: 'If you use one of the preset stacks (Mito-NAD+, Full Hybrid, SIRT1 Stack), NMN is the native choice. If pairing with resveratrol, take NMN in the morning fasted and resveratrol in the evening with fat.',
       },
       {
         '@type': 'HowToStep',
         name: 'Verify the product COA',
-        text: 'Confirm: purity ≥98% NMN or NR, mass spectrometry verification, no heavy metal contamination. Most quality brands publish third-party COA on their website. TNiC lists verified picks at /products.',
+        text: 'Confirm: purity ≥98% NMN or NR, mass spectrometry verification, no heavy metal contamination. Most quality brands publish third-party COA on their website. Verified picks are listed at /products.',
       },
       {
         '@type': 'HowToStep',
@@ -289,7 +289,7 @@ export default function NadSupplementGuidePage() {
         <div className="container-page max-w-5xl">
           <h2 className="text-2xl font-bold mb-2">NAD+ Precursor Comparison</h2>
           <p className="text-muted-foreground text-sm mb-8">
-            Three human-studied NAD+ precursors — ranked by TNiC for longevity stack integration.
+            Three human-studied NAD+ precursors, ranked for longevity stack integration.
           </p>
           <div className="space-y-4">
             {NAD_PRECURSORS.map((p, i) => (
@@ -318,7 +318,7 @@ export default function NadSupplementGuidePage() {
                           </span>
                           {i === 0 && (
                             <span className="text-[10px] font-semibold text-accent-emerald bg-accent-emerald/10 border border-accent-emerald/20 px-2 py-0.5 rounded-full">
-                              TNiC Pick
+                              Top Pick
                             </span>
                           )}
                         </div>
@@ -401,12 +401,12 @@ export default function NadSupplementGuidePage() {
               {
                 step: 2,
                 title: 'Match to your stack preset',
-                body: 'If you use TNiC stacks (Mito-NAD+, Full Hybrid, SIRT1 Stack), NMN is the native choice. Running a standalone NAD+ protocol? Either NMN or NR work — NMN is preferred for NAMPT bypass in older adults.',
+                body: 'If you use one of the preset stacks (Mito-NAD+, Full Hybrid, SIRT1 Stack), NMN is the native choice. Running a standalone NAD+ protocol? Either NMN or NR work — NMN is preferred for NAMPT bypass in older adults.',
               },
               {
                 step: 3,
                 title: 'Add a CD38 inhibitor for multiplied effect',
-                body: "CD38 enzyme activity rises with age and destroys NAD+ aggressively. Adding apigenin (chamomile extract) or quercetin helps reduce CD38-driven degradation — amplifying the effect of any NAD+ precursor. This is why TNiC stacks include flavonoids.",
+                body: "CD38 enzyme activity rises with age and destroys NAD+ aggressively. Adding apigenin (chamomile extract) or quercetin helps reduce CD38-driven degradation — amplifying the effect of any NAD+ precursor. This is why well-built NAD+ stacks include flavonoids.",
               },
               {
                 step: 4,
@@ -416,7 +416,7 @@ export default function NadSupplementGuidePage() {
               {
                 step: 5,
                 title: 'Verify the product COA',
-                body: 'Look for: purity ≥98% NMN or NR verified by HPLC, third-party mass spectrometry, no heavy metal contamination, no NMN oxide impurities. Most quality brands publish COA on their site. TNiC lists verified picks at /products.',
+                body: 'Look for: purity ≥98% NMN or NR verified by HPLC, third-party mass spectrometry, no heavy metal contamination, no NMN oxide impurities. Most quality brands publish COA on their site. Verified picks are listed at /products.',
               },
             ].map((item) => (
               <div key={item.step} className="flex gap-4 rounded-xl border border-border/60 p-5 bg-card/20">
@@ -437,7 +437,7 @@ export default function NadSupplementGuidePage() {
       <section className="py-12 border-b border-border bg-[#050a14]/50">
         <div className="container-page max-w-4xl">
           <h2 className="text-2xl font-bold mb-2">Optimal NAD+ supplement timing</h2>
-          <p className="text-muted-foreground text-sm mb-8">Based on TNiC protocol research and chronobiology data on NAD+ metabolism.</p>
+          <p className="text-muted-foreground text-sm mb-8">Based on published protocol research and chronobiology data on NAD+ metabolism.</p>
           <div className="grid md:grid-cols-3 gap-4">
             {[
               {

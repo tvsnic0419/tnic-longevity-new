@@ -26,8 +26,8 @@ export function TopPicksHub() {
         <PageHeader
           icon={Dna}
           eyebrow="Editorial Curation"
-          title="Top TNiC picks by pathway."
-          description="Sirtuin activation, PARP-mediated DNA repair, and NRF2 antioxidant signaling share more biology than their names suggest — NAD+ fuels the first two, and glutathione status underwrites the third. Here are TNiC's highest-conviction picks for each, and the mechanistic reason each one made the list."
+          title="Top picks by pathway."
+          description="Sirtuin activation, PARP-mediated DNA repair, and NRF2 antioxidant signaling share more biology than their names suggest — NAD+ fuels the first two, and glutathione status underwrites the third. Here are the highest-conviction picks for each, and the mechanistic reason each one made the list."
           theme="violet"
           context={getHubContext('topPicks')}
         />

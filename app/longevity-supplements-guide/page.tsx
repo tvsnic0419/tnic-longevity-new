@@ -17,7 +17,7 @@ const GUIDE_FAQS = [
   {
     question: 'Is NMN or NR better for NAD+ supplementation?',
     answer:
-      'Both raise blood NAD+ metabolites in humans. NMN (250–500 mg/day) has a stronger mechanistic case for NAMPT-bypass and is integrated into most TNiC stacks. NR (300–1000 mg/day) has a longer commercial track record. A tie on core NAD+ restoration — choose NMN for TNiC stack integration or NR if your physician prefers that literature. Do not combine high doses of both. Full comparison: tnic.help/library/compare/nmn-vs-nr',
+      'Both raise blood NAD+ metabolites in humans. NMN (250–500 mg/day) has a stronger mechanistic case for NAMPT-bypass and is the more common stack choice. NR (300–1000 mg/day) has a longer commercial track record. A tie on core NAD+ restoration — choose NMN for easier stack integration or NR if your physician prefers that literature. Do not combine high doses of both. Full comparison: tnic.help/library/compare/nmn-vs-nr',
   },
   {
     question: 'How do I know if a longevity supplement is evidence-graded Tier A?',
@@ -57,7 +57,7 @@ const HOW_TO_STEPS = [
   },
   {
     name: 'Verify evidence tier before purchasing',
-    text: 'Only proceed with Tier A (≥2 RCTs) or Tier B (1 RCT or robust pilots) compounds. Check the TNiC compound library for the underlying PMIDs. Every compound page links directly to the PubMed studies it cites — read the abstracts.',
+    text: 'Only proceed with Tier A (≥2 RCTs) or Tier B (1 RCT or robust pilots) compounds. Check the compound library for the underlying PMIDs. Every compound page links directly to the PubMed studies it cites — read the abstracts.',
   },
   {
     name: 'Get baseline labs before starting',

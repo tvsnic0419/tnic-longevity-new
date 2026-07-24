@@ -129,7 +129,7 @@ export const citationFramework = {
   formats: [
     { format: 'Inline PMID link', example: 'Kumar et al. 2023 (PMID: 35975308)', use: 'Intervention cards, stack studies' },
     { format: 'Structured citation block', example: 'Author · Journal · Year · DOI/PMID', use: 'Methodology page, compound deep dives' },
-    { format: 'Evidence tag + citation pair', example: 'Tier A badge + PubMed link', use: 'All TNiC compound surfaces' },
+    { format: 'Evidence tag + citation pair', example: 'Tier A badge + PubMed link', use: 'All compound surfaces' },
   ],
 };
 
