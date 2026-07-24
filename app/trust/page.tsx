@@ -40,7 +40,6 @@ export default function TrustPage() {
           { value: '12', label: 'Hallmarks of aging' },
         ]}
         primary={{ href: '/trust/methodology', label: 'How we grade the evidence' }}
-        secondary={{ href: '/corrections', label: 'Corrections log' }}
       />
       <TrustHub />
     </>
