@@ -74,6 +74,14 @@ export interface Compound {
   badge: StackGoal;
   /** Oral absorption %, only set when a specific published figure exists — omit rather than guess. */
   bioavailability?: number;
+  /** Molecular formula, e.g. "C14H12O3" — only set for a single well-defined
+   * molecule, omitted for extracts/mixtures with no one formula (herbal
+   * extracts, mineral blends). */
+  formula?: string;
+  /** Molar mass with unit, e.g. "228.24 g/mol" — same omit-if-mixture rule as formula. */
+  molarMass?: string;
+  /** Chemical class, e.g. "Stilbenoid polyphenol" — omit if not a clean single-class fit. */
+  chemFamily?: string;
   evidence: EvidenceTier;
   dose: string;
   timing: 'AM' | 'PM' | 'AM/PM';

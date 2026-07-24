@@ -81,6 +81,9 @@ export default async function LibraryModulePage({
         dose: heroCompound.dose,
         timing: heroCompound.timing,
         bioavailability: heroCompound.bioavailability,
+        formula: heroCompound.formula,
+        molarMass: heroCompound.molarMass,
+        chemFamily: heroCompound.chemFamily,
         studyCount: heroCompound.studies.length,
         synergyCount: heroCompound.synergies.length,
         hallmarks: heroCompound.hallmarks

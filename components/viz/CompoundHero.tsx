@@ -21,6 +21,9 @@ export type CompoundHeroData = {
   dose: string;
   timing: string;
   bioavailability?: number;
+  formula?: string;
+  molarMass?: string;
+  chemFamily?: string;
   studyCount: number;
   synergyCount: number;
   hallmarks: string[];
@@ -48,6 +51,9 @@ export function CompoundHero(data: CompoundHeroData) {
     facts.push({ k: "Oral bioavail.", v: `${data.bioavailability}%` });
   }
   facts.push({ k: "Synergies", v: `${data.synergyCount} mapped` });
+  if (data.formula) facts.push({ k: "Formula", v: data.formula });
+  if (data.molarMass) facts.push({ k: "Molar mass", v: data.molarMass });
+  if (data.chemFamily) facts.push({ k: "Family", v: data.chemFamily });
 
   return (
     <div className="tnic-chero" style={{ "--hue": hueCss } as React.CSSProperties}>
