@@ -34,10 +34,10 @@ export function InterventionCards({ interventions }: { interventions: HallmarkIn
     <div className="space-y-5">
       {sorted.map((iv) => {
         const compound = iv.compoundId ? compounds.find((c) => c.id === iv.compoundId) : undefined;
-        const module = iv.compoundId
+        const libraryModule = iv.compoundId
           ? libraryModules.find((m) => m.compoundId === iv.compoundId)
           : undefined;
-        const href = module ? getModulePath(module) : undefined;
+        const href = libraryModule ? getModulePath(libraryModule) : undefined;
         return (
           <div key={iv.id} className="rounded-2xl border border-border/60 bg-card/40 p-6">
             <div className="flex items-start justify-between gap-4 mb-3">
