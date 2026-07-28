@@ -288,8 +288,8 @@ const CSS = `
 .tnic-age small { font-size: .32em; color: var(--muted); font-family: 'JetBrains Mono', monospace; letter-spacing: .12em; margin-left: 8px; }
 .tnic-stage-cap { font-size: 16px; color: var(--ink); max-width: 36ch; line-height: 1.4; }
 .tnic-range { -webkit-appearance: none; appearance: none; width: 100%; height: 3px; border-radius: 3px; background: var(--line); margin: 18px 0 4px; cursor: pointer; }
-.tnic-range::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--gold); border: 3px solid var(--void); box-shadow: 0 0 0 1px var(--gold), 0 0 22px rgba(240,196,106,.6); cursor: grab; }
-.tnic-range::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--gold); border: 3px solid var(--void); box-shadow: 0 0 0 1px var(--gold), 0 0 22px rgba(240,196,106,.6); cursor: grab; }
+.tnic-range::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: var(--gold); border: 3px solid var(--void); box-shadow: 0 0 0 1px var(--gold), 0 0 22px rgba(240,196,106,.6); cursor: grab; }
+.tnic-range::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: var(--gold); border: 3px solid var(--void); box-shadow: 0 0 0 1px var(--gold), 0 0 22px rgba(240,196,106,.6); cursor: grab; }
 .tnic-range:focus-visible { outline: 2px solid var(--cyan); outline-offset: 6px; }
 .tnic-tl-stats {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 16px;

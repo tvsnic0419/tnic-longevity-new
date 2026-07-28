@@ -66,11 +66,11 @@ export function HomeHero() {
                 utility by cascade-layer rules regardless of source order.
                 This hero is intentionally always-dark (bg-[#020811] above),
                 so force white with Tailwind's `!` important-modifier. */}
-            <h1 id="home-hero-heading" className="headline-editorial mb-5 !text-white">
+            <h2 id="home-hero-heading" className="headline-editorial mb-5 !text-white">
               Transformative nutrition{' '}
               <br />
               <span className="gradient-sweep-text">for cell-health.</span>
-            </h1>
+            </h2>
 
             <p className="mx-auto mb-8 max-w-xl text-lg leading-relaxed text-white/70 md:text-xl lg:mx-0">
               TNiC — Transformative Nutrition in Cell-Health — is a PubMed-backed
