@@ -211,6 +211,8 @@ const CSS = `
 .tnic-descent .edge.warn { stroke-dasharray: 1 7; opacity: .48; }
 
 .tnic-descent .node { cursor: pointer; }
+.tnic-descent .node:focus { outline: none; }
+.tnic-descent .node:focus-visible .node-ring { opacity: 1; stroke: var(--cyan); stroke-width: 2.5; }
 .tnic-descent .node-hit { fill: transparent; }
 .tnic-descent .node-core { transition: opacity .35s ease; }
 .tnic-descent .node-label {
@@ -725,10 +727,10 @@ export function HomeDescent() {
   return (
     <div className="tnic-descent" data-reduced={reduced} ref={rootRef}>
       <style>{CSS}</style>
-      <canvas ref={shimmerRef} className="tnic-layer tnic-shimmer" />
-      <div className="tnic-layer tnic-grid" />
-      <canvas ref={cursorRef} className="tnic-layer tnic-cursor" />
-      <div className="tnic-layer tnic-vignette" />
+      <canvas ref={shimmerRef} className="tnic-layer tnic-shimmer" aria-hidden="true" />
+      <div className="tnic-layer tnic-grid" aria-hidden="true" />
+      <canvas ref={cursorRef} className="tnic-layer tnic-cursor" aria-hidden="true" />
+      <div className="tnic-layer tnic-vignette" aria-hidden="true" />
 
       <div className="tnic-rail-track">
         <nav className="tnic-rail" aria-label="Descent sections">
@@ -770,7 +772,7 @@ export function HomeDescent() {
 
         <div className="tnic-molwrap">
           <div className="tnic-stage">
-            <MoleculeStage geometryId="resveratrol" hue={HUES.cyan} />
+            <MoleculeStage geometryId="resveratrol" hue={HUES.cyan} ariaLabel="Rotatable 3D model of the resveratrol molecule. Full details are in the panel beside it." />
             <div className="tnic-molhint"><span className="dot" />drag · scroll to zoom</div>
           </div>
 
@@ -817,6 +819,7 @@ export function HomeDescent() {
         <div className="tnic-toolbar">
           <input
             className="tnic-search" type="search" placeholder="Search compounds — e.g. resveratrol, magnesium…"
+            aria-label="Search compounds"
             value={search} onChange={(e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
           />
           {(Object.keys(TIER) as TierKey[]).map((t) => (
@@ -830,7 +833,8 @@ export function HomeDescent() {
 
         <div className="tnic-netwrap">
           <div className="tnic-stage" style={{ aspectRatio: "10/7", maxHeight: "62vh" }}>
-            <svg viewBox="0 0 1000 720" preserveAspectRatio="xMidYMid meet">
+            <svg viewBox="0 0 1000 720" preserveAspectRatio="xMidYMid meet"
+              role="group" aria-label="Compound synergy network. Select a compound to trace its interactions.">
               <defs>
                 <radialGradient id="tnic-node-core" cx="35%" cy="30%">
                   <stop offset="0%" stopColor="#f0f6ff" />
@@ -862,7 +866,11 @@ export function HomeDescent() {
                 const nr = 13 + Math.min(n.deg || 1, 6) * 1.8;
                 return (
                   <g key={id} className={`node${dim ? " dim" : ""}${sel ? " sel" : ""}${elite ? " elite" : ""}`}
-                    onClick={() => setSelNode(sel ? null : id)}>
+                    role="button" tabIndex={0}
+                    aria-pressed={sel}
+                    aria-label={`${n.name} — ${n.role}${elite ? ", TNiC elite pick" : ""}`}
+                    onClick={() => setSelNode(sel ? null : id)}
+                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelNode(sel ? null : id); } }}>
                     <circle className="node-pulse" cx={n.x} cy={n.y} r={nr + 10} fill={elite ? "#f0c46a" : "#5fe3e0"} opacity="0.2" />
                     <circle className="node-ring" cx={n.x} cy={n.y} r={nr + 6} />
                     <circle className="node-hit" cx={n.x} cy={n.y} r={nr + 26} />
@@ -884,7 +892,7 @@ export function HomeDescent() {
           </div>
 
           <div>
-            <div className="tnic-readout">
+            <div className="tnic-readout" aria-live="polite">
               {selNode ? (
                 <>
                   <div className="r-eyebrow">
@@ -1048,7 +1056,8 @@ export function HomeDescent() {
           </div>
 
           <input className="tnic-range" type="range" min="30" max="95" value={age}
-            onChange={(e) => setAge(Number(e.target.value))} aria-label="Age" />
+            onChange={(e) => setAge(Number(e.target.value))}
+            aria-label="Age" aria-valuetext={`Age ${age} — ${curStage.cap}`} />
 
           <div className="tnic-tl-stats">
             <div className="tnic-tl-stat">

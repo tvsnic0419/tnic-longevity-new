@@ -33,12 +33,14 @@ export function MoleculeStage({
   interactive = true,
   className,
   style,
+  ariaLabel,
 }: {
   geometryId?: string;
   hue: RGB;
   interactive?: boolean;
   className?: string;
   style?: React.CSSProperties;
+  ariaLabel?: string;
 }) {
   const reduced = useReducedMotion();
   const reducedRef = useRef(false);
@@ -258,6 +260,8 @@ export function MoleculeStage({
     <canvas
       ref={canvasRef}
       className={className}
+      role="img"
+      aria-label={ariaLabel ?? "Molecular structure visualization"}
       style={{ width: "100%", height: "100%", display: "block", cursor: canInteract ? "grab" : "default", ...style }}
       onMouseDown={onDown} onMouseMove={onMove} onMouseUp={onUp} onMouseLeave={onUp}
       onTouchStart={onDown} onTouchMove={onMove} onTouchEnd={onUp}
