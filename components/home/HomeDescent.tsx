@@ -39,7 +39,7 @@ const CSS = `
   --amber: #eaa24a;
   --ink: #eef2fb;
   --muted: #96a0bc;
-  --faint: #5a6482;
+  --faint: #7d88a8;
   position: relative;
   background:
     radial-gradient(140% 60% at 50% 0%, #0a1024 0%, #050710 45%, #030510 100%);
@@ -743,7 +743,7 @@ export function HomeDescent() {
       {/* ACT 0 — ARRIVE */}
       <section ref={s0} data-idx="0" className="tnic-act tnic-hero">
         <p className="tnic-kicker">TNiC · longevity, shown honestly</p>
-        <h1 className="tnic-h1">See what<br />you&apos;re <em>protecting</em>.</h1>
+        <h1 className="tnic-h1">See what{' '}<br />you&apos;re <em>protecting</em>.</h1>
         <p className="tnic-lead">
           You can&apos;t feel a cell aging. So we made it visible — the real biology
           behind your stack, rendered instead of promised. Five scenes. One
@@ -761,7 +761,7 @@ export function HomeDescent() {
       {/* ACT 1 — MOLECULE */}
       <section ref={s1} data-idx="1" className="tnic-act">
         <p className="tnic-kicker">01 — the molecule</p>
-        <h2 className="tnic-h2">It starts smaller<br />than you can <em>picture</em>.</h2>
+        <h2 className="tnic-h2">It starts smaller{' '}<br />than you can <em>picture</em>.</h2>
         <p className="tnic-lead">
           Trans-resveratrol — studied for sirtuin activation and healthy-aging
           pathways. Turn it over, zoom in. This is the actual shape doing the

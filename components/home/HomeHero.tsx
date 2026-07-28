@@ -67,7 +67,7 @@ export function HomeHero() {
                 This hero is intentionally always-dark (bg-[#020811] above),
                 so force white with Tailwind's `!` important-modifier. */}
             <h1 id="home-hero-heading" className="headline-editorial mb-5 !text-white">
-              Transformative nutrition
+              Transformative nutrition{' '}
               <br />
               <span className="gradient-sweep-text">for cell-health.</span>
             </h1>

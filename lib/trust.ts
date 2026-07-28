@@ -428,6 +428,13 @@ export const disclaimers: DisclaimerBlock[] = [
     appliesTo: ['All pages', 'Stack exports', 'Lab recommendations'],
   },
   {
+    id: 'fda-dshea-supplement',
+    title: 'Dietary Supplement Statements — FDA / DSHEA Notice',
+    severity: 'legal',
+    body: 'Statements on this site describing dietary supplements and their effects on the structure or function of the body have not been evaluated by the U.S. Food and Drug Administration. These products are not intended to diagnose, treat, cure, or prevent any disease. TNiC does not sell supplements; this notice accompanies the structure/function descriptions used across the library, guides, and elite-intervention pages. (Draft wording pending legal review — see the note at the foot of this page.)',
+    appliesTo: ['Compound deep-dives', 'Elite interventions', 'Guides', 'Stacks & protocols'],
+  },
+  {
     id: 'modeled-projections',
     title: 'Modeled Projections vs. Lab Data',
     severity: 'warning',

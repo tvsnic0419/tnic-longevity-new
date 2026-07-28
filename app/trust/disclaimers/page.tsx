@@ -21,6 +21,17 @@ export default function DisclaimersPage() {
           <DisclaimerBanner key={d.id} disclaimer={d} showAppliesTo />
         ))}
       </div>
+
+      <section className="mt-8 space-y-3 rounded-xl border border-accent-amber/25 bg-accent-amber/5 p-4">
+        <h2 className="text-h3">Legal review status</h2>
+        <p className="text-sm text-muted-foreground">
+          The FDA / DSHEA supplement notice above was drafted to match the standard
+          structure/function-claim disclaimer language (21 CFR 101.93). It has not yet been
+          reviewed by qualified legal counsel for this jurisdiction and business model. Have
+          counsel confirm the exact wording and where it must appear relative to specific claims
+          before relying on it.
+        </p>
+      </section>
     </TrustPageTemplate>
   );
 }
