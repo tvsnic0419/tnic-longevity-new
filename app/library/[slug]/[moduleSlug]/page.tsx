@@ -126,6 +126,7 @@ export default async function LibraryModulePage({
       <LibraryModuleDetail
         module={mod}
         mdxBody={mdx?.body ?? null}
+        lastUpdated={mdx?.frontmatter.last_updated ?? null}
         comparisons={comparisons}
         guide={guide}
         relatedCompounds={relatedCompounds}

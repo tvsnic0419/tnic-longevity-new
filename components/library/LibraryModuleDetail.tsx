@@ -21,6 +21,8 @@ import { CompoundGlancePanel } from './CompoundGlancePanel';
 import { ModuleGlancePanel } from './ModuleGlancePanel';
 import { recordModuleVisit } from '@/lib/recent-modules';
 import { GlassPanel } from '@/components/ui/GlassPanel';
+import { ContentTrustHeader } from '@/components/trust/ContentTrustHeader';
+import { collectPmids } from '@/lib/content-provenance';
 
 /**
  * Category -> icon + full static Tailwind class strings. Deliberately not
@@ -41,12 +43,14 @@ const categoryVisual: Record<
 export function LibraryModuleDetail({
   module,
   mdxBody,
+  lastUpdated,
   comparisons = [],
   guide,
   relatedCompounds = [],
 }: {
   module: LibraryModule;
   mdxBody: string | null;
+  lastUpdated?: string | null;
   comparisons?: ComparisonLink[];
   guide?: GuideLink;
   relatedCompounds?: RelatedCompoundLink[];
@@ -66,6 +70,13 @@ export function LibraryModuleDetail({
     module.category === 'compounds' && !relatedCompound && mdxBody
       ? new Set(mdxBody.match(/\bPMID:?\s*(\d{7,8})\b/g)?.map((m) => m.replace(/\D/g, '')) ?? []).size
       : 0;
+  // Unique PMIDs across the deep-dive prose AND the compound's structured study
+  // set (deduped) — an honest citation total that matches the evidence panels below.
+  const citationPmids = collectPmids(mdxBody);
+  for (const s of relatedCompound?.studies ?? []) {
+    if (s.pmid) citationPmids.add(String(s.pmid));
+  }
+  const citationCount = citationPmids.size;
 
   useEffect(() => {
     recordModuleVisit(module);
@@ -269,6 +280,12 @@ export function LibraryModuleDetail({
               </div>
               <p className="text-lg text-muted-foreground mb-4">{module.tagline}</p>
               <p className="text-sm text-muted-foreground leading-relaxed">{module.summary}</p>
+              <ContentTrustHeader
+                lastUpdated={lastUpdated ?? undefined}
+                evidenceTier={module.evidenceTier}
+                citationCount={citationCount}
+                className="mt-4"
+              />
             </motion.div>
 
             {relatedCompound ? (

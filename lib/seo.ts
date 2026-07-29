@@ -200,6 +200,7 @@ export function buildMedicalWebPageSchema({
   dateModified,
   evidenceTier,
   citations = [],
+  reviewedBy,
 }: {
   title: string;
   description: string;
@@ -207,8 +208,11 @@ export function buildMedicalWebPageSchema({
   dateModified?: string;
   evidenceTier?: string;
   citations?: SourceCitation[];
+  /** Honest editorial reviewer — the org by default. Never a fabricated individual. */
+  reviewedBy?: string;
 }) {
   const url = `${SITE.url}${path}`;
+  const reviewed = dateModified ?? new Date().toISOString().split('T')[0];
   return {
     '@context': 'https://schema.org',
     '@type': 'MedicalWebPage',
@@ -216,7 +220,9 @@ export function buildMedicalWebPageSchema({
     headline: title,
     description,
     url,
-    dateModified: dateModified ?? new Date().toISOString().split('T')[0],
+    dateModified: reviewed,
+    lastReviewed: reviewed,
+    reviewedBy: { '@type': 'Organization', name: reviewedBy ?? SITE.name, url: SITE.url },
     author: { '@type': 'Organization', name: SITE.name, url: SITE.url },
     publisher: { '@type': 'Organization', name: SITE.name, url: SITE.url },
     about: {
