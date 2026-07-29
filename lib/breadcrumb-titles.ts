@@ -110,6 +110,7 @@ export const libraryModuleTitles: Record<string, string> = {
   'synergies/glynac-nrf2-triad': "NRF2 Defense Triad",
   'synergies/nmn-resveratrol-sirt1': "SIRT1 Activation Pair",
   'synergies/nad-mito-stack': "NAD+ Mitochondrial Stack",
+  'synergies/systems-longevity-stack': "Systems-Biology Longevity Stack",
   'lifestyle/exercise': "Exercise",
   'lifestyle/sleep': "Sleep",
   'lifestyle/nutrition': "Nutrition",

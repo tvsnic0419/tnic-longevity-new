@@ -60,7 +60,7 @@ export const libraryModules: LibraryModule[] = [
     evidenceTier: 'A',
     relatedHallmarkIds: ['mito', 'proteostasis', 'inflammation', 'genomic'],
     compoundId: 'glynac',
-    relatedSynergySlugs: ['glynac-nrf2-triad'],
+    relatedSynergySlugs: ['glynac-nrf2-triad', 'systems-longevity-stack'],
     outline: [
       'Overview & hallmark mapping',
       'Mechanism: GSH synthesis bottleneck',
@@ -82,7 +82,7 @@ export const libraryModules: LibraryModule[] = [
     evidenceTier: 'A',
     relatedHallmarkIds: ['mito', 'genomic', 'epigenetic', 'senescence', 'nutrient'],
     compoundId: 'nmn',
-    relatedSynergySlugs: ['nmn-resveratrol-sirt1', 'nad-mito-stack'],
+    relatedSynergySlugs: ['nmn-resveratrol-sirt1', 'nad-mito-stack', 'systems-longevity-stack'],
     outline: [
       'Overview & NAD+ decline curve',
       'Mechanism: NMN → NAD+ → SIRT/PARP axis',
@@ -299,6 +299,7 @@ export const libraryModules: LibraryModule[] = [
     evidenceTier: 'B',
     relatedHallmarkIds: ['autophagy', 'epigenetic', 'senescence'],
     compoundId: 'spermidine',
+    relatedSynergySlugs: ['systems-longevity-stack'],
     outline: [
       'Overview & autophagy induction',
       'Mechanism: EP300 / eIF5A',
@@ -1460,6 +1461,28 @@ export const libraryModules: LibraryModule[] = [
       'Cost & simplicity tiers',
     ],
     mdxSlug: 'nad-mito-stack',
+  },
+  {
+    slug: 'systems-longevity-stack',
+    category: 'synergies',
+    title: 'Systems-Biology Longevity Stack',
+    tagline: 'Full-spectrum, seven-module protocol',
+    summary:
+      'A breadth-first stack that assigns each compound to a module — redox/glutathione, NAD⁺/sirtuins, autophagy, NRF2/detox, senolytic, neurotrophic, and cardiovascular/ECM — so no major hallmark is left uncovered. Tier-A/B legs; Tier-B as a combined architecture.',
+    evidenceTier: 'B',
+    relatedHallmarkIds: ['mito', 'genomic', 'proteostasis', 'autophagy', 'epigenetic', 'senescence', 'inflammation', 'nutrient'],
+    synergyCompoundIds: ['glynac', 'nmn', 'spermidine', 'sulforaphane', 'cakg', 'rala', 'omega3', 'resveratrol'],
+    requiresDisclaimer: true,
+    outline: [
+      'Why breadth beats depth: seven modules',
+      'Mechanistic synergy map & hallmark coverage',
+      'Pathway coverage scores (supplement-domain scale)',
+      'Evidence per module + combination logic',
+      'Daily choreography & module build order',
+      'Full biomarker panel (GSH, hs-CRP, NAD+, omega-3 index)',
+      'Red flags, variants, and personal results template',
+    ],
+    mdxSlug: 'systems-longevity-stack',
   },
 
   // ── Lifestyle ──────────────────────────────────────────────────────────────
