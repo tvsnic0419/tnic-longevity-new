@@ -10,6 +10,7 @@ import {
   OctagonX,
   ListTree,
   BookMarked,
+  Scale,
 } from 'lucide-react';
 import type { CitationType, EvidenceTier } from '@/lib/types';
 import type { HallmarkVisualType } from '@/lib/hallmark-visuals';
@@ -459,6 +460,25 @@ function renderDirective(
           className="text-sm text-foreground/80 leading-relaxed"
           dangerouslySetInnerHTML={{ __html: renderInline(body, linkedTerms) }}
         />
+      </div>
+    );
+  }
+
+  if (type === 'limitations') {
+    // Evidence limitations / open questions — distinct from safety warnings.
+    // Scholarly caution tone (cyan/neutral), not danger (rose) or caution (amber).
+    return (
+      <div
+        key={key}
+        className="my-6 rounded-xl border border-accent-cyan/25 bg-muted/25 p-5"
+      >
+        <div className="mb-3 flex items-center gap-2">
+          <Scale className="h-4 w-4 text-accent-cyan" aria-hidden="true" />
+          <p className="font-mono text-[10px] uppercase tracking-wider text-accent-cyan">
+            {attrs.title ?? 'Evidence limitations & open questions'}
+          </p>
+        </div>
+        {renderMarkdownBlock(body, key, linkedTerms)}
       </div>
     );
   }

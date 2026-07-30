@@ -365,14 +365,15 @@ const curatedCitations: SourceCitation[] = [
     summary: 'Resveratrol activated SIRT1/AMPK and improved metabolic markers in obese men.',
   },
   {
-    id: 'c-fisetin-2020',
-    title: 'Fisetin reduces senescent cells in older adults',
-    authors: 'Justice JN et al.',
+    id: 'c-fisetin-2018',
+    title: 'Fisetin is a senotherapeutic that extends health and lifespan',
+    authors: 'Yousefzadeh MJ et al.',
     journal: 'EBioMedicine',
-    year: 2020,
+    year: 2018,
     pmid: '30279143',
-    type: 'clinical',
-    summary: 'Intermittent fisetin dosing reduced senescent cell markers in older adults.',
+    type: 'preclinical',
+    summary:
+      'Fisetin cleared senescent cells and extended health- and lifespan in aged mice — the most potent senolytic flavonoid tested. Human outcome data are not yet published; Phase 2 trials in older adults are underway.',
   },
 ];
 
