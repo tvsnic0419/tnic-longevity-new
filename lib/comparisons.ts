@@ -783,13 +783,13 @@ export const evidenceComparisons: EvidenceComparison[] = [
   {
     slug: 'fisetin-vs-quercetin',
     title: 'Fisetin vs Quercetin',
-    subtitle: 'Two flavonoid senolytics — Mayo Clinic pilot vs Dasatinib adjunct',
+    subtitle: 'Two flavonoid senolytics — fisetin (human trials ongoing) vs the D+Q adjunct',
     labelA: 'Fisetin',
     labelB: 'Quercetin',
     category: 'compound',
     evidenceTier: 'B',
     summary:
-      'Fisetin and quercetin are both flavonoids studied for senolytic activity — the ability to selectively eliminate senescent "zombie" cells that accumulate with age and drive inflammaging. They share the BCL-2/BCL-XL inhibition pathway but differ dramatically in their human evidence, dosing strategy, and solo OTC viability. Fisetin has a standalone Mayo Clinic phase 1 pilot; quercetin is most studied in combination with the prescription drug dasatinib (D+Q protocol).',
+      'Fisetin and quercetin are both flavonoids studied for senolytic activity — the ability to selectively eliminate senescent "zombie" cells that accumulate with age and drive inflammaging. They share the BCL-2/BCL-XL inhibition pathway but differ dramatically in their human evidence, dosing strategy, and solo OTC viability. Fisetin has standalone human trials underway (Mayo Clinic AFFIRM, NCT03430037) but no published outcome data yet; quercetin is most studied in combination with the prescription drug dasatinib (D+Q protocol).',
     verdict:
       'Fisetin is the stronger OTC-only senolytic choice: the only flavonoid with a standalone Mayo Clinic clinical signal. Quercetin belongs in a D+Q protocol (physician supervised) — solo OTC quercetin has weak senolytic evidence. Do not replace dasatinib with quercetin for serious senolytic intent.',
     rows: [
