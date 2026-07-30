@@ -11,7 +11,7 @@ import {
   ListTree,
   BookMarked,
 } from 'lucide-react';
-import type { EvidenceTier } from '@/lib/types';
+import type { CitationType, EvidenceTier } from '@/lib/types';
 import type { HallmarkVisualType } from '@/lib/hallmark-visuals';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { HallmarkIcon } from '@/components/library/HallmarkIcon';
@@ -21,7 +21,7 @@ import {
   LifestyleDecisionTree,
   parseDecisionNodes,
 } from '@/components/library/LifestyleDecisionTree';
-import { citationRegistry } from '@/lib/trust';
+import { citationRegistry, citationTypeLabels, translationalLabel } from '@/lib/trust';
 import { glossary } from '@/lib/data';
 
 const PMID_PATTERN = /\bPMID:?\s?(\d{7,8})\b/g;
@@ -32,6 +32,32 @@ const PMID_CLASS =
 
 function pubmedUrl(pmid: string): string {
   return `https://pubmed.ncbi.nlm.nih.gov/${pmid}/`;
+}
+
+/** PMID → citation, so inline PMIDs and the reference list can show provenance. */
+const citationByPmid = new Map(citationRegistry.map((c) => [c.pmid, c]));
+
+/** Escape a string for safe use inside an HTML double-quoted attribute. */
+function escapeAttr(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+/** Literal Tailwind color classes for a citation-type chip — kept literal so the
+ * build-time scanner emits them. Human = emerald, preclinical = amber, else cyan. */
+function citationTypeColorClass(type: CitationType): string {
+  switch (type) {
+    case 'clinical':
+    case 'meta-analysis':
+      return 'bg-accent-emerald/15 text-accent-emerald';
+    case 'preclinical':
+      return 'bg-accent-amber/15 text-accent-amber';
+    default:
+      return 'bg-accent-cyan/15 text-accent-cyan';
+  }
 }
 
 function escapeHtml(text: string): string {
@@ -97,11 +123,20 @@ function renderInline(text: string, linkedTerms: Set<string>): string {
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
     .replace(/`(.+?)`/g, '<code class="text-accent-cyan bg-muted/50 px-1 rounded text-xs">$1</code>');
 
-  out = out.replace(PMID_PATTERN, (_m, id: string) =>
-    stash(
-      `<a href="${pubmedUrl(id)}" target="_blank" rel="noopener noreferrer" class="${PMID_CLASS}">PMID ${id}</a>`,
-    ),
-  );
+  out = out.replace(PMID_PATTERN, (_m, id: string) => {
+    const cite = citationByPmid.get(id);
+    const link = `<a href="${pubmedUrl(id)}" target="_blank" rel="noopener noreferrer" class="${PMID_CLASS}"`;
+    // Only registry-backed PMIDs get a provenance tag — never guess a study type.
+    if (!cite) return stash(`${link}>PMID ${id}</a>`);
+    const tip = escapeAttr(
+      `${citationTypeLabels[cite.type] ?? 'Study'}${cite.summary ? ` — ${cite.summary}` : ''}`,
+    );
+    const tag = `ml-1 align-middle rounded px-1 py-0.5 text-[10px] font-medium ${citationTypeColorClass(cite.type)}`;
+    return stash(
+      `${link} title="${tip}">PMID ${id}</a>` +
+        `<span class="${tag}" title="${tip}">${translationalLabel(cite.type)}</span>`,
+    );
+  });
 
   out = linkGlossaryTerms(out, linkedTerms);
 
@@ -171,8 +206,6 @@ function extractPmids(content: string): string[] {
   }
   return ordered;
 }
-
-const citationByPmid = new Map(citationRegistry.map((c) => [c.pmid, c]));
 
 const WORDS_PER_MINUTE = 200;
 
@@ -255,6 +288,17 @@ function ReferencesSection({ pmids }: { pmids: string[] }) {
               >
                 PMID {pmid}
               </a>
+              {cite ? (
+                <span
+                  className={`ml-2 inline-block rounded px-1.5 py-0.5 align-middle text-[10px] font-medium ${citationTypeColorClass(cite.type)}`}
+                  title={citationTypeLabels[cite.type]}
+                >
+                  {translationalLabel(cite.type)}
+                </span>
+              ) : null}
+              {cite?.summary ? (
+                <p className="mt-1 text-xs text-muted-foreground/80">{cite.summary}</p>
+              ) : null}
             </li>
           );
         })}

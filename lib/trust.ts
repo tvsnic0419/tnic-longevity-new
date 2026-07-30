@@ -1,4 +1,5 @@
 import type {
+  CitationType,
   DisclaimerBlock,
   EvidenceLevel,
   EvidenceTier,
@@ -101,6 +102,24 @@ export const citationTypeLabels = {
   guideline: 'Guideline',
   'meta-analysis': 'Meta-Analysis',
 } as const;
+
+/**
+ * Translational status shown beside a citation — the honest "who was actually
+ * studied" signal. This operationalizes the "No Citation Laundering" principle:
+ * preclinical (animal / in-vitro) evidence is NEVER labelled as human. Unknown
+ * types fall back to the conservative "Preclinical" — we never over-claim.
+ */
+export const translationalLabels: Record<CitationType, string> = {
+  clinical: 'Human',
+  'meta-analysis': 'Human (meta-analysis)',
+  review: 'Review',
+  guideline: 'Guideline',
+  preclinical: 'Preclinical',
+};
+
+export function translationalLabel(type: CitationType): string {
+  return translationalLabels[type] ?? 'Preclinical';
+}
 
 /** How TNiC handles source citations */
 export const citationFramework = {
