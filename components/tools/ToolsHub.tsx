@@ -15,6 +15,7 @@ import {
   FlaskConical,
   TrendingUp,
   Calculator,
+  Cpu,
   Network,
   BarChart3,
   Package,
@@ -149,6 +150,31 @@ export function ToolsHub() {
               </div>
               <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-amber shrink-0">
                 Open ranking <ArrowRight className="w-4 h-4" />
+              </span>
+            </div>
+          </Link>
+        </GlassPanel>
+
+        <GlassPanel depth="mid" className="mb-8 rounded-2xl">
+          <Link
+            href="/compound-engine"
+            className="focus-ring group block border border-accent-cyan/25 bg-gradient-to-br from-accent-cyan/8 to-transparent rounded-2xl p-5 md:p-6 hover:border-accent-cyan/40 transition"
+          >
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="flex items-start gap-3 flex-1">
+                <div className="icon-badge-cyan w-10 h-10 rounded-xl flex items-center justify-center shrink-0">
+                  <Cpu className="w-5 h-5 text-accent-cyan" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-label text-accent-cyan mb-1">Featured tool</p>
+                  <h2 className="font-bold text-lg group-hover:text-accent-cyan transition">Compound Intelligence Engine</h2>
+                  <p className="text-sm text-muted-foreground mt-1 max-w-xl">
+                    Score any compound on evidence, effect, breadth, bioavailability and safety — then resolve stack synergy, interaction cautions, and coverage across all 12 hallmarks of aging.
+                  </p>
+                </div>
+              </div>
+              <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-cyan shrink-0">
+                Open engine <ArrowRight className="w-4 h-4" />
               </span>
             </div>
           </Link>

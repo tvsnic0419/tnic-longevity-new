@@ -17,6 +17,16 @@ import type { ToolId } from './registry';
  * the corresponding entry here is updated.
  */
 
+/**
+ * Top-level route slugs whose display title should be stated rather than
+ * inferred. `buildRouteBreadcrumbs` falls back to title-casing the slug, which
+ * silently produces the wrong label for any route whose name isn't just its
+ * words capitalized — so anything added here is authoritative over that guess.
+ */
+export const routeTitles: Record<string, string> = {
+  'compound-engine': 'Compound Engine',
+};
+
 export const comparisonTitles: Record<string, string> = {
   'nmn-vs-nr': 'NMN vs NR',
   'glynac-vs-liposomal-glutathione': 'GlyNAC vs Liposomal Glutathione',

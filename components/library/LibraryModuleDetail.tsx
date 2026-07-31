@@ -44,12 +44,19 @@ export function LibraryModuleDetail({
   comparisons = [],
   guide,
   relatedCompounds = [],
+  engineHref,
 }: {
   module: LibraryModule;
   mdxBody: string | null;
   comparisons?: ComparisonLink[];
   guide?: GuideLink;
   relatedCompounds?: RelatedCompoundLink[];
+  /**
+   * Deep link into the Compound Intelligence Engine pre-loaded with this
+   * compound, or undefined when the engine hasn't curated it. Resolved on the
+   * server so the engine's scoring dataset never reaches this client bundle.
+   */
+  engineHref?: string;
 }) {
   const categoryMeta = libraryCategoryMeta[module.category];
   const relatedHallmarks = hallmarkLibrary.filter((h) => module.relatedHallmarkIds.includes(h.id));
@@ -319,6 +326,16 @@ export function LibraryModuleDetail({
               >
                 Build your stack
               </Link>
+              {engineHref && (
+                <GlassPanel depth="mid" className="glass-hover rounded-lg">
+                  <Link
+                    href={engineHref}
+                    className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-foreground/80"
+                  >
+                    See how this scores
+                  </Link>
+                </GlassPanel>
+              )}
               <GlassPanel depth="mid" className="glass-hover rounded-lg">
                 <Link
                   href="/labs"

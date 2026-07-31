@@ -17,24 +17,51 @@
 
 import { compoundModules, getModulePath } from './library-modules';
 
-/* ── Palette (aligned to the site's dark-theme accent tokens) ────────────── */
-// Concrete hexes (not CSS vars) so SVG presentation attributes and Recharts
-// props resolve correctly. Values mirror the `--accent-*` / text tokens in
-// app/globals.css.
+/* ── Palette ─────────────────────────────────────────────────────────────
+   Every entry is a *reference* to a scoped `--sie-*` custom property, which
+   `CompoundIntelligenceEngine` aliases to the site's global design tokens in
+   `app/globals.css` (`--accent-*`, `--color-text-*`, `--color-bg-*`). Nothing
+   here is a literal colour, so the engine follows the light/dark toggle like
+   every other surface instead of being locked to one theme.
+
+   Two families, deliberately:
+   • the base accents (`cyan`, `jade`, `indigo`, `gold`, `rose`) are the
+     *graphic* colours — SVG strokes and fills, chart series, glow;
+   • the `…Ink` variants are the *text-safe* colours. Raw accents dip below
+     WCAG AA as small text on the light theme's near-white panels (light
+     `--accent-amber` measures 3.19:1 on white), so the ink variants blend
+     each accent toward the theme's primary ink, which darkens it on light and
+     brightens it on dark. See the engine's token block for the mix ratio.
+
+   Text tiers stop at `muted`: `--color-text-muted` is the faintest value that
+   clears AA in *both* themes (7.3:1 dark, 4.8:1 light). `faint` is deliberately
+   non-text — dashed outlines, empty bar tracks, tick marks. */
 export const PALETTE = {
-  ink: '#020811',
-  panel: '#080f1c',
-  panel2: '#0d1526',
-  line: '#212b3c',
-  text: '#fafafa',
-  muted: '#a1a1aa',
-  dim: '#6b7280',
-  jade: '#34d399', // --accent-emerald
-  amber: '#fbbf24', // --accent-amber
-  violet: '#c084fc', // --accent-violet
-  rose: '#f472b6', // --accent-rose
-  cyan: '#00e0ff', // --accent-cyan
+  ink: 'var(--sie-ink)',
+  panel: 'var(--sie-panel)',
+  panel2: 'var(--sie-panel-2)',
+  line: 'var(--sie-line)',
+  lineStrong: 'var(--sie-line-strong)',
+  text: 'var(--sie-text)',
+  body: 'var(--sie-body)',
+  muted: 'var(--sie-muted)',
+  /** Decoration only — never text. See note above. */
+  faint: 'var(--sie-faint)',
+  jade: 'var(--sie-jade)',
+  jadeInk: 'var(--sie-jade-ink)',
+  gold: 'var(--sie-gold)',
+  goldInk: 'var(--sie-gold-ink)',
+  indigo: 'var(--sie-indigo)',
+  indigoInk: 'var(--sie-indigo-ink)',
+  rose: 'var(--sie-rose)',
+  roseInk: 'var(--sie-rose-ink)',
+  cyan: 'var(--sie-cyan)',
+  cyanInk: 'var(--sie-cyan-ink)',
 } as const;
+
+/** `color-mix` alpha, so tokens can be tinted without reintroducing hex+alpha. */
+export const alpha = (color: string, pct: number) =>
+  `color-mix(in srgb, ${color} ${pct}%, transparent)`;
 
 /* ── 12 Hallmarks of Aging (López-Otín et al., 2023) ─────────────────────── */
 export type HallmarkId =
@@ -124,9 +151,9 @@ const RAW_COMPOUND_DB: Omit<Compound, 'libraryHref'>[] = [
   { id: 'pqq', name: 'PQQ', full: 'Pyrroloquinoline quinone', aliases: [], cls: 'Mito cofactor', tier: 'C', rct: true, studies: 300, effect: 45, bioavail: 60, safety: 84, pathways: ['pgc1a'], hallmarks: ['mito'], dose: '10–20 mg', note: 'Signals mitochondrial biogenesis.', flags: ['Small human evidence base'] },
   { id: 'taurine', name: 'Taurine', full: 'Taurine', aliases: [], cls: 'Amino sulfonic acid', tier: 'B', rct: true, studies: 1000, effect: 52, bioavail: 80, safety: 90, pathways: ['osmo', 'etc'], hallmarks: ['mito', 'inflammation', 'intercellular'], dose: '1–3 g', note: '2023 Science: taurine declines with age; supplementation extended lifespan in mice.', flags: ['Human longevity RCT still lacking'] },
   { id: 'urolithina', name: 'Urolithin A', full: 'Urolithin A', aliases: ['urolithin'], cls: 'Mitophagy activator', tier: 'B', rct: true, studies: 150, effect: 58, bioavail: 60, safety: 88, pathways: ['mitophagy', 'autophagy'], hallmarks: ['mito', 'autophagy'], dose: '500–1000 mg', note: 'Induces mitophagy; positive human muscle trials; only ~40% produce it endogenously.', flags: ['Direct supplementation beats relying on precursors'] },
-  { id: 'caakg', name: 'Ca-AKG', full: 'Calcium Alpha-Ketoglutarate', aliases: ['akg', 'alpha ketoglutarate', 'ca akg'], cls: 'TCA metabolite', tier: 'B', rct: true, studies: 200, effect: 52, bioavail: 65, safety: 84, pathways: ['akg', 'mtor'], hallmarks: ['epigenetic', 'nutrient', 'inflammation'], dose: '1000 mg', note: 'Co-substrate for Fe²⁺/α-KG-dependent TET demethylases; retrospective DNAm-clock signal; RCT pending.', flags: ['Human data early / retrospective'] },
-  { id: 'vitd3', name: 'Vitamin D3', full: 'Cholecalciferol', aliases: ['vitamin d', 'd3', 'cholecalciferol'], cls: 'Hormone / vitamin', tier: 'A', rct: true, studies: 10000, effect: 55, bioavail: 70, safety: 85, pathways: ['immune'], hallmarks: ['inflammation', 'intercellular', 'genomic'], dose: '1000–4000 IU', note: 'Correct deficiency; broad immune and bone roles.', flags: ['Test levels; fat-soluble'] },
-  { id: 'vitk2', name: 'Vitamin K2', full: 'Menaquinone (MK-7)', aliases: ['vitamin k', 'mk-7', 'menaquinone', 'k2'], cls: 'Vitamin', tier: 'B', rct: true, studies: 600, effect: 52, bioavail: 70, safety: 86, pathways: ['ecm'], hallmarks: ['intercellular'], dose: '90–200 mcg', note: 'Activates MGP/osteocalcin; directs calcium to bone.', flags: [] },
+  { id: 'caakg', name: 'Ca-AKG', full: 'Calcium Alpha-Ketoglutarate', aliases: ['akg', 'alpha ketoglutarate', 'ca akg', 'cakg'], cls: 'TCA metabolite', tier: 'B', rct: true, studies: 200, effect: 52, bioavail: 65, safety: 84, pathways: ['akg', 'mtor'], hallmarks: ['epigenetic', 'nutrient', 'inflammation'], dose: '1000 mg', note: 'Co-substrate for Fe²⁺/α-KG-dependent TET demethylases; retrospective DNAm-clock signal; RCT pending.', flags: ['Human data early / retrospective'] },
+  { id: 'vitd3', name: 'Vitamin D3', full: 'Cholecalciferol', aliases: ['vitamin d', 'd3', 'cholecalciferol', 'vitamin-d3'], cls: 'Hormone / vitamin', tier: 'A', rct: true, studies: 10000, effect: 55, bioavail: 70, safety: 85, pathways: ['immune'], hallmarks: ['inflammation', 'intercellular', 'genomic'], dose: '1000–4000 IU', note: 'Correct deficiency; broad immune and bone roles.', flags: ['Test levels; fat-soluble'] },
+  { id: 'vitk2', name: 'Vitamin K2', full: 'Menaquinone (MK-7)', aliases: ['vitamin k', 'mk-7', 'menaquinone', 'k2', 'vitamin-k2'], cls: 'Vitamin', tier: 'B', rct: true, studies: 600, effect: 52, bioavail: 70, safety: 86, pathways: ['ecm'], hallmarks: ['intercellular'], dose: '90–200 mcg', note: 'Activates MGP/osteocalcin; directs calcium to bone.', flags: [] },
   { id: 'magnesium', name: 'Magnesium', full: 'Magnesium (glycinate/malate)', aliases: ['mag', 'magnesium glycinate'], cls: 'Mineral', tier: 'A', rct: true, studies: 4000, effect: 55, bioavail: 60, safety: 88, pathways: ['ampk'], hallmarks: ['genomic', 'mito', 'inflammation'], dose: '200–400 mg elem.', note: 'Cofactor for 300+ enzymes including DNA-repair machinery.', flags: ['Oxide form poorly absorbed'] },
   { id: 'creatine', name: 'Creatine', full: 'Creatine monohydrate', aliases: ['creatine monohydrate'], cls: 'Ergogenic', tier: 'A', rct: true, studies: 6000, effect: 60, bioavail: 90, safety: 90, pathways: ['etc'], hallmarks: ['mito', 'intercellular'], dose: '3–5 g', note: 'Phosphocreatine energy buffer; muscle + cognition; very well evidenced.', flags: [] },
   { id: 'curcumin', name: 'Curcumin', full: 'Curcumin', aliases: ['turmeric'], cls: 'Polyphenol', tier: 'B', rct: true, studies: 15000, effect: 50, bioavail: 25, safety: 84, pathways: ['nfkb', 'nrf2'], hallmarks: ['inflammation', 'senescence'], dose: '500–1000 mg (enhanced)', note: 'Anti-inflammatory; requires piperine or phytosome delivery.', flags: ['Very low bioavailability unformulated'] },
@@ -148,6 +175,46 @@ export const COMPOUND_DB: Compound[] = RAW_COMPOUND_DB.map((c) => ({
   libraryHref: resolveLibraryHref(c.id),
 }));
 export const CDB: Record<string, Compound> = Object.fromEntries(COMPOUND_DB.map((c) => [c.id, c]));
+
+/* Lookup index for hand-off links. `/stacks` and the library deep-dives address
+   compounds by *their* ids (`lib/data.ts` / library slugs), which mostly but not
+   always match the engine's — `cakg` vs `caakg`, `vitamin-d3` vs `vitd3`. The
+   diverging spellings are carried as aliases, so one case-insensitive index over
+   id + alias + name resolves every namespace. */
+const COMPOUND_INDEX: Record<string, Compound> = (() => {
+  const index: Record<string, Compound> = {};
+  for (const c of COMPOUND_DB) {
+    for (const key of [c.id, c.name, ...c.aliases]) {
+      const k = key.trim().toLowerCase();
+      if (k && !(k in index)) index[k] = c;
+    }
+  }
+  return index;
+})();
+
+/** Resolve one id/alias/name to a curated compound. Unknown tokens yield null. */
+export function resolveCompound(token: string): Compound | null {
+  return COMPOUND_INDEX[token.trim().toLowerCase()] ?? null;
+}
+
+/**
+ * Parse a `?stack=` hand-off — a comma-separated list of compound tokens from
+ * any of the site's id namespaces. Unknown and duplicate tokens are dropped so a
+ * stale or partially-overlapping link still opens with whatever it can resolve.
+ */
+export function parseEngineStackParam(param: string | null | undefined): Compound[] {
+  if (!param) return [];
+  const seen = new Set<string>();
+  const out: Compound[] = [];
+  for (const token of param.split(',')) {
+    const c = resolveCompound(token);
+    if (c && !seen.has(c.id)) {
+      seen.add(c.id);
+      out.push(c);
+    }
+  }
+  return out;
+}
 
 /* ── Interaction knowledge ───────────────────────────────────────────────── */
 export type SynergyPair = [string, string, string, number];
@@ -186,11 +253,15 @@ export const REDUNDANCY_GROUPS: RedundancyGroup[] = [
 ];
 export const ANTIOXIDANT_SET = ['nac', 'rala', 'astax', 'coq10', 'curcumin', 'egcg'];
 
-export const TIER_META: Record<Tier, { label: string; color: string }> = {
-  A: { label: 'Human RCT · strong', color: PALETTE.jade },
-  B: { label: 'Human trials · moderate', color: PALETTE.cyan },
-  C: { label: 'Preclinical + mechanistic', color: PALETTE.amber },
-  D: { label: 'Theoretical / in-vitro', color: PALETTE.muted },
+/* Tier colour language, shared with the homepage Descent network and the
+   compound deep-dives: emerald = human-evidence strong, cyan = human moderate,
+   gold = preclinical, neutral ink = theoretical. `color` paints graphics,
+   `ink` paints text on top of them. */
+export const TIER_META: Record<Tier, { label: string; color: string; ink: string }> = {
+  A: { label: 'Human RCT · strong', color: PALETTE.jade, ink: PALETTE.jadeInk },
+  B: { label: 'Human trials · moderate', color: PALETTE.cyan, ink: PALETTE.cyanInk },
+  C: { label: 'Preclinical + mechanistic', color: PALETTE.gold, ink: PALETTE.goldInk },
+  D: { label: 'Theoretical / in-vitro', color: PALETTE.muted, ink: PALETTE.muted },
 };
 
 export type Weights = { evidence: number; effect: number; breadth: number; bioavail: number; safety: number };
@@ -243,8 +314,14 @@ export const overallOf = (subs: Subscores, w: Weights): number => {
 };
 
 export const tierColor = (t: Tier) => (TIER_META[t] || TIER_META.D).color;
+export const tierInk = (t: Tier) => (TIER_META[t] || TIER_META.D).ink;
+
+/** Graphic colour for a 0–100 score — arcs, bars, glow. */
 export const scoreColor = (v: number) =>
-  v >= 78 ? PALETTE.jade : v >= 60 ? PALETTE.cyan : v >= 42 ? PALETTE.amber : PALETTE.rose;
+  v >= 78 ? PALETTE.jade : v >= 60 ? PALETTE.cyan : v >= 42 ? PALETTE.gold : PALETTE.rose;
+/** Text-safe twin of `scoreColor`, for the score numerals themselves. */
+export const scoreInk = (v: number) =>
+  v >= 78 ? PALETTE.jadeInk : v >= 60 ? PALETTE.cyanInk : v >= 42 ? PALETTE.goldInk : PALETTE.roseInk;
 
 export const pubmedUrl = (name: string) =>
   `https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(name + ' (aging OR longevity OR healthspan)')}`;
@@ -254,7 +331,15 @@ export interface ConvergentPathway { p: PathwayId; count: number; members: strin
 export interface Synergy { a: string; b: string; rationale: string; w: number }
 export interface Caution { kind: string; a: string; b: string; rationale: string; penalty: number }
 export interface Redundancy { label: string; members: string[]; rationale: string; penalty: number }
-export interface BreakdownRow { label: string; value: number; kind: 'base' | 'pos' | 'neg' }
+/**
+ * `tone` names the accent each row is drawn in, so the component never has to
+ * string-match labels to pick a colour. The vocabulary is the homepage Descent
+ * network's: cyan / indigo / gold carry synergy, rose and gold carry caution —
+ * positive and negative bars grow in opposite directions, so gold reads
+ * unambiguously in either role.
+ */
+export type BreakdownTone = 'neutral' | 'cyan' | 'indigo' | 'gold' | 'rose';
+export interface BreakdownRow { label: string; value: number; kind: 'base' | 'pos' | 'neg'; tone: BreakdownTone }
 
 export interface StackAnalysis {
   scored: ScoredItem[];
@@ -339,13 +424,13 @@ export function analyzeStack(staged: StagedItem[], weights: Weights): StackAnaly
   const gaps = HALLMARKS.filter((h) => hallmarkDepth[h.id] === 0);
 
   const breakdown: BreakdownRow[] = [
-    { label: 'Baseline', value: 50, kind: 'base' },
-    { label: 'Pathway convergence', value: convergenceScore, kind: 'pos' },
-    { label: 'Known synergies', value: complementScore, kind: 'pos' },
-    { label: 'Hallmark coverage', value: coverageScore, kind: 'pos' },
-    { label: 'Redundancy', value: -redPenalty, kind: 'neg' },
-    { label: 'Interaction caution', value: -antPenalty, kind: 'neg' },
-    { label: 'Redox load', value: -antioxidantPenalty, kind: 'neg' },
+    { label: 'Baseline', value: 50, kind: 'base', tone: 'neutral' },
+    { label: 'Pathway convergence', value: convergenceScore, kind: 'pos', tone: 'cyan' },
+    { label: 'Known synergies', value: complementScore, kind: 'pos', tone: 'indigo' },
+    { label: 'Hallmark coverage', value: coverageScore, kind: 'pos', tone: 'gold' },
+    { label: 'Redundancy', value: -redPenalty, kind: 'neg', tone: 'gold' },
+    { label: 'Interaction caution', value: -antPenalty, kind: 'neg', tone: 'rose' },
+    { label: 'Redox load', value: -antioxidantPenalty, kind: 'neg', tone: 'rose' },
   ].filter((b) => b.value !== 0 || b.kind === 'base') as BreakdownRow[];
 
   const synergyScore = items.length < 2 ? null : clamp(

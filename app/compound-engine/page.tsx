@@ -43,16 +43,23 @@ function buildEngineSchemas() {
       path: '/compound-engine',
       evidenceTier: 'B',
     }),
+    // Mirrors the visible ContextBar crumb (`routeTitles` in
+    // lib/breadcrumb-titles.ts) — Google expects the two to agree.
     buildBreadcrumbSchema([
       { name: 'Home', path: '/' },
-      { name: 'Compound Intelligence Engine', path: '/compound-engine' },
+      { name: 'Compound Engine', path: '/compound-engine' },
     ]),
   ];
 }
 
 export default function CompoundEnginePage() {
+  // Same shell as the sibling tool routes (/tools, /stacks, /labs), ContextBar
+  // included: this is a workspace you arrive at *carrying* a stack — usually
+  // straight from the Stack Architect — so the persisted-stack readout and the
+  // breadcrumb are the right context, not the fresh-start framing that
+  // `hideContextBar` exists for.
   return (
-    <SubPageLayout hideContextBar>
+    <SubPageLayout>
       <StructuredData schemas={buildEngineSchemas()} />
       <CompoundIntelligenceEngine />
     </SubPageLayout>
