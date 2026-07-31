@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, Target, BookOpen, BarChart3 } from 'lucide-react';
+import { ArrowRight, Target, BookOpen, BarChart3, Cpu } from 'lucide-react';
 
 interface RecommendedNextStepsProps {
   context?: 'library' | 'quiz' | 'general';
@@ -28,6 +28,13 @@ export const RecommendedNextSteps: React.FC<RecommendedNextStepsProps> = ({
         description: "Set up your Lab Hub baselines",
         href: "/labs",
         label: "Go to Lab Hub"
+      },
+      {
+        icon: Cpu,
+        title: "Score a compound or stack",
+        description: "Rate evidence, effect, breadth, bioavailability and safety — and see hallmark coverage",
+        href: "/compound-engine",
+        label: "Open Compound Engine"
       }
     ],
     quiz: [

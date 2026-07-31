@@ -16,6 +16,7 @@ import { citationRegistry } from './trust';
 const SEGMENTS_WITH_OWN_OG_IMAGE = new Set([
   '/',
   '/brief',
+  '/compound-engine',
   '/elite-8',
   '/faq',
   '/labs',

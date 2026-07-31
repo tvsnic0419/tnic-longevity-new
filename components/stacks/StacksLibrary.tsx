@@ -5,11 +5,11 @@ import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { Layers, Wrench, Table2, BookOpen, ShoppingBag } from 'lucide-react';
+import { Cpu, Layers, Wrench, Table2, BookOpen, ShoppingBag } from 'lucide-react';
 import { eliteStacks } from '@/lib/stacks-library';
 import { stackPresets, type PresetKey } from '@/lib/presets';
 import { usePlatform } from '@/context/PlatformContext';
-import { buildShopStackUrl } from '@/lib/stack-url';
+import { buildEngineStackUrl, buildShopStackUrl } from '@/lib/stack-url';
 import { PageShell } from '@/components/ui/PageShell';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { TabBar } from '@/components/ui/TabBar';
@@ -75,6 +75,15 @@ export function StacksLibrary() {
         >
           <ShoppingBag className="w-4 h-4" />
           Protocol Shop — verify your stack
+        </Link>
+        <Link
+          href={buildEngineStackUrl(selected)}
+          className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 rounded-xl glass glass-hover text-sm font-semibold text-accent-cyan"
+        >
+          <Cpu className="w-4 h-4" />
+          {selected.length > 0
+            ? 'Score this stack in the Compound Engine'
+            : 'Score a stack in the Compound Engine'}
         </Link>
       </div>
 

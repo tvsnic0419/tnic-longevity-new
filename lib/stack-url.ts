@@ -34,6 +34,29 @@ export function buildShopStackUrl(ids: string[]): string {
   return `/shop?stack=${ids.join(',')}`;
 }
 
+/**
+ * Query key for the Compound Intelligence Engine hand-off. Deliberately *not*
+ * `stack`: `PlatformContext` reads `?stack=` on every route and seeds the OS
+ * stack from it, so reusing the name would make an engine link silently replace
+ * the visitor's saved stack — a deep-dive's "see how this scores" link carries
+ * one compound, which would wipe out the rest. A separate key keeps the engine's
+ * staging area and the OS stack independent.
+ */
+export const ENGINE_STACK_PARAM = 'compounds';
+
+/**
+ * Hand a set of compounds to the Compound Intelligence Engine. The engine keys
+ * compounds by its own ids but carries this module's ids as aliases, so the same
+ * comma-separated shape works across both namespaces — see
+ * `parseEngineStackParam` in lib/compound-engine-data.ts. Compounds the engine
+ * hasn't curated are simply dropped on arrival.
+ */
+export function buildEngineStackUrl(ids: string[]): string {
+  return ids.length > 0
+    ? `/compound-engine?${ENGINE_STACK_PARAM}=${ids.join(',')}`
+    : '/compound-engine';
+}
+
 export function buildShopPresetUrl(key: PresetKey): string {
   return `/shop?stack=${key}`;
 }

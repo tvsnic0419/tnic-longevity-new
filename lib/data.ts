@@ -24,6 +24,10 @@ export const navLinks = [
   { href: '/stacks', label: 'Stacks', mod: 'MOD-ARC-04' },
   { href: '/labs', label: 'Labs', mod: 'MOD-LAB-11' },
   { href: '/tools', label: 'Tools', mod: 'MOD-TOL-14' },
+  // Single-noun label to match the rest of the bar and keep the row from
+  // wrapping at lg — the full "Compound Engine" name is used in the footer,
+  // the breadcrumb, and every cross-link card, where there is room for it.
+  { href: '/compound-engine', label: 'Engine', mod: 'MOD-ENG-18' },
 ];
 
 export const communityPulse = [

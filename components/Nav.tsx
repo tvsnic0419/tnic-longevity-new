@@ -78,6 +78,16 @@ export function Nav() {
   const isInternal = (href: string) => href.startsWith('/');
   const isActive = (href: string) => href === pathname || (href !== '/' && pathname.startsWith(`${href}/`));
 
+  // The current route already carries aria-current="page"; these give that state
+  // a matching visual token so it is not announced-only. Keyed off the attribute
+  // rather than a second isActive() branch, so the two can never diverge.
+  const navLinkClass =
+    'focus-ring interactive whitespace-nowrap px-3.5 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent-cyan/10 transition-all ' +
+    'aria-[current=page]:text-foreground aria-[current=page]:bg-accent-cyan/10';
+  const mobileNavLinkClass =
+    'focus-ring interactive flex justify-between items-center text-foreground hover:text-accent-cyan py-3.5 min-h-[var(--space-touch)] text-base font-medium border-b border-border/50 last:border-0 ' +
+    'aria-[current=page]:text-accent-cyan';
+
   return (
     <nav className="fixed top-0 w-full z-50" aria-label="Main navigation">
       <div
@@ -103,7 +113,7 @@ export function Nav() {
                 key={link.href}
                 href={link.href}
                 aria-current={isActive(link.href) ? 'page' : undefined}
-                className="focus-ring interactive px-3.5 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent-cyan/10 transition-all"
+                className={navLinkClass}
               >
                 {link.label}
               </Link>
@@ -111,7 +121,7 @@ export function Nav() {
               <a
                 key={link.href}
                 href={link.href}
-                className="focus-ring interactive px-3.5 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent-cyan/10 transition-all"
+                className={navLinkClass}
               >
                 {link.label}
               </a>
@@ -188,7 +198,7 @@ export function Nav() {
                     key={link.href}
                     href={link.href}
                     aria-current={isActive(link.href) ? 'page' : undefined}
-                    className="focus-ring interactive flex justify-between items-center text-foreground hover:text-accent-cyan py-3.5 min-h-[var(--space-touch)] text-base font-medium border-b border-border/50 last:border-0"
+                    className={mobileNavLinkClass}
                   >
                     {link.label}
                   </Link>
@@ -196,7 +206,7 @@ export function Nav() {
                   <a
                     key={link.href}
                     href={link.href}
-                    className="focus-ring interactive flex justify-between items-center text-foreground hover:text-accent-cyan py-3.5 min-h-[var(--space-touch)] text-base font-medium border-b border-border/50 last:border-0"
+                    className={mobileNavLinkClass}
                   >
                     {link.label}
                   </a>

@@ -7,6 +7,7 @@ import {
   hallmarkTitles,
   libraryModuleTitles,
   libraryCategoryLabels,
+  routeTitles,
   toolLabels,
   peptideTitles,
 } from './breadcrumb-titles';
@@ -74,6 +75,9 @@ const SEGMENT_LABELS: Record<string, string> = {
   journey: 'Journey',
   updates: 'Updates',
   'delivery-systems': 'Delivery Systems',
+  // Routes outside the original hub set carry their titles in
+  // breadcrumb-titles.ts; spread last so those stay authoritative.
+  ...routeTitles,
 };
 
 function titleCase(slug: string): string {

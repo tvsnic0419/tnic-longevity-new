@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Logo } from '@/components/ui/Logo';
 import {
+  Cpu,
   Shield,
   BookOpen,
   Layers,
@@ -27,6 +28,7 @@ const hubLinks = [
   { href: '/learn', label: 'Learn Hub', icon: GraduationCap },
   { href: '/stacks', label: 'Stacks & Protocols', icon: Layers },
   { href: '/labs', label: 'Lab Analysis Hub', icon: FlaskConical },
+  { href: '/compound-engine', label: 'Compound Engine', icon: Cpu },
 ];
 
 const resourceLinks = [

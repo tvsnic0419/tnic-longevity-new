@@ -20,6 +20,8 @@ import {
   getCompoundCitations,
 } from '@/lib/seo';
 import { getComparisonsForCompound } from '@/lib/comparison-relations';
+import { resolveCompound as resolveEngineCompound } from '@/lib/compound-engine-data';
+import { buildEngineStackUrl } from '@/lib/stack-url';
 import { getGuideForCompound, getRelatedCompounds } from '@/lib/library-graph';
 import { seoRoutes } from '@/lib/seo-routes';
 
@@ -65,6 +67,15 @@ export default async function LibraryModulePage({
   const guide = mod.category === 'compounds' ? getGuideForCompound(mod.slug) : undefined;
   const relatedCompounds =
     mod.category === 'compounds' ? getRelatedCompounds(mod.slug) : [];
+
+  // "See how this scores" only appears when the engine has actually curated this
+  // compound. Resolved here rather than in the client component so the engine's
+  // scoring dataset stays out of every deep-dive's bundle.
+  const engineCompound =
+    mod.category === 'compounds' ? resolveEngineCompound(mod.slug) : null;
+  const engineHref = engineCompound
+    ? buildEngineStackUrl([engineCompound.id])
+    : undefined;
 
   // Cinematic overture for compound pages — real fields joined from lib/data.ts.
   const heroCompound =
@@ -129,6 +140,7 @@ export default async function LibraryModulePage({
         comparisons={comparisons}
         guide={guide}
         relatedCompounds={relatedCompounds}
+        engineHref={engineHref}
       />
     </>
   );
