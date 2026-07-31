@@ -14,9 +14,19 @@ interface SubPageLayoutProps {
    * every time. Pass true there to render just Nav + content + Footer.
    */
   hideContextBar?: boolean;
+  /**
+   * Keep the ContextBar (breadcrumb, next action) but drop its persisted-stack
+   * readout. For pages that render their own stack analysis and would otherwise
+   * show two coverage numbers side by side — see `ContextBarProps`.
+   */
+  hideStackReadout?: boolean;
 }
 
-export function SubPageLayout({ children, hideContextBar = false }: SubPageLayoutProps) {
+export function SubPageLayout({
+  children,
+  hideContextBar = false,
+  hideStackReadout = false,
+}: SubPageLayoutProps) {
   return (
     <div className="min-h-screen canvas-scrim text-foreground overflow-x-hidden">
       <ScrollProgress />
@@ -24,7 +34,7 @@ export function SubPageLayout({ children, hideContextBar = false }: SubPageLayou
       <div className="pt-14 md:pt-16">
         {!hideContextBar && (
           <aside aria-label="Your saved workspace">
-            <ContextBar />
+            <ContextBar hideStackReadout={hideStackReadout} />
           </aside>
         )}
         <main id="main-content" tabIndex={-1}>

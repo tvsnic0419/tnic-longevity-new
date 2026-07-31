@@ -45,7 +45,18 @@ function getNextAction(input: {
   return { message: 'Command center', href: '/dashboard', label: 'Dashboard' };
 }
 
-export function ContextBar() {
+interface ContextBarProps {
+  /**
+   * Drop the persisted-stack cluster (coverage ring, stack label, Reset,
+   * Export) and keep only the breadcrumb and next action. For pages that carry
+   * their own, more detailed stack readout — the Compound Engine scores the
+   * same compounds against its own curated hallmark dataset, so showing both
+   * puts two different coverage numbers for one stack on the same screen.
+   */
+  hideStackReadout?: boolean;
+}
+
+export function ContextBar({ hideStackReadout = false }: ContextBarProps = {}) {
   const pathname = usePathname() ?? '/';
   const searchParams = useSearchParams();
   const tab = searchParams.get('tab');
@@ -131,7 +142,7 @@ export function ContextBar() {
         )}
 
         <div className="ml-auto flex items-center gap-2 min-w-0">
-          {selected.length > 0 && (
+          {selected.length > 0 && !hideStackReadout && (
             <>
               <HallmarkCoverageRing covered={analysis.hallmarkCount} />
               <span className="hidden md:inline truncate font-medium text-foreground/90 max-w-[200px] lg:max-w-xs">

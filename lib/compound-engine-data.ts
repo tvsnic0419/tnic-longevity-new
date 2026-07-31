@@ -198,9 +198,10 @@ export function resolveCompound(token: string): Compound | null {
 }
 
 /**
- * Parse a `?stack=` hand-off — a comma-separated list of compound tokens from
- * any of the site's id namespaces. Unknown and duplicate tokens are dropped so a
- * stale or partially-overlapping link still opens with whatever it can resolve.
+ * Parse the engine's hand-off param (`ENGINE_STACK_PARAM` in lib/stack-url.ts) —
+ * a comma-separated list of compound tokens from any of the site's id
+ * namespaces. Unknown and duplicate tokens are dropped so a stale or
+ * partially-overlapping link still opens with whatever it can resolve.
  */
 export function parseEngineStackParam(param: string | null | undefined): Compound[] {
   if (!param) return [];

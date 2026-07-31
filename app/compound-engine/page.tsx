@@ -53,13 +53,14 @@ function buildEngineSchemas() {
 }
 
 export default function CompoundEnginePage() {
-  // Same shell as the sibling tool routes (/tools, /stacks, /labs), ContextBar
-  // included: this is a workspace you arrive at *carrying* a stack — usually
-  // straight from the Stack Architect — so the persisted-stack readout and the
-  // breadcrumb are the right context, not the fresh-start framing that
-  // `hideContextBar` exists for.
+  // Same shell as the sibling tool routes (/tools, /stacks, /labs) so the
+  // breadcrumb and next action are here, but without the ContextBar's stack
+  // readout: the engine scores compounds against its own curated hallmark
+  // dataset, which is deliberately not the one `lib/stack-analysis` uses, so
+  // rendering both would put two different coverage numbers for the same stack
+  // on one screen.
   return (
-    <SubPageLayout>
+    <SubPageLayout hideStackReadout>
       <StructuredData schemas={buildEngineSchemas()} />
       <CompoundIntelligenceEngine />
     </SubPageLayout>

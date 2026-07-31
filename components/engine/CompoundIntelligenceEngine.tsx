@@ -38,6 +38,7 @@ import {
   type BreakdownTone, type Compound, type Form, type HallmarkId, type StagedItem,
   type ScoredItem, type Tier, type Weights,
 } from '@/lib/compound-engine-data';
+import { ENGINE_STACK_PARAM } from '@/lib/stack-url';
 
 /* Mono micro-labels never go below 11px — the site-wide floor set by
    `.text-label` in globals.css. SVG text is sized in user units, and every
@@ -410,15 +411,18 @@ export function CompoundIntelligenceEngine() {
   const [showWeights, setShowWeights] = useState(false);
   const prefilled = useRef(false);
 
-  /* `?stack=` hand-off from the Stack Architect. Read from `location` rather
-     than `useSearchParams` on purpose: this page is statically rendered for
-     SEO, and `useSearchParams` would force the whole engine behind a Suspense
-     boundary and out of the prerendered HTML. The stack is a client-only
-     enhancement, so applying it once on mount costs nothing. */
+  /* `?compounds=` hand-off from the Stack Architect and the library deep-dives.
+     Read from `location` rather than `useSearchParams` on purpose: this page is
+     statically rendered for SEO, and `useSearchParams` would force the whole
+     engine behind a Suspense boundary and out of the prerendered HTML. The
+     staged set is a client-only enhancement, so applying it once on mount costs
+     nothing. */
   useEffect(() => {
     if (prefilled.current) return;
     prefilled.current = true;
-    const incoming = parseEngineStackParam(new URLSearchParams(window.location.search).get('stack'));
+    const incoming = parseEngineStackParam(
+      new URLSearchParams(window.location.search).get(ENGINE_STACK_PARAM),
+    );
     if (incoming.length === 0) return;
     const now = Date.now();
     // eslint-disable-next-line react-hooks/set-state-in-effect -- URL is a client-only source; not derivable during render.

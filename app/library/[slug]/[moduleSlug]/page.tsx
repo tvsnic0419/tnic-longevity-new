@@ -21,6 +21,7 @@ import {
 } from '@/lib/seo';
 import { getComparisonsForCompound } from '@/lib/comparison-relations';
 import { resolveCompound as resolveEngineCompound } from '@/lib/compound-engine-data';
+import { buildEngineStackUrl } from '@/lib/stack-url';
 import { getGuideForCompound, getRelatedCompounds } from '@/lib/library-graph';
 import { seoRoutes } from '@/lib/seo-routes';
 
@@ -73,7 +74,7 @@ export default async function LibraryModulePage({
   const engineCompound =
     mod.category === 'compounds' ? resolveEngineCompound(mod.slug) : null;
   const engineHref = engineCompound
-    ? `/compound-engine?stack=${engineCompound.id}`
+    ? buildEngineStackUrl([engineCompound.id])
     : undefined;
 
   // Cinematic overture for compound pages — real fields joined from lib/data.ts.
