@@ -166,6 +166,22 @@ export const seoRoutes = {
       keywords: ['longevity calculator', 'supplement interaction graph', 'healthspan estimator', 'biological age calculator'],
     }),
 
+  compoundEngine: () =>
+    buildPageMetadata({
+      title: 'Compound Intelligence Engine — Mechanistic Stack Scoring',
+      description:
+        'Score longevity compounds and stacks mechanistically: evidence, effect, breadth, bioavailability and safety, plus stack synergy and coverage across the 12 hallmarks of aging. Rule-based and transparent — not generative AI, no account.',
+      path: '/compound-engine',
+      keywords: [
+        'supplement stack scoring',
+        'longevity compound mechanism',
+        'hallmarks of aging coverage',
+        'stack synergy calculator',
+        'NAD methylation synergy',
+        'senolytic redundancy checker',
+      ],
+    }),
+
   elite8: () =>
     buildPageMetadata({
       title: 'Elite 8 Longevity Rankings — Longevity Quotient',
