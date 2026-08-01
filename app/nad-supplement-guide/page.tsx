@@ -3,6 +3,7 @@ import { ArrowRight, FlaskConical, ShieldCheck, Clock, ExternalLink, CheckCircle
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { GuideHeroPanel } from '@/components/guides/GuideHeroPanel';
 import { StructuredData } from '@/components/seo/StructuredData';
+import { LinkedText } from '@/components/ui/LinkedText';
 import { buildPageMetadata } from '@/lib/seo';
 import { buildBreadcrumbSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
@@ -489,7 +490,7 @@ export default function NadSupplementGuidePage() {
             {GUIDE_FAQS.map((faq) => (
               <div key={faq.question} className="rounded-xl border border-border/60 p-5">
                 <h3 className="font-bold text-sm mb-2 text-accent-cyan">{faq.question}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{faq.answer}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed"><LinkedText text={faq.answer} /></p>
               </div>
             ))}
           </div>

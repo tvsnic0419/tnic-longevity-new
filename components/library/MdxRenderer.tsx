@@ -24,8 +24,15 @@ import {
 import { citationRegistry } from '@/lib/trust';
 import { glossary } from '@/lib/data';
 import { GlassPanel } from '@/components/ui/GlassPanel';
-import { libraryModules, getModulePath } from '@/lib/library-modules';
+import { libraryModules } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
+import {
+  COMPOUND_TERMS_BY_LENGTH,
+  HALLMARK_TERMS_BY_LENGTH,
+  canonicalCompoundName,
+  escapeRegExp,
+  termPattern,
+} from '@/lib/interlinking';
 
 // Matches "PMID"/"PMIDs" (singular or plural, with or without a colon) followed
 // by one or more comma-separated ids — e.g. "PMID 12345678" or
@@ -50,26 +57,8 @@ function escapeHtml(text: string): string {
     .replace(/"/g, '&quot;');
 }
 
-function escapeRegExp(text: string): string {
-  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
 /** Longest-term-first so e.g. "Epigenetic Clock" is tried before any shorter overlap. */
 const GLOSSARY_TERMS_BY_LENGTH = [...glossary].sort((a, b) => b.term.length - a.term.length);
-
-/** Compound module title minus its parenthetical/suffix, e.g. "NMN (Nicotinamide
- * Mononucleotide)" -> "NMN", "Berberine HCl" -> "Berberine" — the short form
- * prose actually uses when naming the substance mid-sentence. */
-function canonicalCompoundName(title: string): string {
-  return title.replace(/\s*\(.*\)\s*$/, '').replace(/\s+HCl$/i, '').trim();
-}
-
-/** Longest-name-first so e.g. "Urolithin A" is tried before a shorter overlap. */
-const COMPOUND_TERMS_BY_LENGTH = libraryModules
-  .filter((m) => m.category === 'compounds')
-  .map((m) => ({ name: canonicalCompoundName(m.title), href: getModulePath(m) }))
-  .filter((c) => c.name.length >= 3)
-  .sort((a, b) => b.name.length - a.name.length);
 
 /**
  * Links the first on-page occurrence of each other compound's canonical name
@@ -81,7 +70,7 @@ function linkCompoundTerms(text: string, linkedTerms: Set<string>): string {
   let out = text;
   for (const { name, href } of COMPOUND_TERMS_BY_LENGTH) {
     if (linkedTerms.has(name)) continue;
-    const pattern = new RegExp(`(?<![a-zA-Z0-9-])(${escapeRegExp(name)})(?![a-zA-Z0-9-])`);
+    const pattern = termPattern(name, false);
     if (!pattern.test(out)) continue;
     linkedTerms.add(name);
     out = out.replace(pattern, (matched) => `<a href="${href}" class="${LINK_CLASS}">${matched}</a>`);
@@ -89,26 +78,20 @@ function linkCompoundTerms(text: string, linkedTerms: Set<string>): string {
   return out;
 }
 
-/** Longest-title-first, same overlap-safety rule as compound terms. */
-const HALLMARK_TERMS_BY_LENGTH = hallmarkLibrary
-  .map((h) => ({ name: h.title, href: `/library/${h.slug}` }))
-  .sort((a, b) => b.name.length - a.name.length);
-
 /**
  * Links the first on-page mention of any *other* hallmark's full name
  * (e.g. "Chronic Inflammation", "Genomic Instability") to its own deep-dive —
  * same first-mention convention and shared dedup set as compound/glossary
- * linking, so a hallmark page never links to itself.
+ * linking, so a hallmark page never links to itself. Case-insensitive:
+ * hallmark titles are Title Case, but prose mentions them lowercase
+ * mid-sentence far more often ("mitochondrial dysfunction" vs "Mitochondrial
+ * Dysfunction") — glossary linking already accounts for this.
  */
 function linkHallmarkTerms(text: string, linkedTerms: Set<string>): string {
   let out = text;
   for (const { name, href } of HALLMARK_TERMS_BY_LENGTH) {
     if (linkedTerms.has(name)) continue;
-    // Case-insensitive: hallmark titles are Title Case, but prose mentions
-    // them lowercase mid-sentence far more often ("mitochondrial dysfunction"
-    // vs "Mitochondrial Dysfunction") — glossary linking already accounts for
-    // this, hallmark names need the same.
-    const pattern = new RegExp(`(?<![a-zA-Z0-9-])(${escapeRegExp(name)})(?![a-zA-Z0-9-])`, 'i');
+    const pattern = termPattern(name, true);
     if (!pattern.test(out)) continue;
     linkedTerms.add(name);
     out = out.replace(pattern, (matched) => `<a href="${href}" class="${LINK_CLASS}">${matched}</a>`);

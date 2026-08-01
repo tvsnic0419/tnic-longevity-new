@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowRight, FlaskConical, ShieldCheck, Clock, ExternalLink, CheckCircle2, AlertTriangle, Star } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { StructuredData } from '@/components/seo/StructuredData';
+import { LinkedText } from '@/components/ui/LinkedText';
 import { seoRoutes } from '@/lib/seo-routes';
 import { buildHowToSchema, buildGuidePageSchema, buildBreadcrumbSchema } from '@/lib/seo';
 import { getScoredCompounds } from '@/lib/elite-8-data';
@@ -351,7 +352,7 @@ export default function LongevitySupplementsGuidePage() {
                   <ArrowRight className="w-4 h-4 shrink-0 transition-transform group-open:rotate-90 text-muted-foreground group-open:text-accent-cyan" />
                 </summary>
                 <div className="px-5 pb-5 text-sm text-muted-foreground leading-relaxed border-t border-border/40 pt-4">
-                  {faq.answer}
+                  <LinkedText text={faq.answer} />
                 </div>
               </details>
             ))}

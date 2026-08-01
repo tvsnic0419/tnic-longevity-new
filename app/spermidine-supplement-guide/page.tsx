@@ -3,6 +3,7 @@ import { ArrowRight, FlaskConical, ExternalLink, CheckCircle2, AlertTriangle, Mi
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { GuideHeroPanel } from '@/components/guides/GuideHeroPanel';
 import { StructuredData } from '@/components/seo/StructuredData';
+import { LinkedText } from '@/components/ui/LinkedText';
 import { buildPageMetadata, buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
 
@@ -508,7 +509,9 @@ export default function SpermidineSupplementGuidePage() {
                   {item.q}
                   <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0 group-open:rotate-90 transition-transform" aria-hidden="true" />
                 </summary>
-                <p className="px-5 pb-5 text-sm text-muted-foreground leading-relaxed">{item.a}</p>
+                <p className="px-5 pb-5 text-sm text-muted-foreground leading-relaxed">
+                  <LinkedText text={item.a} excludeNames={['Spermidine']} />
+                </p>
               </details>
             ))}
           </div>

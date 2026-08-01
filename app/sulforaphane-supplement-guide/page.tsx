@@ -3,6 +3,7 @@ import { ArrowRight, ExternalLink, CheckCircle2, AlertTriangle, ShieldCheck } fr
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { GuideHeroPanel } from '@/components/guides/GuideHeroPanel';
 import { StructuredData } from '@/components/seo/StructuredData';
+import { LinkedText } from '@/components/ui/LinkedText';
 import { buildPageMetadata, buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
 
@@ -422,7 +423,7 @@ export default function SulforaphaneGuidePage() {
                   <ArrowRight className="w-4 h-4 text-muted-foreground transition-transform group-open:rotate-90 flex-shrink-0 ml-4" aria-hidden="true" />
                 </summary>
                 <div className="px-5 pb-5 text-sm text-muted-foreground leading-relaxed border-t border-border/40 pt-4">
-                  {faq.a}
+                  <LinkedText text={faq.a} excludeNames={['Sulforaphane']} />
                 </div>
               </details>
             ))}
