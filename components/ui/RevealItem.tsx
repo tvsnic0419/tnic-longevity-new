@@ -1,7 +1,4 @@
-'use client';
-
-import { motion, useReducedMotion } from 'framer-motion';
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 interface RevealItemProps {
   /** Position within its grid — drives the stagger delay, capped so long lists don't feel sluggish. */
@@ -12,27 +9,25 @@ interface RevealItemProps {
 
 /**
  * Restrained scroll-reveal stagger for homepage card grids — fades/lifts in
- * once, the first time the item scrolls into view. Mirrors the entrance
- * pattern already used in HallmarkCoverageGrid.tsx, generalized into one
- * reusable primitive instead of repeating the same motion.div boilerplate
- * across every section.
+ * once, the first time the item scrolls into view.
+ *
+ * This is deliberately a *server* component: it renders a plain div and the
+ * entrance is pure CSS, triggered by the single shared observer in
+ * RevealScript. It was previously a framer-motion `motion.div`, which forced
+ * a client boundary into every section that used it and hydrated ~100 motion
+ * components on the homepage alone — the dominant share of a measured 4.2s of
+ * main-thread time. Keep it server-only; if a specific card needs real motion,
+ * reach for framer-motion in that component rather than reinstating it here.
  */
 export function RevealItem({ index = 0, children, className }: RevealItemProps) {
-  const reducedMotion = useReducedMotion() ?? false;
+  const delay = Math.min(index, 6) * 0.06;
 
   return (
-    <motion.div
-      className={className}
-      initial={reducedMotion ? false : { opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-80px' }}
-      transition={{
-        delay: reducedMotion ? 0 : Math.min(index, 6) * 0.06,
-        duration: 0.4,
-        ease: [0.22, 1, 0.36, 1],
-      }}
+    <div
+      className={className ? `reveal-item ${className}` : 'reveal-item'}
+      style={delay ? ({ '--reveal-delay': `${delay}s` } as CSSProperties) : undefined}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

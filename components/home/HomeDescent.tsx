@@ -537,13 +537,66 @@ export function HomeDescent() {
     ];
     let cur: [number, number, number] = [95,227,224];
 
+    /* Glow sprites. This loop used to call ctx.createRadialGradient() once per
+       particle per frame — 212 gradient objects every frame on a full-viewport
+       canvas, which measured ~100ms per frame under CPU throttling and left the
+       main thread permanently saturated. Instead each layer's glow is rendered
+       once into an offscreen canvas and blitted with drawImage + globalAlpha.
+       The sprites are only re-rendered when the palette colour has drifted far
+       enough to be visible (it lerps 2% per frame), so gradient construction
+       goes from 212×/frame to roughly 3 every few frames. */
+    const LAYER_RADIUS = [3, 5, 8];
+    const sprites = layers.map(() => document.createElement('canvas'));
+    const dotSprite = document.createElement('canvas');
+    let spriteKey = '';
+
+    function buildSprites(cr: number, cg: number, cb: number) {
+      layers.forEach((l, li) => {
+        const rad = Math.max(1, l.rMax * LAYER_RADIUS[li]);
+        const size = Math.max(2, Math.ceil(rad * 2));
+        const s = sprites[li];
+        s.width = size; s.height = size;
+        const sc = s.getContext('2d');
+        if (!sc) return;
+        const g = sc.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+        g.addColorStop(0, `rgba(${cr},${cg},${cb},1)`);
+        g.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
+        sc.fillStyle = g;
+        sc.fillRect(0, 0, size, size);
+      });
+    }
+
+    // The small bright core on the two nearer layers — colour never changes.
+    {
+      const size = 16;
+      dotSprite.width = size; dotSprite.height = size;
+      const sc = dotSprite.getContext('2d');
+      if (sc) {
+        const g = sc.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+        g.addColorStop(0, 'rgba(230,240,255,1)');
+        g.addColorStop(0.5, 'rgba(230,240,255,0.85)');
+        g.addColorStop(1, 'rgba(230,240,255,0)');
+        sc.fillStyle = g;
+        sc.fillRect(0, 0, size, size);
+      }
+    }
+
     function draw() {
       if (!ctx) return;
       const target = palettes[Math.min(activeRef.current, palettes.length - 1)];
       cur = cur.map((c, i) => c + (target[i] - c) * 0.02) as [number, number, number];
       const [cr, cg, cb] = cur.map(Math.round);
+      // Quantise so a slow colour lerp doesn't rebuild sprites every frame.
+      const key = `${cr >> 3}:${cg >> 3}:${cb >> 3}`;
+      if (key !== spriteKey) { spriteKey = key; buildSprites(cr, cg, cb); }
       ctx.clearRect(0, 0, w, h);
+      /* Constellation lines. Previously each connection was its own
+         beginPath/stroke — up to ~1,770 stroke calls per frame. The segments
+         are now bucketed into three opacity tiers and drawn as three batched
+         paths, which keeps the depth cue while collapsing the draw calls. */
       const near = P[1];
+      const TIERS = 3;
+      const buckets: number[][] = [[], [], []];
       for (let i = 0; i < near.length; i++) {
         const a = near[i];
         const ax = a.x * w, ay = a.y * h;
@@ -552,12 +605,23 @@ export function HomeDescent() {
           const bx = b.x * w, by = b.y * h;
           const d2 = (ax - bx) ** 2 + (ay - by) ** 2;
           if (d2 < 14000) {
-            const o = (1 - d2 / 14000) * 0.08;
-            ctx.strokeStyle = `rgba(${cr},${cg},${cb},${o})`;
-            ctx.lineWidth = 0.6;
-            ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
+            const t = 1 - d2 / 14000;
+            const tier = Math.min(TIERS - 1, Math.floor(t * TIERS));
+            buckets[tier].push(ax, ay, bx, by);
           }
         }
+      }
+      ctx.lineWidth = 0.6;
+      for (let t = 0; t < TIERS; t++) {
+        const seg = buckets[t];
+        if (!seg.length) continue;
+        ctx.strokeStyle = `rgba(${cr},${cg},${cb},${((t + 0.5) / TIERS) * 0.08})`;
+        ctx.beginPath();
+        for (let k = 0; k < seg.length; k += 4) {
+          ctx.moveTo(seg[k], seg[k + 1]);
+          ctx.lineTo(seg[k + 2], seg[k + 3]);
+        }
+        ctx.stroke();
       }
       for (let li = 0; li < layers.length; li++) {
         const l = layers[li];
@@ -571,18 +635,17 @@ export function HomeDescent() {
           }
           const tw = 0.55 + Math.sin(p.ph) * 0.45;
           const px = p.x * w, py = p.y * h;
-          const rad = p.r * (li === 2 ? 8 : li === 1 ? 5 : 3);
-          const g = ctx.createRadialGradient(px, py, 0, px, py, rad);
-          g.addColorStop(0, `rgba(${cr},${cg},${cb},${l.alpha * tw})`);
-          g.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
-          ctx.fillStyle = g;
-          ctx.beginPath(); ctx.arc(px, py, rad, 0, Math.PI * 2); ctx.fill();
+          const rad = p.r * LAYER_RADIUS[li];
+          ctx.globalAlpha = l.alpha * tw;
+          ctx.drawImage(sprites[li], px - rad, py - rad, rad * 2, rad * 2);
           if (li < 2) {
-            ctx.fillStyle = `rgba(230,240,255,${0.55 * tw})`;
-            ctx.beginPath(); ctx.arc(px, py, p.r * 0.6, 0, Math.PI * 2); ctx.fill();
+            const dr = p.r * 1.2;
+            ctx.globalAlpha = 0.55 * tw;
+            ctx.drawImage(dotSprite, px - dr, py - dr, dr * 2, dr * 2);
           }
         }
       }
+      ctx.globalAlpha = 1;
     }
     const stopLoop = runWhenVisible(cv, draw);
     return () => { stopLoop(); ro.disconnect(); };
@@ -609,24 +672,41 @@ export function HomeDescent() {
       state.tx = e.clientX - rect.left;
       state.ty = e.clientY - rect.top;
       state.on = true;
+      dirty = true;
     }
-    function onLeave() { state.on = false; }
+    function onLeave() { state.on = false; dirty = true; }
     root.addEventListener("pointermove", onMove);
     root.addEventListener("pointerleave", onLeave);
+    /* The glow is a fixed gradient that only ever moves, so render it once to
+       an offscreen sprite and blit it, rather than rebuilding the gradient
+       every frame. */
+    const RAD = 220;
+    const glow = document.createElement('canvas');
+    glow.width = RAD * 2; glow.height = RAD * 2;
+    {
+      const gc = glow.getContext('2d');
+      if (gc) {
+        const g = gc.createRadialGradient(RAD, RAD, 0, RAD, RAD, RAD);
+        g.addColorStop(0, 'rgba(95,227,224,0.14)');
+        g.addColorStop(0.4, 'rgba(140,140,245,0.06)');
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        gc.fillStyle = g;
+        gc.fillRect(0, 0, RAD * 2, RAD * 2);
+      }
+    }
+    let dirty = true;
     function draw() {
       if (!ctx) return;
-      state.x += (state.tx - state.x) * 0.15;
-      state.y += (state.ty - state.y) * 0.15;
+      const nx = state.x + (state.tx - state.x) * 0.15;
+      const ny = state.y + (state.ty - state.y) * 0.15;
+      const settled = Math.abs(nx - state.x) < 0.1 && Math.abs(ny - state.y) < 0.1;
+      state.x = nx; state.y = ny;
+      // Idle pointer means an identical frame — skip the clear+blit entirely
+      // instead of repainting a full-viewport canvas 60 times a second.
+      if (settled && !dirty) return;
+      if (settled) dirty = false; else dirty = true;
       ctx.clearRect(0, 0, w, h);
-      if (state.on) {
-        const rad = 220;
-        const g = ctx.createRadialGradient(state.x, state.y, 0, state.x, state.y, rad);
-        g.addColorStop(0, "rgba(95,227,224,0.14)");
-        g.addColorStop(0.4, "rgba(140,140,245,0.06)");
-        g.addColorStop(1, "rgba(0,0,0,0)");
-        ctx.fillStyle = g;
-        ctx.beginPath(); ctx.arc(state.x, state.y, rad, 0, Math.PI * 2); ctx.fill();
-      }
+      if (state.on) ctx.drawImage(glow, state.x - RAD, state.y - RAD);
     }
     const stopLoop = runWhenVisible(cv, draw);
     return () => {

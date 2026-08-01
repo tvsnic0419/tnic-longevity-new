@@ -4,7 +4,7 @@ import { StructuredData } from '@/components/seo/StructuredData';
 import { seoRoutes } from '@/lib/seo-routes';
 import { buildProductListSchema, buildBreadcrumbSchema } from '@/lib/seo';
 import { PRODUCT_PICKS } from '@/lib/product-picks';
-import { compounds } from '@/lib/data';
+import { compounds } from '@/lib/data/compounds';
 
 export const metadata = seoRoutes.products();
 

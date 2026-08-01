@@ -3,7 +3,7 @@ import type { ToolId } from './registry';
 import type { LibraryModule, LibraryModuleCategory } from './library-modules';
 import type { HallmarkLibraryEntry, Peptide } from './types';
 import type { EvidenceComparison } from './comparisons';
-import { consumerFAQ } from './data';
+import { consumerFAQ } from './data/faq';
 
 export interface HubContext {
   what: string;

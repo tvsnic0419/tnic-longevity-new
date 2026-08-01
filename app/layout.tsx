@@ -8,6 +8,7 @@ import { SkipLink } from '@/components/SkipLink';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { PlatformProviderWrapper } from '@/components/PlatformProviderWrapper';
 import { ThemeScript } from '@/components/theme/ThemeScript';
+import { RevealScript } from '@/components/ui/RevealScript';
 import { buildRootMetadata } from '@/lib/seo';
 import { AmbientLayer } from '@/components/ui/AmbientLayer';
 import './globals.css';
@@ -69,6 +70,7 @@ export default function RootLayout({
     >
       <head>
         <ThemeScript />
+        <RevealScript />
         <JsonLd />
       </head>
       <body className="min-h-full">

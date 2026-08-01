@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { Filter, ArrowUpRight, Sparkles } from 'lucide-react';
 import type { HallmarkIntervention } from '@/lib/types';
-import { compounds } from '@/lib/data';
+import { compounds } from '@/lib/data/compounds';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { PmidLink } from '@/components/trust/SourceCitation';
 

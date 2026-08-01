@@ -39,13 +39,9 @@ import {
 } from 'lucide-react';
 import { PageShell } from '@/components/ui/PageShell';
 import { PageHeader } from '@/components/ui/PageHeader';
-import {
-  gettingStartedSteps,
-  glossary,
-  consumerFAQ,
-  outcomeMilestones,
-  supplementRedFlags,
-} from '@/lib/data';
+import { consumerFAQ } from '@/lib/data/faq';
+import { glossary } from '@/lib/data/glossary';
+import { gettingStartedSteps, outcomeMilestones, supplementRedFlags } from '@/lib/data/trust-content';
 import { usePlatform } from '@/context/PlatformContext';
 import { getHubContext } from '@/lib/hub-context';
 

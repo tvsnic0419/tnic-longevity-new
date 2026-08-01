@@ -1,7 +1,7 @@
 'use client';
 
 import { ExternalLink, Sparkles, ShieldAlert } from 'lucide-react';
-import { compounds } from '@/lib/data';
+import { compounds } from '@/lib/data/compounds';
 import { stackPresets, type PresetKey } from '@/lib/presets';
 import { analyzeStack, hallmarkDisplayNames } from '@/lib/stack-analysis';
 import type { EvidenceTier } from '@/lib/types';

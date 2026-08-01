@@ -10,7 +10,7 @@ import { useSearchParams } from 'next/navigation';
 
 export const LABS_PARTNER_TAB_EVENT = 'tnic:labs-partner-tab';
 import { Plus, Upload, FileText, ClipboardPaste, CheckCircle2, AlertCircle } from 'lucide-react';
-import { biomarkers } from '@/lib/data';
+import { biomarkers } from '@/lib/data/biomarkers';
 import { LABS_CSV_TEMPLATE, parseLabsCsv, getLabStatus, parseOptimalRange } from '@/lib/labs';
 import { usePlatform } from '@/context/PlatformContext';
 import { PartnerImportPanel } from './PartnerImportPanel';

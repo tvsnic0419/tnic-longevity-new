@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowLeft, ArrowUpRight, Dna } from 'lucide-react';
-import { compounds } from '@/lib/data';
+import { compounds } from '@/lib/data/compounds';
 import { topPickCategories } from '@/lib/top-picks';
 import { themes } from '@/lib/design-system';
 import { getHubContext } from '@/lib/hub-context';

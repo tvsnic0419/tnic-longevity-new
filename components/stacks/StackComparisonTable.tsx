@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Filter, ArrowUpDown } from 'lucide-react';
 import { DataTable } from '@/components/ui/DataTable';
-import { compounds } from '@/lib/data';
+import { compounds } from '@/lib/data/compounds';
 import {
   eliteStacks,
   goalLabels,

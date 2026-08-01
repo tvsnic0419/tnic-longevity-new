@@ -12,7 +12,7 @@ import {
   Zap,
   Pill,
 } from 'lucide-react';
-import { compounds } from '@/lib/data';
+import { compounds } from '@/lib/data/compounds';
 import { useStack } from '@/context/PlatformContext';
 import type { EliteStack } from '@/lib/stacks-library';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';

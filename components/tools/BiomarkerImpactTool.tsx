@@ -14,7 +14,7 @@ import {
 import { ChartGrid, axisProps, barCursor, tooltipContentStyle, tooltipItemStyle, tooltipLabelStyle } from '@/components/ui/ChartKit';
 import Link from 'next/link';
 import { ArrowRight, Pill, HeartPulse } from 'lucide-react';
-import { biomarkers } from '@/lib/data';
+import { biomarkers } from '@/lib/data/biomarkers';
 import {
   calculateBiomarkerImpact,
   getHallmarkLabelsForMarker,

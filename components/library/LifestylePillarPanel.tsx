@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { FlaskConical, Activity, GitBranch, ArrowRight } from 'lucide-react';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
-import { biomarkers } from '@/lib/data';
+import { biomarkers } from '@/lib/data/biomarkers';
 import {
   getLabsDeepLink,
   getLifestylePillar,

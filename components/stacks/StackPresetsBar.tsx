@@ -2,7 +2,7 @@
 
 import { Sparkles } from 'lucide-react';
 import { stackPresets, type PresetKey } from '@/lib/presets';
-import { compounds } from '@/lib/data';
+import { compounds } from '@/lib/data/compounds';
 import { cn } from '@/lib/utils';
 
 interface StackPresetsBarProps {

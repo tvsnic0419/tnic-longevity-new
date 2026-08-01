@@ -9,7 +9,8 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { compounds, synergyScore, calculateDefenseProfile } from '@/lib/data';
+import { compounds } from '@/lib/data/compounds';
+import { synergyScore, calculateDefenseProfile } from '@/lib/data/engine';
 import { stackPresets, type PresetKey } from '@/lib/presets';
 import { readStackFromSearch } from '@/lib/stack-url';
 import { exportLabsCsv as labsToCsv, type LabEntry } from '@/lib/labs';

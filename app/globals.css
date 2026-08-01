@@ -3195,3 +3195,43 @@ p,
     -webkit-backdrop-filter: blur(calc(var(--glass-blur, 24px) * 0.5)) saturate(1.15);
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Scroll reveal — CSS-driven, one shared observer
+   ───────────────────────────────────────────────────────────────────────────
+   RevealItem used to be a framer-motion `motion.div` with `whileInView`. It
+   wraps every card in eight homepage sections, so the page hydrated ~100
+   motion components — each with its own observer and motion values — and the
+   `'use client'` boundary spread from the wrapper into otherwise-static
+   sections. Measured at ~3.8s of the homepage's main-thread time.
+
+   Now the entrance is pure CSS and a single IntersectionObserver
+   (RevealScript) toggles `.is-visible`. Sections using it stay server
+   components.
+
+   The hidden state is gated behind `.js-reveal` on <html>, set by an inline
+   script before paint. Without JS the class is never added, so content
+   renders visible rather than stuck at opacity 0.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.js-reveal .reveal-item {
+  opacity: 0;
+  transform: translateY(16px);
+  will-change: opacity, transform;
+}
+
+.js-reveal .reveal-item.is-visible {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s),
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s);
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js-reveal .reveal-item {
+    opacity: 1;
+    transform: none;
+  }
+  .js-reveal .reveal-item.is-visible { transition: none; }
+}

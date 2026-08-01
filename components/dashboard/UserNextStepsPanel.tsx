@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { ArrowRight, FlaskConical, Scan, BookOpen, Layers, Target } from 'lucide-react';
 import { usePlatform } from '@/context/PlatformContext';
 import { stackPresets } from '@/lib/presets';
-import { compounds } from '@/lib/data';
+import { compounds } from '@/lib/data/compounds';
 
 const DEFAULT_IDS = new Set<string>(stackPresets.starter.ids);
 

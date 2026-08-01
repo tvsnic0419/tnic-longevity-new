@@ -4,7 +4,8 @@ import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { seoRoutes } from '@/lib/seo-routes';
 import { buildBreadcrumbSchema } from '@/lib/seo';
-import { compounds, hallmarks } from '@/lib/data';
+import { compounds } from '@/lib/data/compounds';
+import { hallmarks } from '@/lib/data/hallmarks';
 
 export const metadata = seoRoutes.architect();
 

@@ -7,7 +7,7 @@ import { HallmarkIcon } from '@/components/library/HallmarkIcon';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { getHallmarkVisual } from '@/lib/hallmark-visuals';
 import { themes } from '@/lib/design-system';
-import { compounds } from '@/lib/data';
+import { compounds } from '@/lib/data/compounds';
 import { cn } from '@/lib/utils';
 
 interface HallmarkCoverageGridProps {

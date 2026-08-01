@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { HallmarkIntervention } from '@/lib/types';
-import { compounds } from '@/lib/data';
+import { compounds } from '@/lib/data/compounds';
 import { libraryModules, getModulePath } from '@/lib/library-modules';
 
 /**

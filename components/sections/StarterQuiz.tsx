@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import { quizSteps, getQuizResult, getQuizPreset, type QuizAnswers } from '@/lib/homepage';
 import { stackPresets } from '@/lib/presets';
-import { compounds } from '@/lib/data';
+import { compounds } from '@/lib/data/compounds';
 import { QuizResultPanel } from '@/components/quiz/QuizResultPanel';
 import { parseQuizSearchParams } from '@/lib/quiz-share';
 import { usePlatform } from '@/context/PlatformContext';

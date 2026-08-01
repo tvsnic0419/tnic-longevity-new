@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { CheckCircle2, Circle } from 'lucide-react';
 import { personalJourneyTemplate } from '@/lib/journey';
-import { gettingStartedSteps } from '@/lib/data';
+import { gettingStartedSteps } from '@/lib/data/trust-content';
 import { usePlatform } from '@/context/PlatformContext';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { RevealCard } from '@/components/ui/RevealCard';

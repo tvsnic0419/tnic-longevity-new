@@ -1,7 +1,7 @@
 'use client';
 
 import { Check } from 'lucide-react';
-import { compounds } from '@/lib/data';
+import { compounds } from '@/lib/data/compounds';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { cn } from '@/lib/utils';
 

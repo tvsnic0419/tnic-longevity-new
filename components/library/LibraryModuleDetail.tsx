@@ -9,7 +9,7 @@ import type { ComparisonLink } from '@/lib/comparison-relations';
 import type { GuideLink, RelatedCompoundLink } from '@/lib/library-graph';
 import { libraryCategoryMeta, libraryModules } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
-import { compounds } from '@/lib/data';
+import { compounds } from '@/lib/data/compounds';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { MdxRenderer, extractPmids } from './MdxRenderer';
 import { CompoundBuyerGuidePanel } from './CompoundBuyerGuide';

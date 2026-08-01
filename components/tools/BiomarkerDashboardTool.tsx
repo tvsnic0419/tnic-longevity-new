@@ -22,7 +22,7 @@ import {
   FlaskConical,
   Activity,
 } from 'lucide-react';
-import { biomarkers } from '@/lib/data';
+import { biomarkers } from '@/lib/data/biomarkers';
 import { usePlatform } from '@/context/PlatformContext';
 import { useToolsStore } from '@/stores/toolsStore';
 import {

@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { LibraryModuleDetail } from '@/components/library/LibraryModuleDetail';
 import { CompoundHero, type CompoundHeroData } from '@/components/viz/CompoundHero';
 import { StructuredData } from '@/components/seo/StructuredData';
-import { compounds } from '@/lib/data';
+import { compounds } from '@/lib/data/compounds';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import {
   getAllModuleParams,

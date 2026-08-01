@@ -31,12 +31,20 @@ export function MoleculeStage({
   geometryId,
   hue,
   interactive = true,
+  animate = true,
   className,
   style,
 }: {
   geometryId?: string;
   hue: RGB;
   interactive?: boolean;
+  /**
+   * Drive a continuous rAF loop (default). Set false for decorative
+   * thumbnails — the stage renders a single frame when it scrolls into view
+   * instead. A grid of dozens of stages is otherwise dozens of simultaneous
+   * canvas-2D render loops, which dominates main-thread time on that page.
+   */
+  animate?: boolean;
   className?: string;
   style?: React.CSSProperties;
 }) {
@@ -47,6 +55,8 @@ export function MoleculeStage({
   const geomRef = useRef<Geometry | null>(null);
   const hueRef = useRef<RGB>(hue);
 
+  const animateRef = useRef(animate);
+  useEffect(() => { animateRef.current = animate; }, [animate]);
   useEffect(() => { reducedRef.current = reduced; }, [reduced]);
   useEffect(() => { hueRef.current = hue; }, [hue]);
   useEffect(() => {
@@ -70,14 +80,29 @@ export function MoleculeStage({
       ph: Math.random() * Math.PI * 2,
     }));
 
+    // Set once `draw` exists below. Resizing clears the canvas, and a static
+    // stage has no loop to repaint it, so it must redraw explicitly.
+    let redraw: () => void = () => {};
+
     function resize() {
       if (!cv || !ctx) return;
       w = cv.clientWidth; h = cv.clientHeight;
       cv.width = w * dpr; cv.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (!animateRef.current) redraw();
     }
-    resize();
-    const ro = new ResizeObserver(resize); ro.observe(cv);
+    // Allocating the backing store (cv.width = w * dpr) is what actually costs
+    // memory, so defer it — along with the ResizeObserver — until the stage is
+    // first near the viewport. Off-screen stages in a long grid then cost
+    // nothing but an IntersectionObserver entry.
+    const ro = new ResizeObserver(resize);
+    let started = false;
+    const ensureStarted = () => {
+      if (started) return;
+      started = true;
+      resize();
+      ro.observe(cv);
+    };
 
     function drawMolecule(geom: Geometry) {
       if (!ctx) return;
@@ -219,11 +244,13 @@ export function MoleculeStage({
       ctx.beginPath(); ctx.arc(cx, cy, R * 0.32, 0, Math.PI * 2); ctx.fill();
     }
 
-    const draw = () => {
+    const paint = () => {
       const geom = geomRef.current;
       if (geom) drawMolecule(geom); else drawField();
     };
-    const stopLoop = runWhenVisible(cv, draw);
+    redraw = paint;
+    const draw = () => { ensureStarted(); paint(); };
+    const stopLoop = runWhenVisible(cv, draw, { once: !animateRef.current });
     return () => { stopLoop(); ro.disconnect(); };
   }, []);
 

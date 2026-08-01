@@ -1,4 +1,5 @@
-import { biomarkers, compounds } from '@/lib/data';
+import { biomarkers } from '@/lib/data/biomarkers';
+import { compounds } from '@/lib/data/compounds';
 import { DEFAULT_HALLMARK_ENTRY, type HallmarkNotesMap } from '@/lib/hallmark-notes';
 import type { LabEntry } from '@/lib/labs';
 import type { UserMilestone, UserMilestoneKind } from '@/lib/milestone-engine';

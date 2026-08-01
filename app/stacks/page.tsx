@@ -4,7 +4,7 @@ import { StructuredData } from '@/components/seo/StructuredData';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { seoRoutes } from '@/lib/seo-routes';
 import { buildHowToSchema, buildBreadcrumbSchema } from '@/lib/seo';
-import { compounds } from '@/lib/data';
+import { compounds } from '@/lib/data/compounds';
 import { COMPOUND_COUNT } from '@/lib/library-modules';
 import { eliteInterventions } from '@/lib/elite-interventions';
 

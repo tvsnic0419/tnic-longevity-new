@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import Link from 'next/link';
 import { Plus, X, CheckCircle2, AlertTriangle, BookOpen } from 'lucide-react';
 import { useStack } from '@/context/PlatformContext';
-import { compounds } from '@/lib/data';
+import { compounds } from '@/lib/data/compounds';
 import {
   analyzeStack,
   computeLiveStackAnalysis,

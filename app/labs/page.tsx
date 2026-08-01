@@ -6,7 +6,7 @@ import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { seoRoutes } from '@/lib/seo-routes';
 import { buildBreadcrumbSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
-import { biomarkers } from '@/lib/data';
+import { biomarkers } from '@/lib/data/biomarkers';
 import { COMPOUND_COUNT } from '@/lib/library-modules';
 
 export const metadata = seoRoutes.labs();

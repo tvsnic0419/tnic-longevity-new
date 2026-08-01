@@ -1,6 +1,6 @@
 'use client';
 
-import { biomarkers } from '@/lib/data';
+import { biomarkers } from '@/lib/data/biomarkers';
 import { getLabStatus, parseOptimalRange, type LabEntry } from '@/lib/labs';
 
 interface MarkerChartProps {

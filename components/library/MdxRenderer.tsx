@@ -22,7 +22,7 @@ import {
   parseDecisionNodes,
 } from '@/components/library/LifestyleDecisionTree';
 import { citationRegistry } from '@/lib/trust';
-import { glossary } from '@/lib/data';
+import { glossary } from '@/lib/data/glossary';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { libraryModules } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';

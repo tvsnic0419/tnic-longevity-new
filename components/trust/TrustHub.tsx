@@ -56,7 +56,7 @@ import {
   updateHistory,
 } from '@/lib/trust';
 import { journeyMilestones } from '@/lib/journey';
-import { evidenceStandards, transparencyPledge } from '@/lib/data';
+import { evidenceStandards, transparencyPledge } from '@/lib/data/trust-content';
 import type { EvidenceTier } from '@/lib/types';
 import { EvidenceTag } from './EvidenceTag';
 import { CheckCircle2 } from 'lucide-react';

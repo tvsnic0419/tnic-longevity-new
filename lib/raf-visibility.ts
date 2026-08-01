@@ -22,15 +22,23 @@ export function cappedDpr(max = 3): number {
 export function runWhenVisible(
   el: Element,
   draw: () => void,
-  opts?: { rootMargin?: string },
+  opts?: { rootMargin?: string; once?: boolean },
 ): () => void {
   let raf = 0;
   let visible = true;
   let running = false;
 
+  // `once` renders a single frame per visibility gain instead of driving a
+  // continuous loop. Decorative thumbnails (e.g. a grid of dozens of compound
+  // molecules) look the same rendered once as they do animating at 60fps, but
+  // cost a single frame instead of a permanent rAF loop each.
   const frame = () => {
     if (!running) return;
     draw();
+    if (opts?.once) {
+      running = false;
+      return;
+    }
     raf = requestAnimationFrame(frame);
   };
   const start = () => {

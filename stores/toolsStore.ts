@@ -4,7 +4,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { ProtocolGoal } from '@/lib/tools/protocol-customizer';
 import type { ToolsStoreState } from '@/lib/tools/types';
-import { biomarkers } from '@/lib/data';
+import { biomarkers } from '@/lib/data/biomarkers';
 
 interface ToolsStore extends ToolsStoreState {
   setProtocolGoals: (goals: ProtocolGoal[]) => void;

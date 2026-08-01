@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { TrendingUp, TrendingDown, Minus, BarChart3 } from 'lucide-react';
 import { MarkerChart } from '@/components/charts/MarkerChart';
-import { biomarkers } from '@/lib/data';
+import { biomarkers } from '@/lib/data/biomarkers';
 import { getLabStatus } from '@/lib/labs';
 import type { MarkerSnapshot } from '@/lib/lab-analysis';
 import type { LabEntry } from '@/lib/labs';

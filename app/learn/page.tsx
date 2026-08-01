@@ -4,7 +4,8 @@ import { LearnPageClient } from '@/components/learn/LearnPageClient';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
 import { seoRoutes } from '@/lib/seo-routes';
-import { gettingStartedSteps, consumerFAQ } from '@/lib/data';
+import { consumerFAQ } from '@/lib/data/faq';
+import { gettingStartedSteps } from '@/lib/data/trust-content';
 import { SITE } from '@/lib/site';
 
 export const metadata = seoRoutes.learn();

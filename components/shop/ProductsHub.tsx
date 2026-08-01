@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ExternalLink, Package, ShieldCheck } from 'lucide-react';
 import { PRODUCT_PICKS, type ProductPick } from '@/lib/product-picks';
-import { compounds } from '@/lib/data';
+import { compounds } from '@/lib/data/compounds';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { ContextRail } from '@/components/ui/ContextRail';
 import { getHubContext } from '@/lib/hub-context';

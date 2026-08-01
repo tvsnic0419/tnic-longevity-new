@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ArrowRight, ClipboardList, Menu, Search, ShieldCheck, X } from 'lucide-react';
-import { navLinks } from '@/lib/data';
+import { navLinks } from '@/lib/data/nav';
 import { Logo } from '@/components/ui/Logo';
 import { SiteSearch } from '@/components/SiteSearch';
 import { COMMAND_PALETTE_EVENT } from '@/components/os/os-events';
@@ -116,6 +116,11 @@ export function Nav() {
               <Link
                 key={link.href}
                 href={link.href}
+                /* Every nav link prefetching its route on sight meant each page
+                   speculatively pulled ~500 KB of JS for routes the visitor
+                   may never visit. Measured at ~90% of the homepage's total
+                   JS. Nav still prefetches on hover/touch-start. */
+                prefetch={false}
                 aria-current={active ? 'page' : undefined}
                 className={className}
               >
@@ -199,6 +204,7 @@ export function Nav() {
                   <Link
                     key={link.href}
                     href={link.href}
+                    prefetch={false}
                     aria-current={isActive(link.href) ? 'page' : undefined}
                     className="focus-ring interactive flex justify-between items-center text-foreground hover:text-accent-cyan py-3.5 min-h-[var(--space-touch)] text-base font-medium border-b border-border/50 last:border-0"
                   >

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ArrowRight, BookOpen, HelpCircle } from 'lucide-react';
-import { consumerFAQ } from '@/lib/data';
+import { consumerFAQ } from '@/lib/data/faq';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { getHubContext } from '@/lib/hub-context';
 

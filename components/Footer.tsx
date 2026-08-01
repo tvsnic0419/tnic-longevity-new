@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { POPULAR_GUIDE_LINKS } from '@/lib/index-priority';
 import { citationRegistry } from '@/lib/trust';
-import { compounds } from '@/lib/data';
+import { compounds } from '@/lib/data/compounds';
 
 const tierACount = compounds.filter((c) => c.evidence === 'A').length;
 const tierBCount = compounds.filter((c) => c.evidence === 'B').length;
@@ -73,6 +73,7 @@ export function Footer() {
           <div className="sm:col-span-2 lg:col-span-1">
             {/* No aria-label here — see the matching comment in Nav.tsx. */}
             <Link
+              prefetch={false}
               href="/"
               className="focus-ring inline-flex items-center mb-4 rounded-xl group transition-transform hover:scale-[1.02]"
             >
@@ -90,6 +91,7 @@ export function Footer() {
               {hubLinks.map((link) => (
                 <li key={link.href}>
                   <Link
+                    prefetch={false}
                     href={link.href}
                     className="focus-ring interactive flex items-center gap-2 text-body-sm hover:text-accent-cyan rounded-md"
                   >
@@ -107,6 +109,7 @@ export function Footer() {
               {POPULAR_GUIDE_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link
+                    prefetch={false}
                     href={link.href}
                     className="focus-ring interactive text-body-sm hover:text-accent-cyan rounded-md"
                   >
@@ -123,6 +126,7 @@ export function Footer() {
               {resourceLinks.map((link) => (
                 <li key={link.label}>
                   <Link
+                    prefetch={false}
                     href={link.href}
                     className="focus-ring interactive flex items-center gap-2 text-body-sm hover:text-accent-cyan rounded-md"
                   >
@@ -147,10 +151,10 @@ export function Footer() {
             </p>
             <p className="text-caption">
               Consult a physician before starting any protocol.{' '}
-              <Link href="/privacy" className="text-accent-cyan hover:underline focus-ring rounded">
+              <Link prefetch={false} href="/privacy" className="text-accent-cyan hover:underline focus-ring rounded">
                 Privacy
               </Link>{' '}·{' '}
-              <Link href="/trust/disclaimers" className="text-accent-cyan hover:underline focus-ring rounded">
+              <Link prefetch={false} href="/trust/disclaimers" className="text-accent-cyan hover:underline focus-ring rounded">
                 Disclaimers
               </Link>
             </p>

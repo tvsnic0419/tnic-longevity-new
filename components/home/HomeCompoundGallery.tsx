@@ -53,6 +53,12 @@ export function HomeCompoundGallery() {
               <RevealItem key={m.slug} index={i} className="h-full">
                 <Link
                   href={getModulePath(m)}
+                  /* This grid renders one link per compound. Next.js prefetches
+                     every in-viewport Link by default, so the homepage was
+                     speculatively downloading and compiling ~470 KB of route
+                     payloads for pages the visitor may never open. The tiles
+                     are a gallery, not a primary nav path — fetch on click. */
+                  prefetch={false}
                   className="focus-ring interactive group flex h-full flex-col overflow-hidden rounded-2xl border border-border/60 bg-card/40 transition-colors hover:border-accent-cyan/40"
                 >
                   <div className="relative aspect-square w-full bg-black/20">
@@ -60,6 +66,7 @@ export function HomeCompoundGallery() {
                       geometryId={structured ? m.compoundId : undefined}
                       hue={hue}
                       interactive={false}
+                      animate={false}
                     />
                   </div>
                   <div className="flex items-center justify-between gap-2 p-3">
