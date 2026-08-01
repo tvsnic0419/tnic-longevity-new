@@ -8,7 +8,6 @@ import { libraryModules, libraryCategoryMeta } from './library-modules';
 
 export type ToolId =
   | 'simulator'
-  | 'network'
   | 'protocol'
   | 'biomarker'
   | 'impact'
@@ -38,18 +37,6 @@ export const toolsRegistry: ToolRegistryEntry[] = [
     href: '/tools?tab=simulator',
     keywords: ['supplement synergy', 'drug interaction checker', 'stack dosing'],
     evidenceNote: 'Uses Tier A/B compound safety database and published trial dose ranges.',
-  },
-  {
-    id: 'network',
-    slug: 'network',
-    label: 'Stack Network',
-    shortLabel: 'Conflict graph',
-    description:
-      'Visual synergy and conflict network — interactive graph of compound interactions, cautions, and contraindications.',
-    href: '/tools?tab=network',
-    keywords: ['supplement interaction graph', 'stack conflict analyzer', 'synergy network'],
-    evidenceNote: 'Pair-level edges from TNiC interaction database plus documented compound synergies.',
-    badge: 'New',
   },
   {
     id: 'protocol',

@@ -126,7 +126,6 @@ export const libraryCategoryLabels: Record<LibraryModuleCategory, string> = {
 
 export const toolLabels: Record<ToolId, string> = {
   simulator: 'Stack Simulator',
-  network: 'Stack Network',
   protocol: 'Protocol Engine',
   biomarker: 'Biomarker Dashboard',
   impact: 'Biomarker Impact',

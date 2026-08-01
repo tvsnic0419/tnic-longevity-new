@@ -5,7 +5,6 @@
 
 import type {
   ProtocolEngineOutput,
-  StackNetworkGraph,
   BiomarkerDashboardResult,
   ReasoningStep,
 } from './types';
@@ -74,17 +73,6 @@ export const sampleProtocolOutput: Partial<ProtocolEngineOutput> = {
   ],
   disclaimer:
     'Educational model only. Not a prescription. Physician review required before starting any protocol.',
-};
-
-export const sampleNetworkGraph: Partial<StackNetworkGraph> = {
-  stats: {
-    synergyCount: 8,
-    cautionCount: 4,
-    contraindicationCount: 0,
-    activeSynergyCount: 3,
-    activeConflictCount: 1,
-    networkDensity: 0.42,
-  },
 };
 
 export const sampleDashboardResult: Partial<BiomarkerDashboardResult> = {

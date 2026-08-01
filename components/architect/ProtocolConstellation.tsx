@@ -3,8 +3,9 @@
 import { useMemo, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, X, Sparkles, ArrowRight, Layers, ShieldAlert } from 'lucide-react';
+import { Search, X, Sparkles, ArrowRight, Layers, ShieldAlert, AlertTriangle } from 'lucide-react';
 import { compounds, hallmarks } from '@/lib/data';
+import { stackInteractions } from '@/lib/stack-analysis';
 import { useStack } from '@/context/PlatformContext';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 
@@ -133,6 +134,22 @@ export function ProtocolConstellation() {
     return links;
   }, [selectedCompoundData, selectedSet, compoundNodes]);
 
+  /* Caution / contraindication edges between selected compounds. Drawn
+     alongside synergies so this map is the single place on the site where
+     compound-to-compound relationships are visualized — both the good and
+     the risky. Detail text is surfaced in the side panel below. */
+  const conflictLinks = useMemo(() => {
+    return stackInteractions
+      .filter((i) => i.type !== 'synergy')
+      .filter((i) => selectedSet.has(i.compoundIds[0]) && selectedSet.has(i.compoundIds[1]))
+      .map((i) => {
+        const a = compoundNodes.find((n) => n.id === i.compoundIds[0]);
+        const b = compoundNodes.find((n) => n.id === i.compoundIds[1]);
+        return a && b ? { interaction: i, a, b } : null;
+      })
+      .filter((x): x is NonNullable<typeof x> => x !== null);
+  }, [selectedSet, compoundNodes]);
+
   const toggleCompound = useCallback((id: string) => toggle(id), [toggle]);
 
   const sendToArchitect = useCallback(() => {
@@ -163,6 +180,7 @@ export function ProtocolConstellation() {
           <Sparkles className="w-4 h-4 text-accent-violet" aria-hidden="true" />
           <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
             {coverageCount}/12 hallmarks touched · {selectedCompoundData.length} compounds active
+            {conflictLinks.length > 0 && ` · ${conflictLinks.length} flagged`}
           </p>
         </div>
 
@@ -209,6 +227,26 @@ export function ProtocolConstellation() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.85, strokeDashoffset: [0, -18] }}
               transition={{ opacity: { duration: 0.3 }, strokeDashoffset: { duration: 1.6, repeat: Infinity, ease: 'linear' } }}
+            />
+          ))}
+
+          {/* Conflict arcs — caution (amber) / contraindication (rose) */}
+          {conflictLinks.map(({ interaction, a, b }) => (
+            <motion.line
+              key={`conflict-${a.id}-${b.id}`}
+              x1={a.x}
+              y1={a.y}
+              x2={b.x}
+              y2={b.y}
+              stroke={
+                interaction.type === 'contraindication'
+                  ? 'var(--accent-rose)'
+                  : 'var(--accent-amber)'
+              }
+              strokeWidth={2.5}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0.45, 0.95, 0.45] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
             />
           ))}
 
@@ -357,11 +395,34 @@ export function ProtocolConstellation() {
               </AnimatePresence>
 
               {synergyLinks.length > 0 && (
-                <div className="mb-4 rounded-lg bg-accent-violet/10 border border-accent-violet/20 px-3 py-2 text-xs text-accent-violet flex items-start gap-2">
+                <div className="mb-3 rounded-lg bg-accent-violet/10 border border-accent-violet/20 px-3 py-2 text-xs text-accent-violet flex items-start gap-2">
                   <Sparkles className="w-3.5 h-3.5 shrink-0 mt-0.5" aria-hidden="true" />
                   <span>{synergyLinks.length} synergy connection{synergyLinks.length === 1 ? '' : 's'} active among your selection.</span>
                 </div>
               )}
+
+              {conflictLinks.map(({ interaction }) => {
+                const isContra = interaction.type === 'contraindication';
+                return (
+                  <div
+                    key={interaction.compoundIds.join('-')}
+                    className={`mb-3 rounded-lg px-3 py-2 text-xs flex items-start gap-2 border ${
+                      isContra
+                        ? 'bg-accent-rose/10 border-accent-rose/25 text-accent-rose'
+                        : 'bg-accent-amber/10 border-accent-amber/25 text-accent-amber'
+                    }`}
+                  >
+                    {isContra ? (
+                      <ShieldAlert className="w-3.5 h-3.5 shrink-0 mt-0.5" aria-hidden="true" />
+                    ) : (
+                      <AlertTriangle className="w-3.5 h-3.5 shrink-0 mt-0.5" aria-hidden="true" />
+                    )}
+                    <span>
+                      <strong className="font-semibold">{interaction.title}</strong> — {interaction.detail}
+                    </span>
+                  </div>
+                );
+              })}
 
               <button
                 type="button"

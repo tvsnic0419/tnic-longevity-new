@@ -15,7 +15,6 @@ import {
   FlaskConical,
   TrendingUp,
   Calculator,
-  Network,
   BarChart3,
   Package,
   Trophy,
@@ -34,10 +33,6 @@ import { getToolContext } from '@/lib/hub-context';
 
 const StackSimulatorTool = dynamic(
   () => import('./StackSimulatorTool').then((m) => ({ default: m.StackSimulatorTool })),
-  { loading: () => <SectionSkeleton height="lg" /> },
-);
-const StackNetworkTool = dynamic(
-  () => import('./StackNetworkTool').then((m) => ({ default: m.StackNetworkTool })),
   { loading: () => <SectionSkeleton height="lg" /> },
 );
 const ProtocolEngineTool = dynamic(
@@ -63,7 +58,6 @@ const BiomarkerImpactTool = dynamic(
 
 const tabIcons = {
   simulator: Layers,
-  network: Network,
   protocol: Wand2,
   biomarker: FlaskConical,
   impact: BarChart3,
@@ -73,7 +67,6 @@ const tabIcons = {
 
 const toolAccents: Record<ToolId, string> = {
   simulator:  'var(--accent-violet)',
-  network:    'var(--accent-cyan)',
   protocol:   'var(--accent-emerald)',
   biomarker:  'var(--accent-amber)',
   impact:     'var(--accent-rose)',
@@ -226,7 +219,6 @@ export function ToolsHub() {
 
         <div role="tabpanel" id={`panel-${active}`} aria-labelledby={`tab-${active}`}>
           {active === 'simulator' && <StackSimulatorTool />}
-          {active === 'network' && <StackNetworkTool />}
           {active === 'protocol' && <ProtocolEngineTool />}
           {active === 'biomarker' && <BiomarkerDashboardTool />}
           {active === 'impact' && <BiomarkerImpactTool />}

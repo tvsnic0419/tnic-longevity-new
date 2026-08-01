@@ -79,46 +79,6 @@ export interface ProtocolEngineOutput {
   disclaimer: string;
 }
 
-// ── Stack Network Analyzer ────────────────────────────────────────────────
-
-export type NetworkEdgeType = 'synergy' | 'caution' | 'contraindication' | 'potential';
-
-export interface NetworkNode {
-  id: string;
-  label: string;
-  shortLabel: string;
-  pathway: string;
-  evidence: EvidenceTier;
-  x: number;
-  y: number;
-  selected: boolean;
-  bioavailability?: number;
-}
-
-export interface NetworkEdge {
-  id: string;
-  source: string;
-  target: string;
-  type: NetworkEdgeType;
-  label: string;
-  detail: string;
-  severity: 'low' | 'medium' | 'high';
-  active: boolean;
-}
-
-export interface StackNetworkGraph {
-  nodes: NetworkNode[];
-  edges: NetworkEdge[];
-  stats: {
-    synergyCount: number;
-    cautionCount: number;
-    contraindicationCount: number;
-    activeSynergyCount: number;
-    activeConflictCount: number;
-    networkDensity: number;
-  };
-}
-
 // ── Biomarker Dashboard ───────────────────────────────────────────────────
 
 export interface TrendPoint {
@@ -177,8 +137,6 @@ export interface ToolsStoreState {
   protocolGoals: ProtocolGoal[];
   protocolBudget: ProtocolEngineInput['budget'];
   protocolComplexity: ProtocolEngineInput['complexity'];
-  networkHighlightNode: string | null;
-  networkFilter: 'all' | 'active' | 'conflicts';
   dashboardMarkerId: string;
   forecastHorizonWeeks: 12 | 24 | 36;
   showForecastBands: boolean;

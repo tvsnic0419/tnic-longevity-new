@@ -170,9 +170,9 @@ export const seoRoutes = {
     buildPageMetadata({
       title: 'Longevity Tools — Six Interactive Calculators',
       description:
-        'Six free longevity tools: stack simulator, compound interaction network, protocol engine, biomarker trend visualizer, intervention impact ranking, and healthspan estimator. All local — no paywall, no account.',
+        'Six free longevity tools: stack simulator, protocol engine, biomarker dashboard, intervention impact ranking, healthspan estimator, and inventory forecast. All local — no paywall, no account.',
       path: '/tools',
-      keywords: ['longevity calculator', 'supplement interaction graph', 'healthspan estimator', 'biological age calculator'],
+      keywords: ['longevity calculator', 'healthspan estimator', 'biological age calculator', 'supplement protocol planner'],
     }),
 
   elite8: () =>

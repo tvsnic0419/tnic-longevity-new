@@ -235,11 +235,6 @@ const toolContexts: Record<ToolId, HubContext> = {
     why: 'Two safe compounds together can still conflict. See the math before you commit to a daily protocol.',
     next: 'Add compounds from Stack Architect, review the risk index, then export or share your stack URL.',
   },
-  network: {
-    what: 'Interactive graph of compound synergies, cautions, and contraindication edges.',
-    why: 'Linear stack lists hide network effects. Visualize how NAD+, NRF2, and mTOR pathways interact.',
-    next: 'Identify red edges first, remove conflicting pairs, then re-run the Simulator for an updated score.',
-  },
   protocol: {
     what: 'Rule-based multi-phase protocol planner from goals, labs, and lifestyle inputs.',
     why: 'Phased ramp-in prevents overwhelm and catches interactions early. Full reasoning trace — not generative AI.',

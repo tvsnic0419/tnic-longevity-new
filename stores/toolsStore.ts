@@ -11,8 +11,6 @@ interface ToolsStore extends ToolsStoreState {
   toggleProtocolGoal: (goal: ProtocolGoal) => void;
   setProtocolBudget: (budget: ToolsStoreState['protocolBudget']) => void;
   setProtocolComplexity: (complexity: ToolsStoreState['protocolComplexity']) => void;
-  setNetworkHighlightNode: (id: string | null) => void;
-  setNetworkFilter: (filter: ToolsStoreState['networkFilter']) => void;
   setDashboardMarkerId: (id: string) => void;
   setForecastHorizonWeeks: (weeks: ToolsStoreState['forecastHorizonWeeks']) => void;
   setShowForecastBands: (show: boolean) => void;
@@ -23,8 +21,6 @@ const initialState: ToolsStoreState = {
   protocolGoals: ['longevity', 'energy'],
   protocolBudget: 'moderate',
   protocolComplexity: 'standard',
-  networkHighlightNode: null,
-  networkFilter: 'all',
   dashboardMarkerId: biomarkers[0]?.id ?? 'gsh',
   forecastHorizonWeeks: 24,
   showForecastBands: true,
@@ -48,8 +44,6 @@ export const useToolsStore = create<ToolsStore>()(
 
       setProtocolBudget: (budget) => set({ protocolBudget: budget }),
       setProtocolComplexity: (complexity) => set({ protocolComplexity: complexity }),
-      setNetworkHighlightNode: (id) => set({ networkHighlightNode: id }),
-      setNetworkFilter: (filter) => set({ networkFilter: filter }),
       setDashboardMarkerId: (id) => set({ dashboardMarkerId: id }),
       setForecastHorizonWeeks: (weeks) => set({ forecastHorizonWeeks: weeks }),
       setShowForecastBands: (show) => set({ showForecastBands: show }),
