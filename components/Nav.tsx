@@ -97,26 +97,38 @@ export function Nav() {
         </Link>
 
         <div className="hidden lg:flex gap-0.5 xl:gap-1">
-          {navLinks.map((link) =>
-            isInternal(link.href) ? (
+          {navLinks.map((link) => {
+            const active = isActive(link.href);
+            const className = `focus-ring interactive isolate relative px-3.5 py-2 rounded-xl text-sm font-semibold tracking-tight transition-colors ${
+              active
+                ? 'text-accent-cyan'
+                : 'text-foreground/70 hover:text-foreground hover:bg-accent-cyan/10'
+            }`;
+            const pill = active && (
+              <motion.span
+                layoutId="nav-active-pill"
+                className="absolute inset-0 -z-10 rounded-xl bg-accent-cyan/10 ring-1 ring-inset ring-accent-cyan/25"
+                transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+              />
+            );
+
+            return isInternal(link.href) ? (
               <Link
                 key={link.href}
                 href={link.href}
-                aria-current={isActive(link.href) ? 'page' : undefined}
-                className="focus-ring interactive px-3.5 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent-cyan/10 transition-all"
+                aria-current={active ? 'page' : undefined}
+                className={className}
               >
+                {pill}
                 {link.label}
               </Link>
             ) : (
-              <a
-                key={link.href}
-                href={link.href}
-                className="focus-ring interactive px-3.5 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent-cyan/10 transition-all"
-              >
+              <a key={link.href} href={link.href} className={className}>
+                {pill}
                 {link.label}
               </a>
-            ),
-          )}
+            );
+          })}
         </div>
 
         <div className="hidden lg:flex items-center gap-2 shrink-0">
