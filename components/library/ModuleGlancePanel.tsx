@@ -3,6 +3,7 @@ import { FileText, Route, Target } from 'lucide-react';
 import type { LibraryModule } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { StatTile } from '@/components/ui/StatTile';
 
 /**
  * "Compound at a glance" for library-first compounds that do not (yet) have a
@@ -27,26 +28,6 @@ const focusFromTagline = (tagline: string): string => {
   return (focus || tagline).trim();
 };
 
-function Metric({
-  icon: Icon,
-  label,
-  children,
-}: {
-  icon: typeof Route;
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="rounded-xl border border-border/60 bg-muted/10 p-4">
-      <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
-        <Icon className="h-3.5 w-3.5 text-accent-cyan" aria-hidden="true" />
-        {label}
-      </div>
-      <div className="mt-2">{children}</div>
-    </div>
-  );
-}
-
 export function ModuleGlancePanel({
   module,
   studyCount,
@@ -70,29 +51,29 @@ export function ModuleGlancePanel({
       </div>
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
-        <Metric icon={Route} label="Focus">
+        <StatTile icon={Route} label="Focus">
           <p className="text-sm font-semibold text-foreground">{focusFromTagline(module.tagline)}</p>
-        </Metric>
+        </StatTile>
 
-        <Metric icon={Target} label="Hallmarks targeted">
-          <p className="text-lg font-bold leading-none text-accent-violet">
+        <StatTile icon={Target} label="Hallmarks targeted" accent="violet">
+          <p className="font-display text-xl font-medium leading-none text-accent-violet">
             {targetHallmarks.length}
-            <span className="ml-1 text-xs font-medium text-muted-foreground">
+            <span className="font-sans ml-1 text-xs font-medium text-muted-foreground">
               of 12
             </span>
           </p>
           <p className="mt-1.5 text-xs text-muted-foreground">Aging pathways</p>
-        </Metric>
+        </StatTile>
 
-        <Metric icon={FileText} label="Evidence base">
-          <p className="text-lg font-bold leading-none text-accent-emerald">
+        <StatTile icon={FileText} label="Evidence base" accent="emerald">
+          <p className="font-display text-xl font-medium leading-none text-accent-emerald">
             {studyCount}
-            <span className="ml-1 text-xs font-medium text-muted-foreground">
+            <span className="font-sans ml-1 text-xs font-medium text-muted-foreground">
               cited {studyCount === 1 ? 'study' : 'studies'}
             </span>
           </p>
           <p className="mt-1.5 text-xs text-muted-foreground">Peer-reviewed PMIDs</p>
-        </Metric>
+        </StatTile>
       </div>
 
       {targetHallmarks.length > 0 && (

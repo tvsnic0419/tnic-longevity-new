@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
+import { Activity } from 'lucide-react';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { BioAgeWizard } from '@/components/bio-age/BioAgeWizard';
 
 export const metadata: Metadata = {
@@ -20,41 +22,29 @@ export default function BioAgePage() {
       <main id="main-content" tabIndex={-1} className="pt-20 pb-24">
         <div className="container-page py-12">
           {/* Header */}
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-xs font-medium text-emerald-400 tracking-widest uppercase">
-                Biological Age Engine · v2
-              </span>
+          <PageHeader
+            icon={Activity}
+            eyebrow="Biological Age Engine · v2"
+            title="How Old Are Your Cells?"
+            description="4 steps. 5 domains. One score that matters more than your birthday. Get your biological age estimate and a personalized anti-aging protocol — calibrated to your actual metrics."
+            theme="emerald"
+          />
+          <div className="flex flex-wrap items-center justify-center gap-6 -mt-6 mb-12 text-sm text-muted-foreground">
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              Metabolic markers
             </div>
-            <h1 className="text-4xl md:text-5xl font-black tracking-tight text-foreground mb-4">
-              How Old Are
-              <br />
-              <span className="text-emerald-400">Your Cells?</span>
-            </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              4 steps. 5 domains. One score that matters more than your birthday.
-              Get your biological age estimate and a personalized anti-aging protocol —
-              calibrated to your actual metrics.
-            </p>
-
-            <div className="flex flex-wrap items-center justify-center gap-6 mt-6 text-sm text-muted-foreground">
-              <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                Metabolic markers
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-amber-500" />
-                Inflammatory burden
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-cyan-500" />
-                NAD+ & hormonal vitality
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-violet-500" />
-                Lifestyle optimization
-              </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-amber-500" />
+              Inflammatory burden
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-cyan-500" />
+              NAD+ & hormonal vitality
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-violet-500" />
+              Lifestyle optimization
             </div>
           </div>
 

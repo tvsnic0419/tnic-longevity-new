@@ -167,6 +167,17 @@
   --radius-xl: 1.25rem;
   --radius-2xl: 1.5rem;
 
+  /* The primary nav's desktop row (9 top-level links + search + theme toggle +
+     3 action items) measurably overflows its container below this width — the
+     Dashboard CTA sits past the viewport edge with no scroll affordance, i.e.
+     unreachable, not just cramped. Verified via headless measurement at
+     1280/1366/1440/1536 (97–197px overflow) vs 1920 (fits). The desktop row,
+     AND the mobile-menu trigger that must cover for it below this width, both
+     key off this one token (see Nav.tsx) so there is never a dead zone with
+     neither visible. If the link count changes, re-measure before touching
+     this value. */
+  --breakpoint-nav: 106.25rem; /* 1700px — measured natural-fit width is ~1633px; this leaves a real margin */
+
   --space-touch: 2.75rem;
   --leading-body: 1.65;
   --leading-tight: 1.15;
