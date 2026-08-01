@@ -1,6 +1,7 @@
 import { stackPresets, type PresetKey } from './presets';
-import { researchFeed } from './data';
+import { researchFeed, compounds } from './data';
 import { platformStats } from './platform-stats';
+import { analyzeStack, hallmarkDisplayNames } from './stack-analysis';
 
 export const heroValueProps = [
   'Every compound rated Tier A, B, or C — from human trials, not marketing claims',
@@ -12,6 +13,7 @@ export const quizSteps = [
   {
     id: 'goal',
     question: 'What brings you to TNiC today?',
+    multi: false,
     options: [
       { id: 'learn', label: 'Understand the science first', icon: 'book' as const },
       { id: 'defense', label: 'Strengthen antioxidant defenses', icon: 'shield' as const },
@@ -22,8 +24,21 @@ export const quizSteps = [
     ],
   },
   {
+    id: 'concern',
+    question: "What's bothering you most right now?",
+    multi: false,
+    options: [
+      { id: 'mito', label: 'Low energy / fatigue', desc: 'Mitochondrial & NAD+ decline' },
+      { id: 'inflammation', label: 'Brain fog or slow recovery', desc: 'Chronic inflammation' },
+      { id: 'senescence', label: 'Feeling older than my age', desc: 'Cellular senescence' },
+      { id: 'nutrient', label: 'Metabolic or blood-sugar sluggishness', desc: 'Nutrient-sensing pathways' },
+      { id: 'none', label: 'Nothing specific — being proactive', desc: 'No particular symptom' },
+    ],
+  },
+  {
     id: 'age',
     question: 'Your age range',
+    multi: false,
     options: [
       { id: '30-40', label: '30–40', desc: 'Prevention window' },
       { id: '41-50', label: '41–50', desc: 'Early decline signals' },
@@ -34,18 +49,48 @@ export const quizSteps = [
   {
     id: 'experience',
     question: 'Your supplement experience',
+    multi: false,
     options: [
       { id: 'new', label: 'Brand new', desc: 'Start with fundamentals' },
       { id: 'some', label: 'Some experience', desc: 'Ready to optimize' },
       { id: 'advanced', label: 'Advanced', desc: 'Compare & stack' },
     ],
   },
+  {
+    id: 'budget',
+    question: 'Monthly budget for this stack',
+    multi: false,
+    options: [
+      { id: 'under50', label: 'Under $50/month', desc: 'Start lean' },
+      { id: '50to150', label: '$50–150/month', desc: 'Most popular range' },
+      { id: 'over150', label: '$150+/month', desc: 'Maximum coverage' },
+    ],
+  },
+  {
+    id: 'safety',
+    question: 'Any of these apply to you?',
+    multi: true,
+    options: [
+      { id: 'pregnant', label: 'Pregnant or nursing' },
+      { id: 'bloodThinners', label: 'Taking blood thinners' },
+      { id: 'diabetesMeds', label: 'Diabetes medication' },
+      { id: 'kidney', label: 'Kidney disease' },
+      { id: 'thyroid', label: 'Thyroid condition' },
+      { id: 'chemo', label: 'Active chemotherapy' },
+      { id: 'none', label: 'None of these apply' },
+    ],
+  },
 ] as const;
 
 export type QuizAnswers = {
   goal?: string;
+  /** Hallmark id the user says bothers them most, or 'none' — see CONCERN_HALLMARK. */
+  concern?: string;
   age?: string;
   experience?: string;
+  budget?: string;
+  /** Multi-select; ['none'] or omitted means no flags raised. */
+  safety?: string[];
 };
 
 type QuizNextStep = { title: string; href: string; cta: string };
@@ -87,15 +132,42 @@ function isAcceleratedAge(age?: string): boolean {
   return age === '51-60' || age === '60+';
 }
 
+/** Concern option id -> the real hallmark id it names (see lib/data.ts compound
+ * `hallmarks` fields). 'none' and unrecognized ids intentionally have no entry. */
+const CONCERN_HALLMARK: Record<string, string> = {
+  mito: 'mito',
+  inflammation: 'inflammation',
+  senescence: 'senescence',
+  nutrient: 'nutrient',
+};
+
+/** A preset's aggregate hallmark coverage, derived from its actual compounds —
+ * never a hand-maintained second copy of what each preset "covers". */
+function presetHallmarks(key: PresetKey): Set<string> {
+  return new Set(
+    stackPresets[key].ids.flatMap((id) => compounds.find((c) => c.id === id)?.hallmarks ?? []),
+  );
+}
+
+/** True when the stated concern names a real hallmark the base preset doesn't
+ * already cover — i.e. there's a genuine gap a broader stack could close. */
+function isConcernUnmet(concern: string | undefined, base: PresetKey): boolean {
+  const hallmark = concern ? CONCERN_HALLMARK[concern] : undefined;
+  return hallmark ? !presetHallmarks(base).has(hallmark) : false;
+}
+
 /**
  * How far up a goal's ladder to climb, 0–2. A brand-new user always stays at
- * rung 0 regardless of age — "start with fundamentals" is a promise, not a
- * suggestion. Age only matters once experience says the user is ready to act
- * on it, matching the quiz's own option copy ("Advanced: Compare & stack").
+ * rung 0 regardless of age or concern — "start with fundamentals" is a
+ * promise, not a suggestion. Age and concern only matter once experience says
+ * the user is ready to act on them, matching the quiz's own option copy
+ * ("Advanced: Compare & stack") — an unmet concern is treated as exactly the
+ * same strength of readiness signal as an accelerated age band, not a
+ * guarantee the broadened stack fully covers it (see isConcernUnmet).
  */
-function ladderStep(age: string | undefined, experience: string | undefined): 0 | 1 | 2 {
-  if (experience === 'advanced') return isAcceleratedAge(age) ? 2 : 1;
-  if (experience === 'some') return isAcceleratedAge(age) ? 1 : 0;
+function ladderStep(age: string | undefined, experience: string | undefined, concernUnmet = false): 0 | 1 | 2 {
+  if (experience === 'advanced') return isAcceleratedAge(age) || concernUnmet ? 2 : 1;
+  if (experience === 'some') return isAcceleratedAge(age) || concernUnmet ? 1 : 0;
   return 0;
 }
 
@@ -183,10 +255,11 @@ function personalizationNote(answers: QuizAnswers): string {
 
 /**
  * Resolve the stack preset for a set of quiz answers. Goal picks the mechanism
- * family; age and experience can then broaden it up that goal's ladder (see
- * GOAL_UPGRADE_RUNGS) so two people with the same goal but different readiness
- * signals aren't handed an identical stack. Exported so the live preview and
- * the final result share a single source of truth.
+ * family; age, experience, and a stated concern the base preset doesn't cover
+ * can then broaden it up that goal's ladder (see GOAL_UPGRADE_RUNGS) so two
+ * people with the same goal but different readiness signals aren't handed an
+ * identical stack. Exported so the live preview and the final result share a
+ * single source of truth.
  */
 export function getQuizPreset(answers: QuizAnswers): PresetKey {
   if (answers.goal === 'full') {
@@ -198,7 +271,7 @@ export function getQuizPreset(answers: QuizAnswers): PresetKey {
   const rungs = GOAL_UPGRADE_RUNGS[answers.goal ?? ''];
   if (!rungs) return base;
 
-  const step = ladderStep(answers.age, answers.experience);
+  const step = ladderStep(answers.age, answers.experience, isConcernUnmet(answers.concern, base));
   if (step === 0) return base;
   return resolveRung(rungs, step) ?? base;
 }
@@ -214,12 +287,66 @@ function broadeningNote(answers: QuizAnswers, preset: PresetKey): string | null 
   return `Your experience level and age band signaled you're ready for more than the standard ${stackPresets[base].label} preset, so this was broadened to ${stackPresets[preset].label} for fuller pathway coverage.`;
 }
 
+/** Names the concern the user flagged and whether this preset actually covers
+ * that hallmark — either confirms the match or points at the gap honestly
+ * rather than implying every stated concern gets folded in automatically. */
+function concernNote(answers: QuizAnswers, preset: PresetKey): string | null {
+  const hallmark = answers.concern ? CONCERN_HALLMARK[answers.concern] : undefined;
+  if (!hallmark) return null;
+  const label = (hallmarkDisplayNames[hallmark] ?? hallmark).toLowerCase();
+  return presetHallmarks(preset).has(hallmark)
+    ? `You flagged ${label} as your top concern — this stack directly targets that pathway.`
+    : `You also flagged ${label} — this preset doesn't center on that pathway, so browse the ${hallmarkDisplayNames[hallmark] ?? hallmark} hallmark in the Library to see what would layer in well.`;
+}
+
+const BUDGET_LABEL: Record<string, string> = {
+  under50: 'under $50/month',
+  '50to150': '$50–150/month',
+  over150: '$150+/month',
+};
+const BUDGET_CEILING: Record<string, number> = {
+  under50: 50,
+  '50to150': 150,
+  over150: Infinity,
+};
+
+/** Compares the preset's real monthly cost (lib/stack-analysis's own
+ * calculation, not a second estimate) against the user's stated ceiling. */
+function budgetNote(answers: QuizAnswers, preset: PresetKey): string | null {
+  const ceiling = answers.budget ? BUDGET_CEILING[answers.budget] : undefined;
+  if (ceiling === undefined) return null;
+  const { low, high } = analyzeStack([...stackPresets[preset].ids]).monthlyCost;
+  const label = BUDGET_LABEL[answers.budget!];
+  return high <= ceiling
+    ? `At $${low}–${high}/month, it fits comfortably inside your stated ${label} range.`
+    : `Heads up: this runs $${low}–${high}/month, above your stated ${label} — start with the highest-evidence compounds first and phase the rest in as budget allows.`;
+}
+
+/** Doesn't attempt to match a specific flagged condition to a specific
+ * caution (free-text safety notes aren't reliably keyword-matchable) — just
+ * confirms the flag was heard and points at the real, compound-specific
+ * cautions already rendered below, which is what an honest cross-reference
+ * looks like without guessing. */
+function safetyNote(answers: QuizAnswers): string | null {
+  const flags = (answers.safety ?? []).filter((f) => f !== 'none');
+  if (flags.length === 0) return null;
+  return 'You flagged a health condition or medication — review the consult-worthy cautions for your exact compounds below before starting anything new.';
+}
+
 export function getQuizResult(answers: QuizAnswers) {
   const preset = getQuizPreset(answers);
   const stack = stackPresets[preset];
   const primary = GOAL_NEXT_STEP[answers.goal ?? ''] ?? GOAL_NEXT_STEP.learn;
-  const broadening = broadeningNote(answers, preset);
-  const insight = `${PRESET_INSIGHT[preset]}${broadening ? ` ${broadening}` : ''} ${personalizationNote(answers)}`;
+  const insight = [
+    PRESET_INSIGHT[preset],
+    broadeningNote(answers, preset),
+    concernNote(answers, preset),
+    personalizationNote(answers),
+    budgetNote(answers, preset),
+    safetyNote(answers),
+  ]
+    .filter((part): part is string => Boolean(part))
+    .join(' ');
 
   return { preset, stack, primary, insight };
 }

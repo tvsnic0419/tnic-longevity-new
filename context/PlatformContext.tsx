@@ -37,8 +37,11 @@ import {
 import { validatePlatformImport, type ImportResult } from '@/lib/import-validation';
 export interface QuizRecord {
   goal: string;
+  concern?: string;
   age?: string;
   experience?: string;
+  budget?: string;
+  safety?: string[];
   preset: string;
   completedAt: string;
 }

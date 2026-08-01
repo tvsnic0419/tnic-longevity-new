@@ -390,16 +390,16 @@ export default function SupplementGuidesPage() {
             <div className="grid md:grid-cols-3 gap-6">
               <div className="p-6 rounded-2xl border border-border/60 bg-card">
                 <p className="text-label mb-2">Not sure where to start?</p>
-                <h3 className="font-bold text-foreground mb-3">Take the 3-min quiz</h3>
+                <h3 className="font-bold text-foreground mb-3">Take the Nico Starter Questionnaire</h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Answer 7 questions about your health goals, lifestyle, and budget. Get a
-                  personalized supplement stack ranked by evidence and synergy.
+                  Answer a few questions about your goal, top concern, budget, and safety
+                  flags. Get a personalized supplement stack ranked by evidence and synergy.
                 </p>
                 <Link
                   href="/quiz"
                   className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border/60 bg-card text-foreground font-medium text-sm hover:border-accent-cyan/30 transition"
                 >
-                  Start the quiz
+                  Start the questionnaire
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>

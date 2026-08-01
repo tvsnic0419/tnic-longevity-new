@@ -30,8 +30,11 @@ export function buildQuizSharePath(answers: QuizAnswers): string {
   const result = getQuizResult(answers);
   const params = new URLSearchParams();
   if (answers.goal) params.set('goal', answers.goal);
+  if (answers.concern) params.set('concern', answers.concern);
   if (answers.age) params.set('age', answers.age);
   if (answers.experience) params.set('experience', answers.experience);
+  if (answers.budget) params.set('budget', answers.budget);
+  if (answers.safety?.length) params.set('safety', answers.safety.join(','));
   const qs = params.toString();
   return `/quiz/share/${result.preset}${qs ? `?${qs}` : ''}`;
 }
@@ -56,9 +59,13 @@ export function buildQuizShopUrl(preset: PresetKey): string {
 export function parseQuizSearchParams(search: string): QuizAnswers | null {
   const params = new URLSearchParams(search);
   const goal = params.get('goal') ?? undefined;
+  const concern = params.get('concern') ?? undefined;
   const age = params.get('age') ?? undefined;
   const experience = params.get('experience') ?? undefined;
-  const answers: QuizAnswers = { goal, age, experience };
+  const budget = params.get('budget') ?? undefined;
+  const safetyRaw = params.get('safety');
+  const safety = safetyRaw ? safetyRaw.split(',').filter(Boolean) : undefined;
+  const answers: QuizAnswers = { goal, concern, age, experience, budget, safety };
   return isCompleteQuizAnswers(answers) ? answers : null;
 }
 
@@ -73,8 +80,10 @@ export function buildQuizShareText(answers: QuizAnswers): string {
     `My TNiC longevity quiz result: ${result.stack.label}`,
     '',
     `Goal: ${labelFor('goal', answers.goal!)}`,
+    ...(answers.concern ? [`Top concern: ${labelFor('concern', answers.concern)}`] : []),
     `Age: ${labelFor('age', answers.age!)}`,
     `Experience: ${labelFor('experience', answers.experience!)}`,
+    ...(answers.budget ? [`Budget: ${labelFor('budget', answers.budget)}`] : []),
     '',
     `Recommended stack: ${compoundNames}`,
     result.insight,
@@ -108,9 +117,9 @@ export function buildQuizShareMarkdown(answers: QuizAnswers): string {
 | Profile | Value |
 | --- | --- |
 | Goal | ${labelFor('goal', answers.goal!)} |
-| Age range | ${labelFor('age', answers.age!)} |
+${answers.concern ? `| Top concern | ${labelFor('concern', answers.concern)} |\n` : ''}| Age range | ${labelFor('age', answers.age!)} |
 | Experience | ${labelFor('experience', answers.experience!)} |
-| Preset | ${result.stack.label} |
+${answers.budget ? `| Budget | ${labelFor('budget', answers.budget)} |\n` : ''}| Preset | ${result.stack.label} |
 
 ## Recommended compounds
 

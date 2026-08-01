@@ -13,7 +13,7 @@ export function QuizShareRedirect({ preset }: { preset: PresetKey }) {
   useEffect(() => {
     const qs = new URLSearchParams();
     qs.set('preset', preset);
-    for (const key of ['goal', 'age', 'experience'] as const) {
+    for (const key of ['goal', 'concern', 'age', 'experience', 'budget', 'safety'] as const) {
       const val = searchParams.get(key);
       if (val) qs.set(key, val);
     }

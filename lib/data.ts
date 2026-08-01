@@ -1687,7 +1687,7 @@ export const supplementRedFlags = [
 ];
 
 export const gettingStartedSteps = [
-  { step: 1, title: 'Take the 3-Min Starter Quiz', desc: 'Answer three questions about your goal, age, and experience. Get a personalized stack preset and next OS step.', link: '/quiz' },
+  { step: 1, title: 'Take the Nico Starter Questionnaire', desc: 'Answer questions about your goal, concern, age, experience, budget, and safety flags. Get a personalized stack preset and next OS step.', link: '/quiz' },
   { step: 2, title: 'Review Your Biomarkers', desc: 'See which longevity markers are most depleted for your profile. Understand what your stack needs to target.', link: '/labs?tab=input' },
   { step: 3, title: 'Build Your Stack', desc: 'Use the Stack Architect to toggle compounds. Watch synergy score and AM/PM dosing update in real time.', link: '/stacks' },
   { step: 4, title: 'Check Safety & Consult', desc: 'Review contraindications in the Trust Center. Export your protocol and bring it to your physician.', link: '/trust' },
@@ -1962,6 +1962,6 @@ export const consumerFAQ = [
     id: 'faq40',
     category: 'getting-started' as const,
     question: 'Should I look into peptides before I finish the compound library?',
-    answer: 'Generally no. Every peptide on TNiC\'s list is either prescription-only, has a materially thinner human evidence base than TNiC\'s Tier-A oral compounds, or both — Semaglutide/Tirzepatide being the one exception with genuine large-RCT backing. If you are new to TNiC, the compound library and 3-Min Quiz are the lower-risk, better-evidenced starting point. Peptides are worth reading once you understand evidence tiers and want to evaluate a specific claim you have already encountered elsewhere, not as a first stop.',
+    answer: 'Generally no. Every peptide on TNiC\'s list is either prescription-only, has a materially thinner human evidence base than TNiC\'s Tier-A oral compounds, or both — Semaglutide/Tirzepatide being the one exception with genuine large-RCT backing. If you are new to TNiC, the compound library and Nico Starter Questionnaire are the lower-risk, better-evidenced starting point. Peptides are worth reading once you understand evidence tiers and want to evaluate a specific claim you have already encountered elsewhere, not as a first stop.',
   },
 ];

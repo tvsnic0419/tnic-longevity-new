@@ -94,7 +94,7 @@ export const hubContexts: Record<
     theme: 'cyan',
     what: 'Consumer education hub — getting started path, glossary, outcome timelines, red flags, and 15 curated FAQ answers.',
     why: 'Intelligent consumers ask hard questions first. Learn the science and safety rails before building a stack.',
-    next: 'Complete the Start Here checklist, read Red Flags, then take the 3-min quiz for a personalized stack handoff.',
+    next: 'Complete the Start Here checklist, read Red Flags, then take the Nico Starter Questionnaire for a personalized stack handoff.',
   },
   compare: {
     theme: 'cyan',
@@ -104,9 +104,9 @@ export const hubContexts: Record<
   },
   quiz: {
     theme: 'emerald',
-    what: 'A 3-question intake that maps your goal, age window, and experience to an evidence-graded stack preset.',
-    why: 'One-size-fits-all stacks fail. The quiz routes beginners to fundamentals and advanced users to compare-and-stack paths.',
-    next: 'Answer all three questions, load your preset in Stack Architect, and open your OS dashboard to track progress.',
+    what: 'The Nico Starter Questionnaire — goal, concern, age, experience, budget, and safety flags mapped to an evidence-graded stack preset.',
+    why: 'One-size-fits-all stacks fail. Nico routes beginners to fundamentals and advanced users to compare-and-stack paths.',
+    next: 'Answer every question, load your preset in Stack Architect, and open your OS dashboard to track progress.',
   },
   library: {
     theme: 'emerald',

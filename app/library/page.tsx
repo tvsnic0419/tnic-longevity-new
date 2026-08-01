@@ -63,7 +63,7 @@ export default function LibraryPage() {
           { value: 'A–C', label: 'Evidence tiers' },
           { value: String(eliteInterventions.length), label: 'Elite interventions' },
         ]}
-        primary={{ href: '/quiz', label: 'Find your stack in 90 seconds' }}
+        primary={{ href: '/quiz', label: 'Take the Nico Starter Questionnaire' }}
         secondary={{ href: '/stacks', label: 'Open the Stack Architect' }}
       />
       {/* Lead with the page title and context, then the tools to act on it */}

@@ -70,6 +70,27 @@ describe('getQuizPreset', () => {
     expect(getQuizPreset({ goal: 'full', age: '60+' })).toBe('hybrid');
     expect(getQuizPreset({ goal: 'full', age: '51-60' })).toBe('hybrid');
   });
+
+  it('lets an unmet concern act as a readiness signal, same strength as accelerated age', () => {
+    // 'senescence' isn't in the NRF2 base preset's hallmark coverage (glynac,
+    // sulforaphane, rala only cover mito/proteostasis/inflammation/genomic).
+    expect(getQuizPreset({ goal: 'defense', experience: 'some', concern: 'senescence' })).toBe('hybrid');
+    expect(getQuizPreset({ goal: 'defense', experience: 'advanced', concern: 'senescence' })).toBe('full');
+  });
+
+  it('ignores concern for a brand-new user, same as it ignores age', () => {
+    expect(getQuizPreset({ goal: 'defense', experience: 'new', concern: 'senescence' })).toBe('nrf2');
+  });
+
+  it('does not nudge on a concern the base preset already covers', () => {
+    // NRF2 base already covers 'inflammation' via glynac/sulforaphane.
+    expect(getQuizPreset({ goal: 'defense', experience: 'some', concern: 'inflammation' })).toBe('nrf2');
+  });
+
+  it('does not nudge on "nothing specific" or an unrecognized concern id', () => {
+    expect(getQuizPreset({ goal: 'defense', experience: 'some', concern: 'none' })).toBe('nrf2');
+    expect(getQuizPreset({ goal: 'defense', experience: 'some', concern: 'nonsense' })).toBe('nrf2');
+  });
 });
 
 describe('getQuizResult', () => {
@@ -113,5 +134,35 @@ describe('getQuizResult', () => {
     const unbroadened = getQuizResult({ goal: 'defense', age: '30-40', experience: 'new' });
     expect(unbroadened.preset).toBe('nrf2');
     expect(unbroadened.insight).not.toContain('broadened');
+  });
+
+  it('acknowledges a covered concern and flags an uncovered one honestly', () => {
+    const covered = getQuizResult({ goal: 'defense', concern: 'inflammation' });
+    expect(covered.insight).toContain('inflammation');
+    expect(covered.insight).toContain('directly targets');
+
+    const uncovered = getQuizResult({ goal: 'defense', concern: 'senescence' });
+    expect(uncovered.insight).toContain('senescence');
+    expect(uncovered.insight).toContain("doesn't center on that pathway");
+  });
+
+  it('says nothing about concern when none was stated or it was "none"', () => {
+    expect(getQuizResult({ goal: 'defense' }).insight).not.toContain('flagged');
+    expect(getQuizResult({ goal: 'defense', concern: 'none' }).insight).not.toContain('flagged');
+  });
+
+  it('compares the real stack cost against the stated budget', () => {
+    const overBudget = getQuizResult({ goal: 'full', experience: 'advanced', budget: 'under50' });
+    expect(overBudget.insight).toContain('Heads up');
+    expect(overBudget.insight).toContain('/month');
+
+    const withinBudget = getQuizResult({ goal: 'defense', budget: 'over150' });
+    expect(withinBudget.insight).toContain('fits comfortably');
+  });
+
+  it('surfaces a safety callout only when a real condition is flagged', () => {
+    expect(getQuizResult({ goal: 'defense' }).insight).not.toContain('health condition');
+    expect(getQuizResult({ goal: 'defense', safety: ['none'] }).insight).not.toContain('health condition');
+    expect(getQuizResult({ goal: 'defense', safety: ['kidney'] }).insight).toContain('health condition');
   });
 });

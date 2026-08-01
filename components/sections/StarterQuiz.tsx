@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BookOpen, Shield, Zap, Layers, Check } from 'lucide-react';
+import { BookOpen, Shield, Zap, Layers, Check, Square, SquareCheck, ArrowRight } from 'lucide-react';
 import { quizSteps, getQuizResult, getQuizPreset, type QuizAnswers } from '@/lib/homepage';
 import { stackPresets } from '@/lib/presets';
 import { compounds } from '@/lib/data';
@@ -83,14 +83,14 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
   const [step, setStep] = useState(shared ? quizSteps.length - 1 : 0);
   const [answers, setAnswers] = useState<QuizAnswers>(shared ?? {});
   const [done, setDone] = useState(Boolean(shared));
+  const [multiDraft, setMultiDraft] = useState<string[]>([]);
 
   const current = quizSteps[step];
   const progress = done ? 100 : ((step + 1) / quizSteps.length) * 100;
 
-  const select = (optionId: string) => {
-    const key = current.id as keyof QuizAnswers;
-    const next = { ...answers, [key]: optionId };
+  const advance = (next: QuizAnswers) => {
     setAnswers(next);
+    setMultiDraft([]);
 
     if (step < quizSteps.length - 1) {
       setStep(step + 1);
@@ -98,8 +98,11 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
       const finalResult = getQuizResult(next);
       setQuizResult({
         goal: next.goal ?? '',
+        concern: next.concern,
         age: next.age,
         experience: next.experience,
+        budget: next.budget,
+        safety: next.safety,
         preset: finalResult.preset,
         completedAt: new Date().toISOString(),
       });
@@ -107,9 +110,29 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
     }
   };
 
+  const select = (optionId: string) => {
+    const key = current.id as Exclude<keyof QuizAnswers, 'safety'>;
+    advance({ ...answers, [key]: optionId });
+  };
+
+  // 'none' is exclusive — picking it clears any other flags and finishes the
+  // step immediately, same one-tap feel as every single-select question.
+  const toggleMulti = (optionId: string) => {
+    if (optionId === 'none') {
+      advance({ ...answers, safety: [] });
+      return;
+    }
+    setMultiDraft((prev) =>
+      prev.includes(optionId) ? prev.filter((id) => id !== optionId) : [...prev, optionId],
+    );
+  };
+
+  const confirmMulti = () => advance({ ...answers, safety: multiDraft });
+
   const reset = () => {
     setStep(0);
     setAnswers({});
+    setMultiDraft([]);
     setDone(false);
   };
 
@@ -119,14 +142,12 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
     <div
       className={`p-6 md:p-8 ${variant === 'page' ? 'card-ultra shadow-lg shadow-accent-emerald/10' : ''}`}
       role="form"
-      aria-label="3-minute starter quiz"
+      aria-label="Nico Starter Questionnaire"
     >
       <div className="flex items-center justify-between mb-4">
         <div>
-          <p className="font-mono text-[10px] text-accent-cyan tracking-widest mb-1">3-MIN QUIZ</p>
-          <h3 className="text-lg font-bold">
-            {variant === 'page' ? 'Your personalized path' : 'Find Your Entry Point'}
-          </h3>
+          <p className="font-mono text-[10px] text-accent-cyan tracking-widest mb-1">NICO QUESTIONNAIRE</p>
+          <h3 className="text-lg font-bold">Nico Starter Questionnaire</h3>
         </div>
         <div className="flex items-center gap-3">
           {variant === 'embedded' && (
@@ -204,7 +225,12 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -12 }}
           >
-            <p className="text-sm font-semibold mb-3">{current.question}</p>
+            <p className="text-sm font-semibold mb-1">{current.question}</p>
+            {current.multi && (
+              <p className="text-[11px] text-muted-foreground mb-2">
+                Select any that apply, then continue — helps flag interactions before you start.
+              </p>
+            )}
             <div className="space-y-2">
               {current.options.map((opt) => {
                 const Icon = 'icon' in opt ? goalIcons[opt.icon] : null;
@@ -212,15 +238,24 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
                   step === 0
                     ? goalAccent[opt.id] ?? 'var(--accent-cyan)'
                     : 'var(--accent-cyan)';
+                const checked = current.multi && multiDraft.includes(opt.id);
+                const CheckboxIcon = checked ? SquareCheck : Square;
                 return (
                   <button
                     key={opt.id}
                     type="button"
-                    onClick={() => select(opt.id)}
+                    onClick={() => (current.multi ? toggleMulti(opt.id) : select(opt.id))}
+                    aria-pressed={current.multi ? checked : undefined}
                     className="focus-ring w-full text-left glass glass-hover rounded-xl px-4 py-3 flex items-center gap-3 transition-all group"
                     style={{ ['--hover-accent' as string]: optAccent }}
                   >
-                    {Icon && (
+                    {current.multi ? (
+                      <CheckboxIcon
+                        className="w-4 h-4 shrink-0"
+                        style={{ color: checked ? 'var(--accent-cyan)' : 'var(--muted-foreground)' }}
+                        aria-hidden="true"
+                      />
+                    ) : Icon ? (
                       <div
                         className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-all group-hover:scale-110"
                         style={{
@@ -233,7 +268,7 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
                           aria-hidden="true"
                         />
                       </div>
-                    )}
+                    ) : null}
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-semibold group-hover:text-foreground transition-colors"
                         style={{ color: 'inherit' }}>
@@ -253,6 +288,17 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
                 );
               })}
             </div>
+            {current.multi && (
+              <button
+                type="button"
+                onClick={confirmMulti}
+                disabled={multiDraft.length === 0}
+                className="focus-ring interactive w-full mt-3 rounded-xl bg-accent-cyan text-black py-3 text-sm font-semibold flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-accent-emerald transition-colors"
+              >
+                Continue
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </button>
+            )}
           </motion.div>
         ) : result && (
           <QuizResultPanel result={result} answers={answers} onRetake={reset} />
