@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { MoleculeStage } from "./MoleculeStage";
-import { VIZ, FONT, HUES, type RGB } from "./tokens";
+import { FONT, HUES, paletteFor, type RGB } from "./tokens";
+import { useTheme } from "@/components/theme/ThemeProvider";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CinematicHubHero — a reusable, Descent-language opening band for hub pages.
@@ -10,6 +11,10 @@ import { VIZ, FONT, HUES, type RGB } from "./tokens";
 // Fraunces headline, a live stat rail, and gradient CTAs — all keyed to a hub's
 // signature hue so it sits inside the same site-wide camera as everything else.
 // Content is real: callers pass stats joined from lib data, never invented.
+//
+// Theme-aware: reads the site's resolved dark/light theme and swaps in the
+// matching palette from viz/tokens (paletteFor) rather than only ever
+// rendering the dark "evidence-noir" look.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type HubStat = { value: string; label: string };
@@ -32,12 +37,14 @@ export function CinematicHubHero({
   primary?: { href: string; label: string };
   secondary?: { href: string; label: string };
 }) {
-  const rgb: RGB = HUES[hue] ?? HUES.violet;
+  const { resolved } = useTheme();
+  const { viz, hues } = paletteFor(resolved);
+  const rgb: RGB = hues[hue] ?? hues.violet;
   const hueCss = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
 
   return (
     <section className="tnic-hubhero" style={{ "--hue": hueCss } as React.CSSProperties}>
-      <style>{HUBHERO_CSS}</style>
+      <style>{hubHeroCss(viz)}</style>
 
       {/* full-bleed molecular field, masked to ambience */}
       <div className="hh-field" aria-hidden="true">
@@ -83,12 +90,13 @@ export function CinematicHubHero({
   );
 }
 
-const HUBHERO_CSS = `
+function hubHeroCss(viz: { ink: string; muted: string; faint: string; line: string; void: string; indigo: string }) {
+  return `
 .tnic-hubhero {
   position: relative; isolation: isolate; overflow: hidden;
   padding: clamp(72px, 12vh, 140px) 0 clamp(48px, 8vh, 96px);
   font-family: ${FONT.sans};
-  color: ${VIZ.ink};
+  color: ${viz.ink};
   -webkit-font-smoothing: antialiased;
 }
 .tnic-hubhero * { box-sizing: border-box; }
@@ -102,7 +110,7 @@ const HUBHERO_CSS = `
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background:
     radial-gradient(90% 60% at 50% 0%, color-mix(in srgb, var(--hue) 10%, transparent), transparent 60%),
-    linear-gradient(180deg, transparent 40%, rgba(5,7,16,0.5) 100%);
+    linear-gradient(180deg, transparent 40%, color-mix(in srgb, ${viz.void} 55%, transparent) 100%);
 }
 .hh-inner {
   position: relative; z-index: 2;
@@ -117,15 +125,21 @@ const HUBHERO_CSS = `
 .hh-title {
   font-family: ${FONT.display}; font-weight: 400;
   font-size: clamp(40px, 7vw, 84px); line-height: 0.98; letter-spacing: -0.025em;
-  margin: 0; max-width: 18ch; color: ${VIZ.ink};
+  margin: 0; max-width: 18ch; color: ${viz.ink};
 }
 .hh-title em { font-style: italic; color: var(--hue); }
 .hh-lead {
-  font-size: clamp(15px, 2vw, 19px); line-height: 1.6; color: ${VIZ.muted};
+  font-size: clamp(15px, 2vw, 19px); line-height: 1.6; color: ${viz.muted};
   max-width: 56ch; margin: 22px 0 0;
 }
 .hh-stats {
   display: flex; flex-wrap: wrap; gap: clamp(20px, 4vw, 48px); margin-top: 34px;
+}
+@media (max-width: 640px) {
+  /* Below the point where 4 stats fit one flex row, an odd count (our hero
+     rails run 4) leaves one item orphaned alone on its own line — a
+     deliberate 2-column grid reads as designed instead of accidental wrap. */
+  .hh-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px 16px; }
 }
 .hh-stat { display: flex; flex-direction: column; gap: 4px; }
 .hh-stat .v {
@@ -134,14 +148,14 @@ const HUBHERO_CSS = `
 }
 .hh-stat .k {
   font-family: ${FONT.mono}; font-size: 10.5px; letter-spacing: 0.16em;
-  text-transform: uppercase; color: ${VIZ.faint};
+  text-transform: uppercase; color: ${viz.faint};
 }
 .hh-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
 .hh-cta {
   display: inline-flex; align-items: center; gap: 10px;
   padding: 13px 24px; border-radius: 999px; text-decoration: none;
   font-weight: 600; font-size: 15px;
-  background: linear-gradient(135deg, var(--hue), color-mix(in srgb, var(--hue) 55%, #8c8cf5));
+  background: linear-gradient(135deg, var(--hue), color-mix(in srgb, var(--hue) 55%, ${viz.indigo}));
   color: #050710; box-shadow: 0 0 30px color-mix(in srgb, var(--hue) 35%, transparent);
   transition: transform .2s ease, box-shadow .2s ease;
 }
@@ -149,8 +163,9 @@ const HUBHERO_CSS = `
 .hh-cta .arr { transition: transform .2s ease; }
 .hh-cta:hover .arr { transform: translateX(4px); }
 .hh-cta.ghost {
-  background: transparent; color: ${VIZ.ink};
-  border: 1px solid ${VIZ.line}; box-shadow: none;
+  background: transparent; color: ${viz.ink};
+  border: 1px solid ${viz.line}; box-shadow: none;
 }
 .hh-cta.ghost:hover { border-color: var(--hue); }
 `;
+}

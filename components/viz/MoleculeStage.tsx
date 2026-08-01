@@ -8,6 +8,7 @@ import { getGeometry, type Geometry } from "./molecule";
 import type { RGB } from "./tokens";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { runWhenVisible, cappedDpr } from "@/lib/raf-visibility";
+import { useTheme } from "@/components/theme/ThemeProvider";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // MoleculeStage — the shared cinematic renderer for the viz family.
@@ -41,12 +42,15 @@ export function MoleculeStage({
 }) {
   const reduced = useReducedMotion();
   const reducedRef = useRef(false);
+  const { resolved } = useTheme();
+  const isLightRef = useRef(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const drag = useRef({ down: false, x: 0, y: 0, rx: -0.15, ry: 0.5, vx: 0, vy: 0, zoom: 1 });
   const geomRef = useRef<Geometry | null>(null);
   const hueRef = useRef<RGB>(hue);
 
   useEffect(() => { reducedRef.current = reduced; }, [reduced]);
+  useEffect(() => { isLightRef.current = resolved === "light"; }, [resolved]);
   useEffect(() => { hueRef.current = hue; }, [hue]);
   useEffect(() => {
     geomRef.current = geometryId ? getGeometry(geometryId) : null;
@@ -98,10 +102,16 @@ export function MoleculeStage({
         const persp = 6 / (6 + z);
         return { sx: cx + x * scale * persp, sy: cy + y * scale * persp, z, persp, el: a.el };
       });
+      const isLight = isLightRef.current;
       ctx.clearRect(0, 0, w, h);
       const back = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(w, h) * 0.7);
-      back.addColorStop(0, "rgba(20,30,60,0.35)");
-      back.addColorStop(1, "rgba(5,7,16,0)");
+      if (isLight) {
+        back.addColorStop(0, "rgba(148,163,184,0.22)");
+        back.addColorStop(1, "rgba(248,250,252,0)");
+      } else {
+        back.addColorStop(0, "rgba(20,30,60,0.35)");
+        back.addColorStop(1, "rgba(5,7,16,0)");
+      }
       ctx.fillStyle = back;
       ctx.beginPath(); ctx.arc(cx, cy, Math.max(w, h) * 0.7, 0, Math.PI * 2); ctx.fill();
       ctx.lineCap = "round";
@@ -113,8 +123,16 @@ export function MoleculeStage({
         const alpha = 0.35 + (1 - depth) * 0.55;
         const lw = (1.9 + (1 - depth) * 3) * ((p.persp + q.persp) / 2);
         const grad = ctx.createLinearGradient(p.sx, p.sy, q.sx, q.sy);
-        grad.addColorStop(0, `rgba(190,215,255,${alpha})`);
-        grad.addColorStop(1, `rgba(140,170,220,${alpha * 0.85})`);
+        if (isLight) {
+          // Icy near-white bonds read fine on the dark void but vanish on a
+          // light backdrop — a darker slate keeps the same glassy gradient
+          // legible without inverting the whole rendering approach.
+          grad.addColorStop(0, `rgba(51,65,85,${alpha})`);
+          grad.addColorStop(1, `rgba(30,41,59,${alpha * 0.85})`);
+        } else {
+          grad.addColorStop(0, `rgba(190,215,255,${alpha})`);
+          grad.addColorStop(1, `rgba(140,170,220,${alpha * 0.85})`);
+        }
         if (bd.order === 2) {
           const dx = q.sy - p.sy, dy = -(q.sx - p.sx);
           const len = Math.hypot(dx, dy) || 1; const off = 2.6;
@@ -137,11 +155,16 @@ export function MoleculeStage({
         const rad = (isHetero ? 11 : 9) * p.persp * (1.2 - depth * 0.3);
         const pal = ELEMENT_COLOR[p.el] ?? ELEMENT_COLOR.C;
         const a = 0.94 - depth * 0.35;
-        const bloom = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, rad * 3);
-        bloom.addColorStop(0, `${pal.glow}${0.55 * a})`);
+        // On dark, this bloom reads as a luminous glow; the same additive-looking
+        // wash on a light backdrop looks like a smudge, not a glow, so it's
+        // pulled back to a much softer depth cue instead of removed outright.
+        const bloomAlpha = isLight ? 0.55 * a * 0.35 : 0.55 * a;
+        const bloomRadius = isLight ? rad * 2 : rad * 3;
+        const bloom = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, bloomRadius);
+        bloom.addColorStop(0, `${pal.glow}${bloomAlpha})`);
         bloom.addColorStop(1, `${pal.glow}0)`);
         ctx.fillStyle = bloom;
-        ctx.beginPath(); ctx.arc(p.sx, p.sy, rad * 3, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(p.sx, p.sy, bloomRadius, 0, Math.PI * 2); ctx.fill();
         const sphere = ctx.createRadialGradient(p.sx - rad * 0.4, p.sy - rad * 0.45, rad * 0.05, p.sx, p.sy, rad);
         sphere.addColorStop(0, `rgba(${pal.hi[0]},${pal.hi[1]},${pal.hi[2]},${a})`);
         sphere.addColorStop(0.35, `rgba(${pal.core[0]},${pal.core[1]},${pal.core[2]},${a})`);
@@ -162,20 +185,23 @@ export function MoleculeStage({
     let t = 0;
     function drawField() {
       if (!ctx) return;
+      const isLight = isLightRef.current;
       const [cr, cg, cb] = hueRef.current;
       if (!reducedRef.current) t += 0.006;
       const cx = w / 2, cy = h / 2;
       const R = Math.min(w, h) * 0.34;
       ctx.clearRect(0, 0, w, h);
       const back = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(w, h) * 0.7);
-      back.addColorStop(0, `rgba(${cr},${cg},${cb},0.08)`);
-      back.addColorStop(1, "rgba(5,7,16,0)");
+      back.addColorStop(0, `rgba(${cr},${cg},${cb},${isLight ? 0.05 : 0.08})`);
+      back.addColorStop(1, isLight ? "rgba(248,250,252,0)" : "rgba(5,7,16,0)");
       ctx.fillStyle = back;
       ctx.beginPath(); ctx.arc(cx, cy, Math.max(w, h) * 0.7, 0, Math.PI * 2); ctx.fill();
-      // three orbital rings
+      // three orbital rings — a touch more opaque in light mode, where the
+      // same alpha reads much fainter against a near-white backdrop
+      const ringAlpha = isLight ? 1.7 : 1;
       for (let ring = 0; ring < 3; ring++) {
         const tilt = 0.5 + ring * 0.6;
-        ctx.strokeStyle = `rgba(${cr},${cg},${cb},${0.1 - ring * 0.02})`;
+        ctx.strokeStyle = `rgba(${cr},${cg},${cb},${(0.1 - ring * 0.02) * ringAlpha})`;
         ctx.lineWidth = 1;
         ctx.beginPath();
         for (let k = 0; k <= 60; k++) {

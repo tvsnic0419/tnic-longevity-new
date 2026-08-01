@@ -9,8 +9,9 @@ import { eliteInterventions } from "@/lib/elite-interventions";
 import { COMPOUND_COUNT } from "@/lib/library-modules";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { MoleculeStage } from "@/components/viz/MoleculeStage";
-import { HUES } from "@/components/viz/tokens";
+import { paletteFor } from "@/components/viz/tokens";
 import { runWhenVisible, cappedDpr } from "@/lib/raf-visibility";
+import { useTheme } from "@/components/theme/ThemeProvider";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TNiC · "Descent" — a captivate-on-arrival scrollytelling section
@@ -27,10 +28,12 @@ const CSS = `
 
 .tnic-descent {
   --void: #050710;
+  --void-deep: #030510;
   --void2: #0a0e1e;
   --panel: #0e1426;
   --panel2: #131a30;
   --line: rgba(150,170,220,0.14);
+  --grid-line: rgba(150,170,220,0.05);
   --cyan: #5fe3e0;
   --indigo: #8c8cf5;
   --violet: #b98cf0;
@@ -40,9 +43,21 @@ const CSS = `
   --ink: #eef2fb;
   --muted: #96a0bc;
   --faint: #5a6482;
+  /* Translucent panel washes reused across kickers, stage backdrops, cards,
+     and node labels — kept as custom properties (not inlined rgba literals)
+     so the light theme below can redefine them in one place. */
+  --scrim-1: rgba(14,20,38,0.55);
+  --scrim-2: rgba(10,14,30,0.85);
+  --panel-wash-a: rgba(19,26,48,0.75);
+  --panel-wash-b: rgba(14,20,38,0.75);
+  --panel-wash-a2: rgba(19,26,48,0.7);
+  --panel-wash-b2: rgba(14,20,38,0.7);
+  --panel-wash-c: rgba(14,20,38,0.6);
+  --label-stroke: rgba(5,7,16,0.9);
+  --cta-ink: #050710;
   position: relative;
   background:
-    radial-gradient(140% 60% at 50% 0%, #0a1024 0%, #050710 45%, #030510 100%);
+    radial-gradient(140% 60% at 50% 0%, var(--void2) 0%, var(--void) 45%, var(--void-deep) 100%);
   color: var(--ink);
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -57,18 +72,19 @@ const CSS = `
 }
 .tnic-shimmer { z-index: 0; }
 .tnic-cursor  { z-index: 1; mix-blend-mode: screen; opacity: .85; }
+[data-theme="light"] .tnic-cursor { mix-blend-mode: multiply; opacity: .5; }
 .tnic-vignette {
   z-index: 2;
   background:
-    radial-gradient(120% 90% at 50% 0%, rgba(95,227,224,0.07), transparent 45%),
-    radial-gradient(140% 120% at 50% 120%, rgba(240,196,106,0.06), transparent 55%),
-    radial-gradient(100% 100% at 50% 50%, transparent 55%, rgba(3,5,12,0.85) 100%);
+    radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--cyan) 7%, transparent), transparent 45%),
+    radial-gradient(140% 120% at 50% 120%, color-mix(in srgb, var(--gold) 6%, transparent), transparent 55%),
+    radial-gradient(100% 100% at 50% 50%, transparent 55%, color-mix(in srgb, var(--void) 85%, transparent) 100%);
 }
 .tnic-grid {
   z-index: 1; opacity: .35;
   background:
-    linear-gradient(rgba(150,170,220,0.05) 1px, transparent 1px) 0 0/60px 60px,
-    linear-gradient(90deg, rgba(150,170,220,0.05) 1px, transparent 1px) 0 0/60px 60px;
+    linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0/60px 60px,
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0/60px 60px;
   mask-image: radial-gradient(90% 70% at 50% 40%, #000 40%, transparent 100%);
   -webkit-mask-image: radial-gradient(90% 70% at 50% 40%, #000 40%, transparent 100%);
 }
@@ -145,7 +161,7 @@ const CSS = `
   font-family: 'JetBrains Mono', monospace; font-size: 11px;
   letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
   padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px;
-  background: rgba(14,20,38,0.55); backdrop-filter: blur(6px);
+  background: var(--scrim-1); backdrop-filter: blur(6px);
 }
 .tnic-hero-badges .pill b { color: var(--cyan); font-weight: 500; }
 .tnic-hero-badges .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
@@ -169,9 +185,9 @@ const CSS = `
   transition: opacity 1.1s ease .1s, transform 1.1s ease .1s;
   border-radius: 20px; overflow: hidden;
   background:
-    radial-gradient(100% 100% at 30% 20%, rgba(95,227,224,0.06), transparent 60%),
-    radial-gradient(100% 100% at 80% 90%, rgba(140,140,245,0.06), transparent 60%),
-    linear-gradient(180deg, rgba(14,20,38,0.55), rgba(10,14,30,0.85));
+    radial-gradient(100% 100% at 30% 20%, color-mix(in srgb, var(--cyan) 6%, transparent), transparent 60%),
+    radial-gradient(100% 100% at 80% 90%, color-mix(in srgb, var(--indigo) 6%, transparent), transparent 60%),
+    linear-gradient(180deg, var(--scrim-1), var(--scrim-2));
   border: 1px solid var(--line);
 }
 .tnic-stage canvas, .tnic-stage svg { width: 100%; height: 100%; display: block; }
@@ -216,7 +232,7 @@ const CSS = `
 .tnic-descent .node-label {
   font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500;
   fill: var(--ink); pointer-events: none; transition: opacity .35s ease, fill .35s ease;
-  paint-order: stroke; stroke: rgba(5,7,16,0.9); stroke-width: 4;
+  paint-order: stroke; stroke: var(--label-stroke); stroke-width: 4;
 }
 .tnic-descent .node.dim .node-label { opacity: .3; }
 .tnic-descent .node.dim .node-core { opacity: .32; }
@@ -234,7 +250,7 @@ const CSS = `
 .tnic-toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
 .tnic-search {
   flex: 1; min-width: 180px;
-  background: rgba(14,20,38,0.6); border: 1px solid var(--line); color: var(--ink);
+  background: var(--panel-wash-c); border: 1px solid var(--line); color: var(--ink);
   padding: 10px 14px; border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 14px;
   outline: none;
 }
@@ -242,7 +258,7 @@ const CSS = `
 .tnic-search::placeholder { color: var(--faint); }
 .tnic-chip {
   display: inline-flex; align-items: center; gap: 7px; padding: 8px 12px;
-  background: rgba(14,20,38,0.6); border: 1px solid var(--line); color: var(--muted);
+  background: var(--panel-wash-c); border: 1px solid var(--line); color: var(--muted);
   border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
   letter-spacing: .14em; text-transform: uppercase; cursor: pointer; transition: all .2s ease;
 }
@@ -288,15 +304,15 @@ const CSS = `
 .tnic-age small { font-size: .32em; color: var(--muted); font-family: 'JetBrains Mono', monospace; letter-spacing: .12em; margin-left: 8px; }
 .tnic-stage-cap { font-size: 16px; color: var(--ink); max-width: 36ch; line-height: 1.4; }
 .tnic-range { -webkit-appearance: none; appearance: none; width: 100%; height: 3px; border-radius: 3px; background: var(--line); margin: 18px 0 4px; cursor: pointer; }
-.tnic-range::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--gold); border: 3px solid var(--void); box-shadow: 0 0 0 1px var(--gold), 0 0 22px rgba(240,196,106,.6); cursor: grab; }
-.tnic-range::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--gold); border: 3px solid var(--void); box-shadow: 0 0 0 1px var(--gold), 0 0 22px rgba(240,196,106,.6); cursor: grab; }
+.tnic-range::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--gold); border: 3px solid var(--void); box-shadow: 0 0 0 1px var(--gold), 0 0 22px color-mix(in srgb, var(--gold) 60%, transparent); cursor: grab; }
+.tnic-range::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--gold); border: 3px solid var(--void); box-shadow: 0 0 0 1px var(--gold), 0 0 22px color-mix(in srgb, var(--gold) 60%, transparent); cursor: grab; }
 .tnic-range:focus-visible { outline: 2px solid var(--cyan); outline-offset: 6px; }
 .tnic-tl-stats {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 16px;
 }
 @media (max-width: 720px){ .tnic-tl-stats { grid-template-columns: 1fr; } }
 .tnic-tl-stat {
-  background: linear-gradient(180deg, rgba(19,26,48,0.75), rgba(14,20,38,0.75));
+  background: linear-gradient(180deg, var(--panel-wash-a), var(--panel-wash-b));
   border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px;
   display: flex; flex-direction: column; gap: 4px;
 }
@@ -315,7 +331,7 @@ const CSS = `
 .tnic-final-recap { display: flex; flex-direction: column; gap: 14px; }
 .tnic-final-row {
   display: flex; align-items: center; gap: 14px; padding: 14px 16px;
-  background: linear-gradient(180deg, rgba(19,26,48,0.7), rgba(14,20,38,0.7));
+  background: linear-gradient(180deg, var(--panel-wash-a2), var(--panel-wash-b2));
   border: 1px solid var(--line); border-radius: 14px;
 }
 .tnic-final-row .n { font-family: 'Fraunces', serif; font-size: 28px; color: var(--cyan); width: 36px; text-align: center; flex: none; }
@@ -332,7 +348,7 @@ const CSS = `
 .tnic-final-elites .head a:hover { color: var(--gold); }
 .tnic-elite-card {
   display: flex; align-items: center; gap: 14px; padding: 14px 16px;
-  background: linear-gradient(180deg, rgba(19,26,48,0.75), rgba(14,20,38,0.75));
+  background: linear-gradient(180deg, var(--panel-wash-a), var(--panel-wash-b));
   border: 1px solid var(--line); border-radius: 14px;
   text-decoration: none; color: inherit; transition: border-color .2s ease, transform .2s ease;
 }
@@ -354,11 +370,11 @@ const CSS = `
   display: inline-flex; align-items: center; gap: 12px; margin-top: 22px;
   padding: 14px 24px; border-radius: 999px;
   background: linear-gradient(135deg, var(--cyan), var(--indigo));
-  color: #050710; font-weight: 600; font-size: 15px; text-decoration: none;
-  box-shadow: 0 0 32px rgba(95,227,224,0.3);
+  color: var(--cta-ink); font-weight: 600; font-size: 15px; text-decoration: none;
+  box-shadow: 0 0 32px color-mix(in srgb, var(--cyan) 30%, transparent);
   transition: transform .2s ease, box-shadow .2s ease;
 }
-.tnic-cta:hover { transform: translateY(-1px); box-shadow: 0 0 40px rgba(95,227,224,0.5); }
+.tnic-cta:hover { transform: translateY(-1px); box-shadow: 0 0 40px color-mix(in srgb, var(--cyan) 50%, transparent); }
 .tnic-cta .arr { display: inline-block; transition: transform .2s ease; }
 .tnic-cta:hover .arr { transform: translateX(4px); }
 .tnic-cta.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); box-shadow: none; margin-left: 12px; }
@@ -380,16 +396,56 @@ const CSS = `
 .tnic-descent[data-reduced="true"] .bar,
 .tnic-descent[data-reduced="true"] .edge.flow,
 .tnic-descent[data-reduced="true"] .node-pulse { animation: none !important; }
+
+/* ── Light theme ──
+   Every color in this scene is drawn from the custom properties above, so a
+   single override block re-tints the whole scene — the molecule/shimmer/cursor
+   canvases read the resolved theme themselves (see the component body) and
+   branch their own draw colors to match. Values mirror the site's existing
+   [data-theme="light"] tokens in app/globals.css, not an improvised palette. */
+:root[data-theme="light"] .tnic-descent {
+  --void: #f8fafc;
+  --void-deep: #eef2f7;
+  --void2: #eef2f7;
+  --panel: #ffffff;
+  --panel2: #f8fafc;
+  --line: rgba(15,23,42,0.1);
+  --grid-line: rgba(15,23,42,0.05);
+  --cyan: #0891b2;
+  --indigo: #7c3aed;
+  --violet: #7c3aed;
+  --gold: #d97706;
+  --rose: #e11d48;
+  --amber: #d97706;
+  --ink: #0f172a;
+  --muted: #475569;
+  --faint: #64748b;
+  --scrim-1: rgba(255,255,255,0.7);
+  --scrim-2: rgba(248,250,252,0.9);
+  --panel-wash-a: rgba(255,255,255,0.85);
+  --panel-wash-b: rgba(248,250,252,0.85);
+  --panel-wash-a2: rgba(255,255,255,0.8);
+  --panel-wash-b2: rgba(248,250,252,0.8);
+  --panel-wash-c: rgba(255,255,255,0.75);
+  --label-stroke: rgba(255,255,255,0.9);
+  --cta-ink: #ffffff;
+}
 `;
 
 
 type TierKey = "established" | "mechanistic" | "exploratory" | "caution";
-const TIER: Record<TierKey, { color: string; label: string }> = {
-  established: { color: "#5fe3e0", label: "Established" },
-  mechanistic: { color: "#8c8cf5", label: "Mechanistic" },
-  exploratory: { color: "#b98cf0", label: "Exploratory" },
-  caution:     { color: "#eaa24a", label: "Caution" },
-};
+
+/** Network-graph tier colors, built from the resolved theme's palette so the
+ *  synergy graph's edges/legend match the rest of the scene in light mode
+ *  instead of staying hardcoded to the dark accent hexes. */
+function buildTier(viz: { cyan: string; indigo: string; violet: string; amber: string }): Record<TierKey, { color: string; label: string }> {
+  return {
+    established: { color: viz.cyan, label: "Established" },
+    mechanistic: { color: viz.indigo, label: "Mechanistic" },
+    exploratory: { color: viz.violet, label: "Exploratory" },
+    caution: { color: viz.amber, label: "Caution" },
+  };
+}
 
 const NODE_DEFS: Array<[string, string, string, string | null]> = [
   ["curcumin", "Curcumin", "anti-inflammatory signaling", null],
@@ -462,12 +518,17 @@ const CURVE_BASE: Array<[number, number]> = [[30,92],[40,87],[50,79],[60,67],[70
 const CURVE_GOAL: Array<[number, number]> = [[30,96],[40,94],[50,90],[60,85],[70,77],[80,63],[90,38],[95,16]];
 const CURVE_ELITE: Array<[number, number]> = [[30,98],[40,97],[50,95],[60,92],[70,86],[80,74],[90,52],[95,22]];
 
-const MILESTONES: Array<{ at: number; label: string; c: string }> = [
-  { at: 40, label: "NAD⁺ decline steepens", c: "#5fe3e0" },
-  { at: 50, label: "Senescent-cell window", c: "#b98cf0" },
-  { at: 65, label: "Sarcopenia inflection", c: "#eaa24a" },
-  { at: 80, label: "Morbidity horizon", c: "#f08a7a" },
+const MILESTONE_DEFS: Array<{ at: number; label: string; key: "cyan" | "violet" | "amber" | "rose" }> = [
+  { at: 40, label: "NAD⁺ decline steepens", key: "cyan" },
+  { at: 50, label: "Senescent-cell window", key: "violet" },
+  { at: 65, label: "Sarcopenia inflection", key: "amber" },
+  { at: 80, label: "Morbidity horizon", key: "rose" },
 ];
+
+/** Timeline milestone markers, colored from the resolved theme's palette. */
+function buildMilestones(viz: { cyan: string; violet: string; amber: string; rose: string }): Array<{ at: number; label: string; c: string }> {
+  return MILESTONE_DEFS.map((m) => ({ at: m.at, label: m.label, c: viz[m.key] }));
+}
 
 function interp(pts: Array<[number, number]>, x: number): number {
   if (x <= pts[0][0]) return pts[0][1];
@@ -488,10 +549,15 @@ export function HomeDescent() {
   const [selNode, setSelNode] = useState<string | null>(null);
   const [age, setAge] = useState(50);
   const reduced = useReducedMotion();
+  const { resolved } = useTheme();
+  const { viz, hues } = useMemo(() => paletteFor(resolved), [resolved]);
+  const TIER = useMemo(() => buildTier(viz), [viz]);
+  const MILESTONES = useMemo(() => buildMilestones(viz), [viz]);
   const [search, setSearch] = useState("");
   const [tierFilter, setTierFilter] = useState<Set<TierKey>>(new Set());
   const [showElite, setShowElite] = useState(true);
   const reducedRef = useRef(false);
+  const isLightRef = useRef(false);
   const shimmerRef = useRef<HTMLCanvasElement | null>(null);
   const cursorRef = useRef<HTMLCanvasElement | null>(null);
   const activeRef = useRef(0);
@@ -506,6 +572,9 @@ export function HomeDescent() {
   useEffect(() => {
     reducedRef.current = reduced;
   }, [reduced]);
+  useEffect(() => {
+    isLightRef.current = resolved === "light";
+  }, [resolved]);
 
   // ── shimmer: 3 parallax layers ──
   useEffect(() => {
@@ -534,17 +603,26 @@ export function HomeDescent() {
     resize();
     const ro = new ResizeObserver(resize); ro.observe(cv);
 
-    const palettes: Array<[number, number, number]> = [
+    const palettesDark: Array<[number, number, number]> = [
       [95,227,224], [95,227,224], [140,140,245], [240,196,106], [95,227,224],
+    ];
+    const palettesLight: Array<[number, number, number]> = [
+      [8,145,178], [8,145,178], [124,58,237], [217,119,6], [8,145,178],
     ];
     let cur: [number, number, number] = [95,227,224];
 
     function draw() {
       if (!ctx) return;
+      const isLight = isLightRef.current;
+      const palettes = isLight ? palettesLight : palettesDark;
       const target = palettes[Math.min(activeRef.current, palettes.length - 1)];
       cur = cur.map((c, i) => c + (target[i] - c) * 0.02) as [number, number, number];
       const [cr, cg, cb] = cur.map(Math.round);
       ctx.clearRect(0, 0, w, h);
+      // Faint connective mesh reads clearly against the dark void at a low
+      // alpha; the same alpha against a light backdrop needs a boost to stay
+      // visible rather than disappearing into the page.
+      const meshBoost = isLight ? 2.2 : 1;
       const near = P[1];
       for (let i = 0; i < near.length; i++) {
         const a = near[i];
@@ -554,7 +632,7 @@ export function HomeDescent() {
           const bx = b.x * w, by = b.y * h;
           const d2 = (ax - bx) ** 2 + (ay - by) ** 2;
           if (d2 < 14000) {
-            const o = (1 - d2 / 14000) * 0.08;
+            const o = (1 - d2 / 14000) * 0.08 * meshBoost;
             ctx.strokeStyle = `rgba(${cr},${cg},${cb},${o})`;
             ctx.lineWidth = 0.6;
             ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
@@ -580,7 +658,10 @@ export function HomeDescent() {
           ctx.fillStyle = g;
           ctx.beginPath(); ctx.arc(px, py, rad, 0, Math.PI * 2); ctx.fill();
           if (li < 2) {
-            ctx.fillStyle = `rgba(230,240,255,${0.55 * tw})`;
+            // The icy-white speck highlight reads as a bright star on the dark
+            // void but would vanish against a light page, so it swaps to a
+            // deep slate dot — still a highlight, just inverted for contrast.
+            ctx.fillStyle = isLight ? `rgba(30,41,59,${0.35 * tw})` : `rgba(230,240,255,${0.55 * tw})`;
             ctx.beginPath(); ctx.arc(px, py, p.r * 0.6, 0, Math.PI * 2); ctx.fill();
           }
         }
@@ -623,9 +704,18 @@ export function HomeDescent() {
       if (state.on) {
         const rad = 220;
         const g = ctx.createRadialGradient(state.x, state.y, 0, state.x, state.y, rad);
-        g.addColorStop(0, "rgba(95,227,224,0.14)");
-        g.addColorStop(0.4, "rgba(140,140,245,0.06)");
-        g.addColorStop(1, "rgba(0,0,0,0)");
+        // .tnic-cursor switches to mix-blend-mode:multiply in light theme (see
+        // CSS above) — screen-blending a light color onto white is a no-op, so
+        // a darker, more saturated tint is needed for the tint to read at all.
+        if (isLightRef.current) {
+          g.addColorStop(0, "rgba(8,145,178,0.16)");
+          g.addColorStop(0.4, "rgba(124,58,237,0.07)");
+          g.addColorStop(1, "rgba(255,255,255,0)");
+        } else {
+          g.addColorStop(0, "rgba(95,227,224,0.14)");
+          g.addColorStop(0.4, "rgba(140,140,245,0.06)");
+          g.addColorStop(1, "rgba(0,0,0,0)");
+        }
         ctx.fillStyle = g;
         ctx.beginPath(); ctx.arc(state.x, state.y, rad, 0, Math.PI * 2); ctx.fill();
       }
@@ -770,7 +860,7 @@ export function HomeDescent() {
 
         <div className="tnic-molwrap">
           <div className="tnic-stage">
-            <MoleculeStage geometryId="resveratrol" hue={HUES.cyan} />
+            <MoleculeStage geometryId="resveratrol" hue={hues.cyan} />
             <div className="tnic-molhint"><span className="dot" />drag · scroll to zoom</div>
           </div>
 
@@ -863,14 +953,17 @@ export function HomeDescent() {
                 return (
                   <g key={id} className={`node${dim ? " dim" : ""}${sel ? " sel" : ""}${elite ? " elite" : ""}`}
                     onClick={() => setSelNode(sel ? null : id)}>
-                    <circle className="node-pulse" cx={n.x} cy={n.y} r={nr + 10} fill={elite ? "#f0c46a" : "#5fe3e0"} opacity="0.2" />
+                    <circle className="node-pulse" cx={n.x} cy={n.y} r={nr + 10} fill={elite ? "var(--gold)" : "var(--cyan)"} opacity="0.2" />
                     <circle className="node-ring" cx={n.x} cy={n.y} r={nr + 6} />
                     <circle className="node-hit" cx={n.x} cy={n.y} r={nr + 26} />
                     <circle className="node-core" cx={n.x} cy={n.y} r={nr}
                       fill={elite ? "url(#tnic-node-elite)" : "url(#tnic-node-core)"}
-                      stroke={elite ? "#f0c46a" : "#dce8ff"} strokeWidth="1.5" />
+                      stroke={elite ? "var(--gold)" : "#dce8ff"} strokeWidth="1.5" />
                     <g className="elite-badge" transform={`translate(${n.x + nr * 0.75},${n.y - nr * 0.75})`}>
-                      <circle r="8" fill="#f0c46a" />
+                      <circle r="8" fill="var(--gold)" />
+                      {/* Fixed dark fill, not theme-linked — the gold badge stays a
+                          warm mid-tone in both themes, so the star icon needs to stay
+                          dark on top of it either way, not flip to a near-white ink. */}
                       <path d={STAR_D} fill="#050710" transform="scale(0.9)" />
                     </g>
                     <text className="node-label"
@@ -979,21 +1072,21 @@ export function HomeDescent() {
             <svg viewBox="0 0 1000 500" preserveAspectRatio="none">
               <defs>
                 <linearGradient id="tnic-goldfill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="rgba(240,196,106,0.45)" />
-                  <stop offset="100%" stopColor="rgba(240,196,106,0.05)" />
+                  <stop offset="0%" stopColor="var(--gold)" stopOpacity="0.45" />
+                  <stop offset="100%" stopColor="var(--gold)" stopOpacity="0.05" />
                 </linearGradient>
                 <linearGradient id="tnic-elitefill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="rgba(95,227,224,0.35)" />
-                  <stop offset="100%" stopColor="rgba(95,227,224,0.03)" />
+                  <stop offset="0%" stopColor="var(--cyan)" stopOpacity="0.35" />
+                  <stop offset="100%" stopColor="var(--cyan)" stopOpacity="0.03" />
                 </linearGradient>
                 <clipPath id="tnic-reveal"><rect x={PAD.l} y="0" width={Math.max(0, clipW)} height={TH} /></clipPath>
               </defs>
 
               {/* frailty threshold */}
               <line x1={PAD.l} y1={vitToY(40)} x2={TW - PAD.r} y2={vitToY(40)}
-                stroke="rgba(240,138,122,0.4)" strokeWidth="1" strokeDasharray="3 6" />
+                stroke="var(--rose)" strokeOpacity="0.4" strokeWidth="1" strokeDasharray="3 6" />
               <text x={TW - PAD.r} y={vitToY(40) - 8} textAnchor="end"
-                fontFamily="'JetBrains Mono',monospace" fontSize="12" fill="rgba(240,138,122,0.75)">
+                fontFamily="'JetBrains Mono',monospace" fontSize="12" fill="var(--rose)" fillOpacity="0.75">
                 frailty threshold
               </text>
 
@@ -1004,7 +1097,7 @@ export function HomeDescent() {
               </g>
 
               {/* baseline */}
-              <path d={basePath} fill="none" stroke="rgba(139,149,176,0.6)" strokeWidth="2" strokeDasharray="2 7" />
+              <path d={basePath} fill="none" stroke="var(--muted)" strokeOpacity="0.6" strokeWidth="2" strokeDasharray="2 7" />
               {/* goal */}
               <path d={goalPath} fill="none" stroke="var(--gold)" strokeWidth="3" />
               {/* elite */}
@@ -1028,9 +1121,9 @@ export function HomeDescent() {
 
               {/* scrubber */}
               <line x1={ageToX(age)} y1={PAD.t - 10} x2={ageToX(age)} y2={TH - PAD.b}
-                stroke="rgba(240,196,106,0.5)" strokeWidth="1.5" />
+                stroke="var(--gold)" strokeOpacity="0.5" strokeWidth="1.5" />
               <circle cx={ageToX(age)} cy={vitToY(interp(CURVE_GOAL, age))} r="7" fill="var(--gold)" />
-              <circle cx={ageToX(age)} cy={vitToY(interp(CURVE_BASE, age))} r="5" fill="rgba(139,149,176,0.9)" />
+              <circle cx={ageToX(age)} cy={vitToY(interp(CURVE_BASE, age))} r="5" fill="var(--muted)" fillOpacity="0.9" />
               {showElite && (
                 <circle cx={ageToX(age)} cy={vitToY(interp(CURVE_ELITE, age))} r="6" fill="var(--cyan)" />
               )}

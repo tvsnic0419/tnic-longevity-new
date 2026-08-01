@@ -40,6 +40,51 @@ export const HUES: Record<string, RGB> = {
   emerald: [52, 211, 153],
 };
 
+/**
+ * Light-theme palette — not an improvised second brand, but the exact
+ * accent/background/text values already defined in app/globals.css's
+ * `[data-theme="light"]` block (contrast-checked against white there). The
+ * cinematic surfaces (Descent, CompoundHero, CinematicHubHero) previously
+ * ignored the site's theme entirely; this gives them a genuine light variant
+ * instead of staying dark-locked while the rest of the chrome flips.
+ */
+export const VIZ_LIGHT = {
+  void: "#f8fafc",
+  void2: "#eef2f7",
+  panel: "#ffffff",
+  panel2: "#f8fafc",
+  line: "rgba(15,23,42,0.1)",
+  ink: "#0f172a",
+  muted: "#475569",
+  faint: "#64748b",
+  cyan: "#0891b2",
+  indigo: "#7c3aed",
+  violet: "#7c3aed",
+  gold: "#d97706",
+  rose: "#e11d48",
+  amber: "#d97706",
+  teal: "#059669",
+} as const;
+
+/** Light-theme accent hues as RGB triples — same source accents as VIZ_LIGHT. */
+export const HUES_LIGHT: Record<string, RGB> = {
+  cyan: [8, 145, 178],
+  indigo: [124, 58, 237],
+  violet: [124, 58, 237],
+  gold: [217, 119, 6],
+  rose: [225, 29, 72],
+  amber: [217, 119, 6],
+  teal: [5, 150, 105],
+  emerald: [5, 150, 105],
+};
+
+/** Pick the palette/hue map for a resolved theme — the one branch point every cinematic component shares. */
+export function paletteFor(theme: "dark" | "light") {
+  return theme === "light"
+    ? { viz: VIZ_LIGHT, hues: HUES_LIGHT }
+    : { viz: VIZ, hues: HUES };
+}
+
 /** Curated signature-hue rotation — every compound gets a stable, on-brand color. */
 const SIGNATURE_ORDER: Array<keyof typeof HUES> = [
   "cyan", "indigo", "violet", "teal", "gold", "rose", "amber",
@@ -56,18 +101,18 @@ function hashString(s: string): number {
 }
 
 /** Stable signature hue for a compound/pathway id — always on-palette. */
-export function signatureHue(id: string): RGB {
+export function signatureHue(id: string, hues: Record<string, RGB> = HUES): RGB {
   const key = SIGNATURE_ORDER[hashString(id) % SIGNATURE_ORDER.length];
-  return HUES[key];
+  return hues[key];
 }
 
 /** Evidence tier → accent color. Matches the site's grading language. */
-export function tierColor(tier: string): string {
+export function tierColor(tier: string, viz: typeof VIZ | typeof VIZ_LIGHT = VIZ): string {
   switch (tier) {
-    case "A": return VIZ.cyan;
-    case "B": return VIZ.gold;
-    case "C": return VIZ.violet;
-    default:  return VIZ.muted;
+    case "A": return viz.cyan;
+    case "B": return viz.gold;
+    case "C": return viz.violet;
+    default:  return viz.muted;
   }
 }
 

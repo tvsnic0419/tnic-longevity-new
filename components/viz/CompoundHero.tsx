@@ -2,7 +2,8 @@
 
 import { MoleculeStage } from "./MoleculeStage";
 import { hasGeometry, getGeometry } from "./molecule";
-import { VIZ, FONT, tierColor, signatureHue } from "./tokens";
+import { FONT, paletteFor, tierColor, signatureHue, type RGB } from "./tokens";
+import { useTheme } from "@/components/theme/ThemeProvider";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CompoundHero — a "mini-Descent" overture band for every compound page.
@@ -10,6 +11,10 @@ import { VIZ, FONT, tierColor, signatureHue } from "./tokens";
 // medallion, mechanism hook, and a fact rail built entirely from real fields
 // in lib/data.ts. The compound's large cover name is decorative (aria-hidden)
 // — the page's semantic <h1> still lives in LibraryModuleDetail below.
+//
+// Theme-aware: reads the site's resolved dark/light theme and swaps in the
+// matching palette from viz/tokens (paletteFor) rather than only ever
+// rendering the dark "evidence-noir" look.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type CompoundHeroData = {
@@ -32,11 +37,13 @@ function firstSentence(text: string): string {
 }
 
 export function CompoundHero(data: CompoundHeroData) {
-  const hue = signatureHue(data.id);
+  const { resolved } = useTheme();
+  const { viz, hues } = paletteFor(resolved);
+  const hue = signatureHue(data.id, hues);
   const hueCss = `rgb(${hue[0]},${hue[1]},${hue[2]})`;
   const structured = hasGeometry(data.id);
   const geom = structured ? getGeometry(data.id) : null;
-  const tint = tierColor(data.evidence);
+  const tint = tierColor(data.evidence, viz);
 
   const facts: Array<{ k: string; v: string }> = [
     { k: "Evidence", v: `Tier ${data.evidence}` },
@@ -51,12 +58,12 @@ export function CompoundHero(data: CompoundHeroData) {
 
   return (
     <div className="tnic-chero" style={{ "--hue": hueCss } as React.CSSProperties}>
-      <style>{CHERO_CSS}</style>
+      <style>{cheroCss(viz)}</style>
 
       <div className="chero-grid">
         <div className="chero-stage-wrap">
           <div className="chero-stage">
-            <MoleculeStage geometryId={structured ? data.id : undefined} hue={hue} />
+            <MoleculeStage geometryId={structured ? data.id : undefined} hue={hue as RGB} />
             <div className="chero-hint">
               <span className="dot" />
               {structured ? "drag · scroll to zoom" : "orbital field · illustrative"}
@@ -100,12 +107,13 @@ export function CompoundHero(data: CompoundHeroData) {
   );
 }
 
-const CHERO_CSS = `
+function cheroCss(viz: { ink: string; muted: string; faint: string; line: string; panel: string; panel2: string }) {
+  return `
 .tnic-chero {
   position: relative;
   max-width: 80rem; margin: 0 auto; padding: clamp(20px, 4vw, 40px) 24px 8px;
   font-family: ${FONT.sans};
-  color: ${VIZ.ink};
+  color: ${viz.ink};
   -webkit-font-smoothing: antialiased;
 }
 .tnic-chero * { box-sizing: border-box; }
@@ -115,19 +123,19 @@ const CHERO_CSS = `
 .chero-stage-wrap { display: flex; flex-direction: column; gap: 10px; }
 .chero-stage {
   position: relative; width: 100%; aspect-ratio: 16/11; border-radius: 20px; overflow: hidden;
-  border: 1px solid ${VIZ.line};
+  border: 1px solid ${viz.line};
   background:
     radial-gradient(100% 100% at 30% 20%, color-mix(in srgb, var(--hue) 14%, transparent), transparent 60%),
-    radial-gradient(100% 100% at 80% 90%, rgba(140,140,245,0.06), transparent 60%),
-    linear-gradient(180deg, rgba(14,20,38,0.6), rgba(10,14,30,0.9));
+    radial-gradient(100% 100% at 80% 90%, color-mix(in srgb, var(--hue) 8%, transparent), transparent 60%),
+    linear-gradient(180deg, color-mix(in srgb, ${viz.panel2} 88%, transparent), color-mix(in srgb, ${viz.panel} 96%, transparent));
 }
 .chero-hint {
   position: absolute; bottom: 12px; right: 14px;
-  font-family: ${FONT.mono}; font-size: 11px; color: ${VIZ.faint}; letter-spacing: .06em;
+  font-family: ${FONT.mono}; font-size: 11px; color: ${viz.faint}; letter-spacing: .06em;
   display: flex; align-items: center; gap: 7px; pointer-events: none;
 }
 .chero-hint .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--hue); box-shadow: 0 0 10px var(--hue); }
-.chero-cap { font-family: ${FONT.mono}; font-size: 11px; color: ${VIZ.faint}; letter-spacing: .03em; line-height: 1.5; margin: 0; }
+.chero-cap { font-family: ${FONT.mono}; font-size: 11px; color: ${viz.faint}; letter-spacing: .03em; line-height: 1.5; margin: 0; }
 
 .chero-body { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
 .chero-kicker {
@@ -137,7 +145,7 @@ const CHERO_CSS = `
 .chero-kicker::before { content: ''; width: 26px; height: 1px; background: var(--hue); opacity: .6; }
 .chero-name {
   font-family: ${FONT.display}; font-weight: 400; font-size: clamp(38px, 6.5vw, 76px);
-  line-height: 0.98; letter-spacing: -0.025em; color: ${VIZ.ink}; margin: 2px 0;
+  line-height: 0.98; letter-spacing: -0.025em; color: ${viz.ink}; margin: 2px 0;
 }
 .chero-medallion {
   display: inline-flex; align-items: center; gap: 9px; align-self: flex-start;
@@ -145,26 +153,27 @@ const CHERO_CSS = `
   padding: 7px 14px; border: 1px solid; border-radius: 999px;
 }
 .chero-medallion .ring { width: 8px; height: 8px; border-radius: 50%; background: currentColor; box-shadow: 0 0 10px currentColor; }
-.chero-mech { font-size: clamp(15px, 1.9vw, 18px); line-height: 1.6; color: ${VIZ.muted}; margin: 4px 0 0; max-width: 52ch; }
+.chero-mech { font-size: clamp(15px, 1.9vw, 18px); line-height: 1.6; color: ${viz.muted}; margin: 4px 0 0; max-width: 52ch; }
 
 .chero-facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 8px; }
 @media (max-width: 520px) { .chero-facts { grid-template-columns: repeat(2, 1fr); } }
 .chero-fact {
   display: flex; flex-direction: column; gap: 4px; padding: 12px 14px;
-  background: linear-gradient(180deg, rgba(19,26,48,0.7), rgba(14,20,38,0.7));
-  border: 1px solid ${VIZ.line}; border-radius: 12px;
+  background: linear-gradient(180deg, color-mix(in srgb, ${viz.panel2} 75%, transparent), color-mix(in srgb, ${viz.panel2} 70%, transparent));
+  border: 1px solid ${viz.line}; border-radius: 12px;
 }
-.chero-fact .k { font-family: ${FONT.mono}; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: ${VIZ.faint}; }
-.chero-fact .v { font-size: 14px; color: ${VIZ.ink}; font-weight: 500; }
+.chero-fact .k { font-family: ${FONT.mono}; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: ${viz.faint}; }
+.chero-fact .v { font-size: 14px; color: ${viz.ink}; font-weight: 500; }
 
 .chero-hallmarks { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 6px; }
-.chero-hallmarks .lbl { font-family: ${FONT.mono}; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: ${VIZ.faint}; margin-right: 4px; }
+.chero-hallmarks .lbl { font-family: ${FONT.mono}; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: ${viz.faint}; margin-right: 4px; }
 .chero-hallmarks .chip {
-  font-size: 12px; color: ${VIZ.muted}; padding: 5px 11px; border-radius: 999px;
-  border: 1px solid ${VIZ.line}; background: rgba(14,20,38,0.5);
+  font-size: 12px; color: ${viz.muted}; padding: 5px 11px; border-radius: 999px;
+  border: 1px solid ${viz.line}; background: color-mix(in srgb, ${viz.panel2} 60%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .chero-hint .dot { box-shadow: none; }
 }
 `;
+}
