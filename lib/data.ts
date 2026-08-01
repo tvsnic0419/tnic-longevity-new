@@ -24,6 +24,7 @@ export const navLinks = [
   { href: '/stacks', label: 'Stacks', mod: 'MOD-ARC-04' },
   { href: '/labs', label: 'Labs', mod: 'MOD-LAB-11' },
   { href: '/tools', label: 'Tools', mod: 'MOD-TOL-14' },
+  { href: '/architect', label: 'Constellation', mod: 'MOD-ARC-18' },
 ];
 
 export const communityPulse = [

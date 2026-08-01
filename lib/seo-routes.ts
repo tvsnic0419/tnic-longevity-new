@@ -139,6 +139,15 @@ export const seoRoutes = {
       keywords: ['NMN vs NR', 'longevity comparison', 'stack comparison', 'evidence table', 'R-ALA vs ALA'],
     }),
 
+  architect: () =>
+    buildPageMetadata({
+      title: 'The Protocol Constellation — Build a Stack by Hallmark Coverage',
+      description:
+        'An interactive map connecting every evidence-graded compound to the 12 hallmarks of aging it targets. Select compounds to build a protocol, watch synergy connections light up in real time, and hand the result straight to the Stack Architect.',
+      path: '/architect',
+      keywords: ['hallmarks of aging map', 'longevity protocol builder', 'compound synergy visualizer', 'supplement stack tool'],
+    }),
+
   stacks: () =>
     buildPageMetadata({
       title: 'Stack Architect — Build Evidence-Graded Longevity Protocols',
