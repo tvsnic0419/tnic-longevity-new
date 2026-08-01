@@ -64,8 +64,14 @@ export default function HomePage() {
       <ScrollProgress />
       <Nav />
       <main id="main-content" tabIndex={-1}>
-        <HomeDescent />
+        {/* The Nico Starter Questionnaire (inside HomeHero) opens the page.
+            The Descent is a five-act scroll narrative, so leading with it put
+            the one interactive entry point behind five full viewports of
+            story — a visitor had to commit to the film before they could do
+            anything. Hero first states the offer and lets them start; the
+            Descent then earns attention from someone already engaged. */}
         <HomeHero />
+        <HomeDescent />
         <HomeEliteInterventions />
         <HomeHallmarks />
         <HomeCompoundGallery />

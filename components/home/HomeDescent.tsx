@@ -822,17 +822,10 @@ export function HomeDescent() {
         </nav>
       </div>
 
-      {/* ACT 0 — ARRIVE
-          Ships with `is-in` already applied. Every act starts at opacity 0 and
-          is revealed by the IntersectionObserver below, but that observer lives
-          in an effect — so the first act, which is in the viewport by
-          definition, used to stay invisible until this 1,100-line client
-          component had hydrated and then faded in over a second. The page's
-          largest text was painting ~4-5s in. The remaining acts are genuinely
-          below the fold and still reveal on scroll. */}
-      <section ref={s0} data-idx="0" className="tnic-act tnic-hero is-in">
+      {/* ACT 0 — ARRIVE */}
+      <section ref={s0} data-idx="0" className="tnic-act tnic-hero">
         <p className="tnic-kicker">TNiC · longevity, shown honestly</p>
-        <h1 className="tnic-h1">See what<br />you&apos;re <em>protecting</em>.</h1>
+        <h2 className="tnic-h1">See what<br />you&apos;re <em>protecting</em>.</h2>
         <p className="tnic-lead">
           You can&apos;t feel a cell aging. So we made it visible — the real biology
           behind your stack, rendered instead of promised. Five scenes. One
