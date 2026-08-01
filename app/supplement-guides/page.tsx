@@ -390,7 +390,7 @@ export default function SupplementGuidesPage() {
             <div className="grid md:grid-cols-3 gap-6">
               <div className="p-6 rounded-2xl border border-border/60 bg-card">
                 <p className="text-label mb-2">Not sure where to start?</p>
-                <h3 className="font-bold text-foreground mb-3">Take the Nico Starter Questionnaire</h3>
+                <h3 className="font-bold text-foreground mb-3">Take The Nico Starter Questionnaire</h3>
                 <p className="text-sm text-muted-foreground mb-4">
                   Answer a few questions about your goal, top concern, budget, and safety
                   flags. Get a personalized supplement stack ranked by evidence and synergy.

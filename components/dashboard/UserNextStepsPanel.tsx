@@ -51,7 +51,7 @@ export function UserNextStepsPanel() {
   if (!quizResult) {
     actions.push({
       icon: Target,
-      title: 'Take the Nico Starter Questionnaire',
+      title: 'Take The Nico Starter Questionnaire',
       description: 'Get a personalized stack preset matched to your goal, concern, budget, and experience level.',
       href: '/quiz',
       accent: 'text-accent-cyan',

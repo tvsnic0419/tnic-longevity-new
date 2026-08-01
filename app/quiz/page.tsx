@@ -11,7 +11,7 @@ function buildQuizSchemas() {
   const quizApp = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
-    name: 'Nico Starter Questionnaire',
+    name: 'The Nico Starter Questionnaire',
     url: `${SITE.url}/quiz`,
     applicationCategory: 'HealthApplication',
     operatingSystem: 'Web',
@@ -46,7 +46,7 @@ function buildQuizSchemas() {
 
   const breadcrumb = buildBreadcrumbSchema([
     { name: 'Home', path: '/' },
-    { name: 'Nico Starter Questionnaire', path: '/quiz' },
+    { name: 'The Nico Starter Questionnaire', path: '/quiz' },
   ]);
 
   return [quizApp, buildSoftwareApplicationSchema(), breadcrumb];

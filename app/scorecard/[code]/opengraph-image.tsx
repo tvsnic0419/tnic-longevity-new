@@ -173,7 +173,7 @@ export default async function Image({
               fontWeight: 800,
             }}
           >
-            Free Nico Questionnaire → tnic.help
+            Try The Nico Questionnaire → tnic.help
           </div>
         </div>
       </div>

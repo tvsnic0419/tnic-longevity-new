@@ -439,7 +439,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
     ],
     whenChooseA: [
       'First longevity stack ever',
-      'Nico Starter Questionnaire beginner path',
+      'The Nico Starter Questionnaire beginner path',
       'Want results before maximizing spend',
     ],
     whenChooseB: [
@@ -449,7 +449,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
     ],
     relatedHrefs: [
       { label: 'Stack Architect', href: '/stacks' },
-      { label: 'Nico Questionnaire', href: '/quiz' },
+      { label: 'The Nico Questionnaire', href: '/quiz' },
       { label: 'Testing guide', href: '/library/guides/testing-and-monitoring' },
     ],
     keywords: ['starter', 'hybrid', 'stack', 'beginner'],

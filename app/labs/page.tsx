@@ -52,7 +52,7 @@ export default function LabsPage() {
           { value: '12', label: 'Hallmarks of aging' },
           { value: 'A–C', label: 'Evidence tiers' },
         ]}
-        primary={{ href: '/quiz', label: 'Take the Nico Starter Questionnaire' }}
+        primary={{ href: '/quiz', label: 'Take The Nico Starter Questionnaire' }}
         secondary={{ href: '/library', label: 'Browse the library' }}
       />
       <Suspense fallback={<SectionSkeleton height="lg" />}>

@@ -52,7 +52,7 @@ export default function StacksPage() {
         title={<>Build the stack the <em>evidence</em> would build.</>}
         lead="Presets graded on human trials, live synergy scoring, contraindication flags, and a protocol you can export — assembled from the same dataset that powers every compound module."
         stats={stackStats}
-        primary={{ href: '/quiz', label: 'Take the Nico Starter Questionnaire' }}
+        primary={{ href: '/quiz', label: 'Take The Nico Starter Questionnaire' }}
         secondary={{ href: '/library', label: 'Browse compounds' }}
       />
       <Suspense fallback={<div className="container-page py-20 text-muted-foreground">Loading stacks…</div>}>

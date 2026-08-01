@@ -33,7 +33,7 @@ export const seoRoutes = {
 
   quiz: () =>
     buildPageMetadata({
-      title: 'Nico Starter Questionnaire — Personalized Longevity Entry Point',
+      title: 'The Nico Starter Questionnaire — Personalized Longevity Entry Point',
       description:
         'Your goal, top concern, age range, experience level, budget, and any safety flags. Get a mechanism-matched stack preset, a PMID-cited insight for your age group, and your next step in the TNiC Longevity OS.',
       path: '/quiz',
