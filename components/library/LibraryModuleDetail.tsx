@@ -7,7 +7,7 @@ import Link from 'next/link';
 import type { LibraryModule, LibraryModuleCategory } from '@/lib/library-modules';
 import type { ComparisonLink } from '@/lib/comparison-relations';
 import type { GuideLink, RelatedCompoundLink } from '@/lib/library-graph';
-import { libraryCategoryMeta } from '@/lib/library-modules';
+import { libraryCategoryMeta, libraryModules } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { compounds } from '@/lib/data';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
@@ -57,6 +57,7 @@ export function LibraryModuleDetail({
   const synergyCompounds = module.synergyCompoundIds
     ?.map((id) => compounds.find((c) => c.id === id))
     .filter(Boolean) ?? [];
+  const synergyModules = libraryModules.filter((m) => m.category === 'synergies');
   const buyerGuide =
     module.category === 'compounds' ? getBuyerGuideByModuleSlug(module.slug) : undefined;
   // Library-first compounds have no canonical dataset entry to drive the rich
@@ -161,7 +162,7 @@ export function LibraryModuleDetail({
                         href={`/library/synergies/${slug}`}
                         className="text-sm text-muted-foreground hover:text-accent-cyan transition"
                       >
-                        {slug.replace(/-/g, ' ')}
+                        {synergyModules.find((m) => m.slug === slug)?.title ?? slug.replace(/-/g, ' ')}
                       </Link>
                     </li>
                   ))}
@@ -304,7 +305,11 @@ export function LibraryModuleDetail({
                   <BookOpen className="w-4 h-4 text-accent-cyan" />
                   <p className="text-[10px] font-mono text-accent-cyan uppercase">Deep dive</p>
                 </div>
-                <MdxRenderer content={mdxBody} currentCompoundId={module.compoundId} />
+                <MdxRenderer
+                  content={mdxBody}
+                  currentCompoundId={module.compoundId}
+                  currentSynergySlug={module.category === 'synergies' ? module.slug : undefined}
+                />
               </div>
             ) : (
               <GlassPanel depth="mid" className="rounded-xl p-8 text-center text-muted-foreground">

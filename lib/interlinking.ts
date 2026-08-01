@@ -34,6 +34,13 @@ export const HALLMARK_TERMS_BY_LENGTH: LinkableTerm[] = hallmarkLibrary
   .map((h) => ({ name: h.title, href: `/library/${h.slug}` }))
   .sort((a, b) => b.name.length - a.name.length);
 
+/** Named synergy-stack presets (e.g. "NRF2 Defense Triad") — referenced by
+ * name across many compound deep-dives, always in their canonical casing. */
+export const SYNERGY_TERMS_BY_LENGTH: LinkableTerm[] = libraryModules
+  .filter((m) => m.category === 'synergies')
+  .map((m) => ({ name: m.title, href: getModulePath(m) }))
+  .sort((a, b) => b.name.length - a.name.length);
+
 export function escapeRegExp(text: string): string {
   return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }

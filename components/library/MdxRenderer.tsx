@@ -29,6 +29,7 @@ import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import {
   COMPOUND_TERMS_BY_LENGTH,
   HALLMARK_TERMS_BY_LENGTH,
+  SYNERGY_TERMS_BY_LENGTH,
   canonicalCompoundName,
   escapeRegExp,
   termPattern,
@@ -100,6 +101,23 @@ function linkHallmarkTerms(text: string, linkedTerms: Set<string>): string {
 }
 
 /**
+ * Links the first on-page mention of a named synergy-stack preset (e.g.
+ * "NRF2 Defense Triad") to its own deep-dive. Case-sensitive, same rule as
+ * compound names — these are always written in their canonical casing.
+ */
+function linkSynergyTerms(text: string, linkedTerms: Set<string>): string {
+  let out = text;
+  for (const { name, href } of SYNERGY_TERMS_BY_LENGTH) {
+    if (linkedTerms.has(name)) continue;
+    const pattern = termPattern(name, false);
+    if (!pattern.test(out)) continue;
+    linkedTerms.add(name);
+    out = out.replace(pattern, (matched) => `<a href="${href}" class="${LINK_CLASS}">${matched}</a>`);
+  }
+  return out;
+}
+
+/**
  * Links the first on-page occurrence of each glossary term to an inline,
  * hover/focus tooltip carrying its plain-English definition — readers hit
  * jargon (AMPK, incretin, immunosenescence, ...) without leaving the page.
@@ -162,6 +180,7 @@ function renderInline(text: string, linkedTerms: Set<string>): string {
 
   out = linkCompoundTerms(out, linkedTerms);
   out = linkHallmarkTerms(out, linkedTerms);
+  out = linkSynergyTerms(out, linkedTerms);
   out = linkGlossaryTerms(out, linkedTerms);
 
   return out.replace(/\uE000T(\d+)\uE000/g, (_m, i: string) => tokens[Number(i)] ?? '');
@@ -791,6 +810,7 @@ export function MdxRenderer({
   showReferences = true,
   currentCompoundId,
   currentHallmarkId,
+  currentSynergySlug,
 }: {
   content: string;
   showToc?: boolean;
@@ -802,6 +822,9 @@ export function MdxRenderer({
   /** The hallmark this page is already about, if any — same self-link guard,
    * for hallmark-name mentions instead of compound-name mentions. */
   currentHallmarkId?: string;
+  /** The synergy-stack module this page is already about, if any — same
+   * self-link guard, for a synergy referring to its own name mid-body. */
+  currentSynergySlug?: string;
 }) {
   const blocks = parseBlocks(content);
   const elements: ReactNode[] = [];
@@ -814,6 +837,10 @@ export function MdxRenderer({
     ? hallmarkLibrary.find((h) => h.id === currentHallmarkId)
     : undefined;
   if (selfHallmark) linkedTerms.add(selfHallmark.title);
+  const selfSynergy = currentSynergySlug
+    ? libraryModules.find((m) => m.category === 'synergies' && m.slug === currentSynergySlug)
+    : undefined;
+  if (selfSynergy) linkedTerms.add(selfSynergy.title);
 
   blocks.forEach((block, i) => {
     if (block.kind === 'directive') {

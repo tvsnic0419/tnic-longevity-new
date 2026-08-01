@@ -1,6 +1,11 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
-import { COMPOUND_TERMS_BY_LENGTH, HALLMARK_TERMS_BY_LENGTH, termPattern } from '@/lib/interlinking';
+import {
+  COMPOUND_TERMS_BY_LENGTH,
+  HALLMARK_TERMS_BY_LENGTH,
+  SYNERGY_TERMS_BY_LENGTH,
+  termPattern,
+} from '@/lib/interlinking';
 
 /**
  * Auto-links the first mention of any compound or hallmark name in a plain
@@ -23,7 +28,7 @@ export function LinkedText({
   excludeNames?: string[];
 }): ReactNode {
   const linked = new Set(excludeNames);
-  const terms = [...COMPOUND_TERMS_BY_LENGTH, ...HALLMARK_TERMS_BY_LENGTH].sort(
+  const terms = [...COMPOUND_TERMS_BY_LENGTH, ...HALLMARK_TERMS_BY_LENGTH, ...SYNERGY_TERMS_BY_LENGTH].sort(
     (a, b) => b.name.length - a.name.length,
   );
 
