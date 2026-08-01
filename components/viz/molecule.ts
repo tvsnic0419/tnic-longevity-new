@@ -14,9 +14,9 @@
 // structure someone on this project actually drew and checked.
 // ─────────────────────────────────────────────────────────────────────────────
 
-import { MOLECULES, type Molecule as SkeletalMolecule } from "@/components/ui/molecules";
+import { STRUCTURE_LIBRARY, type Molecule as SkeletalMolecule } from "@/components/ui/molecules";
 
-export type Atom = { x: number; y: number; z: number; el: "C" | "O" | "N" | "S" | "P" };
+export type Atom = { x: number; y: number; z: number; el: "C" | "O" | "N" | "S" | "P" | "Cl" | "F" };
 export type Bond = [number, number, 1 | 2];
 export type Geometry = { atoms: Atom[]; bonds: Bond[]; formula: string; label: string };
 
@@ -144,8 +144,10 @@ function buildAstaxanthin(): Geometry {
 
 function elementFromLabel(text?: string): Atom["el"] {
   if (!text) return "C"; // unlabeled vertex = implicit carbon, per skeletal-formula convention
+  if (text.includes("Cl")) return "Cl";
   if (text.includes("O")) return "O";
   if (text.includes("N")) return "N";
+  if (text.includes("F")) return "F";
   if (text.includes("S")) return "S";
   return "C";
 }
@@ -190,7 +192,7 @@ function fromSkeletal(m: SkeletalMolecule, formula: string, label: string): Geom
   return { atoms, bonds, formula, label };
 }
 
-const skeletalById = new Map(MOLECULES.map((m) => [m.id, m]));
+const skeletalById = new Map(STRUCTURE_LIBRARY.map((m) => [m.id, m]));
 
 function buildFromSkeletal(id: string, formula: string, label: string): () => Geometry {
   return () => {
@@ -277,6 +279,19 @@ export const REGISTRY: Record<string, () => Geometry> = {
     "C₂₀H₁₈NO₄⁺",
     "isoquinoline alkaloid (quaternary ammonium)",
   ),
+  // PubChem-sourced hero structures. NEEDS CHEMIST REVIEW.
+  "creatine": buildFromSkeletal('creatine', 'C₄H₉N₃O₂', '2-[carbamimidoyl(methyl)amino]acetic acid'),
+  "curcumin": buildFromSkeletal('curcumin', 'C₂₁H₂₀O₆', 'Curcumin'),
+  "quercetin": buildFromSkeletal('quercetin', 'C₁₅H₁₀O₇', '2-(3,4-dihydroxyphenyl)-3,5,7-trihydroxychromen-4-one'),
+  "melatonin": buildFromSkeletal('melatonin', 'C₁₃H₁₆N₂O₂', 'N-[2-(5-methoxy-1H-indol-3-yl)ethyl]acetamide'),
+  "glycine": buildFromSkeletal('glycine', 'C₂H₅NO₂', '2-aminoacetic acid'),
+  "nac": buildFromSkeletal('nac', 'C₅H₉NO₃S', '(2R)-2-acetamido-3-sulfanylpropanoic acid'),
+  "glucosamine": buildFromSkeletal('glucosamine', 'C₆H₁₃NO₅', 'Glucosamine'),
+  "pqq": buildFromSkeletal('pqq', 'C₁₄H₆N₂O₈', 'PQQ'),
+  "rala": buildFromSkeletal('rala', 'C₈H₁₄O₂S₂', '5-[(3R)-dithiolan-3-yl]pentanoic acid'),
+  "urolithina": buildFromSkeletal('urolithina', 'C₁₃H₈O₄', '3,8-dihydroxybenzo[c]chromen-6-one'),
+  "vitamin-d3": buildFromSkeletal('vitamin-d3', 'C₂₇H₄₄O', 'Vitamin D3'),
+  "taurine": buildFromSkeletal('taurine', 'C₂H₇NO₃S', '2-aminoethanesulfonic acid'),
 };
 
 export function hasGeometry(id: string): boolean {
