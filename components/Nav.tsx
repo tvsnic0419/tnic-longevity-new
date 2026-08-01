@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ArrowRight, ClipboardList, Menu, Search, ShieldCheck, X } from 'lucide-react';
@@ -168,71 +167,68 @@ export function Nav() {
         </div>
       </div>
 
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            ref={menuRef}
-            id="mobile-menu"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Mobile navigation menu"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden relative nav-glass nav-glass-scrolled border-b border-border"
-          >
-            <div className="container-page py-4 flex flex-col gap-1">
-              {navLinks.map((link) =>
-                isInternal(link.href) ? (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    aria-current={isActive(link.href) ? 'page' : undefined}
-                    className="focus-ring interactive flex justify-between items-center text-foreground hover:text-accent-cyan py-3.5 min-h-[var(--space-touch)] text-base font-medium border-b border-border/50 last:border-0"
-                  >
-                    {link.label}
-                  </Link>
-                ) : (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    className="focus-ring interactive flex justify-between items-center text-foreground hover:text-accent-cyan py-3.5 min-h-[var(--space-touch)] text-base font-medium border-b border-border/50 last:border-0"
-                  >
-                    {link.label}
-                  </a>
-                ),
-              )}
-              <div className="flex flex-col gap-2 mt-3">
-                <GlassPanel depth="float" className="glass-hover rounded-xl">
-                  <Link
-                    href="/quiz"
-                    onClick={() => setMobileOpen(false)}
-                    className="focus-ring block rounded-xl py-3 text-center text-sm font-semibold"
-                  >
-                    3-Min Stack Quiz
-                  </Link>
-                </GlassPanel>
-                <GlassPanel depth="float" className="glass-hover rounded-xl">
-                  <Link
-                    href="/shop"
-                    onClick={() => setMobileOpen(false)}
-                    className="focus-ring block rounded-xl py-3 text-center text-sm font-semibold"
-                  >
-                    Verify a Product
-                  </Link>
-                </GlassPanel>
+      <div
+        ref={menuRef}
+        id="mobile-menu"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Mobile navigation menu"
+        data-open={mobileOpen ? 'true' : 'false'}
+        inert={!mobileOpen}
+        className="mobile-menu lg:hidden relative nav-glass nav-glass-scrolled border-b border-border"
+      >
+        <div className="mobile-menu-inner">
+          <div className="container-page py-4 flex flex-col gap-1">
+            {navLinks.map((link) =>
+              isInternal(link.href) ? (
                 <Link
-                  href="/dashboard"
-                  onClick={() => setMobileOpen(false)}
-                  className="focus-ring btn-gradient text-sm text-center justify-center"
+                  key={link.href}
+                  href={link.href}
+                  aria-current={isActive(link.href) ? 'page' : undefined}
+                  className="focus-ring interactive flex justify-between items-center text-foreground hover:text-accent-cyan py-3.5 min-h-[var(--space-touch)] text-base font-medium border-b border-border/50 last:border-0"
                 >
-                  Open Dashboard
+                  {link.label}
                 </Link>
-              </div>
+              ) : (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="focus-ring interactive flex justify-between items-center text-foreground hover:text-accent-cyan py-3.5 min-h-[var(--space-touch)] text-base font-medium border-b border-border/50 last:border-0"
+                >
+                  {link.label}
+                </a>
+              ),
+            )}
+            <div className="flex flex-col gap-2 mt-3">
+              <GlassPanel depth="float" className="glass-hover rounded-xl">
+                <Link
+                  href="/quiz"
+                  onClick={() => setMobileOpen(false)}
+                  className="focus-ring block rounded-xl py-3 text-center text-sm font-semibold"
+                >
+                  3-Min Stack Quiz
+                </Link>
+              </GlassPanel>
+              <GlassPanel depth="float" className="glass-hover rounded-xl">
+                <Link
+                  href="/shop"
+                  onClick={() => setMobileOpen(false)}
+                  className="focus-ring block rounded-xl py-3 text-center text-sm font-semibold"
+                >
+                  Verify a Product
+                </Link>
+              </GlassPanel>
+              <Link
+                href="/dashboard"
+                onClick={() => setMobileOpen(false)}
+                className="focus-ring btn-gradient text-sm text-center justify-center"
+              >
+                Open Dashboard
+              </Link>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </div>
+      </div>
     </nav>
   );
 }
