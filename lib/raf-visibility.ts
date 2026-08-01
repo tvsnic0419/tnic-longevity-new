@@ -22,11 +22,16 @@ export function cappedDpr(max = 3): number {
 export function runWhenVisible(
   el: Element,
   draw: () => void,
-  opts?: { rootMargin?: string; once?: boolean },
+  opts?: { rootMargin?: string; once?: boolean; fps?: number },
 ): () => void {
   let raf = 0;
   let visible = true;
   let running = false;
+  // Ambient decoration does not need 60fps. Capping the rate roughly halves
+  // its main-thread cost; on a HiDPI display, where each frame covers 4x the
+  // pixels, that is the difference between a smooth page and a stalled one.
+  const minFrameMs = opts?.fps ? 1000 / opts.fps : 0;
+  let last = 0;
 
   // `once` renders a single frame per visibility gain instead of driving a
   // continuous loop. Decorative thumbnails (e.g. a grid of dozens of compound
@@ -34,6 +39,14 @@ export function runWhenVisible(
   // cost a single frame instead of a permanent rAF loop each.
   const frame = () => {
     if (!running) return;
+    if (minFrameMs) {
+      const now = performance.now();
+      if (now - last < minFrameMs) {
+        raf = requestAnimationFrame(frame);
+        return;
+      }
+      last = now;
+    }
     draw();
     if (opts?.once) {
       running = false;

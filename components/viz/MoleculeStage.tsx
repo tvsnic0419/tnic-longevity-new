@@ -67,7 +67,11 @@ export function MoleculeStage({
     const cv = canvasRef.current; if (!cv) return;
     const ctx = cv.getContext("2d"); if (!ctx) return;
     let w = 0, h = 0;
-    const dpr = cappedDpr();
+    // Static thumbnails (a grid of dozens of these) don't need full retina
+    // resolution — each backing store is allocated and rasterised, so at dpr 3
+    // a gallery costs several hundred megabytes of canvas and a long stall.
+    // Interactive stages, where the user is looking closely, keep it.
+    const dpr = animateRef.current ? cappedDpr() : cappedDpr(1.5);
 
     // field-mode particles (only used when there is no geometry)
     const N = 64;

@@ -510,7 +510,11 @@ export function HomeDescent() {
     const cv = shimmerRef.current; if (!cv) return;
     const ctx = cv.getContext("2d"); if (!ctx) return;
     let w = 0, h = 0;
-    const dpr = cappedDpr();
+    /* Decorative full-viewport particle field: resolution is capped well below
+       the display's. At dpr 3 this canvas is ~11 megapixels cleared and
+       redrawn every frame, which measured as 600ms+ main-thread stalls on a
+       HiDPI display. Soft glows hide the lower resolution. */
+    const dpr = cappedDpr(1.25);
     const layers = [
       { n: 130, sp: 0.00012, dxr: 0.00008, rMin: 0.3, rMax: 1.2, alpha: 0.55 },
       { n: 60,  sp: 0.00020, dxr: 0.00014, rMin: 0.8, rMax: 2.2, alpha: 0.75 },
@@ -647,7 +651,7 @@ export function HomeDescent() {
       }
       ctx.globalAlpha = 1;
     }
-    const stopLoop = runWhenVisible(cv, draw);
+    const stopLoop = runWhenVisible(cv, draw, { fps: 30 });
     return () => { stopLoop(); ro.disconnect(); };
   }, []);
 
@@ -655,7 +659,7 @@ export function HomeDescent() {
   useEffect(() => {
     const cv = cursorRef.current; const root = rootRef.current; if (!cv || !root) return;
     const ctx = cv.getContext("2d"); if (!ctx) return;
-    const dpr = cappedDpr();
+    const dpr = cappedDpr(1.25);
     let w = 0, h = 0;
     const state = { x: 0, y: 0, tx: 0, ty: 0, on: false };
     function resize() {
