@@ -106,7 +106,7 @@ export function Nav() {
           <Logo variant="lockup" size="nav" alt="TNiC – Transformative Nutrition in Cell-Health · Home" />
         </Link>
 
-        <div className="hidden lg:flex gap-0.5 xl:gap-1">
+        <div className="hidden nav:flex gap-1">
           {navLinks.map((link) =>
             isInternal(link.href) ? (
               <Link
@@ -129,22 +129,25 @@ export function Nav() {
           )}
         </div>
 
-        <div className="hidden lg:flex items-center gap-2 shrink-0">
+        <div className="hidden nav:flex items-center gap-2.5 shrink-0">
           <ThemeToggle compact />
           <SiteSearch />
-          <GlassPanel depth="float" className="glass-hover rounded-full">
+          {/* One grouped shell for the two secondary actions — an internal
+              divider reads as "related pair" instead of two independent
+              pills, and it's narrower than two full GlassPanels. Dashboard
+              stays outside the glass as the single filled primary. */}
+          <GlassPanel depth="float" className="glass-hover flex items-center rounded-full">
             <Link
               href="/quiz"
-              className="focus-ring inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground"
+              className="focus-ring inline-flex items-center gap-1.5 rounded-full py-2 pl-4 pr-3.5 text-sm font-semibold text-muted-foreground hover:text-foreground"
             >
               <ClipboardList className="w-4 h-4 text-accent-violet" aria-hidden="true" />
               Quiz
             </Link>
-          </GlassPanel>
-          <GlassPanel depth="float" className="glass-hover rounded-full">
+            <span className="h-4 w-px bg-border/70" aria-hidden="true" />
             <Link
               href="/shop"
-              className="focus-ring inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground"
+              className="focus-ring inline-flex items-center gap-1.5 rounded-full py-2 pl-3.5 pr-4 text-sm font-semibold text-muted-foreground hover:text-foreground"
             >
               <ShieldCheck className="w-4 h-4 text-accent-amber" aria-hidden="true" />
               Verify
@@ -156,7 +159,7 @@ export function Nav() {
           </Link>
         </div>
 
-        <div className="flex items-center gap-1 lg:hidden">
+        <div className="flex items-center gap-1 nav:hidden">
           <ThemeToggle compact />
           <button
             onClick={() => window.dispatchEvent(new Event(COMMAND_PALETTE_EVENT))}
@@ -189,7 +192,7 @@ export function Nav() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden relative nav-glass nav-glass-scrolled border-b border-border"
+            className="nav:hidden relative nav-glass nav-glass-scrolled border-b border-border"
           >
             <div className="container-page py-4 flex flex-col gap-1">
               {navLinks.map((link) =>

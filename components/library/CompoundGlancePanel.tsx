@@ -3,6 +3,7 @@ import { Activity, Clock, FileText, Route, Target } from 'lucide-react';
 import type { Compound } from '@/lib/types';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { StatTile } from '@/components/ui/StatTile';
 
 /**
  * "Compound at a glance" — a scannable identity panel that surfaces the
@@ -17,26 +18,6 @@ const firstSentence = (text: string): string => {
   const match = text.match(/^.*?[.!?](?=\s|$)/);
   return (match ? match[0] : text).trim();
 };
-
-function Metric({
-  icon: Icon,
-  label,
-  children,
-}: {
-  icon: typeof Route;
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="rounded-xl border border-border/60 bg-muted/10 p-4">
-      <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
-        <Icon className="h-3.5 w-3.5 text-accent-cyan" aria-hidden="true" />
-        {label}
-      </div>
-      <div className="mt-2">{children}</div>
-    </div>
-  );
-}
 
 export function CompoundGlancePanel({ compound }: { compound: Compound }) {
   const targetHallmarks = compound.hallmarks
@@ -54,16 +35,16 @@ export function CompoundGlancePanel({ compound }: { compound: Compound }) {
       </div>
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <Metric icon={Route} label="Pathway">
+        <StatTile icon={Route} label="Pathway">
           <p className="text-sm font-semibold text-foreground">{compound.pathway}</p>
-        </Metric>
+        </StatTile>
 
-        <Metric icon={Activity} label="Bioavailability">
+        <StatTile icon={Activity} label="Bioavailability">
           {compound.bioavailability != null ? (
             <>
-              <p className="text-lg font-bold leading-none text-accent-cyan">
+              <p className="font-display text-xl font-medium leading-none text-accent-cyan">
                 {compound.bioavailability}
-                <span className="text-xs font-medium text-muted-foreground">%</span>
+                <span className="font-sans text-xs font-medium text-muted-foreground">%</span>
               </p>
               <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted/40">
                 <div
@@ -75,22 +56,22 @@ export function CompoundGlancePanel({ compound }: { compound: Compound }) {
           ) : (
             <p className="text-sm font-semibold text-muted-foreground">—</p>
           )}
-        </Metric>
+        </StatTile>
 
-        <Metric icon={Clock} label="Protocol">
+        <StatTile icon={Clock} label="Protocol">
           <p className="text-sm font-semibold text-foreground">{compound.dose}</p>
           <p className="mt-1 text-xs text-muted-foreground">{compound.timing} dosing</p>
-        </Metric>
+        </StatTile>
 
-        <Metric icon={FileText} label="Evidence base">
-          <p className="text-lg font-bold leading-none text-accent-emerald">
+        <StatTile icon={FileText} label="Evidence base" accent="emerald">
+          <p className="font-display text-xl font-medium leading-none text-accent-emerald">
             {compound.studies.length}
-            <span className="ml-1 text-xs font-medium text-muted-foreground">
+            <span className="font-sans ml-1 text-xs font-medium text-muted-foreground">
               indexed {compound.studies.length === 1 ? 'study' : 'studies'}
             </span>
           </p>
           <p className="mt-1.5 text-xs text-muted-foreground">Peer-reviewed PMIDs</p>
-        </Metric>
+        </StatTile>
       </div>
 
       {targetHallmarks.length > 0 && (
