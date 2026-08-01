@@ -12,12 +12,27 @@ import {
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { getHubContext } from '@/lib/hub-context';
+import { cn } from '@/lib/utils';
+import type { EvidenceTier } from '@/lib/types';
 
 const categoryIcons: Record<LibraryModuleCategory, typeof Pill> = {
   compounds: Pill,
   synergies: Layers,
   lifestyle: HeartPulse,
   guides: FlaskConical,
+};
+
+/** Same tier -> color mapping EvidenceTag itself uses, so the card's accent
+ * spine and hover glow always agree with its own tier badge. */
+const TIER_ACCENT: Record<EvidenceTier, string> = {
+  A: 'var(--accent-emerald)',
+  B: 'var(--accent-cyan)',
+  C: 'var(--accent-amber)',
+};
+const TIER_GLOW: Record<EvidenceTier, string> = {
+  A: 'glow-hover-emerald',
+  B: 'glow-hover-cyan',
+  C: 'glow-hover-amber',
 };
 
 const categoryOrder = (Object.keys(libraryCategoryMeta) as LibraryModuleCategory[]).sort(
@@ -122,8 +137,16 @@ export function LibraryModulesHub() {
                     <Link
                       key={mod.slug}
                       href={getModulePath(mod)}
-                      className="focus-ring interactive card-elevated p-5 flex flex-col h-full group"
+                      className={cn(
+                        'focus-ring interactive card-elevated relative overflow-hidden p-5 pl-6 flex flex-col h-full group',
+                        TIER_GLOW[mod.evidenceTier],
+                      )}
                     >
+                      <span
+                        aria-hidden="true"
+                        className="absolute inset-y-0 left-0 w-[3px] opacity-70 transition-opacity group-hover:opacity-100"
+                        style={{ background: TIER_ACCENT[mod.evidenceTier] }}
+                      />
                       <div className="flex items-center justify-between gap-2 mb-3">
                         <EvidenceTag tier={mod.evidenceTier} size="sm" />
                         {mod.requiresDisclaimer && (

@@ -7,11 +7,9 @@ import { HallmarkIcon } from './HallmarkIcon';
 export function HallmarkVisual({
   visual,
   coverage,
-  number,
 }: {
   visual: HallmarkLibraryEntry['visual'];
   coverage: number;
-  number: number;
 }) {
   const meta = getHallmarkVisual(visual);
   const r = 70;
@@ -52,9 +50,6 @@ export function HallmarkVisual({
         </text>
         <text x="100" y="134" textAnchor="middle" fill="var(--color-text-faint)" fontSize="9" fontFamily="var(--font-mono)">
           TNiC COVERAGE
-        </text>
-        <text x="100" y="168" textAnchor="middle" fill="var(--color-text-faint)" fontSize="10">
-          Hallmark {number}
         </text>
       </svg>
       <p className="text-center text-caption mt-2">{meta.label}</p>

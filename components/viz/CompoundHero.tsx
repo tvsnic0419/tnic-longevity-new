@@ -130,6 +130,26 @@ const CHERO_CSS = `
     radial-gradient(100% 100% at 30% 20%, color-mix(in srgb, var(--hue) 14%, transparent), transparent 60%),
     radial-gradient(100% 100% at 80% 90%, rgba(140,140,245,0.06), transparent 60%),
     linear-gradient(180deg, rgba(14,20,38,0.6), rgba(10,14,30,0.9));
+  /* Deep Glass content-plane shadow (app/globals.css "Design System v8") — this
+     is the hero glass moment of every compound page, so it earns the deepest
+     stacked contact+lift+ambient shadow instead of a flat 1px border. */
+  box-shadow: var(--glass-shadow-content, 0 20px 60px -20px rgba(0,0,0,0.55));
+}
+.chero-stage::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 1; border-radius: inherit; padding: 1px;
+  background: linear-gradient(
+    135deg,
+    var(--glass-edge-specular, rgba(255,255,255,0.35)) 0%,
+    var(--glass-edge-cool, rgba(150,210,255,0.16)) 14%,
+    transparent 42%, transparent 58%,
+    var(--glass-edge-warm, rgba(255,185,130,0.1)) 86%,
+    var(--glass-edge-shadow, rgba(0,0,0,0.4)) 100%
+  );
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 .chero-hint {
   position: absolute; bottom: 12px; right: 14px;
@@ -160,9 +180,28 @@ const CHERO_CSS = `
 .chero-facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 8px; }
 @media (max-width: 520px) { .chero-facts { grid-template-columns: repeat(2, 1fr); } }
 .chero-fact {
+  position: relative;
   display: flex; flex-direction: column; gap: 4px; padding: 12px 14px;
   background: linear-gradient(180deg, rgba(19,26,48,0.7), rgba(14,20,38,0.7));
   border: 1px solid ${VIZ.line}; border-radius: 12px;
+  /* Deep Glass mid-plane shadow — matches .card-elevated/.card-premium
+     elsewhere on the site instead of a flat one-off border. */
+  box-shadow: var(--glass-shadow-mid, 0 8px 20px -10px rgba(0,0,0,0.32));
+  overflow: hidden;
+}
+.chero-fact::before {
+  content: '';
+  position: absolute; inset: 0; border-radius: inherit; padding: 1px;
+  background: linear-gradient(
+    135deg,
+    var(--glass-edge-specular, rgba(255,255,255,0.3)) 0%,
+    transparent 50%,
+    var(--glass-edge-shadow, rgba(0,0,0,0.35)) 100%
+  );
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 .chero-fact .k { font-family: ${FONT.mono}; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: ${VIZ.faint}; }
 .chero-fact .v { font-size: 14px; color: ${VIZ.ink}; font-weight: 500; }

@@ -205,7 +205,6 @@ export function AntiAgingLibrary({ asPageTitle = false }: AntiAgingLibraryProps)
                     <HallmarkVisual
                       visual={active.visual}
                       coverage={active.coverage}
-                      number={active.number}
                     />
                   </div>
                 </div>

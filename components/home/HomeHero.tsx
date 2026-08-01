@@ -31,9 +31,16 @@ export function HomeHero() {
   return (
     <section
       aria-labelledby="home-hero-heading"
-      className="relative isolate overflow-hidden bg-[#020811] pt-28 pb-16 md:pt-32 md:pb-24"
+      className="relative isolate overflow-hidden pt-28 pb-16 md:pt-32 md:pb-24"
     >
-      {/* Backdrop — pure CSS so it renders on the server and stays lightweight */}
+      {/* Backdrop — pure CSS so it renders on the server and stays lightweight.
+          Deliberately no opaque bg on the section root: the shared AmbientLayer
+          (aurora orbs + drifting molecule cascade, see app/layout.tsx) already
+          paints behind every page at this same base tone, and painting a solid
+          fill here would wall this section off from it — the exact "page
+          wrappers must not repaint an opaque background" rule documented next
+          to .canvas-scrim in globals.css. Letting it show through keeps this
+          section in the same cinematic register as the Descent scene above it. */}
       <div aria-hidden="true" className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[radial-gradient(#12203c_0.8px,transparent_1px)] [background-size:22px_22px] opacity-50" />
         <div className="absolute -left-32 -top-40 h-[38rem] w-[38rem] rounded-full bg-[radial-gradient(circle,rgba(0,224,255,0.16),transparent_60%)] blur-2xl" />

@@ -57,7 +57,6 @@ export function HallmarkDetail({
             <HallmarkVisual
               visual={hallmark.visual}
               coverage={hallmark.coverage}
-              number={hallmark.number}
             />
             {MechanismVisual && (
               <GlassPanel depth="mid" className="overflow-hidden rounded-xl">
