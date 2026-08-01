@@ -25,6 +25,7 @@ import { citationRegistry } from '@/lib/trust';
 import { glossary } from '@/lib/data';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { libraryModules, getModulePath } from '@/lib/library-modules';
+import { hallmarkLibrary } from '@/lib/hallmarks-library';
 
 // Matches "PMID"/"PMIDs" (singular or plural, with or without a colon) followed
 // by one or more comma-separated ids — e.g. "PMID 12345678" or
@@ -81,6 +82,33 @@ function linkCompoundTerms(text: string, linkedTerms: Set<string>): string {
   for (const { name, href } of COMPOUND_TERMS_BY_LENGTH) {
     if (linkedTerms.has(name)) continue;
     const pattern = new RegExp(`(?<![a-zA-Z0-9-])(${escapeRegExp(name)})(?![a-zA-Z0-9-])`);
+    if (!pattern.test(out)) continue;
+    linkedTerms.add(name);
+    out = out.replace(pattern, (matched) => `<a href="${href}" class="${LINK_CLASS}">${matched}</a>`);
+  }
+  return out;
+}
+
+/** Longest-title-first, same overlap-safety rule as compound terms. */
+const HALLMARK_TERMS_BY_LENGTH = hallmarkLibrary
+  .map((h) => ({ name: h.title, href: `/library/${h.slug}` }))
+  .sort((a, b) => b.name.length - a.name.length);
+
+/**
+ * Links the first on-page mention of any *other* hallmark's full name
+ * (e.g. "Chronic Inflammation", "Genomic Instability") to its own deep-dive —
+ * same first-mention convention and shared dedup set as compound/glossary
+ * linking, so a hallmark page never links to itself.
+ */
+function linkHallmarkTerms(text: string, linkedTerms: Set<string>): string {
+  let out = text;
+  for (const { name, href } of HALLMARK_TERMS_BY_LENGTH) {
+    if (linkedTerms.has(name)) continue;
+    // Case-insensitive: hallmark titles are Title Case, but prose mentions
+    // them lowercase mid-sentence far more often ("mitochondrial dysfunction"
+    // vs "Mitochondrial Dysfunction") — glossary linking already accounts for
+    // this, hallmark names need the same.
+    const pattern = new RegExp(`(?<![a-zA-Z0-9-])(${escapeRegExp(name)})(?![a-zA-Z0-9-])`, 'i');
     if (!pattern.test(out)) continue;
     linkedTerms.add(name);
     out = out.replace(pattern, (matched) => `<a href="${href}" class="${LINK_CLASS}">${matched}</a>`);
@@ -150,6 +178,7 @@ function renderInline(text: string, linkedTerms: Set<string>): string {
   );
 
   out = linkCompoundTerms(out, linkedTerms);
+  out = linkHallmarkTerms(out, linkedTerms);
   out = linkGlossaryTerms(out, linkedTerms);
 
   return out.replace(/\uE000T(\d+)\uE000/g, (_m, i: string) => tokens[Number(i)] ?? '');
@@ -778,6 +807,7 @@ export function MdxRenderer({
   showToc = true,
   showReferences = true,
   currentCompoundId,
+  currentHallmarkId,
 }: {
   content: string;
   showToc?: boolean;
@@ -786,6 +816,9 @@ export function MdxRenderer({
    * linked-terms set so the auto-linker never links a compound's name back
    * to the page it's already on. */
   currentCompoundId?: string;
+  /** The hallmark this page is already about, if any — same self-link guard,
+   * for hallmark-name mentions instead of compound-name mentions. */
+  currentHallmarkId?: string;
 }) {
   const blocks = parseBlocks(content);
   const elements: ReactNode[] = [];
@@ -794,6 +827,10 @@ export function MdxRenderer({
     ? libraryModules.find((m) => m.compoundId === currentCompoundId)
     : undefined;
   if (selfModule) linkedTerms.add(canonicalCompoundName(selfModule.title));
+  const selfHallmark = currentHallmarkId
+    ? hallmarkLibrary.find((h) => h.id === currentHallmarkId)
+    : undefined;
+  if (selfHallmark) linkedTerms.add(selfHallmark.title);
 
   blocks.forEach((block, i) => {
     if (block.kind === 'directive') {

@@ -114,7 +114,7 @@ export function HallmarkDetail({
                   <BookOpen className="w-4 h-4 text-accent-cyan" />
                   <p className="text-[10px] font-mono text-accent-cyan uppercase">Deep dive (MDX)</p>
                 </div>
-                <MdxRenderer content={mdxBody} />
+                <MdxRenderer content={mdxBody} currentHallmarkId={hallmark.id} />
               </div>
             )}
 
