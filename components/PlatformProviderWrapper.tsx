@@ -4,6 +4,7 @@ import { MotionConfig } from 'framer-motion';
 import { PlatformProvider } from '@/context/PlatformContext';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
 import { OsOverlays } from '@/components/os/OsOverlays';
+import { PrivacyConsentBanner } from '@/components/PrivacyConsentBanner';
 import type { ReactNode } from 'react';
 
 export function PlatformProviderWrapper({ children }: { children: ReactNode }) {
@@ -16,6 +17,7 @@ export function PlatformProviderWrapper({ children }: { children: ReactNode }) {
       <ThemeProvider>
         <PlatformProvider>
           <OsOverlays />
+          <PrivacyConsentBanner />
           {children}
         </PlatformProvider>
       </ThemeProvider>
