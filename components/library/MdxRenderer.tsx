@@ -26,7 +26,12 @@ import { glossary } from '@/lib/data';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { libraryModules, getModulePath } from '@/lib/library-modules';
 
-const PMID_PATTERN = /\bPMID:?\s?(\d{7,8})\b/g;
+// Matches "PMID"/"PMIDs" (singular or plural, with or without a colon) followed
+// by one or more comma-separated ids — e.g. "PMID 12345678" or
+// "PMIDs: 12345678, 23456789, 34567890". Every id in the group gets its own
+// PubMed link; a bare trailing number that just repeats a preceding "PMID X,"
+// citation is a common authoring shorthand and must not be left unlinked.
+const PMID_PATTERN = /\bPMIDs?:?\s*(\d{7,8}(?:\s*,\s*\d{7,8})*)\b/g;
 const LINK_CLASS =
   'text-accent-cyan hover:text-accent-emerald underline underline-offset-2 decoration-accent-cyan/40 hover:decoration-accent-emerald transition-colors';
 const PMID_CLASS =
@@ -131,9 +136,16 @@ function renderInline(text: string, linkedTerms: Set<string>): string {
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
     .replace(/`(.+?)`/g, '<code class="text-accent-cyan bg-muted/50 px-1 rounded text-xs">$1</code>');
 
-  out = out.replace(PMID_PATTERN, (_m, id: string) =>
+  out = out.replace(PMID_PATTERN, (_m, ids: string) =>
     stash(
-      `<a href="${pubmedUrl(id)}" target="_blank" rel="noopener noreferrer" class="${PMID_CLASS}">PMID ${id}</a>`,
+      ids
+        .split(',')
+        .map((id) => id.trim())
+        .map(
+          (id) =>
+            `<a href="${pubmedUrl(id)}" target="_blank" rel="noopener noreferrer" class="${PMID_CLASS}">PMID ${id}</a>`,
+        )
+        .join(', '),
     ),
   );
 
@@ -193,15 +205,22 @@ function extractHeadings(content: string): Heading[] {
   return headings;
 }
 
-/** Ordered, de-duplicated PMIDs cited anywhere in the prose or directives. */
-function extractPmids(content: string): string[] {
+/**
+ * Ordered, de-duplicated PMIDs cited anywhere in the prose or directives.
+ * Exported so anything that needs an accurate cited-study count — e.g. the
+ * "Peer-reviewed PMIDs" tally on library-only compound pages — reuses this
+ * exact extraction instead of a second, easier-to-drift-out-of-sync regex.
+ */
+export function extractPmids(content: string): string[] {
   const seen = new Set<string>();
   const ordered: string[] = [];
   for (const match of content.matchAll(PMID_PATTERN)) {
-    const pmid = match[1];
-    if (!seen.has(pmid)) {
-      seen.add(pmid);
-      ordered.push(pmid);
+    for (const raw of match[1].split(',')) {
+      const pmid = raw.trim();
+      if (!seen.has(pmid)) {
+        seen.add(pmid);
+        ordered.push(pmid);
+      }
     }
   }
   return ordered;

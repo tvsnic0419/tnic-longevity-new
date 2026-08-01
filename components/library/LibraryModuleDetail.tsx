@@ -11,7 +11,7 @@ import { libraryCategoryMeta } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { compounds } from '@/lib/data';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
-import { MdxRenderer } from './MdxRenderer';
+import { MdxRenderer, extractPmids } from './MdxRenderer';
 import { CompoundBuyerGuidePanel } from './CompoundBuyerGuide';
 import { LifestylePillarPanel } from './LifestylePillarPanel';
 import { getBuyerGuideByModuleSlug } from '@/lib/buyer-guides';
@@ -64,7 +64,7 @@ export function LibraryModuleDetail({
   // in the deep-dive body so all 55 compound pages stay coherent.
   const mdxStudyCount =
     module.category === 'compounds' && !relatedCompound && mdxBody
-      ? new Set(mdxBody.match(/\bPMID:?\s*(\d{7,8})\b/g)?.map((m) => m.replace(/\D/g, '')) ?? []).size
+      ? extractPmids(mdxBody).length
       : 0;
 
   useEffect(() => {
