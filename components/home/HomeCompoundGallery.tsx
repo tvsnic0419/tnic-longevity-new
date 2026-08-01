@@ -9,13 +9,21 @@ import { RevealItem } from '@/components/ui/RevealItem';
 import { CellularDivider } from '@/components/ui/CellularDivider';
 
 /**
- * Every compound in the library, rendered — a real ball-and-stick structure
- * where one has been hand-verified (see components/viz/molecule.ts), an
+ * A preview of the compound library — a real ball-and-stick structure where
+ * one has been hand-verified (see components/viz/molecule.ts), an
  * honestly-labeled illustrative orbital field otherwise. Never a fabricated
  * structure passed off as literal; MoleculeStage/CompoundHero already enforce
- * that same rule on each compound's own deep-dive page. This is the "look at
- * everything at once" view of the same 55 compounds, not a new claim.
+ * that same rule on each compound's own deep-dive page.
+ *
+ * This used to render every module in the library. Each tile is a canvas
+ * renderer, so the landing page was mounting ~56 of them — the single largest
+ * source of work on the page, for a wall of near-identical thumbnails that
+ * conveys nothing the first dozen don't. The full set lives one click away at
+ * /library/compounds, which is the right place to browse. Keep this a
+ * preview; the copy below states the real library size rather than implying
+ * the grid is exhaustive.
  */
+const PREVIEW_COUNT = 12;
 
 export function HomeCompoundGallery() {
   return (
@@ -27,7 +35,7 @@ export function HomeCompoundGallery() {
       <div className="container-page">
         <div className="mb-10 items-center gap-10 lg:mb-14 lg:grid lg:grid-cols-12">
           <RevealItem className="lg:col-span-7">
-            <p className="text-label mb-3 text-accent-cyan">Every compound, rendered</p>
+            <p className="text-label mb-3 text-accent-cyan">The compounds, rendered</p>
             <h2 id="home-compound-gallery-heading" className="heading-section mb-3">
               {COMPOUND_COUNT} compounds — every one graded, every one linked to its deep-dive.
             </h2>
@@ -37,16 +45,16 @@ export function HomeCompoundGallery() {
             </p>
             <Link
               href="/library/compounds"
-              className="focus-ring group hidden items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+              className="focus-ring group inline-flex items-center gap-1.5 text-sm font-semibold text-accent-cyan transition-colors hover:text-accent-emerald"
             >
-              Browse the full compound library
+              Browse all {COMPOUND_COUNT} compounds
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
             </Link>
           </RevealItem>
         </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          {compoundModules.map((m, i) => {
+          {compoundModules.slice(0, PREVIEW_COUNT).map((m, i) => {
             const structured = m.compoundId ? hasGeometry(m.compoundId) : false;
             const hue = signatureHue(m.compoundId ?? m.slug);
             return (
@@ -79,6 +87,16 @@ export function HomeCompoundGallery() {
               </RevealItem>
             );
           })}
+        </div>
+
+        <div className="mt-8 flex justify-center">
+          <Link
+            href="/library/compounds"
+            className="focus-ring group inline-flex items-center gap-2 rounded-full border border-border/70 px-5 py-3 text-sm font-semibold text-foreground transition-colors hover:border-accent-cyan/50 hover:text-accent-cyan"
+          >
+            See all {COMPOUND_COUNT} compounds
+            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
+          </Link>
         </div>
       </div>
     </section>
