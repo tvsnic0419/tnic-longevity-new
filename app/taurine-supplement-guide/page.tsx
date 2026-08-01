@@ -437,7 +437,7 @@ export default function TaurineGuidePage() {
           <div className="rounded-2xl border border-accent-emerald/20 bg-accent-emerald/[0.04] p-8 md:p-10 text-center">
             <h2 className="heading-section mb-3">Add Taurine to Your Stack</h2>
             <p className="text-body text-muted-foreground mb-8 max-w-xl mx-auto">
-              Taurine is included in TNiC&rsquo;s Foundation, Mito-NAD+, and Full-Spectrum presets. Take the quiz to get your personalized protocol.
+              Taurine is included in TNiC&rsquo;s Foundation, Mito-NAD+, and Full-Spectrum presets. Take The Nico Starter Questionnaire to get your personalized protocol.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               <Link

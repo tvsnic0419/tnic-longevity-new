@@ -6,7 +6,7 @@
  * Vercel Analytics client into a server bundle.
  */
 export const ANALYTICS_EVENTS = {
-  /** A visitor finished the 3-question quiz and saw a recommended stack. */
+  /** A visitor finished The Nico Starter Questionnaire and saw a recommended stack. */
   quizCompleted: 'quiz_completed',
   /** A visitor subscribed to the Protocol Brief. */
   emailSubscribed: 'email_subscribed',

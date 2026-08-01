@@ -443,7 +443,7 @@ export default function GlyNACGuidePage() {
           <div className="rounded-2xl border border-accent-cyan/20 bg-accent-cyan/[0.04] p-8 md:p-10 text-center">
             <h2 className="heading-section mb-3">Build Your GlyNAC Stack</h2>
             <p className="text-body text-muted-foreground mb-8 max-w-xl mx-auto">
-              GlyNAC is a foundation-layer compound in most TNiC protocol presets. The quiz matches you to the right preset based on your goal, age, and experience.
+              GlyNAC is a foundation-layer compound in most TNiC protocol presets. The Nico Starter Questionnaire matches you to the right preset based on your goal, concern, age, experience, budget, and safety flags.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               <Link

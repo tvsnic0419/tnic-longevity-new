@@ -5,7 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import { StarterQuiz } from '@/components/sections/StarterQuiz';
 
 /**
- * Every "take the quiz" link site-wide points straight here — so this page
+ * Every "take the questionnaire" link site-wide points straight here — so this page
  * is the questions, not a landing page that explains them first. No
  * PageHeader/ContextRail preamble: StarterQuiz's own compact header (eyebrow,
  * step dots, progress bar) is the framing. Answering the first question is
@@ -22,7 +22,7 @@ export function QuizPageContent() {
         Back to homepage
       </Link>
 
-      <div className="max-w-xl mx-auto">
+      <div className="max-w-2xl mx-auto">
         <StarterQuiz variant="page" />
       </div>
     </div>

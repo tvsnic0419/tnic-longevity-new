@@ -140,7 +140,7 @@ export function Nav() {
               className="focus-ring inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground"
             >
               <ClipboardList className="w-4 h-4 text-accent-violet" aria-hidden="true" />
-              Quiz
+              Nico
             </Link>
           </GlassPanel>
           <GlassPanel depth="float" className="glass-hover rounded-full">
@@ -221,7 +221,7 @@ export function Nav() {
                     onClick={() => setMobileOpen(false)}
                     className="focus-ring block rounded-xl py-3 text-center text-sm font-semibold"
                   >
-                    3-Min Stack Quiz
+                    The Nico Starter Questionnaire
                   </Link>
                 </GlassPanel>
                 <GlassPanel depth="float" className="glass-hover rounded-xl">

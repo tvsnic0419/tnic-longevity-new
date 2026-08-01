@@ -552,7 +552,7 @@ export default function BerberineGuidePage() {
           <div className="rounded-2xl border border-accent-violet/20 bg-accent-violet/[0.04] p-8 md:p-10 text-center">
             <h2 className="heading-section mb-3">Build Your Berberine Stack</h2>
             <p className="text-body text-muted-foreground mb-8 max-w-xl mx-auto">
-              Berberine is a component in TNiC&rsquo;s Foundation, NRF2, and Full-Spectrum presets. Take the quiz to get a personalized protocol.
+              Berberine is a component in TNiC&rsquo;s Foundation, NRF2, and Full-Spectrum presets. Take The Nico Starter Questionnaire to get a personalized protocol.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               <Link

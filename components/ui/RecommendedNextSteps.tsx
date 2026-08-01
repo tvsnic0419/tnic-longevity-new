@@ -49,10 +49,10 @@ export const RecommendedNextSteps: React.FC<RecommendedNextStepsProps> = ({
     general: [
       {
         icon: Target,
-        title: "Take the 3-minute quiz",
+        title: "Take the Nico Starter Questionnaire",
         description: "Get a mechanism-matched stack recommendation",
         href: "/quiz",
-        label: "Start Quiz"
+        label: "Start Questionnaire"
       },
       {
         icon: BookOpen,

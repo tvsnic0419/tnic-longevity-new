@@ -18,7 +18,7 @@ export function QuizStacksBanner({ preset }: { preset: PresetKey }) {
           <Sparkles className="w-5 h-5 text-accent-emerald" aria-hidden="true" />
         </div>
         <div>
-          <p className="text-sm font-bold text-accent-emerald">Quiz preset loaded</p>
+          <p className="text-sm font-bold text-accent-emerald">Nico preset loaded</p>
           <p className="text-body-sm text-muted-foreground mt-1">
             <strong>{stack.label}</strong> stack is active in the Builder — {stack.desc}. Adjust compounds,
             check synergy score, then save or export your protocol.

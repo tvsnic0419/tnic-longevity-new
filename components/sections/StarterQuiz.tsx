@@ -44,8 +44,9 @@ const goalAccent: Record<string, string> = {
   full:      'var(--accent-cyan)',
 };
 
-/** One icon per question, driving the step rail — independent of the goal
- * step's own per-option icons. */
+/** One icon per question — drives both the step rail and, for every
+ * single-select step besides goal (which has its own per-option icons),
+ * every option tile's badge too, so no step ever falls back to a bare dot. */
 const STEP_ICON: Record<string, typeof Target> = {
   goal: Target,
   concern: HeartPulse,
@@ -85,27 +86,27 @@ function LiveStackPreview({ answers }: { answers: QuizAnswers }) {
     <motion.div
       initial={{ opacity: 0, y: -6 }}
       animate={{ opacity: 1, y: 0 }}
-      className="relative mb-4 overflow-hidden rounded-xl px-3.5 py-3 border"
+      className="relative mb-5 overflow-hidden rounded-2xl px-4 py-3.5 border"
       style={{
-        background: `linear-gradient(135deg, color-mix(in srgb, ${accent} 10%, transparent), color-mix(in srgb, ${accent} 3%, transparent))`,
-        borderColor: `color-mix(in srgb, ${accent} 28%, transparent)`,
+        background: `linear-gradient(135deg, color-mix(in srgb, ${accent} 12%, transparent), color-mix(in srgb, ${accent} 3%, transparent))`,
+        borderColor: `color-mix(in srgb, ${accent} 30%, transparent)`,
       }}
     >
       <p
-        className="flex items-center gap-1.5 text-[9px] font-mono uppercase tracking-widest mb-1.5"
+        className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-widest mb-2"
         style={{ color: accent }}
       >
-        <Sparkles className="w-3 h-3" aria-hidden="true" />
+        <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
         Predicted stack → {preset.label}
       </p>
-      <div className="flex flex-wrap gap-1">
+      <div className="flex flex-wrap gap-1.5">
         {compoundNames.map((name, i) => (
           <motion.span
             key={name}
-            initial={{ opacity: 0, scale: 0.85 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: i * 0.04, duration: 0.25 }}
-            className="text-[9px] font-semibold px-1.5 py-0.5 rounded"
+            initial={{ opacity: 0, scale: 0.8, y: 4 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ delay: i * 0.05, duration: 0.3, type: 'spring', stiffness: 300, damping: 22 }}
+            className="text-[10px] font-semibold px-2 py-1 rounded-lg"
             style={{
               background: `color-mix(in srgb, ${accent} 16%, transparent)`,
               color: accent,
@@ -121,7 +122,7 @@ function LiveStackPreview({ answers }: { answers: QuizAnswers }) {
 
 function StepRail({ step, done }: { step: number; done: boolean }) {
   return (
-    <div className="flex items-center mb-5" aria-hidden="true">
+    <div className="flex items-center mb-6" aria-hidden="true">
       {quizSteps.map((s, i) => {
         const Icon = STEP_ICON[s.id] ?? Target;
         const isComplete = done || i < step;
@@ -129,9 +130,9 @@ function StepRail({ step, done }: { step: number; done: boolean }) {
         return (
           <div key={s.id} className={`flex items-center ${i < quizSteps.length - 1 ? 'flex-1' : ''}`}>
             <div
-              className="relative shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-transform duration-300"
+              className="relative shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-transform duration-300"
               style={{
-                transform: isActive ? 'scale(1.12)' : 'scale(1)',
+                transform: isActive ? 'scale(1.15)' : 'scale(1)',
                 background: isComplete
                   ? 'linear-gradient(135deg, var(--accent-cyan), var(--accent-emerald))'
                   : isActive
@@ -143,15 +144,15 @@ function StepRail({ step, done }: { step: number; done: boolean }) {
                     ? '1.5px solid var(--accent-cyan)'
                     : '1.5px solid color-mix(in srgb, currentColor 14%, transparent)',
                 boxShadow: isActive
-                  ? '0 0 0 4px color-mix(in srgb, var(--accent-cyan) 14%, transparent), 0 0 18px color-mix(in srgb, var(--accent-cyan) 30%, transparent)'
+                  ? '0 0 0 4px color-mix(in srgb, var(--accent-cyan) 16%, transparent), 0 0 20px color-mix(in srgb, var(--accent-cyan) 35%, transparent)'
                   : 'none',
               }}
             >
               {isComplete ? (
-                <Check className="w-3.5 h-3.5 text-black" aria-hidden="true" />
+                <Check className="w-4 h-4 text-black" aria-hidden="true" />
               ) : (
                 <Icon
-                  className="w-3.5 h-3.5"
+                  className="w-4 h-4"
                   style={{ color: isActive ? 'var(--accent-cyan)' : 'var(--muted-foreground)' }}
                   aria-hidden="true"
                 />
@@ -192,9 +193,15 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
   const [answers, setAnswers] = useState<QuizAnswers>(shared ?? {});
   const [done, setDone] = useState(Boolean(shared));
   const [multiDraft, setMultiDraft] = useState<string[]>([]);
+  // Brief "locked in" confirm state before the step actually advances — a
+  // deliberate ~180ms beat so a tap reads as a considered choice instead of
+  // an instant snap-away. Cheap (transform/opacity + a timeout), not a
+  // second render pass or new animation loop.
+  const [justSelected, setJustSelected] = useState<string | null>(null);
 
   const current = quizSteps[step];
   const stepAccent = STEP_ACCENT[current.id] ?? 'var(--accent-cyan)';
+  const isPage = variant === 'page';
 
   const advance = (next: QuizAnswers) => {
     setAnswers(next);
@@ -219,8 +226,12 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
   };
 
   const select = (optionId: string) => {
-    const key = current.id as Exclude<keyof QuizAnswers, 'safety'>;
-    advance({ ...answers, [key]: optionId });
+    setJustSelected(optionId);
+    window.setTimeout(() => {
+      const key = current.id as Exclude<keyof QuizAnswers, 'safety'>;
+      advance({ ...answers, [key]: optionId });
+      setJustSelected(null);
+    }, 180);
   };
 
   // 'none' is exclusive — picking it clears any other flags and finishes the
@@ -241,17 +252,26 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
     setStep(0);
     setAnswers({});
     setMultiDraft([]);
+    setJustSelected(null);
     setDone(false);
   };
 
   const result = done ? getQuizResult(answers) : null;
-  const isPage = variant === 'page';
+  // Exactly-3-option steps (experience, budget) get a 3-column grid so
+  // there's no orphaned single tile in a second row; everything else with
+  // 4+ options gets 2 columns. Embedded stays single-column — it's a
+  // ~450px teaser slot, not the full-width /quiz page.
+  const gridCols = !isPage
+    ? 'grid-cols-1'
+    : current.options.length === 3
+      ? 'grid-cols-1 sm:grid-cols-3'
+      : 'grid-cols-1 sm:grid-cols-2';
 
   return (
     <div
       className={
         isPage
-          ? 'relative isolate glass-deep glass-plane-content rounded-3xl p-6 md:p-8 overflow-hidden'
+          ? 'relative isolate glass-deep glass-plane-content rounded-3xl p-6 md:p-10 overflow-hidden'
           : 'p-6 md:p-8'
       }
       role="form"
@@ -259,33 +279,51 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
     >
       {/* Ambient glow — page variant only (embedded already sits inside its
           own TiltGlassPanel; a second glass+glow layer there would just
-          muddy the one the parent already provides). Tracks the current
-          question's signature accent so the card's mood shifts as you
-          progress, the same "route-aware tint" idea as AmbientTone. */}
+          muddy the one the parent already provides). Two blobs: one tracks
+          the current question's signature accent so the card's mood shifts
+          as you progress, the other stays a constant emerald/cyan brand
+          anchor (same "cohesion anchor" idea as AmbientLayer's third orb) so
+          the card never reads as a single flat hue. */}
       {isPage && (
-        <motion.div
-          aria-hidden="true"
-          className="w-64 h-64 rounded-full pointer-events-none"
-          animate={{ background: `radial-gradient(circle, color-mix(in srgb, ${stepAccent} 30%, transparent), transparent 70%)` }}
-          transition={{ duration: 0.6 }}
-          // Inline position/inset/z-index, not Tailwind classes: this is a
-          // direct child of .glass-deep, whose unlayered `.glass-deep > *
-          // { position: relative; z-index: 2; }` rule beats any Tailwind
-          // utility class regardless of source order — silently turning
-          // `absolute` into `relative` and leaving this 256px box's normal-
-          // flow space reserved (pushing the header down) instead of
-          // floating free. Only an inline style wins over that rule.
-          style={{ position: 'absolute', top: '-96px', right: '-64px', zIndex: 0, filter: 'blur(50px)' }}
-        />
+        <>
+          <motion.div
+            aria-hidden="true"
+            className="w-80 h-80 rounded-full pointer-events-none"
+            animate={{ background: `radial-gradient(circle, color-mix(in srgb, ${stepAccent} 32%, transparent), transparent 70%)` }}
+            transition={{ duration: 0.6 }}
+            // Inline position/inset/z-index, not Tailwind classes: this is a
+            // direct child of .glass-deep, whose unlayered `.glass-deep > *
+            // { position: relative; z-index: 2; }` rule beats any Tailwind
+            // utility class regardless of source order — silently turning
+            // `absolute` into `relative` and leaving this box's normal-flow
+            // space reserved (pushing content down) instead of floating
+            // free. Only an inline style wins over that rule.
+            style={{ position: 'absolute', top: '-120px', right: '-96px', zIndex: 0, filter: 'blur(60px)' }}
+          />
+          <div
+            aria-hidden="true"
+            className="w-72 h-72 rounded-full pointer-events-none"
+            style={{
+              position: 'absolute',
+              bottom: '-100px',
+              left: '-90px',
+              zIndex: 0,
+              filter: 'blur(60px)',
+              background: 'radial-gradient(circle, color-mix(in srgb, var(--accent-emerald) 16%, transparent), transparent 70%)',
+            }}
+          />
+        </>
       )}
 
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-5">
         <div>
-          <p className="flex items-center gap-1.5 font-mono text-[10px] text-accent-cyan tracking-widest mb-1">
+          <p className="flex items-center gap-1.5 font-mono text-[10px] text-accent-cyan tracking-widest mb-1.5">
             <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent-cyan animate-pulse-glow" aria-hidden="true" />
             THE NICO QUESTIONNAIRE
           </p>
-          <h3 className="font-display text-xl font-medium tracking-tight">The Nico Starter Questionnaire</h3>
+          <h3 className={`font-display font-medium tracking-tight ${isPage ? 'text-2xl md:text-3xl' : 'text-xl'}`}>
+            The Nico Starter Questionnaire
+          </h3>
         </div>
         <div className="flex items-center gap-3">
           {variant === 'embedded' && (
@@ -310,16 +348,26 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
         {!done ? (
           <motion.div
             key={step}
-            initial={{ opacity: 0, x: 12 }}
+            initial={{ opacity: 0, x: 16 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -12 }}
+            exit={{ opacity: 0, x: -16 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
           >
-            <p className="text-base font-semibold mb-1 tracking-tight">{current.question}</p>
-            {current.multi && (
-              <p className="text-[11px] text-muted-foreground mb-3">
-                Select any that apply, then continue — helps flag interactions before you start.
+            <div className="mb-4">
+              <p className={`font-display font-medium tracking-tight ${isPage ? 'text-xl md:text-2xl' : 'text-base font-sans font-semibold'}`}>
+                {current.question}
               </p>
-            )}
+              <span
+                className="mt-2 block h-[3px] w-11 rounded-full"
+                style={{ background: `linear-gradient(90deg, ${stepAccent}, var(--accent-emerald))` }}
+                aria-hidden="true"
+              />
+              {current.multi && (
+                <p className="text-[11px] text-muted-foreground mt-2.5">
+                  Select any that apply, then continue — helps flag interactions before you start.
+                </p>
+              )}
+            </div>
 
             {current.multi ? (
               <>
@@ -381,52 +429,55 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
                 </button>
               </>
             ) : (
-              <div className="space-y-2">
+              <div className={`grid ${gridCols} gap-2.5`}>
                 {current.options.map((opt) => {
-                  const Icon = 'icon' in opt ? goalIcons[opt.icon] : null;
+                  const GoalIcon = 'icon' in opt ? goalIcons[opt.icon] : null;
+                  const BadgeIcon = GoalIcon ?? STEP_ICON[current.id];
                   const optAccent = step === 0 ? goalAccent[opt.id] ?? stepAccent : stepAccent;
+                  const locked = justSelected === opt.id;
                   return (
                     <motion.button
                       key={opt.id}
                       type="button"
-                      whileTap={{ scale: 0.98 }}
+                      whileTap={{ scale: 0.97 }}
+                      animate={locked ? { scale: 1.02 } : { scale: 1 }}
                       onClick={() => select(opt.id)}
-                      className="focus-ring interactive relative w-full text-left overflow-hidden rounded-xl px-4 py-3 flex items-center gap-3 transition-all group glass glass-hover"
-                      style={{ ['--hover-accent' as string]: optAccent }}
+                      disabled={justSelected !== null}
+                      className={`focus-ring interactive relative text-left overflow-hidden rounded-2xl flex items-center gap-3 transition-colors group glass glass-hover ${
+                        isPage ? 'px-5 py-4' : 'px-4 py-3'
+                      }`}
+                      style={{
+                        ['--hover-accent' as string]: optAccent,
+                        borderColor: locked ? optAccent : undefined,
+                        boxShadow: locked
+                          ? `0 0 0 1.5px ${optAccent}, 0 0 24px color-mix(in srgb, ${optAccent} 40%, transparent)`
+                          : undefined,
+                      }}
                     >
                       <span
                         aria-hidden="true"
-                        className="absolute inset-y-0 left-0 w-[3px] opacity-0 group-hover:opacity-90 transition-opacity"
-                        style={{ background: optAccent }}
+                        className="absolute inset-y-0 left-0 w-[3px] transition-opacity"
+                        style={{ background: optAccent, opacity: locked ? 1 : 0 }}
                       />
-                      {Icon ? (
-                        <div
-                          className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-all group-hover:scale-110"
-                          style={{
-                            background: `color-mix(in srgb, ${optAccent} 15%, transparent)`,
-                          }}
-                        >
-                          <Icon
-                            className="w-3.5 h-3.5"
-                            style={{ color: optAccent }}
-                            aria-hidden="true"
-                          />
-                        </div>
-                      ) : (
-                        <span
-                          className="w-2 h-2 rounded-full shrink-0 transition-transform group-hover:scale-125"
-                          style={{ background: optAccent }}
-                          aria-hidden="true"
-                        />
-                      )}
+                      <span className="absolute inset-y-0 left-0 w-[3px] opacity-0 group-hover:opacity-90 transition-opacity" style={{ background: optAccent }} aria-hidden="true" />
+                      <div
+                        className={`rounded-xl flex items-center justify-center shrink-0 transition-all group-hover:scale-110 ${isPage ? 'w-10 h-10' : 'w-8 h-8'}`}
+                        style={{ background: `color-mix(in srgb, ${optAccent} 16%, transparent)` }}
+                      >
+                        {locked ? (
+                          <Check className={isPage ? 'w-5 h-5' : 'w-4 h-4'} style={{ color: optAccent }} aria-hidden="true" />
+                        ) : (
+                          <BadgeIcon className={isPage ? 'w-5 h-5' : 'w-4 h-4'} style={{ color: optAccent }} aria-hidden="true" />
+                        )}
+                      </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold group-hover:text-foreground transition-colors"
+                        <p className={`font-semibold group-hover:text-foreground transition-colors ${isPage ? 'text-[15px]' : 'text-sm'}`}
                           style={{ color: 'inherit' }}>
                           {opt.label}
                         </p>
-                        {'desc' in opt && <p className="text-[10px] text-muted-foreground">{opt.desc}</p>}
+                        {'desc' in opt && <p className="text-[11px] text-muted-foreground mt-0.5">{opt.desc}</p>}
                       </div>
-                      {step === 0 && (
+                      {step === 0 && !locked && (
                         <span
                           className="shrink-0 text-[9px] font-semibold font-mono opacity-0 group-hover:opacity-100 transition-opacity"
                           style={{ color: optAccent }}

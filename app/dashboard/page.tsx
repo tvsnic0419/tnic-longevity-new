@@ -21,7 +21,7 @@ function buildDashboardSchemas() {
       'Active stack tracker',
       'Protocol history log',
       'Biomarker trend visualization',
-      'Quiz result persistence',
+      'Nico Questionnaire result persistence',
       'Local-only data with CSV export',
     ],
     isAccessibleForFree: true,

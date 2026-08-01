@@ -52,7 +52,7 @@ export const hubContexts: Record<
     theme: 'emerald',
     what: 'Your personal longevity command center — stack status, labs, hallmark coverage, milestones, and export kit in one view.',
     why: 'Fragmented tracking leads to bad decisions. The OS unifies what you are taking, what your labs show, and what to do next.',
-    next: 'Complete the onboarding strip, then log baseline labs and load a stack preset from the quiz or Stack Architect.',
+    next: 'Complete the onboarding strip, then log baseline labs and load a stack preset from The Nico Starter Questionnaire or Stack Architect.',
   },
   stacks: {
     theme: 'violet',
@@ -243,7 +243,7 @@ const toolContexts: Record<ToolId, HubContext> = {
   protocol: {
     what: 'Rule-based multi-phase protocol planner from goals, labs, and lifestyle inputs.',
     why: 'Phased ramp-in prevents overwhelm and catches interactions early. Full reasoning trace — not generative AI.',
-    next: 'Enter your quiz goal and lab snapshot, review phase 1 compounds, then load into Stack Architect.',
+    next: 'Enter your Nico Questionnaire goal and lab snapshot, review phase 1 compounds, then load into Stack Architect.',
   },
   biomarker: {
     what: 'Lab trend visualization with intervention impact forecasts and ranked scenarios.',

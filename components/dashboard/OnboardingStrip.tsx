@@ -10,7 +10,7 @@ export function OnboardingStrip() {
   const steps = [
     {
       id: 'quiz',
-      label: 'Take the quiz',
+      label: 'Take Nico Questionnaire',
       sublabel: 'Get your personalized stack preset',
       href: '/quiz',
       done: !!quizResult,

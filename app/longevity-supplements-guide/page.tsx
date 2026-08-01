@@ -296,7 +296,7 @@ export default function LongevitySupplementsGuidePage() {
 
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href="/quiz" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-accent-cyan text-black hover:bg-accent-cyan/90 transition focus-ring">
-              Start Step 1 — Take the Quiz <ArrowRight className="w-4 h-4" />
+              Start Step 1 — Take the Nico Starter Questionnaire <ArrowRight className="w-4 h-4" />
             </Link>
             <Link href="/stacks" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border border-white/15 text-white/80 hover:border-white/30 transition focus-ring">
               Step 5 — Stack Architect

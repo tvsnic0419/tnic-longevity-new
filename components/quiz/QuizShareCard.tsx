@@ -55,7 +55,7 @@ export function QuizShareCard({ answers, preset, stackLabel }: QuizShareCardProp
           className="focus-ring inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-accent-violet/15 border border-accent-violet/25 text-accent-violet hover:bg-accent-violet/25 transition"
         >
           {copied === 'link' ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Link2 className="w-3.5 h-3.5" />}
-          {copied === 'link' ? 'Copied' : 'Quiz link'}
+          {copied === 'link' ? 'Copied' : 'Questionnaire link'}
         </button>
         <button
           type="button"

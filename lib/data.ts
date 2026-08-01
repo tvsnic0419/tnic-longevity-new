@@ -1908,13 +1908,13 @@ export const consumerFAQ = [
     id: 'faq31',
     category: 'safety' as const,
     question: 'Does TNiC store or share my health data?',
-    answer: 'No. TNiC is built on a local-first architecture. Your quiz results, biomarker logs, stack configurations, and biological age inputs are stored in your own browser — never transmitted to TNiC servers or third parties. There is no account system, no user database, and no data monetization. Clearing your browser storage erases your data permanently. This is a deliberate design choice, not a marketing claim.',
+    answer: 'No. TNiC is built on a local-first architecture. Your Nico Questionnaire results, biomarker logs, stack configurations, and biological age inputs are stored in your own browser — never transmitted to TNiC servers or third parties. There is no account system, no user database, and no data monetization. Clearing your browser storage erases your data permanently. This is a deliberate design choice, not a marketing claim.',
   },
   {
     id: 'faq32',
     category: 'science' as const,
-    question: 'How does the TNiC quiz generate a personalized stack preset?',
-    answer: 'The quiz maps three inputs — primary goal (learn the science, cellular defense, mitochondrial energy, full optimization, longevity/healthspan, or cardio-metabolic health), age range, and supplement experience — to one of six mechanistic presets: Starter, NRF2 Defense, Mito-NAD+, Full Hybrid, Longevity Pro (senolytic focus), or Cardio-Metabolic (AMPK/lipid focus). Each preset is a curated subset drawn from 14 evidence-graded compounds optimized for synergy coverage across the relevant hallmarks. No black-box algorithm — every mapping is transparent in the methodology section.',
+    question: 'How does The Nico Starter Questionnaire generate a personalized stack preset?',
+    answer: 'The questionnaire maps six inputs — primary goal, top concern, age range, supplement experience, monthly budget, and any safety flags — to one of seven mechanistic presets: Foundation, NRF2 Defense, Mitochondrial, Full Hybrid, Longevity Pro (senolytic focus), Cardio-Metabolic (AMPK/lipid focus), or Full-Spectrum 14. Goal picks the mechanism family; age, experience, and a concern the base preset does not cover can broaden it up that family’s ladder. Budget is checked against the preset’s real cost, and safety flags surface the exact compound cautions to review. Each preset is a curated subset drawn from 14 evidence-graded compounds optimized for synergy coverage across the relevant hallmarks. No black-box algorithm — every mapping is transparent in the methodology section.',
   },
   {
     id: 'faq33',

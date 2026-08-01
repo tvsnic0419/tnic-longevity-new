@@ -73,14 +73,14 @@ export function QuizResultPanel({ result, answers, onRetake }: QuizResultPanelPr
           <Check className="w-4 h-4 text-accent-emerald" aria-hidden="true" />
         </div>
         <div>
-          <p className="text-sm font-bold text-accent-emerald mb-1">Quiz complete — pick your next step</p>
+          <p className="text-sm font-bold text-accent-emerald mb-1">Questionnaire complete — pick your next step</p>
           <p className="text-xs text-muted-foreground leading-relaxed">{result.insight}</p>
         </div>
       </div>
 
       <DetailedStackSuggestion preset={result.preset as PresetKey} />
 
-      <div className="space-y-2" role="group" aria-label="Quiz result actions">
+      <div className="space-y-2" role="group" aria-label="Nico Questionnaire result actions">
         <button
           type="button"
           onClick={loadStackAndOpenArchitect}
@@ -205,7 +205,7 @@ export function QuizResultPanel({ result, answers, onRetake }: QuizResultPanelPr
           className="focus-ring w-full flex items-center justify-center gap-2 glass py-3 rounded-xl text-xs text-muted-foreground hover:text-foreground transition"
         >
           <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
-          Retake quiz
+          Retake questionnaire
           <span className="text-caption">— try a different goal or experience level</span>
         </button>
       </div>

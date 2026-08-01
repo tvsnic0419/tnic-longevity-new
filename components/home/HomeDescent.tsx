@@ -23,8 +23,6 @@ import { runWhenVisible, cappedDpr } from "@/lib/raf-visibility";
 // ─────────────────────────────────────────────────────────────────────────────
 
 const CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
-
 .tnic-descent {
   --void: #050710;
   --void2: #0a0e1e;
@@ -44,7 +42,7 @@ const CSS = `
   background:
     radial-gradient(140% 60% at 50% 0%, #0a1024 0%, #050710 45%, #030510 100%);
   color: var(--ink);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
   isolation: isolate;
@@ -82,7 +80,7 @@ const CSS = `
 }
 
 .tnic-kicker {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
   font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase;
   color: var(--cyan); margin: 0 0 20px;
   display: inline-flex; align-items: center; gap: 12px;
@@ -92,7 +90,7 @@ const CSS = `
 .tnic-kicker::before { content: ''; width: 26px; height: 1px; background: var(--cyan); opacity: .6; }
 
 .tnic-h1 {
-  font-family: 'Fraunces', serif; font-weight: 400;
+  font-family: var(--font-display, 'Fraunces', Georgia, serif); font-weight: 400;
   font-size: clamp(44px, 9vw, 108px); line-height: 0.96;
   letter-spacing: -0.025em; margin: 0; color: var(--ink);
   opacity: 0; transform: translateY(22px);
@@ -102,7 +100,7 @@ const CSS = `
 .tnic-h1 .warm { color: var(--gold); font-style: italic; }
 
 .tnic-h2 {
-  font-family: 'Fraunces', serif; font-weight: 400;
+  font-family: var(--font-display, 'Fraunces', Georgia, serif); font-weight: 400;
   font-size: clamp(32px, 6.2vw, 66px); line-height: 1.02;
   letter-spacing: -0.02em; margin: 0; color: var(--ink);
   opacity: 0; transform: translateY(20px);
@@ -118,7 +116,7 @@ const CSS = `
   transition: opacity 1s ease .2s, transform 1s ease .2s;
 }
 .tnic-note {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
   font-size: 11.5px; letter-spacing: .04em; color: var(--faint);
   margin-top: 14px;
   opacity: 0; transition: opacity 1s ease .5s;
@@ -142,7 +140,7 @@ const CSS = `
 }
 .tnic-hero-badges .pill {
   display: inline-flex; align-items: center; gap: 8px;
-  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 11px;
   letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
   padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px;
   background: rgba(14,20,38,0.55); backdrop-filter: blur(6px);
@@ -152,7 +150,7 @@ const CSS = `
 
 .tnic-cue {
   position: absolute; left: 50%; bottom: 34px; transform: translateX(-50%);
-  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 11px;
   letter-spacing: .22em; text-transform: uppercase; color: var(--faint);
   display: flex; flex-direction: column; align-items: center; gap: 10px;
 }
@@ -178,7 +176,7 @@ const CSS = `
 
 .tnic-molhint {
   position: absolute; bottom: 12px; right: 14px;
-  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 11px;
   color: var(--faint); letter-spacing: .06em; pointer-events: none;
   display: flex; align-items: center; gap: 7px;
 }
@@ -191,14 +189,14 @@ const CSS = `
   opacity: 0; transform: translateY(16px);
   transition: opacity 1s ease .3s, transform 1s ease .3s;
 }
-.tnic-molcard h3 { font-family: 'Fraunces', serif; font-size: 30px; font-weight: 400; margin: 0; letter-spacing: -.01em; }
-.tnic-molcard .formula { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--cyan); letter-spacing: .08em; }
+.tnic-molcard h3 { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: 30px; font-weight: 400; margin: 0; letter-spacing: -.01em; }
+.tnic-molcard .formula { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 14px; color: var(--cyan); letter-spacing: .08em; }
 .tnic-molcard .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; margin-top: 4px; }
 .tnic-molcard .fact { display: flex; flex-direction: column; gap: 3px; }
-.tnic-molcard .fact .k { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--faint); }
+.tnic-molcard .fact .k { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--faint); }
 .tnic-molcard .fact .v { font-size: 15px; color: var(--ink); }
 .tnic-molcard .why { font-size: 13.5px; color: var(--muted); line-height: 1.55; margin-top: 4px; border-top: 1px solid var(--line); padding-top: 14px; }
-.tnic-molcard .cite { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--faint); letter-spacing: .1em; }
+.tnic-molcard .cite { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; color: var(--faint); letter-spacing: .1em; }
 
 .tnic-netwrap { display: grid; grid-template-columns: 1.5fr 1fr; gap: 28px; align-items: start; margin-top: 10px; }
 @media (max-width: 900px){ .tnic-netwrap { grid-template-columns: 1fr; } }
@@ -214,7 +212,7 @@ const CSS = `
 .tnic-descent .node-hit { fill: transparent; }
 .tnic-descent .node-core { transition: opacity .35s ease; }
 .tnic-descent .node-label {
-  font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500;
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif); font-size: 14px; font-weight: 500;
   fill: var(--ink); pointer-events: none; transition: opacity .35s ease, fill .35s ease;
   paint-order: stroke; stroke: rgba(5,7,16,0.9); stroke-width: 4;
 }
@@ -235,7 +233,7 @@ const CSS = `
 .tnic-search {
   flex: 1; min-width: 180px;
   background: rgba(14,20,38,0.6); border: 1px solid var(--line); color: var(--ink);
-  padding: 10px 14px; border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 14px;
+  padding: 10px 14px; border-radius: 10px; font-family: var(--font-sans, 'Inter', system-ui, sans-serif); font-size: 14px;
   outline: none;
 }
 .tnic-search:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(95,227,224,0.15); }
@@ -243,7 +241,7 @@ const CSS = `
 .tnic-chip {
   display: inline-flex; align-items: center; gap: 7px; padding: 8px 12px;
   background: rgba(14,20,38,0.6); border: 1px solid var(--line); color: var(--muted);
-  border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+  border-radius: 999px; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px;
   letter-spacing: .14em; text-transform: uppercase; cursor: pointer; transition: all .2s ease;
 }
 .tnic-chip.on { color: var(--ink); border-color: currentColor; background: rgba(255,255,255,0.03); }
@@ -254,24 +252,24 @@ const CSS = `
   border: 1px solid var(--line); border-radius: 18px; padding: 22px 22px 24px;
   min-height: 260px;
 }
-.tnic-readout .r-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--faint); display: flex; align-items: center; gap: 8px; }
+.tnic-readout .r-eyebrow { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--faint); display: flex; align-items: center; gap: 8px; }
 .tnic-readout .r-elite {
   display: inline-flex; align-items: center; gap: 5px; margin-left: 4px;
   color: var(--gold); font-weight: 500;
 }
 .tnic-readout .r-elite svg { width: 11px; height: 11px; }
-.tnic-readout .r-name { font-family: 'Fraunces', serif; font-size: 30px; margin: 6px 0 2px; letter-spacing: -.01em; }
+.tnic-readout .r-name { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: 30px; margin: 6px 0 2px; letter-spacing: -.01em; }
 .tnic-readout .r-role { font-size: 13.5px; color: var(--muted); margin-bottom: 12px; }
-.tnic-readout .r-meta { display: flex; gap: 12px; margin-bottom: 12px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: .1em; color: var(--faint); text-transform: uppercase; }
+.tnic-readout .r-meta { display: flex; gap: 12px; margin-bottom: 12px; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; letter-spacing: .1em; color: var(--faint); text-transform: uppercase; }
 .tnic-readout .r-meta b { color: var(--ink); font-weight: 500; letter-spacing: .04em; }
 .tnic-readout .r-link { display: flex; gap: 11px; padding: 12px 0; border-top: 1px solid var(--line); }
 .tnic-readout .r-link .r-dot { width: 9px; height: 9px; border-radius: 50%; margin-top: 5px; flex: none; box-shadow: 0 0 8px currentColor; }
 .tnic-readout .r-link .r-to { font-size: 14px; font-weight: 600; color: var(--ink); }
-.tnic-readout .r-link .r-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; margin-left: 8px; }
+.tnic-readout .r-link .r-tag { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; margin-left: 8px; }
 .tnic-readout .r-link .r-why { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin-top: 3px; }
 .tnic-readout .r-cta {
   display: inline-flex; align-items: center; gap: 8px; margin-top: 16px;
-  color: var(--cyan); text-decoration: none; font-family: 'JetBrains Mono', monospace;
+  color: var(--cyan); text-decoration: none; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
   font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
   border-top: 1px solid var(--line); padding-top: 14px; width: 100%;
 }
@@ -279,13 +277,13 @@ const CSS = `
 .tnic-readout .r-empty { color: var(--faint); font-size: 14px; line-height: 1.6; padding-top: 8px; }
 
 .tnic-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 16px; }
-.tnic-legend .lg { display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
+.tnic-legend .lg { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
 .tnic-legend .lg .sw { width: 10px; height: 10px; border-radius: 50%; }
 
 .tnic-tl { margin-top: 8px; }
 .tnic-tl-head { display: flex; align-items: baseline; gap: 20px; flex-wrap: wrap; margin-bottom: 6px; }
-.tnic-age { font-family: 'Fraunces', serif; font-size: clamp(48px,8vw,80px); line-height: 1; color: var(--gold); letter-spacing: -.02em; }
-.tnic-age small { font-size: .32em; color: var(--muted); font-family: 'JetBrains Mono', monospace; letter-spacing: .12em; margin-left: 8px; }
+.tnic-age { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: clamp(48px,8vw,80px); line-height: 1; color: var(--gold); letter-spacing: -.02em; }
+.tnic-age small { font-size: .32em; color: var(--muted); font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); letter-spacing: .12em; margin-left: 8px; }
 .tnic-stage-cap { font-size: 16px; color: var(--ink); max-width: 36ch; line-height: 1.4; }
 .tnic-range { -webkit-appearance: none; appearance: none; width: 100%; height: 3px; border-radius: 3px; background: var(--line); margin: 18px 0 4px; cursor: pointer; }
 .tnic-range::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--gold); border: 3px solid var(--void); box-shadow: 0 0 0 1px var(--gold), 0 0 22px rgba(240,196,106,.6); cursor: grab; }
@@ -300,8 +298,8 @@ const CSS = `
   border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px;
   display: flex; flex-direction: column; gap: 4px;
 }
-.tnic-tl-stat b { font-family: 'Fraunces', serif; font-size: 26px; color: var(--gold); letter-spacing: -.01em; }
-.tnic-tl-stat .k { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); }
+.tnic-tl-stat b { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: 26px; color: var(--gold); letter-spacing: -.01em; }
+.tnic-tl-stat .k { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); }
 .tnic-tl-stat .n { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
 .tnic-honest { font-size: 13px; color: var(--faint); font-style: italic; margin-top: 14px; max-width: 60ch; line-height: 1.55; }
 .tnic-tl-toggle { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
@@ -318,14 +316,14 @@ const CSS = `
   background: linear-gradient(180deg, rgba(19,26,48,0.7), rgba(14,20,38,0.7));
   border: 1px solid var(--line); border-radius: 14px;
 }
-.tnic-final-row .n { font-family: 'Fraunces', serif; font-size: 28px; color: var(--cyan); width: 36px; text-align: center; flex: none; }
+.tnic-final-row .n { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: 28px; color: var(--cyan); width: 36px; text-align: center; flex: none; }
 .tnic-final-row .body { flex: 1; }
 .tnic-final-row .body .t { font-size: 15px; color: var(--ink); font-weight: 500; }
 .tnic-final-row .body .s { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin-top: 2px; }
 
 .tnic-final-elites { display: flex; flex-direction: column; gap: 12px; }
 .tnic-final-elites .head {
-  font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .2em;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 11px; letter-spacing: .2em;
   text-transform: uppercase; color: var(--faint); display: flex; justify-content: space-between; align-items: baseline;
 }
 .tnic-final-elites .head a { color: var(--cyan); text-decoration: none; letter-spacing: .18em; }
@@ -338,14 +336,14 @@ const CSS = `
 }
 .tnic-elite-card:hover { border-color: var(--cyan); transform: translateY(-1px); }
 .tnic-elite-card .rank {
-  font-family: 'Fraunces', serif; font-size: 22px; color: var(--gold);
+  font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: 22px; color: var(--gold);
   width: 32px; text-align: center; flex: none;
 }
 .tnic-elite-card .body { flex: 1; min-width: 0; }
 .tnic-elite-card .body .name { font-size: 15px; font-weight: 600; color: var(--ink); }
 .tnic-elite-card .body .path { font-size: 12px; color: var(--muted); margin-top: 2px; }
 .tnic-elite-card .tier {
-  font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .18em;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10px; letter-spacing: .18em;
   text-transform: uppercase; padding: 4px 8px; border-radius: 999px;
   border: 1px solid currentColor;
 }
@@ -371,7 +369,7 @@ const CSS = `
   background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 10px;
   padding: 6px 0; color: var(--faint); justify-content: flex-end;
 }
-.tnic-rail .lbl { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; opacity: 0; transform: translateX(6px); transition: all .3s ease; }
+.tnic-rail .lbl { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; opacity: 0; transform: translateX(6px); transition: all .3s ease; }
 .tnic-rail button:hover .lbl, .tnic-rail button.on .lbl { opacity: 1; transform: none; color: var(--ink); }
 .tnic-rail .tick { width: 26px; height: 2px; background: currentColor; border-radius: 2px; transition: all .3s ease; }
 .tnic-rail button.on { color: var(--cyan); }
@@ -1084,7 +1082,7 @@ export function HomeDescent() {
         <p className="tnic-lead">
           Everything below this section is the working version of what you just
           watched — the elite interventions graded by human evidence, the full
-          library of {COMPOUND_COUNT} compounds, and a 90-second quiz that turns
+          library of {COMPOUND_COUNT} compounds, and The Nico Starter Questionnaire that turns
           it into a stack pointed at your goals.
         </p>
 
@@ -1113,7 +1111,7 @@ export function HomeDescent() {
             </div>
             <div>
               <Link href="/quiz" className="tnic-cta">
-                Start the 90-second quiz <span className="arr">→</span>
+                Start The Nico Starter Questionnaire <span className="arr">→</span>
               </Link>
               <Link href="#elite-interventions" className="tnic-cta ghost">
                 See the elite picks
