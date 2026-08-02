@@ -51,7 +51,7 @@ export function UserNextStepsPanel() {
   if (!quizResult) {
     actions.push({
       icon: Target,
-      title: 'Take the 3-min quiz',
+      title: 'Take the 5-min quiz',
       description: 'Get a personalized stack preset matched to your goal and experience level.',
       href: '/quiz',
       accent: 'text-accent-cyan',

@@ -209,7 +209,7 @@ export function Nav() {
                     onClick={() => setMobileOpen(false)}
                     className="focus-ring block rounded-xl py-3 text-center text-sm font-semibold"
                   >
-                    3-Min Stack Quiz
+                    5-Min Stack Quiz
                   </Link>
                 </GlassPanel>
                 <GlassPanel depth="float" className="glass-hover rounded-xl">

@@ -20,10 +20,10 @@ export function QuizPageContent() {
       <div className="max-w-xl mx-auto">
         <PageHeader
           icon={ClipboardList}
-          eyebrow="~3 minutes"
+          eyebrow="~5 minutes"
           title="Find your longevity entry point"
-          description="Answer three quick questions. Get an evidence-graded stack preset, your next OS step, and a personalized insight — no account required."
-          meta="Goal · Age range · Experience"
+          description="Answer nine quick questions — goal, age, experience, and lifestyle. Get an evidence-graded stack preset, personalized additions, and your next OS step — no account required."
+          meta="Goal · Age · Experience · Lifestyle"
           theme="emerald"
           context={getHubContext('quiz')}
         />
@@ -32,7 +32,7 @@ export function QuizPageContent() {
 
         <p className="flex items-center justify-center gap-2 text-caption font-mono mt-6">
           <Clock className="w-3.5 h-3.5" aria-hidden="true" />
-          3 questions · Results saved locally when you load a stack
+          9 questions · Results saved locally when you load a stack
         </p>
       </div>
     </div>

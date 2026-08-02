@@ -2,15 +2,17 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, RotateCcw, Check, Layers, Compass, ShoppingBag, BookOpen, Mail, CheckCircle2, AlertCircle } from 'lucide-react';
+import { ArrowRight, RotateCcw, Check, Layers, Compass, ShoppingBag, BookOpen, Mail, CheckCircle2, AlertCircle, ShieldAlert, Sparkles } from 'lucide-react';
 import { useBriefSubscribe } from '@/hooks/useBriefSubscribe';
 import { DetailedStackSuggestion } from '@/components/quiz/DetailedStackSuggestion';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { usePlatform } from '@/context/PlatformContext';
-import type { PresetKey } from '@/lib/presets';
-import type { getQuizResult } from '@/lib/homepage';
+import { stackPresets, type PresetKey } from '@/lib/presets';
+import { compounds } from '@/lib/data';
+import { analyzeStack } from '@/lib/stack-analysis';
+import { SLEEP_PROFILE_VALUE, STRESS_PROFILE_VALUE, type QuizAnswers, type getQuizResult } from '@/lib/homepage';
 import { QuizShareCard } from '@/components/quiz/QuizShareCard';
 import { isCompleteQuizAnswers } from '@/lib/quiz-share';
 import { buildShopPresetUrl } from '@/lib/stack-url';
@@ -28,14 +30,27 @@ const AGE_PROFILE_MAP: Record<string, number> = {
 
 interface QuizResultPanelProps {
   result: QuizResult;
-  answers: { goal?: string; age?: string; experience?: string };
+  answers: QuizAnswers;
   onRetake: () => void;
 }
 
 export function QuizResultPanel({ result, answers, onRetake }: QuizResultPanelProps) {
   const router = useRouter();
-  const { applyPreset, setProfile, setQuizResult } = usePlatform();
+  const { applyPreset, setSelected, setProfile, setQuizResult } = usePlatform();
   const { email, setEmail, subscribed, loading, error, subscribe: subscribeBrief } = useBriefSubscribe();
+
+  const mergedIds = useMemo(
+    () => [...new Set([...stackPresets[result.preset].ids, ...result.additions])],
+    [result.preset, result.additions],
+  );
+  const safetyAnalysis = useMemo(() => analyzeStack(mergedIds), [mergedIds]);
+  const flaggedSafety = answers.safety === 'meds' || answers.safety === 'pregnant';
+  const relevantSafetyNotes = flaggedSafety
+    ? (answers.safety === 'pregnant'
+        ? safetyAnalysis.consultIf.filter((n) => /pregnan|nursing/i.test(n))
+        : safetyAnalysis.consultIf.filter((n) => /blood thinner|warfarin|medication|chemotherapy|metformin|anticoagulant/i.test(n))
+      )
+    : [];
 
   useEffect(() => {
     setQuizResult({
@@ -55,10 +70,16 @@ export function QuizResultPanel({ result, answers, onRetake }: QuizResultPanelPr
   }, []);
 
   const loadStackAndOpenArchitect = () => {
-    applyPreset(result.preset as PresetKey);
-    if (answers.age && AGE_PROFILE_MAP[answers.age]) {
-      setProfile({ age: AGE_PROFILE_MAP[answers.age] });
+    if (result.additions.length > 0) {
+      setSelected(mergedIds);
+    } else {
+      applyPreset(result.preset as PresetKey);
     }
+    const profilePatch: { age?: number; sleep?: number; stress?: number } = {};
+    if (answers.age && AGE_PROFILE_MAP[answers.age]) profilePatch.age = AGE_PROFILE_MAP[answers.age];
+    if (answers.sleep && SLEEP_PROFILE_VALUE[answers.sleep] != null) profilePatch.sleep = SLEEP_PROFILE_VALUE[answers.sleep];
+    if (answers.stress && STRESS_PROFILE_VALUE[answers.stress] != null) profilePatch.stress = STRESS_PROFILE_VALUE[answers.stress];
+    if (Object.keys(profilePatch).length > 0) setProfile(profilePatch);
     router.push(`/stacks?from=quiz&preset=${result.preset}`);
   };
 
@@ -78,7 +99,44 @@ export function QuizResultPanel({ result, answers, onRetake }: QuizResultPanelPr
         </div>
       </div>
 
-      <DetailedStackSuggestion preset={result.preset as PresetKey} />
+      <DetailedStackSuggestion preset={result.preset as PresetKey} extraIds={result.additions} />
+
+      {result.additions.length > 0 && (
+        <div className="rounded-xl border border-accent-rose/25 bg-accent-rose/5 p-3 mb-3">
+          <p className="flex items-center gap-1.5 text-[10px] font-mono text-accent-rose uppercase tracking-wider mb-1.5">
+            <Sparkles className="w-3 h-3" aria-hidden="true" />
+            Personalized for you
+          </p>
+          <p className="text-[11px] text-muted-foreground leading-relaxed">
+            Based on your sleep, stress, diet, and training answers, we added{' '}
+            {result.additions
+              .map((id) => compounds.find((c) => c.id === id)?.name)
+              .filter(Boolean)
+              .join(', ')}{' '}
+            on top of the {result.stack.label} preset — tagged &ldquo;For you&rdquo; below.
+          </p>
+        </div>
+      )}
+
+      {flaggedSafety && (
+        <div className="rounded-xl border border-accent-amber/25 bg-accent-amber/5 p-3 mb-3">
+          <p className="flex items-center gap-1.5 text-[10px] font-mono text-accent-amber uppercase tracking-wider mb-1.5">
+            <ShieldAlert className="w-3 h-3" aria-hidden="true" />
+            Safety check — {answers.safety === 'pregnant' ? 'pregnant or nursing' : 'on medication'}
+          </p>
+          {relevantSafetyNotes.length > 0 ? (
+            <ul className="space-y-1">
+              {relevantSafetyNotes.map((n) => (
+                <li key={n} className="text-[11px] text-muted-foreground leading-relaxed">{n}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-[11px] text-muted-foreground leading-relaxed">
+              Nothing in this specific stack matched what you flagged, but always share your full medication list with a physician or pharmacist before starting anything new.
+            </p>
+          )}
+        </div>
+      )}
 
       <div className="space-y-2" role="group" aria-label="Quiz result actions">
         <button
@@ -92,8 +150,8 @@ export function QuizResultPanel({ result, answers, onRetake }: QuizResultPanelPr
               <div>
                 <p className="text-sm font-semibold">Load stack &amp; open Architect</p>
                 <p className="text-xs opacity-80 mt-0.5">
-                  Applies <strong>{result.stack.label}</strong> preset ({result.stack.ids.length} compounds) and
-                  opens the Builder tab
+                  Applies <strong>{result.stack.label}</strong> preset ({mergedIds.length} compound{mergedIds.length === 1 ? '' : 's'}
+                  {result.additions.length > 0 ? `, incl. ${result.additions.length} personalized` : ''}) and opens the Builder tab
                 </p>
               </div>
             </div>

@@ -94,7 +94,7 @@ export const hubContexts: Record<
     theme: 'cyan',
     what: 'Consumer education hub — getting started path, glossary, outcome timelines, red flags, and 15 curated FAQ answers.',
     why: 'Intelligent consumers ask hard questions first. Learn the science and safety rails before building a stack.',
-    next: 'Complete the Start Here checklist, read Red Flags, then take the 3-min quiz for a personalized stack handoff.',
+    next: 'Complete the Start Here checklist, read Red Flags, then take the 5-min quiz for a personalized stack handoff.',
   },
   compare: {
     theme: 'cyan',
@@ -104,9 +104,9 @@ export const hubContexts: Record<
   },
   quiz: {
     theme: 'emerald',
-    what: 'A 3-question intake that maps your goal, age window, and experience to an evidence-graded stack preset.',
-    why: 'One-size-fits-all stacks fail. The quiz routes beginners to fundamentals and advanced users to compare-and-stack paths.',
-    next: 'Answer all three questions, load your preset in Stack Architect, and open your OS dashboard to track progress.',
+    what: 'A 9-question intake that maps your goal, age, experience, and lifestyle (sleep, stress, diet, training, budget, safety) to an evidence-graded stack preset plus personalized additions.',
+    why: 'One-size-fits-all stacks fail. The quiz routes beginners to fundamentals, advanced users to compare-and-stack paths, and layers in individual compounds based on lifestyle answers.',
+    next: 'Answer all nine questions, load your preset in Stack Architect, and open your OS dashboard to track progress.',
   },
   library: {
     theme: 'emerald',

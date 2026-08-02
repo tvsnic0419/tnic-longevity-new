@@ -14,7 +14,7 @@ export const nextUpImprovements: NextUpItem[] = [
   },
   {
     id: 'quiz-architect-handoff',
-    title: '3-Min Quiz → Stack Architect handoff',
+    title: '5-Min Quiz → Stack Architect handoff',
     desc: 'Dedicated /quiz, preset handoff, Builder tab auto-open.',
     status: 'shipped',
     sprint: 'Sprint 5',

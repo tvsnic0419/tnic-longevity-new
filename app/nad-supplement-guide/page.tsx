@@ -502,7 +502,7 @@ export default function NadSupplementGuidePage() {
           <div className="rounded-2xl border border-accent-cyan/20 bg-accent-cyan/[0.04] p-8 text-center">
             <h2 className="text-xl font-bold mb-3">Ready to start your NAD+ protocol?</h2>
             <p className="text-muted-foreground text-sm mb-6 max-w-lg mx-auto">
-              Take the 3-minute quiz to get a personalized stack preset — including NAD+ precursor timing
+              Take the 5-minute quiz to get a personalized stack preset — including NAD+ precursor timing
               choreographed with resveratrol, GlyNAC, and your other compounds.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">

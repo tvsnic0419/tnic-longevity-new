@@ -23,8 +23,8 @@ export function HomeCTA() {
             See what the evidence actually supports.
           </h2>
           <p className="text-body mx-auto mb-9 max-w-xl">
-            Browse the library by hallmark or compound, or start with a 3-minute guide that points
-            you to the right pages. Private, free, and no account — ever.
+            Browse the library by hallmark or compound, or start with a 5-minute questionnaire that
+            points you to the right pages. Private, free, and no account — ever.
           </p>
           <div className="flex flex-col justify-center gap-3 sm:flex-row">
             <Link
@@ -44,7 +44,7 @@ export function HomeCTA() {
                 className="focus-ring inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-semibold text-foreground"
               >
                 <ClipboardList className="h-5 w-5 text-accent-cyan" aria-hidden="true" />
-                Start with a 3-min guide
+                Start with a 5-min guide
               </Link>
             </GlassPanel>
           </div>

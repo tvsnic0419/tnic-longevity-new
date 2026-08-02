@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     : '';
   return {
     title: `Longevity Grade ${grade} — TNiC Scorecard`,
-    description: `${deltaLine}${p.coverage}% of the 12 hallmarks of aging covered with a ${p.stackSize}-compound stack. Build yours free in 3 minutes — no account, evidence-graded.`,
+    description: `${deltaLine}${p.coverage}% of the 12 hallmarks of aging covered with a ${p.stackSize}-compound stack. Build yours free in 5 minutes — no account, evidence-graded.`,
     robots: { index: false, follow: true },
   };
 }
@@ -86,7 +86,7 @@ export default async function ScorecardPage({ params }: Props) {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/quiz" className="focus-ring btn-gradient rounded-full text-sm !px-6">
-              Get my scorecard — 3 min
+              Get my scorecard — 5 min
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>
             <Link

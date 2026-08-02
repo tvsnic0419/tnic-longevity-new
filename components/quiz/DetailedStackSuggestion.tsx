@@ -38,10 +38,19 @@ function Metric({ label, value }: { label: string; value: string | number }) {
  * (synergy score, hallmark coverage, evidence tier, monthly cost) plus a
  * per-compound card explaining mechanism, dose, timing, evidence, the aging
  * hallmarks it targets, and a key citation.
+ *
+ * `extraIds` layers personalized additions (from lifestyle answers — see
+ * getPersonalizedAdditions in lib/homepage.ts) on top of the base preset.
+ * They're included in every metric below (synergy, hallmark coverage, cost,
+ * cautions) since they're part of the real recommended stack, and flagged
+ * individually with a "For you" tag so it's clear which compounds came from
+ * the goal preset vs. the user's own answers.
  */
-export function DetailedStackSuggestion({ preset }: { preset: PresetKey }) {
+export function DetailedStackSuggestion({ preset, extraIds = [] }: { preset: PresetKey; extraIds?: string[] }) {
   const stack = stackPresets[preset];
-  const ids = [...stack.ids];
+  const baseIds = new Set<string>(stack.ids);
+  const personalized = new Set(extraIds.filter((id) => !baseIds.has(id)));
+  const ids = [...baseIds, ...personalized];
   const analysis = analyzeStack(ids);
   const tier = TIER_STYLE[analysis.evidenceTier];
   const stackCompounds = ids
@@ -58,7 +67,10 @@ export function DetailedStackSuggestion({ preset }: { preset: PresetKey }) {
               Your recommended protocol
             </p>
             <h4 className="text-base font-bold leading-tight">{stack.label}</h4>
-            <p className="text-[11px] text-muted-foreground mt-0.5">{stack.desc}</p>
+            <p className="text-[11px] text-muted-foreground mt-0.5">
+              {stack.desc}
+              {personalized.size > 0 && ` · +${personalized.size} personalized for you`}
+            </p>
           </div>
           <span className={`shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded ${tier.cls}`}>
             {tier.label} avg
@@ -104,6 +116,11 @@ export function DetailedStackSuggestion({ preset }: { preset: PresetKey }) {
                     <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
                       {c.timing}
                     </span>
+                    {personalized.has(c.id) && (
+                      <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-accent-rose/15 text-accent-rose">
+                        For you
+                      </span>
+                    )}
                   </div>
                   <p className="text-[10px] font-mono text-muted-foreground mt-0.5">
                     {c.pathway} · {c.dose}

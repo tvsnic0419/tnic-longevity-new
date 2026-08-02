@@ -40,13 +40,80 @@ export const quizSteps = [
       { id: 'advanced', label: 'Advanced', desc: 'Compare & stack' },
     ],
   },
+  {
+    id: 'sleep',
+    question: "How's your sleep lately?",
+    options: [
+      { id: 'solid', label: 'Solid', desc: 'Consistently 7+ hours' },
+      { id: 'inconsistent', label: 'Inconsistent', desc: 'Falls apart under stress' },
+      { id: 'poor', label: 'Poor', desc: 'Chronically short or restless' },
+    ],
+  },
+  {
+    id: 'stress',
+    question: 'Your day-to-day stress load',
+    options: [
+      { id: 'low', label: 'Low', desc: 'Mostly manageable' },
+      { id: 'moderate', label: 'Moderate', desc: 'Some sustained pressure' },
+      { id: 'high', label: 'High', desc: 'Chronic, hard to switch off' },
+    ],
+  },
+  {
+    id: 'diet',
+    question: 'How would you describe your diet?',
+    options: [
+      { id: 'omnivore', label: 'Omnivore', desc: 'Meat, fish, dairy included' },
+      { id: 'plant-forward', label: 'Plant-forward', desc: 'Vegetarian or vegan-leaning' },
+      { id: 'low-carb', label: 'Low-carb', desc: 'Keto, carnivore, or similar' },
+    ],
+  },
+  {
+    id: 'training',
+    question: 'How active is your training?',
+    options: [
+      { id: 'sedentary', label: 'Mostly sedentary', desc: 'Little structured exercise' },
+      { id: 'moderate', label: 'Moderately active', desc: '2–3 sessions a week' },
+      { id: 'athlete', label: 'Athlete-level', desc: 'Strength or endurance training 4+ days/wk' },
+    ],
+  },
+  {
+    id: 'budget',
+    question: 'Monthly budget for this stack',
+    options: [
+      { id: 'lean', label: 'Lean', desc: 'Under $50 — keep it minimal' },
+      { id: 'standard', label: 'Standard', desc: '$50–120' },
+      { id: 'no-limit', label: 'No limit', desc: "Cost isn't the constraint" },
+    ],
+  },
+  {
+    id: 'safety',
+    question: 'Anything we should account for?',
+    options: [
+      { id: 'none', label: 'Nothing specific', desc: 'No flags to raise' },
+      { id: 'meds', label: 'On medication', desc: 'Prescription meds or blood thinners' },
+      { id: 'pregnant', label: 'Pregnant or nursing', desc: 'Or trying to conceive' },
+    ],
+  },
 ] as const;
 
 export type QuizAnswers = {
   goal?: string;
   age?: string;
   experience?: string;
+  sleep?: string;
+  stress?: string;
+  diet?: string;
+  training?: string;
+  budget?: string;
+  safety?: string;
 };
+
+/** Profile.sleep / Profile.stress are 0–100 quality/load percentages consumed by
+ *  the Defense Scan, Protocol Engine, and Healthspan Estimator — mapping the
+ *  quiz's categorical answers onto that same scale lets a quiz completion feed
+ *  those tools too, instead of the sleep/stress signal dead-ending at the quiz. */
+export const SLEEP_PROFILE_VALUE: Record<string, number> = { solid: 85, inconsistent: 55, poor: 30 };
+export const STRESS_PROFILE_VALUE: Record<string, number> = { low: 25, moderate: 55, high: 80 };
 
 type QuizNextStep = { title: string; href: string; cta: string };
 
@@ -181,26 +248,88 @@ function personalizationNote(answers: QuizAnswers): string {
   return 'Load it in Stack Architect to check the synergy score, then adjust dosing to fit your routine.';
 }
 
+function resolvePresetForReadiness(goal: string | undefined, age: string | undefined, experience: string | undefined): PresetKey {
+  if (goal === 'full') {
+    return resolveFullGoalPreset(age, experience);
+  }
+  const base = GOAL_PRESET[goal ?? ''];
+  if (!base) return 'starter';
+
+  const rungs = GOAL_UPGRADE_RUNGS[goal ?? ''];
+  if (!rungs) return base;
+
+  const step = ladderStep(age, experience);
+  if (step === 0) return base;
+  return resolveRung(rungs, step) ?? base;
+}
+
 /**
  * Resolve the stack preset for a set of quiz answers. Goal picks the mechanism
  * family; age and experience can then broaden it up that goal's ladder (see
  * GOAL_UPGRADE_RUNGS) so two people with the same goal but different readiness
- * signals aren't handed an identical stack. Exported so the live preview and
- * the final result share a single source of truth.
+ * signals aren't handed an identical stack. A 'lean' budget answer overrides
+ * that broadening entirely — cost was named as the actual constraint, so the
+ * result stays on the goal's minimal base regardless of age/experience
+ * readiness. Exported so the live preview and the final result share a single
+ * source of truth.
  */
 export function getQuizPreset(answers: QuizAnswers): PresetKey {
-  if (answers.goal === 'full') {
-    return resolveFullGoalPreset(answers.age, answers.experience);
+  if (answers.budget === 'lean') {
+    return resolvePresetForReadiness(answers.goal, undefined, 'new');
   }
-  const base = GOAL_PRESET[answers.goal ?? ''];
-  if (!base) return 'starter';
+  return resolvePresetForReadiness(answers.goal, answers.age, answers.experience);
+}
 
-  const rungs = GOAL_UPGRADE_RUNGS[answers.goal ?? ''];
-  if (!rungs) return base;
+// Compound ids pulled from the library-only pool (never already inside a
+// stack preset) so a personalized addition always layers on top of the base
+// stack rather than silently duplicating one of its members. Every id here
+// has full mechanism/dose/safety-note coverage in lib/data.ts — nothing here
+// is invented; these are simply real catalog compounds the fixed presets
+// don't already reach.
+const SLEEP_ADDITIONS: Partial<Record<string, string[]>> = {
+  poor: ['melatonin', 'glycine'],
+  inconsistent: ['magnesium'],
+};
+const STRESS_ADDITIONS: Partial<Record<string, string[]>> = {
+  high: ['nac'],
+};
+const DIET_ADDITIONS: Partial<Record<string, string[]>> = {
+  'plant-forward': ['creatine', 'zinc'],
+  'low-carb': ['magnesium'],
+};
+const TRAINING_ADDITIONS: Partial<Record<string, string[]>> = {
+  athlete: ['creatine', 'glucosamine'],
+};
 
-  const step = ladderStep(answers.age, answers.experience);
-  if (step === 0) return base;
-  return resolveRung(rungs, step) ?? base;
+/**
+ * Layer 0–3 real, evidence-graded compounds onto the resolved stack based on
+ * lifestyle answers the goal/age/experience ladder doesn't see — sleep,
+ * stress, diet, and training each independently nudge in a targeted addition.
+ * This is what makes two users who land on the same preset walk away with
+ * genuinely different, individually-justified recommendations. A 'lean'
+ * budget caps the list to the single highest-priority addition instead of
+ * suppressing personalization entirely.
+ */
+export function getPersonalizedAdditions(answers: QuizAnswers): string[] {
+  const preset = getQuizPreset(answers);
+  const baseIds = new Set<string>(stackPresets[preset].ids);
+  const candidates = [
+    ...(SLEEP_ADDITIONS[answers.sleep ?? ''] ?? []),
+    ...(TRAINING_ADDITIONS[answers.training ?? ''] ?? []),
+    ...(STRESS_ADDITIONS[answers.stress ?? ''] ?? []),
+    ...(DIET_ADDITIONS[answers.diet ?? ''] ?? []),
+  ];
+
+  const seen = new Set<string>();
+  const additions: string[] = [];
+  const cap = answers.budget === 'lean' ? 1 : 3;
+  for (const id of candidates) {
+    if (baseIds.has(id) || seen.has(id)) continue;
+    seen.add(id);
+    additions.push(id);
+    if (additions.length >= cap) break;
+  }
+  return additions;
 }
 
 /** The base preset for a goal, ignoring any age/experience broadening — used to detect and explain when a broadening actually happened. */
@@ -220,8 +349,9 @@ export function getQuizResult(answers: QuizAnswers) {
   const primary = GOAL_NEXT_STEP[answers.goal ?? ''] ?? GOAL_NEXT_STEP.learn;
   const broadening = broadeningNote(answers, preset);
   const insight = `${PRESET_INSIGHT[preset]}${broadening ? ` ${broadening}` : ''} ${personalizationNote(answers)}`;
+  const additions = getPersonalizedAdditions(answers);
 
-  return { preset, stack, primary, insight };
+  return { preset, stack, primary, insight, additions };
 }
 
 export const featuredStacks = (Object.keys(stackPresets) as (keyof typeof stackPresets)[]).map((key) => ({

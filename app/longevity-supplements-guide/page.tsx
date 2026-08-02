@@ -48,8 +48,8 @@ const GUIDE_FAQS = [
 
 const HOW_TO_STEPS = [
   {
-    name: 'Take the 3-minute Starter Quiz',
-    text: 'Answer three questions — your primary goal (energy, cognition, or longevity), age range, and experience level. The quiz matches you to one of 6 evidence-graded stack presets (NRF2 Defense, NAD+ Restoration, Mitochondrial Health, Senolytic Protocol, Foundation, or Elite Protocol).',
+    name: 'Take the 5-minute Starter Questionnaire',
+    text: 'Answer nine questions — your primary goal, age range, experience level, and lifestyle factors like sleep, stress, diet, and training. The quiz matches you to one of 6 evidence-graded stack presets (NRF2 Defense, NAD+ Restoration, Mitochondrial Health, Senolytic Protocol, Foundation, or Elite Protocol) and layers in personalized additions from your lifestyle answers.',
   },
   {
     name: 'Choose your first compound based on hallmark targeting',

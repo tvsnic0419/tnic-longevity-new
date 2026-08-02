@@ -14,14 +14,15 @@
    Scoring dataset + pure analysis live in `lib/compound-engine-data.ts`.
 ============================================================================ */
 
-import { useMemo, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import {
   RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer,
 } from 'recharts';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import {
   FlaskConical, Network, ShieldCheck, Search, X,
   AlertTriangle, CheckCircle2, Dna, ExternalLink, BookOpen, Info,
-  SlidersHorizontal,
+  SlidersHorizontal, Gauge,
 } from 'lucide-react';
 import {
   PALETTE as COLORS,
@@ -31,6 +32,7 @@ import {
   type Compound, type Form, type HallmarkId, type StagedItem, type ScoredItem,
   type Tier, type Weights,
 } from '@/lib/compound-engine-data';
+import { signatureHue, rgba as vizRgba } from '@/components/viz/tokens';
 
 const css = `
 .sie-root{
@@ -40,13 +42,26 @@ const css = `
     radial-gradient(900px 500px at 8% 8%, rgba(192,132,252,.08), transparent 55%),
     ${COLORS.ink};
   min-height:100%;line-height:1.5;-webkit-font-smoothing:antialiased;
+  position:relative;isolation:isolate;
 }
 .sie-root *{box-sizing:border-box;}
 .sie-mono{font-family:var(--font-jetbrains-mono),ui-monospace,monospace;font-variant-numeric:tabular-nums;}
 .sie-disp{font-family:var(--font-inter),system-ui,sans-serif;letter-spacing:-.01em;}
 .sie-eyebrow{font-family:var(--font-jetbrains-mono),monospace;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:${COLORS.muted};}
-.sie-card{background:linear-gradient(180deg, rgba(13,21,38,.72), rgba(8,15,28,.72));border:1px solid ${COLORS.line};border-radius:16px;backdrop-filter:blur(6px);}
+.sie-card{background:linear-gradient(180deg, rgba(13,21,38,.72), rgba(8,15,28,.72));border:1px solid ${COLORS.line};border-radius:16px;backdrop-filter:blur(6px);position:relative;}
 .sie-hair{border:1px solid ${COLORS.line};}
+.sie-hero{position:relative;overflow:hidden;border-radius:22px;border:1px solid ${COLORS.line};padding:clamp(28px,5vw,52px) clamp(20px,4vw,40px);margin-bottom:22px;}
+.sie-hero-orb{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;opacity:.55;animation:sieFloat 16s ease-in-out infinite;}
+.sie-hero-orb-1{width:420px;height:420px;background:radial-gradient(circle, rgba(52,211,153,.42) 0%, transparent 70%);top:-18%;left:-6%;}
+.sie-hero-orb-2{width:340px;height:340px;background:radial-gradient(circle, rgba(0,224,255,.30) 0%, transparent 70%);top:10%;right:-8%;animation-delay:-5s;}
+.sie-hero-orb-3{width:280px;height:280px;background:radial-gradient(circle, rgba(192,132,252,.26) 0%, transparent 70%);bottom:-22%;left:32%;animation-delay:-10s;}
+@keyframes sieFloat{0%,100%{transform:translate(0,0) scale(1);}30%{transform:translate(30px,-22px) scale(1.06);}65%{transform:translate(-20px,16px) scale(.94);}}
+.sie-hero-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border-radius:999px;border:1px solid rgba(52,211,153,.35);background:rgba(52,211,153,.08);}
+.sie-hero-title{font-family:var(--font-display),Georgia,serif;font-weight:400;letter-spacing:-.02em;line-height:.98;font-size:clamp(30px,5.4vw,48px);margin:14px 0 0;}
+.sie-shimmer{background:linear-gradient(90deg, ${COLORS.cyan}, ${COLORS.jade}, #6ee7b7, ${COLORS.jade}, ${COLORS.cyan});background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:sieShimmer 4.5s linear infinite;font-style:italic;}
+@keyframes sieShimmer{0%{background-position:0% center;}100%{background-position:200% center;}}
+.sie-stat-pill{position:relative;background:color-mix(in srgb, rgba(13,21,38,.85) 92%, transparent);backdrop-filter:blur(10px) saturate(1.15);border-radius:16px;border:1px solid ${COLORS.line};padding:12px 16px;overflow:hidden;min-width:88px;}
+.sie-stat-pill::before{content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(140deg, var(--pill-glow) 0%, transparent 55%);-webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.55;pointer-events:none;}
 .sie-input{background:rgba(2,8,17,.6);border:1px solid ${COLORS.line};border-radius:10px;color:${COLORS.text};padding:11px 13px;font-size:14px;width:100%;outline:none;transition:border-color .15s, box-shadow .15s;font-family:var(--font-inter),sans-serif;}
 .sie-input:focus{border-color:rgba(52,211,153,.55);box-shadow:0 0 0 3px rgba(52,211,153,.12);}
 .sie-input::placeholder{color:${COLORS.dim};}
@@ -62,10 +77,10 @@ const css = `
 .sie-tab-active{color:${COLORS.text};background:rgba(13,21,38,.85);border-color:${COLORS.line};}
 .sie-chip{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;border:1px solid ${COLORS.line};background:rgba(2,8,17,.5);font-size:12px;}
 .sie-tag{display:inline-block;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;font-family:var(--font-jetbrains-mono),monospace;letter-spacing:.02em;}
-.sie-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:1px solid ${COLORS.line};background:rgba(2,8,17,.35);cursor:pointer;transition:border-color .15s, background .15s;width:100%;text-align:left;font-family:inherit;color:inherit;}
-.sie-row:hover{border-color:rgba(0,224,255,.45);background:rgba(13,21,38,.5);}
+.sie-row{position:relative;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:1px solid ${COLORS.line};border-left:3px solid var(--row-hue, ${COLORS.line});background:rgba(2,8,17,.35);cursor:pointer;transition:border-color .15s, background .15s, box-shadow .2s, transform .15s;width:100%;text-align:left;font-family:inherit;color:inherit;}
+.sie-row:hover{border-color:rgba(0,224,255,.45);border-left-color:var(--row-hue, ${COLORS.cyan});background:rgba(13,21,38,.55);box-shadow:0 10px 28px -14px var(--row-hue, rgba(0,224,255,.6));transform:translateY(-1px);}
 .sie-row:focus-visible{outline:2px solid ${COLORS.cyan};outline-offset:2px;}
-.sie-row-active{border-color:rgba(52,211,153,.6);background:rgba(13,21,38,.7);}
+.sie-row-active{border-color:rgba(52,211,153,.6);border-left-color:var(--row-hue, ${COLORS.jade});background:rgba(13,21,38,.7);box-shadow:0 10px 28px -14px var(--row-hue, rgba(52,211,153,.55));}
 .sie-iconbtn{display:inline-flex;align-items:center;justify-content:center;background:transparent;border:none;padding:2px;cursor:pointer;color:${COLORS.muted};border-radius:6px;}
 .sie-iconbtn:hover{color:${COLORS.text};}
 .sie-iconbtn:focus-visible{outline:2px solid ${COLORS.cyan};outline-offset:2px;}
@@ -77,6 +92,8 @@ const css = `
 .sie-scroll::-webkit-scrollbar{width:9px;height:9px;}
 .sie-scroll::-webkit-scrollbar-thumb{background:#26324a;border-radius:8px;}
 .sie-scroll::-webkit-scrollbar-track{background:transparent;}
+.sie-bloom-node{animation:sieNodeIn .5s var(--sie-ease,cubic-bezier(.16,1,.3,1)) backwards;animation-delay:calc(var(--i,0) * 45ms);}
+@keyframes sieNodeIn{from{opacity:0;transform:scale(.4);}to{opacity:1;transform:scale(1);}}
 @keyframes siePulse{0%,100%{opacity:.55;}50%{opacity:1;}}
 @keyframes sieFade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
 .sie-fade{animation:sieFade .3s ease both;}
@@ -84,7 +101,10 @@ const css = `
 input[type=range].sie-range{-webkit-appearance:none;appearance:none;height:4px;background:#26324a;border-radius:4px;outline:none;}
 input[type=range].sie-range::-webkit-slider-thumb{-webkit-appearance:none;height:15px;width:15px;border-radius:50%;background:${COLORS.jade};cursor:pointer;border:2px solid #0a1120;}
 input[type=range].sie-range:focus-visible{outline:2px solid ${COLORS.cyan};outline-offset:3px;}
-@media (prefers-reduced-motion: reduce){.sie-fade,.sie-pulse{animation:none;}}
+@media (prefers-reduced-motion: reduce){
+  .sie-fade,.sie-pulse,.sie-hero-orb,.sie-shimmer,.sie-bloom-node{animation:none;}
+  .sie-shimmer{-webkit-text-fill-color:${COLORS.jade};background:none;}
+}
 @media (max-width: 860px){
   .sie-grid{grid-template-columns:minmax(0,1fr) !important;}
   .sie-detail-grid{grid-template-columns:minmax(0,1fr) !important;}
@@ -94,9 +114,13 @@ input[type=range].sie-range:focus-visible{outline:2px solid ${COLORS.cyan};outli
 `;
 
 /* ── SVG geometry helpers ────────────────────────────────────────────────── */
+// Rounded to 4dp: server (Node/V8) and client (browser engine) Math.sin/cos
+// can differ in the last ULP for the same input, which otherwise surfaces as
+// a spurious SSR/CSR hydration mismatch on these trig-derived SVG coordinates.
+const round4 = (n: number) => Math.round(n * 10000) / 10000;
 const polar = (cx: number, cy: number, r: number, angle: number) => {
   const a = (angle * Math.PI) / 180;
-  return { x: cx + r * Math.sin(a), y: cy - r * Math.cos(a) };
+  return { x: round4(cx + r * Math.sin(a)), y: round4(cy - r * Math.cos(a)) };
 };
 const arcPath = (cx: number, cy: number, r: number, start: number, end: number) => {
   const s = polar(cx, cy, r, start);
@@ -107,6 +131,37 @@ const arcPath = (cx: number, cy: number, r: number, start: number, end: number) 
 };
 
 /* ── Small UI atoms ──────────────────────────────────────────────────────── */
+/** RAF-driven count-up, snaps instantly under prefers-reduced-motion. */
+function CountUp({ value, duration = 900, suffix = '' }: { value: number | null; duration?: number; suffix?: string }) {
+  const reduced = useReducedMotion();
+  const [display, setDisplay] = useState(value ?? 0);
+  const prev = useRef(value);
+
+  useEffect(() => {
+    if (value == null) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- RAF count-up: immediate-snap branches (reduced motion / unchanged value) intentionally set state synchronously instead of animating; not derivable during render.
+    if (reduced) { setDisplay(value); prev.current = value; return; }
+    const from = prev.current ?? 0;
+    const to = value;
+    prev.current = value;
+    if (from === to) { setDisplay(to); return; }
+    let raf = 0;
+    let start: number | null = null;
+    const step = (ts: number) => {
+      if (start === null) start = ts;
+      const pct = Math.min((ts - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - pct, 3);
+      setDisplay(Math.round(from + (to - from) * eased));
+      if (pct < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [value, duration, reduced]);
+
+  if (value == null) return <>—</>;
+  return <>{display}{suffix}</>;
+}
+
 function Bar({ label, value, color }: { label: string; value: number; color?: string }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -125,22 +180,43 @@ function TierBadge({ tier }: { tier: Tier }) {
 }
 
 function Dial({ value, label, size = 148 }: { value: number | null; label: string; size?: number }) {
+  const reduced = useReducedMotion();
+  const uid = useId();
   const cx = size / 2, cy = size / 2, r = size / 2 - 16;
   const frac = Math.max(0, Math.min(1, (value ?? 0) / 100));
   const col = value == null ? COLORS.dim : scoreColor(value);
   const ticks = Array.from({ length: 11 }, (_, i) => 225 + 270 * (i / 10));
+  const trackLen = (270 / 360) * 2 * Math.PI * r;
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label={`${label}: ${value == null ? 'not available' : value}`}>
+      <defs>
+        <linearGradient id={uid} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor={COLORS.amber} />
+          <stop offset="50%" stopColor={COLORS.cyan} />
+          <stop offset="100%" stopColor={COLORS.jade} />
+        </linearGradient>
+      </defs>
       {ticks.map((a, i) => {
         const o = polar(cx, cy, r + 6, a), inr = polar(cx, cy, r + 2, a);
         return <line key={i} x1={inr.x} y1={inr.y} x2={o.x} y2={o.y} stroke={COLORS.line} strokeWidth={1} />;
       })}
       <path d={arcPath(cx, cy, r, 225, 225 + 270)} fill="none" stroke="rgba(255,255,255,.06)" strokeWidth={9} strokeLinecap="round" />
       {value != null && (
-        <path d={arcPath(cx, cy, r, 225, 225 + 270 * frac)} fill="none" stroke={col} strokeWidth={9} strokeLinecap="round" style={{ filter: `drop-shadow(0 0 6px ${col}aa)` }} />
+        <motion.path
+          d={arcPath(cx, cy, r, 225, 225 + 269.98)}
+          fill="none"
+          stroke={value >= 78 ? `url(#${uid})` : col}
+          strokeWidth={9}
+          strokeLinecap="round"
+          style={{ filter: `drop-shadow(0 0 7px ${col}bb)` }}
+          strokeDasharray={trackLen}
+          initial={reduced ? false : { strokeDashoffset: trackLen }}
+          animate={{ strokeDashoffset: trackLen * (1 - frac) }}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+        />
       )}
       <text x={cx} y={cy - 2} textAnchor="middle" className="sie-disp" style={{ fontSize: 30, fontWeight: 700, fill: value == null ? COLORS.dim : COLORS.text }}>
-        {value == null ? '—' : value}
+        <CountUp value={value} />
       </text>
       <text x={cx} y={cy + 18} textAnchor="middle" className="sie-mono" style={{ fontSize: 9, fill: COLORS.muted, letterSpacing: '.14em', textTransform: 'uppercase' }}>{label}</text>
     </svg>
@@ -193,7 +269,8 @@ function HallmarkBloom({
         return (
           <g
             key={h.id}
-            style={{ cursor: interactive ? 'pointer' : 'default' }}
+            className="sie-bloom-node"
+            style={{ cursor: interactive ? 'pointer' : 'default', transformOrigin: `${p.x}px ${p.y}px`, ['--i' as string]: String(i) }}
             onClick={() => onSelect && onSelect(h.id)}
             onKeyDown={interactive ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect!(h.id); } } : undefined}
             role={interactive ? 'button' : undefined}
@@ -233,6 +310,7 @@ export function CompoundIntelligenceEngine() {
   const [selHall, setSelHall] = useState<HallmarkId>('mito');
   const [weights, setWeights] = useState<Weights>(DEFAULT_WEIGHTS);
   const [showWeights, setShowWeights] = useState(false);
+  const reducedMotion = useReducedMotion();
 
   const analysis = useMemo(() => analyzeStack(staged, weights), [staged, weights]);
   const selected: ScoredItem | null =
@@ -277,26 +355,45 @@ export function CompoundIntelligenceEngine() {
       <div style={{ maxWidth: 1180, margin: '0 auto' }}>
 
         {/* MASTHEAD */}
-        <div className="sie-fade" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: 16, marginBottom: 22 }}>
-          <div>
-            <div className="sie-eyebrow" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ width: 6, height: 6, borderRadius: 999, background: COLORS.jade, boxShadow: `0 0 8px ${COLORS.jade}` }} className="sie-pulse" />
-              TNiC · Cellular Intelligence
+        <motion.div
+          className="sie-hero"
+          initial={reducedMotion ? false : { opacity: 0, y: -14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <span className="sie-hero-orb sie-hero-orb-1" aria-hidden="true" />
+          <span className="sie-hero-orb sie-hero-orb-2" aria-hidden="true" />
+          <span className="sie-hero-orb sie-hero-orb-3" aria-hidden="true" />
+          <div style={{ position: 'relative', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: 20 }}>
+            <div style={{ maxWidth: 620 }}>
+              <span className="sie-hero-badge">
+                <Gauge size={13} style={{ color: COLORS.jade }} aria-hidden />
+                <span className="sie-mono" style={{ fontSize: 10.5, letterSpacing: '.24em', textTransform: 'uppercase', color: COLORS.jade }}>TNiC · Cellular Intelligence</span>
+              </span>
+              <h1 className="sie-hero-title">
+                Compound <em className="sie-shimmer">Intelligence</em> Engine
+              </h1>
+              <p style={{ color: COLORS.muted, margin: '12px 0 0', maxWidth: 560, fontSize: 14.5, lineHeight: 1.6 }}>
+                Stage supplements to score each compound mechanistically, resolve stack synergy, and watch coverage bloom across the twelve hallmarks of aging.
+              </p>
             </div>
-            <h1 className="sie-disp" style={{ fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 700, margin: '8px 0 0', lineHeight: 1.05 }}>
-              Compound Intelligence Engine
-            </h1>
-            <p style={{ color: COLORS.muted, margin: '8px 0 0', maxWidth: 560, fontSize: 14 }}>
-              Stage supplements to score each compound mechanistically, resolve stack synergy, and watch coverage bloom across the twelve hallmarks of aging.
-            </p>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+              {[
+                { label: 'STAGED', value: analysis.scored.length, color: COLORS.cyan },
+                { label: 'MEAN', value: analysis.meanScore, color: analysis.meanScore == null ? COLORS.dim : scoreColor(analysis.meanScore) },
+                { label: 'SYNERGY', value: analysis.synergyScore, color: analysis.synergyScore == null ? COLORS.dim : COLORS.violet },
+                { label: 'HALLMARKS', value: analysis.coveredCount, suffix: '/12', color: COLORS.jade },
+              ].map((s) => (
+                <div key={s.label} className="sie-stat-pill" style={{ ['--pill-glow' as string]: s.color }}>
+                  <div className="sie-disp" style={{ fontSize: 22, color: s.color, lineHeight: 1 }}>
+                    <CountUp value={s.value} suffix={s.suffix} />
+                  </div>
+                  <div className="sie-mono" style={{ fontSize: 9, color: COLORS.muted, letterSpacing: '.12em', marginTop: 4 }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="sie-mono" style={{ display: 'flex', gap: 18, fontSize: 11, color: COLORS.muted }}>
-            <div><div style={{ fontSize: 22, color: COLORS.text }} className="sie-disp">{analysis.scored.length}</div>STAGED</div>
-            <div><div style={{ fontSize: 22, color: scoreColor(analysis.meanScore ?? 0) }} className="sie-disp">{analysis.meanScore ?? '—'}</div>MEAN</div>
-            <div><div style={{ fontSize: 22, color: analysis.synergyScore == null ? COLORS.dim : COLORS.violet }} className="sie-disp">{analysis.synergyScore ?? '—'}</div>SYNERGY</div>
-            <div><div style={{ fontSize: 22, color: COLORS.jade }} className="sie-disp">{analysis.coveredCount}<span style={{ color: COLORS.dim, fontSize: 14 }}>/12</span></div>HALLMARKS</div>
-          </div>
-        </div>
+        </motion.div>
 
         {/* ENTRY BAR */}
         <div className="sie-card sie-fade" style={{ padding: 16, marginBottom: 18 }}>
@@ -356,16 +453,26 @@ export function CompoundIntelligenceEngine() {
           {/* staged chips */}
           {staged.length > 0 && (
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 14 }}>
-              {staged.map((s) => (
-                <span key={s.uid} className="sie-chip">
-                  <span style={{ width: 6, height: 6, borderRadius: 999, background: tierColor(s.data.tier) }} />
-                  <span style={{ fontWeight: 600 }}>{s.name}</span>
-                  {s.brand && <span style={{ color: COLORS.dim }}>· {s.brand}</span>}
-                  {s.dose && <span className="sie-mono" style={{ color: COLORS.muted }}>{s.dose}</span>}
-                  {s.form !== 'std' && <span className="sie-mono" style={{ color: COLORS.dim, fontSize: 10 }}>{FORM_LABEL[s.form]}</span>}
-                  <button type="button" className="sie-iconbtn" aria-label={`Remove ${s.name}`} onClick={() => remove(s.uid)}><X size={13} /></button>
-                </span>
-              ))}
+              <AnimatePresence initial={false}>
+                {staged.map((s) => (
+                  <motion.span
+                    key={s.uid}
+                    className="sie-chip"
+                    layout={!reducedMotion}
+                    initial={reducedMotion ? false : { opacity: 0, scale: 0.7 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={reducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.7 }}
+                    transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    <span style={{ width: 6, height: 6, borderRadius: 999, background: tierColor(s.data.tier) }} />
+                    <span style={{ fontWeight: 600 }}>{s.name}</span>
+                    {s.brand && <span style={{ color: COLORS.dim }}>· {s.brand}</span>}
+                    {s.dose && <span className="sie-mono" style={{ color: COLORS.muted }}>{s.dose}</span>}
+                    {s.form !== 'std' && <span className="sie-mono" style={{ color: COLORS.dim, fontSize: 10 }}>{FORM_LABEL[s.form]}</span>}
+                    <button type="button" className="sie-iconbtn" aria-label={`Remove ${s.name}`} onClick={() => remove(s.uid)}><X size={13} /></button>
+                  </motion.span>
+                ))}
+              </AnimatePresence>
             </div>
           )}
         </div>
@@ -425,7 +532,14 @@ export function CompoundIntelligenceEngine() {
                   <div style={{ color: COLORS.muted, fontSize: 13, marginTop: 6 }}>Add a compound above to begin mechanistic scoring.</div>
                 </div>
               ) : (
-                <div className="sie-fade">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={tab}
+                    initial={reducedMotion ? false : { opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
+                    transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                  >
                   {/* weights panel */}
                   {tab === 'compounds' && showWeights && (
                     <div className="sie-card" style={{ padding: 16, marginBottom: 14 }}>
@@ -451,34 +565,57 @@ export function CompoundIntelligenceEngine() {
                   {tab === 'compounds' && (
                     <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr)', gap: 14 }}>
                       <div style={{ display: 'grid', gap: 8 }}>
-                        {analysis.scored.slice().sort((a, b) => b.overall - a.overall).map((it) => (
-                          <button type="button" key={it.uid} className={`sie-row ${selected?.uid === it.uid ? 'sie-row-active' : ''}`} aria-pressed={selected?.uid === it.uid} onClick={() => setSelUid(it.uid)}>
-                            <div style={{ position: 'relative', flexShrink: 0 }}>
-                              <svg width={44} height={44} viewBox="0 0 44 44" aria-hidden>
-                                <circle cx={22} cy={22} r={18} fill="none" stroke="rgba(255,255,255,.06)" strokeWidth={4} />
-                                <path d={arcPath(22, 22, 18, 0, 360 * (it.overall / 100) - 0.01)} fill="none" stroke={scoreColor(it.overall)} strokeWidth={4} strokeLinecap="round" />
-                                <text x={22} y={26} textAnchor="middle" className="sie-disp" style={{ fontSize: 14, fontWeight: 700, fill: COLORS.text }}>{it.overall}</text>
-                              </svg>
-                            </div>
-                            <div style={{ minWidth: 0, flex: 1 }}>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                                <span style={{ fontWeight: 600, fontSize: 14 }}>{it.name}</span>
-                                <TierBadge tier={it.data.tier} />
+                        {analysis.scored.slice().sort((a, b) => b.overall - a.overall).map((it, idx) => {
+                          const hue = vizRgba(signatureHue(it.data.id), 0.9);
+                          return (
+                            <motion.button
+                              type="button"
+                              key={it.uid}
+                              layout={!reducedMotion}
+                              initial={reducedMotion ? false : { opacity: 0, y: 8 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.3, delay: reducedMotion ? 0 : Math.min(idx, 8) * 0.035, ease: [0.16, 1, 0.3, 1] }}
+                              className={`sie-row ${selected?.uid === it.uid ? 'sie-row-active' : ''}`}
+                              style={{ ['--row-hue' as string]: hue }}
+                              aria-pressed={selected?.uid === it.uid}
+                              onClick={() => setSelUid(it.uid)}
+                            >
+                              <div style={{ position: 'relative', flexShrink: 0 }}>
+                                <svg width={44} height={44} viewBox="0 0 44 44" aria-hidden>
+                                  <circle cx={22} cy={22} r={18} fill="none" stroke="rgba(255,255,255,.06)" strokeWidth={4} />
+                                  <path d={arcPath(22, 22, 18, 0, 360 * (it.overall / 100) - 0.01)} fill="none" stroke={scoreColor(it.overall)} strokeWidth={4} strokeLinecap="round" />
+                                  <text x={22} y={26} textAnchor="middle" className="sie-disp" style={{ fontSize: 14, fontWeight: 700, fill: COLORS.text }}>{it.overall}</text>
+                                </svg>
                               </div>
-                              <div style={{ fontSize: 11, color: COLORS.muted, marginTop: 2 }}>{it.data.cls} · {it.data.hallmarks.length} hallmarks · {it.data.pathways.length} pathways</div>
-                            </div>
-                            <div style={{ width: 120, flexShrink: 0 }} className="sie-hide-sm">
-                              <Bar label="EVID" value={it.subs.evidence} />
-                              <div style={{ height: 4 }} />
-                              <Bar label="BREADTH" value={it.subs.breadth} />
-                            </div>
-                          </button>
-                        ))}
+                              <div style={{ minWidth: 0, flex: 1 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                                  <span style={{ fontWeight: 600, fontSize: 14 }}>{it.name}</span>
+                                  <TierBadge tier={it.data.tier} />
+                                </div>
+                                <div style={{ fontSize: 11, color: COLORS.muted, marginTop: 2 }}>{it.data.cls} · {it.data.hallmarks.length} hallmarks · {it.data.pathways.length} pathways</div>
+                              </div>
+                              <div style={{ width: 120, flexShrink: 0 }} className="sie-hide-sm">
+                                <Bar label="EVID" value={it.subs.evidence} />
+                                <div style={{ height: 4 }} />
+                                <Bar label="BREADTH" value={it.subs.breadth} />
+                              </div>
+                            </motion.button>
+                          );
+                        })}
                       </div>
 
                       {/* detail */}
+                      <AnimatePresence mode="wait">
                       {selected && (
-                        <div className="sie-card" style={{ padding: 18 }}>
+                        <motion.div
+                          key={selected.uid}
+                          className="sie-card"
+                          style={{ padding: 18 }}
+                          initial={reducedMotion ? false : { opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
+                          transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                        >
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, flexWrap: 'wrap' }}>
                             <div>
                               <div className="sie-disp" style={{ fontSize: 22, fontWeight: 700 }}>{selected.name}</div>
@@ -556,8 +693,9 @@ export function CompoundIntelligenceEngine() {
                               <ExternalLink size={13} aria-hidden /> PubMed
                             </a>
                           </div>
-                        </div>
+                        </motion.div>
                       )}
+                      </AnimatePresence>
                     </div>
                   )}
 
@@ -716,7 +854,8 @@ export function CompoundIntelligenceEngine() {
                       </div>
                     </div>
                   )}
-                </div>
+                  </motion.div>
+                </AnimatePresence>
               )}
             </div>
           </div>

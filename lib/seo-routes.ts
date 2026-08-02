@@ -33,9 +33,9 @@ export const seoRoutes = {
 
   quiz: () =>
     buildPageMetadata({
-      title: '3-Min Starter Quiz — Personalized Longevity Entry Point',
+      title: '5-Min Starter Quiz — Personalized Longevity Entry Point',
       description:
-        'Three questions: your goal, age range, and experience level. Get a mechanism-matched stack preset, a PMID-cited insight for your age group, and your next step in the TNiC Longevity OS.',
+        'Nine questions: your goal, age range, experience level, and lifestyle — sleep, stress, diet, training, budget, safety. Get a mechanism-matched stack preset with personalized compound additions, a PMID-cited insight for your age group, and your next step in the TNiC Longevity OS.',
       path: '/quiz',
       keywords: ['longevity quiz', 'starter protocol', 'NMN stack quiz', 'personalized supplement stack', 'NRF2 quiz'],
     }),
