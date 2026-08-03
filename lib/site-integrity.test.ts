@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { compounds, researchFeed, safetyNotes } from './data';
 import { libraryModules } from './library-modules';
+import { hallmarkLibrary } from './hallmarks-library';
 import { ELITE_8_COMPOUNDS } from './elite-8-data';
 import { citationRegistry } from './trust';
 import { buildSitemapEntries } from './sitemap-urls';
@@ -63,9 +64,19 @@ describe('site data integrity', () => {
       return routes;
     }
 
+    // Intentionally sitemap-excluded: the bespoke /hallmarks/<slug> pages are
+    // duplicates of the canonical /library/<slug> hallmark deep-dives. They
+    // carry <link rel="canonical"> → /library/<slug> and are deliberately left
+    // out of the sitemap so ranking signals consolidate on one URL. (The
+    // /hallmarks index itself stays in the sitemap.)
+    const CANONICALIZED_DUPLICATES = new Set(
+      hallmarkLibrary.map((h) => `/hallmarks/${h.slug}`),
+    );
+
     const staticRoutes = collectStaticPageRoutes(resolve(process.cwd(), 'app'));
     const sitemapPaths = new Set(buildSitemapEntries().map((e) => new URL(e.url).pathname));
     for (const route of staticRoutes) {
+      if (CANONICALIZED_DUPLICATES.has(route)) continue;
       expect(sitemapPaths.has(route), `app route ${route} has a page.tsx but is missing from the sitemap`).toBe(true);
     }
   });

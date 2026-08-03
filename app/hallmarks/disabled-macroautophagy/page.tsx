@@ -8,6 +8,7 @@ import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 import { HallmarkHeroVisual } from '@/components/hallmarks/HallmarkHeroVisual';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/library/disabled-macroautophagy' },
   title: 'Disabled Macroautophagy / Nutrient Sensing | Hallmarks of Aging | TNiC',
   description:
     'Deep-dive into nutrient sensing dysregulation and disabled macroautophagy — the mTOR/AMPK axis that controls whether cells grow or clean. Rapamycin, resveratrol, NMN, metformin, and clinical evidence.',

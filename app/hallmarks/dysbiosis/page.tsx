@@ -8,6 +8,7 @@ import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 import { HallmarkHeroVisual } from '@/components/hallmarks/HallmarkHeroVisual';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/library/dysbiosis' },
   title: 'Dysbiosis | Hallmarks of Aging | TNiC',
   description:
     'Deep-dive into dysbiosis — the gut microbiome crisis driving inflammaging. Mechanisms, leaky gut, SCFA decline, evidence-graded interventions (fermented foods, fiber, sulforaphane), and biomarkers.',

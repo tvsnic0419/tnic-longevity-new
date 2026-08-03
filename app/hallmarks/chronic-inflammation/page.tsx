@@ -8,6 +8,7 @@ import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 import { HallmarkHeroVisual } from '@/components/hallmarks/HallmarkHeroVisual';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/library/chronic-inflammation' },
   title: 'Chronic Inflammation (Inflammaging) | Hallmarks of Aging | TNiC',
   description:
     'Deep-dive into chronic inflammation — the "inflammaging" hallmark driving cardiovascular disease, cancer, and neurodegeneration. Mechanisms, hs-CRP targets, evidence-graded interventions, and biomarkers.',

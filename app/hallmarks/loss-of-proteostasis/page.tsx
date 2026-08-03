@@ -8,6 +8,7 @@ import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 import { HallmarkHeroVisual } from '@/components/hallmarks/HallmarkHeroVisual';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/library/loss-of-proteostasis' },
   title: 'Loss of Proteostasis | Hallmarks of Aging | TNiC',
   description:
     'Deep-dive into loss of proteostasis — the protein folding crisis underlying neurodegeneration. Mechanisms, chaperones, ubiquitin-proteasome, evidence-graded interventions (GlyNAC, sulforaphane, R-ALA), and biomarkers.',

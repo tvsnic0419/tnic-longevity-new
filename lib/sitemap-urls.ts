@@ -69,12 +69,11 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     priority: 0.85,
   }));
 
-  const hallmarkDeepDiveRoutes = hallmarkLibrary.map((h) => ({
-    url: `${base}/hallmarks/${h.slug}`,
-    lastModified,
-    changeFrequency: 'monthly' as const,
-    priority: 0.83,
-  }));
+  // The bespoke /hallmarks/<slug> pages are duplicates of the canonical
+  // /library/<slug> hallmark deep-dives (which is what seoRoutes.hallmark
+  // declares canonical and every internal link points to). They carry a
+  // canonical → /library/<slug> and are intentionally omitted from the sitemap
+  // so ranking signals consolidate on the one canonical URL.
 
   const compareRoutes = getAllComparisonSlugs().map((slug) => ({
     url: `${base}/library/compare/${slug}`,
@@ -116,7 +115,6 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     ...quizShareRoutes,
     ...toolTabRoutes,
     ...hallmarkRoutes,
-    ...hallmarkDeepDiveRoutes,
     ...compareRoutes,
     ...moduleRoutes,
     ...peptideRoutes,

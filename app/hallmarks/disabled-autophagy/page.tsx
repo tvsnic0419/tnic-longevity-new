@@ -8,6 +8,7 @@ import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 import { HallmarkHeroVisual } from '@/components/hallmarks/HallmarkHeroVisual';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/library/disabled-autophagy' },
   title: 'Disabled Autophagy | Hallmarks of Aging | TNiC',
   description:
     'Deep-dive into disabled autophagy — cellular recycling that fails with age. mTOR/AMPK axis, evidence-graded interventions (spermidine, NMN, resveratrol, fasting), and biomarkers.',

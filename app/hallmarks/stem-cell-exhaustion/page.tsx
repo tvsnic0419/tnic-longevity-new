@@ -8,6 +8,7 @@ import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 import { HallmarkHeroVisual } from '@/components/hallmarks/HallmarkHeroVisual';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/library/stem-cell-exhaustion' },
   title: 'Stem Cell Exhaustion | Hallmarks of Aging | TNiC',
   description:
     'Deep-dive into stem cell exhaustion — the regenerative decline driving muscle loss, immune aging, and poor wound healing. Mechanisms, evidence-graded interventions (Ca-AKG, NMN, exercise), and biomarkers.',
