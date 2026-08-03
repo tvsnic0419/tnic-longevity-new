@@ -141,6 +141,7 @@ export default async function LibraryModulePage({
         guide={guide}
         relatedCompounds={relatedCompounds}
         engineHref={engineHref}
+        lastUpdated={mdx?.frontmatter.last_updated}
       />
     </>
   );

@@ -45,6 +45,7 @@ export function LibraryModuleDetail({
   guide,
   relatedCompounds = [],
   engineHref,
+  lastUpdated,
 }: {
   module: LibraryModule;
   mdxBody: string | null;
@@ -57,6 +58,8 @@ export function LibraryModuleDetail({
    * server so the engine's scoring dataset never reaches this client bundle.
    */
   engineHref?: string;
+  /** MDX frontmatter `last_updated` ("YYYY-MM-DD"), surfaced as "Last reviewed". */
+  lastUpdated?: string;
 }) {
   const categoryMeta = libraryCategoryMeta[module.category];
   const relatedHallmarks = hallmarkLibrary.filter((h) => module.relatedHallmarkIds.includes(h.id));
@@ -279,10 +282,10 @@ export function LibraryModuleDetail({
             </motion.div>
 
             {relatedCompound ? (
-              <CompoundGlancePanel compound={relatedCompound} />
+              <CompoundGlancePanel compound={relatedCompound} lastUpdated={lastUpdated} />
             ) : (
               module.category === 'compounds' && (
-                <ModuleGlancePanel module={module} studyCount={mdxStudyCount} />
+                <ModuleGlancePanel module={module} studyCount={mdxStudyCount} lastUpdated={lastUpdated} />
               )
             )}
 

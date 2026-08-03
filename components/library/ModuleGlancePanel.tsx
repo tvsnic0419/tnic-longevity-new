@@ -4,6 +4,7 @@ import type { LibraryModule } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { StatTile } from '@/components/ui/StatTile';
+import { formatReviewDate } from '@/lib/utils';
 
 /**
  * "Compound at a glance" for library-first compounds that do not (yet) have a
@@ -31,14 +32,18 @@ const focusFromTagline = (tagline: string): string => {
 export function ModuleGlancePanel({
   module,
   studyCount,
+  lastUpdated,
 }: {
   module: LibraryModule;
   /** Unique PMIDs cited in the deep-dive body — a real, verifiable count. */
   studyCount: number;
+  /** MDX frontmatter `last_updated` ("YYYY-MM-DD"), surfaced as "Last reviewed". */
+  lastUpdated?: string;
 }) {
   const targetHallmarks = module.relatedHallmarkIds
     .map((id) => hallmarkLibrary.find((h) => h.id === id))
     .filter((h): h is (typeof hallmarkLibrary)[number] => Boolean(h));
+  const reviewDate = formatReviewDate(lastUpdated);
 
   return (
     <section
@@ -47,7 +52,14 @@ export function ModuleGlancePanel({
     >
       <div className="mb-5 flex items-center justify-between gap-4">
         <p className="text-label text-accent-cyan">Compound at a glance</p>
-        <EvidenceTag tier={module.evidenceTier} showTooltip />
+        <div className="flex items-center gap-3">
+          {reviewDate && (
+            <p className="text-xs text-muted-foreground whitespace-nowrap">
+              Last reviewed <span className="text-foreground/70">{reviewDate}</span>
+            </p>
+          )}
+          <EvidenceTag tier={module.evidenceTier} showTooltip />
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">

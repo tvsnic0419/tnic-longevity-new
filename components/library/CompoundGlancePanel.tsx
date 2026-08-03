@@ -4,6 +4,7 @@ import type { Compound } from '@/lib/types';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { StatTile } from '@/components/ui/StatTile';
+import { formatReviewDate } from '@/lib/utils';
 
 /**
  * "Compound at a glance" — a scannable identity panel that surfaces the
@@ -19,10 +20,18 @@ const firstSentence = (text: string): string => {
   return (match ? match[0] : text).trim();
 };
 
-export function CompoundGlancePanel({ compound }: { compound: Compound }) {
+export function CompoundGlancePanel({
+  compound,
+  lastUpdated,
+}: {
+  compound: Compound;
+  /** MDX frontmatter `last_updated` ("YYYY-MM-DD"), surfaced as "Last reviewed". */
+  lastUpdated?: string;
+}) {
   const targetHallmarks = compound.hallmarks
     .map((id) => hallmarkLibrary.find((h) => h.id === id))
     .filter((h): h is (typeof hallmarkLibrary)[number] => Boolean(h));
+  const reviewDate = formatReviewDate(lastUpdated);
 
   return (
     <section
@@ -31,7 +40,14 @@ export function CompoundGlancePanel({ compound }: { compound: Compound }) {
     >
       <div className="mb-5 flex items-center justify-between gap-4">
         <p className="text-label text-accent-cyan">Compound at a glance</p>
-        <EvidenceTag tier={compound.evidence} showTooltip />
+        <div className="flex items-center gap-3">
+          {reviewDate && (
+            <p className="text-xs text-muted-foreground whitespace-nowrap">
+              Last reviewed <span className="text-foreground/70">{reviewDate}</span>
+            </p>
+          )}
+          <EvidenceTag tier={compound.evidence} showTooltip />
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
