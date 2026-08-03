@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { crossLinks, crossLinkTerms } from './cross-links';
 import { libraryModules } from './library-modules';
 import { hallmarkLibrary } from './hallmarks-library';
+import { peptideLibrary } from './peptides-library';
 
 const compoundHrefs = new Set(
   libraryModules
@@ -9,11 +10,12 @@ const compoundHrefs = new Set(
     .map((m) => `/library/compounds/${m.slug}`),
 );
 const hallmarkHrefs = new Set(hallmarkLibrary.map((h) => `/library/${h.slug}`));
+const peptideHrefs = new Set(peptideLibrary.map((p) => `/peptides/${p.slug}`));
 
 describe('cross-links resolve to real routes', () => {
-  it('every cross-link href is a real compound or hallmark deep-dive', () => {
+  it('every cross-link href is a real compound, hallmark, or peptide deep-dive', () => {
     for (const { href } of crossLinks) {
-      const ok = compoundHrefs.has(href) || hallmarkHrefs.has(href);
+      const ok = compoundHrefs.has(href) || hallmarkHrefs.has(href) || peptideHrefs.has(href);
       expect(ok, `cross-link href does not resolve: ${href}`).toBe(true);
     }
   });

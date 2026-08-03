@@ -55,6 +55,19 @@ const SIMPLE_COMPOUNDS = [
   'acarbose',
 ];
 
+/** Peptide deep-dives — distinctive names, low false-positive risk. Bridges the
+ * peptide library into the same prose interlink graph as compounds/hallmarks. */
+const PEPTIDE_NAMES: Record<string, string[]> = {
+  'bpc-157': ['BPC-157'],
+  'ghk-cu': ['GHK-Cu'],
+  epithalon: ['Epithalon', 'Epitalon'],
+  'thymosin-alpha-1': ['Thymosin Alpha-1', 'Thymosin α-1'],
+  'gh-secretagogues': ['Ipamorelin', 'CJC-1295'],
+  'mots-c': ['MOTS-c'],
+  'glp1-longevity': ['Semaglutide', 'Tirzepatide'],
+  humanin: ['Humanin'],
+};
+
 const HALLMARKS: Array<{ name: string; slug: string }> = [
   { name: 'Genomic Instability', slug: 'genomic-instability' },
   { name: 'Telomere Attrition', slug: 'telomere-attrition' },
@@ -82,6 +95,10 @@ export const crossLinks: CrossLink[] = [
   ...SIMPLE_COMPOUNDS.map((slug) => ({
     names: [titleCase(slug)],
     href: `/library/compounds/${slug}`,
+  })),
+  ...Object.entries(PEPTIDE_NAMES).map(([slug, names]) => ({
+    names,
+    href: `/peptides/${slug}`,
   })),
   ...HALLMARKS.map((h) => ({ names: [h.name], href: `/library/${h.slug}` })),
 ];
