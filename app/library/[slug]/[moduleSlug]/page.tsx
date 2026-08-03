@@ -13,6 +13,8 @@ import {
   type LibraryModuleCategory,
 } from '@/lib/library-modules';
 import { loadMdx } from '@/lib/mdx';
+import { countCitedPmids } from '@/lib/utils';
+import { focusFromTagline } from '@/components/library/ModuleGlancePanel';
 import {
   buildArticleSchema,
   buildBreadcrumbSchema,
@@ -77,7 +79,12 @@ export default async function LibraryModulePage({
     ? buildEngineStackUrl([engineCompound.id])
     : undefined;
 
-  // Cinematic overture for compound pages — real fields joined from lib/data.ts.
+  // Cinematic overture for compound pages — real fields joined from lib/data.ts
+  // when a dataset entry exists. The 28 MDX-only compounds get the same
+  // overture built from fields already reviewed elsewhere (tagline, summary,
+  // evidence tier, hallmark mapping, cited PMID count) — dose/timing/
+  // bioavailability are simply omitted rather than guessed, same principle
+  // as ModuleGlancePanel.
   const heroCompound =
     mod.category === 'compounds' && mod.compoundId
       ? compounds.find((c) => c.id === mod.compoundId)
@@ -98,7 +105,20 @@ export default async function LibraryModulePage({
           .map((hid) => hallmarkLibrary.find((h) => h.id === hid)?.title ?? hid)
           .filter(Boolean),
       }
-    : null;
+    : mod.category === 'compounds'
+      ? {
+          id: mod.slug,
+          name: mod.title,
+          pathway: focusFromTagline(mod.tagline),
+          mechanism: mod.summary,
+          evidence: mod.evidenceTier,
+          studyCount: countCitedPmids(mdx?.body),
+          synergyCount: mod.synergyCompoundIds?.length ?? 0,
+          hallmarks: mod.relatedHallmarkIds
+            .map((hid) => hallmarkLibrary.find((h) => h.id === hid)?.title ?? hid)
+            .filter(Boolean),
+        }
+      : null;
 
   const breadcrumb = buildBreadcrumbSchema([
     { name: 'Library', path: '/library' },

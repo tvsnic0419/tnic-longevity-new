@@ -22,3 +22,10 @@ export function formatReviewDate(isoDate: string | undefined): string | null {
   if (!monthName) return null;
   return `${monthName} ${Number(day)}, ${year}`;
 }
+
+/** Unique PMIDs cited in an MDX deep-dive body — a real, verifiable citation count. */
+export function countCitedPmids(mdxBody: string | null | undefined): number {
+  if (!mdxBody) return 0;
+  const matches = mdxBody.match(/\bPMID:?\s*(\d{7,8})\b/g) ?? [];
+  return new Set(matches.map((m) => m.replace(/\D/g, ''))).size;
+}

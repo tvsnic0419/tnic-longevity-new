@@ -24,7 +24,7 @@ const firstSentence = (text: string): string => {
 };
 
 /** The tagline reads "<focus> — evidence-graded deep dive"; take the focus. */
-const focusFromTagline = (tagline: string): string => {
+export const focusFromTagline = (tagline: string): string => {
   const [focus] = tagline.split(/\s+[—–-]\s+/);
   return (focus || tagline).trim();
 };

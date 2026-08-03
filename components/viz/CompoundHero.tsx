@@ -18,8 +18,9 @@ export type CompoundHeroData = {
   pathway: string;
   mechanism: string;
   evidence: string;
-  dose: string;
-  timing: string;
+  /** Omitted (not "—") for compounds without a physician-reviewed protocol. */
+  dose?: string;
+  timing?: string;
   bioavailability?: number;
   studyCount: number;
   synergyCount: number;
@@ -41,9 +42,9 @@ export function CompoundHero(data: CompoundHeroData) {
   const facts: Array<{ k: string; v: string }> = [
     { k: "Evidence", v: `Tier ${data.evidence}` },
     { k: "Studies", v: `${data.studyCount} cited` },
-    { k: "Dose", v: data.dose },
-    { k: "Timing", v: data.timing },
   ];
+  if (data.dose) facts.push({ k: "Dose", v: data.dose });
+  if (data.timing) facts.push({ k: "Timing", v: data.timing });
   if (typeof data.bioavailability === "number") {
     facts.push({ k: "Oral bioavail.", v: `${data.bioavailability}%` });
   }

@@ -15,6 +15,7 @@ import { MdxRenderer } from './MdxRenderer';
 import { CompoundBuyerGuidePanel } from './CompoundBuyerGuide';
 import { LifestylePillarPanel } from './LifestylePillarPanel';
 import { getBuyerGuideByModuleSlug } from '@/lib/buyer-guides';
+import { countCitedPmids } from '@/lib/utils';
 import type { LifestyleSlug } from '@/lib/lifestyle-pillars';
 import { ModuleContextStrip } from './ModuleContextStrip';
 import { CompoundGlancePanel } from './CompoundGlancePanel';
@@ -73,9 +74,7 @@ export function LibraryModuleDetail({
   // glance panel; surface the same shape from a live count of the PMIDs cited
   // in the deep-dive body so all 55 compound pages stay coherent.
   const mdxStudyCount =
-    module.category === 'compounds' && !relatedCompound && mdxBody
-      ? new Set(mdxBody.match(/\bPMID:?\s*(\d{7,8})\b/g)?.map((m) => m.replace(/\D/g, '')) ?? []).size
-      : 0;
+    module.category === 'compounds' && !relatedCompound ? countCitedPmids(mdxBody) : 0;
 
   useEffect(() => {
     recordModuleVisit(module);
