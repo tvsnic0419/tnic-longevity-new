@@ -359,7 +359,7 @@ const moduleSlugOverrides: Partial<Record<string, Partial<HubContext>>> = {
   berberine: {
     next: 'See the metformin head-to-head at Berberine vs Metformin, then verify dihydroberberine form (5x bioavailability) at Protocol Shop.',
   },
-  urolithina: {
+  'urolithin-a': {
     next: 'Compare against CoQ10\'s electron-transport-chain approach at Urolithin A vs CoQ10, then verify Mitopure-licensed form at Protocol Shop.',
   },
   fisetin: {

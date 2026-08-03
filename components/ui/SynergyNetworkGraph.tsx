@@ -50,7 +50,7 @@ const NODES: CompoundNode[] = [
   { id: 'coq10',        name: 'CoQ10',          short: 'CoQ10',  pathway: 'nad',      tier: 'B', href: '/library/compounds/coq10',         x: 523, y: 145, labelAnchor: 'start',  labelDx:  14 },
   { id: 'cakg',         name: 'Ca-AKG',         short: 'AKG',    pathway: 'nad',      tier: 'A', href: '/library/compounds/cakg',          x: 550, y: 245, labelAnchor: 'start',  labelDx:  14 },
   { id: 'berberine',    name: 'Berberine',       short: 'BBR',    pathway: 'ampk',     tier: 'A', href: '/library/compounds/berberine',     x: 523, y: 345, labelAnchor: 'start',  labelDx:  14 },
-  { id: 'urolithina',   name: 'Urolithin A',     short: 'UA',     pathway: 'nad',      tier: 'A', href: '/library/compounds/urolithina',    x: 450, y: 418, labelAnchor: 'start',  labelDx:  14 },
+  { id: 'urolithin-a',   name: 'Urolithin A',     short: 'UA',     pathway: 'nad',      tier: 'A', href: '/library/compounds/urolithin-a',    x: 450, y: 418, labelAnchor: 'start',  labelDx:  14 },
   { id: 'fisetin',      name: 'Fisetin',         short: 'FIS',    pathway: 'senolytic',tier: 'B', href: '/library/compounds/fisetin',       x: 350, y: 445, labelAnchor: 'middle', labelDy:  20 },
   { id: 'spermidine',   name: 'Spermidine',      short: 'SPD',    pathway: 'ampk',     tier: 'B', href: '/library/compounds/spermidine',    x: 250, y: 418, labelAnchor: 'end',    labelDx: -14 },
   { id: 'pterostilbene',name: 'Pterostilbene',   short: 'PTS',    pathway: 'sirtuin',  tier: 'B', href: '/library/compounds/pterostilbene', x: 177, y: 345, labelAnchor: 'end',    labelDx: -14 },
@@ -74,7 +74,7 @@ const EDGES: SynergyEdge[] = [
   { a: 'nmn',         b: 'cakg',          strength: 'strong',   note: 'TCA cycle fuel (AKG) + NAD⁺ repletion — epigenetic reprogramming and mTOR suppression stack' },
   { a: 'nmn',         b: 'rala',          strength: 'strong',   note: 'R-ALA recycles NAD⁺ at Complex I — extends ETC electron transport efficiency upstream' },
   { a: 'nmn',         b: 'coq10',         strength: 'strong',   note: 'NAD⁺ feeds Complex I; CoQ10 shuttles electrons to Complex III — sequential ETC co-support' },
-  { a: 'nmn',         b: 'urolithina',    strength: 'strong',   note: 'Urolithin A clears damaged mitochondria via mitophagy; NMN fuels the healthy survivors' },
+  { a: 'nmn',         b: 'urolithin-a',    strength: 'strong',   note: 'Urolithin A clears damaged mitochondria via mitophagy; NMN fuels the healthy survivors' },
   { a: 'nmn',         b: 'glynac',        strength: 'moderate', note: 'NAD⁺ + glutathione dual repletion — complementary redox defense at separate nodes' },
   { a: 'nmn',         b: 'taurine',       strength: 'moderate', note: 'Taurine membrane stabilization + NAD⁺ — additive mitochondrial membrane potential support' },
   { a: 'nmn',         b: 'spermidine',    strength: 'moderate', note: 'Spermidine autophagy (EP300 inhibition) + NMN SIRT1-mediated autophagic initiation — dual flux' },
@@ -94,7 +94,7 @@ const EDGES: SynergyEdge[] = [
   { a: 'sulforaphane',b: 'rala',          strength: 'moderate', note: 'Dual NRF2 activators via KEAP1 modification and redox signaling — additive ARE induction' },
   { a: 'sulforaphane',b: 'omega3',        strength: 'moderate', note: 'NRF2 upregulates resolvin-producing enzymes; omega-3 provides the SPM substrate — synergistic resolution' },
   { a: 'coq10',       b: 'rala',          strength: 'strong',   note: 'R-ALA regenerates ubiquinol from ubiquinone in vivo — extends active CoQ10 pool half-life' },
-  { a: 'spermidine',  b: 'urolithina',    strength: 'moderate', note: 'Dual cellular autophagy — EP300 pathway (spermidine) + PINK1/Parkin mitophagy (UA) at separate targets' },
+  { a: 'spermidine',  b: 'urolithin-a',    strength: 'moderate', note: 'Dual cellular autophagy — EP300 pathway (spermidine) + PINK1/Parkin mitophagy (UA) at separate targets' },
 ];
 
 // ── Helpers ───────────────────────────────────────────────────────────────────

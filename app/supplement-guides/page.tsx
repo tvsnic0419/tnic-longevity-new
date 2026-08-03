@@ -163,7 +163,7 @@ const compoundDeepDives = [
   { href: '/library/compounds/berberine', label: 'Berberine' },
   { href: '/library/compounds/spermidine', label: 'Spermidine' },
   { href: '/library/compounds/cakg', label: 'Ca-AKG (Alpha-Ketoglutarate)' },
-  { href: '/library/compounds/urolithina', label: 'Urolithin A' },
+  { href: '/library/compounds/urolithin-a', label: 'Urolithin A' },
   { href: '/library/compounds/rapamycin', label: 'Rapamycin' },
   { href: '/library/compounds/pterostilbene', label: 'Pterostilbene' },
 ];

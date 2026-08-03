@@ -353,7 +353,7 @@ export const libraryModules: LibraryModule[] = [
     mdxSlug: 'berberine',
   },
   {
-    slug: 'urolithina',
+    slug: 'urolithin-a',
     category: 'compounds',
     title: 'Urolithin A (Mitopure)',
     tagline: 'Mitophagy activator — Phase 2 muscle trial, Tier A',
@@ -361,7 +361,7 @@ export const libraryModules: LibraryModule[] = [
       'Gut-derived metabolite from ellagitannin polyphenols that activates mitophagy — the selective clearance of damaged mitochondria. Phase 2 RCT (2022, Cell Reports Medicine) confirmed improved muscle strength and reduced fatigue in adults ≥65 at 1000 mg/day. Only commercially available mitophagy-specific compound with human trial data.',
     evidenceTier: 'A',
     relatedHallmarkIds: ['mito', 'autophagy', 'senescence'],
-    compoundId: 'urolithina',
+    compoundId: 'urolithin-a',
     outline: [
       'Overview & mitophagy mechanism',
       'Phase 2 RCT: muscle strength + fatigue outcomes',
@@ -371,7 +371,7 @@ export const libraryModules: LibraryModule[] = [
       'Safety & contraindications',
       'Personal results template',
     ],
-    mdxSlug: 'urolithina',
+    mdxSlug: 'urolithin-a',
   },
   {
     slug: 'fisetin',

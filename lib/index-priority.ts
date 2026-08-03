@@ -28,7 +28,7 @@ export const PRIORITY_INDEX_PATHS = [
   '/library/compounds/berberine',
   '/library/compounds/spermidine',
   '/library/compounds/cakg',
-  '/library/compounds/urolithina',
+  '/library/compounds/urolithin-a',
   '/library/compounds/rapamycin',
   '/library/compounds/pterostilbene',
   '/library/mitochondrial-dysfunction',

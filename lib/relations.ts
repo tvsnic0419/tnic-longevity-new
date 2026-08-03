@@ -369,7 +369,7 @@ export const pathwayGroups: PathwayGroup[] = [
     tagline: 'Microbiome integrity as the upstream controller of systemic inflammation',
     accent: 'amber',
     hallmarkIds: ['dysbiosis', 'inflammation', 'communication', 'nutrient'],
-    compoundIds: ['urolithina', 'omega3'],
+    compoundIds: ['urolithin-a', 'omega3'],
     keyMolecules: ['LPS', 'SCFA', 'Butyrate', 'TLR4', 'Treg cells'],
     synergy: 'Restoring microbial diversity lowers LPS translocation while urolithin A (gut-converted) directly triggers mitophagy in intestinal and muscle cells — a gut-to-tissue signaling cascade.',
   },

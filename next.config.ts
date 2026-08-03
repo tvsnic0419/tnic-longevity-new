@@ -55,6 +55,24 @@ const nextConfig: NextConfig = {
         : []),
     ];
   },
+
+  async redirects() {
+    return [
+      // The Urolithin A deep-dive shipped under a misspelled slug
+      // (`urolithina`). Preserve any external links / index entries by
+      // permanently redirecting the old paths to the corrected slug.
+      {
+        source: '/library/compounds/urolithina',
+        destination: '/library/compounds/urolithin-a',
+        permanent: true,
+      },
+      {
+        source: '/library/compare/urolithina-vs-coq10',
+        destination: '/library/compare/urolithin-a-vs-coq10',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

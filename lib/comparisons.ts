@@ -575,7 +575,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
     keywords: ['berberine', 'metformin', 'ampk', 'glucose', 'metabolic', 'diabetes', 'longevity'],
   },
   {
-    slug: 'urolithina-vs-coq10',
+    slug: 'urolithin-a-vs-coq10',
     title: 'Urolithin A vs CoQ10',
     subtitle: 'Both target mitochondrial aging — but at completely different points in the process',
     labelA: 'Urolithin A (Mitopure)',
@@ -671,7 +671,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
       'Budget-constrained — CoQ10 delivers Tier B mitochondrial support at substantially lower cost than Mitopure',
     ],
     relatedHrefs: [
-      { label: 'Urolithin A in Library', href: '/library/compounds/urolithina' },
+      { label: 'Urolithin A in Library', href: '/library/compounds/urolithin-a' },
       { label: 'CoQ10 in Library', href: '/library/compounds/coq10' },
       { label: 'Mitochondrial Dysfunction hallmark', href: '/library/mitochondrial-dysfunction' },
       { label: 'NMN vs Spermidine', href: '/library/compare/nmn-vs-spermidine' },
@@ -1216,7 +1216,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
     ],
     relatedHrefs: [
       { label: 'CoQ10 in Library', href: '/library/compounds/coq10' },
-      { label: 'Urolithin A vs CoQ10', href: '/library/compare/urolithina-vs-coq10' },
+      { label: 'Urolithin A vs CoQ10', href: '/library/compare/urolithin-a-vs-coq10' },
       { label: 'Mitochondrial Dysfunction hallmark', href: '/library/mitochondrial-dysfunction' },
       { label: 'Elite 8 LQ Ranking', href: '/elite-8' },
     ],

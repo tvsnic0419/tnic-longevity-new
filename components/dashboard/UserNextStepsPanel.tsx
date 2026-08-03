@@ -28,7 +28,7 @@ const COMPOUND_MODULE: Record<string, string> = {
   spermidine: '/library/compounds/spermidine',
   pterostilbene: '/library/compounds/pterostilbene',
   berberine: '/library/compounds/berberine',
-  urolithina: '/library/compounds/urolithina',
+  'urolithin-a': '/library/compounds/urolithin-a',
   fisetin: '/library/compounds/fisetin',
   coq10: '/library/compounds/coq10',
   omega3: '/library/compounds/omega3',
