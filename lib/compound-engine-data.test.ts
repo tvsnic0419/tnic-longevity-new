@@ -86,7 +86,7 @@ describe('analyzeStack', () => {
 
   it('flags NAD+ precursor redundancy (NMN + NR)', () => {
     const a = analyzeStack([stage('nmn'), stage('nr')], DEFAULT_WEIGHTS);
-    expect(a.redundancies.some((r) => r.label === 'NAD⁺ precursors')).toBe(true);
+    expect(a.redundancies.some((r) => r.label === 'NAD+ precursors')).toBe(true);
     const withoutRed = analyzeStack([stage('nmn'), stage('tmg')], DEFAULT_WEIGHTS);
     expect(a.synergyScore!).toBeLessThan(withoutRed.synergyScore! + 100); // redundancy penalizes
   });
@@ -106,7 +106,7 @@ describe('analyzeStack', () => {
 
   it('reports convergent pathways hit by 2+ compounds', () => {
     const a = analyzeStack([stage('nmn'), stage('nr')], DEFAULT_WEIGHTS);
-    // Both feed NAD⁺ and SIRT1.
+    // Both feed NAD+ and SIRT1.
     expect(a.convergent.some((c) => c.p === 'nad')).toBe(true);
   });
 });

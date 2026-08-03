@@ -141,8 +141,10 @@ export function Footer() {
           <div>
             <p className="text-label mb-4">Important Notice</p>
             <p className="text-body-sm mb-3">
-              TNiC is educational — not a medical provider. Biological age
-              and biomarker projections are modeled estimates, not lab diagnostics.
+              Nothing on this site constitutes medical advice, diagnosis, or treatment. TNiC is
+              educational — not a medical provider. Biological age and biomarker projections are
+              modeled estimates, not lab diagnostics. Always consult a qualified physician before
+              starting, stopping, or modifying any supplement or health protocol.
             </p>
             <p className="text-caption mb-3">
               TNiC does not sell supplements. Verified product links may carry an
@@ -150,7 +152,6 @@ export function Footer() {
               which products are listed or their evidence tier.
             </p>
             <p className="text-caption">
-              Consult a physician before starting any protocol.{' '}
               <Link href="/privacy" className="text-accent-cyan hover:underline focus-ring rounded">
                 Privacy
               </Link>{' '}·{' '}

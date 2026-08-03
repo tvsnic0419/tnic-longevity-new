@@ -5,7 +5,7 @@ import { platformStats } from './platform-stats';
 export const heroValueProps = [
   'Every compound rated Tier A, B, or C — from human trials, not marketing claims',
   '12 Hallmarks of Aging library — mechanism-mapped, PMID-cited, updated as trials publish',
-  'Six local-first tools — biomarker forecasts, defense scan, stack simulator. No accounts, no paywall.',
+  'Seven local-first tools — biomarker forecasts, defense scan, stack simulator. No accounts, no paywall.',
 ];
 
 export const quizSteps = [

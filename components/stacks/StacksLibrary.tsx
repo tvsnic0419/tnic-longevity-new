@@ -63,7 +63,7 @@ export function StacksLibrary() {
         eyebrow="Stacks & Protocols"
         title="Stack Architect"
         description="Pre-built evidence-graded protocols with dosing, monitoring, and cost breakdowns. Build custom stacks with real-time synergy and contraindication analysis."
-        meta={`${eliteStacks.length} elite stacks · 6 evidence-graded compounds · Educational only`}
+        meta={`${eliteStacks.length} elite stacks · ${Object.keys(stackPresets).length} stack presets · Educational only`}
         theme="violet"
         context={getHubContext('stacks')}
       />

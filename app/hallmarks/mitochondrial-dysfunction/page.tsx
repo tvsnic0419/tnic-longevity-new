@@ -6,6 +6,7 @@ import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Zap } from '
 import { getHallmarkBySlug } from '@/lib/hallmarks-library';
 import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 import { HallmarkHeroVisual } from '@/components/hallmarks/HallmarkHeroVisual';
+import { EvidenceTagLegend } from '@/components/trust/EvidenceTag';
 
 export const metadata: Metadata = {
   title: 'Mitochondrial Dysfunction | Hallmarks of Aging | TNiC',
@@ -164,9 +165,8 @@ export default function MitochondrialDysfunctionPage() {
               <p className="text-xs text-emerald-400 uppercase tracking-widest font-medium">Evidence-Graded Interventions</p>
             </div>
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-2">Mitochondrial interventions with human evidence</h2>
-            <p className="text-muted-foreground mb-8">
-              Tier A = multiple human RCTs. Tier B = at least one human trial + mechanistic data. Listed in order of evidence strength.
-            </p>
+            <EvidenceTagLegend className="mb-2" />
+            <p className="text-muted-foreground mb-8">Listed in order of evidence strength.</p>
             <InterventionCards interventions={hallmark.interventions} />
           </div>
         </section>

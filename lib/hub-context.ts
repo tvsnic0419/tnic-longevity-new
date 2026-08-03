@@ -1,6 +1,7 @@
 import type { ThemeAccent } from './design-system';
 import type { ToolId } from './registry';
 import type { LibraryModule, LibraryModuleCategory } from './library-modules';
+import { libraryModules } from './library-modules';
 import type { HallmarkLibraryEntry, Peptide } from './types';
 import type { EvidenceComparison } from './comparisons';
 import { consumerFAQ } from './data';
@@ -69,7 +70,7 @@ export const hubContexts: Record<
   },
   tools: {
     theme: 'violet',
-    what: 'Six rule-based calculators plus Elite 8 Longevity Quotient ranking — simulator, network graph, protocol engine, biomarker forecasts, impact ranking, and defense scan.',
+    what: 'Seven rule-based calculators plus Elite 8 Longevity Quotient ranking — simulator, network graph, protocol engine, biomarker forecasts, impact ranking, defense scan, and inventory forecast.',
     why: 'Library knowledge stays abstract until you model it. These tools turn evidence into dose schedules, composite rankings, and projected outcomes — locally, no AI black box.',
     next: 'Run the Stack Simulator on your current compounds, or open Elite 8 LQ to compare interventions head-to-head.',
   },
@@ -93,7 +94,7 @@ export const hubContexts: Record<
   },
   learn: {
     theme: 'cyan',
-    what: 'Consumer education hub — getting started path, glossary, outcome timelines, red flags, and 15 curated FAQ answers.',
+    what: `Consumer education hub — getting started path, glossary, outcome timelines, red flags, and ${consumerFAQ.length} curated FAQ answers.`,
     why: 'Intelligent consumers ask hard questions first. Learn the science and safety rails before building a stack.',
     next: 'Complete the Start Here checklist, read Red Flags, then take The NICO Starter Questionnaire for a personalized stack handoff.',
   },
@@ -117,7 +118,7 @@ export const hubContexts: Record<
   },
   libraryModules: {
     theme: 'emerald',
-    what: '20 evidence-graded MDX modules — compounds, synergies, lifestyle pillars, and testing guides with personal tracking templates.',
+    what: `${libraryModules.length} evidence-graded MDX modules — compounds, synergies, lifestyle pillars, and testing guides with personal tracking templates.`,
     why: 'Shallow blog posts cannot support protocol decisions. Every module includes dosing, monitoring, decision trees, and PMID citations.',
     next: 'Search by compound or hallmark, read the decision tree, then log relevant labs and add compounds to your stack.',
   },

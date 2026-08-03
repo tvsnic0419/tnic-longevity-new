@@ -465,7 +465,7 @@ const CURVE_GOAL: Array<[number, number]> = [[30,96],[40,94],[50,90],[60,85],[70
 const CURVE_ELITE: Array<[number, number]> = [[30,98],[40,97],[50,95],[60,92],[70,86],[80,74],[90,52],[95,22]];
 
 const MILESTONES: Array<{ at: number; label: string; c: string }> = [
-  { at: 40, label: "NAD⁺ decline steepens", c: "#5fe3e0" },
+  { at: 40, label: "NAD+ decline steepens", c: "#5fe3e0" },
   { at: 50, label: "Senescent-cell window", c: "#b98cf0" },
   { at: 65, label: "Sarcopenia inflection", c: "#eaa24a" },
   { at: 80, label: "Morbidity horizon", c: "#f08a7a" },

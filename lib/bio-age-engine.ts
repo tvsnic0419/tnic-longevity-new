@@ -390,7 +390,7 @@ function domainKey(key: string): string {
  * teach, not just assert. Evidence strength is flagged where a human RCT exists.
  */
 const compoundMechanism: Record<string, string> = {
-  NMN: 'Bypasses the age-impaired NAMPT salvage step to rebuild NAD⁺ for sirtuins (SIRT1/3) and PARP-mediated DNA repair. Human RCTs confirm NAD⁺ elevation.',
+  NMN: 'Bypasses the age-impaired NAMPT salvage step to rebuild NAD+ for sirtuins (SIRT1/3) and PARP-mediated DNA repair. Human RCTs confirm NAD+ elevation.',
   GlyNAC: 'Glycine + NAC restore glutathione — the master antioxidant — correcting age-related redox and mitochondrial decline. Tier A human RCTs (Baylor).',
   Berberine: 'Activates AMPK, improving insulin-mediated glucose uptake and mitochondrial efficiency — mimics calorie-restriction signaling.',
   'R-Alpha': 'Mitochondrial cofactor for pyruvate and α-ketoglutarate dehydrogenase; regenerates vitamins C/E and recycles glutathione.',

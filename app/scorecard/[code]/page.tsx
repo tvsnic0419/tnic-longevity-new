@@ -8,6 +8,7 @@ import {
   gradeLabels,
   ageDeltaHeadline,
 } from '@/lib/scorecard';
+import { COMPOUND_COUNT } from '@/lib/library-modules';
 
 interface Props {
   params: Promise<{ code: string }>;
@@ -82,7 +83,7 @@ export default async function ScorecardPage({ params }: Props) {
           <h1 className="heading-section mb-3">What&rsquo;s your longevity grade?</h1>
           <p className="text-body-sm max-w-md mx-auto mb-6">
             This scorecard was built with TNiC — free, evidence-graded longevity intelligence.
-            14 compounds, 12 hallmarks of aging, every claim PubMed-cited.
+            {COMPOUND_COUNT} compounds, 12 hallmarks of aging, every claim PubMed-cited.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/quiz" className="focus-ring btn-gradient rounded-full text-sm !px-6">

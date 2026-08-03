@@ -37,8 +37,8 @@ export const navLinks = [
 export const communityPulse = [
   { metric: String(COMPOUND_COUNT), label: 'Evidence-Graded Compounds' },
   { metric: '12', label: 'Hallmarks Explained' },
-  { metric: '33', label: 'FAQ Answers' },
-  { metric: '20', label: 'Glossary Terms' },
+  { metric: '40', label: 'FAQ Answers' },
+  { metric: '26', label: 'Glossary Terms' },
   { metric: '28', label: 'Clinical Studies' },
 ];
 
@@ -273,7 +273,7 @@ export const compounds: Compound[] = [
   },
   {
     id: 'coq10',
-    name: 'CoQ10 (Ubiquinol)',
+    name: 'CoQ10 (Ubiquinone)',
     brand: 'Kaneka Ubiquinol / QH-absorb',
     pathway: 'Mitochondrial Electron Transport Chain',
     mechanism: 'Lipophilic electron carrier shuttling between Complex I/II and Complex III in the mitochondrial inner membrane. Essential for ~95% of cellular ATP production. Simultaneously functions as the only fat-soluble endogenous antioxidant synthesized in cells, quenching lipid peroxides that escape the aqueous glutathione system. Ubiquinol (reduced QH₂ form) is the physiologically active antioxidant form; ubiquinone (oxidized Q form) must be converted to ubiquinol before use.',
@@ -1780,7 +1780,7 @@ export const consumerFAQ = [
     id: 'faq32',
     category: 'science' as const,
     question: 'How does The NICO Starter Questionnaire generate a personalized stack preset?',
-    answer: 'The NICO Starter Questionnaire maps three inputs — primary goal (learn the science, cellular defense, mitochondrial energy, full optimization, longevity/healthspan, or cardio-metabolic health), age range, and supplement experience — to one of six mechanistic presets: Starter, NRF2 Defense, Mito-NAD+, Full Hybrid, Longevity Pro (senolytic focus), or Cardio-Metabolic (AMPK/lipid focus). Each preset is a curated subset drawn from 14 evidence-graded compounds optimized for synergy coverage across the relevant hallmarks. No black-box algorithm — every mapping is transparent in the methodology section.',
+    answer: 'The NICO Starter Questionnaire maps three inputs — primary goal (learn the science, cellular defense, mitochondrial energy, full optimization, longevity/healthspan, or cardio-metabolic health), age range, and supplement experience — to one of seven mechanistic presets: Starter, NRF2 Defense, Mito-NAD+, Full Hybrid, Longevity Pro (senolytic focus), Cardio-Metabolic (AMPK/lipid focus), or Full-Spectrum 14. Each preset is a curated subset drawn from up to 14 evidence-graded compounds optimized for synergy coverage across the relevant hallmarks. No black-box algorithm — every mapping is transparent in the methodology section.',
   },
   {
     id: 'faq33',

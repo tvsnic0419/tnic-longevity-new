@@ -16,7 +16,7 @@ import type { Compound } from './types';
  * excluded — they have no matching graded compound in lib/data.ts.
  *
  * Ordering rule: the four Tier-A interventions the owner asked to feature lead —
- * GlyNAC, NAD⁺ restoration (the owner's "RESTORN", mapped to NMN, whose pathway
+ * GlyNAC, NAD+ restoration (the owner's "RESTORN", mapped to NMN, whose pathway
  * in lib/data.ts is literally "NAD+ Restoration"), Ca-AKG, and NRF2/sulforaphane
  * (Nrf2 Renew) — followed by the strongest Tier-B picks. `mechanismLine` is a
  * neutral, mechanism-level descriptor drawn
@@ -31,7 +31,7 @@ interface EliteSeed {
 
 const ELITE_SEEDS: EliteSeed[] = [
   { compoundId: 'glynac', mechanismLine: 'Rebuilds the glutathione antioxidant system' },
-  { compoundId: 'nmn', mechanismLine: 'Restores NAD⁺ that powers sirtuins and DNA repair' },
+  { compoundId: 'nmn', mechanismLine: 'Restores NAD+ that powers sirtuins and DNA repair' },
   { compoundId: 'cakg', mechanismLine: 'Feeds the TCA cycle and α-ketoglutarate signalling' },
   { compoundId: 'sulforaphane', mechanismLine: 'Switches on the NRF2 cellular-defense response' },
   { compoundId: 'resveratrol', mechanismLine: 'Activates SIRT1, a caloric-restriction mimic' },

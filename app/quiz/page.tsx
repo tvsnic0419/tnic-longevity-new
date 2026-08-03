@@ -17,7 +17,7 @@ function buildQuizSchemas() {
     operatingSystem: 'Web',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     description:
-      'The NICO Starter Questionnaire matches your longevity goal, age range, and experience level to a personalized evidence-graded supplement stack preset — NRF2 Defense, NAD+ Restoration, Mitochondrial Health, Senolytic Protocol, Foundation, or Elite.',
+      'The NICO Starter Questionnaire matches your longevity goal, age range, and experience level to one of seven evidence-graded stack presets — Starter, NRF2 Defense, Mitochondrial, Full Hybrid, Longevity Pro, Cardio-Metabolic, or Full-Spectrum 14.',
     featureList: [
       'Mechanism-matched stack presets',
       'PMID-cited insight for your age group',
@@ -33,7 +33,7 @@ function buildQuizSchemas() {
       {
         '@type': 'Question',
         name: 'What stack presets does The NICO Starter Questionnaire recommend?',
-        acceptedAnswer: { '@type': 'Answer', text: 'The NICO Starter Questionnaire maps to one of six presets: NRF2 Defense Triad, NAD+ Mitochondrial Stack, Mitochondrial Health, Senolytic Protocol, Foundation Starter, or Full Hybrid. Each preset is built from evidence-graded Tier A/B compounds.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'The NICO Starter Questionnaire maps to one of seven presets: Starter, NRF2 Defense, Mitochondrial, Full Hybrid, Longevity Pro, Cardio-Metabolic, or Full-Spectrum 14. Each preset is built from evidence-graded Tier A/B compounds.' },
       },
       {
         '@type': 'Question',

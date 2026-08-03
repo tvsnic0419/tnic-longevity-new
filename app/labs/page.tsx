@@ -27,7 +27,7 @@ function buildLabsSchemas() {
       'Longevity-optimized reference ranges',
       'Trend charts for key biomarkers',
       'PDF lab import (structured extraction)',
-      'No account — data never leaves your device',
+      'No account — logged and CSV-imported labs stay on your device by default',
     ],
     isAccessibleForFree: true,
   };
@@ -45,7 +45,7 @@ export default function LabsPage() {
         hue="rose"
         kicker="Lab Hub"
         title={<>Your biology, <em>measured</em>.</>}
-        lead="A local-first biomarker tracker with longevity-optimized reference ranges — log your labs, watch the trends, and map each marker to the interventions that move it. Your data never leaves your device."
+        lead="A local-first biomarker tracker with longevity-optimized reference ranges — log your labs, watch the trends, and map each marker to the interventions that move it. Manually logged and CSV-imported labs stay on your device by default; connecting an optional lab partner is the one opt-in exception."
         stats={[
           { value: String(biomarkers.length), label: 'Tracked biomarkers' },
           { value: String(COMPOUND_COUNT), label: 'Graded compounds' },

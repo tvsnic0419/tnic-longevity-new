@@ -96,7 +96,7 @@ export const HALLMARK_MAP: Record<HallmarkId, Hallmark> = Object.fromEntries(
 
 /* ── Mechanistic pathways ────────────────────────────────────────────────── */
 export const PATHWAY_LABELS = {
-  nad: 'NAD⁺', sirt1: 'SIRT1', ampk: 'AMPK', mtor: 'mTOR', nrf2: 'NRF2',
+  nad: 'NAD+', sirt1: 'SIRT1', ampk: 'AMPK', mtor: 'mTOR', nrf2: 'NRF2',
   nfkb: 'NF-κB', pgc1a: 'PGC-1α', etc: 'ETC', autophagy: 'Autophagy',
   mitophagy: 'Mitophagy', senolytic: 'Senolytic', glutathione: 'Glutathione',
   methylation: 'Methylation', cd38: 'CD38', akg: 'α-KG / TET', lipid: 'Membrane lipids',
@@ -130,9 +130,9 @@ export interface Compound {
 
 /* ── Curated mechanistic library ─────────────────────────────────────────── */
 const RAW_COMPOUND_DB: Omit<Compound, 'libraryHref'>[] = [
-  { id: 'nmn', name: 'NMN', full: 'Nicotinamide Mononucleotide', aliases: ['β-nmn', 'beta nmn'], cls: 'NAD⁺ precursor', tier: 'B', rct: true, studies: 350, effect: 60, bioavail: 62, safety: 88, pathways: ['nad', 'sirt1', 'pgc1a'], hallmarks: ['nutrient', 'mito', 'genomic', 'epigenetic'], dose: '250–1000 mg', note: 'Raises NAD⁺; sirtuin fuel. Oral uptake mechanism debated. (Note: US regulatory status contested.)', flags: ['High methylation demand — pair a methyl donor'] },
-  { id: 'nr', name: 'NR', full: 'Nicotinamide Riboside', aliases: ['niagen'], cls: 'NAD⁺ precursor', tier: 'B', rct: true, studies: 300, effect: 55, bioavail: 70, safety: 90, pathways: ['nad', 'sirt1'], hallmarks: ['nutrient', 'mito', 'genomic'], dose: '250–500 mg', note: 'Robustly raises NAD⁺ in humans; clinical outcomes modest so far.', flags: ['Consumes methyl groups'] },
-  { id: 'tmg', name: 'TMG', full: 'Betaine (Trimethylglycine)', aliases: ['betaine', 'trimethylglycine'], cls: 'Methyl donor', tier: 'B', rct: true, studies: 500, effect: 58, bioavail: 82, safety: 90, pathways: ['methylation'], hallmarks: ['epigenetic'], dose: '500–1000 mg', note: 'Homocysteine remethylation; buffers the methyl cost of NAD⁺ precursors.', flags: [] },
+  { id: 'nmn', name: 'NMN', full: 'Nicotinamide Mononucleotide', aliases: ['β-nmn', 'beta nmn'], cls: 'NAD+ precursor', tier: 'B', rct: true, studies: 350, effect: 60, bioavail: 62, safety: 88, pathways: ['nad', 'sirt1', 'pgc1a'], hallmarks: ['nutrient', 'mito', 'genomic', 'epigenetic'], dose: '250–1000 mg', note: 'Raises NAD+; sirtuin fuel. Oral uptake mechanism debated. (Note: US regulatory status contested.)', flags: ['High methylation demand — pair a methyl donor'] },
+  { id: 'nr', name: 'NR', full: 'Nicotinamide Riboside', aliases: ['niagen'], cls: 'NAD+ precursor', tier: 'B', rct: true, studies: 300, effect: 55, bioavail: 70, safety: 90, pathways: ['nad', 'sirt1'], hallmarks: ['nutrient', 'mito', 'genomic'], dose: '250–500 mg', note: 'Robustly raises NAD+ in humans; clinical outcomes modest so far.', flags: ['Consumes methyl groups'] },
+  { id: 'tmg', name: 'TMG', full: 'Betaine (Trimethylglycine)', aliases: ['betaine', 'trimethylglycine'], cls: 'Methyl donor', tier: 'B', rct: true, studies: 500, effect: 58, bioavail: 82, safety: 90, pathways: ['methylation'], hallmarks: ['epigenetic'], dose: '500–1000 mg', note: 'Homocysteine remethylation; buffers the methyl cost of NAD+ precursors.', flags: [] },
   { id: 'glycine', name: 'Glycine', full: 'Glycine', aliases: [], cls: 'Amino acid', tier: 'B', rct: true, studies: 600, effect: 55, bioavail: 88, safety: 92, pathways: ['glutathione'], hallmarks: ['inflammation', 'proteostasis'], dose: '3–10 g', note: 'Glutathione substrate; supports sleep and metabolic markers.', flags: [] },
   { id: 'nac', name: 'NAC', full: 'N-Acetylcysteine', aliases: ['n acetylcysteine'], cls: 'Antioxidant', tier: 'B', rct: true, studies: 1200, effect: 62, bioavail: 60, safety: 85, pathways: ['glutathione', 'nrf2'], hallmarks: ['inflammation', 'proteostasis', 'mito'], dose: '600–1800 mg', note: 'Cysteine donor for glutathione synthesis.', flags: ['High-dose antioxidants may blunt exercise adaptation'] },
   { id: 'glynac', name: 'GlyNAC', full: 'Glycine + NAC', aliases: ['gly nac', 'glycine nac'], cls: 'Combination', tier: 'B', rct: true, studies: 45, effect: 66, bioavail: 70, safety: 88, pathways: ['glutathione', 'nrf2'], hallmarks: ['mito', 'inflammation', 'genomic', 'proteostasis'], dose: 'per components', note: 'Combined glutathione restoration; promising small human trials.', flags: [] },
@@ -145,7 +145,7 @@ const RAW_COMPOUND_DB: Omit<Compound, 'libraryHref'>[] = [
   { id: 'resveratrol', name: 'Resveratrol', full: 'Resveratrol', aliases: [], cls: 'Stilbene', tier: 'C', rct: true, studies: 9000, effect: 42, bioavail: 30, safety: 82, pathways: ['sirt1', 'ampk'], hallmarks: ['nutrient', 'inflammation', 'epigenetic'], dose: '150–500 mg', note: 'SIRT1 activation debated; poor bioavailability; mixed human outcomes.', flags: ['Low bioavailability — pair fat/piperine; evidence mixed'] },
   { id: 'pterostilbene', name: 'Pterostilbene', full: 'Pterostilbene', aliases: [], cls: 'Stilbene', tier: 'C', rct: true, studies: 300, effect: 45, bioavail: 70, safety: 80, pathways: ['sirt1'], hallmarks: ['nutrient', 'inflammation'], dose: '50–125 mg', note: 'Methylated resveratrol analog with much better absorption.', flags: ['May raise LDL at higher doses'] },
   { id: 'fisetin', name: 'Fisetin', full: 'Fisetin', aliases: [], cls: 'Senolytic flavonoid', tier: 'C', rct: true, studies: 400, effect: 48, bioavail: 45, safety: 82, pathways: ['senolytic', 'nfkb'], hallmarks: ['senescence', 'inflammation'], dose: '100–1500 mg (pulsed)', note: 'Senolytic in animals; human trials underway.', flags: ['Human senolytic efficacy unproven'] },
-  { id: 'quercetin', name: 'Quercetin', full: 'Quercetin', aliases: [], cls: 'Flavonoid', tier: 'B', rct: true, studies: 2000, effect: 48, bioavail: 40, safety: 84, pathways: ['senolytic', 'nfkb', 'cd38'], hallmarks: ['senescence', 'inflammation'], dose: '250–1000 mg', note: 'Senolytic; CD38 inhibition may spare NAD⁺; phytosome improves uptake.', flags: ['Low bioavailability unless phytosome'] },
+  { id: 'quercetin', name: 'Quercetin', full: 'Quercetin', aliases: [], cls: 'Flavonoid', tier: 'B', rct: true, studies: 2000, effect: 48, bioavail: 40, safety: 84, pathways: ['senolytic', 'nfkb', 'cd38'], hallmarks: ['senescence', 'inflammation'], dose: '250–1000 mg', note: 'Senolytic; CD38 inhibition may spare NAD+; phytosome improves uptake.', flags: ['Low bioavailability unless phytosome'] },
   { id: 'sulforaphane', name: 'Sulforaphane', full: 'Sulforaphane (glucoraphanin)', aliases: ['glucoraphanin', 'broccoli'], cls: 'Isothiocyanate', tier: 'B', rct: true, studies: 800, effect: 55, bioavail: 55, safety: 82, pathways: ['nrf2'], hallmarks: ['inflammation', 'genomic', 'proteostasis', 'epigenetic'], dose: '10–40 mg', note: 'Potent NRF2 activator and dietary HDAC inhibitor (epigenetic); myrosinase-dependent.', flags: ['Stability/conversion variable — spec stabilized form'] },
   { id: 'spermidine', name: 'Spermidine', full: 'Spermidine', aliases: [], cls: 'Polyamine', tier: 'B', rct: true, studies: 600, effect: 55, bioavail: 65, safety: 86, pathways: ['autophagy'], hallmarks: ['autophagy', 'proteostasis', 'intercellular', 'epigenetic'], dose: '1–6 mg', note: 'Induces autophagy; modulates histone acetylation; cohort longevity link.', flags: [] },
   { id: 'pqq', name: 'PQQ', full: 'Pyrroloquinoline quinone', aliases: [], cls: 'Mito cofactor', tier: 'C', rct: true, studies: 300, effect: 45, bioavail: 60, safety: 84, pathways: ['pgc1a'], hallmarks: ['mito'], dose: '10–20 mg', note: 'Signals mitochondrial biogenesis.', flags: ['Small human evidence base'] },
@@ -158,7 +158,7 @@ const RAW_COMPOUND_DB: Omit<Compound, 'libraryHref'>[] = [
   { id: 'creatine', name: 'Creatine', full: 'Creatine monohydrate', aliases: ['creatine monohydrate'], cls: 'Ergogenic', tier: 'A', rct: true, studies: 6000, effect: 60, bioavail: 90, safety: 90, pathways: ['etc'], hallmarks: ['mito', 'intercellular'], dose: '3–5 g', note: 'Phosphocreatine energy buffer; muscle + cognition; very well evidenced.', flags: [] },
   { id: 'curcumin', name: 'Curcumin', full: 'Curcumin', aliases: ['turmeric'], cls: 'Polyphenol', tier: 'B', rct: true, studies: 15000, effect: 50, bioavail: 25, safety: 84, pathways: ['nfkb', 'nrf2'], hallmarks: ['inflammation', 'senescence'], dose: '500–1000 mg (enhanced)', note: 'Anti-inflammatory; requires piperine or phytosome delivery.', flags: ['Very low bioavailability unformulated'] },
   { id: 'egcg', name: 'EGCG', full: 'Epigallocatechin gallate', aliases: ['green tea', 'egcg'], cls: 'Catechin', tier: 'B', rct: true, studies: 4000, effect: 48, bioavail: 35, safety: 76, pathways: ['ampk', 'nfkb'], hallmarks: ['inflammation', 'nutrient', 'epigenetic'], dose: '300–500 mg', note: 'Catechin with DNMT-inhibitory (epigenetic) activity.', flags: ['Hepatotoxicity risk at high dose fasted'] },
-  { id: 'apigenin', name: 'Apigenin', full: 'Apigenin', aliases: [], cls: 'Flavone', tier: 'C', rct: true, studies: 300, effect: 45, bioavail: 40, safety: 82, pathways: ['cd38', 'nfkb'], hallmarks: ['senescence', 'inflammation', 'nutrient'], dose: '50 mg', note: 'CD38 inhibition may preserve NAD⁺; largely preclinical.', flags: ['Human data limited'] },
+  { id: 'apigenin', name: 'Apigenin', full: 'Apigenin', aliases: [], cls: 'Flavone', tier: 'C', rct: true, studies: 300, effect: 45, bioavail: 40, safety: 82, pathways: ['cd38', 'nfkb'], hallmarks: ['senescence', 'inflammation', 'nutrient'], dose: '50 mg', note: 'CD38 inhibition may preserve NAD+; largely preclinical.', flags: ['Human data limited'] },
   { id: 'lactoferrin', name: 'Lactoferrin', full: 'Lactoferrin (bovine / rhLF)', aliases: ['ltf', 'apolactoferrin'], cls: 'Glycoprotein', tier: 'B', rct: true, studies: 900, effect: 55, bioavail: 45, safety: 88, pathways: ['immune', 'nfkb'], hallmarks: ['inflammation', 'intercellular', 'mito'], dose: '150–300 mg', note: 'Iron homeostasis and anti-inflammaging; gastric-labile so enteric delivery preferred.', flags: ['Enteric-protect; dairy allergen unless recombinant'] },
 ];
 
@@ -220,10 +220,10 @@ export function parseEngineStackParam(param: string | null | undefined): Compoun
 /* ── Interaction knowledge ───────────────────────────────────────────────── */
 export type SynergyPair = [string, string, string, number];
 export const SYNERGY_PAIRS: SynergyPair[] = [
-  ['nmn', 'tmg', 'TMG replenishes methyl groups consumed during NAD⁺-precursor metabolism.', 3],
-  ['nr', 'tmg', 'TMG offsets the methylation cost of NAD⁺-precursor turnover.', 3],
-  ['nmn', 'apigenin', 'CD38 inhibition slows NAD⁺ breakdown, extending the pool NMN builds.', 2],
-  ['nmn', 'quercetin', "Quercetin's CD38 inhibition helps preserve the NAD⁺ pool from NMN.", 2],
+  ['nmn', 'tmg', 'TMG replenishes methyl groups consumed during NAD+-precursor metabolism.', 3],
+  ['nr', 'tmg', 'TMG offsets the methylation cost of NAD+-precursor turnover.', 3],
+  ['nmn', 'apigenin', 'CD38 inhibition slows NAD+ breakdown, extending the pool NMN builds.', 2],
+  ['nmn', 'quercetin', "Quercetin's CD38 inhibition helps preserve the NAD+ pool from NMN.", 2],
   ['glycine', 'nac', 'Combined glutathione precursors — the GlyNAC redox-restoration rationale.', 3],
   ['omega3', 'astax', 'Astaxanthin embeds in membranes and shields omega-3 PUFAs from peroxidation.', 2],
   ['vitd3', 'vitk2', 'K2 routes D3-absorbed calcium to bone and away from arteries.', 3],
@@ -250,7 +250,7 @@ export interface RedundancyGroup {
   rationale: string;
 }
 export const REDUNDANCY_GROUPS: RedundancyGroup[] = [
-  { label: 'NAD⁺ precursors', ids: ['nmn', 'nr'], penalty: 6, rationale: 'Multiple NAD⁺ precursors give diminishing returns — consolidate unless deliberately layering routes.' },
+  { label: 'NAD+ precursors', ids: ['nmn', 'nr'], penalty: 6, rationale: 'Multiple NAD+ precursors give diminishing returns — consolidate unless deliberately layering routes.' },
 ];
 export const ANTIOXIDANT_SET = ['nac', 'rala', 'astax', 'coq10', 'curcumin', 'egcg'];
 

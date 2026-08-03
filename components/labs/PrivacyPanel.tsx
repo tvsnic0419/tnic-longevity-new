@@ -9,12 +9,12 @@ const principles = [
   {
     icon: HardDrive,
     title: 'Local-First Storage',
-    desc: 'All lab readings persist in your browser only. No account, no server, no database.',
+    desc: 'Manually entered and CSV-imported lab readings persist in your browser only. No account, no TNiC server, no database.',
   },
   {
     icon: WifiOff,
-    title: 'Zero Network Transmission',
-    desc: 'CSV uploads are parsed in-memory. Values never leave your device during input or analysis.',
+    title: 'Zero Network Transmission for CSV Uploads',
+    desc: 'CSV uploads are parsed in-memory. Values never leave your device during input or analysis — unless you separately connect an optional lab partner below.',
   },
   {
     icon: Lock,
@@ -24,7 +24,7 @@ const principles = [
   {
     icon: Shield,
     title: 'No Third-Party Analytics on Labs',
-    desc: 'Lab values are excluded from tracking. Analysis runs client-side — no API calls.',
+    desc: 'Lab values are excluded from tracking. Manually logged and CSV-imported labs are analyzed client-side — no API calls for that path.',
   },
 ];
 
@@ -70,7 +70,7 @@ export function PrivacyPanel() {
           </div>
           <div>
             <h3 className="font-bold text-sm">Privacy-First Architecture</h3>
-            <p className="text-xs text-muted-foreground">Your health-adjacent data never touches TNiC servers.</p>
+            <p className="text-xs text-muted-foreground">Manually logged and CSV-imported labs never touch TNiC servers — connecting an optional lab partner below is the one opt-in exception.</p>
           </div>
         </div>
 

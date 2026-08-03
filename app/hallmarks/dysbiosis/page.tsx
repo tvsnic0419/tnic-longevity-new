@@ -6,6 +6,7 @@ import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Radio } from
 import { getHallmarkBySlug } from '@/lib/hallmarks-library';
 import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 import { HallmarkHeroVisual } from '@/components/hallmarks/HallmarkHeroVisual';
+import { EvidenceTagLegend } from '@/components/trust/EvidenceTag';
 
 export const metadata: Metadata = {
   title: 'Dysbiosis | Hallmarks of Aging | TNiC',
@@ -134,7 +135,7 @@ export default function DysbiosisPage() {
               <p className="text-xs text-emerald-400 uppercase tracking-widest font-medium">Evidence-Graded Interventions</p>
             </div>
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-2">Microbiome restoration with clinical evidence</h2>
-            <p className="text-muted-foreground mb-8">Tier A = human RCT evidence. Tier B = at least one human trial + mechanistic data.</p>
+            <EvidenceTagLegend className="mb-8" />
             <InterventionCards interventions={hallmark.interventions} />
           </div>
         </section>

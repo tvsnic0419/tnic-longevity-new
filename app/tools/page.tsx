@@ -18,7 +18,7 @@ function buildToolsSchemas() {
     operatingSystem: 'Web',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     description:
-      'Six evidence-graded longevity tools: healthspan defense scan, intervention impact ranker, stack synergy map, biomarker risk scorer, protocol timeline builder, and compound interaction checker.',
+      'Seven evidence-graded longevity tools: healthspan defense scan, intervention impact ranker, stack synergy map, biomarker risk scorer, protocol timeline builder, compound interaction checker, and supply/reorder forecaster.',
     featureList: [
       'Healthspan defense scan',
       'Intervention impact ranker',
@@ -26,6 +26,7 @@ function buildToolsSchemas() {
       'Biomarker risk scorer',
       'Protocol timeline builder',
       'Compound interaction checker',
+      'Supply and reorder forecaster',
     ],
     isAccessibleForFree: true,
   };

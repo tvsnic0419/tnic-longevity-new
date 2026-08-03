@@ -67,10 +67,16 @@ export function CompoundBuyerGuidePanel({
       <div className={cn('p-5 space-y-5', compact && 'space-y-4')}>
         {productPick && (
           <div className="grid md:grid-cols-[minmax(0,1fr)_240px] gap-4 items-start">
-            <p className="text-sm text-muted-foreground leading-relaxed md:col-span-1">
-              After verifying COA demands below, use this TNiC-matched pick — click the image to open
-              the manufacturer product page.
-            </p>
+            <div className="md:col-span-1">
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                After verifying COA demands below, use this TNiC-matched pick — click the image to open
+                the manufacturer product page.
+              </p>
+              <p className="text-xs text-muted-foreground/80 mt-2 leading-relaxed">
+                This link may carry an affiliate token — disclosed here, at the point you&apos;d act on
+                it. Commission never influences which product is listed.
+              </p>
+            </div>
             <ProductPickCard pick={productPick} compact />
           </div>
         )}

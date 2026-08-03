@@ -397,7 +397,7 @@ export const libraryModules: LibraryModule[] = [
   {
     slug: 'coq10',
     category: 'compounds',
-    title: 'CoQ10 (Ubiquinol)',
+    title: 'CoQ10 (Ubiquinone)',
     tagline: 'Electron transport chain cofactor — essential for statin users',
     summary:
       'Mitochondrial cofactor required at Complex I, II, and III of the electron transport chain. Declines ~50% by age 70. Ubiquinol (reduced form) has superior bioavailability. Meta-analysis of 17 RCTs confirms hs-CRP and IL-6 reduction. Critical for statin users — statins block HMG-CoA reductase, which also synthesizes CoQ10. Tier B.',

@@ -579,7 +579,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
     title: 'Urolithin A vs CoQ10',
     subtitle: 'Both target mitochondrial aging — but at completely different points in the process',
     labelA: 'Urolithin A (Mitopure)',
-    labelB: 'CoQ10 (Ubiquinol)',
+    labelB: 'CoQ10 (Ubiquinone)',
     category: 'compound',
     evidenceTier: 'B',
     summary:
@@ -681,19 +681,19 @@ export const evidenceComparisons: EvidenceComparison[] = [
   {
     slug: 'nmn-vs-spermidine',
     title: 'NMN vs Spermidine',
-    subtitle: 'Two longevity starters — NAD⁺ repletion vs direct autophagy induction',
+    subtitle: 'Two longevity starters — NAD+ repletion vs direct autophagy induction',
     labelA: 'NMN',
     labelB: 'Spermidine',
     category: 'compound',
     evidenceTier: 'B',
     summary:
-      'NMN restores NAD⁺ levels that decline ~50% by age 60, fueling SIRT1-mediated DNA repair and mitochondrial biogenesis. Spermidine inhibits the acetyltransferase EP300, directly triggering autophagy — the cellular recycling process that clears damaged proteins and organelles. Both are credible longevity starters but act at entirely different nodes; stacking them provides complementary coverage rather than redundancy.',
+      'NMN restores NAD+ levels that decline ~50% by age 60, fueling SIRT1-mediated DNA repair and mitochondrial biogenesis. Spermidine inhibits the acetyltransferase EP300, directly triggering autophagy — the cellular recycling process that clears damaged proteins and organelles. Both are credible longevity starters but act at entirely different nodes; stacking them provides complementary coverage rather than redundancy.',
     verdict:
-      'NMN leads on NAD⁺-sensitive domains: DNA repair, mitochondrial biogenesis, vascular endothelium. Spermidine leads on autophagy flux and immune T-cell rejuvenation. Do not force a choice — the Full Hybrid and Full-Spectrum 14 stacks include both for orthogonal pathway coverage.',
+      'NMN leads on NAD+-sensitive domains: DNA repair, mitochondrial biogenesis, vascular endothelium. Spermidine leads on autophagy flux and immune T-cell rejuvenation. Do not force a choice — the Full Hybrid and Full-Spectrum 14 stacks include both for orthogonal pathway coverage.',
     rows: [
       {
         dimension: 'Primary mechanism',
-        a: 'NAD⁺ repletion → SIRT1 / PARP1 / CD38 axis activation',
+        a: 'NAD+ repletion → SIRT1 / PARP1 / CD38 axis activation',
         b: 'EP300 acetyltransferase inhibition → autophagy induction',
         verdict: 'context',
         note: 'Mechanistically orthogonal — not competing for the same target',
@@ -715,15 +715,15 @@ export const evidenceComparisons: EvidenceComparison[] = [
         note: 'Spermidine triggers robust autophagy flux at 1 mg/day dietary-equivalent dosing',
       },
       {
-        dimension: 'NAD⁺ restoration',
-        a: '38% whole-blood NAD⁺ increase at 250 mg/day (Liao 2021)',
-        b: 'None — polyamine mechanism is independent of NAD⁺ metabolism',
+        dimension: 'NAD+ restoration',
+        a: '38% whole-blood NAD+ increase at 250 mg/day (Liao 2021)',
+        b: 'None — polyamine mechanism is independent of NAD+ metabolism',
         verdict: 'a',
         pmid: '34631532',
       },
       {
         dimension: 'Cardiovascular aging',
-        a: 'Endothelial NAD⁺ deficit is a validated vascular aging target',
+        a: 'Endothelial NAD+ deficit is a validated vascular aging target',
         b: 'Cardiac hypertrophy reversal in aged hearts; human cohort CV mortality data',
         verdict: 'tie',
         pmid: '30975980',
@@ -731,7 +731,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
       },
       {
         dimension: 'Immune T-cell rejuvenation',
-        a: 'Moderate — NAD⁺ is required for T-cell activation and metabolic fitness',
+        a: 'Moderate — NAD+ is required for T-cell activation and metabolic fitness',
         b: 'High — autophagy restores T-cell mitochondria, reversing CD8⁺ exhaustion',
         verdict: 'b',
         pmid: '28026137',
@@ -753,16 +753,16 @@ export const evidenceComparisons: EvidenceComparison[] = [
       },
       {
         dimension: 'Synergy within TNiC stack',
-        a: 'NMN + Resveratrol = SIRT1 dual activation (core NAD⁺ pair)',
-        b: 'Spermidine + NMN = orthogonal coverage: polyamine autophagy + NAD⁺ repair',
+        a: 'NMN + Resveratrol = SIRT1 dual activation (core NAD+ pair)',
+        b: 'Spermidine + NMN = orthogonal coverage: polyamine autophagy + NAD+ repair',
         verdict: 'tie',
         note: 'Both are included in Full Hybrid and Full-Spectrum 14 — the combination is the point',
       },
     ],
     whenChooseA: [
-      'Primary goal is NAD⁺ repletion — declining energy, muscle endurance, or cognition after 40',
+      'Primary goal is NAD+ repletion — declining energy, muscle endurance, or cognition after 40',
       'Running the SIRT1 pair stack (NMN + Resveratrol) as your core longevity protocol',
-      'Vascular aging is a priority — endothelial NAD⁺ deficit is the validated target',
+      'Vascular aging is a priority — endothelial NAD+ deficit is the validated target',
       'Prefer the compound with the strongest double-blind RCT footprint available OTC',
     ],
     whenChooseB: [
@@ -776,7 +776,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
       { label: 'Spermidine in Library', href: '/library/compounds/spermidine' },
       { label: 'NMN vs NR', href: '/library/compare/nmn-vs-nr' },
       { label: 'Disabled Autophagy hallmark', href: '/library/disabled-macroautophagy' },
-      { label: 'NAD⁺ Mito Stack synergy', href: '/library/nad-mito-stack' },
+      { label: 'NAD+ Mito Stack synergy', href: '/library/nad-mito-stack' },
     ],
     keywords: ['nmn', 'spermidine', 'autophagy', 'nad+', 'ep300', 'sirt1', 'longevity', 'immune aging', 'polyamine'],
   },
@@ -897,14 +897,14 @@ export const evidenceComparisons: EvidenceComparison[] = [
       {
         dimension: 'Mechanism breadth',
         a: 'Mitochondrial function, DNA damage, inflammation, immune aging, stem cell pool, telomere length — multi-hallmark',
-        b: 'NAD⁺ repletion → SIRT1, PARP1, CD38 axis — deep mechanistic specificity',
+        b: 'NAD+ repletion → SIRT1, PARP1, CD38 axis — deep mechanistic specificity',
         verdict: 'context',
         note: 'Taurine is broad but less mechanistically characterized than NMN',
       },
       {
         dimension: 'NAD+ restoration',
         a: 'Indirect — taurine supports mitochondrial function but does not raise NAD+',
-        b: '38% whole-blood NAD⁺ increase at 250 mg/day (Liao 2021)',
+        b: '38% whole-blood NAD+ increase at 250 mg/day (Liao 2021)',
         verdict: 'b',
         pmid: '34631532',
       },

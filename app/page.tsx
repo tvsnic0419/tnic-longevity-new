@@ -33,7 +33,7 @@ export const metadata = {
   ...buildPageMetadata({
     title: HOME_TITLE,
     description:
-      'Elite anti-aging interventions — GlyNAC, NAD⁺, Ca-AKG, NRF2 and more — graded by the strength of human evidence, each paired with one verified product to buy well. Plus a free, PubMed-backed library of the 12 hallmarks of aging. No pay-for-placement.',
+      'Elite anti-aging interventions — GlyNAC, NAD+, Ca-AKG, NRF2 and more — graded by the strength of human evidence, each paired with one verified product to buy well. Plus a free, PubMed-backed library of the 12 hallmarks of aging. No pay-for-placement.',
     path: '',
   }),
   // Absolute title so the `%s | TNiC` template doesn't double the brand name.

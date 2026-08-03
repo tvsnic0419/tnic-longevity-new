@@ -118,7 +118,7 @@ export function ToolsHub() {
           icon={Calculator}
           eyebrow="Interactive Tools"
           title="Longevity Tools"
-          description="Six evidence-graded calculators that turn library knowledge into practical models. Rule-based, transparent reasoning — not generative AI."
+          description="Seven evidence-graded calculators that turn library knowledge into practical models. Rule-based, transparent reasoning — not generative AI."
           theme="violet"
           as="h1"
         />
@@ -150,6 +150,31 @@ export function ToolsHub() {
               </div>
               <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-amber shrink-0">
                 Open ranking <ArrowRight className="w-4 h-4" />
+              </span>
+            </div>
+          </Link>
+        </GlassPanel>
+
+        <GlassPanel depth="mid" className="mb-8 rounded-2xl">
+          <Link
+            href="/tools/pathway-architect"
+            className="focus-ring group block border border-accent-amber/25 bg-gradient-to-br from-accent-amber/8 to-transparent rounded-2xl p-5 md:p-6 hover:border-accent-amber/40 transition"
+          >
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="flex items-start gap-3 flex-1">
+                <div className="icon-badge-amber w-10 h-10 rounded-xl flex items-center justify-center shrink-0">
+                  <Network className="w-5 h-5 text-accent-amber" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-label text-accent-amber mb-1">Featured tool</p>
+                  <h2 className="font-bold text-lg group-hover:text-accent-amber transition">Pathway Architect</h2>
+                  <p className="text-sm text-muted-foreground mt-1 max-w-xl">
+                    Build a protocol compound-by-compound and watch synergy score, convergent pathways, and hallmark coverage update live.
+                  </p>
+                </div>
+              </div>
+              <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-amber shrink-0">
+                Open Pathway Architect <ArrowRight className="w-4 h-4" />
               </span>
             </div>
           </Link>

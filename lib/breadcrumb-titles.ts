@@ -78,7 +78,7 @@ export const libraryModuleTitles: Record<string, string> = {
   'compounds/berberine': "Berberine HCl",
   'compounds/urolithina': "Urolithin A (Mitopure)",
   'compounds/fisetin': "Fisetin",
-  'compounds/coq10': "CoQ10 (Ubiquinol)",
+  'compounds/coq10': "CoQ10 (Ubiquinone)",
   'compounds/omega3': "Omega-3 (EPA + DHA)",
   'compounds/metformin': "Metformin",
   'compounds/creatine': "Creatine Monohydrate",

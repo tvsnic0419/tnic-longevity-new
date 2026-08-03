@@ -36,7 +36,7 @@ export const GenomicInstabilityVisual: React.FC<HallmarkVisualProps> = ({
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={cn(className)}
-      aria-label="Genomic Instability: DNA damage and NAD⁺-fueled repair"
+      aria-label="Genomic Instability: DNA damage and NAD+-fueled repair"
       role="img"
     >
       <defs>
@@ -65,7 +65,7 @@ export const GenomicInstabilityVisual: React.FC<HallmarkVisualProps> = ({
       <text x="135" y="125" textAnchor="middle" fill="#e5e7eb" fontSize="10" fontFamily="monospace">PARP</text>
       {/* NAD+ arrow */}
       <path d="M165 110 L155 118" stroke={c.s} strokeWidth="2" markerEnd="url(#gi-arrow)" />
-      <text x="160" y="225" textAnchor="middle" fill="#9ca3af" fontSize="11" fontFamily="system-ui">DNA Repair + NAD⁺ Fuel</text>
+      <text x="160" y="225" textAnchor="middle" fill="#9ca3af" fontSize="11" fontFamily="system-ui">DNA Repair + NAD+ Fuel</text>
     </svg>
   );
 };
@@ -205,7 +205,7 @@ export const MitochondrialDysfunctionVisual: React.FC<HallmarkVisualProps> = ({
 }) => {
   const c = ac(accentColor);
   return (
-    <svg width={size} height={size * 0.75} viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg" className={cn(className)} aria-label="Mitochondrial Dysfunction — cristae ETC and NAD⁺/SIRT3 axis" role="img">
+    <svg width={size} height={size * 0.75} viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg" className={cn(className)} aria-label="Mitochondrial Dysfunction — cristae ETC and NAD+/SIRT3 axis" role="img">
       <defs>
         <linearGradient id="mitoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#1f2937" />
@@ -226,7 +226,7 @@ export const MitochondrialDysfunctionVisual: React.FC<HallmarkVisualProps> = ({
       <text x="225" y="124" textAnchor="middle" fill="#e5e7eb" fontSize="8" fontFamily="monospace">SIRT3</text>
       <path d="M240 105 L265 95" stroke={c.s} strokeWidth="2" />
       <path d="M240 135 L265 145" stroke={c.s} strokeWidth="2" />
-      <text x="160" y="225" textAnchor="middle" fill="#9ca3af" fontSize="11" fontFamily="system-ui">NAD⁺ → SIRT3 Mitophagy Axis</text>
+      <text x="160" y="225" textAnchor="middle" fill="#9ca3af" fontSize="11" fontFamily="system-ui">NAD+ → SIRT3 Mitophagy Axis</text>
     </svg>
   );
 };

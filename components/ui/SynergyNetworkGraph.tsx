@@ -17,7 +17,7 @@ const PATHWAY_COLOR: Record<Pathway, string> = {
 
 const PATHWAY_LABEL: Record<Pathway, string> = {
   nrf2:      'NRF2 · Antioxidant',
-  nad:       'NAD⁺ · Mitochondrial',
+  nad:       'NAD+ · Mitochondrial',
   sirtuin:   'SIRT1 · Epigenetic',
   ampk:      'AMPK · Metabolic',
   senolytic: 'Senolytic',
@@ -69,18 +69,18 @@ interface SynergyEdge {
 
 const EDGES: SynergyEdge[] = [
   // ── hub-to-hub ──
-  { a: 'nmn',         b: 'resveratrol',   strength: 'strong',   note: 'SIRT1 dual activation — NAD⁺ substrate pairs with SIRT1 deacetylase for peak epigenetic remodeling' },
+  { a: 'nmn',         b: 'resveratrol',   strength: 'strong',   note: 'SIRT1 dual activation — NAD+ substrate pairs with SIRT1 deacetylase for peak epigenetic remodeling' },
   // ── NMN spokes ──
-  { a: 'nmn',         b: 'cakg',          strength: 'strong',   note: 'TCA cycle fuel (AKG) + NAD⁺ repletion — epigenetic reprogramming and mTOR suppression stack' },
-  { a: 'nmn',         b: 'rala',          strength: 'strong',   note: 'R-ALA recycles NAD⁺ at Complex I — extends ETC electron transport efficiency upstream' },
-  { a: 'nmn',         b: 'coq10',         strength: 'strong',   note: 'NAD⁺ feeds Complex I; CoQ10 shuttles electrons to Complex III — sequential ETC co-support' },
+  { a: 'nmn',         b: 'cakg',          strength: 'strong',   note: 'TCA cycle fuel (AKG) + NAD+ repletion — epigenetic reprogramming and mTOR suppression stack' },
+  { a: 'nmn',         b: 'rala',          strength: 'strong',   note: 'R-ALA recycles NAD+ at Complex I — extends ETC electron transport efficiency upstream' },
+  { a: 'nmn',         b: 'coq10',         strength: 'strong',   note: 'NAD+ feeds Complex I; CoQ10 shuttles electrons to Complex III — sequential ETC co-support' },
   { a: 'nmn',         b: 'urolithina',    strength: 'strong',   note: 'Urolithin A clears damaged mitochondria via mitophagy; NMN fuels the healthy survivors' },
-  { a: 'nmn',         b: 'glynac',        strength: 'moderate', note: 'NAD⁺ + glutathione dual repletion — complementary redox defense at separate nodes' },
-  { a: 'nmn',         b: 'taurine',       strength: 'moderate', note: 'Taurine membrane stabilization + NAD⁺ — additive mitochondrial membrane potential support' },
+  { a: 'nmn',         b: 'glynac',        strength: 'moderate', note: 'NAD+ + glutathione dual repletion — complementary redox defense at separate nodes' },
+  { a: 'nmn',         b: 'taurine',       strength: 'moderate', note: 'Taurine membrane stabilization + NAD+ — additive mitochondrial membrane potential support' },
   { a: 'nmn',         b: 'spermidine',    strength: 'moderate', note: 'Spermidine autophagy (EP300 inhibition) + NMN SIRT1-mediated autophagic initiation — dual flux' },
   { a: 'nmn',         b: 'fisetin',       strength: 'moderate', note: 'NMN suppresses SASP via PARP/SIRT1 while fisetin eliminates the senescent cells generating it' },
-  { a: 'nmn',         b: 'berberine',     strength: 'moderate', note: 'AMPK activation raises NAD⁺:NADH ratio, amplifying SIRT1 activity downstream' },
-  { a: 'nmn',         b: 'pterostilbene', strength: 'moderate', note: 'Methylated RSV analogue with 4× bioavailability + NAD⁺ — enhanced SIRT1 substrate pairing' },
+  { a: 'nmn',         b: 'berberine',     strength: 'moderate', note: 'AMPK activation raises NAD+:NADH ratio, amplifying SIRT1 activity downstream' },
+  { a: 'nmn',         b: 'pterostilbene', strength: 'moderate', note: 'Methylated RSV analogue with 4× bioavailability + NAD+ — enhanced SIRT1 substrate pairing' },
   // ── Resveratrol spokes ──
   { a: 'resveratrol', b: 'cakg',          strength: 'strong',   note: 'Ca-AKG TET dioxygenase demethylation + SIRT1 deacetylation — dual epigenetic reprogramming' },
   { a: 'resveratrol', b: 'pterostilbene', strength: 'strong',   note: 'Methylated resveratrol analogue — additive SIRT1 activity with superior plasma half-life' },

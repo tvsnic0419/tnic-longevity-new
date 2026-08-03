@@ -40,7 +40,7 @@ const guides = [
     subtitle: 'The complete ranked guide to evidence-backed longevity compounds',
     description:
       'Start here. Our master guide ranks 12+ compounds by evidence quality, covers the Hallmarks of Aging framework, explains synergy principles, and includes honest cautions. Built on 50+ PubMed citations.',
-    pills: ['12+ compounds', 'Tier A–D ranking', '50+ citations'],
+    pills: ['12+ compounds', 'Tier A–C ranking', '50+ citations'],
     evidenceTier: 'A',
     glowHover: 'glow-hover-cyan',
     borderHover: 'hover:border-accent-cyan/40',

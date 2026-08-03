@@ -24,7 +24,7 @@ export const seoRoutes = {
 
   dashboard: () =>
     buildPageMetadata({
-      title: 'My Longevity OS — Personal Dashboard',
+      title: 'My Dashboard — Personal Longevity Command Center',
       description:
         'Your anti-aging command center: active stack with synergy scores, lab status, hallmark coverage map, outcome milestones, and export kit. Local-first — data never leaves your browser.',
       path: '/dashboard',
@@ -159,9 +159,9 @@ export const seoRoutes = {
 
   tools: () =>
     buildPageMetadata({
-      title: 'Longevity Tools — Six Interactive Calculators',
+      title: 'Longevity Tools — Seven Interactive Calculators',
       description:
-        'Six free longevity tools: stack simulator, compound interaction network, protocol engine, biomarker trend visualizer, intervention impact ranking, and healthspan estimator. All local — no paywall, no account.',
+        'Seven free longevity tools: stack simulator, compound interaction network, protocol engine, biomarker trend visualizer, intervention impact ranking, healthspan estimator, and inventory forecast. All local — no paywall, no account.',
       path: '/tools',
       keywords: ['longevity calculator', 'supplement interaction graph', 'healthspan estimator', 'biological age calculator'],
     }),

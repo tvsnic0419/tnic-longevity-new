@@ -22,7 +22,7 @@ const GUIDE_FAQS = [
   {
     question: 'How do I know if a longevity supplement is evidence-graded Tier A?',
     answer:
-      'TNiC defines Tier A as: ≥2 independent RCTs with consistent primary endpoints, human participants, N ≥ 20 per arm, published in peer-reviewed journals with PubMed indexing. Tier B = 1 RCT or multiple high-quality human pilots. Tier C = animal or in-vitro data only. Every compound in our library has its evidence tier clearly labeled with the underlying PMIDs.',
+      'TNiC defines Tier A as: a peer-reviewed human randomized or controlled trial with a measured biomarker or healthspan outcome, independent replication or multi-trial consensus, and a characterized human safety profile. Tier B = strong mechanistic data plus at least one human pharmacokinetic or pilot study. Tier C = animal or in-vitro evidence only, flagged as not recommended as a stack foundation. See /trust/methodology for the full criteria. Every compound in our library has its evidence tier clearly labeled with the underlying PMIDs.',
   },
   {
     question: 'Should I take NMN, GlyNAC, and Sulforaphane together?',
@@ -49,7 +49,7 @@ const GUIDE_FAQS = [
 const HOW_TO_STEPS = [
   {
     name: 'Take The NICO Starter Questionnaire',
-    text: 'Answer three questions — your primary goal (energy, cognition, or longevity), age range, and experience level. The NICO Starter Questionnaire matches you to one of 6 evidence-graded stack presets (NRF2 Defense, NAD+ Restoration, Mitochondrial Health, Senolytic Protocol, Foundation, or Elite Protocol).',
+    text: 'Answer three questions — your primary goal (energy, cognition, or longevity), age range, and experience level. The NICO Starter Questionnaire matches you to one of seven evidence-graded stack presets (Starter, NRF2 Defense, Mitochondrial, Full Hybrid, Longevity Pro, Cardio-Metabolic, or Full-Spectrum 14).',
   },
   {
     name: 'Choose your first compound based on hallmark targeting',

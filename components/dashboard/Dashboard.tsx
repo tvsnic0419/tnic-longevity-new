@@ -97,7 +97,7 @@ export function Dashboard() {
             <LayoutDashboard className="w-4 h-4 text-accent-emerald" aria-hidden="true" />
             <span className="font-mono text-xs tracking-wide text-foreground/90 uppercase">Personal command center</span>
           </div>
-          <h1 className="heading-page">My Longevity OS</h1>
+          <h1 className="heading-page">My Dashboard</h1>
           <p className="text-body text-muted-foreground mt-3 max-w-2xl">
             {quizResult
               ? `Goal: ${goalLabels[quizResult.goal] ?? quizResult.goal} — stack, labs, and journey in one place.`

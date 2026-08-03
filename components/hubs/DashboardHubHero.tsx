@@ -64,7 +64,7 @@ export function DashboardHubHero() {
               <span>Personal command center</span>
             </div>
 
-            <h1 className="heading-page mb-3">My Longevity OS</h1>
+            <h1 className="heading-page mb-3">My Dashboard</h1>
             <p className="text-body max-w-xl mb-6">
               {quizResult
                 ? `Goal: ${goalLabels[quizResult.goal] ?? quizResult.goal} — stack, labs, and journey unified.`

@@ -14,7 +14,7 @@ function buildMethodologySchemas() {
     buildArticleSchema({
       title: 'TNiC Evidence Methodology — How Longevity Compounds Are Graded',
       description:
-        'Transparent framework for compound selection, evidence tier grading (A/B/C/D), biomarker modeling, and conflict-of-interest management at TNiC.',
+        'Transparent framework for compound selection, evidence tier grading (A/B/C), biomarker modeling, and conflict-of-interest management at TNiC.',
       path: '/trust/methodology',
     }),
     buildBreadcrumbSchema([

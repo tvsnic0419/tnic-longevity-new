@@ -8,7 +8,7 @@
  * (O/N/S); carbons are implicit vertices, as in real skeletal formulae.
  *
  * These are the actual compounds featured across the library — resveratrol,
- * the nicotinamide (NAD⁺) core, spermidine, sulforaphane, fisetin, berberine —
+ * the nicotinamide (NAD+) core, spermidine, sulforaphane, fisetin, berberine —
  * drawn as authentic line structures, not decorative squiggles.
  */
 
@@ -90,7 +90,7 @@ function resveratrol(): Molecule {
   return { id: 'resveratrol', name: 'Resveratrol', w: 120, h: 90, bonds, labels };
 }
 
-// ── Nicotinamide — pyridine-3-carboxamide (NAD⁺ core) ────────────────────────
+// ── Nicotinamide — pyridine-3-carboxamide (NAD+ core) ────────────────────────
 function nicotinamide(): Molecule {
   const P = ring(40, 45, R); // pyridine ring, N at P[4] (upper-left)
   // carboxamide off P[0] (right vertex): C(=O)-NH2

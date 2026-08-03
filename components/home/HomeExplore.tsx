@@ -122,7 +122,7 @@ export function HomeExplore() {
               From the science to the shelf — one honest path.
             </h2>
             <p className="text-body">
-              Six places to look, each doing one thing well: understand the biology, read the
+              Seven places to look, each doing one thing well: understand the biology, read the
               graded evidence, and know what&apos;s genuinely worth buying.
             </p>
           </div>

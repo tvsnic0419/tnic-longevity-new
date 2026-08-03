@@ -325,7 +325,7 @@ export const pathwayGroups: PathwayGroup[] = [
   },
   {
     id: 'nad-sirtuin',
-    name: 'NAD⁺/Sirtuin Axis',
+    name: 'NAD+/Sirtuin Axis',
     tagline: 'Central metabolic regulator linking energy status to epigenetic age',
     accent: 'emerald',
     hallmarkIds: ['epigenetic', 'mito', 'genomic', 'nutrient'],
@@ -559,7 +559,7 @@ export const impactPropagations: ImpactPropagation[] = [
 export const emergentEffects: EmergentEffect[] = [
   {
     id: 'nad-epigenetic-mito-loop',
-    title: 'NAD⁺ Epigenetic–Mitochondrial Loop',
+    title: 'NAD+ Epigenetic–Mitochondrial Loop',
     tagline: 'NMN + Ca-AKG creates a self-reinforcing sirtuin activation cascade',
     compoundIds: ['nmn', 'cakg', 'resveratrol'],
     hallmarkIds: ['mito', 'epigenetic', 'nutrient', 'genomic'],

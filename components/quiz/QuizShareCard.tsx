@@ -63,7 +63,7 @@ export function QuizShareCard({ answers, preset, stackLabel }: QuizShareCardProp
           className="focus-ring inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold glass hover:border-accent-cyan/30 transition"
         >
           {copied === 'stacks' ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Link2 className="w-3.5 h-3.5" />}
-          {copied === 'stacks' ? 'Copied' : 'Architect link'}
+          {copied === 'stacks' ? 'Copied' : 'Stack Architect link'}
         </button>
         <button
           type="button"
