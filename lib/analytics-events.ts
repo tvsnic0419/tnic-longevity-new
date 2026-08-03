@@ -14,6 +14,16 @@ export const ANALYTICS_EVENTS = {
   stackExported: 'stack_exported',
   /** A visitor clicked through the affiliate redirect layer (revenue signal). */
   affiliateClick: 'affiliate_click',
+  /** A visitor added a compound to their Pathway Architect protocol. */
+  pathwayArchitectAdd: 'pathway_architect_add',
+  /** A visitor removed a compound from their Pathway Architect protocol. */
+  pathwayArchitectRemove: 'pathway_architect_remove',
+  /** A visitor loaded one of the four Pathway Architect starter stacks. */
+  pathwayArchitectStarterStack: 'pathway_architect_starter_stack',
+  /** A visitor copied a shareable Pathway Architect protocol link. */
+  pathwayArchitectShare: 'pathway_architect_share',
+  /** A visitor printed their Pathway Architect protocol. */
+  pathwayArchitectPrint: 'pathway_architect_print',
 } as const;
 
 export type AnalyticsEventName =

@@ -182,6 +182,22 @@ export const seoRoutes = {
       ],
     }),
 
+  pathwayArchitect: () =>
+    buildPageMetadata({
+      title: 'Pathway Architect — Build a Protocol, Watch the Synergy Update Live',
+      description:
+        'Add compounds one at a time and watch synergy score, hallmark coverage, convergent pathways, and interaction cautions update in real time. Four starter stacks, shareable protocol links, no account.',
+      path: '/tools/pathway-architect',
+      keywords: [
+        'longevity protocol builder',
+        'supplement synergy detector',
+        'pathway coverage tool',
+        'NAD+ stack builder',
+        'hallmark coverage calculator',
+        'stack synergy score',
+      ],
+    }),
+
   elite8: () =>
     buildPageMetadata({
       title: 'Elite 8 Longevity Rankings — Longevity Quotient',

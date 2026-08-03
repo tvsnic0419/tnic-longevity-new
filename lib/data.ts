@@ -28,6 +28,10 @@ export const navLinks = [
   // wrapping at lg — the full "Compound Engine" name is used in the footer,
   // the breadcrumb, and every cross-link card, where there is room for it.
   { href: '/compound-engine', label: 'Engine', mod: 'MOD-ENG-18' },
+  // Same reasoning as Engine above — "Pathways" over "Pathway Architect" keeps
+  // this one-word like its neighbors; the full name lives in the page's own
+  // PageHeader, breadcrumb, and footer link.
+  { href: '/tools/pathway-architect', label: 'Pathways', mod: 'MOD-PWY-19' },
 ];
 
 export const communityPulse = [

@@ -45,7 +45,8 @@ export const hubContexts: Record<
   | 'contact'
   | 'deliverySystems'
   | 'peptides'
-  | 'topPicks',
+  | 'topPicks'
+  | 'pathwayArchitect',
   HubContextEntry
 > = {
   dashboard: {
@@ -155,6 +156,12 @@ export const hubContexts: Record<
     what: "TNiC's highest-conviction compound picks across three overlapping pathways — sirtuin activation, PARP/DNA-repair support, and NRF2 antioxidant signaling.",
     why: 'The same NAD+ pool fuels both sirtuins and PARP, and NRF2 activation both switches on antioxidant genes and reduces the DNA damage those repair pathways face — picks here reflect that shared biology instead of treating each pathway in isolation.',
     next: 'Open a pick to read its full compound module, then check the Systems Map for how these pathways interact with the rest of the hallmarks.',
+  },
+  pathwayArchitect: {
+    theme: 'amber',
+    what: 'Build a protocol compound-by-compound and watch synergy, caution, redundancy, and hallmark coverage update live as you add each one.',
+    why: 'A stack is more than a compound list — the pathways it converges on and the interactions between its members determine whether it compounds or cancels itself out.',
+    next: 'Start from a starter stack or add compounds individually, then open any card\'s library link to read the mechanism behind a synergy.',
   },
 };
 

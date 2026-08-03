@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, RotateCcw, Check, Layers, Compass, ShoppingBag, BookOpen, Mail, CheckCircle2, AlertCircle } from 'lucide-react';
+import { ArrowRight, RotateCcw, Check, Layers, Compass, ShoppingBag, BookOpen, Mail, CheckCircle2, AlertCircle, Network } from 'lucide-react';
 import { useBriefSubscribe } from '@/hooks/useBriefSubscribe';
 import { DetailedStackSuggestion } from '@/components/quiz/DetailedStackSuggestion';
 import { GlassPanel } from '@/components/ui/GlassPanel';
@@ -14,6 +14,8 @@ import type { getQuizResult } from '@/lib/homepage';
 import { QuizShareCard } from '@/components/quiz/QuizShareCard';
 import { isCompleteQuizAnswers } from '@/lib/quiz-share';
 import { buildShopPresetUrl } from '@/lib/stack-url';
+import { resolveCompound } from '@/lib/compound-engine-data';
+import { buildPathwayArchitectUrl } from '@/lib/pathway-architect-data';
 import { trackEvent } from '@/lib/analytics';
 import { ANALYTICS_EVENTS } from '@/lib/analytics-events';
 
@@ -62,6 +64,15 @@ export function QuizResultPanel({ result, answers, onRetake }: QuizResultPanelPr
     router.push(`/stacks?from=quiz&preset=${result.preset}`);
   };
 
+  // Pathway Architect keys compounds by the Compound Intelligence Engine's own
+  // id namespace, which diverges from a handful of `lib/data.ts` ids (e.g.
+  // `cakg` vs `caakg`) — resolveCompound() carries those as aliases, so this
+  // reuses the same cross-namespace resolution the engine hand-off already
+  // relies on. Compounds the engine hasn't curated are simply dropped.
+  const pathwayArchitectIds = result.stack.ids
+    .map((id) => resolveCompound(id)?.id)
+    .filter((id): id is string => Boolean(id));
+
   return (
     <motion.div
       key="result"
@@ -90,7 +101,7 @@ export function QuizResultPanel({ result, answers, onRetake }: QuizResultPanelPr
             <div className="flex items-start gap-3">
               <Layers className="w-5 h-5 shrink-0 mt-0.5" aria-hidden="true" />
               <div>
-                <p className="text-sm font-semibold">Load stack &amp; open Architect</p>
+                <p className="text-sm font-semibold">Load stack &amp; open Stack Architect</p>
                 <p className="text-xs opacity-80 mt-0.5">
                   Applies <strong>{result.stack.label}</strong> preset ({result.stack.ids.length} compounds) and
                   opens the Builder tab
@@ -100,6 +111,29 @@ export function QuizResultPanel({ result, answers, onRetake }: QuizResultPanelPr
             <ArrowRight className="w-5 h-5 shrink-0" aria-hidden="true" />
           </div>
         </button>
+
+        {pathwayArchitectIds.length > 0 && (
+          <GlassPanel depth="mid" className="glass-hover rounded-xl">
+            <Link
+              href={buildPathwayArchitectUrl(pathwayArchitectIds)}
+              className="focus-ring block w-full text-left rounded-xl p-4"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-start gap-3">
+                  <Network className="w-5 h-5 text-accent-amber shrink-0 mt-0.5" aria-hidden="true" />
+                  <div>
+                    <p className="text-sm font-semibold">Try Pathway Architect</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      Opens with <strong>{result.stack.label}</strong> pre-loaded — see live synergy scoring, cautions,
+                      and hallmark coverage as you refine it
+                    </p>
+                  </div>
+                </div>
+                <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0" aria-hidden="true" />
+              </div>
+            </Link>
+          </GlassPanel>
+        )}
 
         <GlassPanel depth="mid" className="glass-hover rounded-xl">
         <Link

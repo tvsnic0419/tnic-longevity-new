@@ -10,6 +10,11 @@ describe('analytics-events', () => {
       emailSubscribed: 'email_subscribed',
       stackExported: 'stack_exported',
       affiliateClick: 'affiliate_click',
+      pathwayArchitectAdd: 'pathway_architect_add',
+      pathwayArchitectRemove: 'pathway_architect_remove',
+      pathwayArchitectStarterStack: 'pathway_architect_starter_stack',
+      pathwayArchitectShare: 'pathway_architect_share',
+      pathwayArchitectPrint: 'pathway_architect_print',
     });
   });
 

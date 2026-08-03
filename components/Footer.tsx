@@ -12,6 +12,7 @@ import {
   GraduationCap,
   Rocket,
   Syringe,
+  Network,
 } from 'lucide-react';
 import { POPULAR_GUIDE_LINKS } from '@/lib/index-priority';
 import { citationRegistry } from '@/lib/trust';
@@ -29,6 +30,7 @@ const hubLinks = [
   { href: '/stacks', label: 'Stacks & Protocols', icon: Layers },
   { href: '/labs', label: 'Lab Analysis Hub', icon: FlaskConical },
   { href: '/compound-engine', label: 'Compound Engine', icon: Cpu },
+  { href: '/tools/pathway-architect', label: 'Pathway Architect', icon: Network },
 ];
 
 const resourceLinks = [

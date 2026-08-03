@@ -31,6 +31,7 @@ export const HUB_PATH_MAP: Record<string, HubKey> = {
   '/library/delivery-systems': 'deliverySystems',
   '/library/top-picks': 'topPicks',
   '/library': 'library',
+  '/tools/pathway-architect': 'pathwayArchitect',
   '/peptides': 'peptides',
   '/trust': 'trust',
   '/contact': 'contact',
@@ -75,6 +76,7 @@ const SEGMENT_LABELS: Record<string, string> = {
   journey: 'Journey',
   updates: 'Updates',
   'delivery-systems': 'Delivery Systems',
+  'pathway-architect': 'Pathway Architect',
   // Routes outside the original hub set carry their titles in
   // breadcrumb-titles.ts; spread last so those stay authoritative.
   ...routeTitles,
