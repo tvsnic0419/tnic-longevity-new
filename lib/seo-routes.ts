@@ -33,11 +33,11 @@ export const seoRoutes = {
 
   quiz: () =>
     buildPageMetadata({
-      title: '3-Min Starter Quiz — Personalized Longevity Entry Point',
+      title: 'The NICO Starter Questionnaire — Personalized Longevity Entry Point',
       description:
         'Three questions: your goal, age range, and experience level. Get a mechanism-matched stack preset, a PMID-cited insight for your age group, and your next step in the TNiC Longevity OS.',
       path: '/quiz',
-      keywords: ['longevity quiz', 'starter protocol', 'NMN stack quiz', 'personalized supplement stack', 'NRF2 quiz'],
+      keywords: ['NICO starter questionnaire', 'starter protocol', 'NMN stack recommendation', 'personalized supplement stack', 'NRF2 protocol match'],
     }),
 
   learn: () =>

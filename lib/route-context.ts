@@ -59,7 +59,7 @@ const SEGMENT_LABELS: Record<string, string> = {
   brief: 'Protocol Brief',
   learn: 'Learn',
   faq: 'FAQ',
-  quiz: 'Quiz',
+  quiz: 'NICO Starter Questionnaire',
   library: 'Library',
   peptides: 'Peptides',
   trust: 'Trust',

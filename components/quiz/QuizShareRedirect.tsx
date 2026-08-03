@@ -22,9 +22,9 @@ export function QuizShareRedirect({ preset }: { preset: PresetKey }) {
 
   return (
     <div className="container-page py-24 text-center">
-      <p className="text-label text-accent-emerald mb-2">Quiz result</p>
+      <p className="text-label text-accent-emerald mb-2">Questionnaire result</p>
       <h1 className="heading-section text-2xl mb-2">{stack.label} Stack</h1>
-      <p className="text-body-sm text-muted-foreground">Opening your personalized quiz result…</p>
+      <p className="text-body-sm text-muted-foreground">Opening your personalized questionnaire result…</p>
     </div>
   );
 }

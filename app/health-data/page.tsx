@@ -18,7 +18,7 @@ export default function HealthDataPage() {
         <section className="space-y-3">
           <h2 className="text-h3">Stored in your browser</h2>
           <p>
-            Your profile, lab values, saved stack, checklist, hallmark notes, milestones, and quiz result
+            Your profile, lab values, saved stack, checklist, hallmark notes, milestones, and questionnaire result
             are held in your browser&apos;s local (or session) storage. They are not uploaded to a TNiC
             server, and TNiC keeps no account or database of them.
           </p>

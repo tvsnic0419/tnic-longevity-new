@@ -11,13 +11,13 @@ function buildQuizSchemas() {
   const quizApp = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
-    name: 'TNiC 3-Minute Longevity Stack Quiz',
+    name: 'The NICO Starter Questionnaire',
     url: `${SITE.url}/quiz`,
     applicationCategory: 'HealthApplication',
     operatingSystem: 'Web',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     description:
-      'Three-question quiz that matches your longevity goal, age range, and experience level to a personalized evidence-graded supplement stack preset — NRF2 Defense, NAD+ Restoration, Mitochondrial Health, Senolytic Protocol, Foundation, or Elite.',
+      'The NICO Starter Questionnaire matches your longevity goal, age range, and experience level to a personalized evidence-graded supplement stack preset — NRF2 Defense, NAD+ Restoration, Mitochondrial Health, Senolytic Protocol, Foundation, or Elite.',
     featureList: [
       'Mechanism-matched stack presets',
       'PMID-cited insight for your age group',
@@ -27,25 +27,25 @@ function buildQuizSchemas() {
     faq: [
       {
         '@type': 'Question',
-        name: 'How long does the longevity quiz take?',
+        name: 'How long does The NICO Starter Questionnaire take?',
         acceptedAnswer: { '@type': 'Answer', text: 'Three questions — under 3 minutes. You receive an immediate protocol recommendation with PMID-cited evidence for your age group.' },
       },
       {
         '@type': 'Question',
-        name: 'What stack presets does the quiz recommend?',
-        acceptedAnswer: { '@type': 'Answer', text: 'The quiz maps to one of six presets: NRF2 Defense Triad, NAD+ Mitochondrial Stack, Mitochondrial Health, Senolytic Protocol, Foundation Starter, or Full Hybrid. Each preset is built from evidence-graded Tier A/B compounds.' },
+        name: 'What stack presets does The NICO Starter Questionnaire recommend?',
+        acceptedAnswer: { '@type': 'Answer', text: 'The NICO Starter Questionnaire maps to one of six presets: NRF2 Defense Triad, NAD+ Mitochondrial Stack, Mitochondrial Health, Senolytic Protocol, Foundation Starter, or Full Hybrid. Each preset is built from evidence-graded Tier A/B compounds.' },
       },
       {
         '@type': 'Question',
-        name: 'Is my quiz data stored?',
-        acceptedAnswer: { '@type': 'Answer', text: 'Your quiz result is saved locally in your browser — no account, no server storage. Data stays in your browser until you clear it or export via the dashboard.' },
+        name: 'Is my questionnaire data stored?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Your questionnaire result is saved locally in your browser — no account, no server storage. Data stays in your browser until you clear it or export via the dashboard.' },
       },
     ],
   };
 
   const breadcrumb = buildBreadcrumbSchema([
     { name: 'Home', path: '/' },
-    { name: 'Starter Quiz', path: '/quiz' },
+    { name: 'NICO Starter Questionnaire', path: '/quiz' },
   ]);
 
   return [quizApp, buildSoftwareApplicationSchema(), breadcrumb];

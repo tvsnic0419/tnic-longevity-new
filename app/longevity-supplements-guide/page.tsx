@@ -48,8 +48,8 @@ const GUIDE_FAQS = [
 
 const HOW_TO_STEPS = [
   {
-    name: 'Take the 3-minute Starter Quiz',
-    text: 'Answer three questions — your primary goal (energy, cognition, or longevity), age range, and experience level. The quiz matches you to one of 6 evidence-graded stack presets (NRF2 Defense, NAD+ Restoration, Mitochondrial Health, Senolytic Protocol, Foundation, or Elite Protocol).',
+    name: 'Take The NICO Starter Questionnaire',
+    text: 'Answer three questions — your primary goal (energy, cognition, or longevity), age range, and experience level. The NICO Starter Questionnaire matches you to one of 6 evidence-graded stack presets (NRF2 Defense, NAD+ Restoration, Mitochondrial Health, Senolytic Protocol, Foundation, or Elite Protocol).',
   },
   {
     name: 'Choose your first compound based on hallmark targeting',
@@ -295,7 +295,7 @@ export default function LongevitySupplementsGuidePage() {
 
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href="/quiz" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-accent-cyan text-black hover:bg-accent-cyan/90 transition focus-ring">
-              Start Step 1 — Take the Quiz <ArrowRight className="w-4 h-4" />
+              Start Step 1 — Take the Questionnaire <ArrowRight className="w-4 h-4" />
             </Link>
             <Link href="/stacks" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border border-white/15 text-white/80 hover:border-white/30 transition focus-ring">
               Step 5 — Stack Architect

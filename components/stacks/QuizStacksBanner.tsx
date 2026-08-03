@@ -18,7 +18,7 @@ export function QuizStacksBanner({ preset }: { preset: PresetKey }) {
           <Sparkles className="w-5 h-5 text-accent-emerald" aria-hidden="true" />
         </div>
         <div>
-          <p className="text-sm font-bold text-accent-emerald">Quiz preset loaded</p>
+          <p className="text-sm font-bold text-accent-emerald">Questionnaire preset loaded</p>
           <p className="text-body-sm text-muted-foreground mt-1">
             <strong>{stack.label}</strong> stack is active in the Builder — {stack.desc}. Adjust compounds,
             check synergy score, then save or export your protocol.
@@ -30,13 +30,13 @@ export function QuizStacksBanner({ preset }: { preset: PresetKey }) {
           href="/quiz"
           className="focus-ring text-xs font-semibold text-accent-cyan hover:underline rounded px-2 py-1"
         >
-          Retake quiz
+          Retake questionnaire
         </Link>
         <button
           type="button"
           onClick={() => setDismissed(true)}
           className="focus-ring p-2 rounded-lg hover:bg-muted/50 text-muted-foreground"
-          aria-label="Dismiss quiz banner"
+          aria-label="Dismiss questionnaire banner"
         >
           <X className="w-4 h-4" />
         </button>

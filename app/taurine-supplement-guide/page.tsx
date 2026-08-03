@@ -436,14 +436,14 @@ export default function TaurineGuidePage() {
           <div className="rounded-2xl border border-accent-emerald/20 bg-accent-emerald/[0.04] p-8 md:p-10 text-center">
             <h2 className="heading-section mb-3">Add Taurine to Your Stack</h2>
             <p className="text-body text-muted-foreground mb-8 max-w-xl mx-auto">
-              Taurine is included in TNiC&rsquo;s Foundation, Mito-NAD+, and Full-Spectrum presets. Take the quiz to get your personalized protocol.
+              Taurine is included in TNiC&rsquo;s Foundation, Mito-NAD+, and Full-Spectrum presets. Take The NICO Starter Questionnaire to get your personalized protocol.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               <Link
                 href="/quiz"
                 className="focus-ring interactive inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-accent-emerald text-bg-base font-semibold text-sm hover:bg-accent-emerald/90 transition"
               >
-                Take the 3-min quiz
+                Take the Questionnaire
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </Link>
               <Link

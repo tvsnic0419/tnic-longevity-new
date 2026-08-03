@@ -3,7 +3,7 @@ import { PRESET_KEYS, PRESET_OG_ACCENTS } from '@/lib/quiz-share';
 import { stackPresets, type PresetKey } from '@/lib/presets';
 import { isPresetKey } from '@/lib/stack-url';
 
-export const alt = 'TNiC Quiz Result';
+export const alt = 'TNiC Questionnaire Result';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -15,7 +15,7 @@ export default async function Image({ params }: { params: Promise<{ preset: stri
   const { preset } = await params;
 
   if (!isPresetKey(preset)) {
-    return OgImage({ title: 'Quiz Result', accent: '#34d399' });
+    return OgImage({ title: 'Questionnaire Result', accent: '#34d399' });
   }
 
   const stack = stackPresets[preset as PresetKey];
@@ -23,7 +23,7 @@ export default async function Image({ params }: { params: Promise<{ preset: stri
 
   return OgImage({
     title: `${stack.label} Stack`,
-    subtitle: `TNiC quiz result · ${compoundCount} evidence-graded compounds · Tier A/B protocol`,
+    subtitle: `NICO Starter Questionnaire result · ${compoundCount} evidence-graded compounds · Tier A/B protocol`,
     accent: PRESET_OG_ACCENTS[preset as PresetKey],
   });
 }

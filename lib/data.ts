@@ -1553,7 +1553,7 @@ export const supplementRedFlags = [
 ];
 
 export const gettingStartedSteps = [
-  { step: 1, title: 'Take the 3-Min Starter Quiz', desc: 'Answer three questions about your goal, age, and experience. Get a personalized stack preset and next OS step.', link: '/quiz' },
+  { step: 1, title: 'Take The NICO Starter Questionnaire', desc: 'Answer three questions about your goal, age, and experience. Get a personalized stack preset and next OS step.', link: '/quiz' },
   { step: 2, title: 'Review Your Biomarkers', desc: 'See which longevity markers are most depleted for your profile. Understand what your stack needs to target.', link: '/labs?tab=input' },
   { step: 3, title: 'Build Your Stack', desc: 'Use the Stack Architect to toggle compounds. Watch synergy score and AM/PM dosing update in real time.', link: '/stacks' },
   { step: 4, title: 'Check Safety & Consult', desc: 'Review contraindications in the Trust Center. Export your protocol and bring it to your physician.', link: '/trust' },
@@ -1774,13 +1774,13 @@ export const consumerFAQ = [
     id: 'faq31',
     category: 'safety' as const,
     question: 'Does TNiC store or share my health data?',
-    answer: 'No. TNiC is built on a local-first architecture. Your quiz results, biomarker logs, stack configurations, and biological age inputs are stored in your own browser — never transmitted to TNiC servers or third parties. There is no account system, no user database, and no data monetization. Clearing your browser storage erases your data permanently. This is a deliberate design choice, not a marketing claim.',
+    answer: 'No. TNiC is built on a local-first architecture. Your NICO Starter Questionnaire results, biomarker logs, stack configurations, and biological age inputs are stored in your own browser — never transmitted to TNiC servers or third parties. There is no account system, no user database, and no data monetization. Clearing your browser storage erases your data permanently. This is a deliberate design choice, not a marketing claim.',
   },
   {
     id: 'faq32',
     category: 'science' as const,
-    question: 'How does the TNiC quiz generate a personalized stack preset?',
-    answer: 'The quiz maps three inputs — primary goal (learn the science, cellular defense, mitochondrial energy, full optimization, longevity/healthspan, or cardio-metabolic health), age range, and supplement experience — to one of six mechanistic presets: Starter, NRF2 Defense, Mito-NAD+, Full Hybrid, Longevity Pro (senolytic focus), or Cardio-Metabolic (AMPK/lipid focus). Each preset is a curated subset drawn from 14 evidence-graded compounds optimized for synergy coverage across the relevant hallmarks. No black-box algorithm — every mapping is transparent in the methodology section.',
+    question: 'How does The NICO Starter Questionnaire generate a personalized stack preset?',
+    answer: 'The NICO Starter Questionnaire maps three inputs — primary goal (learn the science, cellular defense, mitochondrial energy, full optimization, longevity/healthspan, or cardio-metabolic health), age range, and supplement experience — to one of six mechanistic presets: Starter, NRF2 Defense, Mito-NAD+, Full Hybrid, Longevity Pro (senolytic focus), or Cardio-Metabolic (AMPK/lipid focus). Each preset is a curated subset drawn from 14 evidence-graded compounds optimized for synergy coverage across the relevant hallmarks. No black-box algorithm — every mapping is transparent in the methodology section.',
   },
   {
     id: 'faq33',
@@ -1828,6 +1828,6 @@ export const consumerFAQ = [
     id: 'faq40',
     category: 'getting-started' as const,
     question: 'Should I look into peptides before I finish the compound library?',
-    answer: 'Generally no. Every peptide on TNiC\'s list is either prescription-only, has a materially thinner human evidence base than TNiC\'s Tier-A oral compounds, or both — Semaglutide/Tirzepatide being the one exception with genuine large-RCT backing. If you are new to TNiC, the compound library and 3-Min Quiz are the lower-risk, better-evidenced starting point. Peptides are worth reading once you understand evidence tiers and want to evaluate a specific claim you have already encountered elsewhere, not as a first stop.',
+    answer: 'Generally no. Every peptide on TNiC\'s list is either prescription-only, has a materially thinner human evidence base than TNiC\'s Tier-A oral compounds, or both — Semaglutide/Tirzepatide being the one exception with genuine large-RCT backing. If you are new to TNiC, the compound library and The NICO Starter Questionnaire are the lower-risk, better-evidenced starting point. Peptides are worth reading once you understand evidence tiers and want to evaluate a specific claim you have already encountered elsewhere, not as a first stop.',
   },
 ];

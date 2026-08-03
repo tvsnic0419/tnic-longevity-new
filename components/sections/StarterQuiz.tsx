@@ -119,11 +119,11 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
     <div
       className={`p-6 md:p-8 ${variant === 'page' ? 'card-ultra shadow-lg shadow-accent-emerald/10' : ''}`}
       role="form"
-      aria-label="3-minute starter quiz"
+      aria-label="The NICO Starter Questionnaire"
     >
       <div className="flex items-center justify-between mb-4">
         <div>
-          <p className="font-mono text-[10px] text-accent-cyan tracking-widest mb-1">3-MIN QUIZ</p>
+          <p className="font-mono text-[10px] text-accent-cyan tracking-widest mb-1">NICO STARTER QUESTIONNAIRE</p>
           <h3 className="text-lg font-bold">
             {variant === 'page' ? 'Your personalized path' : 'Find Your Entry Point'}
           </h3>

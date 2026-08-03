@@ -168,17 +168,18 @@
   --radius-2xl: 1.5rem;
 
   /* The primary nav's desktop row (10 top-level links + search + theme toggle +
-     3 action items) measurably overflows its container below this width — the
-     Dashboard CTA sits past the viewport edge with no scroll affordance, i.e.
-     unreachable, not just cramped. Re-measured via headless Playwright after
-     adding the Pathway Architect link (10th): the real Dashboard link's right
-     edge exceeds window.innerWidth up to ~1858px and only clears it at
-     ~1870px+, so the previous 106.25rem (1700px) threshold now sits squarely
-     inside the overflow zone. The desktop row, AND the mobile-menu trigger
-     that must cover for it below this width, both key off this one token (see
-     Nav.tsx) so there is never a dead zone with neither visible. If the link
-     count changes, re-measure before touching this value. */
-  --breakpoint-nav: 125rem; /* 2000px — real crossover measured at ~1870px; this leaves a real margin (~70px slack at 2000px, same margin philosophy as before) */
+     3 action items, one of which — "NICO Starter Questionnaire" — is long)
+     measurably overflows its container below this width — the Dashboard CTA
+     sits past the viewport edge with no scroll affordance, i.e. unreachable,
+     not just cramped. Re-measured via headless Playwright twice: once after
+     adding the Pathway Architect link (10th link), and again after renaming
+     the "Quiz" pill to "Questionnaire" — that rename alone cut the slack at
+     125rem (2000px) from ~70px down to ~7px, too thin a margin to keep. The
+     desktop row, AND the mobile-menu trigger that must cover for it below
+     this width, both key off this one token (see Nav.tsx) so there is never
+     a dead zone with neither visible. If the link count OR any link's text
+     changes, re-measure before touching this value. */
+  --breakpoint-nav: 135rem; /* 2160px — restores a real margin (~85px slack), same philosophy as before */
 
   --space-touch: 2.75rem;
   --leading-body: 1.65;

@@ -105,7 +105,7 @@ export const protocolBriefIssues: ProtocolBriefEntry[] = [
     libraryHrefs: [
       { label: 'Hallmark targets (home)', href: '/#hallmark-targets' },
       { label: 'Full library', href: '/library' },
-      { label: '3-Min Quiz', href: '/quiz' },
+      { label: 'NICO Starter Questionnaire', href: '/quiz' },
     ],
     takeaway: 'Start at the hallmark that matches your labs — not the supplement you saw advertised.',
     tags: ['hallmarks', 'library'],

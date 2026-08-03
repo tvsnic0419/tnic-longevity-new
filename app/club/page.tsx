@@ -62,7 +62,7 @@ export default function ClubPage() {
           <Dna className="w-8 h-8 text-accent-cyan mx-auto mb-4" aria-hidden="true" />
           <h2 className="heading-section mb-3">Don&rsquo;t have a grade yet?</h2>
           <p className="text-body-sm max-w-md mx-auto mb-6">
-            Take the 3-minute quiz to build an evidence-graded stack, get your longevity grade,
+            Take The NICO Starter Questionnaire to build an evidence-graded stack, get your longevity grade,
             then bring it back to your charter card.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
