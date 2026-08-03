@@ -578,7 +578,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
     slug: 'urolithin-a-vs-coq10',
     title: 'Urolithin A vs CoQ10',
     subtitle: 'Both target mitochondrial aging — but at completely different points in the process',
-    labelA: 'Urolithin A (Mitopure)',
+    labelA: 'Urolithin A',
     labelB: 'CoQ10 (Ubiquinol)',
     category: 'compound',
     evidenceTier: 'B',

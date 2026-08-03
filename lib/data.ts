@@ -41,7 +41,7 @@ export const communityPulse = [
 export const compounds: Compound[] = [
   {
     id: 'glynac',
-    name: 'GlyNAC ET',
+    name: 'GlyNAC',
     brand: 'Nutri',
     pathway: 'Glutathione Synthesis',
     mechanism: 'Provides glycine and N-acetylcysteine — the two rate-limiting precursors for glutathione (GSH) synthesis. Glutathione synthetase (GSS) condenses γ-glutamylcysteine (made by GCL from NAC-derived cysteine + glutamate) with glycine to produce GSH. Glycine becomes limiting first in aging because protein intake falls while gluconeogenic glycine demand rises; NAC addresses the cysteine bottleneck from dietary methionine under-supply. Restored GSH pools protect KEAP1-NRF2 switch, IKKβ-NF-κB braking, and mitochondrial complex I subunit cysteines from irreversible oxidation.',
@@ -231,7 +231,7 @@ export const compounds: Compound[] = [
   },
   {
     id: 'urolithin-a',
-    name: 'Urolithin A (Mitopure)',
+    name: 'Urolithin A',
     brand: 'Amazentis / Timeline Nutrition',
     pathway: 'Mitophagy Induction',
     mechanism: 'Gut-derived metabolite of ellagitannins (pomegranate, walnuts) that activates mitophagy — selective autophagy of damaged mitochondria — by suppressing the PINK1/Parkin axis brakes and independently of AMPK or mTOR signaling. Only ~30–40% of adults have gut microbiota capable of producing urolithin A from dietary sources; supplementation bypasses this.',

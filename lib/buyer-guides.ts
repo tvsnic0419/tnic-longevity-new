@@ -378,7 +378,7 @@ export const compoundBuyerGuides: CompoundBuyerGuide[] = [
   },
   {
     compoundId: 'urolithin-a',
-    title: 'Urolithin A (Mitopure) Buyer Guide',
+    title: 'Urolithin A Buyer Guide',
     tagline: 'Only Mitopure has Phase 2 human RCT backing — standardization matters',
     formRequirements: [
       'Label must say: urolithin A (specific molecule — not ellagitannin or pomegranate extract)',

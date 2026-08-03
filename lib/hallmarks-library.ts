@@ -121,7 +121,7 @@ export const hallmarkLibrary: HallmarkLibraryEntry[] = [
       { id: 'a3', name: 'Resveratrol → AMPK activation', category: 'compound', evidence: 'B', rank: 3, impact: 7, description: 'AMPK phosphorylation triggers autophagy independent of mTOR.', compoundId: 'resveratrol', tnicAvailable: true },
       { id: 'a4', name: 'Sulforaphane', category: 'compound', evidence: 'B', rank: 4, impact: 6, description: 'NRF2-mediated upregulation of autophagy-related genes in preclinical models.', compoundId: 'sulforaphane', tnicAvailable: true },
       { id: 'a5', name: 'Spermidine', category: 'compound', evidence: 'B', rank: 5, impact: 6, description: 'Induces autophagy via EP300 inhibition. Madeo 2021 memory RCT; dietary epidemiology links intake to longevity.', compoundId: 'spermidine', pmid: '33932338', tnicAvailable: true },
-      { id: 'a6', name: 'Urolithin A (Mitopure)', category: 'compound', evidence: 'A', rank: 6, impact: 8, description: 'Activates mitophagy (selective mitochondria autophagy) in human skeletal muscle — Phase 2 RCT confirmed improved muscle mitochondrial gene expression and endurance in older adults (PMID 35391504).', compoundId: 'urolithin-a', pmid: '35391504', tnicAvailable: true },
+      { id: 'a6', name: 'Urolithin A', category: 'compound', evidence: 'A', rank: 6, impact: 8, description: 'Activates mitophagy (selective mitochondria autophagy) in human skeletal muscle — Phase 2 RCT confirmed improved muscle mitochondrial gene expression and endurance in older adults (PMID 35391504).', compoundId: 'urolithin-a', pmid: '35391504', tnicAvailable: true },
     ],
   },
   {

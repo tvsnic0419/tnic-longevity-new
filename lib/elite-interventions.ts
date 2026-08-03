@@ -44,7 +44,7 @@ const ELITE_SEEDS: EliteSeed[] = [
 export interface EliteIntervention {
   rank: number;
   compoundId: string;
-  /** Common compound name from lib/data.ts (e.g. "GlyNAC ET"). */
+  /** Common compound name from lib/data.ts (e.g. "GlyNAC"). */
   compoundName: string;
   /** Pathway/mechanism family from lib/data.ts (used as the card eyebrow). */
   pathway: string;
