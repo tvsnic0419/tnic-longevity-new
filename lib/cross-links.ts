@@ -68,6 +68,32 @@ const PEPTIDE_NAMES: Record<string, string[]> = {
   humanin: ['Humanin'],
 };
 
+/** Molecular pathways (lib/pathways.ts) — slug → prose aliases. These are the
+ * mechanistic actors that saturate mechanism prose, so linking them is the
+ * highest-density interlinking win. Kept in sync with pathways.ts by
+ * cross-links.test.ts. */
+const PATHWAY_NAMES: Record<string, string[]> = {
+  'nad-plus': ['NAD+', 'NAD⁺'],
+  sirt1: ['SIRT1', 'Sirtuin 1'],
+  sirt3: ['SIRT3', 'Sirtuin 3'],
+  sirt6: ['SIRT6', 'Sirtuin 6'],
+  parp: ['PARP1/2', 'PARP-1', 'PARP1', 'PARP'],
+  cd38: ['CD38'],
+  mtor: ['mTORC1', 'mTOR'],
+  ampk: ['AMPK'],
+  foxo3: ['FOXO3', 'FOXO'],
+  'pink1-parkin': ['PINK1/Parkin', 'PINK1', 'Parkin'],
+  'pgc-1-alpha': ['PGC-1α', 'PGC-1alpha', 'PGC1α', 'PGC-1a'],
+  tfeb: ['TFEB'],
+  ulk1: ['ULK1'],
+  nrf2: ['NRF2/KEAP1', 'NRF2', 'KEAP1'],
+  'nf-kb': ['NF-κB', 'NF-kappaB', 'NF-kB', 'NFkB'],
+  nlrp3: ['NLRP3', 'inflammasome'],
+  glutathione: ['Glutathione', 'GSH'],
+  'enos-no': ['eNOS', 'nitric oxide'],
+  'gsk-3-beta': ['GSK-3β', 'GSK-3', 'GSK3'],
+};
+
 const HALLMARKS: Array<{ name: string; slug: string }> = [
   { name: 'Genomic Instability', slug: 'genomic-instability' },
   { name: 'Telomere Attrition', slug: 'telomere-attrition' },
@@ -99,6 +125,10 @@ export const crossLinks: CrossLink[] = [
   ...Object.entries(PEPTIDE_NAMES).map(([slug, names]) => ({
     names,
     href: `/peptides/${slug}`,
+  })),
+  ...Object.entries(PATHWAY_NAMES).map(([slug, names]) => ({
+    names,
+    href: `/pathways/${slug}`,
   })),
   ...HALLMARKS.map((h) => ({ names: [h.name], href: `/library/${h.slug}` })),
 ];

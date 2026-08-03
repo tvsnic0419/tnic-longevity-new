@@ -26,6 +26,7 @@ import { getComparisonsForCompound } from '@/lib/comparison-relations';
 import { resolveCompound as resolveEngineCompound } from '@/lib/compound-engine-data';
 import { buildEngineStackUrl } from '@/lib/stack-url';
 import { getGuideForCompound, getRelatedCompounds } from '@/lib/library-graph';
+import { getPathwaysForCompound } from '@/lib/pathways';
 import { seoRoutes } from '@/lib/seo-routes';
 
 const VALID_CATEGORIES = Object.keys(libraryCategoryMeta) as LibraryModuleCategory[];
@@ -70,6 +71,12 @@ export default async function LibraryModulePage({
   const guide = mod.category === 'compounds' ? getGuideForCompound(mod.slug) : undefined;
   const relatedCompounds =
     mod.category === 'compounds' ? getRelatedCompounds(mod.slug) : [];
+  // Pathways this compound engages — resolved server-side so the pathway
+  // registry stays out of the deep-dive client bundle.
+  const compoundPathways =
+    mod.category === 'compounds'
+      ? getPathwaysForCompound(mod.slug).map((p) => ({ slug: p.slug, name: p.name }))
+      : [];
 
   // "See how this scores" only appears when the engine has actually curated this
   // compound. Resolved here rather than in the client component so the engine's
@@ -198,6 +205,7 @@ export default async function LibraryModulePage({
         guide={guide}
         relatedCompounds={relatedCompounds}
         engineHref={engineHref}
+        pathways={compoundPathways}
         lastUpdated={mdx?.frontmatter.last_updated}
         author={mdx?.frontmatter.author}
         reviewer={reviewer}

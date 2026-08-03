@@ -47,6 +47,7 @@ export function LibraryModuleDetail({
   guide,
   relatedCompounds = [],
   engineHref,
+  pathways = [],
   lastUpdated,
   author,
   reviewer,
@@ -56,6 +57,8 @@ export function LibraryModuleDetail({
   comparisons?: ComparisonLink[];
   guide?: GuideLink;
   relatedCompounds?: RelatedCompoundLink[];
+  /** Molecular pathways this compound engages (server-resolved). */
+  pathways?: { slug: string; name: string }[];
   /**
    * Deep link into the Compound Intelligence Engine pre-loaded with this
    * compound, or undefined when the engine hasn't curated it. Resolved on the
@@ -136,6 +139,24 @@ export function LibraryModuleDetail({
                         className="text-sm text-muted-foreground hover:text-accent-cyan transition"
                       >
                         #{h.number} {h.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </GlassPanel>
+            )}
+
+            {pathways.length > 0 && (
+              <GlassPanel depth="mid" className="rounded-xl p-5">
+                <p className="text-[10px] font-mono text-accent-cyan uppercase mb-3">Pathways engaged</p>
+                <ul className="space-y-2">
+                  {pathways.map((p) => (
+                    <li key={p.slug}>
+                      <Link
+                        href={`/pathways/${p.slug}`}
+                        className="text-sm text-muted-foreground hover:text-accent-cyan transition"
+                      >
+                        {p.name}
                       </Link>
                     </li>
                   ))}
