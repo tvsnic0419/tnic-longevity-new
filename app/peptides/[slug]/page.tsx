@@ -33,6 +33,11 @@ export default async function PeptidePage({
 
   const mdx = loadMdx(peptide.mdxSlug, 'peptides');
   const path = `/peptides/${peptide.slug}`;
+  const reviewer = mdx?.frontmatter.reviewer;
+  const breadcrumbItems = [
+    { name: 'Peptides', path: '/peptides' },
+    { name: peptide.name, path },
+  ];
 
   const schemas = [
     buildMedicalWebPageSchema({
@@ -41,17 +46,21 @@ export default async function PeptidePage({
       path,
       dateModified: mdx?.frontmatter.last_updated,
       evidenceTier: peptide.evidenceTier,
+      reviewer,
     }),
-    buildBreadcrumbSchema([
-      { name: 'Peptides', path: '/peptides' },
-      { name: peptide.name, path },
-    ]),
+    buildBreadcrumbSchema(breadcrumbItems),
   ];
 
   return (
     <>
       <StructuredData schemas={schemas} />
-      <PeptideDetail peptide={peptide} mdxBody={mdx?.body ?? null} />
+      <PeptideDetail
+        peptide={peptide}
+        mdxBody={mdx?.body ?? null}
+        lastUpdated={mdx?.frontmatter.last_updated}
+        author={mdx?.frontmatter.author}
+        reviewer={reviewer}
+      />
     </>
   );
 }

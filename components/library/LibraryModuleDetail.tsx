@@ -21,6 +21,7 @@ import { CompoundGlancePanel } from './CompoundGlancePanel';
 import { ModuleGlancePanel } from './ModuleGlancePanel';
 import { recordModuleVisit } from '@/lib/recent-modules';
 import { GlassPanel } from '@/components/ui/GlassPanel';
+import { ContentByline } from '@/components/trust/ContentByline';
 
 /**
  * Category -> icon + full static Tailwind class strings. Deliberately not
@@ -45,6 +46,9 @@ export function LibraryModuleDetail({
   guide,
   relatedCompounds = [],
   engineHref,
+  lastUpdated,
+  author,
+  reviewer,
 }: {
   module: LibraryModule;
   mdxBody: string | null;
@@ -57,6 +61,10 @@ export function LibraryModuleDetail({
    * server so the engine's scoring dataset never reaches this client bundle.
    */
   engineHref?: string;
+  /** Authorship / freshness signals from MDX frontmatter (E-E-A-T byline). */
+  lastUpdated?: string;
+  author?: string;
+  reviewer?: string;
 }) {
   const categoryMeta = libraryCategoryMeta[module.category];
   const relatedHallmarks = hallmarkLibrary.filter((h) => module.relatedHallmarkIds.includes(h.id));
@@ -83,10 +91,16 @@ export function LibraryModuleDetail({
       <div className="max-w-7xl mx-auto px-6">
         <Link
           href="/library#content-modules"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-accent-cyan transition mb-8"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-accent-cyan transition mb-4"
         >
           <ArrowLeft className="w-4 h-4" /> Back to Library
         </Link>
+        <ContentByline
+          author={author}
+          lastUpdated={lastUpdated}
+          reviewer={reviewer}
+          className="mb-8"
+        />
 
         <div className="grid lg:grid-cols-12 gap-10">
           <aside className="order-2 lg:order-1 lg:col-span-4 space-y-6">

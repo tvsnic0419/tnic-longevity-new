@@ -10,6 +10,7 @@ import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { PeptideLegalBadge, getPeptideLegalStatusMeta } from './PeptideLegalBadge';
 import { PeptideContextStrip } from './PeptideContextStrip';
 import { MdxRenderer } from '@/components/library/MdxRenderer';
+import { ContentByline } from '@/components/trust/ContentByline';
 
 /** ThemeAccent -> full static Tailwind class strings — see the identical
  * note in LibraryModuleDetail.tsx on why these can't be interpolated. */
@@ -21,7 +22,19 @@ const themeVisual: Record<string, { badgeClass: string; glowClass: string; textC
   amber: { badgeClass: 'icon-badge-amber', glowClass: 'glow-amber', textClass: 'text-accent-amber' },
 };
 
-export function PeptideDetail({ peptide, mdxBody }: { peptide: Peptide; mdxBody: string | null }) {
+export function PeptideDetail({
+  peptide,
+  mdxBody,
+  lastUpdated,
+  author,
+  reviewer,
+}: {
+  peptide: Peptide;
+  mdxBody: string | null;
+  lastUpdated?: string;
+  author?: string;
+  reviewer?: string;
+}) {
   const categoryMeta = peptideCategoryMeta[peptide.category];
   const legalMeta = getPeptideLegalStatusMeta(peptide.legalStatus);
   const relatedHallmarks = hallmarkLibrary.filter((h) => peptide.relatedHallmarkIds.includes(h.id));
@@ -34,10 +47,16 @@ export function PeptideDetail({ peptide, mdxBody }: { peptide: Peptide; mdxBody:
       <div className="max-w-7xl mx-auto px-6">
         <Link
           href="/peptides"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-accent-cyan transition mb-8"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-accent-cyan transition mb-4"
         >
           <ArrowLeft className="w-4 h-4" /> Back to Peptides
         </Link>
+        <ContentByline
+          author={author}
+          lastUpdated={lastUpdated}
+          reviewer={reviewer}
+          className="mb-8"
+        />
 
         <div className="grid lg:grid-cols-12 gap-10">
           <aside className="order-2 lg:order-1 lg:col-span-4 space-y-6">

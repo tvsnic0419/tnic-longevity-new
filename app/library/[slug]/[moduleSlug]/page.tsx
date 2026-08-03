@@ -100,11 +100,13 @@ export default async function LibraryModulePage({
       }
     : null;
 
-  const breadcrumb = buildBreadcrumbSchema([
+  const breadcrumbItems = [
     { name: 'Library', path: '/library' },
     { name: libraryCategoryMeta[mod.category].label, path: `/library#content-modules` },
     { name: mod.title, path },
-  ]);
+  ];
+  const breadcrumb = buildBreadcrumbSchema(breadcrumbItems);
+  const reviewer = mdx?.frontmatter.reviewer;
 
   const schemas =
     mod.category === 'compounds'
@@ -116,6 +118,7 @@ export default async function LibraryModulePage({
             dateModified: mdx?.frontmatter.last_updated,
             evidenceTier: mod.evidenceTier,
             citations: getCompoundCitations(mod.slug, mod.compoundId),
+            reviewer,
           }),
           breadcrumb,
         ]
@@ -126,6 +129,7 @@ export default async function LibraryModulePage({
             path,
             dateModified: mdx?.frontmatter.last_updated,
             evidenceTier: mod.evidenceTier,
+            reviewer,
           }),
           breadcrumb,
         ];
@@ -141,6 +145,9 @@ export default async function LibraryModulePage({
         guide={guide}
         relatedCompounds={relatedCompounds}
         engineHref={engineHref}
+        lastUpdated={mdx?.frontmatter.last_updated}
+        author={mdx?.frontmatter.author}
+        reviewer={reviewer}
       />
     </>
   );

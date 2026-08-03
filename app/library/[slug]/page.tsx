@@ -62,6 +62,11 @@ export default async function HallmarkPage({
   const targetingCompounds = getCompoundsForHallmark(hallmark.id);
   const compoundHrefs = getCompoundIdToSlugMap();
 
+  const reviewer = mdx?.frontmatter.reviewer;
+  const breadcrumbItems = [
+    { name: 'Library', path: '/library' },
+    { name: hallmark.title, path },
+  ];
   const schemas = [
     buildArticleSchema({
       title: hallmark.title,
@@ -69,11 +74,9 @@ export default async function HallmarkPage({
       path,
       dateModified: mdx?.frontmatter.last_updated,
       evidenceTier: 'A',
+      reviewer,
     }),
-    buildBreadcrumbSchema([
-      { name: 'Library', path: '/library' },
-      { name: hallmark.title, path },
-    ]),
+    buildBreadcrumbSchema(breadcrumbItems),
   ];
 
   return (
@@ -84,6 +87,9 @@ export default async function HallmarkPage({
         mdxBody={mdx?.body ?? null}
         targetingCompounds={targetingCompounds}
         compoundHrefs={compoundHrefs}
+        lastUpdated={mdx?.frontmatter.last_updated}
+        author={mdx?.frontmatter.author}
+        reviewer={reviewer}
       />
     </>
   );

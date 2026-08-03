@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { consumerFAQ } from './data';
 import { PRIORITY_INDEX_PATHS } from './index-priority';
-import { SITE, LONGEVITY_KEYWORDS, SOCIAL_PROFILES } from './site';
+import { SITE, LONGEVITY_KEYWORDS, SOCIAL_PROFILES, EDITORIAL_AUTHOR } from './site';
 import type { SourceCitation } from './types';
 import { citationRegistry } from './trust';
 
@@ -127,8 +127,23 @@ export function buildOrganizationSchema() {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: SITE.name,
+    alternateName: SITE.fullName,
     url: SITE.url,
+    logo: `${SITE.url}/icon-512.png`,
     description: 'Independent educational longevity platform — not a medical provider or supplement retailer.',
+    knowsAbout: [
+      'Hallmarks of aging',
+      'Longevity supplements',
+      'Healthspan',
+      'NAD+ metabolism',
+      'Evidence-based nutrition',
+    ],
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'editorial',
+      email: SITE.contactEmail,
+      url: `${SITE.url}/contact`,
+    },
     sameAs: [...SOCIAL_PROFILES],
   };
 }
@@ -194,6 +209,17 @@ export function getCompoundCitations(slug: string, compoundId?: string): SourceC
   return citationRegistry.filter((c) => c.id.startsWith(prefix));
 }
 
+/**
+ * The independent-reviewer signal (schema.org `reviewedBy`). Emitted ONLY when a
+ * real named reviewer is supplied via frontmatter — the schema code path exists
+ * so a future reviewer lights up automatically, but nothing is claimed today.
+ */
+function reviewedByNode(reviewer?: string) {
+  const name = reviewer?.trim();
+  if (!name) return {};
+  return { reviewedBy: { '@type': 'Person', name } };
+}
+
 export function buildMedicalWebPageSchema({
   title,
   description,
@@ -201,6 +227,7 @@ export function buildMedicalWebPageSchema({
   dateModified,
   evidenceTier,
   citations = [],
+  reviewer,
 }: {
   title: string;
   description: string;
@@ -208,8 +235,11 @@ export function buildMedicalWebPageSchema({
   dateModified?: string;
   evidenceTier?: string;
   citations?: SourceCitation[];
+  /** Independent clinical reviewer name; when unset, no reviewedBy is emitted. */
+  reviewer?: string;
 }) {
   const url = `${SITE.url}${path}`;
+  const lastReviewed = dateModified ?? new Date().toISOString().split('T')[0];
   return {
     '@context': 'https://schema.org',
     '@type': 'MedicalWebPage',
@@ -217,9 +247,12 @@ export function buildMedicalWebPageSchema({
     headline: title,
     description,
     url,
-    dateModified: dateModified ?? new Date().toISOString().split('T')[0],
-    author: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+    dateModified: lastReviewed,
+    lastReviewed,
+    author: { '@type': 'Organization', name: EDITORIAL_AUTHOR.name, url: EDITORIAL_AUTHOR.url },
     publisher: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+    ...reviewedByNode(reviewer),
+    medicalAudience: { '@type': 'MedicalAudience', audienceType: 'Patient' },
     about: {
       '@type': 'MedicalEntity',
       name: title,
@@ -248,22 +281,29 @@ export function buildArticleSchema({
   path,
   dateModified,
   evidenceTier,
+  citations = [],
+  reviewer,
 }: {
   title: string;
   description: string;
   path: string;
   dateModified?: string;
   evidenceTier?: string;
+  citations?: SourceCitation[];
+  /** Independent clinical reviewer name; when unset, no reviewedBy is emitted. */
+  reviewer?: string;
 }) {
+  const lastReviewed = dateModified ?? new Date().toISOString().split('T')[0];
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: title,
     description,
     url: `${SITE.url}${path}`,
-    dateModified: dateModified ?? new Date().toISOString().split('T')[0],
-    author: { '@type': 'Organization', name: SITE.name },
+    dateModified: lastReviewed,
+    author: { '@type': 'Organization', name: EDITORIAL_AUTHOR.name, url: EDITORIAL_AUTHOR.url },
     publisher: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+    ...reviewedByNode(reviewer),
     about: {
       '@type': 'Thing',
       name: 'Longevity Science',
@@ -271,6 +311,21 @@ export function buildArticleSchema({
     },
     isAccessibleForFree: true,
     educationalUse: 'Longevity education — not medical advice',
+    ...(citations.length > 0
+      ? {
+          citation: citations.map((c) => ({
+            '@type': 'ScholarlyArticle',
+            name: c.title,
+            author: c.authors,
+            datePublished: String(c.year),
+            isPartOf: { '@type': 'Periodical', name: c.journal },
+            identifier: c.pmid
+              ? { '@type': 'PropertyValue', propertyID: 'PMID', value: c.pmid }
+              : undefined,
+            url: c.pmid ? `https://pubmed.ncbi.nlm.nih.gov/${c.pmid}/` : undefined,
+          })),
+        }
+      : {}),
   };
 }
 
