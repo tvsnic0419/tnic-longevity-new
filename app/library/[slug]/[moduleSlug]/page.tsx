@@ -104,11 +104,13 @@ export default async function LibraryModulePage({
     : null;
 
   // Visual parity: the 28 "library-only" compounds have no lib/data.ts entry
-  // (so no CompoundHero). Give them a lighter overture built only from module
-  // fields — evidence tier, a live PMID count from the body, and hallmarks —
-  // so all 55 compound pages open with a consistent hero.
+  // (so no CompoundHero), and synergy stacks never do. Give them a lighter
+  // overture built only from module fields — evidence tier, a live PMID count
+  // from the body, and hallmarks — so every compound and synergy page opens
+  // with a consistent hero. (Lifestyle/guide pages keep their own treatment —
+  // the molecular motif doesn't fit them.)
   const moduleHeroData: ModuleHeroData | null =
-    mod.category === 'compounds' && !heroData
+    (mod.category === 'compounds' || mod.category === 'synergies') && !heroData
       ? {
           id: mod.slug,
           title: mod.title,
