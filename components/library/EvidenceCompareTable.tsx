@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { ArrowRight, Scale, ExternalLink } from 'lucide-react';
-import type { EvidenceComparison, CompareVerdict } from '@/lib/comparisons';
+import type { CompareRow, EvidenceComparison, CompareVerdict } from '@/lib/comparisons';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { CompareShareCard } from '@/components/library/CompareShareCard';
 import { GlassPanel } from '@/components/ui/GlassPanel';
@@ -16,12 +16,75 @@ const verdictStyle: Record<CompareVerdict, string> = {
   context: 'text-accent-amber bg-accent-amber/10 border-accent-amber/20',
 };
 
+const verdictBarColor: Record<CompareVerdict, string> = {
+  a: 'bg-accent-cyan',
+  b: 'bg-accent-violet',
+  tie: 'bg-accent-emerald',
+  context: 'bg-accent-amber',
+};
+
 const verdictLabel: Record<CompareVerdict, (a: string, b: string) => string> = {
   a: (a) => `${a} edge`,
   b: (_, b) => `${b} edge`,
   tie: () => 'Even',
   context: () => 'Depends on goal',
 };
+
+const VERDICT_ORDER: CompareVerdict[] = ['a', 'b', 'tie', 'context'];
+
+/**
+ * At-a-glance tally of the per-dimension verdicts below — a real count over
+ * `rows`, not a synthetic score. Fixed slot order/colors match the verdict
+ * badges in the detailed table so the two stay legible as one system.
+ */
+function ComparisonVerdictBar({
+  rows,
+  labelA,
+  labelB,
+}: {
+  rows: CompareRow[];
+  labelA: string;
+  labelB: string;
+}) {
+  const tally: Record<CompareVerdict, number> = { a: 0, b: 0, tie: 0, context: 0 };
+  rows.forEach((row) => {
+    tally[row.verdict] += 1;
+  });
+  const total = rows.length;
+  const present = VERDICT_ORDER.filter((v) => tally[v] > 0);
+  const summary = present.map((v) => `${verdictLabel[v](labelA, labelB)}: ${tally[v]}`).join(', ');
+
+  return (
+    <div className="rounded-2xl border border-border p-5">
+      <p className="text-label text-muted-foreground mb-4">
+        Verdict tally across {total} dimension{total === 1 ? '' : 's'}
+      </p>
+      <div
+        className="flex h-2.5 w-full gap-0.5"
+        role="img"
+        aria-label={`Out of ${total} dimensions compared: ${summary}`}
+      >
+        {present.map((v) => (
+          <div
+            key={v}
+            aria-hidden="true"
+            className={cn('h-full first:rounded-l-full last:rounded-r-full', verdictBarColor[v])}
+            style={{ width: `${(tally[v] / total) * 100}%` }}
+          />
+        ))}
+      </div>
+      <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
+        {present.map((v) => (
+          <div key={v} className="flex items-center gap-1.5 text-xs">
+            <span className={cn('h-2 w-2 rounded-full shrink-0', verdictBarColor[v])} aria-hidden="true" />
+            <span className="text-muted-foreground">{verdictLabel[v](labelA, labelB)}</span>
+            <span className="font-mono text-foreground/80">{tally[v]}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 interface EvidenceCompareTableProps {
   comparison: EvidenceComparison;
@@ -40,6 +103,8 @@ export function EvidenceCompareTable({ comparison }: EvidenceCompareTableProps) 
       <p className="text-body-sm text-muted-foreground leading-relaxed max-w-3xl">
         {comparison.summary}
       </p>
+
+      <ComparisonVerdictBar rows={rows} labelA={labelA} labelB={labelB} />
 
       <div className="rounded-2xl border border-border overflow-hidden">
         <div className="grid grid-cols-[1.2fr_1fr_1fr_auto] gap-0 bg-muted/30 border-b border-border text-[10px] font-mono uppercase tracking-wider">
