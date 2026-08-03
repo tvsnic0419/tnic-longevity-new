@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { LibraryModuleDetail } from '@/components/library/LibraryModuleDetail';
 import { CompoundHero, type CompoundHeroData } from '@/components/viz/CompoundHero';
+import { ModuleHero, type ModuleHeroData } from '@/components/viz/ModuleHero';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { compounds } from '@/lib/data';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
@@ -102,6 +103,27 @@ export default async function LibraryModulePage({
       }
     : null;
 
+  // Visual parity: the 28 "library-only" compounds have no lib/data.ts entry
+  // (so no CompoundHero). Give them a lighter overture built only from module
+  // fields — evidence tier, a live PMID count from the body, and hallmarks —
+  // so all 55 compound pages open with a consistent hero.
+  const moduleHeroData: ModuleHeroData | null =
+    mod.category === 'compounds' && !heroData
+      ? {
+          id: mod.slug,
+          title: mod.title,
+          kicker: mod.tagline.split('—')[0].trim() || 'Compound Deep-Dive',
+          summary: mod.summary,
+          evidenceTier: mod.evidenceTier,
+          studyCount: new Set(
+            (mdx?.body.match(/\bPMID:?\s*(\d{7,8})\b/g) ?? []).map((m) => m.replace(/\D/g, '')),
+          ).size,
+          hallmarks: mod.relatedHallmarkIds
+            .map((hid) => hallmarkLibrary.find((h) => h.id === hid)?.title)
+            .filter((t): t is string => Boolean(t)),
+        }
+      : null;
+
   const breadcrumbItems = [
     { name: 'Library', path: '/library' },
     { name: libraryCategoryMeta[mod.category].label, path: `/library#content-modules` },
@@ -166,6 +188,7 @@ export default async function LibraryModulePage({
     <>
       <StructuredData schemas={schemas} />
       {heroData && <CompoundHero {...heroData} />}
+      {moduleHeroData && <ModuleHero {...moduleHeroData} />}
       <LibraryModuleDetail
         module={mod}
         mdxBody={mdx?.body ?? null}
