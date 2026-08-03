@@ -136,8 +136,9 @@ const CHERO_CSS = `
 }
 .chero-kicker::before { content: ''; width: 26px; height: 1px; background: var(--hue); opacity: .6; }
 .chero-name {
-  font-family: ${FONT.display}; font-weight: 400; font-size: clamp(38px, 6.5vw, 76px);
-  line-height: 0.98; letter-spacing: -0.025em; color: ${VIZ.ink}; margin: 2px 0;
+  font-family: ${FONT.display}; font-weight: 400; font-size: clamp(34px, 5.5vw, 72px);
+  line-height: 1.0; letter-spacing: -0.025em; color: ${VIZ.ink}; margin: 2px 0;
+  max-width: 100%; overflow-wrap: break-word; word-break: break-word; hyphens: auto;
 }
 .chero-medallion {
   display: inline-flex; align-items: center; gap: 9px; align-self: flex-start;

@@ -36,10 +36,13 @@ export function ModuleHero(data: ModuleHeroData) {
   const geom = structured ? getGeometry(data.id) : null;
   const tint = tierColor(data.evidenceTier);
 
+  // Drop the "Studies" tile when the body cites none, rather than show a hollow
+  // "0 cited". The fact rail's column count follows the number of tiles so the
+  // grid never leaves an empty cell.
   const facts: Array<{ k: string; v: string }> = [
     { k: "Evidence", v: `Tier ${data.evidenceTier}` },
-    { k: "Studies", v: `${data.studyCount} cited` },
-    { k: "Hallmarks", v: `${data.hallmarks.length} targeted` },
+    ...(data.studyCount > 0 ? [{ k: "Studies", v: `${data.studyCount} cited` }] : []),
+    ...(data.hallmarks.length > 0 ? [{ k: "Hallmarks", v: `${data.hallmarks.length} targeted` }] : []),
   ];
 
   return (
@@ -70,7 +73,10 @@ export function ModuleHero(data: ModuleHeroData) {
           </div>
           {data.summary && <p className="mhero-mech">{firstSentence(data.summary)}</p>}
 
-          <div className="mhero-facts">
+          <div
+            className="mhero-facts"
+            style={{ gridTemplateColumns: `repeat(${facts.length}, minmax(0, 1fr))` }}
+          >
             {facts.map((f) => (
               <div className="mhero-fact" key={f.k}>
                 <span className="k">{f.k}</span>
@@ -129,8 +135,9 @@ const MHERO_CSS = `
 }
 .mhero-kicker::before { content: ''; width: 26px; height: 1px; background: var(--hue); opacity: .6; }
 .mhero-name {
-  font-family: ${FONT.display}; font-weight: 400; font-size: clamp(38px, 6.5vw, 76px);
-  line-height: 0.98; letter-spacing: -0.025em; color: ${VIZ.ink}; margin: 2px 0;
+  font-family: ${FONT.display}; font-weight: 400; font-size: clamp(34px, 5.5vw, 72px);
+  line-height: 1.0; letter-spacing: -0.025em; color: ${VIZ.ink}; margin: 2px 0;
+  max-width: 100%; overflow-wrap: break-word; word-break: break-word; hyphens: auto;
 }
 .mhero-medallion {
   display: inline-flex; align-items: center; gap: 9px; align-self: flex-start;
