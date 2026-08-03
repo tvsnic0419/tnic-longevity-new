@@ -1,6 +1,5 @@
 import { stackPresets, type PresetKey } from './presets';
 import { researchFeed } from './data';
-import { platformStats } from './platform-stats';
 
 export const heroValueProps = [
   'Every compound rated Tier A, B, or C — from human trials, not marketing claims',
@@ -254,5 +253,3 @@ export const trustPillars = [
     href: '/trust/methodology',
   },
 ];
-
-export { platformStats };
