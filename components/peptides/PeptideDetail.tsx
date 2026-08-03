@@ -183,7 +183,7 @@ export function PeptideDetail({
                   <BookOpen className="w-4 h-4 text-accent-cyan" />
                   <p className="text-[10px] font-mono text-accent-cyan uppercase">Deep dive</p>
                 </div>
-                <MdxRenderer content={mdxBody} />
+                <MdxRenderer content={mdxBody} selfHref={`/peptides/${peptide.slug}`} />
               </div>
             ) : (
               <div className="glass rounded-xl p-8 text-center text-muted-foreground">

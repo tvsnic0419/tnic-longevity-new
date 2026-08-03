@@ -7,7 +7,7 @@ import Link from 'next/link';
 import type { LibraryModule, LibraryModuleCategory } from '@/lib/library-modules';
 import type { ComparisonLink } from '@/lib/comparison-relations';
 import type { GuideLink, RelatedCompoundLink } from '@/lib/library-graph';
-import { libraryCategoryMeta } from '@/lib/library-modules';
+import { getModulePath, libraryCategoryMeta } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { compounds } from '@/lib/data';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
@@ -22,6 +22,7 @@ import { ModuleGlancePanel } from './ModuleGlancePanel';
 import { recordModuleVisit } from '@/lib/recent-modules';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { ContentByline } from '@/components/trust/ContentByline';
+import { libraryModuleTitles } from '@/lib/breadcrumb-titles';
 
 /**
  * Category -> icon + full static Tailwind class strings. Deliberately not
@@ -182,7 +183,7 @@ export function LibraryModuleDetail({
                         href={`/library/synergies/${slug}`}
                         className="text-sm text-muted-foreground hover:text-accent-cyan transition"
                       >
-                        {slug.replace(/-/g, ' ')}
+                        {libraryModuleTitles[`synergies/${slug}`] ?? slug.replace(/-/g, ' ')}
                       </Link>
                     </li>
                   ))}
@@ -325,7 +326,7 @@ export function LibraryModuleDetail({
                   <BookOpen className="w-4 h-4 text-accent-cyan" />
                   <p className="text-[10px] font-mono text-accent-cyan uppercase">Deep dive</p>
                 </div>
-                <MdxRenderer content={mdxBody} />
+                <MdxRenderer content={mdxBody} selfHref={getModulePath(module)} />
               </div>
             ) : (
               <GlassPanel depth="mid" className="rounded-xl p-8 text-center text-muted-foreground">

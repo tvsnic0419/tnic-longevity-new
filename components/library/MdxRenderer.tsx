@@ -23,6 +23,7 @@ import {
 } from '@/components/library/LifestyleDecisionTree';
 import { citationRegistry } from '@/lib/trust';
 import { glossary } from '@/lib/data';
+import { crossLinkTerms } from '@/lib/cross-links';
 
 const PMID_PATTERN = /\bPMID:?\s?(\d{7,8})\b/g;
 // Bare DOIs in prose (e.g. "DOI: 10.1038/s41586-020-2975-4" or "doi:10.1000/xyz").
@@ -86,7 +87,7 @@ function linkGlossaryTerms(text: string, linkedTerms: Set<string>): string {
  * never rewrite characters inside an href or double-wrap an already-linked
  * phrase.
  */
-function renderInline(text: string, linkedTerms: Set<string>): string {
+function renderInline(text: string, linkedTerms: Set<string>, inHeading = false): string {
   const tokens: string[] = [];
   const stash = (html: string): string => {
     tokens.push(html);
@@ -116,6 +117,21 @@ function renderInline(text: string, linkedTerms: Set<string>): string {
       `<a href="${doiUrl(clean)}" target="_blank" rel="noopener noreferrer" class="${PMID_CLASS}">DOI ${clean}</a>`,
     );
   });
+
+  // Cross-link the first on-page mention of each compound/hallmark to its
+  // deep-dive (skipped in headings and never a self-link). Runs after markdown
+  // links and PMIDs are stashed, so already-linked names aren't re-wrapped.
+  if (!inHeading) {
+    for (const { name, href } of crossLinkTerms) {
+      // Self-link is skipped via a pre-seeded `xlink:<selfHref>` key (see MdxRenderer).
+      const key = `xlink:${href}`;
+      if (linkedTerms.has(key)) continue;
+      const pattern = new RegExp(`(?<![a-zA-Z0-9])(${escapeRegExp(name)})(?![a-zA-Z0-9])`, 'i');
+      if (!pattern.test(out)) continue;
+      linkedTerms.add(key);
+      out = out.replace(pattern, (m) => stash(`<a href="${href}" class="${LINK_CLASS}">${m}</a>`));
+    }
+  }
 
   out = linkGlossaryTerms(out, linkedTerms);
 
@@ -610,10 +626,10 @@ function renderMarkdownBlock(content: string, blockKey: number, linkedTerms: Set
               <span className="shrink-0 font-mono text-sm text-accent-cyan" aria-hidden="true">
                 {numbered[1].padStart(2, '0')}
               </span>
-              <span dangerouslySetInnerHTML={{ __html: renderInline(numbered[2], linkedTerms) }} />
+              <span dangerouslySetInnerHTML={{ __html: renderInline(numbered[2], linkedTerms, true) }} />
             </>
           ) : (
-            <span dangerouslySetInnerHTML={{ __html: renderInline(text, linkedTerms) }} />
+            <span dangerouslySetInnerHTML={{ __html: renderInline(text, linkedTerms, true) }} />
           )}
         </h2>,
       );
@@ -627,7 +643,7 @@ function renderMarkdownBlock(content: string, blockKey: number, linkedTerms: Set
           key={key}
           id={slugify(text)}
           className="scroll-mt-24 text-lg font-semibold mt-6 mb-2 text-foreground"
-          dangerouslySetInnerHTML={{ __html: renderInline(text, linkedTerms) }}
+          dangerouslySetInnerHTML={{ __html: renderInline(text, linkedTerms, true) }}
         />,
       );
       return;
@@ -733,14 +749,20 @@ export function MdxRenderer({
   content,
   showToc = true,
   showReferences = true,
+  selfHref,
 }: {
   content: string;
   showToc?: boolean;
   showReferences?: boolean;
+  /** This page's own href, so the prose cross-linker never self-links. */
+  selfHref?: string;
 }) {
   const blocks = parseBlocks(content);
   const elements: ReactNode[] = [];
   const linkedTerms = new Set<string>();
+  // Pre-seed the current page's own cross-link key so the prose cross-linker
+  // never self-links (e.g. the NMN page won't link the word "NMN" to itself).
+  if (selfHref) linkedTerms.add(`xlink:${selfHref}`);
 
   blocks.forEach((block, i) => {
     if (block.kind === 'directive') {
