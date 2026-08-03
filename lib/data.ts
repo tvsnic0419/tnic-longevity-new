@@ -116,7 +116,7 @@ export const compounds: Compound[] = [
   },
   {
     id: 'nmn',
-    name: 'NMN Platinum',
+    name: 'NMN',
     brand: 'Codeage',
     pathway: 'NAD+ Restoration',
     mechanism: 'NMN (nicotinamide mononucleotide) enters the NAD+ salvage pathway at a step downstream of NAMPT — the rate-limiting enzyme that declines with age. NMN is phosphorylated to NMN-AMP (NMNAT enzyme, 3 isoforms in nucleus, cytoplasm, and mitochondria) and then adenylated to NAD+. This bypasses the NAMPT bottleneck, making NMN more efficient than nicotinamide at restoring NAD+ in aged tissue. NAD+ is consumed by: SIRT1–7 (deacetylases regulating DNA repair, mitophagy, inflammatory gene expression), PARP1/2 (DNA strand break repair), NNMT (methylation sink), and CD38/CD157 (ectoenzymes that rise with age and compete for NAD+). Restoring NAD+ simultaneously improves all of these systems.',
