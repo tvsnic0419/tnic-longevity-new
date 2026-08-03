@@ -1305,6 +1305,142 @@ export const evidenceComparisons: EvidenceComparison[] = [
     ],
     keywords: ['omega-3 vs krill oil', 'fish oil vs krill oil', 'krill oil supplement', 'best omega-3 supplement', 'EPA DHA supplement', 'fish oil longevity', 'omega-3 bioavailability'],
   },
+  {
+    slug: 'magnesium-glycinate-vs-threonate',
+    title: 'Magnesium Glycinate vs L-Threonate',
+    subtitle: 'Two chelated magnesium forms — general repletion & sleep vs. brain-targeted cognition',
+    labelA: 'Magnesium Glycinate',
+    labelB: 'Magnesium L-Threonate',
+    category: 'form',
+    evidenceTier: 'B',
+    summary:
+      'Both are well-absorbed chelated forms of magnesium — bound to an amino acid (glycine) or to L-threonic acid — chosen over cheap oxide/citrate to avoid the laxative effect and improve uptake. They are not interchangeable by purpose: glycinate is the workhorse for correcting whole-body magnesium status, sleep, and calm at a low cost per milligram, while L-threonate is formulated specifically to raise magnesium in the brain and is marketed for cognition and memory at a much higher price and lower elemental-magnesium density.',
+    verdict:
+      'For general magnesium repletion, sleep, muscle relaxation, and calm, magnesium glycinate is the better value — gentle on the gut and higher elemental magnesium per dose. Reserve L-threonate for a specific cognitive-support goal, where its brain-targeting rationale justifies the premium and the lower elemental dose. Most people should start with glycinate; add or switch to threonate only for a deliberate cognition experiment.',
+    rows: [
+      {
+        dimension: 'Primary use case',
+        a: 'Whole-body repletion, sleep quality, muscle/nervous-system calm',
+        b: 'Brain-targeted cognition and memory support',
+        verdict: 'context',
+        note: 'Different goals, not better/worse — match the form to the endpoint you are tracking',
+      },
+      {
+        dimension: 'Brain / CSF penetration',
+        a: 'Standard systemic uptake; limited dedicated CNS-targeting rationale',
+        b: 'Designed to raise brain magnesium; the entire reason the form exists',
+        verdict: 'b',
+      },
+      {
+        dimension: 'GI tolerance',
+        a: 'Very gentle — glycine chelation minimizes the osmotic/laxative effect',
+        b: 'Generally well tolerated; also chelated and gentle',
+        verdict: 'tie',
+      },
+      {
+        dimension: 'Elemental magnesium per dose',
+        a: 'Higher elemental magnesium per gram — efficient for correcting a deficit',
+        b: 'Lower elemental magnesium per gram — repletion is not its strength',
+        verdict: 'a',
+      },
+      {
+        dimension: 'Cost',
+        a: 'Inexpensive and widely available',
+        b: 'Premium priced (branded Magtein) — several times the cost per dose',
+        verdict: 'a',
+      },
+      {
+        dimension: 'Evidence maturity',
+        a: 'Long track record for repletion, sleep, and calm endpoints',
+        b: 'Cognition rationale is mechanistically motivated but human trials are limited and smaller',
+        verdict: 'a',
+        note: 'Threonate cognition data is emerging, not settled — treat it as a hypothesis-driven trial',
+      },
+    ],
+    whenChooseA: [
+      'Your goal is correcting a magnesium deficit, better sleep, or calm',
+      'You are cost-conscious and want the most elemental magnesium per dose',
+      'You have a sensitive gut and want the gentlest common form',
+      'You do not have a specific cognition endpoint you are tracking',
+    ],
+    whenChooseB: [
+      'Your explicit goal is cognitive/memory support and you will track it',
+      'You already meet magnesium needs and want a brain-targeted add-on',
+      'You are willing to pay a premium for the brain-penetration rationale',
+      'You accept that the human cognition evidence is still limited',
+    ],
+    relatedHrefs: [
+      { label: 'Magnesium in Library', href: '/library/compounds/magnesium' },
+      { label: 'Sleep pillar', href: '/library/lifestyle/sleep' },
+      { label: 'Mitochondrial Dysfunction hallmark', href: '/library/mitochondrial-dysfunction' },
+    ],
+    keywords: ['magnesium glycinate vs threonate', 'best magnesium for sleep', 'magnesium l-threonate cognition', 'magnesium bisglycinate', 'which magnesium should i take', 'magnesium form guide', 'magtein vs glycinate'],
+  },
+  {
+    slug: 'coq10-vs-pqq',
+    title: 'CoQ10 vs PQQ',
+    subtitle: 'Two mitochondrial support compounds — electron-transport function vs. mitochondrial biogenesis',
+    labelA: 'CoQ10 (Ubiquinol)',
+    labelB: 'PQQ (Pyrroloquinoline Quinone)',
+    category: 'compound',
+    evidenceTier: 'B',
+    summary:
+      'CoQ10 and PQQ are frequently framed as rivals but act on different parts of mitochondrial health. CoQ10 is the electron carrier that keeps existing mitochondria producing ATP and is also a fat-soluble antioxidant — with its strongest, most specific human case in statin-induced deficiency and heart failure. PQQ is a redox cofactor studied for stimulating mitochondrial biogenesis (the growth of new mitochondria) via PGC-1α/CREB signaling, but its human outcome evidence is thinner. The honest read is that these are complementary, not competing.',
+    verdict:
+      'This is rarely an either/or. CoQ10 has the stronger, more specific human evidence — especially for statin users and cardiovascular support — and supports the function of the mitochondria you already have. PQQ targets mitochondrial biogenesis on a lighter human evidence base. If you must pick one, CoQ10 wins on evidence maturity; many people who want a biogenesis angle stack a small dose of PQQ on top rather than replacing CoQ10.',
+    rows: [
+      {
+        dimension: 'Core mechanism',
+        a: 'Electron carrier in the transport chain + fat-soluble antioxidant',
+        b: 'Redox cofactor reported to promote mitochondrial biogenesis (PGC-1α/CREB)',
+        verdict: 'context',
+        note: 'Function of existing mitochondria (CoQ10) vs. making new ones (PQQ) — complementary roles',
+      },
+      {
+        dimension: 'Strength of human evidence',
+        a: 'Stronger — statin-deficiency correction and heart-failure outcomes',
+        b: 'Thinner — small human studies; much of the biogenesis data is preclinical',
+        verdict: 'a',
+      },
+      {
+        dimension: 'Statin relevance',
+        a: 'Directly relevant — statins deplete CoQ10 via the mevalonate pathway',
+        b: 'No specific statin-deficiency rationale',
+        verdict: 'a',
+      },
+      {
+        dimension: 'Antioxidant role',
+        a: 'Only fat-soluble antioxidant the body makes endogenously',
+        b: 'Potent redox-cycling antioxidant in vitro; human relevance less defined',
+        verdict: 'context',
+      },
+      {
+        dimension: 'Dosing & cost',
+        a: '100–300 mg ubiquinol daily with fat; moderate cost',
+        b: 'Low milligram doses (commonly ~10–20 mg); modest cost',
+        verdict: 'context',
+      },
+    ],
+    whenChooseA: [
+      'You are on statin therapy (correcting a drug-induced deficiency)',
+      'Your goal is cardiovascular or heart-failure support',
+      'You want the mitochondrial-support compound with the most mature human evidence',
+      'You are over 40 and want an endogenous antioxidant you make less of with age',
+    ],
+    whenChooseB: [
+      'Your specific interest is mitochondrial biogenesis (making new mitochondria)',
+      'You already run CoQ10 and want to layer a biogenesis-oriented cofactor',
+      'You accept a lighter human evidence base for the biogenesis rationale',
+      'You want a low-dose, low-cost addition rather than a replacement',
+    ],
+    relatedHrefs: [
+      { label: 'CoQ10 in Library', href: '/library/compounds/coq10' },
+      { label: 'PQQ in Library', href: '/library/compounds/pqq' },
+      { label: 'CoQ10 vs Ubiquinol', href: '/library/compare/coq10-vs-ubiquinol' },
+      { label: 'Mitochondrial Dysfunction hallmark', href: '/library/mitochondrial-dysfunction' },
+    ],
+    keywords: ['coq10 vs pqq', 'pqq vs coq10', 'mitochondrial biogenesis supplement', 'pqq benefits', 'coq10 and pqq together', 'best mitochondrial supplement', 'pqq pyrroloquinoline quinone'],
+  },
 ];
 
 export function getComparison(slug: string): EvidenceComparison | undefined {

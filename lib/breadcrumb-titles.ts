@@ -43,6 +43,8 @@ export const comparisonTitles: Record<string, string> = {
   'rapamycin-vs-metformin': 'Rapamycin vs Metformin',
   'coq10-vs-ubiquinol': 'CoQ10 vs Ubiquinol',
   'omega3-vs-krill-oil': 'Omega-3 vs Krill Oil',
+  'magnesium-glycinate-vs-threonate': 'Magnesium Glycinate vs L-Threonate',
+  'coq10-vs-pqq': 'CoQ10 vs PQQ',
 };
 
 export const hallmarkTitles: Record<string, string> = {
