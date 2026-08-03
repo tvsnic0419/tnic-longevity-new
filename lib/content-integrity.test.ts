@@ -158,8 +158,9 @@ describe('internal link integrity', () => {
       // /hallmarks/<slug>
       if (parts[0] === 'hallmarks' && parts.length === 2) return hallmarkSlugs.has(parts[1]);
       if (parts[0] === 'library') {
-        // /library/<category>
-        if (parts.length === 2) return categories.has(parts[1]);
+        // /library/<category> index, or /library/<hallmark-slug> (the canonical
+        // hallmark deep-dive route — app/library/[slug] serves both).
+        if (parts.length === 2) return categories.has(parts[1]) || hallmarkSlugs.has(parts[1]);
         // /library/compare/<slug>
         if (parts[1] === 'compare' && parts.length === 3) return comparisonSlugs.has(parts[2]);
         // /library/<category>/<slug>
