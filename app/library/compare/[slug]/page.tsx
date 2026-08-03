@@ -11,8 +11,17 @@ import {
   getComparison,
 } from '@/lib/comparisons';
 import { getRelatedComparisons } from '@/lib/comparison-relations';
-import { buildArticleSchema, buildBreadcrumbSchema, buildPageMetadata } from '@/lib/seo';
+import { buildArticleSchema, buildBreadcrumbSchema, buildFaqPageSchema, buildPageMetadata } from '@/lib/seo';
 import { getCompareContext } from '@/lib/hub-context';
+
+/** Join authored bullet points into one clean sentence-list for FAQ answers. */
+function joinPoints(points: string[]): string {
+  return points
+    .map((p) => p.trim().replace(/[.;]+$/, ''))
+    .filter(Boolean)
+    .join('; ')
+    .concat('.');
+}
 
 export function generateStaticParams() {
   return getAllComparisonSlugs().map((slug) => ({ slug }));
@@ -27,7 +36,7 @@ export async function generateMetadata({
   const comp = getComparison(slug);
   if (!comp) return { title: 'Not Found' };
   return buildPageMetadata({
-    title: `${comp.title} — Evidence Comparison`,
+    title: `${comp.title}: Which Is Better? Evidence Comparison`,
     description: comp.summary,
     path: `/library/compare/${slug}`,
     keywords: comp.keywords,
@@ -45,6 +54,23 @@ export default async function CompareDetailPage({
 
   const relatedComparisons = getRelatedComparisons(slug);
 
+  // FAQ composed faithfully from the comparison's own authored verdict and
+  // when-to-choose guidance — no new claims — to win FAQ-rich SERP results.
+  const faq = buildFaqPageSchema([
+    {
+      question: `${comparison.labelA} vs ${comparison.labelB}: which is better?`,
+      answer: comparison.verdict,
+    },
+    {
+      question: `When should you choose ${comparison.labelA}?`,
+      answer: joinPoints(comparison.whenChooseA),
+    },
+    {
+      question: `When should you choose ${comparison.labelB}?`,
+      answer: joinPoints(comparison.whenChooseB),
+    },
+  ]);
+
   const schemas = [
     buildArticleSchema({
       title: comparison.title,
@@ -57,6 +83,7 @@ export default async function CompareDetailPage({
       { name: 'Comparisons', path: '/library/compare' },
       { name: comparison.title, path: `/library/compare/${slug}` },
     ]),
+    ...(faq ? [faq] : []),
   ];
 
   return (

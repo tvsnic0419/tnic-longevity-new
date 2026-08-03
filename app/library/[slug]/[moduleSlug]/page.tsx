@@ -16,9 +16,11 @@ import { loadMdx } from '@/lib/mdx';
 import {
   buildArticleSchema,
   buildBreadcrumbSchema,
+  buildFaqPageSchema,
   buildMedicalWebPageSchema,
-  getCompoundCitations,
+  getCitationsFromBody,
 } from '@/lib/seo';
+import { evidenceTagDefinitions } from '@/lib/trust';
 import { getComparisonsForCompound } from '@/lib/comparison-relations';
 import { resolveCompound as resolveEngineCompound } from '@/lib/compound-engine-data';
 import { buildEngineStackUrl } from '@/lib/stack-url';
@@ -107,6 +109,30 @@ export default async function LibraryModulePage({
   ];
   const breadcrumb = buildBreadcrumbSchema(breadcrumbItems);
   const reviewer = mdx?.frontmatter.reviewer;
+  // Every study cited in the deep-dive body, harvested into JSON-LD citations.
+  const citations = getCitationsFromBody(mdx?.body);
+
+  // FAQ composed from already-authored fields (summary, evidence tier, and the
+  // studied dose when this compound has a dataset entry) — no new claims.
+  const tierDef = evidenceTagDefinitions[mod.evidenceTier];
+  const faq =
+    mod.category === 'compounds'
+      ? buildFaqPageSchema([
+          { question: `What does ${mod.title} do?`, answer: mod.summary },
+          {
+            question: `How strong is the evidence for ${mod.title}?`,
+            answer: `TNiC grades ${mod.title} as ${tierDef.label}. ${tierDef.description}`,
+          },
+          ...(heroCompound?.dose
+            ? [
+                {
+                  question: `What dose of ${mod.title} is studied?`,
+                  answer: `${heroCompound.dose}${heroCompound.timing ? ` — ${heroCompound.timing}` : ''}.`,
+                },
+              ]
+            : []),
+        ])
+      : null;
 
   const schemas =
     mod.category === 'compounds'
@@ -117,10 +143,11 @@ export default async function LibraryModulePage({
             path,
             dateModified: mdx?.frontmatter.last_updated,
             evidenceTier: mod.evidenceTier,
-            citations: getCompoundCitations(mod.slug, mod.compoundId),
+            citations,
             reviewer,
           }),
           breadcrumb,
+          ...(faq ? [faq] : []),
         ]
       : [
           buildArticleSchema({
@@ -129,6 +156,7 @@ export default async function LibraryModulePage({
             path,
             dateModified: mdx?.frontmatter.last_updated,
             evidenceTier: mod.evidenceTier,
+            citations,
             reviewer,
           }),
           breadcrumb,

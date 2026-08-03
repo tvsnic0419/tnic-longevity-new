@@ -25,6 +25,9 @@ import { citationRegistry } from '@/lib/trust';
 import { glossary } from '@/lib/data';
 
 const PMID_PATTERN = /\bPMID:?\s?(\d{7,8})\b/g;
+// Bare DOIs in prose (e.g. "DOI: 10.1038/s41586-020-2975-4" or "doi:10.1000/xyz").
+// The DOI syntax allows a wide character set after the "10.NNNN/" prefix.
+const DOI_PATTERN = /\bdoi:?\s?(10\.\d{4,9}\/[^\s)]+)/gi;
 const LINK_CLASS =
   'text-accent-cyan hover:text-accent-emerald underline underline-offset-2 decoration-accent-cyan/40 hover:decoration-accent-emerald transition-colors';
 const PMID_CLASS =
@@ -32,6 +35,10 @@ const PMID_CLASS =
 
 function pubmedUrl(pmid: string): string {
   return `https://pubmed.ncbi.nlm.nih.gov/${pmid}/`;
+}
+
+function doiUrl(doi: string): string {
+  return `https://doi.org/${doi.replace(/[.,;]+$/, '')}`;
 }
 
 function escapeHtml(text: string): string {
@@ -102,6 +109,13 @@ function renderInline(text: string, linkedTerms: Set<string>): string {
       `<a href="${pubmedUrl(id)}" target="_blank" rel="noopener noreferrer" class="${PMID_CLASS}">PMID ${id}</a>`,
     ),
   );
+
+  out = out.replace(DOI_PATTERN, (_m, doi: string) => {
+    const clean = doi.replace(/[.,;]+$/, '');
+    return stash(
+      `<a href="${doiUrl(clean)}" target="_blank" rel="noopener noreferrer" class="${PMID_CLASS}">DOI ${clean}</a>`,
+    );
+  });
 
   out = linkGlossaryTerms(out, linkedTerms);
 

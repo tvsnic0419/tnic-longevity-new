@@ -4,7 +4,7 @@ import { PeptideDetail } from '@/components/peptides/PeptideDetail';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { getPeptideBySlug, peptideLibrary } from '@/lib/peptides-library';
 import { loadMdx } from '@/lib/mdx';
-import { buildMedicalWebPageSchema, buildBreadcrumbSchema } from '@/lib/seo';
+import { buildMedicalWebPageSchema, buildBreadcrumbSchema, getCitationsFromBody } from '@/lib/seo';
 import { seoRoutes } from '@/lib/seo-routes';
 
 export function generateStaticParams() {
@@ -47,6 +47,7 @@ export default async function PeptidePage({
       dateModified: mdx?.frontmatter.last_updated,
       evidenceTier: peptide.evidenceTier,
       reviewer,
+      citations: getCitationsFromBody(mdx?.body),
     }),
     buildBreadcrumbSchema(breadcrumbItems),
   ];

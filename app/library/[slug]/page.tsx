@@ -5,7 +5,7 @@ import { LibraryCategoryIndex } from '@/components/library/LibraryCategoryIndex'
 import { StructuredData } from '@/components/seo/StructuredData';
 import { getHallmarkBySlug, hallmarkLibrary } from '@/lib/hallmarks-library';
 import { loadMdx } from '@/lib/mdx';
-import { buildArticleSchema, buildBreadcrumbSchema, buildPageMetadata } from '@/lib/seo';
+import { buildArticleSchema, buildBreadcrumbSchema, buildPageMetadata, getCitationsFromBody } from '@/lib/seo';
 import { getCompoundsForHallmark, getCompoundIdToSlugMap } from '@/lib/library-graph';
 import { libraryCategoryMeta, type LibraryModuleCategory } from '@/lib/library-modules';
 import { seoRoutes } from '@/lib/seo-routes';
@@ -75,6 +75,7 @@ export default async function HallmarkPage({
       dateModified: mdx?.frontmatter.last_updated,
       evidenceTier: 'A',
       reviewer,
+      citations: getCitationsFromBody(mdx?.body),
     }),
     buildBreadcrumbSchema(breadcrumbItems),
   ];
