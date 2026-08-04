@@ -31,9 +31,12 @@ Use this when rewriting any MDX module to Examine.com-tier quality with TNiC OS 
 ### Compounds (7)
 - [ ] `:::pathway` — synthesis/signaling diagram
 - [ ] Evidence table (study, design, N, duration, outcomes, tier)
+- [ ] **"Where this disappoints"** section — honest failure cases / who it won't help
+- [ ] **"What would change this grade"** section — the specific evidence that would move the tier
 - [ ] Dosing table + week-one checklist
 - [ ] Monitoring table + `:::compare` trajectory
-- [ ] Synergy table with stack links
+- [ ] `:::warning title="Who should skip ..."` — standardized skip-list
+- [ ] Synergy table **plus antagonist table** (or explicit "no known antagonists")
 - [ ] `:::personal` — dose/biomarker/energy log
 
 ### Synergy stacks (3)
