@@ -35,6 +35,19 @@ const nextConfig: NextConfig = {
       // Questionnaire — keep old inbound links working.
       { source: '/quiz', destination: '/nico', permanent: true },
       { source: '/quiz/:path*', destination: '/nico', permanent: true },
+      // The Urolithin A deep-dive shipped under a misspelled slug
+      // (`urolithina`). Preserve any external links / index entries by
+      // permanently redirecting the old paths to the corrected slug.
+      {
+        source: '/library/compounds/urolithina',
+        destination: '/library/compounds/urolithin-a',
+        permanent: true,
+      },
+      {
+        source: '/library/compare/urolithina-vs-coq10',
+        destination: '/library/compare/urolithin-a-vs-coq10',
+        permanent: true,
+      },
     ];
   },
 
@@ -64,6 +77,7 @@ const nextConfig: NextConfig = {
         : []),
     ];
   },
+
 };
 
 export default nextConfig;

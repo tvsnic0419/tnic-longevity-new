@@ -8,6 +8,7 @@ import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 import { HallmarkHeroVisual } from '@/components/hallmarks/HallmarkHeroVisual';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/library/epigenetic-alterations' },
   title: 'Epigenetic Alterations | Hallmarks of Aging | TNiC',
   description:
     'Deep-dive into epigenetic alterations — the aging clock written in methylation. Mechanisms, Horvath clock, evidence-graded interventions (Ca-AKG, NMN, resveratrol), and tracking templates.',

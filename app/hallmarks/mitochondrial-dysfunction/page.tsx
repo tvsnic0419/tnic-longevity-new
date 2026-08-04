@@ -8,6 +8,7 @@ import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 import { HallmarkHeroVisual } from '@/components/hallmarks/HallmarkHeroVisual';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/library/mitochondrial-dysfunction' },
   title: 'Mitochondrial Dysfunction | Hallmarks of Aging | TNiC',
   description:
     'Deep-dive into mitochondrial dysfunction — the energy crisis underlying aging. Mechanisms, electron transport chain decline, NAD+/AMPK axes, evidence-graded interventions (GlyNAC, NMN, CoQ10, urolithin A), and monitoring biomarkers.',

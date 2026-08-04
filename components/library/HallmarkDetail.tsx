@@ -18,17 +18,24 @@ import { ContextRail } from '@/components/ui/ContextRail';
 import { getHallmarkContext } from '@/lib/hub-context';
 import { SystemsSynthesisView } from './SystemsSynthesisView';
 import { HALLMARK_VISUALS } from '@/components/illustrations/HallmarkVisuals';
+import { ContentByline } from '@/components/trust/ContentByline';
 
 export function HallmarkDetail({
   hallmark,
   mdxBody,
   targetingCompounds = [],
   compoundHrefs = {},
+  lastUpdated,
+  author,
+  reviewer,
 }: {
   hallmark: HallmarkLibraryEntry;
   mdxBody: string | null;
   targetingCompounds?: CompoundLink[];
   compoundHrefs?: Record<string, string>;
+  lastUpdated?: string;
+  author?: string;
+  reviewer?: string;
 }) {
   const MechanismVisual = HALLMARK_VISUALS[hallmark.id];
   const visualMeta = getHallmarkVisual(hallmark.visual);
@@ -38,10 +45,16 @@ export function HallmarkDetail({
       <div className="max-w-7xl mx-auto px-6">
         <Link
           href="/library"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-accent-cyan transition mb-8"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-accent-cyan transition mb-4"
         >
           <ArrowLeft className="w-4 h-4" /> Back to Anti-Aging Library
         </Link>
+        <ContentByline
+          author={author}
+          lastUpdated={lastUpdated}
+          reviewer={reviewer}
+          className="mb-8"
+        />
 
         <div className="grid lg:grid-cols-12 gap-10">
           <div className="order-2 lg:order-1 lg:col-span-4 space-y-6">
@@ -104,7 +117,7 @@ export function HallmarkDetail({
                   <BookOpen className="w-4 h-4 text-accent-cyan" />
                   <p className="text-[10px] font-mono text-accent-cyan uppercase">Deep dive (MDX)</p>
                 </div>
-                <MdxRenderer content={mdxBody} />
+                <MdxRenderer content={mdxBody} selfHref={`/library/${hallmark.slug}`} />
               </div>
             )}
 

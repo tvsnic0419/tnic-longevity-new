@@ -8,6 +8,7 @@ import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 import { HallmarkHeroVisual } from '@/components/hallmarks/HallmarkHeroVisual';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/library/genomic-instability' },
   title: 'Genomic Instability | Hallmarks of Aging | TNiC',
   description:
     'Deep-dive into genomic instability — the first hallmark of aging. Mechanisms, biomarkers, evidence-graded interventions (NMN, sulforaphane, GlyNAC), and a monitoring template.',

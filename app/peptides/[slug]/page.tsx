@@ -2,9 +2,11 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { PeptideDetail } from '@/components/peptides/PeptideDetail';
 import { StructuredData } from '@/components/seo/StructuredData';
-import { getPeptideBySlug, peptideLibrary } from '@/lib/peptides-library';
+import { ModuleHero, type ModuleHeroData } from '@/components/viz/ModuleHero';
+import { getPeptideBySlug, peptideCategoryMeta, peptideLibrary } from '@/lib/peptides-library';
+import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { loadMdx } from '@/lib/mdx';
-import { buildMedicalWebPageSchema, buildBreadcrumbSchema } from '@/lib/seo';
+import { buildMedicalWebPageSchema, buildBreadcrumbSchema, getCitationsFromBody } from '@/lib/seo';
 import { seoRoutes } from '@/lib/seo-routes';
 
 export function generateStaticParams() {
@@ -33,6 +35,11 @@ export default async function PeptidePage({
 
   const mdx = loadMdx(peptide.mdxSlug, 'peptides');
   const path = `/peptides/${peptide.slug}`;
+  const reviewer = mdx?.frontmatter.reviewer;
+  const breadcrumbItems = [
+    { name: 'Peptides', path: '/peptides' },
+    { name: peptide.name, path },
+  ];
 
   const schemas = [
     buildMedicalWebPageSchema({
@@ -41,17 +48,39 @@ export default async function PeptidePage({
       path,
       dateModified: mdx?.frontmatter.last_updated,
       evidenceTier: peptide.evidenceTier,
+      reviewer,
+      citations: getCitationsFromBody(mdx?.body),
     }),
-    buildBreadcrumbSchema([
-      { name: 'Peptides', path: '/peptides' },
-      { name: peptide.name, path },
-    ]),
+    buildBreadcrumbSchema(breadcrumbItems),
   ];
+
+  // Visual parity with compound deep-dives: a lighter overture built from
+  // peptide-library fields plus a live PMID count from the body.
+  const moduleHeroData: ModuleHeroData = {
+    id: peptide.slug,
+    title: peptide.name,
+    kicker: peptideCategoryMeta[peptide.category].label,
+    summary: peptide.summary,
+    evidenceTier: peptide.evidenceTier,
+    studyCount: new Set(
+      (mdx?.body.match(/\bPMID:?\s*(\d{7,8})\b/g) ?? []).map((m) => m.replace(/\D/g, '')),
+    ).size,
+    hallmarks: peptide.relatedHallmarkIds
+      .map((hid) => hallmarkLibrary.find((h) => h.id === hid)?.title)
+      .filter((t): t is string => Boolean(t)),
+  };
 
   return (
     <>
       <StructuredData schemas={schemas} />
-      <PeptideDetail peptide={peptide} mdxBody={mdx?.body ?? null} />
+      <ModuleHero {...moduleHeroData} />
+      <PeptideDetail
+        peptide={peptide}
+        mdxBody={mdx?.body ?? null}
+        lastUpdated={mdx?.frontmatter.last_updated}
+        author={mdx?.frontmatter.author}
+        reviewer={reviewer}
+      />
     </>
   );
 }

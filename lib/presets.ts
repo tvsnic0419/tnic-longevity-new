@@ -22,7 +22,7 @@ export const stackPresets = {
   longevity: {
     label: 'Longevity Pro',
     desc: 'Senolytic & healthspan focus',
-    ids: ['urolithina', 'fisetin', 'omega3', 'nmn', 'resveratrol'],
+    ids: ['urolithin-a', 'fisetin', 'omega3', 'nmn', 'resveratrol'],
   },
   metabolic: {
     label: 'Cardio-Metabolic',
@@ -32,7 +32,7 @@ export const stackPresets = {
   full: {
     label: 'Full-Spectrum 14',
     desc: 'All 14 evidence-graded compounds',
-    ids: ['glynac', 'sulforaphane', 'nmn', 'cakg', 'rala', 'resveratrol', 'taurine', 'spermidine', 'pterostilbene', 'berberine', 'urolithina', 'fisetin', 'coq10', 'omega3'],
+    ids: ['glynac', 'sulforaphane', 'nmn', 'cakg', 'rala', 'resveratrol', 'taurine', 'spermidine', 'pterostilbene', 'berberine', 'urolithin-a', 'fisetin', 'coq10', 'omega3'],
   },
 } as const;
 

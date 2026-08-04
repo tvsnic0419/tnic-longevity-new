@@ -121,7 +121,7 @@ export const hallmarkLibrary: HallmarkLibraryEntry[] = [
       { id: 'a3', name: 'Resveratrol → AMPK activation', category: 'compound', evidence: 'B', rank: 3, impact: 7, description: 'AMPK phosphorylation triggers autophagy independent of mTOR.', compoundId: 'resveratrol', tnicAvailable: true },
       { id: 'a4', name: 'Sulforaphane', category: 'compound', evidence: 'B', rank: 4, impact: 6, description: 'NRF2-mediated upregulation of autophagy-related genes in preclinical models.', compoundId: 'sulforaphane', tnicAvailable: true },
       { id: 'a5', name: 'Spermidine', category: 'compound', evidence: 'B', rank: 5, impact: 6, description: 'Induces autophagy via EP300 inhibition. Madeo 2021 memory RCT; dietary epidemiology links intake to longevity.', compoundId: 'spermidine', pmid: '33932338', tnicAvailable: true },
-      { id: 'a6', name: 'Urolithin A (Mitopure)', category: 'compound', evidence: 'A', rank: 6, impact: 8, description: 'Activates mitophagy (selective mitochondria autophagy) in human skeletal muscle — Phase 2 RCT confirmed improved muscle mitochondrial gene expression and endurance in older adults (PMID 35391504).', compoundId: 'urolithina', pmid: '35391504', tnicAvailable: true },
+      { id: 'a6', name: 'Urolithin A', category: 'compound', evidence: 'A', rank: 6, impact: 8, description: 'Activates mitophagy (selective mitochondria autophagy) in human skeletal muscle — Phase 2 RCT confirmed improved muscle mitochondrial gene expression and endurance in older adults (PMID 35391504).', compoundId: 'urolithin-a', pmid: '35391504', tnicAvailable: true },
     ],
   },
   {
@@ -148,7 +148,7 @@ export const hallmarkLibrary: HallmarkLibraryEntry[] = [
       { id: 'm5', name: 'R-Alpha Lipoic Acid', category: 'compound', evidence: 'B', rank: 5, impact: 7, description: 'Cofactor for pyruvate dehydrogenase and complex enzymes; recycles antioxidants in the mitochondrial matrix.', compoundId: 'rala', tnicAvailable: true },
       { id: 'm6', name: 'Taurine', category: 'compound', evidence: 'B', rank: 6, impact: 6, description: 'Age-depleted osmolyte; Singh 2023 Science links deficiency to hallmarks and extends lifespan in animal models.', compoundId: 'taurine', pmid: '37289866', tnicAvailable: true },
       { id: 'm7', name: 'CoQ10 (Ubiquinol)', category: 'compound', evidence: 'B', rank: 7, impact: 7, description: 'Essential electron carrier in Complex I–III of the electron transport chain. Declines ~50% by age 60; ubiquinol form achieves 3× higher plasma levels. Meta-analysis of 17 RCTs confirms reduced hs-CRP and IL-6 (PMID 26267690).', compoundId: 'coq10', pmid: '26267690', tnicAvailable: true },
-      { id: 'm8', name: 'Urolithin A (mitophagy)', category: 'compound', evidence: 'A', rank: 8, impact: 8, description: 'Phase 2 RCT confirmed urolithin A activates mitophagy and improves aerobic capacity and muscle strength in adults ≥65 vs placebo (PMID 35391504).', compoundId: 'urolithina', pmid: '35391504', tnicAvailable: true },
+      { id: 'm8', name: 'Urolithin A (mitophagy)', category: 'compound', evidence: 'A', rank: 8, impact: 8, description: 'Phase 2 RCT confirmed urolithin A activates mitophagy and improves aerobic capacity and muscle strength in adults ≥65 vs placebo (PMID 35391504).', compoundId: 'urolithin-a', pmid: '35391504', tnicAvailable: true },
     ],
   },
   {

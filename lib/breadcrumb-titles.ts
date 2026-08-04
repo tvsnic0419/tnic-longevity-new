@@ -35,7 +35,7 @@ export const comparisonTitles: Record<string, string> = {
   'nrf2-triad-vs-mito-stack': 'NRF2 Triad vs NAD+ Mito Stack',
   'starter-elite-vs-full-hybrid': 'Starter Elite vs Full Hybrid',
   'berberine-vs-metformin': 'Berberine vs Metformin',
-  'urolithina-vs-coq10': 'Urolithin A vs CoQ10',
+  'urolithin-a-vs-coq10': 'Urolithin A vs CoQ10',
   'nmn-vs-spermidine': 'NMN vs Spermidine',
   'fisetin-vs-quercetin': 'Fisetin vs Quercetin',
   'taurine-vs-nmn': 'Taurine vs NMN',
@@ -43,6 +43,8 @@ export const comparisonTitles: Record<string, string> = {
   'rapamycin-vs-metformin': 'Rapamycin vs Metformin',
   'coq10-vs-ubiquinol': 'CoQ10 vs Ubiquinol',
   'omega3-vs-krill-oil': 'Omega-3 vs Krill Oil',
+  'magnesium-glycinate-vs-threonate': 'Magnesium Glycinate vs L-Threonate',
+  'coq10-vs-pqq': 'CoQ10 vs PQQ',
 };
 
 export const hallmarkTitles: Record<string, string> = {
@@ -76,7 +78,7 @@ export const libraryModuleTitles: Record<string, string> = {
   'compounds/spermidine': "Spermidine",
   'compounds/pterostilbene': "Pterostilbene",
   'compounds/berberine': "Berberine HCl",
-  'compounds/urolithina': "Urolithin A (Mitopure)",
+  'compounds/urolithin-a': "Urolithin A",
   'compounds/fisetin': "Fisetin",
   'compounds/coq10': "CoQ10 (Ubiquinol)",
   'compounds/omega3': "Omega-3 (EPA + DHA)",

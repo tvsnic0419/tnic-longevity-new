@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { LibraryModuleDetail } from '@/components/library/LibraryModuleDetail';
 import { CompoundHero, type CompoundHeroData } from '@/components/viz/CompoundHero';
+import { ModuleHero, type ModuleHeroData } from '@/components/viz/ModuleHero';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { compounds } from '@/lib/data';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
@@ -16,13 +17,16 @@ import { loadMdx } from '@/lib/mdx';
 import {
   buildArticleSchema,
   buildBreadcrumbSchema,
+  buildFaqPageSchema,
   buildMedicalWebPageSchema,
-  getCompoundCitations,
+  getCitationsFromBody,
 } from '@/lib/seo';
+import { evidenceTagDefinitions } from '@/lib/trust';
 import { getComparisonsForCompound } from '@/lib/comparison-relations';
 import { resolveCompound as resolveEngineCompound } from '@/lib/compound-engine-data';
 import { buildEngineStackUrl } from '@/lib/stack-url';
 import { getGuideForCompound, getRelatedCompounds } from '@/lib/library-graph';
+import { getPathwaysForCompound } from '@/lib/pathways';
 import { seoRoutes } from '@/lib/seo-routes';
 
 const VALID_CATEGORIES = Object.keys(libraryCategoryMeta) as LibraryModuleCategory[];
@@ -67,6 +71,12 @@ export default async function LibraryModulePage({
   const guide = mod.category === 'compounds' ? getGuideForCompound(mod.slug) : undefined;
   const relatedCompounds =
     mod.category === 'compounds' ? getRelatedCompounds(mod.slug) : [];
+  // Pathways this compound engages — resolved server-side so the pathway
+  // registry stays out of the deep-dive client bundle.
+  const compoundPathways =
+    mod.category === 'compounds'
+      ? getPathwaysForCompound(mod.slug).map((p) => ({ slug: p.slug, name: p.name }))
+      : [];
 
   // "See how this scores" only appears when the engine has actually curated this
   // compound. Resolved here rather than in the client component so the engine's
@@ -100,11 +110,60 @@ export default async function LibraryModulePage({
       }
     : null;
 
-  const breadcrumb = buildBreadcrumbSchema([
+  // Visual parity: the 28 "library-only" compounds have no lib/data.ts entry
+  // (so no CompoundHero), and synergy stacks never do. Give them a lighter
+  // overture built only from module fields — evidence tier, a live PMID count
+  // from the body, and hallmarks — so every compound and synergy page opens
+  // with a consistent hero. (Lifestyle/guide pages keep their own treatment —
+  // the molecular motif doesn't fit them.)
+  const moduleHeroData: ModuleHeroData | null =
+    (mod.category === 'compounds' || mod.category === 'synergies') && !heroData
+      ? {
+          id: mod.slug,
+          title: mod.title,
+          kicker: mod.tagline.split('—')[0].trim() || 'Compound Deep-Dive',
+          summary: mod.summary,
+          evidenceTier: mod.evidenceTier,
+          studyCount: new Set(
+            (mdx?.body.match(/\bPMID:?\s*(\d{7,8})\b/g) ?? []).map((m) => m.replace(/\D/g, '')),
+          ).size,
+          hallmarks: mod.relatedHallmarkIds
+            .map((hid) => hallmarkLibrary.find((h) => h.id === hid)?.title)
+            .filter((t): t is string => Boolean(t)),
+        }
+      : null;
+
+  const breadcrumbItems = [
     { name: 'Library', path: '/library' },
     { name: libraryCategoryMeta[mod.category].label, path: `/library#content-modules` },
     { name: mod.title, path },
-  ]);
+  ];
+  const breadcrumb = buildBreadcrumbSchema(breadcrumbItems);
+  const reviewer = mdx?.frontmatter.reviewer;
+  // Every study cited in the deep-dive body, harvested into JSON-LD citations.
+  const citations = getCitationsFromBody(mdx?.body);
+
+  // FAQ composed from already-authored fields (summary, evidence tier, and the
+  // studied dose when this compound has a dataset entry) — no new claims.
+  const tierDef = evidenceTagDefinitions[mod.evidenceTier];
+  const faq =
+    mod.category === 'compounds'
+      ? buildFaqPageSchema([
+          { question: `What does ${mod.title} do?`, answer: mod.summary },
+          {
+            question: `How strong is the evidence for ${mod.title}?`,
+            answer: `TNiC grades ${mod.title} as ${tierDef.label}. ${tierDef.description}`,
+          },
+          ...(heroCompound?.dose
+            ? [
+                {
+                  question: `What dose of ${mod.title} is studied?`,
+                  answer: `${heroCompound.dose}${heroCompound.timing ? ` — ${heroCompound.timing}` : ''}.`,
+                },
+              ]
+            : []),
+        ])
+      : null;
 
   const schemas =
     mod.category === 'compounds'
@@ -115,9 +174,11 @@ export default async function LibraryModulePage({
             path,
             dateModified: mdx?.frontmatter.last_updated,
             evidenceTier: mod.evidenceTier,
-            citations: getCompoundCitations(mod.slug, mod.compoundId),
+            citations,
+            reviewer,
           }),
           breadcrumb,
+          ...(faq ? [faq] : []),
         ]
       : [
           buildArticleSchema({
@@ -126,6 +187,8 @@ export default async function LibraryModulePage({
             path,
             dateModified: mdx?.frontmatter.last_updated,
             evidenceTier: mod.evidenceTier,
+            citations,
+            reviewer,
           }),
           breadcrumb,
         ];
@@ -134,6 +197,7 @@ export default async function LibraryModulePage({
     <>
       <StructuredData schemas={schemas} />
       {heroData && <CompoundHero {...heroData} />}
+      {moduleHeroData && <ModuleHero {...moduleHeroData} />}
       <LibraryModuleDetail
         module={mod}
         mdxBody={mdx?.body ?? null}
@@ -141,6 +205,10 @@ export default async function LibraryModulePage({
         guide={guide}
         relatedCompounds={relatedCompounds}
         engineHref={engineHref}
+        pathways={compoundPathways}
+        lastUpdated={mdx?.frontmatter.last_updated}
+        author={mdx?.frontmatter.author}
+        reviewer={reviewer}
       />
     </>
   );

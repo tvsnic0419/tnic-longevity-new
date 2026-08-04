@@ -135,7 +135,7 @@ const SIGNAL_BOOST: { test: (a: NicoAnswers) => boolean; ids: string[]; note: st
   { test: (a) => a.movement <= 2, ids: ['creatine', 'vitamin-d3'], note: 'low activity' },
   { test: (a) => a.diet <= 2, ids: ['omega3', 'vitamin-d3', 'magnesium', 'zinc'], note: 'diet gaps' },
   { test: (a) => a.age >= 50, ids: ['nmn', 'cakg', 'coq10'], note: 'age ≥ 50 (NAD⁺/CoQ10 decline)' },
-  { test: (a) => a.age >= 60, ids: ['urolithina', 'glynac'], note: 'age ≥ 60' },
+  { test: (a) => a.age >= 60, ids: ['urolithin-a', 'glynac'], note: 'age ≥ 60' },
 ];
 
 /**
@@ -150,7 +150,7 @@ const SAFETY_EXCLUDE: Record<NicoSafetyFlag, string[]> = {
   // Insufficient pregnancy safety data for most longevity compounds — keep only foundational.
   pregnancy: [
     'nmn', 'cakg', 'resveratrol', 'pterostilbene', 'berberine', 'spermidine',
-    'fisetin', 'quercetin', 'urolithina', 'rala', 'taurine', 'sulforaphane', 'nac',
+    'fisetin', 'quercetin', 'urolithin-a', 'rala', 'taurine', 'sulforaphane', 'nac',
   ],
   statin: [],
   bloodPressure: [],

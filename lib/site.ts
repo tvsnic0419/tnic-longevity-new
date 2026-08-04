@@ -34,6 +34,18 @@ export const SITE = {
   briefRssUrl: `${resolveSiteUrl()}/brief/feed.xml`,
 } as const;
 
+/**
+ * Editorial author shown on content deep-dives and emitted as the JSON-LD
+ * `author`. TNiC content is written and maintained by an in-house editorial
+ * team — an honest, named organizational entity (not a fabricated individual).
+ * The separate *reviewer* signal (independent clinical review) is deliberately
+ * left unset until a real named reviewer exists; see app/editorial-policy.
+ */
+export const EDITORIAL_AUTHOR = {
+  name: 'TNiC Research Team',
+  url: `${resolveSiteUrl()}/editorial-policy`,
+} as const;
+
 export const LONGEVITY_KEYWORDS = [
   'transformative nutrition',
   'nutrition for cell-health',

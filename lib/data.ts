@@ -41,7 +41,7 @@ export const communityPulse = [
 export const compounds: Compound[] = [
   {
     id: 'glynac',
-    name: 'GlyNAC ET',
+    name: 'GlyNAC',
     brand: 'Nutri',
     pathway: 'Glutathione Synthesis',
     mechanism: 'Provides glycine and N-acetylcysteine — the two rate-limiting precursors for glutathione (GSH) synthesis. Glutathione synthetase (GSS) condenses γ-glutamylcysteine (made by GCL from NAC-derived cysteine + glutamate) with glycine to produce GSH. Glycine becomes limiting first in aging because protein intake falls while gluconeogenic glycine demand rises; NAC addresses the cysteine bottleneck from dietary methionine under-supply. Restored GSH pools protect KEAP1-NRF2 switch, IKKβ-NF-κB braking, and mitochondrial complex I subunit cysteines from irreversible oxidation.',
@@ -230,8 +230,8 @@ export const compounds: Compound[] = [
     ],
   },
   {
-    id: 'urolithina',
-    name: 'Urolithin A (Mitopure)',
+    id: 'urolithin-a',
+    name: 'Urolithin A',
     brand: 'Amazentis / Timeline Nutrition',
     pathway: 'Mitophagy Induction',
     mechanism: 'Gut-derived metabolite of ellagitannins (pomegranate, walnuts) that activates mitophagy — selective autophagy of damaged mitochondria — by suppressing the PINK1/Parkin axis brakes and independently of AMPK or mTOR signaling. Only ~30–40% of adults have gut microbiota capable of producing urolithin A from dietary sources; supplementation bypasses this.',
@@ -657,7 +657,7 @@ export const biomarkers = [
     optimal: '>45 (men), >40 (women)',
     critical: '<30',
     desc: 'VO₂ max — maximal oxygen consumption — is the single strongest objective predictor of all-cause mortality across all ages, outperforming lipid panels, blood pressure, and even smoking status in prospective cohort studies. Declines ~10% per decade after age 30 without training. Each 3.5 mL/kg/min increase correlates with ~13% reduction in all-cause mortality. VO₂ max directly reflects mitochondrial oxidative capacity: NMN+Ca-AKG restoration of NAD+ and TCA cycle substrate availability directly supports the biochemical machinery measured by VO₂ max. Zone 2 aerobic training is the primary intervention; supplementation supports the underlying mitochondrial biology.',
-    compounds: ['nmn', 'cakg', 'coq10', 'urolithina'],
+    compounds: ['nmn', 'cakg', 'coq10', 'urolithin-a'],
   },
 ];
 
@@ -1092,7 +1092,7 @@ export const protocolSchedule = [
   { time: '6:00 AM', period: 'AM' as const, action: 'Wake + Morning Light', compounds: [], rationale: 'Circadian entrainment — sets NAD+ and cortisol rhythm' },
   { time: '6:30 AM', period: 'AM' as const, action: 'NRF2 Activation Stack', compounds: ['glynac', 'sulforaphane'], rationale: 'Empty stomach maximizes isothiocyanate absorption' },
   { time: '7:00 AM', period: 'AM' as const, action: 'Mitochondrial Stack', compounds: ['nmn', 'cakg'], rationale: 'NAD+ precursor timed with morning metabolic peak' },
-  { time: '7:30 AM', period: 'AM' as const, action: 'Breakfast + Fat-Soluble Stack', compounds: ['rala', 'coq10', 'omega3', 'urolithina'], rationale: 'CoQ10, omega-3, and urolithin A require fat co-ingestion for absorption; R-ALA recycles CoQ10 in situ' },
+  { time: '7:30 AM', period: 'AM' as const, action: 'Breakfast + Fat-Soluble Stack', compounds: ['rala', 'coq10', 'omega3', 'urolithin-a'], rationale: 'CoQ10, omega-3, and urolithin A require fat co-ingestion for absorption; R-ALA recycles CoQ10 in situ' },
   { time: '8:00 AM', period: 'AM' as const, action: 'Berberine Dose 1 (of 3)', compounds: ['berberine'], rationale: 'TID dosing maintains stable plasma berberine; first dose with or just after breakfast for AMPK activation at peak glucose window' },
   { time: '12:30 PM', period: 'AM' as const, action: 'Berberine Dose 2 + Lunch', compounds: ['berberine'], rationale: 'Midday dose sustains AMPK signaling through afternoon; take with lunch to match glucose exposure and avoid GI discomfort' },
   { time: '6:00 PM', period: 'PM' as const, action: 'Berberine Dose 3 + Dinner', compounds: ['berberine'], rationale: 'Evening dose covers post-dinner glucose and lipid window; complete berberine TID cycle for full 24-hour AMPK coverage' },
@@ -1394,7 +1394,7 @@ export const safetyNotes = [
     consultIf: ['Any prescription medication (metabolized via CYP3A4)', 'Diabetes or blood-pressure medication', 'Liver or kidney disease'],
   },
   {
-    compoundId: 'urolithina',
+    compoundId: 'urolithin-a',
     cautions: ['Well-tolerated in human trials at 500–1000 mg', 'Direct Urolithin A supplementation bypasses variable gut-microbiome conversion'],
     avoidIf: [],
     consultIf: ['Pregnant or nursing', 'Active cancer treatment', 'Taking immunomodulating therapy'],

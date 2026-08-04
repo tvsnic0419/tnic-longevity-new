@@ -56,7 +56,7 @@ export const sampleProtocolOutput: Partial<ProtocolEngineOutput> = {
           compounds: [
             {
               compoundId: 'glynac',
-              name: 'GlyNAC ET',
+              name: 'GlyNAC',
               dose: '600mg glycine + 600mg NAC',
               timing: 'AM',
               evidence: 'A',
@@ -96,7 +96,7 @@ export const sampleDashboardResult: Partial<BiomarkerDashboardResult> = {
     {
       id: 'forecast-gsh-glynac',
       markerId: 'gsh',
-      interventionName: 'GlyNAC ET (add to stack)',
+      interventionName: 'GlyNAC (add to stack)',
       category: 'compound',
       impactScore: 85,
       expectedDelta: 1.4,

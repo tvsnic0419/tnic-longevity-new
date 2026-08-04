@@ -6,6 +6,7 @@ import { StructuredData } from '@/components/seo/StructuredData';
 import { buildArticleSchema, buildBreadcrumbSchema } from '@/lib/seo';
 import { seoRoutes } from '@/lib/seo-routes';
 import { SITE } from '@/lib/site';
+import { platformStats } from '@/lib/platform-stats';
 
 export const metadata = seoRoutes.partnerships();
 
@@ -58,6 +59,29 @@ export default function PartnershipsPage() {
         theme="cyan"
         align="left"
       />
+
+      {/* Platform by the numbers — real scale + rigor a sponsor is evaluating,
+          derived live from the published registries (never hand-set). */}
+      <section aria-labelledby="platform-numbers" className="mb-8">
+        <p id="platform-numbers" className="text-label mb-4 text-muted-foreground">
+          The platform, by the numbers
+        </p>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          {platformStats.map((stat) => (
+            <div key={stat.label} className="card-elevated rounded-xl p-4">
+              <p className="font-display text-3xl font-medium leading-none text-accent-cyan">
+                {stat.value}
+              </p>
+              <p className="mt-2 text-sm font-semibold text-foreground">{stat.label}</p>
+              <p className="text-caption mt-0.5 text-muted-foreground">{stat.sublabel}</p>
+            </div>
+          ))}
+        </div>
+        <p className="text-caption mt-3 text-muted-foreground">
+          Every compound, pathway, and hallmark is graded A–C by strength of human evidence, with
+          traceable PubMed citations — the editorial standard sponsors are evaluated against, not exempt from.
+        </p>
+      </section>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)]">
         <section className="gradient-border p-6 md:p-8">

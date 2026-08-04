@@ -7,7 +7,7 @@ import Link from 'next/link';
 import type { LibraryModule, LibraryModuleCategory } from '@/lib/library-modules';
 import type { ComparisonLink } from '@/lib/comparison-relations';
 import type { GuideLink, RelatedCompoundLink } from '@/lib/library-graph';
-import { libraryCategoryMeta } from '@/lib/library-modules';
+import { getModulePath, libraryCategoryMeta } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { compounds } from '@/lib/data';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
@@ -21,6 +21,8 @@ import { CompoundGlancePanel } from './CompoundGlancePanel';
 import { ModuleGlancePanel } from './ModuleGlancePanel';
 import { recordModuleVisit } from '@/lib/recent-modules';
 import { GlassPanel } from '@/components/ui/GlassPanel';
+import { ContentByline } from '@/components/trust/ContentByline';
+import { libraryModuleTitles } from '@/lib/breadcrumb-titles';
 
 /**
  * Category -> icon + full static Tailwind class strings. Deliberately not
@@ -45,18 +47,28 @@ export function LibraryModuleDetail({
   guide,
   relatedCompounds = [],
   engineHref,
+  pathways = [],
+  lastUpdated,
+  author,
+  reviewer,
 }: {
   module: LibraryModule;
   mdxBody: string | null;
   comparisons?: ComparisonLink[];
   guide?: GuideLink;
   relatedCompounds?: RelatedCompoundLink[];
+  /** Molecular pathways this compound engages (server-resolved). */
+  pathways?: { slug: string; name: string }[];
   /**
    * Deep link into the Compound Intelligence Engine pre-loaded with this
    * compound, or undefined when the engine hasn't curated it. Resolved on the
    * server so the engine's scoring dataset never reaches this client bundle.
    */
   engineHref?: string;
+  /** Authorship / freshness signals from MDX frontmatter (E-E-A-T byline). */
+  lastUpdated?: string;
+  author?: string;
+  reviewer?: string;
 }) {
   const categoryMeta = libraryCategoryMeta[module.category];
   const relatedHallmarks = hallmarkLibrary.filter((h) => module.relatedHallmarkIds.includes(h.id));
@@ -83,10 +95,16 @@ export function LibraryModuleDetail({
       <div className="max-w-7xl mx-auto px-6">
         <Link
           href="/library#content-modules"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-accent-cyan transition mb-8"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-accent-cyan transition mb-4"
         >
           <ArrowLeft className="w-4 h-4" /> Back to Library
         </Link>
+        <ContentByline
+          author={author}
+          lastUpdated={lastUpdated}
+          reviewer={reviewer}
+          className="mb-8"
+        />
 
         <div className="grid lg:grid-cols-12 gap-10">
           <aside className="order-2 lg:order-1 lg:col-span-4 space-y-6">
@@ -121,6 +139,24 @@ export function LibraryModuleDetail({
                         className="text-sm text-muted-foreground hover:text-accent-cyan transition"
                       >
                         #{h.number} {h.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </GlassPanel>
+            )}
+
+            {pathways.length > 0 && (
+              <GlassPanel depth="mid" className="rounded-xl p-5">
+                <p className="text-[10px] font-mono text-accent-cyan uppercase mb-3">Pathways engaged</p>
+                <ul className="space-y-2">
+                  {pathways.map((p) => (
+                    <li key={p.slug}>
+                      <Link
+                        href={`/pathways/${p.slug}`}
+                        className="text-sm text-muted-foreground hover:text-accent-cyan transition"
+                      >
+                        {p.name}
                       </Link>
                     </li>
                   ))}
@@ -168,7 +204,7 @@ export function LibraryModuleDetail({
                         href={`/library/synergies/${slug}`}
                         className="text-sm text-muted-foreground hover:text-accent-cyan transition"
                       >
-                        {slug.replace(/-/g, ' ')}
+                        {libraryModuleTitles[`synergies/${slug}`] ?? slug.replace(/-/g, ' ')}
                       </Link>
                     </li>
                   ))}
@@ -311,7 +347,7 @@ export function LibraryModuleDetail({
                   <BookOpen className="w-4 h-4 text-accent-cyan" />
                   <p className="text-[10px] font-mono text-accent-cyan uppercase">Deep dive</p>
                 </div>
-                <MdxRenderer content={mdxBody} />
+                <MdxRenderer content={mdxBody} selfHref={getModulePath(module)} />
               </div>
             ) : (
               <GlassPanel depth="mid" className="rounded-xl p-8 text-center text-muted-foreground">

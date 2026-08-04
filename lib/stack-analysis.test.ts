@@ -38,7 +38,7 @@ describe('analyzeStack', () => {
     const a = analyzeStack(['glynac', 'sulforaphane']);
     expect(a.synergies).toHaveLength(1);
     expect(a.synergies[0]).toMatchObject({ from: 'glynac', to: 'sulforaphane' });
-    expect(a.synergies[0].label).toBe('GlyNAC ET ↔ Sulforaphane');
+    expect(a.synergies[0].label).toBe('GlyNAC ↔ Sulforaphane');
   });
 
   it('never lists the same synergy pair twice regardless of declaration direction', () => {
@@ -163,11 +163,11 @@ describe('formatStackExport', () => {
     const ids = ['glynac', 'resveratrol'];
     const analysis = analyzeStack(ids);
     const text = formatStackExport(ids, analysis, 'https://tnic.help/stacks?stack=x');
-    expect(text).toContain('GlyNAC ET — 600mg glycine + 600mg NAC');
+    expect(text).toContain('GlyNAC — 600mg glycine + 600mg NAC');
     expect(text).toContain('Trans-Resveratrol — 150–500mg trans-resveratrol');
     const amIndex = text.indexOf('AM PROTOCOL');
     const pmIndex = text.indexOf('PM PROTOCOL');
-    const glynacIndex = text.indexOf('GlyNAC ET');
+    const glynacIndex = text.indexOf('GlyNAC');
     const resveratrolIndex = text.indexOf('Trans-Resveratrol');
     expect(amIndex).toBeGreaterThan(-1);
     expect(pmIndex).toBeGreaterThan(amIndex);
@@ -187,7 +187,7 @@ describe('formatStackExport', () => {
     const ids = ['glynac', 'sulforaphane'];
     const analysis = analyzeStack(ids);
     const text = formatStackExport(ids, analysis, 'https://tnic.help/stacks?stack=x');
-    expect(text).toContain('GlyNAC ET ↔ Sulforaphane');
+    expect(text).toContain('GlyNAC ↔ Sulforaphane');
     expect(text).toContain(`Synergy Score: ${analysis.score}/100`);
     expect(text).toContain(`Evidence Tier: ${analysis.evidenceTier}`);
     expect(text).toContain(`Est. Monthly Cost: $${analysis.monthlyCost.low}–$${analysis.monthlyCost.high}`);
@@ -221,7 +221,7 @@ describe('formatStackJson', () => {
     const json = JSON.parse(formatStackJson(ids, analysis, 'My Stack'));
     expect(json.name).toBe('My Stack');
     expect(json.compounds).toHaveLength(2);
-    expect(json.compounds[0]).toMatchObject({ id: 'glynac', name: 'GlyNAC ET', evidence: 'A' });
+    expect(json.compounds[0]).toMatchObject({ id: 'glynac', name: 'GlyNAC', evidence: 'A' });
     expect(json.analysis.synergyScore).toBe(analysis.score);
     expect([...json.analysis.hallmarkCoverage].sort()).toEqual([...analysis.hallmarkCoverage].sort());
     expect(json.disclaimer).toMatch(/Educational only/);

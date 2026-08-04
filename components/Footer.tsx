@@ -12,6 +12,7 @@ import {
   GraduationCap,
   Rocket,
   Syringe,
+  Waypoints,
 } from 'lucide-react';
 import { POPULAR_GUIDE_LINKS } from '@/lib/index-priority';
 import { citationRegistry } from '@/lib/trust';
@@ -25,6 +26,7 @@ const hubLinks = [
   { href: '/nico', label: 'NICO Starter Questionnaire', icon: HelpCircle },
   { href: '/library', label: 'Anti-Aging Library', icon: Library },
   { href: '/peptides', label: 'Peptide Library', icon: Syringe },
+  { href: '/pathways', label: 'Pathways', icon: Waypoints },
   { href: '/learn', label: 'Learn Hub', icon: GraduationCap },
   { href: '/stacks', label: 'Stacks & Protocols', icon: Layers },
   { href: '/labs', label: 'Lab Analysis Hub', icon: FlaskConical },

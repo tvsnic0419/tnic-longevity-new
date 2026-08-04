@@ -5,7 +5,7 @@ import { LibraryCategoryIndex } from '@/components/library/LibraryCategoryIndex'
 import { StructuredData } from '@/components/seo/StructuredData';
 import { getHallmarkBySlug, hallmarkLibrary } from '@/lib/hallmarks-library';
 import { loadMdx } from '@/lib/mdx';
-import { buildArticleSchema, buildBreadcrumbSchema, buildPageMetadata } from '@/lib/seo';
+import { buildArticleSchema, buildBreadcrumbSchema, buildPageMetadata, getCitationsFromBody } from '@/lib/seo';
 import { getCompoundsForHallmark, getCompoundIdToSlugMap } from '@/lib/library-graph';
 import { libraryCategoryMeta, type LibraryModuleCategory } from '@/lib/library-modules';
 import { seoRoutes } from '@/lib/seo-routes';
@@ -62,6 +62,11 @@ export default async function HallmarkPage({
   const targetingCompounds = getCompoundsForHallmark(hallmark.id);
   const compoundHrefs = getCompoundIdToSlugMap();
 
+  const reviewer = mdx?.frontmatter.reviewer;
+  const breadcrumbItems = [
+    { name: 'Library', path: '/library' },
+    { name: hallmark.title, path },
+  ];
   const schemas = [
     buildArticleSchema({
       title: hallmark.title,
@@ -69,11 +74,10 @@ export default async function HallmarkPage({
       path,
       dateModified: mdx?.frontmatter.last_updated,
       evidenceTier: 'A',
+      reviewer,
+      citations: getCitationsFromBody(mdx?.body),
     }),
-    buildBreadcrumbSchema([
-      { name: 'Library', path: '/library' },
-      { name: hallmark.title, path },
-    ]),
+    buildBreadcrumbSchema(breadcrumbItems),
   ];
 
   return (
@@ -84,6 +88,9 @@ export default async function HallmarkPage({
         mdxBody={mdx?.body ?? null}
         targetingCompounds={targetingCompounds}
         compoundHrefs={compoundHrefs}
+        lastUpdated={mdx?.frontmatter.last_updated}
+        author={mdx?.frontmatter.author}
+        reviewer={reviewer}
       />
     </>
   );

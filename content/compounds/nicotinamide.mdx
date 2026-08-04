@@ -9,26 +9,30 @@ last_updated: 2026-07-18
 
 ## 1. What Nicotinamide (NAM) does
 
-Nicotinamide (NAM) is best understood through **nad precursor and dna repair**. Nicotinamide is a non-flushing vitamin-B3 form with strong evidence for reducing new non-melanoma skin cancers in high-risk patients; high doses are not interchangeable with general NAD support. The evidence base below is anchored to PubMed records returned for this intervention (PMID 40005371, PMID 39885119, PMID 39531334); none proves that the compound extends human lifespan.
+Nicotinamide (NAM) is the **amide form of vitamin B3** and a direct entry point to the NAD+ salvage pathway — but it behaves very differently from NMN/NR and from flushing niacin (nicotinic acid). Unlike niacin, it does **not** cause the skin flush and does **not** lower cholesterol; unlike NMN/NR, its standout human evidence is not "general NAD+ boosting" but a specific dermatology result: oral nicotinamide reduces the rate of new non-melanoma skin cancers and actinic keratoses in high-risk patients. The critical nuance is dose duality — nicotinamide *feeds* NAD+ synthesis, yet at high concentrations it can *inhibit* the very NAD+-consuming enzymes (sirtuins, PARPs) that NAD+ is meant to fuel.
 
-**Primary hallmarks targeted:** genomic · epigenetic
+**Primary hallmarks targeted:** [Genomic instability](/library/genomic-instability) (DNA-repair energy) · [Epigenetic alterations](/library/epigenetic-alterations) (sirtuin substrate supply)
 
 :::evidence tier="B"
-The rating reflects the gap between pathway or condition-specific outcomes and direct longevity evidence. A positive surrogate, symptom, or disease trial should not be promoted into a lifespan claim.
+Strongest human signal is dermatologic — reduced new non-melanoma skin cancers/actinic keratoses in high-risk patients (see the evidence table). This is a disease-prevention endpoint in a selected population, not a general healthspan or lifespan claim.
 :::
 
-:::pathway title="Nicotinamide (NAM): working model" nodes="Exposure|Input|cyan,NAD precursor and DNA repair|Primary pathway|violet,Measured endpoint|Human evidence|emerald,Healthspan hypothesis|Unproven|amber" edges="Exposure->NAD precursor and DNA repair|absorption and exposure,NAD precursor and DNA repair->Measured endpoint|study-specific response,Measured endpoint->Healthspan hypothesis|inference—not proof"
+:::pathway title="Nicotinamide → NAD+ salvage" nodes="Nicotinamide (NAM)|Vitamin B3 amide|cyan,NAMPT salvage|NAM → NMN → NAD+|violet,NAD+ pool|Repair & signaling fuel|emerald,PARP / sirtuins|DNA repair, deacetylation|amber,High-dose inhibition|Sirtuin/PARP brake|rose" edges="Nicotinamide (NAM)->NAMPT salvage|rate-limiting salvage step,NAMPT salvage->NAD+ pool|regenerates NAD+,NAD+ pool->PARP / sirtuins|substrate,Nicotinamide (NAM)->High-dose inhibition|excess NAM inhibits sirtuins/PARP"
 :::
 
 ## 2. Mechanism and biological context
 
-| Layer | What is supported | What remains uncertain |
-| --- | --- | --- |
-| Exposure | Oral or clinical exposure can engage the proposed pathway | Product, dose, and baseline status can change exposure |
-| Pathway | NAD precursor and DNA repair is biologically plausible and intervention-relevant | Pathway engagement does not guarantee a clinical benefit |
-| Outcomes | Human or translational studies report condition-specific endpoints | No completed trial demonstrates longer life in healthy humans |
+Nicotinamide enters NAD+ synthesis through the salvage pathway: NAMPT (the rate-limiting enzyme) converts NAM to NMN, which becomes NAD+. That NAD+ then powers PARP-mediated DNA repair and sirtuin deacetylation — the plausible basis for the skin-cancer-prevention result, since UV-damaged keratinocytes are ATP/NAD+-depleted and repair-limited. The catch is that nicotinamide is also a *product-inhibitor* of sirtuins and PARPs: at high intracellular levels it can throttle the enzymes it is supposed to support. This is why high-dose NAM is **not** interchangeable with NMN/NR for "sirtuin activation," and why methylation load matters — excess NAM is cleared by NNMT using methyl groups (see the TMG pairing).
 
-Mechanistic evidence is useful for choosing what to measure, not for declaring an outcome in advance.
+| Step | Mechanism | Why it matters |
+| --- | --- | --- |
+| NAMPT salvage | NAM → NMN → NAD+ | Refills the NAD+ pool without flushing |
+| DNA-repair fuel | NAD+ powers PARP repair in UV-damaged cells | Basis for the skin-cancer-prevention data |
+| Sirtuin substrate | NAD+ enables sirtuin deacetylation | Epigenetic/metabolic signaling |
+| High-dose inhibition | Excess NAM inhibits sirtuins/PARPs | Not a sirtuin activator at high doses |
+| Methyl clearance | NNMT methylates surplus NAM | Raises methylation demand (pair with TMG) |
+
+The mechanism is well characterized; the honest limit is that the strongest outcome is dermatologic, and dose determines whether nicotinamide helps or hinders NAD+-dependent enzymes.
 
 ## 3. Evidence summary
 
@@ -88,8 +92,9 @@ Evidence in one population does not establish safety in pregnancy, organ impairm
 
 | Partner | Integration rationale |
 | --- | --- |
-| [nmn](/library/compounds/nmn) | Complementary pathway; assess the combination against goals, labs, and total burden. |
-| [nr](/library/compounds/nr) | Complementary pathway; assess the combination against goals, labs, and total burden. |
+| [nmn](/library/compounds/nmn) | Both feed NAD+, but overlap rather than complement — high-dose NAM can inhibit the sirtuins NMN aims to fuel, so this is a substitution/dose question, not additive stacking. |
+| [tmg](/library/compounds/tmg) | Clearing surplus nicotinamide via NNMT consumes methyl groups; betaine (TMG) replenishes the methyl pool. The most defensible NAM pairing. |
+| [nr](/library/compounds/nr) | Same NAD+-salvage overlap as NMN; choose one primary precursor rather than layering. |
 
 Start with the smallest stack that answers the question. Synergy is a mechanistic hypothesis unless a combination trial demonstrates it.
 

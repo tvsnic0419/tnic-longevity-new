@@ -8,6 +8,7 @@ import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 import { HallmarkHeroVisual } from '@/components/hallmarks/HallmarkHeroVisual';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/library/telomere-attrition' },
   title: 'Telomere Attrition | Hallmarks of Aging | TNiC',
   description:
     'Deep-dive into telomere attrition — the molecular clock at chromosome ends. Mechanisms, biomarkers, evidence-graded interventions (NMN, omega-3, stress reduction), and monitoring templates.',

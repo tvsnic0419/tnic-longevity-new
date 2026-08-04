@@ -17,7 +17,7 @@ const compoundNames: Record<string, string> = {
   fisetin: 'Fisetin',
   quercetin: 'Quercetin',
   omega3: 'Omega-3',
-  urolithina: 'Urolithin A',
+  'urolithin-a': 'Urolithin A',
   spermidine: 'Spermidine',
 };
 

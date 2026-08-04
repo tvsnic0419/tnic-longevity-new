@@ -23,8 +23,12 @@ import {
 } from '@/components/library/LifestyleDecisionTree';
 import { citationRegistry } from '@/lib/trust';
 import { glossary } from '@/lib/data';
+import { crossLinkTerms } from '@/lib/cross-links';
 
 const PMID_PATTERN = /\bPMID:?\s?(\d{7,8})\b/g;
+// Bare DOIs in prose (e.g. "DOI: 10.1038/s41586-020-2975-4" or "doi:10.1000/xyz").
+// The DOI syntax allows a wide character set after the "10.NNNN/" prefix.
+const DOI_PATTERN = /\bdoi:?\s?(10\.\d{4,9}\/[^\s)]+)/gi;
 const LINK_CLASS =
   'text-accent-cyan hover:text-accent-emerald underline underline-offset-2 decoration-accent-cyan/40 hover:decoration-accent-emerald transition-colors';
 const PMID_CLASS =
@@ -32,6 +36,10 @@ const PMID_CLASS =
 
 function pubmedUrl(pmid: string): string {
   return `https://pubmed.ncbi.nlm.nih.gov/${pmid}/`;
+}
+
+function doiUrl(doi: string): string {
+  return `https://doi.org/${doi.replace(/[.,;]+$/, '')}`;
 }
 
 function escapeHtml(text: string): string {
@@ -79,7 +87,7 @@ function linkGlossaryTerms(text: string, linkedTerms: Set<string>): string {
  * never rewrite characters inside an href or double-wrap an already-linked
  * phrase.
  */
-function renderInline(text: string, linkedTerms: Set<string>): string {
+function renderInline(text: string, linkedTerms: Set<string>, inHeading = false): string {
   const tokens: string[] = [];
   const stash = (html: string): string => {
     tokens.push(html);
@@ -102,6 +110,28 @@ function renderInline(text: string, linkedTerms: Set<string>): string {
       `<a href="${pubmedUrl(id)}" target="_blank" rel="noopener noreferrer" class="${PMID_CLASS}">PMID ${id}</a>`,
     ),
   );
+
+  out = out.replace(DOI_PATTERN, (_m, doi: string) => {
+    const clean = doi.replace(/[.,;]+$/, '');
+    return stash(
+      `<a href="${doiUrl(clean)}" target="_blank" rel="noopener noreferrer" class="${PMID_CLASS}">DOI ${clean}</a>`,
+    );
+  });
+
+  // Cross-link the first on-page mention of each compound/hallmark to its
+  // deep-dive (skipped in headings and never a self-link). Runs after markdown
+  // links and PMIDs are stashed, so already-linked names aren't re-wrapped.
+  if (!inHeading) {
+    for (const { name, href } of crossLinkTerms) {
+      // Self-link is skipped via a pre-seeded `xlink:<selfHref>` key (see MdxRenderer).
+      const key = `xlink:${href}`;
+      if (linkedTerms.has(key)) continue;
+      const pattern = new RegExp(`(?<![a-zA-Z0-9])(${escapeRegExp(name)})(?![a-zA-Z0-9])`, 'i');
+      if (!pattern.test(out)) continue;
+      linkedTerms.add(key);
+      out = out.replace(pattern, (m) => stash(`<a href="${href}" class="${LINK_CLASS}">${m}</a>`));
+    }
+  }
 
   out = linkGlossaryTerms(out, linkedTerms);
 
@@ -575,7 +605,7 @@ function renderMarkdownBlock(content: string, blockKey: number, linkedTerms: Set
 
     if (trimmed.startsWith('# ')) {
       elements.push(
-        <h1 key={key} className="text-2xl font-bold mt-2 mb-4 text-foreground">
+        <h1 key={key} className="text-2xl font-bold tracking-tight text-balance mt-2 mb-4 text-foreground">
           {trimmed.slice(2)}
         </h1>,
       );
@@ -596,10 +626,10 @@ function renderMarkdownBlock(content: string, blockKey: number, linkedTerms: Set
               <span className="shrink-0 font-mono text-sm text-accent-cyan" aria-hidden="true">
                 {numbered[1].padStart(2, '0')}
               </span>
-              <span dangerouslySetInnerHTML={{ __html: renderInline(numbered[2], linkedTerms) }} />
+              <span className="text-balance" dangerouslySetInnerHTML={{ __html: renderInline(numbered[2], linkedTerms, true) }} />
             </>
           ) : (
-            <span dangerouslySetInnerHTML={{ __html: renderInline(text, linkedTerms) }} />
+            <span className="text-balance" dangerouslySetInnerHTML={{ __html: renderInline(text, linkedTerms, true) }} />
           )}
         </h2>,
       );
@@ -612,8 +642,8 @@ function renderMarkdownBlock(content: string, blockKey: number, linkedTerms: Set
         <h3
           key={key}
           id={slugify(text)}
-          className="scroll-mt-24 text-lg font-semibold mt-6 mb-2 text-foreground"
-          dangerouslySetInnerHTML={{ __html: renderInline(text, linkedTerms) }}
+          className="scroll-mt-24 text-lg font-semibold tracking-tight text-balance mt-6 mb-2 text-foreground"
+          dangerouslySetInnerHTML={{ __html: renderInline(text, linkedTerms, true) }}
         />,
       );
       return;
@@ -623,7 +653,7 @@ function renderMarkdownBlock(content: string, blockKey: number, linkedTerms: Set
       elements.push(
         <blockquote
           key={key}
-          className="border-l-2 border-accent-cyan/50 pl-4 my-4 text-sm text-muted-foreground italic"
+          className="border-l-2 border-accent-cyan/50 pl-4 my-4 text-sm text-muted-foreground italic text-pretty"
           dangerouslySetInnerHTML={{ __html: renderInline(trimmed.slice(2), linkedTerms) }}
         />,
       );
@@ -706,7 +736,7 @@ function renderMarkdownBlock(content: string, blockKey: number, linkedTerms: Set
     elements.push(
       <p
         key={key}
-        className="text-sm text-muted-foreground leading-relaxed my-3"
+        className="text-sm text-muted-foreground leading-relaxed text-pretty my-3"
         dangerouslySetInnerHTML={{ __html: renderInline(trimmed, linkedTerms) }}
       />,
     );
@@ -719,14 +749,20 @@ export function MdxRenderer({
   content,
   showToc = true,
   showReferences = true,
+  selfHref,
 }: {
   content: string;
   showToc?: boolean;
   showReferences?: boolean;
+  /** This page's own href, so the prose cross-linker never self-links. */
+  selfHref?: string;
 }) {
   const blocks = parseBlocks(content);
   const elements: ReactNode[] = [];
   const linkedTerms = new Set<string>();
+  // Pre-seed the current page's own cross-link key so the prose cross-linker
+  // never self-links (e.g. the NMN page won't link the word "NMN" to itself).
+  if (selfHref) linkedTerms.add(`xlink:${selfHref}`);
 
   blocks.forEach((block, i) => {
     if (block.kind === 'directive') {

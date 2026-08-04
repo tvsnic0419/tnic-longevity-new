@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { getAllModuleParams } from '@/lib/library-modules';
 import { peptideLibrary } from '@/lib/peptides-library';
+import { getAllPathwaySlugs } from '@/lib/pathways';
 import { getAllComparisonSlugs } from '@/lib/comparisons';
 import { toolsRegistry } from '@/lib/registry';
 import { SITE } from '@/lib/site';
@@ -15,6 +16,7 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     { url: base, lastModified, changeFrequency: 'weekly', priority: 1 },
     { url: `${base}/library`, lastModified, changeFrequency: 'weekly', priority: 0.95 },
     { url: `${base}/peptides`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${base}/pathways`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/library/delivery-systems`, lastModified, changeFrequency: 'monthly', priority: 0.84 },
     { url: `${base}/library/systems`, lastModified, changeFrequency: 'monthly', priority: 0.84 },
     { url: `${base}/library/top-picks`, lastModified, changeFrequency: 'monthly', priority: 0.85 },
@@ -68,11 +70,17 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     priority: 0.85,
   }));
 
-  const hallmarkDeepDiveRoutes = hallmarkLibrary.map((h) => ({
-    url: `${base}/hallmarks/${h.slug}`,
+  // The bespoke /hallmarks/<slug> pages are duplicates of the canonical
+  // /library/<slug> hallmark deep-dives (which is what seoRoutes.hallmark
+  // declares canonical and every internal link points to). They carry a
+  // canonical → /library/<slug> and are intentionally omitted from the sitemap
+  // so ranking signals consolidate on the one canonical URL.
+
+  const pathwayRoutes = getAllPathwaySlugs().map((slug) => ({
+    url: `${base}/pathways/${slug}`,
     lastModified,
     changeFrequency: 'monthly' as const,
-    priority: 0.83,
+    priority: 0.7,
   }));
 
   const compareRoutes = getAllComparisonSlugs().map((slug) => ({
@@ -107,9 +115,9 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     ...coreRoutes,
     ...toolTabRoutes,
     ...hallmarkRoutes,
-    ...hallmarkDeepDiveRoutes,
     ...compareRoutes,
     ...moduleRoutes,
     ...peptideRoutes,
+    ...pathwayRoutes,
   ];
 }

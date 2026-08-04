@@ -89,7 +89,7 @@ export const starterStack = {
   name: 'TNiC Starter Defense Stack',
   subtitle: 'Evidence-graded entry protocol for adults 35+',
   compounds: [
-    { id: 'glynac', name: 'GlyNAC ET', dose: '600mg glycine + 600mg NAC', timing: 'AM', tier: 'A' as const, why: 'Restores glutathione — depleted 10–15% per decade' },
+    { id: 'glynac', name: 'GlyNAC', dose: '600mg glycine + 600mg NAC', timing: 'AM', tier: 'A' as const, why: 'Restores glutathione — depleted 10–15% per decade' },
     { id: 'sulforaphane', name: 'Sulforaphane', dose: '10–35mg glucoraphanin', timing: 'AM', tier: 'A' as const, why: 'Activates NRF2 — master antioxidant gene switch' },
     { id: 'nmn', name: 'NMN', dose: '250–500mg', timing: 'AM', tier: 'A' as const, why: 'Replenishes NAD+ — declines ~50% by age 60' },
   ],

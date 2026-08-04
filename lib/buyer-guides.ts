@@ -377,8 +377,8 @@ export const compoundBuyerGuides: CompoundBuyerGuide[] = [
     relatedCompareSlug: 'berberine-vs-metformin',
   },
   {
-    compoundId: 'urolithina',
-    title: 'Urolithin A (Mitopure) Buyer Guide',
+    compoundId: 'urolithin-a',
+    title: 'Urolithin A Buyer Guide',
     tagline: 'Only Mitopure has Phase 2 human RCT backing — standardization matters',
     formRequirements: [
       'Label must say: urolithin A (specific molecule — not ellagitannin or pomegranate extract)',

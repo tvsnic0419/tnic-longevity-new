@@ -8,6 +8,7 @@ import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 import { HallmarkHeroVisual } from '@/components/hallmarks/HallmarkHeroVisual';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/library/cellular-senescence' },
   title: 'Cellular Senescence | Hallmarks of Aging | TNiC',
   description:
     'Deep-dive into cellular senescence — the zombie cell crisis driving chronic inflammation and tissue dysfunction. Mechanisms, SASP, evidence-graded senolytics (fisetin, quercetin + dasatinib), and monitoring biomarkers.',

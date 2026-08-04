@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { consumerFAQ } from './data';
 import { PRIORITY_INDEX_PATHS } from './index-priority';
-import { SITE, LONGEVITY_KEYWORDS, SOCIAL_PROFILES } from './site';
+import { SITE, LONGEVITY_KEYWORDS, SOCIAL_PROFILES, EDITORIAL_AUTHOR } from './site';
 import type { SourceCitation } from './types';
 import { citationRegistry } from './trust';
 
@@ -125,8 +125,23 @@ export function buildOrganizationSchema() {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: SITE.name,
+    alternateName: SITE.fullName,
     url: SITE.url,
+    logo: `${SITE.url}/icon-512.png`,
     description: 'Independent educational longevity platform — not a medical provider or supplement retailer.',
+    knowsAbout: [
+      'Hallmarks of aging',
+      'Longevity supplements',
+      'Healthspan',
+      'NAD+ metabolism',
+      'Evidence-based nutrition',
+    ],
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'editorial',
+      email: SITE.contactEmail,
+      url: `${SITE.url}/contact`,
+    },
     sameAs: [...SOCIAL_PROFILES],
   };
 }
@@ -173,11 +188,15 @@ export function buildRootMetadata(): Metadata {
   };
 }
 
-export function buildFaqSchema() {
+/** Generic FAQPage builder. `items` are composed from already-authored content
+ * (verdicts, when-to-choose lists, summaries) — never new medical claims. */
+export function buildFaqPageSchema(items: { question: string; answer: string }[]) {
+  const entities = items.filter((f) => f.question && f.answer);
+  if (entities.length === 0) return null;
   return {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: consumerFAQ.map((f) => ({
+    mainEntity: entities.map((f) => ({
       '@type': 'Question',
       name: f.question,
       acceptedAnswer: { '@type': 'Answer', text: f.answer },
@@ -185,11 +204,74 @@ export function buildFaqSchema() {
   };
 }
 
-/** Map compound module slugs to registry citations for JSON-LD */
-export function getCompoundCitations(slug: string, compoundId?: string): SourceCitation[] {
-  const key = compoundId ?? slug;
-  const prefix = `c-${key.replace('cakg', 'akg').replace('sulforaphane', 'sf').replace('resveratrol', 'resv').replace('glynac', 'glynac').replace('rapamycin', 'rapa')}`;
-  return citationRegistry.filter((c) => c.id.startsWith(prefix));
+export function buildFaqSchema() {
+  // consumerFAQ is a non-empty static list, so this never returns null.
+  return buildFaqPageSchema(consumerFAQ.map((f) => ({ question: f.question, answer: f.answer })))!;
+}
+
+const PMID_IN_BODY = /\bPMID:?\s?(\d{7,8})\b/g;
+const citationByPmid = new Map(
+  citationRegistry.filter((c) => c.pmid).map((c) => [c.pmid as string, c]),
+);
+
+/**
+ * Harvest every study cited in a deep-dive's prose into JSON-LD `citation`
+ * entries. Replaces the old fragile id-prefix match (which left most compounds
+ * with an empty citation array). PMIDs that exist in the curated citation
+ * registry get full metadata (title, authors, journal, year); the rest still
+ * ship a valid PubMed-linked ScholarlyArticle so every studied claim is
+ * machine-traceable. Works for any content type — compounds, hallmarks,
+ * peptides, synergies, lifestyle, guides.
+ */
+export function getCitationsFromBody(body: string | null | undefined): SourceCitation[] {
+  if (!body) return [];
+  const seen = new Set<string>();
+  const out: SourceCitation[] = [];
+  for (const match of body.matchAll(PMID_IN_BODY)) {
+    const pmid = match[1];
+    if (seen.has(pmid)) continue;
+    seen.add(pmid);
+    const known = citationByPmid.get(pmid);
+    out.push(
+      known ?? {
+        id: `pmid-${pmid}`,
+        title: '',
+        journal: '',
+        year: 0,
+        pmid,
+        type: 'clinical' as const,
+      },
+    );
+  }
+  return out;
+}
+
+/** schema.org ScholarlyArticle node — omits fields we don't have. */
+function toScholarlyArticle(c: SourceCitation) {
+  const node: Record<string, unknown> = { '@type': 'ScholarlyArticle' };
+  if (c.title) node.name = c.title;
+  if (c.authors) node.author = c.authors;
+  if (c.year) node.datePublished = String(c.year);
+  if (c.journal) node.isPartOf = { '@type': 'Periodical', name: c.journal };
+  if (c.pmid) {
+    node.identifier = { '@type': 'PropertyValue', propertyID: 'PMID', value: c.pmid };
+    node.url = `https://pubmed.ncbi.nlm.nih.gov/${c.pmid}/`;
+  } else if (c.doi) {
+    node.identifier = { '@type': 'PropertyValue', propertyID: 'DOI', value: c.doi };
+    node.url = `https://doi.org/${c.doi}`;
+  }
+  return node;
+}
+
+/**
+ * The independent-reviewer signal (schema.org `reviewedBy`). Emitted ONLY when a
+ * real named reviewer is supplied via frontmatter — the schema code path exists
+ * so a future reviewer lights up automatically, but nothing is claimed today.
+ */
+function reviewedByNode(reviewer?: string) {
+  const name = reviewer?.trim();
+  if (!name) return {};
+  return { reviewedBy: { '@type': 'Person', name } };
 }
 
 export function buildMedicalWebPageSchema({
@@ -199,6 +281,7 @@ export function buildMedicalWebPageSchema({
   dateModified,
   evidenceTier,
   citations = [],
+  reviewer,
 }: {
   title: string;
   description: string;
@@ -206,8 +289,11 @@ export function buildMedicalWebPageSchema({
   dateModified?: string;
   evidenceTier?: string;
   citations?: SourceCitation[];
+  /** Independent clinical reviewer name; when unset, no reviewedBy is emitted. */
+  reviewer?: string;
 }) {
   const url = `${SITE.url}${path}`;
+  const lastReviewed = dateModified ?? new Date().toISOString().split('T')[0];
   return {
     '@context': 'https://schema.org',
     '@type': 'MedicalWebPage',
@@ -215,9 +301,12 @@ export function buildMedicalWebPageSchema({
     headline: title,
     description,
     url,
-    dateModified: dateModified ?? new Date().toISOString().split('T')[0],
-    author: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+    dateModified: lastReviewed,
+    lastReviewed,
+    author: { '@type': 'Organization', name: EDITORIAL_AUTHOR.name, url: EDITORIAL_AUTHOR.url },
     publisher: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+    ...reviewedByNode(reviewer),
+    medicalAudience: { '@type': 'MedicalAudience', audienceType: 'Patient' },
     about: {
       '@type': 'MedicalEntity',
       name: title,
@@ -226,17 +315,7 @@ export function buildMedicalWebPageSchema({
     isAccessibleForFree: true,
     educationalUse: 'Longevity education — not medical advice',
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
-    citation: citations.map((c) => ({
-      '@type': 'ScholarlyArticle',
-      name: c.title,
-      author: c.authors,
-      datePublished: String(c.year),
-      isPartOf: { '@type': 'Periodical', name: c.journal },
-      identifier: c.pmid
-        ? { '@type': 'PropertyValue', propertyID: 'PMID', value: c.pmid }
-        : undefined,
-      url: c.pmid ? `https://pubmed.ncbi.nlm.nih.gov/${c.pmid}/` : undefined,
-    })),
+    citation: citations.map(toScholarlyArticle),
   };
 }
 
@@ -246,22 +325,29 @@ export function buildArticleSchema({
   path,
   dateModified,
   evidenceTier,
+  citations = [],
+  reviewer,
 }: {
   title: string;
   description: string;
   path: string;
   dateModified?: string;
   evidenceTier?: string;
+  citations?: SourceCitation[];
+  /** Independent clinical reviewer name; when unset, no reviewedBy is emitted. */
+  reviewer?: string;
 }) {
+  const lastReviewed = dateModified ?? new Date().toISOString().split('T')[0];
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: title,
     description,
     url: `${SITE.url}${path}`,
-    dateModified: dateModified ?? new Date().toISOString().split('T')[0],
-    author: { '@type': 'Organization', name: SITE.name },
+    dateModified: lastReviewed,
+    author: { '@type': 'Organization', name: EDITORIAL_AUTHOR.name, url: EDITORIAL_AUTHOR.url },
     publisher: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+    ...reviewedByNode(reviewer),
     about: {
       '@type': 'Thing',
       name: 'Longevity Science',
@@ -269,6 +355,7 @@ export function buildArticleSchema({
     },
     isAccessibleForFree: true,
     educationalUse: 'Longevity education — not medical advice',
+    ...(citations.length > 0 ? { citation: citations.map(toScholarlyArticle) } : {}),
   };
 }
 

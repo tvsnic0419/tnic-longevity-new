@@ -8,6 +8,7 @@ import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 import { HallmarkHeroVisual } from '@/components/hallmarks/HallmarkHeroVisual';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/library/altered-intercellular-communication' },
   title: 'Altered Intercellular Communication | Hallmarks of Aging | TNiC',
   description:
     'Deep-dive into altered intercellular communication — the signaling breakdown driving inflammaging. SASP, hormonal decline, insulin resistance, evidence-graded interventions, and biomarkers.',

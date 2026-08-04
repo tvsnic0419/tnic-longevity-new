@@ -983,11 +983,16 @@ p,
   position: relative;
   padding: 1.15rem 1.25rem 1.15rem 1.5rem;
   border-radius: var(--radius-xl);
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--glass-bg) 84%, #ffffff 7%),
-    var(--glass-bg) 60%
-  );
+  /* Opaque elevated base UNDER the translucent glass gradient so the
+     page's molecular line-art can never bleed through and drop the body
+     text below WCAG AA (the glass tint stays, the contrast is guaranteed). */
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--glass-bg) 84%, #ffffff 7%),
+      var(--glass-bg) 60%
+    ),
+    var(--color-bg-elevated);
   backdrop-filter: blur(16px);
   border: 1px solid color-mix(in srgb, var(--accent-cyan) 12%, var(--color-border-subtle));
   box-shadow:
@@ -1036,7 +1041,10 @@ p,
 .context-rail-compact {
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border-subtle);
-  background: var(--color-bg-muted);
+  /* Opaque scrim (not the near-transparent --color-bg-muted) so the compact
+     rail's body copy sits on a controlled dark surface over the molecular
+     background, guaranteeing WCAG AA. */
+  background: var(--color-bg-elevated);
   overflow: hidden;
 }
 
