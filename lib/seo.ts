@@ -23,7 +23,6 @@ const SEGMENTS_WITH_OWN_OG_IMAGE = new Set([
   '/learn',
   '/library',
   '/products',
-  '/quiz',
   '/shop',
   '/stacks',
   '/tools',
@@ -36,7 +35,6 @@ function hasOwnOgImage(path: string): boolean {
   // Dynamic/nested segments with their own opengraph-image files.
   return (
     p.startsWith('/library/') ||
-    p.startsWith('/quiz/share/') ||
     p.startsWith('/club/') ||
     p.startsWith('/scorecard/')
   );

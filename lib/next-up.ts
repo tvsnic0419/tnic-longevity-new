@@ -13,12 +13,12 @@ export const nextUpImprovements: NextUpItem[] = [
     tags: ['content', 'library'],
   },
   {
-    id: 'quiz-architect-handoff',
-    title: '3-Min Quiz → Stack Architect handoff',
-    desc: 'Dedicated /quiz, preset handoff, Builder tab auto-open.',
+    id: 'nico-questionnaire',
+    title: 'NICO Starter Questionnaire → Stack Builder handoff',
+    desc: 'Dedicated /nico, answer-driven personalized stack, Builder tab auto-open.',
     status: 'shipped',
     sprint: 'Sprint 5',
-    href: '/quiz',
+    href: '/nico',
     tags: ['conversion', 'os'],
   },
   {
@@ -167,15 +167,6 @@ export const nextUpImprovements: NextUpItem[] = [
   },
   // Planned
   {
-    id: 'quiz-result-share',
-    title: 'Quiz result share card',
-    desc: 'Copyable quiz outcome + preset deep link to /stacks and /shop for referral-style handoff.',
-    status: 'shipped',
-    sprint: 'Sprint 15',
-    href: '/quiz',
-    tags: ['conversion', 'seo'],
-  },
-  {
     id: 'trust-citation-export',
     title: 'Citation bundle export',
     desc: 'BibTeX/JSON export of PMID registry for researchers building on TNiC evidence index.',
@@ -195,18 +186,9 @@ export const nextUpImprovements: NextUpItem[] = [
     tags: ['content', 'conversion'],
   },
   {
-    id: 'quiz-share-og',
-    title: 'Quiz share OG cards',
-    desc: 'Per-preset /quiz/share/[preset] routes with dynamic OG images for social referral handoff.',
-    status: 'shipped',
-    sprint: 'Sprint 16',
-    href: '/quiz/share/starter',
-    tags: ['seo', 'conversion'],
-  },
-  {
     id: 'sitemap-sprint-16',
     title: 'Sitemap expansion',
-    desc: 'Quiz share routes + delivery-systems library page indexed for discoverability.',
+    desc: 'Delivery-systems library page indexed for discoverability.',
     status: 'shipped',
     sprint: 'Sprint 16',
     href: '/sitemap.xml',
@@ -278,7 +260,7 @@ export const nextUpImprovements: NextUpItem[] = [
   {
     id: 'hub-context-expansion',
     title: 'OS hub context rails — what/why/next everywhere',
-    desc: 'Centralized hub-context for dashboard, stacks, labs, tools, shop, brief, learn, quiz, library, compare, and all 26 modules.',
+    desc: 'Centralized hub-context for dashboard, stacks, labs, tools, shop, brief, learn, library, compare, and all 26 modules.',
     status: 'shipped',
     sprint: 'Sprint 21',
     href: '/dashboard',
@@ -368,7 +350,7 @@ export const nextUpImprovements: NextUpItem[] = [
   {
     id: 'homepage-upconversion-rails',
     title: 'Homepage upconversion rails — Brief, Compare, stack deep links',
-    desc: 'Brief email capture rail, six comparison cards, featured stack preset deep links, quiz Shop + Brief CTAs.',
+    desc: 'Brief email capture rail, six comparison cards, featured stack preset deep links, Shop + Brief CTAs.',
     status: 'shipped',
     sprint: 'Sprint 29',
     href: '/',
@@ -395,7 +377,7 @@ export const nextUpImprovements: NextUpItem[] = [
   {
     id: 'sprint32-personalization-products-polish',
     title: 'Sprint 32 — personalization rails, /products hub, graphical polish',
-    desc: 'Intent-aware hero, return-visitor protocol rail, product picks catalog, preset-filtered research, Nav Quiz/Shop CTAs, stat-card trust.',
+    desc: 'Intent-aware hero, return-visitor protocol rail, product picks catalog, preset-filtered research, Nav Shop CTAs, stat-card trust.',
     status: 'shipped',
     sprint: 'Sprint 32',
     href: '/products',
@@ -465,9 +447,9 @@ export const nextUpImprovements: NextUpItem[] = [
     tags: ['ui', 'visualization'],
   },
   {
-    id: 'sprint39-quiz-persistence-dashboard-goals',
-    title: 'Sprint 39 — Quiz persistence, NMN vs Spermidine comparison, new goal labels',
-    desc: 'Quiz result saved to PlatformContext on completion. Dashboard and OS funnel handle longevity + metabolic goals. 9th comparison table (NMN vs Spermidine). Comparison row copy dynamicized. Elite 8 cross-links to stack + compare pages.',
+    id: 'sprint39-questionnaire-persistence-dashboard-goals',
+    title: 'Sprint 39 — Questionnaire persistence, NMN vs Spermidine comparison, new goal labels',
+    desc: 'Questionnaire result saved to PlatformContext on completion. Dashboard and OS funnel handle longevity + metabolic goals. 9th comparison table (NMN vs Spermidine). Comparison row copy dynamicized. Elite 8 cross-links to stack + compare pages.',
     status: 'shipped',
     sprint: 'Sprint 39',
     href: '/library/compare',

@@ -7,7 +7,6 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { Cpu, Layers, Wrench, Table2, BookOpen, ShoppingBag } from 'lucide-react';
 import { eliteStacks } from '@/lib/stacks-library';
-import { stackPresets, type PresetKey } from '@/lib/presets';
 import { usePlatform } from '@/context/PlatformContext';
 import { buildEngineStackUrl, buildShopStackUrl } from '@/lib/stack-url';
 import { PageShell } from '@/components/ui/PageShell';
@@ -17,7 +16,6 @@ import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
 import { DynamicStackBuilder } from './DynamicStackBuilder';
 import { EliteStackCard } from './EliteStackCard';
 import { ToolsPromoStrip } from '@/components/tools/ToolsPromoStrip';
-import { QuizStacksBanner } from './QuizStacksBanner';
 import { getHubContext } from '@/lib/hub-context';
 
 // Only ever rendered behind the "Compare" tab — lazy so its compound-data
@@ -35,26 +33,23 @@ const tabs = [
   { id: 'compare' as const, label: 'Compare', icon: Table2 },
 ];
 
-function isPresetKey(value: string | null): value is PresetKey {
-  return value !== null && value in stackPresets;
-}
-
 export function StacksLibrary() {
   const { selected } = usePlatform();
   const searchParams = useSearchParams();
-  const fromQuiz = searchParams.get('from') === 'quiz';
-  const presetParam = searchParams.get('preset');
-  const quizPreset = isPresetKey(presetParam) ? presetParam : null;
+  // The NICO Starter Questionnaire hands off its computed stack via
+  // `?stack=<ids>&from=nico`; PlatformContext seeds the builder from `?stack=`,
+  // and this opens the builder tab so the recommendation is visible immediately.
+  const fromNico = searchParams.get('from') === 'nico';
 
-  const [tab, setTab] = useState<Tab>(fromQuiz ? 'builder' : 'catalog');
+  const [tab, setTab] = useState<Tab>(fromNico ? 'builder' : 'catalog');
 
   useEffect(() => {
-    if (fromQuiz) {
+    if (fromNico) {
       requestAnimationFrame(() => {
         document.getElementById('stack-builder')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     }
-  }, [fromQuiz]);
+  }, [fromNico]);
 
   return (
     <PageShell>
@@ -88,8 +83,6 @@ export function StacksLibrary() {
       </div>
 
       <ToolsPromoStrip headline="Advanced Stack Simulator — age-adjusted dosing, risk index, hallmark radar" className="mb-8" />
-
-      {fromQuiz && quizPreset && <QuizStacksBanner preset={quizPreset} />}
 
       <TabBar
         tabs={tabs}

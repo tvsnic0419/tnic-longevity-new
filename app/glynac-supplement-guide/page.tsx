@@ -185,7 +185,7 @@ export default function GlyNACGuidePage() {
                   <ArrowRight className="w-4 h-4" aria-hidden="true" />
                 </Link>
                 <Link
-                  href="/quiz"
+                  href="/nico"
                   className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-border/60 bg-card text-foreground font-medium text-sm hover:border-accent-cyan/30 transition"
                 >
                   Build my GlyNAC stack
@@ -442,14 +442,14 @@ export default function GlyNACGuidePage() {
           <div className="rounded-2xl border border-accent-cyan/20 bg-accent-cyan/[0.04] p-8 md:p-10 text-center">
             <h2 className="heading-section mb-3">Build Your GlyNAC Stack</h2>
             <p className="text-body text-muted-foreground mb-8 max-w-xl mx-auto">
-              GlyNAC is a foundation-layer compound in most TNiC protocol presets. The quiz matches you to the right preset based on your goal, age, and experience.
+              GlyNAC is a foundation-layer compound in most TNiC protocol presets. The NICO Starter Questionnaire matches you to a personalized stack based on your goals, lifestyle, focus areas, and safety profile.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               <Link
-                href="/quiz"
+                href="/nico"
                 className="focus-ring interactive inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-accent-cyan text-bg-base font-semibold text-sm hover:bg-accent-cyan/90 transition"
               >
-                Take the 3-min quiz
+                Take the NICO Starter Questionnaire
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </Link>
               <Link

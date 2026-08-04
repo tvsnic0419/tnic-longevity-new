@@ -35,7 +35,7 @@ export const PRIORITY_INDEX_PATHS = [
   '/library/cellular-senescence',
   '/library/genomic-instability',
   '/faq',
-  '/quiz',
+  '/nico',
   '/stacks',
   '/learn',
   '/brief',

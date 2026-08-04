@@ -3,7 +3,6 @@ import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { getAllModuleParams } from '@/lib/library-modules';
 import { peptideLibrary } from '@/lib/peptides-library';
 import { getAllComparisonSlugs } from '@/lib/comparisons';
-import { PRESET_KEYS } from '@/lib/quiz-share';
 import { toolsRegistry } from '@/lib/registry';
 import { SITE } from '@/lib/site';
 
@@ -28,7 +27,7 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     { url: `${base}/elite-8`, lastModified, changeFrequency: 'monthly', priority: 0.75 },
     { url: `${base}/compound-engine`, lastModified, changeFrequency: 'monthly', priority: 0.82 },
     { url: `${base}/dashboard`, lastModified, changeFrequency: 'weekly', priority: 0.92 },
-    { url: `${base}/quiz`, lastModified, changeFrequency: 'weekly', priority: 0.94 },
+    { url: `${base}/nico`, lastModified, changeFrequency: 'weekly', priority: 0.94 },
     { url: `${base}/shop`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/products`, lastModified, changeFrequency: 'weekly', priority: 0.87 },
     { url: `${base}/supplement-guides`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
@@ -97,13 +96,6 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     priority: 0.85,
   }));
 
-  const quizShareRoutes = PRESET_KEYS.map((preset) => ({
-    url: `${base}/quiz/share/${preset}`,
-    lastModified,
-    changeFrequency: 'monthly' as const,
-    priority: 0.8,
-  }));
-
   const toolTabRoutes = toolsRegistry.map((t) => ({
     url: `${base}${t.href}`,
     lastModified,
@@ -113,7 +105,6 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
 
   return [
     ...coreRoutes,
-    ...quizShareRoutes,
     ...toolTabRoutes,
     ...hallmarkRoutes,
     ...hallmarkDeepDiveRoutes,

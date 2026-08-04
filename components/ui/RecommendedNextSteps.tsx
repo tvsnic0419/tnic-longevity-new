@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { ArrowRight, Target, BookOpen, BarChart3, Cpu } from 'lucide-react';
 
 interface RecommendedNextStepsProps {
-  context?: 'library' | 'quiz' | 'general';
+  context?: 'library' | 'nico' | 'general';
   className?: string;
 }
 
@@ -37,7 +37,7 @@ export const RecommendedNextSteps: React.FC<RecommendedNextStepsProps> = ({
         label: "Open Compound Engine"
       }
     ],
-    quiz: [
+    nico: [
       {
         icon: Target,
         title: "Apply your personalized stack",
@@ -56,10 +56,10 @@ export const RecommendedNextSteps: React.FC<RecommendedNextStepsProps> = ({
     general: [
       {
         icon: Target,
-        title: "Take the 3-minute quiz",
+        title: "Take the NICO Starter Questionnaire",
         description: "Get a mechanism-matched stack recommendation",
-        href: "/quiz",
-        label: "Start Quiz"
+        href: "/nico",
+        label: "Start the questionnaire"
       },
       {
         icon: BookOpen,

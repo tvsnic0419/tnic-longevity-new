@@ -29,6 +29,15 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['lucide-react', 'recharts', 'framer-motion'],
   },
 
+  async redirects() {
+    return [
+      // The 3-question starter quiz was retired in favor of the NICO Starter
+      // Questionnaire — keep old inbound links working.
+      { source: '/quiz', destination: '/nico', permanent: true },
+      { source: '/quiz/:path*', destination: '/nico', permanent: true },
+    ];
+  },
+
   async headers() {
     return [
       {

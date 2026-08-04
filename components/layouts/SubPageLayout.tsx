@@ -10,7 +10,7 @@ interface SubPageLayoutProps {
    * synergy score, currently-loaded stack) — real leftover data from a prior
    * session on this browser. That's the right context on hub pages like
    * Dashboard or Stacks, but it reads as "this is already in progress" on a
-   * standalone entry-point flow like the quiz, which promises a fresh start
+   * standalone entry-point flow like the NICO Starter Questionnaire, which promises a fresh start
    * every time. Pass true there to render just Nav + content + Footer.
    */
   hideContextBar?: boolean;

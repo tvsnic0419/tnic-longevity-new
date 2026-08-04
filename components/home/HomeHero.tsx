@@ -1,7 +1,5 @@
 import Link from 'next/link';
-import { Suspense } from 'react';
-import { Pill, Library, ArrowRight, Sparkles } from 'lucide-react';
-import { StarterQuiz } from '@/components/sections/StarterQuiz';
+import { Sparkles, Library, ArrowRight, FlaskConical, ShieldCheck } from 'lucide-react';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { TiltGlassPanel } from '@/components/ui/TiltGlassPanel';
 import { COMPOUND_COUNT } from '@/lib/library-modules';
@@ -11,9 +9,9 @@ import { eliteInterventions } from '@/lib/elite-interventions';
  * Server-rendered homepage hero.
  *
  * Everything the crawler needs — headline, value proposition, CTAs, and the
- * evidence stat row — is plain server-rendered markup. The only client island
- * is the interactive StarterQuiz, isolated behind a Suspense boundary so the
- * rest of the route stays static and crawlable.
+ * evidence stat row — is plain server-rendered markup. The personalized entry
+ * point is the NICO Starter Questionnaire, promoted as the hero's primary CTA
+ * and content card, both fully static and crawlable.
  */
 
 const heroStats = [
@@ -82,11 +80,11 @@ export function HomeHero() {
 
             <div className="mb-6 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
               <Link
-                href="/#elite-interventions"
+                href="/nico"
                 className="tnic-button-primary focus-ring group inline-flex items-center justify-center gap-2.5 rounded-2xl px-7 py-3.5 text-base"
               >
-                <Pill className="h-5 w-5" aria-hidden="true" />
-                See elite interventions
+                <Sparkles className="h-5 w-5" aria-hidden="true" />
+                Start the NICO Starter Questionnaire
                 <ArrowRight
                   className="h-4 w-4 transition-transform group-hover:translate-x-1"
                   aria-hidden="true"
@@ -143,12 +141,37 @@ export function HomeHero() {
                 className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-[var(--accent-cyan)]/12 via-transparent to-[var(--accent-emerald)]/12 blur-2xl"
                 aria-hidden="true"
               />
-              <TiltGlassPanel depth="content" className="relative rounded-3xl">
-                <Suspense
-                  fallback={<div className="h-[380px] animate-pulse rounded-3xl bg-white/5" />}
+              <TiltGlassPanel depth="content" className="relative rounded-3xl p-7">
+                <p className="font-mono text-[10px] uppercase tracking-widest text-[var(--accent-emerald)] mb-2">
+                  Personalized
+                </p>
+                <h3 className="text-xl font-bold text-white mb-2">NICO Starter Questionnaire</h3>
+                <p className="text-sm text-white/70 mb-5">
+                  Answer a few questions — the NICO Starter Questionnaire builds your personalized, evidence-graded stack, loads it
+                  into Stack Builder, and tracks it in your OS dashboard.
+                </p>
+                <ul className="space-y-2.5 mb-6">
+                  {[
+                    { icon: Sparkles, text: 'Your goals, lifestyle & focus areas' },
+                    { icon: ShieldCheck, text: 'A built-in safety screen' },
+                    { icon: FlaskConical, text: 'A stack computed for you — not a fixed preset' },
+                  ].map(({ icon: Icon, text }) => (
+                    <li key={text} className="flex items-center gap-3 text-sm text-white/80">
+                      <Icon className="h-4 w-4 shrink-0 text-[var(--accent-cyan)]" aria-hidden="true" />
+                      {text}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href="/nico"
+                  className="tnic-button-primary focus-ring group inline-flex w-full items-center justify-center gap-2.5 rounded-2xl px-6 py-3 text-sm font-semibold"
                 >
-                  <StarterQuiz />
-                </Suspense>
+                  Begin
+                  <ArrowRight
+                    className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                    aria-hidden="true"
+                  />
+                </Link>
               </TiltGlassPanel>
             </div>
             <p className="mt-4 hidden text-center text-[11px] text-white/70 lg:block lg:text-right">
