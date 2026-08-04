@@ -203,8 +203,8 @@ function ProtocolShopPanelInner() {
             {[
               {
                 title: 'Start personalized',
-                body: 'Answer three questions and open a shop list matched to your goal.',
-                href: '/quiz',
+                body: 'Answer the questionnaire and open a shop list matched to your goal.',
+                href: '/',
                 label: 'Take quiz',
               },
               {

@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { compounds, researchFeed, safetyNotes } from './data';
+import { communityPulse, compounds, consumerFAQ, glossary, researchFeed, safetyNotes } from './data';
 import { libraryModules } from './library-modules';
 import { hallmarkLibrary } from './hallmarks-library';
 import { ELITE_8_COMPOUNDS } from './elite-8-data';
@@ -73,10 +73,17 @@ describe('site data integrity', () => {
       hallmarkLibrary.map((h) => `/hallmarks/${h.slug}`),
     );
 
+    // Intentionally sitemap-excluded: routes that export `robots: { index:
+    // false }`. /results renders a questionnaire outcome computed from its
+    // query string, so its URL space is combinatorial — listing it would spend
+    // crawl budget on parameterised duplicates of one template. It stays
+    // `follow`, so its outbound links still pass equity.
+    const NOINDEX_ROUTES = new Set(['/results']);
+
     const staticRoutes = collectStaticPageRoutes(resolve(process.cwd(), 'app'));
     const sitemapPaths = new Set(buildSitemapEntries().map((e) => new URL(e.url).pathname));
     for (const route of staticRoutes) {
-      if (CANONICALIZED_DUPLICATES.has(route)) continue;
+      if (CANONICALIZED_DUPLICATES.has(route) || NOINDEX_ROUTES.has(route)) continue;
       expect(sitemapPaths.has(route), `app route ${route} has a page.tsx but is missing from the sitemap`).toBe(true);
     }
   });
@@ -118,5 +125,14 @@ describe('site data integrity', () => {
     expect(hsts?.value).toContain('preload');
     expect(hsts?.value).toContain('includeSubDomains');
     expect(vercel.redirects.some((r) => r.destination.startsWith('https://tnic.help'))).toBe(true);
+  });
+});
+
+describe('platform counts', () => {
+  it('communityPulse derives its metrics from the live registries', () => {
+    const byLabel = Object.fromEntries(communityPulse.map((m) => [m.label, m.metric]));
+    expect(byLabel['FAQ Answers']).toBe(String(consumerFAQ.length));
+    expect(byLabel['Glossary Terms']).toBe(String(glossary.length));
+    expect(byLabel['Clinical Studies']).toBe(String(researchFeed.length));
   });
 });

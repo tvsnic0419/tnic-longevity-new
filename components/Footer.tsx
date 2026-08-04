@@ -23,7 +23,7 @@ const tierBCount = compounds.filter((c) => c.evidence === 'B').length;
 
 const hubLinks = [
   { href: '/dashboard', label: 'My Dashboard', icon: LayoutDashboard },
-  { href: '/quiz', label: '3-Min Quiz', icon: HelpCircle },
+  { href: '/', label: 'Starter Questionnaire', icon: HelpCircle },
   { href: '/library', label: 'Anti-Aging Library', icon: Library },
   { href: '/peptides', label: 'Peptide Library', icon: Syringe },
   { href: '/pathways', label: 'Pathways', icon: Waypoints },

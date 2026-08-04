@@ -41,6 +41,16 @@ export interface QuizRecord {
   experience?: string;
   preset: string;
   completedAt: string;
+  /**
+   * Lifestyle and safety answers added by the NICO Starter Questionnaire. All
+   * optional so records written by the earlier three-question quiz still load.
+   */
+  sex?: string;
+  sleep?: string;
+  energy?: string;
+  stress?: string;
+  movement?: string;
+  safety?: string[];
 }
 
 

@@ -1,5 +1,6 @@
 import { compounds } from './data';
 import { getQuizResult, quizSteps, type QuizAnswers } from './homepage';
+import { type QuestionnaireAnswers } from './questionnaire';
 import { buildShopPresetUrl } from './stack-url';
 import { SITE } from './site';
 import { stackPresets, type PresetKey } from './presets';
@@ -51,6 +52,68 @@ export function buildQuizStacksUrl(preset: PresetKey): string {
 
 export function buildQuizShopUrl(preset: PresetKey): string {
   return `${SITE.url}${buildShopPresetUrl(preset)}`;
+}
+
+/* ── /results codec ───────────────────────────────────────────────────────
+   The full nine-answer round-trip. Answers live in the URL so a result
+   survives a refresh, can be bookmarked and shared, and can be recomputed on
+   the server — none of which the old inline-only result could do.
+
+   The first three keys keep their original names so existing /quiz/share
+   links and any bookmarked three-answer URLs still resolve. */
+
+const SAFETY_SEPARATOR = ',';
+
+export function buildResultsQuery(answers: QuestionnaireAnswers): string {
+  const params = new URLSearchParams();
+  if (answers.goal) params.set('goal', answers.goal);
+  if (answers.age) params.set('age', answers.age);
+  if (answers.experience) params.set('experience', answers.experience);
+  if (answers.sex) params.set('sex', answers.sex);
+  if (answers.sleep) params.set('sleep', answers.sleep);
+  if (answers.energy) params.set('energy', answers.energy);
+  if (answers.stress) params.set('stress', answers.stress);
+  if (answers.movement) params.set('movement', answers.movement);
+  if (answers.safety?.length) params.set('safety', answers.safety.join(SAFETY_SEPARATOR));
+  return params.toString();
+}
+
+export function buildResultsPath(answers: QuestionnaireAnswers): string {
+  const qs = buildResultsQuery(answers);
+  return `/results${qs ? `?${qs}` : ''}`;
+}
+
+export function buildResultsUrl(answers: QuestionnaireAnswers): string {
+  return `${SITE.url}${buildResultsPath(answers)}`;
+}
+
+/** Decode answers from `/results` search params. Returns null when nothing usable is present. */
+export function parseResultsSearchParams(
+  input: string | URLSearchParams | Record<string, string | string[] | undefined>,
+): QuestionnaireAnswers | null {
+  const get = (key: string): string | undefined => {
+    if (typeof input === 'string') return new URLSearchParams(input).get(key) ?? undefined;
+    if (input instanceof URLSearchParams) return input.get(key) ?? undefined;
+    const value = input[key];
+    return Array.isArray(value) ? value[0] : value;
+  };
+
+  const safetyRaw = get('safety');
+  const answers: QuestionnaireAnswers = {
+    goal: get('goal'),
+    age: get('age'),
+    experience: get('experience'),
+    sex: get('sex'),
+    sleep: get('sleep'),
+    energy: get('energy'),
+    stress: get('stress'),
+    movement: get('movement'),
+    safety: safetyRaw ? safetyRaw.split(SAFETY_SEPARATOR).filter(Boolean) : undefined,
+  };
+
+  // The goal is the only answer the recommendation cannot be resolved without —
+  // everything else has a documented neutral default.
+  return answers.goal ? answers : null;
 }
 
 export function parseQuizSearchParams(search: string): QuizAnswers | null {

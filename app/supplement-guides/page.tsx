@@ -201,7 +201,7 @@ export default function SupplementGuidesPage() {
     <>
       <StructuredData schemas={[collectionSchema, breadcrumbSchema, itemListSchema]} />
 
-      <main className="min-h-screen bg-bg-base">
+      <div className="min-h-screen bg-bg-base">
         {/* Hero */}
         <section className="py-20 md:py-28 border-b border-border section-mesh">
           <div className="container-page text-center">
@@ -390,13 +390,13 @@ export default function SupplementGuidesPage() {
             <div className="grid md:grid-cols-3 gap-6">
               <div className="p-6 rounded-2xl border border-border/60 bg-card">
                 <p className="text-label mb-2">Not sure where to start?</p>
-                <h3 className="font-bold text-foreground mb-3">Take the 3-min quiz</h3>
+                <h3 className="font-bold text-foreground mb-3">Take the Starter Questionnaire</h3>
                 <p className="text-sm text-muted-foreground mb-4">
                   Answer 7 questions about your health goals, lifestyle, and budget. Get a
                   personalized supplement stack ranked by evidence and synergy.
                 </p>
                 <Link
-                  href="/quiz"
+                  href="/"
                   className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border/60 bg-card text-foreground font-medium text-sm hover:border-accent-cyan/30 transition"
                 >
                   Start the quiz
@@ -438,7 +438,7 @@ export default function SupplementGuidesPage() {
             </div>
           </div>
         </section>
-      </main>
+      </div>
     </>
   );
 }

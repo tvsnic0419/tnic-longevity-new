@@ -30,7 +30,7 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     { url: `${base}/elite-8`, lastModified, changeFrequency: 'monthly', priority: 0.75 },
     { url: `${base}/compound-engine`, lastModified, changeFrequency: 'monthly', priority: 0.82 },
     { url: `${base}/dashboard`, lastModified, changeFrequency: 'weekly', priority: 0.92 },
-    { url: `${base}/quiz`, lastModified, changeFrequency: 'weekly', priority: 0.94 },
+    { url: `${base}/explore`, lastModified, changeFrequency: 'weekly', priority: 0.94 },
     { url: `${base}/shop`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/products`, lastModified, changeFrequency: 'weekly', priority: 0.87 },
     { url: `${base}/supplement-guides`, lastModified, changeFrequency: 'weekly', priority: 0.9 },

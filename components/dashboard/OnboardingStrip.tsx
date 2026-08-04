@@ -12,7 +12,7 @@ export function OnboardingStrip() {
       id: 'quiz',
       label: 'Take the quiz',
       sublabel: 'Get your personalized stack preset',
-      href: '/quiz',
+      href: '/',
       done: !!quizResult,
     },
     {

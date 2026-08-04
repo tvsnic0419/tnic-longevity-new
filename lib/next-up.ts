@@ -18,7 +18,7 @@ export const nextUpImprovements: NextUpItem[] = [
     desc: 'Dedicated /quiz, preset handoff, Builder tab auto-open.',
     status: 'shipped',
     sprint: 'Sprint 5',
-    href: '/quiz',
+    href: '/',
     tags: ['conversion', 'os'],
   },
   {
@@ -172,7 +172,7 @@ export const nextUpImprovements: NextUpItem[] = [
     desc: 'Copyable quiz outcome + preset deep link to /stacks and /shop for referral-style handoff.',
     status: 'shipped',
     sprint: 'Sprint 15',
-    href: '/quiz',
+    href: '/',
     tags: ['conversion', 'seo'],
   },
   {

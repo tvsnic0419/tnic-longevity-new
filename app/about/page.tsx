@@ -11,8 +11,8 @@ export const metadata = buildPageMetadata({
 
 export default function AboutPage() {
   return (
-    <main id="main-content" tabIndex={-1} className="container-page py-8 md:py-12 max-w-4xl">
+    <div className="container-page py-8 md:py-12 max-w-4xl">
       <AboutSection />
-    </main>
+    </div>
   );
 }

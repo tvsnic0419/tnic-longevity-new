@@ -85,7 +85,7 @@ export default async function ScorecardPage({ params }: Props) {
             14 compounds, 12 hallmarks of aging, every claim PubMed-cited.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/quiz" className="focus-ring btn-gradient rounded-full text-sm !px-6">
+            <Link href="/" className="focus-ring btn-gradient rounded-full text-sm !px-6">
               Get my scorecard — 3 min
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>

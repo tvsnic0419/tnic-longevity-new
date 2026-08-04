@@ -36,8 +36,27 @@ describe('compound-engine dataset integrity', () => {
 
   it('cross-links known compounds to their library deep-dive', () => {
     expect(CDB.nmn.libraryHref).toBe('/library/compounds/nmn');
-    // Engine id caakg maps onto the library slug `cakg`.
+    // Engine ids that diverge from their library slug. Each of these silently
+    // resolved to undefined before the override table covered them.
     expect(CDB.caakg.libraryHref).toBe('/library/compounds/cakg');
+    expect(CDB.astax.libraryHref).toBe('/library/compounds/astaxanthin');
+    expect(CDB.vitd3.libraryHref).toBe('/library/compounds/vitamin-d3');
+    expect(CDB.vitk2.libraryHref).toBe('/library/compounds/vitamin-k2');
+  });
+
+  /**
+   * Catches the reverse drift: an engine compound whose library page exists but
+   * whose id doesn't match its slug and has no override, which is exactly how
+   * astax / vitd3 / vitk2 went unnoticed. Only `lionsmane` and `lactoferrin`
+   * are legitimately page-less — they are staged in the engine but have no
+   * deep-dive written yet.
+   */
+  it('every engine compound either resolves a library page or is a known page-less entry', () => {
+    const PAGELESS = new Set(['lionsmane', 'lactoferrin']);
+    for (const c of COMPOUND_DB) {
+      if (PAGELESS.has(c.id)) continue;
+      expect(c.libraryHref, `${c.id} resolves no library deep-dive`).toBeDefined();
+    }
   });
 });
 

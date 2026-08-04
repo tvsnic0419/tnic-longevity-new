@@ -40,7 +40,7 @@ export function HomeCTA() {
             </Link>
             <GlassPanel depth="float" className="glass-hover rounded-full">
               <Link
-                href="/quiz"
+                href="/"
                 className="focus-ring inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-semibold text-foreground"
               >
                 <ClipboardList className="h-5 w-5 text-accent-cyan" aria-hidden="true" />

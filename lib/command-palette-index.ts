@@ -47,10 +47,10 @@ const hubPages: PaletteItem[] = [
   {
     id: 'page-quiz',
     kind: 'page',
-    title: '3-Min Starter Quiz',
+    title: 'The NICO Starter Questionnaire',
     subtitle: 'Personalized stack recommendation',
-    href: '/quiz',
-    keywords: ['quiz', 'starter', 'beginner', 'onboarding', '3 min', 'entry'],
+    href: '/',
+    keywords: ['questionnaire', 'quiz', 'starter', 'beginner', 'onboarding', 'nico', 'entry'],
   },
   {
     id: 'page-library',

@@ -439,7 +439,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
     ],
     whenChooseA: [
       'First longevity stack ever',
-      '3-Min Quiz beginner path',
+      'Starter Questionnaire beginner path',
       'Want results before maximizing spend',
     ],
     whenChooseB: [
@@ -449,7 +449,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
     ],
     relatedHrefs: [
       { label: 'Stack Architect', href: '/stacks' },
-      { label: '3-Min Quiz', href: '/quiz' },
+      { label: 'Starter Questionnaire', href: '/' },
       { label: 'Testing guide', href: '/library/guides/testing-and-monitoring' },
     ],
     keywords: ['starter', 'hybrid', 'stack', 'beginner'],

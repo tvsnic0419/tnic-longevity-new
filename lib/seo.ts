@@ -23,7 +23,7 @@ const SEGMENTS_WITH_OWN_OG_IMAGE = new Set([
   '/learn',
   '/library',
   '/products',
-  '/quiz',
+  '/explore',
   '/shop',
   '/stacks',
   '/tools',

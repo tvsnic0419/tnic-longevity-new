@@ -138,7 +138,7 @@ export function Nav() {
               stays outside the glass as the single filled primary. */}
           <GlassPanel depth="float" className="glass-hover flex items-center rounded-full">
             <Link
-              href="/quiz"
+              href="/"
               className="focus-ring inline-flex items-center gap-1.5 rounded-full py-2 pl-4 pr-3.5 text-sm font-semibold text-muted-foreground hover:text-foreground"
             >
               <ClipboardList className="w-4 h-4 text-accent-violet" aria-hidden="true" />
@@ -218,11 +218,11 @@ export function Nav() {
               <div className="flex flex-col gap-2 mt-3">
                 <GlassPanel depth="float" className="glass-hover rounded-xl">
                   <Link
-                    href="/quiz"
+                    href="/"
                     onClick={() => setMobileOpen(false)}
                     className="focus-ring block rounded-xl py-3 text-center text-sm font-semibold"
                   >
-                    3-Min Stack Quiz
+                    Starter Questionnaire
                   </Link>
                 </GlassPanel>
                 <GlassPanel depth="float" className="glass-hover rounded-xl">

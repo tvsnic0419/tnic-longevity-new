@@ -440,10 +440,10 @@ export default function SulforaphaneGuidePage() {
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               <Link
-                href="/quiz"
+                href="/"
                 className="focus-ring interactive inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-accent-emerald text-bg-base font-semibold text-sm hover:bg-accent-emerald/90 transition"
               >
-                Take the 3-min quiz
+                Take the Starter Questionnaire
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </Link>
               <Link

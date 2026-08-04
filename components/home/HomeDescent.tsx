@@ -1121,7 +1121,7 @@ export function HomeDescent() {
               </div>
             </div>
             <div>
-              <Link href="/quiz" className="tnic-cta">
+              <Link href="/" className="tnic-cta">
                 Start the 90-second quiz <span className="arr">→</span>
               </Link>
               <Link href="#elite-interventions" className="tnic-cta ghost">

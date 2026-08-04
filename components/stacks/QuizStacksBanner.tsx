@@ -27,7 +27,7 @@ export function QuizStacksBanner({ preset }: { preset: PresetKey }) {
       </div>
       <div className="flex items-center gap-2 shrink-0">
         <Link
-          href="/quiz"
+          href="/"
           className="focus-ring text-xs font-semibold text-accent-cyan hover:underline rounded px-2 py-1"
         >
           Retake quiz

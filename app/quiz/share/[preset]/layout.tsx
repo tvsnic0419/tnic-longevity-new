@@ -19,7 +19,7 @@ export async function generateMetadata({
   const stack = stackPresets[preset];
   const path = `/quiz/share/${preset}`;
   const title = `${stack.label} Stack — TNiC Quiz Result`;
-  const description = `${stack.desc}. Evidence-graded ${stack.ids.length}-compound protocol from the TNiC 3-min starter quiz.`;
+  const description = `${stack.desc}. Evidence-graded ${stack.ids.length}-compound protocol from The NICO Starter Questionnaire.`;
 
   return {
     title,

@@ -31,13 +31,16 @@ export const seoRoutes = {
       keywords: ['longevity dashboard', 'personal health OS', 'stack tracker', 'hallmark coverage'],
     }),
 
-  quiz: () =>
+  // The questionnaire itself lives at `/` (see app/page.tsx, which owns its own
+  // metadata). `/explore` is the cinematic platform overview that used to be
+  // the homepage.
+  explore: () =>
     buildPageMetadata({
-      title: '3-Min Starter Quiz — Personalized Longevity Entry Point',
+      title: 'Explore TNiC — Evidence-Graded Longevity Supplements & Anti-Aging Library',
       description:
-        'Three questions: your goal, age range, and experience level. Get a mechanism-matched stack preset, a PMID-cited insight for your age group, and your next step in the TNiC Longevity OS.',
-      path: '/quiz',
-      keywords: ['longevity quiz', 'starter protocol', 'NMN stack quiz', 'personalized supplement stack', 'NRF2 quiz'],
+        'Elite anti-aging interventions graded by human evidence, the 12 hallmarks of aging, supplement guides, and the local-first tool suite — the full platform overview.',
+      path: '/explore',
+      keywords: ['anti-aging supplements', 'longevity library', 'hallmarks of aging', 'evidence-graded supplements'],
     }),
 
   learn: () =>

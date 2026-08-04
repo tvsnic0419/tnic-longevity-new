@@ -58,6 +58,14 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      // The three-question starter quiz became The NICO Starter Questionnaire
+      // and moved to the site root, which is now the front door. Permanent so
+      // inbound links and index entries for /quiz follow to the real thing.
+      {
+        source: '/quiz',
+        destination: '/',
+        permanent: true,
+      },
       // The Urolithin A deep-dive shipped under a misspelled slug
       // (`urolithina`). Preserve any external links / index entries by
       // permanently redirecting the old paths to the corrected slug.

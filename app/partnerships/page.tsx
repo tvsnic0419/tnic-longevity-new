@@ -48,7 +48,7 @@ function buildSchemas() {
 
 export default function PartnershipsPage() {
   return (
-    <main id="main-content" tabIndex={-1}>
+    <div>
       <PageShell>
         <StructuredData schemas={buildSchemas()} />
       <PageHeader
@@ -155,7 +155,7 @@ export default function PartnershipsPage() {
         </div>
       </section>
       </PageShell>
-    </main>
+    </div>
   );
 }
 

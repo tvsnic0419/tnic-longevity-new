@@ -30,12 +30,19 @@ export const navLinks = [
   { href: '/compound-engine', label: 'Engine', mod: 'MOD-ENG-18' },
 ];
 
+/**
+ * Platform counts, every one derived from the live data below so they cannot
+ * drift. The FAQ / glossary / study figures were previously hardcoded as
+ * 33 / 20 / 28 against actual counts of 40 / 26 / 24 — the same stale-stat
+ * class already fixed in `lib/platform-stats.ts`. Defined as a getter-backed
+ * array because the registries it counts are declared later in this module.
+ */
 export const communityPulse = [
   { metric: String(COMPOUND_COUNT), label: 'Evidence-Graded Compounds' },
   { metric: '12', label: 'Hallmarks Explained' },
-  { metric: '33', label: 'FAQ Answers' },
-  { metric: '20', label: 'Glossary Terms' },
-  { metric: '28', label: 'Clinical Studies' },
+  { get metric() { return String(consumerFAQ.length); }, label: 'FAQ Answers' },
+  { get metric() { return String(glossary.length); }, label: 'Glossary Terms' },
+  { get metric() { return String(researchFeed.length); }, label: 'Clinical Studies' },
 ];
 
 export const compounds: Compound[] = [
@@ -1549,7 +1556,7 @@ export const supplementRedFlags = [
 ];
 
 export const gettingStartedSteps = [
-  { step: 1, title: 'Take the 3-Min Starter Quiz', desc: 'Answer three questions about your goal, age, and experience. Get a personalized stack preset and next OS step.', link: '/quiz' },
+  { step: 1, title: 'Take the NICO Starter Questionnaire', desc: 'Nine questions covering your goal, age, experience, sleep, energy, stress, movement, and a medication safety screen. Get a personalized, safety-filtered stack.', link: '/' },
   { step: 2, title: 'Review Your Biomarkers', desc: 'See which longevity markers are most depleted for your profile. Understand what your stack needs to target.', link: '/labs?tab=input' },
   { step: 3, title: 'Build Your Stack', desc: 'Use the Stack Architect to toggle compounds. Watch synergy score and AM/PM dosing update in real time.', link: '/stacks' },
   { step: 4, title: 'Check Safety & Consult', desc: 'Review contraindications in the Trust Center. Export your protocol and bring it to your physician.', link: '/trust' },
@@ -1824,6 +1831,6 @@ export const consumerFAQ = [
     id: 'faq40',
     category: 'getting-started' as const,
     question: 'Should I look into peptides before I finish the compound library?',
-    answer: 'Generally no. Every peptide on TNiC\'s list is either prescription-only, has a materially thinner human evidence base than TNiC\'s Tier-A oral compounds, or both — Semaglutide/Tirzepatide being the one exception with genuine large-RCT backing. If you are new to TNiC, the compound library and 3-Min Quiz are the lower-risk, better-evidenced starting point. Peptides are worth reading once you understand evidence tiers and want to evaluate a specific claim you have already encountered elsewhere, not as a first stop.',
+    answer: 'Generally no. Every peptide on TNiC\'s list is either prescription-only, has a materially thinner human evidence base than TNiC\'s Tier-A oral compounds, or both — Semaglutide/Tirzepatide being the one exception with genuine large-RCT backing. If you are new to TNiC, the compound library and the NICO Starter Questionnaire are the lower-risk, better-evidenced starting point. Peptides are worth reading once you understand evidence tiers and want to evaluate a specific claim you have already encountered elsewhere, not as a first stop.',
   },
 ];

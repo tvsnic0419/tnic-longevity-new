@@ -164,7 +164,17 @@ const RAW_COMPOUND_DB: Omit<Compound, 'libraryHref'>[] = [
 
 /* Cross-link each compound to its canonical library deep-dive when one exists.
    Engine id → library slug where they diverge. */
-const LIBRARY_SLUG_OVERRIDES: Record<string, string> = { caakg: 'cakg' };
+const LIBRARY_SLUG_OVERRIDES: Record<string, string> = {
+  caakg: 'cakg',
+  // These three have real library pages under a different slug than their
+  // engine id. Without the mapping resolveLibraryHref() silently returned
+  // undefined and the engine dropped the "deep dive" link — a dead end rather
+  // than a broken link, so nothing surfaced it. The drift guard below now
+  // pins every override.
+  astax: 'astaxanthin',
+  vitd3: 'vitamin-d3',
+  vitk2: 'vitamin-k2',
+};
 const libraryPathBySlug = new Map(compoundModules.map((m) => [m.slug, getModulePath(m)]));
 function resolveLibraryHref(id: string): string | undefined {
   return libraryPathBySlug.get(LIBRARY_SLUG_OVERRIDES[id] ?? id);

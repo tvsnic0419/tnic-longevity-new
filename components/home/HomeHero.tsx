@@ -1,19 +1,18 @@
 import Link from 'next/link';
-import { Suspense } from 'react';
 import { Pill, Library, ArrowRight, Sparkles } from 'lucide-react';
-import { StarterQuiz } from '@/components/sections/StarterQuiz';
+import { HomeQuestionnaireCTA } from '@/components/home/HomeQuestionnaireCTA';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { TiltGlassPanel } from '@/components/ui/TiltGlassPanel';
 import { COMPOUND_COUNT } from '@/lib/library-modules';
 import { eliteInterventions } from '@/lib/elite-interventions';
 
 /**
- * Server-rendered homepage hero.
+ * Server-rendered hero for `/explore`.
  *
  * Everything the crawler needs — headline, value proposition, CTAs, and the
- * evidence stat row — is plain server-rendered markup. The only client island
- * is the interactive StarterQuiz, isolated behind a Suspense boundary so the
- * rest of the route stays static and crawlable.
+ * evidence stat row — is plain server-rendered markup. The content plane now
+ * holds a CTA into the questionnaire at the site root rather than an embedded
+ * second copy of it, so the whole hero is static and crawlable.
  */
 
 const heroStats = [
@@ -144,11 +143,7 @@ export function HomeHero() {
                 aria-hidden="true"
               />
               <TiltGlassPanel depth="content" className="relative rounded-3xl">
-                <Suspense
-                  fallback={<div className="h-[380px] animate-pulse rounded-3xl bg-white/5" />}
-                >
-                  <StarterQuiz />
-                </Suspense>
+                <HomeQuestionnaireCTA />
               </TiltGlassPanel>
             </div>
             <p className="mt-4 hidden text-center text-[11px] text-white/70 lg:block lg:text-right">
