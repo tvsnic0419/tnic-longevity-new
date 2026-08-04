@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import { Pill, Library, ArrowRight, Sparkles } from 'lucide-react';
 import { StarterQuiz } from '@/components/sections/StarterQuiz';
+import { HeroSceneMount } from '@/components/home/HeroSceneMount';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { TiltGlassPanel } from '@/components/ui/TiltGlassPanel';
 import { COMPOUND_COUNT } from '@/lib/library-modules';
@@ -43,6 +44,20 @@ export function HomeHero() {
             grounding it. */}
         <div className="absolute -right-40 top-1/3 h-[34rem] w-[34rem] rounded-full bg-[radial-gradient(circle,rgba(192,132,252,0.10),transparent_60%)] blur-2xl" />
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-background" />
+      </div>
+
+      {/* The live compound-synergy network — HeroSceneMount was built but never
+          placed. It's wired in here as the hero's ambient motif: the real
+          synergy web (cyan) and its clashes (amber), elite picks haloed gold —
+          the site's "nothing works alone" thesis, rendered rather than stated.
+          Decorative and pointer-events-none so it never competes with the quiz;
+          masked + desktop-only, with HeroSceneMount's own poster/mobile gating
+          underneath. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 right-0 -z-10 hidden w-[60%] opacity-70 [mask-image:radial-gradient(72%_72%_at_72%_42%,#000_32%,transparent_80%)] [-webkit-mask-image:radial-gradient(72%_72%_at_72%_42%,#000_32%,transparent_80%)] lg:block"
+      >
+        <HeroSceneMount />
       </div>
 
       <div className="container-page">

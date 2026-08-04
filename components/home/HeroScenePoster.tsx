@@ -1,5 +1,7 @@
 import {
   HERO_NETWORK_EDGES,
+  HERO_NETWORK_EDGE_COLOR,
+  HERO_NETWORK_ELITE_COLOR,
   HERO_NETWORK_TIER_COLOR,
   buildHeroNetworkPoster2D,
 } from '@/lib/hero-network';
@@ -37,6 +39,7 @@ export function HeroScenePoster() {
         const a = nodeMap.get(e.a);
         const b = nodeMap.get(e.b);
         if (!a || !b) return null;
+        const clash = e.kind === 'clash';
         return (
           <line
             key={`${e.a}-${e.b}`}
@@ -44,9 +47,10 @@ export function HeroScenePoster() {
             y1={a.y}
             x2={b.x}
             y2={b.y}
-            stroke="#475569"
-            strokeOpacity={0.35}
-            strokeWidth={1}
+            stroke={clash ? HERO_NETWORK_EDGE_COLOR.clash : HERO_NETWORK_EDGE_COLOR.synergy}
+            strokeOpacity={clash ? 0.6 : 0.32}
+            strokeWidth={clash ? 1.3 : 1}
+            strokeDasharray={clash ? '4 5' : undefined}
           />
         );
       })}
@@ -55,6 +59,10 @@ export function HeroScenePoster() {
         const r = 7 + Math.min(n.degree, 6) * 1.15;
         return (
           <g key={n.id}>
+            {/* Elite picks (the buildable product) carry a soft gold halo. */}
+            {n.elite && (
+              <circle cx={n.x} cy={n.y} r={r + 5} fill={HERO_NETWORK_ELITE_COLOR} fillOpacity={0.16} />
+            )}
             <circle cx={n.x} cy={n.y} r={r + 6} fill={color} fillOpacity={0.1} />
             <circle
               cx={n.x}
@@ -62,9 +70,9 @@ export function HeroScenePoster() {
               r={r}
               fill={color}
               fillOpacity={0.18}
-              stroke={color}
-              strokeOpacity={0.7}
-              strokeWidth={1.4}
+              stroke={n.elite ? HERO_NETWORK_ELITE_COLOR : color}
+              strokeOpacity={n.elite ? 0.85 : 0.7}
+              strokeWidth={n.elite ? 1.8 : 1.4}
             />
           </g>
         );
