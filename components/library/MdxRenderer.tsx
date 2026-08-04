@@ -605,7 +605,7 @@ function renderMarkdownBlock(content: string, blockKey: number, linkedTerms: Set
 
     if (trimmed.startsWith('# ')) {
       elements.push(
-        <h1 key={key} className="text-2xl font-bold mt-2 mb-4 text-foreground">
+        <h1 key={key} className="text-2xl font-bold tracking-tight text-balance mt-2 mb-4 text-foreground">
           {trimmed.slice(2)}
         </h1>,
       );
@@ -626,10 +626,10 @@ function renderMarkdownBlock(content: string, blockKey: number, linkedTerms: Set
               <span className="shrink-0 font-mono text-sm text-accent-cyan" aria-hidden="true">
                 {numbered[1].padStart(2, '0')}
               </span>
-              <span dangerouslySetInnerHTML={{ __html: renderInline(numbered[2], linkedTerms, true) }} />
+              <span className="text-balance" dangerouslySetInnerHTML={{ __html: renderInline(numbered[2], linkedTerms, true) }} />
             </>
           ) : (
-            <span dangerouslySetInnerHTML={{ __html: renderInline(text, linkedTerms, true) }} />
+            <span className="text-balance" dangerouslySetInnerHTML={{ __html: renderInline(text, linkedTerms, true) }} />
           )}
         </h2>,
       );
@@ -642,7 +642,7 @@ function renderMarkdownBlock(content: string, blockKey: number, linkedTerms: Set
         <h3
           key={key}
           id={slugify(text)}
-          className="scroll-mt-24 text-lg font-semibold mt-6 mb-2 text-foreground"
+          className="scroll-mt-24 text-lg font-semibold tracking-tight text-balance mt-6 mb-2 text-foreground"
           dangerouslySetInnerHTML={{ __html: renderInline(text, linkedTerms, true) }}
         />,
       );
@@ -653,7 +653,7 @@ function renderMarkdownBlock(content: string, blockKey: number, linkedTerms: Set
       elements.push(
         <blockquote
           key={key}
-          className="border-l-2 border-accent-cyan/50 pl-4 my-4 text-sm text-muted-foreground italic"
+          className="border-l-2 border-accent-cyan/50 pl-4 my-4 text-sm text-muted-foreground italic text-pretty"
           dangerouslySetInnerHTML={{ __html: renderInline(trimmed.slice(2), linkedTerms) }}
         />,
       );
@@ -736,7 +736,7 @@ function renderMarkdownBlock(content: string, blockKey: number, linkedTerms: Set
     elements.push(
       <p
         key={key}
-        className="text-sm text-muted-foreground leading-relaxed my-3"
+        className="text-sm text-muted-foreground leading-relaxed text-pretty my-3"
         dangerouslySetInnerHTML={{ __html: renderInline(trimmed, linkedTerms) }}
       />,
     );

@@ -138,7 +138,7 @@ const CHERO_CSS = `
 .chero-name {
   font-family: ${FONT.display}; font-weight: 400; font-size: clamp(34px, 5.5vw, 72px);
   line-height: 1.0; letter-spacing: -0.025em; color: ${VIZ.ink}; margin: 2px 0;
-  max-width: 100%; overflow-wrap: break-word; word-break: break-word; hyphens: auto;
+  max-width: 100%; overflow-wrap: break-word; word-break: break-word; hyphens: auto; text-wrap: balance;
 }
 .chero-medallion {
   display: inline-flex; align-items: center; gap: 9px; align-self: flex-start;
