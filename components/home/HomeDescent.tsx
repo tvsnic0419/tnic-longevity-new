@@ -393,51 +393,68 @@ const TIER: Record<TierKey, { color: string; label: string }> = {
   caution:     { color: "#eaa24a", label: "Caution" },
 };
 
-const NODE_DEFS: Array<[string, string, string, string | null]> = [
-  ["curcumin", "Curcumin", "anti-inflammatory signaling", null],
-  ["piperine", "Piperine", "absorption enhancer", null],
-  ["omega3", "Omega-3", "resolving inflammation", null],
-  ["resveratrol", "Resveratrol", "sirtuin / healthy-aging", "resveratrol"],
-  ["pterostilbene", "Pterostilbene", "longer-acting resveratrol", "pterostilbene"],
-  ["fisetin", "Fisetin", "senolytic / cellular cleanup", null],
-  ["vitd", "Vitamin D", "calcium uptake, immune", null],
-  ["k2", "Vitamin K2", "directs calcium to bone", null],
-  ["magnesium", "Magnesium", "enzyme cofactor", null],
-  ["zinc", "Zinc", "immune, enzymes", null],
-  ["copper", "Copper", "balances zinc", null],
-  ["iron", "Iron", "oxygen transport", null],
-  ["vitc", "Vitamin C", "antioxidant, absorption", null],
-  ["folate", "Folate", "one-carbon metabolism", null],
-  ["b12", "Vitamin B12", "methylation, nerves", null],
-  ["b6", "Vitamin B6", "homocysteine balance", null],
+// Real TNiC library compounds — the marquee nodes of the synergy graph. Every
+// node links to its own /library/compounds/<slug> module. Tuple:
+// [id, name, role, librarySlug, eliteCompoundId | null]. Ordered around the
+// circle so clustered relationships (NAD⁺/SIRT, AMPK, senolytics, autophagy,
+// NRF2/glutathione) sit adjacent and edges cross as little as possible.
+const NODE_DEFS: Array<[string, string, string, string, string | null]> = [
+  ["nmn", "NMN", "NAD⁺ precursor — fuels sirtuins & repair", "nmn", "nmn"],
+  ["nr", "NR", "NAD⁺ precursor — converts to NMN", "nr", null],
+  ["cakg", "Ca-AKG", "TCA fuel + epigenetic cofactor", "cakg", "cakg"],
+  ["resveratrol", "Resveratrol", "SIRT1 activator (needs NAD⁺)", "resveratrol", "resveratrol"],
+  ["pterostilbene", "Pterostilbene", "longer-acting SIRT1 stilbene", "pterostilbene", "pterostilbene"],
+  ["berberine", "Berberine", "AMPK activator (metformin-like)", "berberine", null],
+  ["metformin", "Metformin", "AMPK via Complex-I (Rx)", "metformin", null],
+  ["fisetin", "Fisetin", "senolytic flavonoid", "fisetin", null],
+  ["quercetin", "Quercetin", "senolytic flavonoid + CD38", "quercetin", null],
+  ["urolithin-a", "Urolithin A", "mitophagy activator", "urolithin-a", null],
+  ["spermidine", "Spermidine", "autophagy inducer", "spermidine", "spermidine"],
+  ["omega3", "Omega-3", "resolves inflammation (EPA/DHA)", "omega3", null],
+  ["sulforaphane", "Sulforaphane", "NRF2 gene-defense switch", "sulforaphane", "sulforaphane"],
+  ["glynac", "GlyNAC", "rebuilds glutathione (GSH)", "glynac", "glynac"],
+  ["nac", "NAC", "cysteine donor for glutathione", "nac", null],
+  ["rala", "R-ALA", "recycles the antioxidant network", "rala", "rala"],
 ];
 const NCX = 500, NCY = 350, NRX = 360, NRY = 260;
 
-type NodeData = { name: string; role: string; ang: number; x: number; y: number; deg?: number; eliteCompoundId: string | null };
+type NodeData = { name: string; role: string; ang: number; x: number; y: number; deg?: number; librarySlug: string; eliteCompoundId: string | null };
 const NODES: Record<string, NodeData> = {};
-NODE_DEFS.forEach(([id, name, role, elite], i) => {
+NODE_DEFS.forEach(([id, name, role, librarySlug, elite], i) => {
   const ang = (i / NODE_DEFS.length) * Math.PI * 2 - Math.PI / 2;
-  NODES[id] = { name, role, ang, x: NCX + Math.cos(ang) * NRX, y: NCY + Math.sin(ang) * NRY, eliteCompoundId: elite };
+  NODES[id] = { name, role, ang, x: NCX + Math.cos(ang) * NRX, y: NCY + Math.sin(ang) * NRY, librarySlug, eliteCompoundId: elite };
 });
 
 type Edge = { a: string; b: string; tier: TierKey; why: string };
 const EDGES: Edge[] = [
-  { a: "curcumin", b: "piperine", tier: "established", why: "Absorption — piperine blocks curcumin's breakdown in the gut, so far more reaches your blood." },
-  { a: "iron", b: "vitc", tier: "established", why: "Absorption — vitamin C converts iron into the form your gut takes up far more easily." },
-  { a: "vitd", b: "k2", tier: "established", why: "Calcium traffic — vitamin D pulls calcium in; K2 steers it into bone instead of arteries." },
-  { a: "folate", b: "b12", tier: "established", why: "One-carbon metabolism — together they clear homocysteine and keep methylation running." },
-  { a: "curcumin", b: "omega3", tier: "established", why: "Pathways — NF-κB inhibition plus pro-resolving mediators. The anti-inflammatory effects add up." },
-  { a: "vitd", b: "magnesium", tier: "mechanistic", why: "Activation — magnesium is a required cofactor for the enzymes that switch vitamin D on." },
-  { a: "b6", b: "folate", tier: "mechanistic", why: "Homocysteine — B6 covers the transsulfuration arm while folate handles remethylation." },
-  { a: "b6", b: "b12", tier: "mechanistic", why: "Homocysteine — part of the B6 / B12 / folate trio that lowers it together." },
-  { a: "resveratrol", b: "piperine", tier: "mechanistic", why: "Absorption — piperine raises resveratrol uptake, though human data is thinner than for curcumin." },
-  { a: "fisetin", b: "curcumin", tier: "mechanistic", why: "Pathways — two polyphenols working on inflammation and worn-out cells from different angles." },
-  { a: "resveratrol", b: "pterostilbene", tier: "exploratory", why: "Related sirtuin pathways; pterostilbene lingers longer in the body. Promising, not proven together." },
-  { a: "pterostilbene", b: "fisetin", tier: "exploratory", why: "Both studied as senolytics — clearing senescent 'zombie' cells. Early, mostly preclinical." },
-  { a: "fisetin", b: "omega3", tier: "exploratory", why: "Resolving inflammation from different directions. Rationale is sound; the pairing is under-studied." },
-  { a: "curcumin", b: "resveratrol", tier: "exploratory", why: "Overlapping antioxidant signaling. Plausible, not isolated in trials." },
-  { a: "zinc", b: "copper", tier: "caution", why: "Competes — sustained high zinc quietly depletes copper. Pair long-term zinc with a little copper." },
-  { a: "iron", b: "zinc", tier: "caution", why: "Competes — iron and zinc fight for the same uptake path at high doses. Take them at different times." },
+  // ── Synergies (cool) — real pairings documented in the compound modules ──
+  // Flagship documented stacks (NRF2 triad, NAD⁺ Mito / SIRT1 pair) → "established"
+  { a: "glynac", b: "sulforaphane", tier: "established", why: "NRF2 Defense Triad — GlyNAC supplies the glutathione substrate; sulforaphane switches on the genes that build more. Substrate before signal." },
+  { a: "glynac", b: "rala", tier: "established", why: "NRF2 triad — R-ALA recycles the oxidised glutathione GlyNAC's precursors keep synthesising, closing the redox loop." },
+  { a: "sulforaphane", b: "rala", tier: "established", why: "NRF2 triad — gene induction (sulforaphane) plus antioxidant recycling (R-ALA) cover the same defence from two angles." },
+  { a: "nmn", b: "resveratrol", tier: "established", why: "SIRT1 pair — NMN refills the NAD⁺ that resveratrol-activated SIRT1 must burn. The activator needs the fuel." },
+  { a: "nmn", b: "cakg", tier: "established", why: "NAD⁺ Mito Stack — NMN restores NAD⁺ while Ca-AKG feeds the TCA cycle: two independent mitochondrial levers." },
+  { a: "nmn", b: "rala", tier: "established", why: "NAD⁺ repair plus lipid-phase antioxidant recycling — orthogonal coverage while NAD⁺ restores DNA-repair capacity." },
+  // Sound mechanism, combination not RCT-proven → "mechanistic"
+  { a: "cakg", b: "resveratrol", tier: "mechanistic", why: "Ca-AKG fuels the metabolic context; resveratrol drives SIRT1 biogenesis signalling on top of it." },
+  { a: "spermidine", b: "nmn", tier: "mechanistic", why: "Spermidine induces autophagy to clear damage; NMN restores the NAD⁺ that SIRT-mediated autophagy regulation draws on." },
+  { a: "spermidine", b: "resveratrol", tier: "mechanistic", why: "Complementary autophagy + SIRT1 signalling in the PM window — two routes into the same repair program." },
+  { a: "urolithin-a", b: "nmn", tier: "mechanistic", why: "Urolithin A clears damaged mitochondria (mitophagy); NMN fuels biogenesis of the replacements." },
+  { a: "urolithin-a", b: "spermidine", tier: "mechanistic", why: "Mitochondria-specific mitophagy (urolithin A) alongside general autophagy (spermidine) — complementary, not redundant." },
+  { a: "omega3", b: "sulforaphane", tier: "mechanistic", why: "Omega-3 resolves inflammation via specialised pro-resolving mediators; sulforaphane runs the NRF2 antioxidant program — orthogonal coverage." },
+  { a: "omega3", b: "resveratrol", tier: "mechanistic", why: "Two independent anti-inflammatory routes — pro-resolving mediators plus AMPK/SIRT1 signalling." },
+  { a: "pterostilbene", b: "nmn", tier: "mechanistic", why: "Pterostilbene is a longer-acting SIRT1 stilbene; NMN supplies the NAD⁺ that activation consumes." },
+  { a: "berberine", b: "nmn", tier: "mechanistic", why: "Berberine's AMPK activation primes the repair state; NMN restores the NAD⁺ that state runs on." },
+  { a: "berberine", b: "resveratrol", tier: "mechanistic", why: "AMPK energy-deficit signal (berberine) feeding SIRT1 activation (resveratrol) — the caloric-restriction-mimic axis." },
+  // Early / thin combination evidence → "exploratory"
+  { a: "fisetin", b: "resveratrol", tier: "exploratory", why: "Fisetin clears senescent cells; resveratrol has partial SASP-suppressive effects on any that remain. Sound rationale, under-studied together." },
+  { a: "fisetin", b: "nmn", tier: "exploratory", why: "Clearing senescent cells lowers the SASP burden that drains NAD⁺ via CD38; NMN restores the pool. Early, mostly preclinical." },
+  // ── Clashes (amber) — real redundancy/competition from the antagonist tables ──
+  { a: "nmn", b: "nr", tier: "caution", why: "Redundant — NR converts to NMN en route to NAD⁺. Running both at high dose pays twice for one pathway. Pick one precursor." },
+  { a: "berberine", b: "metformin", tier: "caution", why: "Redundant — near-identical AMPK / Complex-I mechanism, and additive hypoglycaemia risk. Choose one under medical guidance; don't stack them." },
+  { a: "quercetin", b: "fisetin", tier: "caution", why: "Redundant — two flavonoid senolytics hitting the same survival pathways. Overlapping, not additive. Pick one." },
+  { a: "nac", b: "glynac", tier: "caution", why: "Redundant — NAC is already GlyNAC's cysteine leg. Adding standalone NAC on top duplicates the same precursor." },
+  { a: "resveratrol", b: "pterostilbene", tier: "caution", why: "Redundant — same SIRT1-stilbene target. Pterostilbene lingers longer; run one, not both, to avoid doubling the stilbene load." },
 ];
 
 EDGES.forEach((e) => {
@@ -818,7 +835,7 @@ export function HomeDescent() {
 
         <div className="tnic-toolbar">
           <input
-            className="tnic-search" type="search" placeholder="Search compounds — e.g. resveratrol, magnesium…"
+            className="tnic-search" type="search" placeholder="Search compounds — e.g. NMN, sulforaphane…"
             aria-label="Search compounds"
             value={search} onChange={(e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
           />
@@ -928,18 +945,17 @@ export function HomeDescent() {
                       </div>
                     );
                   })}
-                  {selElite && (
-                    <Link className="r-cta" href={selElite.libraryHref}>
-                      Full evidence module <span>→</span>
-                    </Link>
-                  )}
+                  <Link className="r-cta" href={`/library/compounds/${NODES[selNode].librarySlug}`}>
+                    Full evidence module <span>→</span>
+                  </Link>
                 </>
               ) : (
                 <div className="r-empty">
                   Tap a node to trace its interactions.<br /><br />
-                  Cool links are synergies; amber links compete and belong at
-                  different times of day. Color shows how strong the evidence is.
-                  A gold star marks a TNiC elite pick.
+                  Cool links are synergies — pairs that reinforce each other.
+                  Amber links are clashes — redundant or competing, so you run
+                  one, not both. Color shows how strong the pairing&apos;s
+                  evidence is. A gold star marks a TNiC elite pick.
                 </div>
               )}
             </div>
@@ -1110,7 +1126,7 @@ export function HomeDescent() {
               <span className="n">02</span>
               <div className="body">
                 <div className="t">Synergies matter as much as ingredients.</div>
-                <div className="s">Absorption partners, competing minerals, cofactors — the network view is why timing beats stacking.</div>
+                <div className="s">Cofactor pairs, redundant precursors, competing mechanisms — the network view is why the right pairing beats a longer list.</div>
               </div>
             </div>
             <div className="tnic-final-row">
