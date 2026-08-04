@@ -3,6 +3,7 @@ import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { compoundModules, getModulePath } from '@/lib/library-modules';
 import { evidenceComparisons } from '@/lib/comparisons';
 import { peptideLibrary } from '@/lib/peptides-library';
+import { bestForGoals } from '@/lib/best-for';
 import { PRIORITY_INDEX_PATHS } from '@/lib/index-priority';
 
 /**
@@ -51,6 +52,12 @@ function build(): string {
   lines.push('## Evidence-graded compounds');
   for (const m of compoundModules) {
     lines.push(`- [${m.title}](${u(getModulePath(m))}) — Tier ${m.evidenceTier}: ${m.tagline}`);
+  }
+  lines.push('');
+
+  lines.push('## Best supplements by goal (evidence-ranked)');
+  for (const g of bestForGoals) {
+    lines.push(`- [${g.title}](${u(`/best/${g.slug}`)})`);
   }
   lines.push('');
 

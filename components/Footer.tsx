@@ -34,6 +34,7 @@ const hubLinks = [
 ];
 
 const resourceLinks = [
+  { href: '/best', label: 'Best Supplements by Goal', icon: Rocket },
   { href: '/elite-8', label: 'Elite 8 Compounds', icon: Rocket },
   { href: '/products', label: 'Products', icon: BookOpen },
   { href: '/shop', label: 'Protocol Shop', icon: BookOpen },

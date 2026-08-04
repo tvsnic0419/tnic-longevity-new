@@ -4,6 +4,7 @@ import { getAllModuleParams } from '@/lib/library-modules';
 import { peptideLibrary } from '@/lib/peptides-library';
 import { getAllPathwaySlugs } from '@/lib/pathways';
 import { getAllComparisonSlugs } from '@/lib/comparisons';
+import { getAllBestForSlugs } from '@/lib/best-for';
 import { toolsRegistry } from '@/lib/registry';
 import { SITE } from '@/lib/site';
 
@@ -30,6 +31,7 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     { url: `${base}/compound-engine`, lastModified, changeFrequency: 'monthly', priority: 0.82 },
     { url: `${base}/dashboard`, lastModified, changeFrequency: 'weekly', priority: 0.92 },
     { url: `${base}/nico`, lastModified, changeFrequency: 'weekly', priority: 0.94 },
+    { url: `${base}/best`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/shop`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/products`, lastModified, changeFrequency: 'weekly', priority: 0.87 },
     { url: `${base}/supplement-guides`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
@@ -111,8 +113,16 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     priority: 0.82,
   }));
 
+  const bestForRoutes = getAllBestForSlugs().map((slug) => ({
+    url: `${base}/best/${slug}`,
+    lastModified,
+    changeFrequency: 'weekly' as const,
+    priority: 0.86,
+  }));
+
   return [
     ...coreRoutes,
+    ...bestForRoutes,
     ...toolTabRoutes,
     ...hallmarkRoutes,
     ...compareRoutes,
