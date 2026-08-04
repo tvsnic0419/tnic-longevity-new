@@ -39,6 +39,9 @@ export function HallmarkDetail({
 }) {
   const MechanismVisual = HALLMARK_VISUALS[hallmark.id];
   const visualMeta = getHallmarkVisual(hallmark.visual);
+  const citationCount = mdxBody
+    ? new Set(mdxBody.match(/\bPMID:?\s*(\d{7,8})\b/g)?.map((m) => m.replace(/\D/g, '')) ?? []).size
+    : 0;
 
   return (
     <div className="min-h-screen canvas-scrim text-foreground pt-6 md:pt-8 pb-20">
@@ -53,6 +56,7 @@ export function HallmarkDetail({
           author={author}
           lastUpdated={lastUpdated}
           reviewer={reviewer}
+          citationCount={citationCount}
           className="mb-8"
         />
 

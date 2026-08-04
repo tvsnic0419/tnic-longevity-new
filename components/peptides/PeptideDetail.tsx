@@ -41,6 +41,9 @@ export function PeptideDetail({
   const relatedPeptides = (peptide.relatedPeptideIds ?? [])
     .map((id) => peptideLibrary.find((p) => p.id === id))
     .filter((p): p is Peptide => Boolean(p));
+  const citationCount = mdxBody
+    ? new Set(mdxBody.match(/\bPMID:?\s*(\d{7,8})\b/g)?.map((m) => m.replace(/\D/g, '')) ?? []).size
+    : 0;
 
   return (
     <div className="min-h-screen canvas-scrim text-foreground pt-6 md:pt-8 pb-20">
@@ -55,6 +58,7 @@ export function PeptideDetail({
           author={author}
           lastUpdated={lastUpdated}
           reviewer={reviewer}
+          citationCount={citationCount}
           className="mb-8"
         />
 

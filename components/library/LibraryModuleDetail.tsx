@@ -85,6 +85,11 @@ export function LibraryModuleDetail({
     module.category === 'compounds' && !relatedCompound && mdxBody
       ? new Set(mdxBody.match(/\bPMID:?\s*(\d{7,8})\b/g)?.map((m) => m.replace(/\D/g, '')) ?? []).size
       : 0;
+  // Distinct PMIDs cited anywhere in the deep-dive — the freshness/depth signal
+  // shown in the byline, computed for every module (not only library-only ones).
+  const citationCount = mdxBody
+    ? new Set(mdxBody.match(/\bPMID:?\s*(\d{7,8})\b/g)?.map((m) => m.replace(/\D/g, '')) ?? []).size
+    : 0;
 
   useEffect(() => {
     recordModuleVisit(module);
@@ -103,6 +108,7 @@ export function LibraryModuleDetail({
           author={author}
           lastUpdated={lastUpdated}
           reviewer={reviewer}
+          citationCount={citationCount}
           className="mb-8"
         />
 
