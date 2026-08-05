@@ -13,7 +13,6 @@ import {
   Scale,
 } from 'lucide-react';
 import type { Compound, Hallmark, PathwayNode, RoadmapItem } from './types';
-import { COMPOUND_COUNT } from './library-modules';
 
 export const navLinks = [
   { href: '/products', label: 'Products', mod: 'MOD-PRD-16' },
@@ -28,14 +27,6 @@ export const navLinks = [
   // wrapping at lg — the full "Compound Engine" name is used in the footer,
   // the breadcrumb, and every cross-link card, where there is room for it.
   { href: '/compound-engine', label: 'Engine', mod: 'MOD-ENG-18' },
-];
-
-export const communityPulse = [
-  { metric: String(COMPOUND_COUNT), label: 'Evidence-Graded Compounds' },
-  { metric: '12', label: 'Hallmarks Explained' },
-  { metric: '33', label: 'FAQ Answers' },
-  { metric: '20', label: 'Glossary Terms' },
-  { metric: '28', label: 'Clinical Studies' },
 ];
 
 export const compounds: Compound[] = [
