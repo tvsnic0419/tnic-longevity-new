@@ -73,16 +73,16 @@ export const NICO_GOAL_OPTIONS: { id: NicoGoal; label: string; desc: string }[] 
   { id: 'epigenetic', label: 'Biological age', desc: 'Methylation, epigenetic clocks' },
 ];
 
-export const NICO_FOCUS_OPTIONS: { id: NicoFocus; label: string }[] = [
-  { id: 'mito', label: 'Mitochondrial function' },
-  { id: 'genomic', label: 'DNA / genomic integrity' },
-  { id: 'epigenetic', label: 'Epigenetic age' },
-  { id: 'inflammation', label: 'Chronic inflammation' },
-  { id: 'senescence', label: 'Senescent-cell burden' },
-  { id: 'proteostasis', label: 'Protein quality control' },
-  { id: 'nutrient', label: 'Nutrient sensing (mTOR/AMPK)' },
-  { id: 'autophagy', label: 'Autophagy / cellular cleanup' },
-  { id: 'telomeres', label: 'Telomere maintenance' },
+export const NICO_FOCUS_OPTIONS: { id: NicoFocus; label: string; desc: string }[] = [
+  { id: 'mito', label: 'Mitochondrial function', desc: "Your cells' energy factories" },
+  { id: 'genomic', label: 'DNA / genomic integrity', desc: 'Protecting DNA from damage' },
+  { id: 'epigenetic', label: 'Epigenetic age', desc: "How 'old' your cells act, apart from your birthday" },
+  { id: 'inflammation', label: 'Chronic inflammation', desc: 'Background inflammation that wears the body down' },
+  { id: 'senescence', label: 'Senescent-cell burden', desc: "Clearing out worn-out, 'zombie' cells" },
+  { id: 'proteostasis', label: 'Protein quality control', desc: 'How well cells fold and recycle proteins' },
+  { id: 'nutrient', label: 'Nutrient sensing', desc: 'How cells balance growth signals vs. repair (mTOR/AMPK)' },
+  { id: 'autophagy', label: 'Autophagy', desc: 'Cellular self-cleaning and recycling' },
+  { id: 'telomeres', label: 'Telomere maintenance', desc: 'The protective caps on your chromosomes' },
 ];
 
 export const NICO_SAFETY_OPTIONS: { id: NicoSafetyFlag; label: string }[] = [
