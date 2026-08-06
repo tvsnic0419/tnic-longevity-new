@@ -363,7 +363,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
         pmid: '33783984',
       },
       {
-        dimension: 'Quiz preset mapping',
+        dimension: 'NICO Starter Questionnaire preset mapping',
         a: 'Inflammation / defense goals',
         b: 'Energy / mitochondrial goals',
         verdict: 'context',
@@ -371,12 +371,12 @@ export const evidenceComparisons: EvidenceComparison[] = [
     ],
     whenChooseA: [
       'hs-CRP above 1.0 or GSH below 5.0',
-      'Quiz result: inflammation or defense focus',
+      'NICO Starter Questionnaire result: inflammation or defense focus',
       'Age 55+ with oxidative lifestyle',
     ],
     whenChooseB: [
       'NAD+ below 80 or morning energy ≤5/10',
-      'Quiz result: energy / mitochondrial focus',
+      'NICO Starter Questionnaire result: energy / mitochondrial focus',
       'Already optimized sleep + Zone 2',
     ],
     relatedHrefs: [
@@ -397,7 +397,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
     summary:
       'Starter Elite is the lowest-friction entry: GlyNAC + NMN + sulforaphane. Full Hybrid adds resveratrol, Ca-AKG, and R-ALA for dual-pathway coverage — more pills, more monitoring.',
     verdict:
-      'Starter Elite wins for first-time stackers and quiz onboarding. Full Hybrid wins when baseline labs justify dual-pathway spend and compliance is proven at 12 weeks.',
+      'Starter Elite wins for first-time stackers and NICO Starter Questionnaire onboarding. Full Hybrid wins when baseline labs justify dual-pathway spend and compliance is proven at 12 weeks.',
     rows: [
       {
         dimension: 'Compounds',
@@ -439,7 +439,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
     ],
     whenChooseA: [
       'First longevity stack ever',
-      '3-Min Quiz beginner path',
+      'NICO Starter Questionnaire beginner path',
       'Want results before maximizing spend',
     ],
     whenChooseB: [
@@ -449,7 +449,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
     ],
     relatedHrefs: [
       { label: 'Stack Architect', href: '/stacks' },
-      { label: '3-Min Quiz', href: '/quiz' },
+      { label: 'NICO Starter Questionnaire', href: '/nico' },
       { label: 'Testing guide', href: '/library/guides/testing-and-monitoring' },
     ],
     keywords: ['starter', 'hybrid', 'stack', 'beginner'],

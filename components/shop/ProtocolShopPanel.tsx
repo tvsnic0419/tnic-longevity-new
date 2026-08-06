@@ -194,7 +194,7 @@ function ProtocolShopPanelInner() {
             <h2 className="text-2xl font-bold text-foreground mb-3">Turn a protocol into a buyer-grade checklist.</h2>
             <p className="text-body-sm text-muted-foreground leading-relaxed">
               Protocol Shop becomes useful once it knows what compounds you are evaluating. Load a preset,
-              take the quiz, or build a custom stack; TNiC will then narrow the shop to dose anchors,
+              take the NICO Starter Questionnaire, or build a custom stack; TNiC will then narrow the shop to dose anchors,
               form requirements, COA demands, red flags, comparisons, and verified product cards.
             </p>
           </div>
@@ -203,9 +203,9 @@ function ProtocolShopPanelInner() {
             {[
               {
                 title: 'Start personalized',
-                body: 'Answer three questions and open a shop list matched to your goal.',
-                href: '/quiz',
-                label: 'Take quiz',
+                body: 'Answer a few questions and open a shop list matched to your goals.',
+                href: '/nico',
+                label: 'Take the questionnaire',
               },
               {
                 title: 'Use a preset',

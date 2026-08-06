@@ -1005,7 +1005,7 @@ export function HomeDescent() {
         <p className="tnic-lead">
           Everything below this section is the working version of what you just
           watched — the elite interventions graded by human evidence, the full
-          library of {COMPOUND_COUNT} compounds, and a 90-second quiz that turns
+          library of {COMPOUND_COUNT} compounds, and a NICO Starter Questionnaire that turns
           it into a stack pointed at your goals.
         </p>
 
@@ -1033,8 +1033,8 @@ export function HomeDescent() {
               </div>
             </div>
             <div>
-              <Link href="/quiz" className="tnic-cta">
-                Start the 90-second quiz <span className="arr">→</span>
+              <Link href="/nico" className="tnic-cta">
+                Start the NICO Starter Questionnaire <span className="arr">→</span>
               </Link>
               <Link href="#elite-interventions" className="tnic-cta ghost">
                 See the elite picks

@@ -31,13 +31,19 @@ export const seoRoutes = {
       keywords: ['longevity dashboard', 'personal health OS', 'stack tracker', 'hallmark coverage'],
     }),
 
-  quiz: () =>
+  nico: () =>
     buildPageMetadata({
-      title: '3-Min Starter Quiz — Personalized Longevity Entry Point',
+      title: 'NICO Starter Questionnaire — Your Personalized Longevity Stack',
       description:
-        'Three questions: your goal, age range, and experience level. Get a mechanism-matched stack preset, a PMID-cited insight for your age group, and your next step in the TNiC Longevity OS.',
-      path: '/quiz',
-      keywords: ['longevity quiz', 'starter protocol', 'NMN stack quiz', 'personalized supplement stack', 'NRF2 quiz'],
+        'Answer a few questions about your goals, lifestyle, and safety profile. The NICO Starter Questionnaire builds a personalized, evidence-graded compound stack from your answers, loads it into Stack Builder, and tracks it in the TNiC Longevity OS.',
+      path: '/nico',
+      keywords: [
+        'NICO Starter Questionnaire',
+        'personalized supplement stack',
+        'longevity assessment',
+        'evidence-graded stack builder',
+        'longevity questionnaire',
+      ],
     }),
 
   learn: () =>

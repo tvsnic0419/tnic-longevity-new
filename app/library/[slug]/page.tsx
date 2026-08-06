@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { HallmarkDetail } from '@/components/library/HallmarkDetail';
 import { LibraryCategoryIndex } from '@/components/library/LibraryCategoryIndex';
 import { StructuredData } from '@/components/seo/StructuredData';
+import { SITE } from '@/lib/site';
 import { getHallmarkBySlug, hallmarkLibrary } from '@/lib/hallmarks-library';
 import { loadMdx } from '@/lib/mdx';
 import { buildArticleSchema, buildBreadcrumbSchema, buildPageMetadata, getCitationsFromBody } from '@/lib/seo';
@@ -52,7 +53,36 @@ export default async function HallmarkPage({
 }) {
   const { slug } = await params;
   if (isCategorySlug(slug)) {
-    return <LibraryCategoryIndex category={slug} />;
+    // Advertise the machine-readable compound dataset to Google Dataset Search
+    // and LLM crawlers so /compounds.json becomes a discoverable, citeable source.
+    const datasetSchema =
+      slug === 'compounds'
+        ? [
+            {
+              '@context': 'https://schema.org',
+              '@type': 'Dataset',
+              name: 'TNiC evidence-graded compound library',
+              description:
+                'Longevity compounds graded A/B/C by the strength of human evidence, mapped to the 12 hallmarks of aging, with studied doses and PubMed citations.',
+              url: `${SITE.url}/library/compounds`,
+              license: `${SITE.url}/terms`,
+              creator: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+              distribution: [
+                {
+                  '@type': 'DataDownload',
+                  encodingFormat: 'application/json',
+                  contentUrl: `${SITE.url}/compounds.json`,
+                },
+              ],
+            },
+          ]
+        : [];
+    return (
+      <>
+        {datasetSchema.length > 0 && <StructuredData schemas={datasetSchema} />}
+        <LibraryCategoryIndex category={slug} />
+      </>
+    );
   }
   const hallmark = getHallmarkBySlug(slug);
   if (!hallmark) notFound();

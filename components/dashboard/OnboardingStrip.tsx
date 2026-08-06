@@ -9,10 +9,10 @@ export function OnboardingStrip() {
 
   const steps = [
     {
-      id: 'quiz',
-      label: 'Take the quiz',
+      id: 'nico',
+      label: 'Take the NICO Starter Questionnaire',
       sublabel: 'Get your personalized stack preset',
-      href: '/quiz',
+      href: '/nico',
       done: !!quizResult,
     },
     {

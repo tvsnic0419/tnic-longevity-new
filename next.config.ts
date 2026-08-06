@@ -29,6 +29,28 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['lucide-react', 'recharts', 'framer-motion'],
   },
 
+  async redirects() {
+    return [
+      // The 3-question starter quiz was retired in favor of the NICO Starter
+      // Questionnaire — keep old inbound links working.
+      { source: '/quiz', destination: '/nico', permanent: true },
+      { source: '/quiz/:path*', destination: '/nico', permanent: true },
+      // The Urolithin A deep-dive shipped under a misspelled slug
+      // (`urolithina`). Preserve any external links / index entries by
+      // permanently redirecting the old paths to the corrected slug.
+      {
+        source: '/library/compounds/urolithina',
+        destination: '/library/compounds/urolithin-a',
+        permanent: true,
+      },
+      {
+        source: '/library/compare/urolithina-vs-coq10',
+        destination: '/library/compare/urolithin-a-vs-coq10',
+        permanent: true,
+      },
+    ];
+  },
+
   async headers() {
     return [
       {
@@ -56,23 +78,6 @@ const nextConfig: NextConfig = {
     ];
   },
 
-  async redirects() {
-    return [
-      // The Urolithin A deep-dive shipped under a misspelled slug
-      // (`urolithina`). Preserve any external links / index entries by
-      // permanently redirecting the old paths to the corrected slug.
-      {
-        source: '/library/compounds/urolithina',
-        destination: '/library/compounds/urolithin-a',
-        permanent: true,
-      },
-      {
-        source: '/library/compare/urolithina-vs-coq10',
-        destination: '/library/compare/urolithin-a-vs-coq10',
-        permanent: true,
-      },
-    ];
-  },
 };
 
 export default nextConfig;

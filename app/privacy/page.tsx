@@ -39,7 +39,7 @@ export default function PrivacyPage() {
             <li>Your profile inputs (age and lifestyle sliders)</li>
             <li>Lab and biomarker values you enter or import</li>
             <li>Your saved stack, checklist progress, hallmark notes, and milestones</li>
-            <li>Quiz results and tool state</li>
+            <li>Questionnaire results and tool state</li>
             <li>Your privacy mode (local vs. session-only) and consent choice</li>
           </ul>
           <p>

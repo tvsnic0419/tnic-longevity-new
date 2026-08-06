@@ -77,7 +77,7 @@ export function ShareScorecard() {
               <p className="font-bold">Your Longevity Grade: {gradeLabels[grade]}</p>
             </div>
             <p className="text-body-sm mt-1">
-              Share your scorecard — friends see your grade, coverage, and a custom card. They build theirs in 3 minutes.
+              Share your scorecard — friends see your grade, coverage, and a custom card. They build theirs in minutes.
             </p>
           </div>
         </div>

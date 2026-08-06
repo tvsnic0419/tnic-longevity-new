@@ -23,7 +23,7 @@ const tierBCount = compounds.filter((c) => c.evidence === 'B').length;
 
 const hubLinks = [
   { href: '/dashboard', label: 'My Dashboard', icon: LayoutDashboard },
-  { href: '/quiz', label: '3-Min Quiz', icon: HelpCircle },
+  { href: '/nico', label: 'NICO Starter Questionnaire', icon: HelpCircle },
   { href: '/library', label: 'Anti-Aging Library', icon: Library },
   { href: '/peptides', label: 'Peptide Library', icon: Syringe },
   { href: '/pathways', label: 'Pathways', icon: Waypoints },
@@ -34,6 +34,7 @@ const hubLinks = [
 ];
 
 const resourceLinks = [
+  { href: '/best', label: 'Best Supplements by Goal', icon: Rocket },
   { href: '/elite-8', label: 'Elite 8 Compounds', icon: Rocket },
   { href: '/products', label: 'Products', icon: BookOpen },
   { href: '/shop', label: 'Protocol Shop', icon: BookOpen },

@@ -82,7 +82,7 @@ function Scene({
         projected.project(camera);
         // Clamped so the tooltip never runs off the edge of the scene's own
         // container — nodes near the container boundary are common since
-        // HomeHero mounts this scene with a `-inset-20` bleed past the quiz
+        // HomeHero mounts this scene with a `-inset-20` bleed past the hero card
         // card it surrounds.
         const marginX = 110;
         const marginY = 40;

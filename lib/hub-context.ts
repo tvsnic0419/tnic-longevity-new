@@ -37,7 +37,7 @@ export const hubContexts: Record<
   | 'brief'
   | 'learn'
   | 'compare'
-  | 'quiz'
+  | 'nico'
   | 'library'
   | 'libraryModules'
   | 'trust'
@@ -52,7 +52,7 @@ export const hubContexts: Record<
     theme: 'emerald',
     what: 'Your personal longevity command center — stack status, labs, hallmark coverage, milestones, and export kit in one view.',
     why: 'Fragmented tracking leads to bad decisions. The OS unifies what you are taking, what your labs show, and what to do next.',
-    next: 'Complete the onboarding strip, then log baseline labs and load a stack preset from the quiz or Stack Architect.',
+    next: 'Complete the onboarding strip, then log baseline labs and load a personalized stack from the NICO Starter Questionnaire or Stack Architect.',
   },
   stacks: {
     theme: 'violet',
@@ -94,7 +94,7 @@ export const hubContexts: Record<
     theme: 'cyan',
     what: 'Consumer education hub — getting started path, glossary, outcome timelines, red flags, and 15 curated FAQ answers.',
     why: 'Intelligent consumers ask hard questions first. Learn the science and safety rails before building a stack.',
-    next: 'Complete the Start Here checklist, read Red Flags, then take the 3-min quiz for a personalized stack handoff.',
+    next: 'Complete the Start Here checklist, read Red Flags, then take the NICO Starter Questionnaire for a personalized stack handoff.',
   },
   compare: {
     theme: 'cyan',
@@ -102,11 +102,11 @@ export const hubContexts: Record<
     why: 'Marketing comparisons hide preclinical-only data. TNiC tables show what human trials actually say — and what they do not.',
     next: 'Pick the comparison matching your decision (e.g. NMN vs NR), then open linked compound modules and buyer guides.',
   },
-  quiz: {
+  nico: {
     theme: 'emerald',
-    what: 'A 3-question intake that maps your goal, age window, and experience to an evidence-graded stack preset.',
-    why: 'One-size-fits-all stacks fail. The quiz routes beginners to fundamentals and advanced users to compare-and-stack paths.',
-    next: 'Answer all three questions, load your preset in Stack Architect, and open your OS dashboard to track progress.',
+    what: 'The NICO Starter Questionnaire — an intake that maps your goals, lifestyle, focus areas, and safety profile to a personalized, evidence-graded stack.',
+    why: 'One-size-fits-all stacks fail. The NICO Starter Questionnaire computes a stack from your own answers, then hands it to Stack Builder.',
+    next: 'Answer a few questions, load your personalized stack in Stack Builder, and open your OS dashboard to track progress.',
   },
   library: {
     theme: 'emerald',
@@ -243,7 +243,7 @@ const toolContexts: Record<ToolId, HubContext> = {
   protocol: {
     what: 'Rule-based multi-phase protocol planner from goals, labs, and lifestyle inputs.',
     why: 'Phased ramp-in prevents overwhelm and catches interactions early. Full reasoning trace — not generative AI.',
-    next: 'Enter your quiz goal and lab snapshot, review phase 1 compounds, then load into Stack Architect.',
+    next: 'Enter your goals and lab snapshot, review phase 1 compounds, then load into Stack Builder.',
   },
   biomarker: {
     what: 'Lab trend visualization with intervention impact forecasts and ranked scenarios.',

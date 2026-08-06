@@ -13,9 +13,9 @@ describe('trackEvent', () => {
   });
 
   it('forwards the event name and properties to the analytics client', () => {
-    trackEvent(ANALYTICS_EVENTS.quizCompleted, { preset: 'starter' });
+    trackEvent(ANALYTICS_EVENTS.nicoCompleted, { protocol: 'mito' });
     expect(track).toHaveBeenCalledTimes(1);
-    expect(track).toHaveBeenCalledWith(ANALYTICS_EVENTS.quizCompleted, { preset: 'starter' });
+    expect(track).toHaveBeenCalledWith(ANALYTICS_EVENTS.nicoCompleted, { protocol: 'mito' });
   });
 
   it('works with no properties', () => {

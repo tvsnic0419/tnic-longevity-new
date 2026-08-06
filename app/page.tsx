@@ -23,7 +23,7 @@ import { eliteInterventions } from '@/lib/elite-interventions';
  * and is crawlable. The page leads with the elite-interventions showcase
  * (products anchored to graded evidence) directly under the hero, then the
  * evidence depth that justifies those picks (hallmarks + guides), then the
- * wayfinding grid and how-to path. Interactive pieces (nav, quiz) are isolated
+ * wayfinding grid and how-to path. Interactive pieces (nav) are isolated
  * client islands within this server shell.
  */
 

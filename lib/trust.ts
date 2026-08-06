@@ -562,7 +562,7 @@ export const updateHistory: UpdateHistoryEntry[] = [
       '/products catalog route — verified manufacturer picks with compound module links',
       'Homepage personalization rails — intent-aware hero, return-visitor protocol strip, product picks rail',
       'Contextual upgrades — preset-filtered research, CompetitiveEdge ContextRail, stat-card trust polish',
-      'Conversion paths — Nav Quiz/Shop CTAs, quiz Brief email capture, command palette products hub',
+      'Conversion paths — Nav Shop CTAs, Brief email capture, command palette products hub',
     ],
   },
   {
@@ -585,7 +585,7 @@ export const updateHistory: UpdateHistoryEntry[] = [
     changes: [
       'Research feed r13–r15 — GlyNAC 16-week RCT, NMN insulin sensitivity, sulforaphane NRF2/NQO1 CKD trial PMIDs',
       'FAQ 21–25 + five glossary terms (Autophagy, Telomeres, Mitophagy, SASP, Oxidative Stress)',
-      'Homepage Brief capture rail, compare row, stack preset deep links, quiz Shop + Brief CTAs',
+      'Homepage Brief capture rail, compare row, stack preset deep links, Shop + Brief CTAs',
       'Community pulse updated to 25 FAQ / 20 glossary; NextUp defaults to planned roadmap',
     ],
   },
@@ -640,7 +640,7 @@ export const updateHistory: UpdateHistoryEntry[] = [
     category: 'feature',
     changes: [
       'lib/hub-context.ts — centralized what/why/next for all OS hubs, tools, hallmarks, comparisons, and library modules',
-      'ContextRail on dashboard, stacks, labs, tools (per-tab), shop, brief, learn, quiz, library, compare hub + detail pages',
+      'ContextRail on dashboard, stacks, labs, tools (per-tab), shop, brief, learn, library, compare hub + detail pages',
       'ModuleContextStrip on all 26 library module deep-dives; hallmark-specific context on detail pages',
     ],
   },
@@ -651,7 +651,7 @@ export const updateHistory: UpdateHistoryEntry[] = [
     category: 'feature',
     changes: [
       'Site-wide ambient aurora canvas — drifting gradient orbs behind all pages',
-      'Cinematic hero — display typography, pulse rings, ultra card quiz shell, gradient CTAs',
+      'Cinematic hero — display typography, pulse rings, ultra card hero shell, gradient CTAs',
       'card-ultra surface system — gradient borders, spotlight glow, hover lift across homepage',
       'Nav glass scroll state + logo glow; animated scroll progress; footer aurora mesh',
     ],
@@ -695,22 +695,22 @@ export const updateHistory: UpdateHistoryEntry[] = [
   {
     date: '2026-06-19',
     version: '1.16.0',
-    title: 'Sprint 16 — Research Protocol Links & Quiz Share OG',
+    title: 'Sprint 16 — Research Protocol Links & Social Share OG',
     category: 'feature',
     changes: [
       'Research intel protocol links — every feed item links to hallmarks, compounds, and stack presets',
-      'Quiz share OG cards — /quiz/share/[preset] with per-preset opengraph-image for social crawlers',
-      'Sitemap — quiz share routes and /library/delivery-systems indexed',
+      'Social share OG cards with per-preset opengraph-image for social crawlers',
+      'Sitemap — /library/delivery-systems indexed',
     ],
   },
   {
     date: '2026-06-19',
     version: '1.15.0',
-    title: 'Sprint 15 — Quiz Share Cards & Citation Export',
+    title: 'Sprint 15 — Share Cards & Citation Export',
     category: 'feature',
     changes: [
-      'Quiz result share card — copy quiz link, Architect/Shop deep links, social snippet, and markdown',
-      'Quiz URL deep links — /quiz?goal=&age=&experience= restores shared results on page load',
+      'Result share card — Architect/Shop deep links, social snippet, and markdown',
+      'Result URL deep links restore shared results on page load',
       'Citation bundle export — BibTeX and JSON copy/download on Trust hub Citations tab',
     ],
   },
@@ -823,10 +823,10 @@ export const updateHistory: UpdateHistoryEntry[] = [
     title: 'Conversion Sprint & Next Up Roadmap',
     category: 'feature',
     changes: [
-      'Dedicated /quiz with labeled result actions and Stack Architect handoff (preset, Builder tab, age sync)',
+      'Dedicated /nico NICO Starter Questionnaire with labeled result actions and Stack Builder handoff (Builder tab)',
       'Learn hub (/learn) and FAQ (/faq) with full schema; honest indexed PMID counts on trust strip',
       'Next up panel — shipped, in-progress, and planned functional improvements on home, dashboard, and /trust/updates',
-      'OG preview cards for home, learn, faq, library, and quiz routes',
+      'OG preview cards for home, learn, faq, and library routes',
     ],
   },
   {
