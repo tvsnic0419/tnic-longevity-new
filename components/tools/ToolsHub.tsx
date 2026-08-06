@@ -180,6 +180,32 @@ export function ToolsHub() {
           </Link>
         </GlassPanel>
 
+        <GlassPanel depth="mid" className="mb-8 rounded-2xl">
+          <Link
+            href="/tools/pathway-architect"
+            className="focus-ring group block border border-accent-violet/25 bg-gradient-to-br from-accent-violet/8 to-transparent rounded-2xl p-5 md:p-6 hover:border-accent-violet/40 transition"
+          >
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="flex items-start gap-3 flex-1">
+                <div className="icon-badge-violet w-10 h-10 rounded-xl flex items-center justify-center shrink-0">
+                  <Network className="w-5 h-5 text-accent-violet" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-label text-accent-violet mb-1">Featured tool</p>
+                  <h2 className="font-bold text-lg group-hover:text-accent-violet transition">Pathway Architect</h2>
+                  <p className="text-sm text-muted-foreground mt-1 max-w-xl">
+                    Build a protocol from curated compounds mapped to molecular pathways — live synergy, redundancy,
+                    and interaction cautions, hallmark coverage, and a shareable link.
+                  </p>
+                </div>
+              </div>
+              <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-violet shrink-0">
+                Open builder <ArrowRight className="w-4 h-4" />
+              </span>
+            </div>
+          </Link>
+        </GlassPanel>
+
         {/* Visual tool picker grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
           {toolsRegistry.map((t, i) => {

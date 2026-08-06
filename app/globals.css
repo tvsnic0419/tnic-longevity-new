@@ -195,6 +195,27 @@
   --type-4xl:  clamp(2.25rem, 3vw + 1.25rem, 3.5rem);   /* feature heads */
   --type-5xl:  clamp(2.75rem, 4.5vw + 1rem,  5rem);     /* editorial / hero */
   --type-6xl:  clamp(3.25rem, 6vw + 1.25rem, 6rem);     /* display */
+
+  /* ── Bind Tailwind's font-size scale to the two most-used steps above ──
+     Tailwind v4 reads `--text-*` (paired with `--text-*--line-height`) for its
+     `text-xs`/`text-sm`/etc. utilities — NOT `--type-*`. Without this the type
+     scale above was dead code for these two steps: `text-xs` and `text-sm`
+     fell through to Tailwind's stock defaults (12px/1.33 and 14px/1.43) at
+     every one of the ~1,150 call sites across the site, while the intended
+     scale sat unused (confirmed live — `grep -c '\-\-text-xs:' app/globals.css`
+     found zero prior to this). Lifted a notch beyond a 1:1 --type-xs/sm
+     mapping (12→13px, 14→15px) with more generous line-heights (1.33/1.43 →
+     1.5/1.6) — these are the two densest, most call-site-heavy steps, and
+     read as undersized body/UI text at Tailwind's tight defaults. Scoped to
+     just these two steps deliberately: base/lg/xl and up already match
+     Tailwind's stock sizes closely enough, and re-theming the full ladder
+     risks a much wider, harder-to-verify visual shift across every heading
+     that uses a raw `text-2xl`/`text-3xl`/etc. utility instead of the
+     semantic `.heading-*` classes. */
+  --text-xs: 0.8125rem;             /* 13px, was --type-xs 12px / Tailwind 12px */
+  --text-xs--line-height: 1.5;
+  --text-sm: 0.9375rem;             /* 15px, was --type-sm 14px / Tailwind 14px */
+  --text-sm--line-height: 1.6;
 }
 
 html {
