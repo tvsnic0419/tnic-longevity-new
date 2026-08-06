@@ -44,30 +44,36 @@ follow the `platform-stats.ts` pattern and derive them live.
 
 ---
 
-## Next (verified, safe to sequence)
+## Shipped (guide cross-link pass)
 
-Ranked by coherence value; each is derivable from already-authored data, so
-none crosses the "don't mass-generate medical prose" line.
+The three items previously queued here are now done, all derived from
+already-authored data.
 
-1. **Audit the remaining hand-written count claims for a floor phrasing.**
-   `app/supplement-guides/page.tsx` advertises the master guide as "12+
-   compounds / 50+ citations." These are soft floors (still true), but they
-   read as small next to a 55-compound library — consider deriving the compound
-   figure or lifting the floor so the copy sells the real depth. The
-   `SynergyNetworkGraph` "14 compounds" labels are **correct** — they describe
-   that visualization's own fixed 14-node layout, not the library — and should
-   be left alone.
+### 3. Guide count claims → derived *(coherence)*
 
-2. **Close the last pillar→cluster link loops** (the open item in both existing
-   roadmaps). The compound↔guide, compound↔hallmark, hallmark→compound, and
-   comparison↔comparison loops are already wired and test-guarded via
-   `library-graph.ts` / `comparison-relations.ts`. The remaining gap is
-   guide→sibling-guide and guide→related-comparison surfacing on the individual
-   `*-supplement-guide` landing pages, which currently lean on the footer's
-   popular-guides list rather than in-context cross-links.
+`app/supplement-guides/page.tsx`'s stat row (in-depth guides, compound profiles,
+head-to-head comparisons) now derives its numbers from the live `guides` /
+`compoundDeepDives` / `comparisons` arrays instead of hardcoded literals, so it
+can never drift below what the page actually lists. The `SynergyNetworkGraph`
+"14 compounds" labels were left alone (correct — they describe that viz's own
+14-node layout).
 
-3. **A single "content coverage" guard** asserting that every compound with a
-   dedicated supplement-guide route is present in `library-graph.ts`'s
-   `COMPOUND_GUIDE` map (and vice-versa), so adding a guide page without wiring
-   the back-link — or renaming a route — fails CI instead of silently orphaning
-   a high-intent page.
+### 4. Guide→sibling-guide + guide→comparison loops closed *(coherence)*
+
+Every `*-supplement-guide` landing page now renders a derived
+`GuideCrossLinks` block (via a `guideHref` prop on `SubPageLayout`) with sibling
+guides (master hub first) and the head-to-head comparisons that feature the
+compound(s) the guide covers. Both are DERIVED — siblings from a new single-
+source `lib/guides.ts` registry, comparisons by inverting the compound→guide map
+(`getCompoundSlugsForGuide`) and reusing `getComparisonsForCompound` — so a guide
+can no longer be a dead end that leans on the footer, and the links can't drift
+from the library graph.
+
+### 5. Content-coverage guard *(coherence)*
+
+`lib/guides.test.ts` asserts the guide registry ↔ compound→guide map agree: every
+route referenced by the compound→guide map has a registry entry, every non-master
+guide covers at least one compound that resolves to a real `/library/compounds`
+page, routes are unique, and siblings never include the current page. Adding a
+guide without wiring it — or renaming a route on one side only — now fails CI
+instead of silently orphaning a high-intent page.

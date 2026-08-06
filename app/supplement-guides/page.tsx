@@ -239,9 +239,12 @@ export default function SupplementGuidesPage() {
           <div className="container-page">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {[
-                { stat: '7', label: 'In-depth guides' },
-                { stat: '11', label: 'Compound profiles' },
-                { stat: '8+', label: 'Head-to-head comparisons' },
+                // Derived from the live arrays so these can never drift below
+                // what the page actually lists (the coherence principle the
+                // footer/hero stats already follow).
+                { stat: String(guides.length), label: 'In-depth guides' },
+                { stat: String(compoundDeepDives.length), label: 'Compound profiles' },
+                { stat: String(comparisons.length), label: 'Head-to-head comparisons' },
                 { stat: '50+', label: 'PubMed citations' },
               ].map((item) => (
                 <div key={item.label} className="text-center">

@@ -151,7 +151,7 @@ function buildSulforaphaneSchemas() {
 
 export default function SulforaphaneGuidePage() {
   return (
-    <SubPageLayout hideContextBar>
+    <SubPageLayout hideContextBar guideHref="/sulforaphane-supplement-guide">
       <StructuredData schemas={buildSulforaphaneSchemas()} />
 
       {/* Hero */}

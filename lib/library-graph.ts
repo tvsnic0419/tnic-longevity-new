@@ -118,6 +118,18 @@ export function getGuideForCompound(moduleSlug: string): GuideLink | undefined {
 }
 
 /**
+ * The inverse of `compoundGuides`: the compound module slugs a given guide
+ * route covers. Lets a guide page derive its own compound set (and, through
+ * that, its related comparisons) from the same map the compound deep-dives use,
+ * so the guide↔compound relationship has exactly one source of truth.
+ */
+export function getCompoundSlugsForGuide(guideHref: string): string[] {
+  return Object.entries(compoundGuides)
+    .filter(([, g]) => g.href === guideHref)
+    .map(([slug]) => slug);
+}
+
+/**
  * Map of compound id -> compound module slug for every compound that has a
  * page. Lets a server component hand client components the data to build
  * correct `/library/compounds/<slug>` links without importing the compound or

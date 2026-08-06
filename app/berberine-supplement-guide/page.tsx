@@ -193,7 +193,7 @@ function buildBerberineSchemas() {
 
 export default function BerberineGuidePage() {
   return (
-    <SubPageLayout hideContextBar>
+    <SubPageLayout hideContextBar guideHref="/berberine-supplement-guide">
       <StructuredData schemas={buildBerberineSchemas()} />
 
       {/* Hero */}

@@ -2,9 +2,17 @@ import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { ContextBar } from '@/components/os/ContextBar';
+import { GuideCrossLinks } from '@/components/guides/GuideCrossLinks';
 
 interface SubPageLayoutProps {
   children: React.ReactNode;
+  /**
+   * When set to a supplement-guide route, renders the derived
+   * "Related guides & comparisons" cross-link block after the page content —
+   * closing the guide→sibling-guide / guide→comparison loops in one place
+   * instead of hand-curating links per guide page.
+   */
+  guideHref?: string;
   /**
    * ContextBar surfaces the visitor's persisted OS state (hallmark coverage,
    * synergy score, currently-loaded stack) — real leftover data from a prior
@@ -26,6 +34,7 @@ export function SubPageLayout({
   children,
   hideContextBar = false,
   hideStackReadout = false,
+  guideHref,
 }: SubPageLayoutProps) {
   return (
     <div className="min-h-screen canvas-scrim text-foreground overflow-x-hidden">
@@ -39,6 +48,7 @@ export function SubPageLayout({
         )}
         <main id="main-content" tabIndex={-1}>
           {children}
+          {guideHref && <GuideCrossLinks currentHref={guideHref} />}
         </main>
       </div>
       <Footer />

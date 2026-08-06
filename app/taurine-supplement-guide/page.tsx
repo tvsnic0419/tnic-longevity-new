@@ -135,7 +135,7 @@ function buildTaurineSchemas() {
 
 export default function TaurineGuidePage() {
   return (
-    <SubPageLayout hideContextBar>
+    <SubPageLayout hideContextBar guideHref="/taurine-supplement-guide">
       <StructuredData schemas={buildTaurineSchemas()} />
 
       {/* Hero */}

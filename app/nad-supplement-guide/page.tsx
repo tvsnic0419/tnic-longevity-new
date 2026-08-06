@@ -177,7 +177,7 @@ function buildNadGuideSchemas() {
 
 export default function NadSupplementGuidePage() {
   return (
-    <SubPageLayout hideContextBar>
+    <SubPageLayout hideContextBar guideHref="/nad-supplement-guide">
       <StructuredData schemas={buildNadGuideSchemas()} />
 
       {/* Hero */}
