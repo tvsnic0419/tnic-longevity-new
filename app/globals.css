@@ -3209,3 +3209,95 @@ p,
     -webkit-backdrop-filter: blur(calc(var(--glass-blur, 24px) * 0.5)) saturate(1.15);
   }
 }
+
+/* ============================================================================
+   Design System v9 — unified premium content card
+   ----------------------------------------------------------------------------
+   One coherent "premium card" idiom, extracted so the laggard index grids
+   (hallmarks index, library category grids) read at the same tier as the
+   bespoke elite-interventions card. Themeable via a single custom property:
+   set `--card-accent` (defaults to cyan) and the top light-catch hairline,
+   hover border, and hover glow all follow it. Consumes the v8 glass shadow
+   tokens for the base lift so it stacks correctly with the rest of the system.
+   ========================================================================== */
+.premium-card {
+  --card-accent: var(--accent-cyan);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--color-border-subtle);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.006));
+  transition:
+    transform 0.32s var(--ease-glass),
+    border-color 0.32s ease,
+    box-shadow 0.32s ease;
+}
+/* Top light-catch hairline — the signature "elite card" tell, now accent-aware. */
+.premium-card::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 1px;
+  z-index: 3;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--card-accent) 60%, transparent),
+    transparent
+  );
+  opacity: 0.75;
+  pointer-events: none;
+}
+/* Accent bloom that warms up on hover — kept behind content (z-0). */
+.premium-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(
+    120% 80% at 50% -10%,
+    color-mix(in srgb, var(--card-accent) 12%, transparent),
+    transparent 62%
+  );
+  opacity: 0;
+  transition: opacity 0.32s ease;
+  pointer-events: none;
+}
+.premium-card > * {
+  position: relative;
+  z-index: 1;
+}
+.premium-card:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--card-accent) 42%, transparent);
+  box-shadow:
+    0 24px 60px -28px color-mix(in srgb, var(--card-accent) 55%, transparent),
+    var(--glass-shadow-content);
+}
+.premium-card:hover::after {
+  opacity: 1;
+}
+.premium-card:focus-within {
+  border-color: color-mix(in srgb, var(--card-accent) 42%, transparent);
+}
+/* Accent-tinted progress/coverage fill that pairs with a premium card. */
+.premium-meter {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--card-accent) 55%, transparent),
+    var(--card-accent)
+  );
+  box-shadow: 0 0 12px -2px color-mix(in srgb, var(--card-accent) 60%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .premium-card:hover {
+    transform: none;
+  }
+}

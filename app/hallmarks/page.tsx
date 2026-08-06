@@ -5,6 +5,8 @@ import { Footer } from '@/components/Footer';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { ArrowRight, Dna, FlaskConical } from 'lucide-react';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { RevealItem } from '@/components/ui/RevealItem';
+import { EvidenceTag } from '@/components/trust/EvidenceTag';
 
 export const metadata: Metadata = {
   title: '12 Hallmarks of Aging | TNiC Longevity Science',
@@ -32,19 +34,16 @@ const EDITORIAL_SLUGS = new Set([
   'disabled-macroautophagy',
 ]);
 
+// Coverage keeps its semantic green→amber→rose signal (how well TNiC covers the
+// hallmark), resolved to the design-system status tokens so it matches the rest
+// of the instrument. Returned as a CSS color string so it can drive both the
+// percentage label and the premium-meter fill (via --card-accent).
 const COVERAGE_COLOR = (pct: number) =>
   pct >= 80
-    ? 'text-emerald-400'
+    ? 'var(--status-optimal)'
     : pct >= 60
-    ? 'text-amber-400'
-    : 'text-rose-400';
-
-const COVERAGE_BG = (pct: number) =>
-  pct >= 80
-    ? 'bg-emerald-500'
-    : pct >= 60
-    ? 'bg-amber-500'
-    : 'bg-rose-500';
+    ? 'var(--status-watch)'
+    : 'var(--status-critical)';
 
 export default function HallmarksIndexPage() {
   return (
@@ -63,10 +62,10 @@ export default function HallmarksIndexPage() {
               theme="emerald"
             />
             <div className="flex flex-wrap justify-center gap-3">
-              <Link href="/stacks" className="inline-flex items-center gap-2 bg-emerald-500 text-black px-5 py-3 rounded-xl text-sm font-bold hover:bg-emerald-400 transition-colors">
-                Build My Stack <ArrowRight className="w-4 h-4" />
+              <Link href="/stacks" className="focus-ring group inline-flex items-center gap-2 rounded-xl bg-accent-emerald px-5 py-3 text-sm font-bold text-[#04110c] shadow-[0_10px_30px_-10px_rgba(52,211,153,0.55)] transition hover:brightness-110">
+                Build My Stack <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
-              <Link href="/library" className="inline-flex items-center gap-2 border border-border px-5 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              <Link href="/library" className="focus-ring inline-flex items-center gap-2 rounded-xl border border-border px-5 py-3 text-sm font-medium text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground">
                 Interactive Library
               </Link>
             </div>
@@ -78,19 +77,19 @@ export default function HallmarksIndexPage() {
           <div className="container-page">
             <div className="grid grid-cols-3 gap-6 max-w-xl mx-auto text-center">
               <div>
-                <p className="text-4xl font-black font-mono text-emerald-400 mb-1">12</p>
+                <p className="tnic-tabular mb-1 font-mono text-4xl font-black text-accent-emerald">12</p>
                 <p className="text-sm font-medium text-foreground">Hallmarks mapped</p>
-                <p className="text-xs text-muted-foreground mt-0.5">López-Otín 2023 framework</p>
+                <p className="mt-0.5 text-xs text-muted-foreground">López-Otín 2023 framework</p>
               </div>
               <div>
-                <p className="text-4xl font-black font-mono text-cyan-400 mb-1">150+</p>
+                <p className="tnic-tabular mb-1 font-mono text-4xl font-black text-accent-cyan">150+</p>
                 <p className="text-sm font-medium text-foreground">PMIDs indexed</p>
-                <p className="text-xs text-muted-foreground mt-0.5">Human trial evidence only in Tier A/B</p>
+                <p className="mt-0.5 text-xs text-muted-foreground">Human trial evidence only in Tier A/B</p>
               </div>
               <div>
-                <p className="text-4xl font-black font-mono text-violet-400 mb-1">9</p>
+                <p className="tnic-tabular mb-1 font-mono text-4xl font-black text-accent-violet">9</p>
                 <p className="text-sm font-medium text-foreground">Tier A/B compounds</p>
-                <p className="text-xs text-muted-foreground mt-0.5">With full dosing + synergy profiles</p>
+                <p className="mt-0.5 text-xs text-muted-foreground">With full dosing + synergy profiles</p>
               </div>
             </div>
           </div>
@@ -105,85 +104,86 @@ export default function HallmarksIndexPage() {
             </h2>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {hallmarkLibrary.map((h) => {
+              {hallmarkLibrary.map((h, i) => {
                 const hasEditorial = EDITORIAL_SLUGS.has(h.slug);
                 const topIntervention = [...h.interventions].sort((a, b) => a.rank - b.rank)[0];
+                const coverageColor = COVERAGE_COLOR(h.coverage);
                 return (
-                  <div key={h.id} className="rounded-2xl border border-border/60 bg-card/40 p-5 flex flex-col">
-                    {/* Header */}
-                    <div className="flex items-start justify-between gap-2 mb-3">
-                      <div>
-                        <span className="text-xs font-mono text-muted-foreground/60">#{h.number}</span>
-                        <h3 className="font-bold text-foreground mt-0.5">{h.title}</h3>
-                      </div>
-                      <span className={`shrink-0 text-xs font-bold font-mono ${COVERAGE_COLOR(h.coverage)}`}>
-                        {h.coverage}%
-                      </span>
-                    </div>
-
-                    <p className="text-xs text-muted-foreground leading-relaxed mb-3 flex-1">{h.tagline}</p>
-
-                    {/* Coverage bar */}
-                    <div className="mb-3">
-                      <div className="h-1 rounded-full bg-border/40 overflow-hidden">
-                        <div
-                          className={`h-full rounded-full ${COVERAGE_BG(h.coverage)} transition-all`}
-                          style={{ width: `${h.coverage}%` }}
-                        />
-                      </div>
-                      <p className="text-xs text-muted-foreground/60 mt-1">TNiC coverage</p>
-                    </div>
-
-                    {/* Biomarkers */}
-                    <div className="flex flex-wrap gap-1 mb-4">
-                      {h.biomarkers.slice(0, 2).map((b) => (
-                        <span key={b} className="text-xs px-2 py-0.5 rounded-md bg-card border border-border/60 text-muted-foreground">
-                          {b}
-                        </span>
-                      ))}
-                      {h.biomarkers.length > 2 && (
-                        <span className="text-xs px-2 py-0.5 rounded-md bg-card border border-border/60 text-muted-foreground/60">
-                          +{h.biomarkers.length - 2}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Top intervention */}
-                    {topIntervention && (
-                      <div className="mb-4 flex items-center gap-2 text-xs">
+                  <RevealItem key={h.id} index={i} className="h-full">
+                    <div
+                      className="premium-card h-full p-5"
+                      style={{ ['--card-accent' as string]: 'var(--accent-emerald)' }}
+                    >
+                      {/* Header */}
+                      <div className="mb-3 flex items-start justify-between gap-2">
+                        <div>
+                          <span className="font-mono text-xs text-muted-foreground/60">#{h.number}</span>
+                          <h3 className="mt-0.5 font-display text-lg font-medium tracking-tight text-foreground">
+                            {h.title}
+                          </h3>
+                        </div>
                         <span
-                          className={`shrink-0 px-1.5 py-0.5 rounded font-bold ${
-                            topIntervention.evidence === 'A'
-                              ? 'bg-emerald-500/15 text-emerald-400'
-                              : topIntervention.evidence === 'B'
-                              ? 'bg-cyan-500/15 text-cyan-400'
-                              : 'bg-amber-500/15 text-amber-400'
-                          }`}
+                          className="shrink-0 font-mono text-xs font-bold tabular-nums"
+                          style={{ color: coverageColor }}
                         >
-                          Tier {topIntervention.evidence}
+                          {h.coverage}%
                         </span>
-                        <span className="truncate text-muted-foreground">{topIntervention.name}</span>
                       </div>
-                    )}
 
-                    {/* Links */}
-                    <div className="flex gap-2">
-                      <Link
-                        href={`/library/${h.slug}`}
-                        className="flex-1 text-center text-xs py-2 rounded-lg border border-border bg-card/60 text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors font-medium"
-                      >
-                        Library →
-                      </Link>
-                      {hasEditorial && (
-                        <Link
-                          href={`/hallmarks/${h.slug}`}
-                          className="flex-1 text-center text-xs py-2 rounded-lg border border-emerald-500/30 bg-emerald-500/5 text-emerald-400 hover:bg-emerald-500/10 transition-colors font-medium"
-                        >
-                          Deep Dive →
-                        </Link>
+                      <p className="mb-3 flex-1 text-xs leading-relaxed text-muted-foreground">{h.tagline}</p>
+
+                      {/* Coverage bar — semantic status color, premium fill */}
+                      <div className="mb-3">
+                        <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
+                          <div
+                            className="premium-meter transition-[width] duration-500"
+                            style={{ width: `${h.coverage}%`, ['--card-accent' as string]: coverageColor }}
+                          />
+                        </div>
+                        <p className="mt-1 text-[11px] text-muted-foreground/60">TNiC coverage</p>
+                      </div>
+
+                      {/* Biomarkers */}
+                      <div className="mb-4 flex flex-wrap gap-1">
+                        {h.biomarkers.slice(0, 2).map((b) => (
+                          <span key={b} className="rounded-md border border-border/60 bg-white/[0.02] px-2 py-0.5 text-xs text-muted-foreground">
+                            {b}
+                          </span>
+                        ))}
+                        {h.biomarkers.length > 2 && (
+                          <span className="rounded-md border border-border/60 bg-white/[0.02] px-2 py-0.5 text-xs text-muted-foreground/60">
+                            +{h.biomarkers.length - 2}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Top intervention — reuse the shared EvidenceTag */}
+                      {topIntervention && (
+                        <div className="mb-4 flex items-center gap-2 text-xs">
+                          <EvidenceTag tier={topIntervention.evidence} size="sm" />
+                          <span className="truncate text-muted-foreground">{topIntervention.name}</span>
+                        </div>
                       )}
+
+                      {/* Links */}
+                      <div className="mt-auto flex gap-2">
+                        <Link
+                          href={`/library/${h.slug}`}
+                          className="focus-ring flex-1 rounded-lg border border-border bg-white/[0.02] py-2 text-center text-xs font-medium text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
+                        >
+                          Library →
+                        </Link>
+                        {hasEditorial && (
+                          <Link
+                            href={`/hallmarks/${h.slug}`}
+                            className="focus-ring flex-1 rounded-lg border border-accent-emerald/30 bg-accent-emerald/[0.06] py-2 text-center text-xs font-medium text-accent-emerald transition-colors hover:bg-accent-emerald/12"
+                          >
+                            Deep Dive →
+                          </Link>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  </RevealItem>
                 );
               })}
             </div>
@@ -196,11 +196,11 @@ export default function HallmarksIndexPage() {
             <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-3">Scientific Foundation</p>
             <p className="text-sm text-muted-foreground leading-relaxed mb-4">
               The hallmarks framework was first published in{' '}
-              <a href="https://pubmed.ncbi.nlm.nih.gov/22768836/" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:underline">
+              <a href="https://pubmed.ncbi.nlm.nih.gov/22768836/" target="_blank" rel="noopener noreferrer" className="text-accent-emerald hover:underline">
                 Cell 2013 (PMID: 22768836)
               </a>{' '}
               by López-Otín et al. and expanded to 12 hallmarks in the{' '}
-              <a href="https://pubmed.ncbi.nlm.nih.gov/36599349/" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:underline">
+              <a href="https://pubmed.ncbi.nlm.nih.gov/36599349/" target="_blank" rel="noopener noreferrer" className="text-accent-emerald hover:underline">
                 2023 update (PMID: 36599349)
               </a>.{' '}
               TNiC maps interventions to this framework using Tier A/B/C evidence grading. The hallmarks are a descriptive
@@ -221,10 +221,10 @@ export default function HallmarksIndexPage() {
               so you know exactly which aging mechanisms your protocol addresses.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
-              <Link href="/stacks" className="inline-flex items-center gap-2 bg-emerald-500 text-black px-6 py-3 rounded-xl text-sm font-bold hover:bg-emerald-400 transition-colors">
-                Stack Architect <ArrowRight className="w-4 h-4" />
+              <Link href="/stacks" className="focus-ring group inline-flex items-center gap-2 rounded-xl bg-accent-emerald px-6 py-3 text-sm font-bold text-[#04110c] shadow-[0_10px_30px_-10px_rgba(52,211,153,0.55)] transition hover:brightness-110">
+                Stack Architect <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
-              <Link href="/bio-age" className="inline-flex items-center gap-2 border border-border px-6 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              <Link href="/bio-age" className="focus-ring inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3 text-sm font-medium text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground">
                 Calculate Bio Age
               </Link>
             </div>
