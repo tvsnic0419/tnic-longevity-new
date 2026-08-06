@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import { Pill, Library, ArrowRight, Sparkles } from 'lucide-react';
 import { StarterQuiz } from '@/components/sections/StarterQuiz';
-import { HeroSceneMount } from '@/components/home/HeroSceneMount';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { TiltGlassPanel } from '@/components/ui/TiltGlassPanel';
 import { COMPOUND_COUNT } from '@/lib/library-modules';
@@ -137,60 +136,24 @@ export function HomeHero() {
             </GlassPanel>
           </div>
 
-          {/* Content plane — the hero's primary glass moment is the live,
-              interactive compound-synergy network: drag to rotate, hover a node
-              to trace its web. HeroSceneMount owns WebGL/mobile/reduced-motion
-              gating and swaps to the SVG poster when the live scene can't run. */}
+          {/* Content plane — the hero's one primary glass moment, with pointer tilt */}
           <div className="mt-12 lg:col-span-5 lg:mt-0">
             <div className="relative">
               <div
                 className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-[var(--accent-cyan)]/12 via-transparent to-[var(--accent-emerald)]/12 blur-2xl"
                 aria-hidden="true"
               />
-              <GlassPanel depth="content" className="relative overflow-hidden rounded-3xl">
-                <div className="relative h-[360px] w-full sm:h-[440px]">
-                  <HeroSceneMount />
-                  <span className="pointer-events-none absolute bottom-3 right-4 font-mono text-[11px] tracking-wide text-white/40">
-                    drag · hover a node
-                  </span>
-                </div>
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-white/10 px-4 py-3 font-mono text-[11px] text-white/60">
-                  <span className="inline-flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full" style={{ background: '#22d3ee' }} />
-                    Synergy
-                  </span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full" style={{ background: '#f0a24a' }} />
-                    Clash
-                  </span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full" style={{ background: '#f0c46a' }} />
-                    Elite pick
-                  </span>
-                  <span className="ml-auto text-white/40">Live · {COMPOUND_COUNT} compounds</span>
-                </div>
-              </GlassPanel>
+              <TiltGlassPanel depth="content" className="relative rounded-3xl">
+                <Suspense
+                  fallback={<div className="h-[380px] animate-pulse rounded-3xl bg-white/5" />}
+                >
+                  <StarterQuiz />
+                </Suspense>
+              </TiltGlassPanel>
             </div>
-            <p className="mt-4 text-center text-[11px] text-white/70 lg:text-right">
-              Nothing works alone — every compound plotted against the ones it boosts and the ones it clashes with.
+            <p className="mt-4 hidden text-center text-[11px] text-white/70 lg:block lg:text-right">
+              Nutrition, down to the cell — evidence you can trace
             </p>
-          </div>
-        </div>
-
-        {/* Quiz entry point — relocated below the hero grid so the network can
-            own the primary glass slot as the interactive centerpiece. */}
-        <div className="mt-12 lg:mt-16">
-          <p className="mb-4 text-center text-label text-white/55">
-            Or skip the map — get pointed straight at your entry point
-          </p>
-          <div className="mx-auto max-w-xl">
-            <TiltGlassPanel depth="content" className="rounded-3xl">
-              <Suspense
-                fallback={<div className="h-[380px] animate-pulse rounded-3xl bg-white/5" />}
-              >
-                <StarterQuiz />
-              </Suspense>
-            </TiltGlassPanel>
           </div>
         </div>
       </div>

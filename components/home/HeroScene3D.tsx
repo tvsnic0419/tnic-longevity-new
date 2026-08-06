@@ -6,8 +6,6 @@ import { Group, Mesh, Vector3 } from 'three';
 import type { EvidenceTier } from '@/lib/types';
 import {
   HERO_NETWORK_EDGES,
-  HERO_NETWORK_EDGE_COLOR,
-  HERO_NETWORK_ELITE_COLOR,
   HERO_NETWORK_NODES_3D,
   HERO_NETWORK_TIER_COLOR,
   type HeroNetworkNode3D,
@@ -56,21 +54,15 @@ function Scene({
 
   const nodeMap = useMemo(() => new Map(HERO_NETWORK_NODES_3D.map((n) => [n.id, n])), []);
 
-  // Split edges by kind so synergies and clashes can carry different colours —
-  // the network reads its own thesis: most links reinforce, some compete.
-  const { synergyPositions, clashPositions } = useMemo(() => {
-    const synergy: number[] = [];
-    const clash: number[] = [];
+  const edgePositions = useMemo(() => {
+    const positions: number[] = [];
     for (const e of HERO_NETWORK_EDGES) {
       const a = nodeMap.get(e.a);
       const b = nodeMap.get(e.b);
       if (!a || !b) continue;
-      (e.kind === 'clash' ? clash : synergy).push(...a.position, ...b.position);
+      positions.push(...a.position, ...b.position);
     }
-    return {
-      synergyPositions: new Float32Array(synergy),
-      clashPositions: new Float32Array(clash),
-    };
+    return new Float32Array(positions);
   }, [nodeMap]);
 
   useFrame((_, delta) => {
@@ -106,40 +98,16 @@ function Scene({
 
   return (
     <group ref={groupRef}>
-      {/* Synergy edges — the reinforcing majority. */}
-      {synergyPositions.length > 0 && (
-        <lineSegments>
-          <bufferGeometry>
-            <bufferAttribute attach="attributes-position" args={[synergyPositions, 3]} />
-          </bufferGeometry>
-          <lineBasicMaterial color={HERO_NETWORK_EDGE_COLOR.synergy} transparent opacity={0.32} />
-        </lineSegments>
-      )}
-      {/* Clash edges — redundant/competing pairs, drawn warm so they read apart. */}
-      {clashPositions.length > 0 && (
-        <lineSegments>
-          <bufferGeometry>
-            <bufferAttribute attach="attributes-position" args={[clashPositions, 3]} />
-          </bufferGeometry>
-          <lineBasicMaterial color={HERO_NETWORK_EDGE_COLOR.clash} transparent opacity={0.6} />
-        </lineSegments>
-      )}
+      <lineSegments>
+        <bufferGeometry>
+          <bufferAttribute attach="attributes-position" args={[edgePositions, 3]} />
+        </bufferGeometry>
+        <lineBasicMaterial color="#64748b" transparent opacity={0.3} />
+      </lineSegments>
       {HERO_NETWORK_NODES_3D.map((n) => {
         const visibleRadius = 0.14 + Math.min(n.degree, 6) * 0.02;
         return (
           <group key={n.id} position={n.position}>
-            {/* Elite picks (the buildable product) carry a soft gold halo. */}
-            {n.elite && (
-              <mesh>
-                <sphereGeometry args={[visibleRadius + 0.11, 16, 16]} />
-                <meshBasicMaterial
-                  color={HERO_NETWORK_ELITE_COLOR}
-                  transparent
-                  opacity={n.id === hoveredId ? 0.4 : 0.22}
-                  depthWrite={false}
-                />
-              </mesh>
-            )}
             <mesh>
               <sphereGeometry args={[visibleRadius, 16, 16]} />
               <meshStandardMaterial
@@ -254,14 +222,6 @@ export function HeroScene3D() {
             >
               {TIER_LABEL[hoveredNode.tier]}
             </span>
-            {hoveredNode.elite && (
-              <span
-                className="text-label !text-[10px]"
-                style={{ color: HERO_NETWORK_ELITE_COLOR }}
-              >
-                · Elite pick
-              </span>
-            )}
           </div>
         )}
       </div>

@@ -3,12 +3,12 @@
 import Link from "next/link";
 import {
   useState, useRef, useEffect, useMemo, useCallback,
-  type ChangeEvent,
 } from "react";
 import { eliteInterventions } from "@/lib/elite-interventions";
 import { COMPOUND_COUNT } from "@/lib/library-modules";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { MoleculeStage } from "@/components/viz/MoleculeStage";
+import { NetworkStage, type NetworkNode, type NetworkEdge } from "@/components/viz/NetworkStage";
 import { HUES } from "@/components/viz/tokens";
 import { runWhenVisible, cappedDpr } from "@/lib/raf-visibility";
 
@@ -416,15 +416,6 @@ const NODE_DEFS: Array<[string, string, string, string, string | null]> = [
   ["nac", "NAC", "cysteine donor for glutathione", "nac", null],
   ["rala", "R-ALA", "recycles the antioxidant network", "rala", "rala"],
 ];
-const NCX = 500, NCY = 350, NRX = 360, NRY = 260;
-
-type NodeData = { name: string; role: string; ang: number; x: number; y: number; deg?: number; librarySlug: string; eliteCompoundId: string | null };
-const NODES: Record<string, NodeData> = {};
-NODE_DEFS.forEach(([id, name, role, librarySlug, elite], i) => {
-  const ang = (i / NODE_DEFS.length) * Math.PI * 2 - Math.PI / 2;
-  NODES[id] = { name, role, ang, x: NCX + Math.cos(ang) * NRX, y: NCY + Math.sin(ang) * NRY, librarySlug, eliteCompoundId: elite };
-});
-
 type Edge = { a: string; b: string; tier: TierKey; why: string };
 const EDGES: Edge[] = [
   // ── Synergies (cool) — real pairings documented in the compound modules ──
@@ -457,15 +448,45 @@ const EDGES: Edge[] = [
   { a: "resveratrol", b: "pterostilbene", tier: "caution", why: "Redundant — same SIRT1-stilbene target. Pterostilbene lingers longer; run one, not both, to avoid doubling the stilbene load." },
 ];
 
-EDGES.forEach((e) => {
-  NODES[e.a].deg = (NODES[e.a].deg || 0) + 1;
-  NODES[e.b].deg = (NODES[e.b].deg || 0) + 1;
-});
-function edgePath(A: NodeData, B: NodeData): string {
-  const mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2;
-  const cx = mx + (NCX - mx) * 0.35, cy = my + (NCY - my) * 0.35;
-  return `M ${A.x} ${A.y} Q ${cx} ${cy} ${B.x} ${B.y}`;
+// ── Act-2 artwork geometry — a deterministic Fibonacci sphere (same layout
+// math as lib/hero-network.ts), computed once so the synergy graph reads as a
+// sibling of the Act-1 molecule: a 3D object you turn over, drawn on canvas
+// (no WebGL) by NetworkStage. Degree drives node size; the tier color and the
+// caution=clash flag drive the edges. ──
+const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
+function fibonacciSphere(count: number, radius: number): Array<[number, number, number]> {
+  if (count <= 1) return count === 1 ? [[0, 0, radius]] : [];
+  const pts: Array<[number, number, number]> = [];
+  for (let i = 0; i < count; i++) {
+    const y = 1 - (i / (count - 1)) * 2;
+    const ring = Math.sqrt(Math.max(0, 1 - y * y));
+    const theta = GOLDEN_ANGLE * i;
+    pts.push([Math.cos(theta) * ring * radius, y * radius, Math.sin(theta) * ring * radius]);
+  }
+  return pts;
 }
+
+const NET_DEGREE: Record<string, number> = {};
+EDGES.forEach((e) => {
+  NET_DEGREE[e.a] = (NET_DEGREE[e.a] || 0) + 1;
+  NET_DEGREE[e.b] = (NET_DEGREE[e.b] || 0) + 1;
+});
+const NET_INDEX: Record<string, number> = {};
+NODE_DEFS.forEach(([id], i) => { NET_INDEX[id] = i; });
+const NET_POS = fibonacciSphere(NODE_DEFS.length, 2.3);
+const NET_NODES: NetworkNode[] = NODE_DEFS.map(([id, name, , , elite], i) => ({
+  name,
+  pos: NET_POS[i],
+  elite: elite !== null,
+  degree: NET_DEGREE[id] ?? 1,
+}));
+const NET_EDGES: NetworkEdge[] = EDGES.map((e) => ({
+  a: NET_INDEX[e.a],
+  b: NET_INDEX[e.b],
+  color: TIER[e.tier].color,
+  dashed: e.tier === "caution",
+}));
+const NET_ELITE_COUNT = NET_NODES.filter((n) => n.elite).length;
 
 const STAGES = [
   { at: 30, cap: "Peak reserve. Nothing feels at stake yet." },
@@ -504,11 +525,8 @@ const STAR_D = "M0 -6 L1.7 -1.9 L6 -1.9 L2.6 0.7 L3.9 5 L0 2.5 L-3.9 5 L-2.6 0.7
 
 export function HomeDescent() {
   const [active, setActive] = useState(0);
-  const [selNode, setSelNode] = useState<string | null>(null);
   const [age, setAge] = useState(50);
   const reduced = useReducedMotion();
-  const [search, setSearch] = useState("");
-  const [tierFilter, setTierFilter] = useState<Set<TierKey>>(new Set());
   const [showElite, setShowElite] = useState(true);
   const reducedRef = useRef(false);
   const shimmerRef = useRef<HTMLCanvasElement | null>(null);
@@ -716,30 +734,7 @@ export function HomeDescent() {
     return (frailtyGoal - frailtyBase).toFixed(0);
   })();
 
-  const nodeEdges = useCallback((id: string) => EDGES.filter((e) => e.a === id || e.b === id), []);
-  const isEdgeHot = (e: Edge) => selNode && (e.a === selNode || e.b === selNode);
-  const eliteById = useMemo(() => {
-    const m = new Map<string, typeof eliteInterventions[number]>();
-    for (const e of eliteInterventions) m.set(e.compoundId, e);
-    return m;
-  }, []);
-
-  const toggleTier = (t: TierKey) => {
-    setTierFilter((prev) => {
-      const next = new Set(prev);
-      if (next.has(t)) next.delete(t); else next.add(t);
-      return next;
-    });
-  };
-  const nodeMatchesSearch = (id: string) => {
-    if (!search.trim()) return true;
-    const q = search.trim().toLowerCase();
-    return NODES[id].name.toLowerCase().includes(q) || NODES[id].role.toLowerCase().includes(q);
-  };
-  const edgePasses = (e: Edge) => tierFilter.size === 0 || tierFilter.has(e.tier);
-
   const topElites = eliteInterventions.slice(0, 4);
-  const selElite = selNode ? NODES[selNode].eliteCompoundId && eliteById.get(NODES[selNode].eliteCompoundId!) : null;
 
   return (
     <div className="tnic-descent" data-reduced={reduced} ref={rootRef}>
@@ -828,138 +823,32 @@ export function HomeDescent() {
         <p className="tnic-kicker">02 — your stack, alive</p>
         <h2 className="tnic-h2">Nothing works <em>alone</em>.</h2>
         <p className="tnic-lead">
-          Tap a compound to trace how it interacts with the rest — the boosts,
-          the clashes, the elite picks marked with a star. Every link is graded
-          by evidence strength. Filter by tier, or search for a specific one.
+          Every graded compound, plotted against the ones it boosts and the ones
+          it clashes with. Turn the network over — the cool links are synergies,
+          the amber ones are clashes, and the gold halos mark the TNiC elite
+          picks. This is your stack as one connected system.
         </p>
-
-        <div className="tnic-toolbar">
-          <input
-            className="tnic-search" type="search" placeholder="Search compounds — e.g. NMN, sulforaphane…"
-            aria-label="Search compounds"
-            value={search} onChange={(e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
-          />
-          {(Object.keys(TIER) as TierKey[]).map((t) => (
-            <button key={t} className={`tnic-chip${tierFilter.has(t) ? " on" : ""}`}
-              style={tierFilter.has(t) ? { color: TIER[t].color } : {}}
-              onClick={() => toggleTier(t)}>
-              <span className="sw" style={{ background: TIER[t].color }} />{TIER[t].label}
-            </button>
-          ))}
-        </div>
 
         <div className="tnic-netwrap">
           <div className="tnic-stage" style={{ aspectRatio: "10/7", maxHeight: "62vh" }}>
-            <svg viewBox="0 0 1000 720" preserveAspectRatio="xMidYMid meet"
-              role="group" aria-label="Compound synergy network. Select a compound to trace its interactions.">
-              <defs>
-                <radialGradient id="tnic-node-core" cx="35%" cy="30%">
-                  <stop offset="0%" stopColor="#f0f6ff" />
-                  <stop offset="60%" stopColor="#5fe3e0" />
-                  <stop offset="100%" stopColor="#1e3350" />
-                </radialGradient>
-                <radialGradient id="tnic-node-elite" cx="35%" cy="30%">
-                  <stop offset="0%" stopColor="#fff2d4" />
-                  <stop offset="60%" stopColor="#f0c46a" />
-                  <stop offset="100%" stopColor="#4a3510" />
-                </radialGradient>
-              </defs>
-              {EDGES.map((e, i) => {
-                const A = NODES[e.a], B = NODES[e.b];
-                const hot = isEdgeHot(e);
-                const move = e.tier === "caution" ? "warn" : "flow";
-                const passes = edgePasses(e);
-                const cls = `edge ${move}${!passes ? " dim" : selNode ? (hot ? " hot" : " dim") : ""}`;
-                return (
-                  <path key={i} className={cls} d={edgePath(A, B)}
-                    stroke={TIER[e.tier].color} />
-                );
-              })}
-              {Object.entries(NODES).map(([id, n]) => {
-                const dim = (selNode && selNode !== id && !nodeEdges(selNode).some((e) => e.a === id || e.b === id))
-                  || !nodeMatchesSearch(id);
-                const sel = selNode === id;
-                const elite = !!n.eliteCompoundId && eliteById.has(n.eliteCompoundId);
-                const nr = 13 + Math.min(n.deg || 1, 6) * 1.8;
-                return (
-                  <g key={id} className={`node${dim ? " dim" : ""}${sel ? " sel" : ""}${elite ? " elite" : ""}`}
-                    role="button" tabIndex={0}
-                    aria-pressed={sel}
-                    aria-label={`${n.name} — ${n.role}${elite ? ", TNiC elite pick" : ""}`}
-                    onClick={() => setSelNode(sel ? null : id)}
-                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelNode(sel ? null : id); } }}>
-                    <circle className="node-pulse" cx={n.x} cy={n.y} r={nr + 10} fill={elite ? "#f0c46a" : "#5fe3e0"} opacity="0.2" />
-                    <circle className="node-ring" cx={n.x} cy={n.y} r={nr + 6} />
-                    <circle className="node-hit" cx={n.x} cy={n.y} r={nr + 26} />
-                    <circle className="node-core" cx={n.x} cy={n.y} r={nr}
-                      fill={elite ? "url(#tnic-node-elite)" : "url(#tnic-node-core)"}
-                      stroke={elite ? "#f0c46a" : "#dce8ff"} strokeWidth="1.5" />
-                    <g className="elite-badge" transform={`translate(${n.x + nr * 0.75},${n.y - nr * 0.75})`}>
-                      <circle r="8" fill="#f0c46a" />
-                      <path d={STAR_D} fill="#050710" transform="scale(0.9)" />
-                    </g>
-                    <text className="node-label"
-                      x={NCX + Math.cos(n.ang) * (NRX + 48)}
-                      y={NCY + Math.sin(n.ang) * (NRY + 40)}
-                      textAnchor="middle">{n.name}</text>
-                  </g>
-                );
-              })}
-            </svg>
+            <NetworkStage nodes={NET_NODES} edges={NET_EDGES}
+              ariaLabel="Rotatable 3D network of TNiC compounds. Cool links are synergies, amber links are clashes, gold-haloed nodes are elite picks. Details and the legend are in the panel beside it." />
+            <div className="tnic-molhint"><span className="dot" />drag · scroll to zoom</div>
           </div>
 
-          <div>
-            <div className="tnic-readout" aria-live="polite">
-              {selNode ? (
-                <>
-                  <div className="r-eyebrow">
-                    Compound
-                    {selElite && (
-                      <span className="r-elite">
-                        <svg viewBox="-8 -8 16 16"><path d={STAR_D} fill="currentColor" /></svg>
-                        TNiC elite pick
-                      </span>
-                    )}
-                  </div>
-                  <div className="r-name">{NODES[selNode].name}</div>
-                  <div className="r-role">Role · {NODES[selNode].role}</div>
-                  {selElite && (
-                    <div className="r-meta">
-                      <span>Evidence <b>{selElite.evidence}</b></span>
-                      <span>Studies <b>{selElite.studyCount}</b></span>
-                      <span>Rank <b>#{selElite.rank}</b></span>
-                    </div>
-                  )}
-                  {nodeEdges(selNode).map((e, i) => {
-                    const otherId = e.a === selNode ? e.b : e.a;
-                    return (
-                      <div className="r-link" key={i}>
-                        <span className="r-dot" style={{ background: TIER[e.tier].color, color: TIER[e.tier].color }} />
-                        <div>
-                          <span className="r-to">{NODES[otherId].name}</span>
-                          <span className="r-tag" style={{ color: TIER[e.tier].color }}>
-                            {TIER[e.tier].label}
-                          </span>
-                          <div className="r-why">{e.why}</div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                  <Link className="r-cta" href={`/library/compounds/${NODES[selNode].librarySlug}`}>
-                    Full evidence module <span>→</span>
-                  </Link>
-                </>
-              ) : (
-                <div className="r-empty">
-                  Tap a node to trace its interactions.<br /><br />
-                  Cool links are synergies — pairs that reinforce each other.
-                  Amber links are clashes — redundant or competing, so you run
-                  one, not both. Color shows how strong the pairing&apos;s
-                  evidence is. A gold star marks a TNiC elite pick.
-                </div>
-              )}
+          <aside className="tnic-molcard">
+            <div>
+              <h3>One connected system</h3>
+              <div className="formula">{NODE_DEFS.length} compounds · {EDGES.length} graded links</div>
             </div>
-            <div className="tnic-legend">
+            <p className="why" style={{ borderTop: "none", paddingTop: 0, marginTop: 0 }}>
+              No compound acts in isolation. NMN refuels the NAD⁺ that
+              resveratrol-activated SIRT1 burns; GlyNAC, sulforaphane and R-ALA
+              cover the same defence from three angles; two flavonoid senolytics
+              only duplicate each other. The graph shows which pairings reinforce
+              — and which are redundant.
+            </p>
+            <div className="tnic-legend" style={{ marginTop: 4 }}>
               {Object.values(TIER).map((t) => (
                 <span className="lg" key={t.label}>
                   <span className="sw" style={{ background: t.color }} />{t.label}
@@ -970,8 +859,15 @@ export function HomeDescent() {
                 Elite pick
               </span>
             </div>
-          </div>
+            <div className="cite">
+              <Link href="/library" style={{ color: 'var(--cyan)', textDecoration: 'none' }}>
+                Explore every compound →
+              </Link>
+            </div>
+          </aside>
         </div>
+
+        <p className="tnic-note">Rendered live · {NET_ELITE_COUNT} elite picks haloed gold · synergies cool, clashes amber</p>
       </section>
 
       {/* ACT 3 — TIMELINE */}
