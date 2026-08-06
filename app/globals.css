@@ -20,12 +20,12 @@
   --primary: 187 85% 53%;
   --primary-foreground: 222 47% 4%;
   --secondary: 217 33% 12%;
-  --secondary-foreground: 0 0% 93%;
+  --secondary-foreground: 0 0% 95%;
   --muted: 217 33% 14%;
   /* text-muted-foreground is the workhorse supporting-text utility site-wide;
-     lifted 65%→74% lightness so body/secondary copy reads brighter and crisper
-     on the dark base (contrast improves, no WCAG regression). */
-  --muted-foreground: 240 6% 74%;
+     lifted 65%→82% lightness across two passes so body/supporting copy reads
+     clearly bright and crisp on the dark base (contrast only improves). */
+  --muted-foreground: 240 8% 82%;
   --accent: 160 84% 39%;
   --accent-foreground: 222 47% 4%;
   --destructive: 0 72% 51%;
@@ -48,11 +48,15 @@
      values, so no WCAG regression): secondary d4d4d8→e3e3e8, muted a1a1aa→
      b9bac2, faint 8b8c96→a6a7b1. Primary stays near-white. */
   --color-text-primary: #fafafa;
-  --color-text-secondary: #e3e3e8;
-  --color-text-muted: #b9bac2;
-  /* Faint tier — small labels/captions sitewide; kept clearly dimmer than
-     muted but lifted well past the WCAG AA 4.5:1 floor on the #020811 base. */
-  --color-text-faint: #a6a7b1;
+  /* Second brightening pass — supporting copy (.text-body / -sm / caption /
+     label all resolve here) pushed brighter again for a crisper, higher-
+     contrast read. Primary stays #fafafa and headings are larger/Fraunces, so
+     hierarchy still reads even as the gap narrows. */
+  --color-text-secondary: #edeef1;
+  --color-text-muted: #ced0d7;
+  /* Faint tier — small labels/captions sitewide; brightest it's been while
+     staying a clear step under muted. */
+  --color-text-faint: #c1c2ca;
 
   /* Hub accents — v2.1 sharp pop */
   --accent-cyan: #00e0ff;
