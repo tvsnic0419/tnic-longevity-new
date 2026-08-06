@@ -82,7 +82,7 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
       <div className="flex flex-1 flex-col p-5">
         <p className="text-label mb-1 text-accent-cyan">{pathway}</p>
         <h3 className="font-display mb-1.5 text-2xl font-medium tracking-tight text-foreground">{compoundName}</h3>
-        <p className="text-body-sm mb-4 leading-relaxed text-muted-foreground">{mechanismLine}</p>
+        <p className="mb-4 text-[0.9375rem] leading-relaxed text-foreground/85 antialiased">{mechanismLine}</p>
 
         {hallmarks.length > 0 && (
           <div className="mb-4 flex flex-wrap gap-1">
@@ -97,15 +97,16 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
           </div>
         )}
 
-        {/* Evidence + dose micro-facts */}
-        <dl className="mb-5 grid grid-cols-2 gap-x-3 gap-y-2 border-y border-border/50 py-3 text-xs">
+        {/* Evidence + dose micro-facts — framed and high-contrast so the
+            supporting data reads as crisp instrument readout, not fine print. */}
+        <dl className="mb-5 grid grid-cols-2 gap-x-3 gap-y-2 rounded-lg border border-border/60 bg-white/[0.025] px-3.5 py-3">
           <div>
-            <dt className="text-caption text-muted-foreground/70">Human studies cited</dt>
-            <dd className="tnic-tabular font-mono font-semibold text-foreground">{studyCount}</dd>
+            <dt className="mb-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">Human studies cited</dt>
+            <dd className="tnic-tabular font-mono text-base font-semibold text-foreground">{studyCount}</dd>
           </div>
           <div>
-            <dt className="text-caption text-muted-foreground/70">Studied dose</dt>
-            <dd className="font-medium text-foreground/90">{dose}</dd>
+            <dt className="mb-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">Studied dose</dt>
+            <dd className="text-sm font-semibold text-foreground">{dose}</dd>
           </div>
         </dl>
 
@@ -113,7 +114,7 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
         <div className="mt-auto">
           <p className="text-label mb-1 text-accent-emerald">Verified pick</p>
           <p className="mb-3 text-sm font-medium text-foreground">
-            {pick.brand} — <span className="text-muted-foreground">{pick.productName}</span>
+            {pick.brand} — <span className="text-foreground/70">{pick.productName}</span>
           </p>
           <div className="flex flex-col gap-2">
             <a
