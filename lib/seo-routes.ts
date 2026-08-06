@@ -188,6 +188,20 @@ export const seoRoutes = {
       ],
     }),
 
+  pathwayArchitect: () =>
+    buildPageMetadata({
+      title: 'Pathway Architect — Protocol Builder',
+      description:
+        'Build an evidence-graded longevity protocol from curated compounds mapped to molecular pathways. Live synergy detection, redundancy and interaction cautions, and hallmark coverage — the same rule-based engine that powers the Compound Intelligence Engine. Free, no account.',
+      path: '/tools/pathway-architect',
+      keywords: [
+        'longevity protocol builder',
+        'supplement stack builder',
+        'compound synergy tool',
+        'pathway coverage calculator',
+      ],
+    }),
+
   elite8: () =>
     buildPageMetadata({
       title: 'Elite 8 Longevity Rankings — Longevity Quotient',

@@ -25,6 +25,7 @@ import type { ToolId } from './registry';
  */
 export const routeTitles: Record<string, string> = {
   'compound-engine': 'Compound Engine',
+  'pathway-architect': 'Pathway Architect',
 };
 
 export const comparisonTitles: Record<string, string> = {

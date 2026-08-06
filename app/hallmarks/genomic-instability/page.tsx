@@ -6,6 +6,7 @@ import { Dna, ArrowRight, FlaskConical, Activity, ShieldCheck, BookOpen } from '
 import { getHallmarkBySlug } from '@/lib/hallmarks-library';
 import { InterventionCards } from '@/components/hallmarks/InterventionCards';
 import { HallmarkHeroVisual } from '@/components/hallmarks/HallmarkHeroVisual';
+import { EvidenceTagLegend } from '@/components/trust/EvidenceTag';
 
 export const metadata: Metadata = {
   alternates: { canonical: '/library/genomic-instability' },
@@ -163,9 +164,8 @@ export default function GenomicInstabilityPage() {
               <p className="text-xs text-emerald-400 uppercase tracking-widest font-medium">Evidence-Graded Interventions</p>
             </div>
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-2">What actually works</h2>
-            <p className="text-muted-foreground mb-8">
-              Tier A = human RCT evidence. Tier B = at least one human trial + strong mechanistic data. We don’t list Tier C here.
-            </p>
+            <EvidenceTagLegend className="mb-2" />
+            <p className="text-muted-foreground mb-8">We don’t list Tier C interventions on this page.</p>
             <InterventionCards interventions={hallmark.interventions} />
           </div>
         </section>
