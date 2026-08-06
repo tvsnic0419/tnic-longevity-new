@@ -12,6 +12,19 @@ import { NetworkStage, type NetworkNode, type NetworkEdge } from "@/components/v
 import { HUES } from "@/components/viz/tokens";
 import { runWhenVisible, cappedDpr } from "@/lib/raf-visibility";
 
+// Canvas draw colors are plain rgba literals (not CSS custom properties), so
+// they can't pick up the `.tnic-descent` light-theme override in the CSS
+// block below automatically — this reads the resolved theme once at effect
+// setup so the shimmer/cursor-glow canvases don't render as a full-intensity
+// dark-mode neon glow on a light background. Read once (not subscribed) is a
+// deliberate scope boundary: it covers "page loads in light mode," not "user
+// toggles theme while this ambient background is on screen," which the rest
+// of the CSS-driven theming handles live but a canvas repaint would need a
+// dedicated theme subscription for — out of scope for ambient decoration.
+function isLightTheme(): boolean {
+  return typeof document !== 'undefined' && document.documentElement.getAttribute('data-theme') === 'light';
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // TNiC · "Descent" — a captivate-on-arrival scrollytelling section
 // Five acts that share one camera: cellular shimmer → 3D resveratrol →
@@ -28,6 +41,7 @@ const CSS = `
 .tnic-descent {
   --void: #050710;
   --void2: #0a0e1e;
+  --void3: #030510;
   --panel: #0e1426;
   --panel2: #131a30;
   --line: rgba(150,170,220,0.14);
@@ -40,9 +54,10 @@ const CSS = `
   --ink: #eef2fb;
   --muted: #96a0bc;
   --faint: #7d88a8;
+  --vignette-edge: rgba(3,5,12,0.85);
   position: relative;
   background:
-    radial-gradient(140% 60% at 50% 0%, #0a1024 0%, #050710 45%, #030510 100%);
+    radial-gradient(140% 60% at 50% 0%, var(--void2) 0%, var(--void) 45%, var(--void3) 100%);
   color: var(--ink);
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -50,6 +65,25 @@ const CSS = `
   isolation: isolate;
 }
 .tnic-descent * { box-sizing: border-box; }
+
+/* ── Light theme ──
+   Re-tints every custom property above from app/globals.css's own light
+   tokens (--color-bg-base/elevated, --color-text-primary/secondary/muted) —
+   not an improvised second palette. Accents stay closer to their dark-theme
+   values (cyan/indigo/gold etc. already read fine on a light backdrop; only
+   void/panel/ink/muted, which assume a near-black canvas, actually break). */
+:root[data-theme="light"] .tnic-descent {
+  --void: #f8fafc;
+  --void2: #eef2f7;
+  --void3: #e2e8f0;
+  --panel: #ffffff;
+  --panel2: #f1f5f9;
+  --line: rgba(15,23,42,0.10);
+  --ink: #0f172a;
+  --muted: #475569;
+  --faint: #64748b;
+  --vignette-edge: rgba(226,232,240,0.85);
+}
 
 .tnic-layer {
   position: absolute; inset: 0; width: 100%; height: 100%;
@@ -62,7 +96,7 @@ const CSS = `
   background:
     radial-gradient(120% 90% at 50% 0%, rgba(95,227,224,0.07), transparent 45%),
     radial-gradient(140% 120% at 50% 120%, rgba(240,196,106,0.06), transparent 55%),
-    radial-gradient(100% 100% at 50% 50%, transparent 55%, rgba(3,5,12,0.85) 100%);
+    radial-gradient(100% 100% at 50% 50%, transparent 55%, var(--vignette-edge) 100%);
 }
 .tnic-grid {
   z-index: 1; opacity: .35;
@@ -575,6 +609,12 @@ export function HomeDescent() {
       [95,227,224], [95,227,224], [140,140,245], [240,196,106], [95,227,224],
     ];
     let cur: [number, number, number] = [95,227,224];
+    const light = isLightTheme();
+    // Same hues, dialed back on light: the dark-theme alpha values (0.55–0.85)
+    // were calibrated as a glow against near-black — at full strength on a
+    // light background they read as a garish neon smear rather than ambient
+    // texture, so light gets a softer multiplier instead of a second palette.
+    const alphaMul = light ? 0.45 : 1;
 
     function draw() {
       if (!ctx) return;
@@ -591,7 +631,7 @@ export function HomeDescent() {
           const bx = b.x * w, by = b.y * h;
           const d2 = (ax - bx) ** 2 + (ay - by) ** 2;
           if (d2 < 14000) {
-            const o = (1 - d2 / 14000) * 0.08;
+            const o = (1 - d2 / 14000) * 0.08 * alphaMul;
             ctx.strokeStyle = `rgba(${cr},${cg},${cb},${o})`;
             ctx.lineWidth = 0.6;
             ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
@@ -612,12 +652,18 @@ export function HomeDescent() {
           const px = p.x * w, py = p.y * h;
           const rad = p.r * (li === 2 ? 8 : li === 1 ? 5 : 3);
           const g = ctx.createRadialGradient(px, py, 0, px, py, rad);
-          g.addColorStop(0, `rgba(${cr},${cg},${cb},${l.alpha * tw})`);
+          g.addColorStop(0, `rgba(${cr},${cg},${cb},${l.alpha * tw * alphaMul})`);
           g.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
           ctx.fillStyle = g;
           ctx.beginPath(); ctx.arc(px, py, rad, 0, Math.PI * 2); ctx.fill();
           if (li < 2) {
-            ctx.fillStyle = `rgba(230,240,255,${0.55 * tw})`;
+            // Sparkle core: near-white reads as a bright twinkle against the
+            // dark backdrop but is nearly invisible white-on-white in light
+            // mode, so it flips to a dark ink dot instead — same twinkle
+            // effect, correct polarity for the background it's drawn on.
+            ctx.fillStyle = light
+              ? `rgba(15,23,42,${0.35 * tw})`
+              : `rgba(230,240,255,${0.55 * tw})`;
             ctx.beginPath(); ctx.arc(px, py, p.r * 0.6, 0, Math.PI * 2); ctx.fill();
           }
         }
@@ -642,6 +688,7 @@ export function HomeDescent() {
     }
     resize();
     const ro = new ResizeObserver(resize); ro.observe(cv);
+    const light = isLightTheme();
     function onMove(e: PointerEvent) {
       if (!root) return;
       const rect = root.getBoundingClientRect();
@@ -660,8 +707,11 @@ export function HomeDescent() {
       if (state.on) {
         const rad = 220;
         const g = ctx.createRadialGradient(state.x, state.y, 0, state.x, state.y, rad);
-        g.addColorStop(0, "rgba(95,227,224,0.14)");
-        g.addColorStop(0.4, "rgba(140,140,245,0.06)");
+        // Same hues, softened on light for the same reason as the shimmer
+        // layer above — full dark-mode intensity reads as a garish smear on
+        // a light background.
+        g.addColorStop(0, light ? "rgba(8,145,178,0.10)" : "rgba(95,227,224,0.14)");
+        g.addColorStop(0.4, light ? "rgba(124,58,237,0.04)" : "rgba(140,140,245,0.06)");
         g.addColorStop(1, "rgba(0,0,0,0)");
         ctx.fillStyle = g;
         ctx.beginPath(); ctx.arc(state.x, state.y, rad, 0, Math.PI * 2); ctx.fill();
