@@ -103,6 +103,20 @@ describe('site data integrity', () => {
     }
   });
 
+  it('the shareable scorecard states the live compound count, not a stale literal', () => {
+    // The /scorecard/[code] card is a viral share surface: a hardcoded library
+    // size (it once read "14 compounds") silently rots as the library grows and
+    // undersells the platform to every visitor who lands on a shared card. It
+    // must derive from COMPOUND_COUNT like the hero, library, stacks, labs and
+    // trust hubs already do — so the number can never drift below reality again.
+    const src = readFileSync(
+      resolve(process.cwd(), 'app/scorecard/[code]/page.tsx'),
+      'utf8',
+    );
+    expect(src).toContain('COMPOUND_COUNT');
+    expect(src).not.toMatch(/\b\d+ compounds, 12 hallmarks/);
+  });
+
   it('vercel.json enforces HSTS preload and www→apex redirect', () => {
     const vercel = JSON.parse(
       readFileSync(resolve(process.cwd(), 'vercel.json'), 'utf8'),
