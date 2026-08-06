@@ -96,7 +96,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="focus-ring interactive flex items-center gap-2 text-body-sm hover:text-accent-cyan rounded-md"
+                    className="focus-ring interactive link-underline flex items-center gap-2 text-body-sm hover:text-accent-cyan rounded-md"
                   >
                     <link.icon className="w-4 h-4 shrink-0" aria-hidden="true" />
                     {link.label}
@@ -113,7 +113,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="focus-ring interactive text-body-sm hover:text-accent-cyan rounded-md"
+                    className="focus-ring interactive link-underline text-body-sm hover:text-accent-cyan rounded-md"
                   >
                     {link.label}
                   </Link>
@@ -129,7 +129,7 @@ export function Footer() {
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="focus-ring interactive flex items-center gap-2 text-body-sm hover:text-accent-cyan rounded-md"
+                    className="focus-ring interactive link-underline flex items-center gap-2 text-body-sm hover:text-accent-cyan rounded-md"
                   >
                     <link.icon className="w-4 h-4 shrink-0" aria-hidden="true" />
                     {link.label}
@@ -152,10 +152,10 @@ export function Footer() {
             </p>
             <p className="text-caption">
               Consult a physician before starting any protocol.{' '}
-              <Link href="/privacy" className="text-accent-cyan hover:underline focus-ring rounded">
+              <Link href="/privacy" className="text-accent-cyan link-underline focus-ring rounded">
                 Privacy
               </Link>{' '}·{' '}
-              <Link href="/trust/disclaimers" className="text-accent-cyan hover:underline focus-ring rounded">
+              <Link href="/trust/disclaimers" className="text-accent-cyan link-underline focus-ring rounded">
                 Disclaimers
               </Link>
             </p>
@@ -167,7 +167,7 @@ export function Footer() {
             <Link
               key={link.href}
               href={link.href}
-              className="focus-ring interactive text-caption hover:text-accent-cyan rounded"
+              className="focus-ring interactive link-underline text-caption hover:text-accent-cyan rounded"
             >
               {link.label}
             </Link>
