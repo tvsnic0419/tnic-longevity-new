@@ -3301,3 +3301,92 @@ p,
     transform: none;
   }
 }
+
+/* ============================================================================
+   Design System v9 — editorial prose + animated links (long-form / utility)
+   ----------------------------------------------------------------------------
+   The trust/legal/utility pages carried a `.text-h3` heading class that was
+   never defined anywhere — ~27 sub-headings across privacy, terms, corrections,
+   editorial-policy, disclaimers and health-data were silently rendering at body
+   size/weight. This restores a real typographic step and gives those long-form
+   pages one polished reading treatment (accent list markers, animated inline
+   links, refined emphasis) via the .prose-tnic wrapper.
+   ========================================================================== */
+
+/* Sub-section heading — a real step below .heading-section. */
+.text-h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 1vw + 1rem, 1.4rem);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  text-wrap: balance;
+}
+
+/* Animated inline underline — draws in from the left on hover/focus. Opt-in,
+   so it never touches card or button links. */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size 0.3s var(--ease-glass);
+  padding-bottom: 1px;
+}
+.link-underline:hover,
+.link-underline:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* Long-form editorial wrapper. Enhances links, list markers and emphasis
+   without imposing block margins — the pages keep their own space-y rhythm. */
+.prose-tnic {
+  color: var(--color-text-secondary);
+  line-height: var(--leading-body, 1.65);
+}
+.prose-tnic a {
+  color: var(--accent-cyan);
+  /* Unlayered, so it overrides any inline `hover:underline` utility on these
+     links — we render the underline ourselves via background-size below. */
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size 0.3s var(--ease-glass), color 0.2s ease;
+  padding-bottom: 1px;
+}
+.prose-tnic a:hover,
+.prose-tnic a:focus-visible {
+  background-size: 100% 1px;
+}
+.prose-tnic strong {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+/* On-brand list markers — a small glowing cyan node instead of a bare disc. */
+.prose-tnic ul:not(.not-prose) {
+  list-style: none;
+  padding-left: 0;
+}
+.prose-tnic ul:not(.not-prose) > li {
+  position: relative;
+  padding-left: 1.4rem;
+}
+.prose-tnic ul:not(.not-prose) > li::before {
+  content: "";
+  position: absolute;
+  left: 0.15rem;
+  top: 0.6em;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent-cyan) 72%, transparent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent-cyan) 55%, transparent);
+}
+.prose-tnic h2,
+.prose-tnic h3,
+.prose-tnic h4 {
+  color: var(--color-text-primary);
+}

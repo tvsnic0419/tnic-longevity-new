@@ -51,7 +51,7 @@ export function TrustPageTemplate({
         align="left"
         context={pageKey ? getTrustPageContext(pageKey) : undefined}
       />
-      <div className="max-w-4xl">{children}</div>
+      <div className="prose-tnic max-w-4xl">{children}</div>
       <DisclaimerInline text={disclaimer} />
     </PageShell>
   );
