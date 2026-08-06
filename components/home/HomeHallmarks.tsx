@@ -77,7 +77,7 @@ export function HomeHallmarks() {
                         <HallmarkIcon type={h.visual} size={18} ring={false} />
                       </span>
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-xs text-muted-foreground/60">
+                        <span className="font-mono text-xs text-muted-foreground">
                           #{h.number}
                         </span>
                         <ArrowUpRight

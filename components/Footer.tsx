@@ -178,7 +178,7 @@ export function Footer() {
           <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent-emerald/25 to-transparent" />
           <p className="text-caption font-mono">
             © 2026 TNiC · Independent · Evidence-First
-            <span className="text-muted-foreground/60"> · Longevity OS coming soon</span>
+            <span className="text-muted-foreground"> · Longevity OS coming soon</span>
           </p>
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-caption font-mono">
             <span>Tier A: {tierACount} compounds</span>

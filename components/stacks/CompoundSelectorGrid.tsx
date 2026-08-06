@@ -108,7 +108,7 @@ export function CompoundSelectorGrid({
             {bioavPct > 0 && (
               <div className="mb-2.5">
                 <div className="flex items-center justify-between mb-0.5">
-                  <span className="text-[8px] font-mono text-muted-foreground/60">Bioav.</span>
+                  <span className="text-[8px] font-mono text-muted-foreground">Bioav.</span>
                   <span
                     className="text-[8px] font-mono"
                     style={{ color: isOn ? 'var(--accent-violet)' : 'var(--muted-foreground)' }}

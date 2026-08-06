@@ -120,7 +120,7 @@ export function ContextBar({ hideStackReadout = false }: ContextBarProps = {}) {
                 return (
                   <li key={crumb.href} className="flex items-center gap-1 min-w-0">
                     {i > 0 && (
-                      <ChevronRight className="w-3 h-3 text-muted-foreground/60 shrink-0" aria-hidden="true" />
+                      <ChevronRight className="w-3 h-3 text-muted-foreground shrink-0" aria-hidden="true" />
                     )}
                     {isLast ? (
                       <span className="font-semibold text-foreground truncate max-w-[180px] sm:max-w-xs">

@@ -44,7 +44,7 @@ export function InterventionCompare({
             {metrics.map((m) => (
               <li key={m.label}>
                 <p className="text-caption mb-0.5">{m.label}</p>
-                <p className="text-sm font-medium text-foreground/80">{m.before}</p>
+                <p className="text-sm font-medium text-foreground/90">{m.before}</p>
               </li>
             ))}
           </ul>
@@ -68,7 +68,7 @@ export function InterventionCompare({
                 <p
                   className={cn(
                     'text-sm font-medium',
-                    m.improved !== false ? 'text-accent-emerald' : 'text-foreground/80',
+                    m.improved !== false ? 'text-accent-emerald' : 'text-foreground/90',
                   )}
                 >
                   {m.after}

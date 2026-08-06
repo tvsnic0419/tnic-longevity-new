@@ -254,7 +254,7 @@ export function NicoQuestionnaire() {
                     onClick={() => setAnswers((a) => ({ ...a, goals: toggle<NicoGoal>(a.goals, g.id) }))}
                   >
                     <span className="block">{g.label}</span>
-                    <span className="block text-[11px] font-normal text-muted-foreground/80 mt-0.5">
+                    <span className="block text-[11px] font-normal text-muted-foreground mt-0.5">
                       {g.desc}
                     </span>
                   </Chip>
@@ -335,7 +335,7 @@ export function NicoQuestionnaire() {
                     onClick={() => setAnswers((a) => ({ ...a, focus: toggle<NicoFocus>(a.focus, f.id) }))}
                   >
                     <span className="block">{f.label}</span>
-                    <span className="block text-[11px] font-normal text-muted-foreground/80 mt-0.5">
+                    <span className="block text-[11px] font-normal text-muted-foreground mt-0.5">
                       {f.desc}
                     </span>
                   </Chip>

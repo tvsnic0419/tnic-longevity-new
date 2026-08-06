@@ -55,7 +55,7 @@ export function PrivacyConsentBanner() {
               </button>
               <button
                 onClick={dismissForSession}
-                className="focus-ring interactive px-4 py-2 rounded-lg text-xs font-semibold text-muted-foreground hover:text-foreground/80"
+                className="focus-ring interactive px-4 py-2 rounded-lg text-xs font-semibold text-muted-foreground hover:text-foreground/90"
               >
                 Dismiss
               </button>

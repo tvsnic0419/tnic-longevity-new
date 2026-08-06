@@ -114,7 +114,7 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
         <div className="mt-auto">
           <p className="text-label mb-1 text-accent-emerald">Verified pick</p>
           <p className="mb-3 text-sm font-medium text-foreground">
-            {pick.brand} — <span className="text-foreground/70">{pick.productName}</span>
+            {pick.brand} — <span className="text-foreground/90">{pick.productName}</span>
           </p>
           <div className="flex flex-col gap-2">
             <a
@@ -129,7 +129,7 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
             </a>
             <Link
               href={intervention.libraryHref}
-              className="focus-ring inline-flex items-center justify-center gap-1.5 rounded-xl border border-border/70 px-4 py-2.5 text-sm font-semibold text-foreground/80 transition-colors hover:border-accent-cyan/40 hover:text-accent-cyan"
+              className="focus-ring inline-flex items-center justify-center gap-1.5 rounded-xl border border-border/70 px-4 py-2.5 text-sm font-semibold text-foreground/90 transition-colors hover:border-accent-cyan/40 hover:text-accent-cyan"
             >
               <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
               Read the evidence
@@ -197,7 +197,7 @@ export function HomeEliteInterventions() {
           </Link>
           <Link
             href="/shop"
-            className="focus-ring inline-flex items-center justify-center gap-2 rounded-xl border border-border/70 px-5 py-3 text-sm font-semibold text-foreground/80 transition-colors hover:border-accent-amber/40 hover:text-accent-amber"
+            className="focus-ring inline-flex items-center justify-center gap-2 rounded-xl border border-border/70 px-5 py-3 text-sm font-semibold text-foreground/90 transition-colors hover:border-accent-amber/40 hover:text-accent-amber"
           >
             Verify a product before you buy
           </Link>

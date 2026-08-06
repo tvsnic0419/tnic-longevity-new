@@ -104,7 +104,7 @@ function ProductCard({ pick }: { pick: ProductPick }) {
 
         <p className="text-xs text-muted-foreground leading-relaxed flex-1 mb-4">{pick.whyThisPick}</p>
         <div className="pt-3 border-t border-border/50 flex items-center justify-between gap-2">
-          <p className="text-[11px] text-muted-foreground/70 leading-snug line-clamp-2">{pick.doseNote}</p>
+          <p className="text-[11px] text-muted-foreground leading-snug line-clamp-2">{pick.doseNote}</p>
           <span className="shrink-0 inline-flex items-center gap-1 text-xs font-semibold text-accent-emerald">
             Buy <ExternalLink className="w-3 h-3" />
           </span>
@@ -182,7 +182,7 @@ export function ProductsHub() {
                     {c.name}
                   </h3>
                   <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3 mb-3">{c.desc}</p>
-                  <p className="text-[11px] text-muted-foreground/80">{c.dose}</p>
+                  <p className="text-[11px] text-muted-foreground">{c.dose}</p>
                   <span className="inline-block mt-3 text-xs font-semibold text-accent-violet group-hover:underline">
                     Read evidence module →
                   </span>

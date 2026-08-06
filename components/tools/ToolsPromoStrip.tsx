@@ -35,7 +35,7 @@ export function ToolsPromoStrip({
                 href={t.href}
                 className="focus-ring interactive block h-full rounded-xl p-3 text-center group"
               >
-                <p className="text-xs font-semibold text-foreground/80 group-hover:text-accent-cyan transition-colors">
+                <p className="text-xs font-semibold text-foreground/90 group-hover:text-accent-cyan transition-colors">
                   {t.label}
                 </p>
                 <p className="text-[10px] text-caption mt-0.5">{t.shortLabel}</p>

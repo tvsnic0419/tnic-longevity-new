@@ -83,7 +83,7 @@ function EmergentCard({ effect, index }: { effect: EmergentEffect; index: number
       {/* Emergent benefit */}
       <div className="rounded-lg bg-accent-emerald/[0.07] border border-accent-emerald/20 p-3">
         <p className="text-[9px] font-mono text-accent-emerald uppercase mb-1.5">Emergent Benefit</p>
-        <p className="text-xs text-foreground/80 leading-relaxed">{effect.emergentBenefit}</p>
+        <p className="text-xs text-foreground/90 leading-relaxed">{effect.emergentBenefit}</p>
       </div>
 
       {/* Compounds */}
@@ -132,7 +132,7 @@ export function EmergentEffectsView({ hallmarkId, compoundId, showAll = false, c
       <div className="flex flex-col items-center gap-2 py-8 text-muted-foreground">
         <Sparkles className="w-8 h-8 opacity-25" />
         <p className="text-xs">No emergent effects mapped for this selection.</p>
-        <p className="text-[10px] text-muted-foreground/60">Try targeting multiple related hallmarks for compound synergies.</p>
+        <p className="text-[10px] text-muted-foreground">Try targeting multiple related hallmarks for compound synergies.</p>
       </div>
     );
   }

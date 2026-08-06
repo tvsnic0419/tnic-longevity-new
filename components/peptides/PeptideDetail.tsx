@@ -204,13 +204,13 @@ export function PeptideDetail({
               </Link>
               <Link
                 href="/labs"
-                className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 rounded-lg glass glass-hover text-sm font-semibold text-foreground/80"
+                className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 rounded-lg glass glass-hover text-sm font-semibold text-foreground/90"
               >
                 Open Labs hub
               </Link>
               <Link
                 href="/trust"
-                className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 rounded-lg glass glass-hover text-sm font-semibold text-foreground/80"
+                className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 rounded-lg glass glass-hover text-sm font-semibold text-foreground/90"
               >
                 Evidence methodology
               </Link>

@@ -356,7 +356,7 @@ export default function NadSupplementGuidePage() {
                     <div>
                       <p className="text-[10px] font-mono text-accent-emerald uppercase mb-2">Advantages</p>
                       {p.pros.map((pro) => (
-                        <div key={pro} className="flex items-start gap-1.5 text-xs text-foreground/80 mb-1">
+                        <div key={pro} className="flex items-start gap-1.5 text-xs text-foreground/90 mb-1">
                           <CheckCircle2 className="w-3 h-3 text-accent-emerald shrink-0 mt-0.5" />
                           {pro}
                         </div>

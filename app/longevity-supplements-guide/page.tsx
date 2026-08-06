@@ -124,7 +124,7 @@ export default function LongevitySupplementsGuidePage() {
               2026
             </h1>
 
-            <p className="text-lg sm:text-xl text-white/60 leading-relaxed mb-8 max-w-2xl">
+            <p className="text-lg sm:text-xl text-white/85 leading-relaxed mb-8 max-w-2xl">
               Ranked by composite LQ score across 8 evidence dimensions: clinical trials, epigenetic
               biomarkers, effect size, evolutionary depth, safety, bioavailability, and human
               population data. Every claim linked to a PubMed ID.
@@ -139,7 +139,7 @@ export default function LongevitySupplementsGuidePage() {
               </Link>
               <Link
                 href="/library"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold border border-white/15 text-white/80 hover:border-white/30 hover:text-white transition-all focus-ring"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold border border-white/15 text-white/90 hover:border-white/30 hover:text-white transition-all focus-ring"
               >
                 Browse Full Library
               </Link>
@@ -228,7 +228,7 @@ export default function LongevitySupplementsGuidePage() {
                     {/* Clock estimate */}
                     <div className="sm:col-span-3">
                       <p className="text-[10px] font-mono text-muted-foreground mb-1 hidden sm:block">Clock estimate</p>
-                      <p className="text-xs text-white/60 font-mono leading-relaxed">{c.clock}</p>
+                      <p className="text-xs text-white/85 font-mono leading-relaxed">{c.clock}</p>
                       <p className="text-[9px] text-white/30 mt-1">{c.clockConfidence} confidence</p>
                     </div>
 
@@ -297,7 +297,7 @@ export default function LongevitySupplementsGuidePage() {
             <Link href="/nico" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-accent-cyan text-black hover:bg-accent-cyan/90 transition focus-ring">
               Start Step 1 — the NICO Starter Questionnaire <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link href="/stacks" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border border-white/15 text-white/80 hover:border-white/30 transition focus-ring">
+            <Link href="/stacks" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border border-white/15 text-white/90 hover:border-white/30 transition focus-ring">
               Step 5 — Stack Architect
             </Link>
           </div>
@@ -323,7 +323,7 @@ export default function LongevitySupplementsGuidePage() {
             ].map((flag) => (
               <div key={flag} className="flex items-start gap-3 rounded-xl p-4 border border-accent-rose/15 bg-accent-rose/[0.04]">
                 <AlertTriangle className="w-4 h-4 text-accent-rose shrink-0 mt-0.5" />
-                <p className="text-sm text-foreground/80">{flag}</p>
+                <p className="text-sm text-foreground/90">{flag}</p>
               </div>
             ))}
           </div>
@@ -358,7 +358,7 @@ export default function LongevitySupplementsGuidePage() {
           </div>
 
           <div className="mt-10 rounded-2xl border border-accent-cyan/15 bg-accent-cyan/[0.04] p-6 text-center">
-            <p className="text-sm text-white/70 mb-4">
+            <p className="text-sm text-white/90 mb-4">
               More detailed answers — mechanism deep-dives, dosing nuances, interaction warnings — are in the TNiC Library.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">

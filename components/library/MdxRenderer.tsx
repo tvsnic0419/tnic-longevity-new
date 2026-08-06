@@ -289,7 +289,7 @@ function ReferencesSection({ pmids }: { pmids: string[] }) {
           );
         })}
       </ol>
-      <p className="mt-4 text-xs text-muted-foreground/70">
+      <p className="mt-4 text-xs text-muted-foreground">
         Links open PubMed. TNiC does not sell supplements; citations support education, not medical
         advice.
       </p>
@@ -403,7 +403,7 @@ function renderDirective(
           <p className="text-[10px] font-mono text-accent-violet uppercase tracking-wider">Suggested visual</p>
         </div>
         <p
-          className="text-sm text-foreground/80 leading-relaxed"
+          className="text-sm text-foreground/90 leading-relaxed"
           dangerouslySetInnerHTML={{ __html: renderInline(body || attrs.description || '', linkedTerms) }}
         />
       </div>
@@ -442,7 +442,7 @@ function renderDirective(
           </p>
         </div>
         <p
-          className="text-sm text-foreground/80 leading-relaxed"
+          className="text-sm text-foreground/90 leading-relaxed"
           dangerouslySetInnerHTML={{ __html: renderInline(body, linkedTerms) }}
         />
       </div>
@@ -491,7 +491,7 @@ function renderDirective(
           title={attrs.title ?? 'Decision tree'}
           nodes={parseDecisionNodes(body)}
         />
-        <p className="mt-2 text-caption text-muted-foreground/80">
+        <p className="mt-2 text-caption text-muted-foreground">
           Educational decision aid — a way to organize the evidence, not a prescription. Doses and
           timing shown are those used in studies; confirm anything you act on with a clinician or
           pharmacist.

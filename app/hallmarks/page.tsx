@@ -117,7 +117,7 @@ export default function HallmarksIndexPage() {
                       {/* Header */}
                       <div className="mb-3 flex items-start justify-between gap-2">
                         <div>
-                          <span className="font-mono text-xs text-muted-foreground/60">#{h.number}</span>
+                          <span className="font-mono text-xs text-muted-foreground">#{h.number}</span>
                           <h3 className="mt-0.5 font-display text-lg font-medium tracking-tight text-foreground">
                             {h.title}
                           </h3>
@@ -140,7 +140,7 @@ export default function HallmarksIndexPage() {
                             style={{ width: `${h.coverage}%`, ['--card-accent' as string]: coverageColor }}
                           />
                         </div>
-                        <p className="mt-1 text-[11px] text-muted-foreground/60">TNiC coverage</p>
+                        <p className="mt-1 text-[11px] text-muted-foreground">TNiC coverage</p>
                       </div>
 
                       {/* Biomarkers */}
@@ -151,7 +151,7 @@ export default function HallmarksIndexPage() {
                           </span>
                         ))}
                         {h.biomarkers.length > 2 && (
-                          <span className="rounded-md border border-border/60 bg-white/[0.02] px-2 py-0.5 text-xs text-muted-foreground/60">
+                          <span className="rounded-md border border-border/60 bg-white/[0.02] px-2 py-0.5 text-xs text-muted-foreground">
                             +{h.biomarkers.length - 2}
                           </span>
                         )}

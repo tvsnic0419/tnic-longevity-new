@@ -196,7 +196,7 @@ export const SynergyNetworkVisual: React.FC<SynergyNetworkProps> = ({
 
       {/* Hover info */}
       {hoveredNode && (
-        <div className="absolute bottom-3 right-3 bg-[#111827] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white/80 pointer-events-none">
+        <div className="absolute bottom-3 right-3 bg-[#111827] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white/90 pointer-events-none">
           {nodes.find(n => n.id === hoveredNode)?.label} • {getConnectedEdges(hoveredNode).length} synergies
         </div>
       )}

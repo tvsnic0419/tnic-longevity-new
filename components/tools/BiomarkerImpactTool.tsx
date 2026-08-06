@@ -236,7 +236,7 @@ export function BiomarkerImpactTool() {
               </span>
             </Link>
             <Link href="/library/guides/testing-and-monitoring">
-              <span className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 rounded-lg glass text-sm font-semibold text-foreground/80">
+              <span className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 rounded-lg glass text-sm font-semibold text-foreground/90">
                 Full testing guide
               </span>
             </Link>
