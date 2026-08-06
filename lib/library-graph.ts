@@ -1,5 +1,6 @@
 import { compounds } from './data';
 import { libraryModules } from './library-modules';
+import { hallmarkLibrary } from './hallmarks-library';
 import type { EvidenceTier } from './types';
 
 /**
@@ -127,6 +128,35 @@ export function getCompoundSlugsForGuide(guideHref: string): string[] {
   return Object.entries(compoundGuides)
     .filter(([, g]) => g.href === guideHref)
     .map(([slug]) => slug);
+}
+
+export interface HallmarkLink {
+  /** Resolves to the canonical hallmark page at /library/<slug>. */
+  slug: string;
+  title: string;
+  number: number;
+}
+
+const hallmarkById = new Map(hallmarkLibrary.map((h) => [h.id, h]));
+
+/**
+ * The hallmarks of aging a guide addresses, derived from the relatedHallmarkIds
+ * of the compound(s) it covers. Closes the guide→hallmark loop so a guide links
+ * up into the mechanism map, not just sideways to sibling guides. Deduplicated
+ * and ordered by hallmark number.
+ */
+export function getHallmarksForGuide(guideHref: string): HallmarkLink[] {
+  const ids = new Set<string>();
+  for (const slug of getCompoundSlugsForGuide(guideHref)) {
+    const mod = libraryModules.find((m) => m.category === 'compounds' && m.slug === slug);
+    if (mod) for (const id of mod.relatedHallmarkIds) ids.add(id);
+  }
+  const links: HallmarkLink[] = [];
+  for (const id of ids) {
+    const h = hallmarkById.get(id);
+    if (h) links.push({ slug: h.slug, title: h.title, number: h.number });
+  }
+  return links.sort((a, b) => a.number - b.number);
 }
 
 /**

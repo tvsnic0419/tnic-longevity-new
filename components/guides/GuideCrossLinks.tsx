@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { ArrowRight, BookOpen, GitCompareArrows } from 'lucide-react';
-import { getSiblingGuides, getCompoundSlugsForGuide } from '@/lib/guides';
+import { ArrowRight, BookOpen, GitCompareArrows, Dna } from 'lucide-react';
+import { getSiblingGuides, getCompoundSlugsForGuide, getHallmarksForGuide } from '@/lib/guides';
 import { getComparisonsForCompound, type ComparisonLink } from '@/lib/comparison-relations';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 
@@ -28,7 +28,9 @@ export function GuideCrossLinks({ currentHref }: { currentHref: string }) {
     }
   }
 
-  if (siblings.length === 0 && comparisons.length === 0) return null;
+  const hallmarks = getHallmarksForGuide(currentHref);
+
+  if (siblings.length === 0 && comparisons.length === 0 && hallmarks.length === 0) return null;
 
   return (
     <section aria-labelledby="guide-cross-links-heading" className="border-t border-border/50 py-14 md:py-16">
@@ -63,6 +65,30 @@ export function GuideCrossLinks({ currentHref }: { currentHref: string }) {
                     Read guide
                     <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true" />
                   </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {hallmarks.length > 0 && (
+          <div className="mb-10">
+            <p className="text-label mb-4 flex items-center gap-2 text-muted-foreground">
+              <Dna className="h-3.5 w-3.5" aria-hidden="true" />
+              Hallmarks of aging it targets
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {hallmarks.map((h) => (
+                <Link
+                  key={h.slug}
+                  href={`/library/${h.slug}`}
+                  className="focus-ring group inline-flex items-center gap-2 rounded-full border border-accent-emerald/25 bg-accent-emerald/[0.06] px-3.5 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-accent-emerald/50 hover:bg-accent-emerald/12"
+                >
+                  <span className="font-mono text-[11px] text-accent-emerald">
+                    {String(h.number).padStart(2, '0')}
+                  </span>
+                  {h.title}
+                  <ArrowRight className="h-3.5 w-3.5 text-accent-emerald opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:opacity-100" aria-hidden="true" />
                 </Link>
               ))}
             </div>

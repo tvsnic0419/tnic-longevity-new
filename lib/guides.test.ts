@@ -3,9 +3,11 @@ import {
   SUPPLEMENT_GUIDES,
   getSiblingGuides,
   getCompoundSlugsForGuide,
+  getHallmarksForGuide,
 } from './guides';
 import { getMappedGuideHrefs } from './library-graph';
 import { libraryModules } from './library-modules';
+import { hallmarkLibrary } from './hallmarks-library';
 
 /**
  * Coverage guard for the supplement-guide graph. These assertions make guide
@@ -42,6 +44,33 @@ describe('supplement guide registry coherence', () => {
       expect(slugs.length, `${guide.href} covers no compound (not wired into the compound→guide map)`).toBeGreaterThan(0);
       for (const slug of slugs) {
         expect(compoundModuleSlugs, `${guide.href} covers "${slug}" which has no /library/compounds page`).toContain(slug);
+      }
+    }
+  });
+
+  it('every guide carries complete presentation metadata', () => {
+    for (const guide of SUPPLEMENT_GUIDES) {
+      expect(guide.label.length, `${guide.href} missing label`).toBeGreaterThan(0);
+      expect(guide.short.length, `${guide.href} missing short`).toBeGreaterThan(0);
+      expect(guide.description.length, `${guide.href} missing description`).toBeGreaterThan(0);
+      expect(guide.badge.length, `${guide.href} missing badge`).toBeGreaterThan(0);
+      expect(guide.pills.length, `${guide.href} should have quick-fact pills`).toBeGreaterThan(0);
+    }
+  });
+});
+
+describe('getHallmarksForGuide', () => {
+  const hallmarkSlugs = new Set(hallmarkLibrary.map((h) => h.slug));
+
+  it('resolves every non-master guide to real, ordered hallmark pages', () => {
+    for (const guide of SUPPLEMENT_GUIDES) {
+      if (guide.isMaster) continue;
+      const hallmarks = getHallmarksForGuide(guide.href);
+      expect(hallmarks.length, `${guide.href} targets no hallmark`).toBeGreaterThan(0);
+      const numbers = hallmarks.map((h) => h.number);
+      expect(numbers, `${guide.href} hallmarks should be ordered by number`).toEqual([...numbers].sort((a, b) => a - b));
+      for (const h of hallmarks) {
+        expect(hallmarkSlugs, `${guide.href} links hallmark "${h.slug}" that has no page`).toContain(h.slug);
       }
     }
   });

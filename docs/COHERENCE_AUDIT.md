@@ -77,3 +77,21 @@ guide covers at least one compound that resolves to a real `/library/compounds`
 page, routes are unique, and siblings never include the current page. Adding a
 guide without wiring it — or renaming a route on one side only — now fails CI
 instead of silently orphaning a high-intent page.
+
+### 6. Guides index consolidated onto the registry *(coherence)*
+
+`app/supplement-guides/page.tsx` previously carried its own inline `guides`
+array — a second source of truth beside `lib/guides.ts` and the compound→guide
+map. The index now renders from `SUPPLEMENT_GUIDES` (the registry, enriched with
+accent/badge/pills/description), keeping only a route→icon map locally (icons are
+React components). Its cards were upgraded to the shared `.premium-card` idiom in
+the same pass, and the `guides.test.ts` guard now asserts every registry entry
+carries complete presentation metadata. One list, one place.
+
+### 7. Guide→hallmark loop closed *(coherence)*
+
+`GuideCrossLinks` now also renders "Hallmarks of aging it targets", derived by
+`getHallmarksForGuide` (a guide's compounds → their `relatedHallmarkIds` → the
+canonical `/library/<slug>` hallmark pages). Guides now link up into the
+mechanism map, not just sideways. Guarded by a test asserting every non-master
+guide resolves to real, number-ordered hallmark pages.

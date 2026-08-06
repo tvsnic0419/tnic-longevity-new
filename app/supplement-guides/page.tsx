@@ -1,9 +1,13 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, BookOpen, FlaskConical, Microscope, Shield, Zap, Leaf, Recycle } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildCollectionPageSchema, buildBreadcrumbSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
+import { SUPPLEMENT_GUIDES } from '@/lib/guides';
+import { themes } from '@/lib/design-system';
+import { EvidenceTag } from '@/components/trust/EvidenceTag';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Longevity Supplement Guides 2026 — Evidence-Based Deep Dives | TNiC',
@@ -28,120 +32,18 @@ export const metadata: Metadata = buildPageMetadata({
   ],
 });
 
-const guides = [
-  {
-    href: '/longevity-supplements-guide',
-    icon: BookOpen,
-    iconBadge: 'icon-badge-cyan',
-    iconText: 'text-accent-cyan',
-    badge: 'Master Guide',
-    badgeColor: 'bg-accent-cyan/15 text-accent-cyan',
-    title: 'Best Longevity Supplements 2026',
-    subtitle: 'The complete ranked guide to evidence-backed longevity compounds',
-    description:
-      'Start here. Our master guide ranks 12+ compounds by evidence quality, covers the Hallmarks of Aging framework, explains synergy principles, and includes honest cautions. Built on 50+ PubMed citations.',
-    pills: ['12+ compounds', 'Tier A–D ranking', '50+ citations'],
-    evidenceTier: 'A',
-    glowHover: 'glow-hover-cyan',
-    borderHover: 'hover:border-accent-cyan/40',
-  },
-  {
-    href: '/nad-supplement-guide',
-    icon: Zap,
-    iconBadge: 'icon-badge-violet',
-    iconText: 'text-accent-violet',
-    badge: 'High Interest',
-    badgeColor: 'bg-accent-violet/15 text-accent-violet',
-    title: 'NAD+ Supplement Guide 2026',
-    subtitle: 'NMN vs NR, precursor hierarchy, and the NAD+ decline curve',
-    description:
-      'NAD+ declines 50% by age 60. This guide compares NMN, NR, and niacin riboside as precursors — covering bioavailability data, optimal dosing windows, and why the form you choose matters for tissue distribution.',
-    pills: ['NMN vs NR vs Niacin', '50% decline by 60', 'Dosing by age'],
-    evidenceTier: 'B',
-    glowHover: 'glow-hover-violet',
-    borderHover: 'hover:border-accent-violet/40',
-  },
-  {
-    href: '/glynac-supplement-guide',
-    icon: Microscope,
-    iconBadge: 'icon-badge-emerald',
-    iconText: 'text-accent-emerald',
-    badge: 'Landmark RCT',
-    badgeColor: 'bg-accent-emerald/15 text-accent-emerald',
-    title: 'GlyNAC Supplement Guide',
-    subtitle: '9 hallmarks of aging reversed in a 24-week human RCT',
-    description:
-      "Sekhar et al. 2021 found GlyNAC (glycine + NAC) reversed 9 of the 12 hallmarks of aging in older adults — including a 94.6% increase in glutathione and 3.7-year epigenetic age reversal. This guide covers the evidence and the protocol.",
-    pills: ['Sekhar 2021 RCT', '9 hallmarks reversed', 'GSH +94.6%'],
-    evidenceTier: 'A',
-    glowHover: 'glow-hover-emerald',
-    borderHover: 'hover:border-accent-emerald/40',
-  },
-  {
-    href: '/berberine-supplement-guide',
-    icon: Shield,
-    iconBadge: 'icon-badge-rose',
-    iconText: 'text-accent-rose',
-    badge: "Nature's Ozempic?",
-    badgeColor: 'bg-accent-rose/15 text-accent-rose',
-    title: "Berberine Guide — Nature's Ozempic Reality Check",
-    subtitle: 'AMPK activation, metabolic evidence, and honest semaglutide comparison',
-    description:
-      "Berberine activates AMPK — the cell's master energy switch — with meta-analytic evidence for HbA1c reduction (−0.72%) and LDL lowering (−0.65 mmol/L). A rigorous 7-row honest comparison with semaglutide tells you what it can and cannot do.",
-    pills: ['AMPK activation', 'HbA1c −0.72%', 'vs Semaglutide'],
-    evidenceTier: 'B',
-    glowHover: 'glow-hover-rose',
-    borderHover: 'hover:border-accent-rose/40',
-  },
-  {
-    href: '/taurine-supplement-guide',
-    icon: FlaskConical,
-    iconBadge: 'icon-badge-amber',
-    iconText: 'text-accent-amber',
-    badge: 'Science 2023',
-    badgeColor: 'bg-amber-500/15 text-amber-400',
-    title: 'Taurine Longevity Guide — Singh 2023',
-    subtitle: '80% decline by age 60 and 10–12% lifespan extension in mammals',
-    description:
-      'The landmark Singh et al. 2023 Science paper found taurine declines 80% by age 60 and that supplementation extended lifespan 10–12% in worms and mice, plus reversed epigenetic age in monkeys. Covers 5 longevity mechanisms and dosing protocol.',
-    pills: ['Singh 2023 Science', '80% decline by 60', '+10–12% lifespan'],
-    evidenceTier: 'B',
-    glowHover: 'glow-hover-amber',
-    borderHover: 'hover:border-amber-500/40',
-  },
-  {
-    href: '/sulforaphane-supplement-guide',
-    icon: Leaf,
-    iconBadge: 'icon-badge-cyan',
-    iconText: 'text-accent-cyan',
-    badge: 'NRF2 Activator',
-    badgeColor: 'bg-accent-cyan/15 text-accent-cyan',
-    title: 'Sulforaphane & NRF2 Guide',
-    subtitle: 'Broccoli sprout extract, form selection, and Keap1-NRF2 mechanism',
-    description:
-      'Sulforaphane from broccoli sprouts alkylates Keap1 cysteine residues, releasing NRF2 to upregulate 200+ cytoprotective genes. Covers human trial data (H. pylori, NAFLD, ASD, air pollution), form hierarchy, and the NRF2 Triad stack.',
-    pills: ['200+ NRF2 genes', '4 human trials', 'Form hierarchy'],
-    evidenceTier: 'B',
-    glowHover: 'glow-hover-cyan',
-    borderHover: 'hover:border-accent-cyan/40',
-  },
-  {
-    href: '/spermidine-supplement-guide',
-    icon: Recycle,
-    iconBadge: 'icon-badge-emerald',
-    iconText: 'text-accent-emerald',
-    badge: 'ITP Mouse Data',
-    badgeColor: 'bg-accent-emerald/15 text-accent-emerald',
-    title: 'Spermidine Guide — Autophagy & ITP Data',
-    subtitle: '~10% ITP lifespan extension and 40% cardiovascular mortality reduction',
-    description:
-      'Spermidine is one of the few OTC longevity compounds with NIA Interventions Testing Program lifespan data (~10% in female mice). The Kiechl 2018 20-year cohort found a 40% reduction in cardiovascular mortality in the highest dietary spermidine tertile. Covers EP300 inhibition mechanism, dosing, and the autophagy triad.',
-    pills: ['ITP mouse data', 'Kiechl 2018 cohort', 'EP300 inhibition'],
-    evidenceTier: 'B',
-    glowHover: 'glow-hover-emerald',
-    borderHover: 'hover:border-accent-emerald/40',
-  },
-];
+// The guide list itself now lives in lib/guides.ts (single source of truth,
+// shared with the in-context cross-links and the coverage guard). Only the
+// per-guide icon stays here, since it's a React component, keyed by route.
+const GUIDE_ICONS: Record<string, LucideIcon> = {
+  '/longevity-supplements-guide': BookOpen,
+  '/nad-supplement-guide': Zap,
+  '/glynac-supplement-guide': Microscope,
+  '/berberine-supplement-guide': Shield,
+  '/taurine-supplement-guide': FlaskConical,
+  '/sulforaphane-supplement-guide': Leaf,
+  '/spermidine-supplement-guide': Recycle,
+};
 
 const comparisons = [
   { href: '/library/compare/nmn-vs-nr', label: 'NMN vs NR', desc: 'The definitive NAD+ precursor showdown' },
@@ -172,7 +74,7 @@ const collectionSchema = buildCollectionPageSchema({
   name: 'Longevity Supplement Guides — TNiC',
   description: 'Evidence-based supplement guides covering NAD+, GlyNAC, berberine, taurine, sulforaphane, spermidine, and top longevity compounds. Each guide is built on PubMed citations and includes honest dosing protocols.',
   path: '/supplement-guides',
-  itemCount: guides.length,
+  itemCount: SUPPLEMENT_GUIDES.length,
 });
 
 const breadcrumbSchema = buildBreadcrumbSchema([
@@ -186,13 +88,13 @@ const itemListSchema = {
   name: 'TNiC Longevity Supplement Guides',
   description: 'Comprehensive evidence-based guides for each major longevity supplement compound.',
   url: `${SITE.url}/supplement-guides`,
-  numberOfItems: guides.length,
-  itemListElement: guides.map((g, i) => ({
+  numberOfItems: SUPPLEMENT_GUIDES.length,
+  itemListElement: SUPPLEMENT_GUIDES.map((g, i) => ({
     '@type': 'ListItem',
     position: i + 1,
-    name: g.title,
+    name: g.label,
     url: `${SITE.url}${g.href}`,
-    description: g.subtitle,
+    description: g.short,
   })),
 };
 
@@ -242,7 +144,7 @@ export default function SupplementGuidesPage() {
                 // Derived from the live arrays so these can never drift below
                 // what the page actually lists (the coherence principle the
                 // footer/hero stats already follow).
-                { stat: String(guides.length), label: 'In-depth guides' },
+                { stat: String(SUPPLEMENT_GUIDES.length), label: 'In-depth guides' },
                 { stat: String(compoundDeepDives.length), label: 'Compound profiles' },
                 { stat: String(comparisons.length), label: 'Head-to-head comparisons' },
                 { stat: '50+', label: 'PubMed citations' },
@@ -269,45 +171,63 @@ export default function SupplementGuidesPage() {
             </div>
 
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {guides.map((guide) => {
-                const Icon = guide.icon;
+              {SUPPLEMENT_GUIDES.map((guide) => {
+                const Icon = GUIDE_ICONS[guide.href] ?? BookOpen;
+                const accent = themes[guide.accent].cssVar;
                 return (
                   <Link
                     key={guide.href}
                     href={guide.href}
-                    className={`group rounded-2xl p-6 border border-border/60 card-premium bg-card transition-all duration-300 ${guide.glowHover} ${guide.borderHover} flex flex-col`}
+                    style={{ ['--card-accent' as string]: accent }}
+                    className="premium-card focus-ring group p-6"
                   >
-                    <div className="flex items-start justify-between mb-4">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${guide.iconBadge}`}>
-                        <Icon className={`w-5 h-5 ${guide.iconText}`} />
-                      </div>
-                      <span className={`text-xs font-mono px-2 py-0.5 rounded-full ${guide.badgeColor}`}>
+                    <div className="mb-4 flex items-start justify-between gap-3">
+                      <span
+                        className="flex h-10 w-10 items-center justify-center rounded-xl border"
+                        style={{
+                          background: `color-mix(in srgb, ${accent} 12%, transparent)`,
+                          borderColor: `color-mix(in srgb, ${accent} 28%, transparent)`,
+                        }}
+                        aria-hidden="true"
+                      >
+                        <Icon className="h-5 w-5" style={{ color: accent }} />
+                      </span>
+                      <span
+                        className="rounded-full border px-2 py-0.5 font-mono text-[11px] font-medium"
+                        style={{
+                          color: accent,
+                          borderColor: `color-mix(in srgb, ${accent} 30%, transparent)`,
+                          background: `color-mix(in srgb, ${accent} 10%, transparent)`,
+                        }}
+                      >
                         {guide.badge}
                       </span>
                     </div>
 
-                    <h3 className="font-bold text-foreground mb-1 leading-tight">{guide.title}</h3>
-                    <p className="text-xs text-muted-foreground font-mono mb-3">{guide.subtitle}</p>
-                    <p className="text-sm text-muted-foreground mb-4 flex-1 leading-relaxed">{guide.description}</p>
+                    <h3 className="font-display text-lg font-medium leading-tight tracking-tight text-foreground transition-colors group-hover:[color:var(--card-accent)]">
+                      {guide.label}
+                    </h3>
+                    <p className="mt-1 font-mono text-xs text-muted-foreground">{guide.short}</p>
+                    <p className="mt-3 mb-4 flex-1 text-body-sm leading-relaxed text-muted-foreground">
+                      {guide.description}
+                    </p>
 
-                    <div className="flex flex-wrap gap-1.5 mb-4">
+                    <div className="mb-4 flex flex-wrap gap-1.5">
                       {guide.pills.map((pill) => (
                         <span
                           key={pill}
-                          className="text-xs px-2 py-0.5 rounded-full bg-card/50 border border-border text-muted-foreground"
+                          className="rounded-full border border-border/60 bg-white/[0.02] px-2 py-0.5 text-xs text-muted-foreground"
                         >
                           {pill}
                         </span>
                       ))}
                     </div>
 
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-mono text-muted-foreground">
-                        Evidence Tier {guide.evidenceTier}
-                      </span>
-                      <span className="flex items-center gap-1 text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+                    <div className="mt-auto flex items-center justify-between">
+                      <EvidenceTag tier={guide.tier} size="sm" />
+                      <span className="inline-flex items-center gap-1 text-sm font-semibold [color:var(--card-accent)]">
                         Read guide
-                        <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+                        <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
                       </span>
                     </div>
                   </Link>
