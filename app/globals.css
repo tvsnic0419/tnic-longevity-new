@@ -3372,6 +3372,22 @@ p,
   }
 }
 
+/* Light-theme parity — the base .premium-card fill is a white-on-dark gradient
+   that disappears on the light base (#f8fafc). Restore a real elevated white
+   surface + the v8 shadow (same approach as .card-elevated), and soften the
+   accent bloom, so the cards read in both themes. */
+[data-theme="light"] .premium-card {
+  background: var(--color-bg-elevated);
+  box-shadow: var(--glass-shadow-mid);
+}
+[data-theme="light"] .premium-card::after {
+  background: radial-gradient(
+    120% 80% at 50% -10%,
+    color-mix(in srgb, var(--card-accent, var(--accent-cyan)) 8%, transparent),
+    transparent 62%
+  );
+}
+
 /* ============================================================================
    Design System v9 — editorial prose + animated links (long-form / utility)
    ----------------------------------------------------------------------------
