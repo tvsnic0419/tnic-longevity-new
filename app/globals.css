@@ -3387,6 +3387,14 @@ p,
     transparent 62%
   );
 }
+/* Subtle white-on-dark surface overlays inside premium cards (chip fills, the
+   coverage-meter track) invert to a faint dark tint on the light base so they
+   don't vanish. Scoped to .premium-card so always-dark sections (e.g. the hero)
+   keep their intended white overlays. */
+[data-theme="light"] .premium-card .bg-white\/\[0\.02\],
+[data-theme="light"] .premium-card .bg-white\/\[0\.06\] {
+  background-color: color-mix(in srgb, var(--color-text-primary) 5%, transparent);
+}
 
 /* ============================================================================
    Design System v9 — editorial prose + animated links (long-form / utility)
