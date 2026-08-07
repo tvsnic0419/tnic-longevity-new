@@ -148,7 +148,7 @@ export default function PartnershipsPage() {
           </p>
           <a
             href={`mailto:${SITE.contactEmail}?subject=${encodeURIComponent('[TNiC partnerships] Collaboration inquiry')}`}
-            className="focus-ring inline-flex items-center justify-center gap-2 rounded-xl bg-accent-cyan px-5 py-3 text-sm font-bold text-black hover:bg-accent-emerald transition"
+            className="focus-ring inline-flex items-center justify-center gap-2 rounded-xl tnic-button-accent px-5 py-3 text-sm"
           >
             Partnership inquiries <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </a>

@@ -179,7 +179,7 @@ export default function GlyNACGuidePage() {
               <div className="flex flex-wrap gap-3">
                 <Link
                   href="/library/compounds/glynac"
-                  className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-accent-cyan text-bg-base font-semibold text-sm hover:bg-accent-cyan/90 transition"
+                  className="focus-ring interactive inline-flex items-center gap-2 tnic-button-accent px-5 py-3 rounded-xl text-sm"
                 >
                   Deep-dive compound page
                   <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -447,7 +447,7 @@ export default function GlyNACGuidePage() {
             <div className="flex flex-wrap gap-3 justify-center">
               <Link
                 href="/nico"
-                className="focus-ring interactive inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-accent-cyan text-bg-base font-semibold text-sm hover:bg-accent-cyan/90 transition"
+                className="focus-ring interactive inline-flex items-center gap-2 tnic-button-accent px-6 py-3 rounded-xl text-sm"
               >
                 Take the NICO Starter Questionnaire
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />

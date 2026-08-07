@@ -121,7 +121,7 @@ export default function SupplementGuidesPage() {
             <div className="flex flex-wrap gap-3 justify-center">
               <Link
                 href="/longevity-supplements-guide"
-                className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-accent-cyan text-bg-base font-semibold text-sm hover:bg-accent-cyan/90 transition"
+                className="focus-ring interactive inline-flex items-center gap-2 tnic-button-accent px-5 py-3 rounded-xl text-sm"
               >
                 Start with the Master Guide
                 <ArrowRight className="w-4 h-4" />

@@ -2989,6 +2989,33 @@ p,
   }
 }
 
+/* ── Accent-aware solid CTA ──
+   One treatment for every "solid accent" button that was previously hand-rolled
+   a dozen slightly-different ways (bg-emerald-500, bg-accent-emerald,
+   bg-accent-cyan text-bg-base, with assorted hover tints). Tint per section with
+   --btn-accent (default cyan); dark ink stays legible on every brand accent.
+   Consistent lift + glow + press. */
+.tnic-button-accent {
+  /* No unlayered --btn-accent declaration here: the per-section tint comes from
+     a Tailwind arbitrary-property utility (`[--btn-accent:var(--accent-emerald)]`),
+     which lives in @layer utilities and would LOSE to an unlayered default. So
+     read it with a fallback instead — utility wins, cyan is the default. */
+  background: var(--btn-accent, var(--accent-cyan));
+  color: #04110c;
+  font-weight: 700;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+@media (hover: hover) {
+  .tnic-button-accent:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+    box-shadow: 0 10px 30px -10px color-mix(in srgb, var(--btn-accent, var(--accent-cyan)) 55%, transparent);
+  }
+}
+.tnic-button-accent:active {
+  transform: translateY(0) scale(0.985);
+}
+
 /* ── Ghost glass secondary button ── */
 .tnic-button-secondary {
   background: rgba(255, 255, 255, 0.06);
@@ -3010,7 +3037,8 @@ p,
 
 @media (prefers-reduced-motion: reduce) {
   .tnic-button-primary,
-  .tnic-button-secondary { transition: none; }
+  .tnic-button-secondary,
+  .tnic-button-accent { transition: none; }
 }
 /* ── Homepage compound & graphic section refinements (from design-polish pass) ── */
 .home-compound-card,

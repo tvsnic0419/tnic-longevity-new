@@ -149,7 +149,7 @@ export default function TelomereAttritionPage() {
             <h2 className="text-3xl font-black tracking-tight text-foreground mb-4">Protect your cellular lifespan.</h2>
             <p className="text-muted-foreground mb-8">The Stack Architect maps stress-reduction, anti-inflammatory, and NAD+ compounds into a coordinated telomere-protective protocol.</p>
             <div className="flex flex-wrap justify-center gap-3">
-              <Link href="/stacks" className="inline-flex items-center gap-2 bg-emerald-500 text-black px-6 py-3 rounded-xl text-sm font-bold hover:bg-emerald-400 transition-colors">Stack Architect <ArrowRight className="w-4 h-4" /></Link>
+              <Link href="/stacks" className="inline-flex items-center gap-2 tnic-button-accent [--btn-accent:var(--accent-emerald)] focus-ring px-6 py-3 rounded-xl text-sm">Stack Architect <ArrowRight className="w-4 h-4" /></Link>
               <Link href="/hallmarks" className="inline-flex items-center gap-2 border border-border px-6 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"><BookOpen className="w-4 h-4" />All Hallmarks</Link>
             </div>
           </div>

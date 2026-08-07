@@ -133,7 +133,7 @@ export default function LongevitySupplementsGuidePage() {
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/nico"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold bg-accent-cyan text-black hover:bg-accent-cyan/90 transition-all focus-ring"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold tnic-button-accent focus-ring"
               >
                 Get Your Personalized Stack <ArrowRight className="w-4 h-4" />
               </Link>
@@ -294,7 +294,7 @@ export default function LongevitySupplementsGuidePage() {
           </div>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/nico" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-accent-cyan text-black hover:bg-accent-cyan/90 transition focus-ring">
+            <Link href="/nico" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold tnic-button-accent focus-ring">
               Start Step 1 — the NICO Starter Questionnaire <ArrowRight className="w-4 h-4" />
             </Link>
             <Link href="/stacks" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border border-white/15 text-white/90 hover:border-white/30 transition focus-ring">
