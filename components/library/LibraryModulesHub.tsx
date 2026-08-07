@@ -11,6 +11,8 @@ import {
 } from '@/lib/library-modules';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { RevealItem } from '@/components/ui/RevealItem';
+import { signatureHue } from '@/components/viz/tokens';
 import { getHubContext } from '@/lib/hub-context';
 
 const categoryIcons: Record<LibraryModuleCategory, typeof Pill> = {
@@ -118,28 +120,42 @@ export function LibraryModulesHub() {
                 </div>
 
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {modules.map((mod) => (
-                    <Link
-                      key={mod.slug}
-                      href={getModulePath(mod)}
-                      className="focus-ring interactive card-elevated p-5 flex flex-col h-full group"
-                    >
-                      <div className="flex items-center justify-between gap-2 mb-3">
-                        <EvidenceTag tier={mod.evidenceTier} size="sm" />
-                        {mod.requiresDisclaimer && (
-                          <span className="text-[10px] font-mono text-accent-amber">Rx</span>
-                        )}
-                      </div>
-                      <h4 className="heading-card mb-1 group-hover:text-accent-cyan transition-colors">
-                        {mod.title}
-                      </h4>
-                      <p className="text-xs text-muted-foreground mb-3">{mod.tagline}</p>
-                      <p className="text-body-sm flex-1">{mod.summary.slice(0, 120)}…</p>
-                      <span className="inline-flex items-center gap-1 mt-4 text-sm font-semibold text-accent-cyan group-hover:text-accent-emerald">
-                        Deep dive <ArrowRight className="w-4 h-4" />
-                      </span>
-                    </Link>
-                  ))}
+                  {modules.map((mod, i) => {
+                    const [r, g, b] = signatureHue(mod.slug);
+                    const accent = `rgb(${r}, ${g}, ${b})`;
+                    return (
+                      <RevealItem key={mod.slug} index={i} className="h-full">
+                        <Link
+                          href={getModulePath(mod)}
+                          style={{ ['--card-accent' as string]: accent }}
+                          className="premium-card focus-ring group h-full p-5"
+                        >
+                          <div className="mb-3 flex items-center justify-between gap-2">
+                            <EvidenceTag tier={mod.evidenceTier} size="sm" />
+                            {mod.requiresDisclaimer && (
+                              <span className="rounded border border-accent-amber/30 bg-accent-amber/10 px-1.5 py-0.5 text-[10px] font-mono font-semibold text-accent-amber">
+                                Rx
+                              </span>
+                            )}
+                          </div>
+                          <h4 className="heading-card mb-1 flex items-center gap-2 transition-colors group-hover:[color:var(--card-accent)]">
+                            <span
+                              aria-hidden="true"
+                              className="inline-block h-1.5 w-1.5 shrink-0 rounded-full"
+                              style={{ background: accent, boxShadow: `0 0 8px ${accent}` }}
+                            />
+                            {mod.title}
+                          </h4>
+                          <p className="mb-3 text-xs text-muted-foreground">{mod.tagline}</p>
+                          <p className="text-body-sm flex-1">{mod.summary.slice(0, 120)}…</p>
+                          <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold [color:var(--card-accent)]">
+                            Deep dive
+                            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+                          </span>
+                        </Link>
+                      </RevealItem>
+                    );
+                  })}
                 </div>
               </div>
             );
