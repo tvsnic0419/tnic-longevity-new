@@ -8,6 +8,7 @@ import { SITE } from '@/lib/site';
 import { SUPPLEMENT_GUIDES } from '@/lib/guides';
 import { themes } from '@/lib/design-system';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { RevealItem } from '@/components/ui/RevealItem';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Longevity Supplement Guides 2026 — Evidence-Based Deep Dives | TNiC',
@@ -171,15 +172,15 @@ export default function SupplementGuidesPage() {
             </div>
 
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {SUPPLEMENT_GUIDES.map((guide) => {
+              {SUPPLEMENT_GUIDES.map((guide, i) => {
                 const Icon = GUIDE_ICONS[guide.href] ?? BookOpen;
                 const accent = themes[guide.accent].cssVar;
                 return (
+                  <RevealItem key={guide.href} index={i} className="h-full">
                   <Link
-                    key={guide.href}
                     href={guide.href}
                     style={{ ['--card-accent' as string]: accent }}
-                    className="premium-card focus-ring group p-6"
+                    className="premium-card focus-ring group h-full p-6"
                   >
                     <div className="mb-4 flex items-start justify-between gap-3">
                       <span
@@ -231,6 +232,7 @@ export default function SupplementGuidesPage() {
                       </span>
                     </div>
                   </Link>
+                  </RevealItem>
                 );
               })}
             </div>
