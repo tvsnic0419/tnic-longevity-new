@@ -1,7 +1,9 @@
 'use client';
 
+import { useId } from 'react';
 import { biomarkers } from '@/lib/data';
 import { getLabStatus, parseOptimalRange, type LabEntry } from '@/lib/labs';
+import { VizGlow, VizAreaGradient } from '@/components/ui/vizDefs';
 
 interface MarkerChartProps {
   markerId: string;
@@ -10,6 +12,9 @@ interface MarkerChartProps {
 }
 
 export function MarkerChart({ markerId, entries, height = 120 }: MarkerChartProps) {
+  const uid = useId();
+  const glowId = `mc-glow-${uid}`;
+  const areaId = `mc-area-${uid}`;
   const b = biomarkers.find((x) => x.id === markerId);
   const sorted = entries
     .filter((e) => e.markerId === markerId)
@@ -47,8 +52,19 @@ export function MarkerChart({ markerId, entries, height = 120 }: MarkerChartProp
     critical: 'var(--status-critical)',
   }[status];
 
+  // Filled area beneath the trend line, faded to nothing at the baseline.
+  const baseY = pad + chartH;
+  const areaPath =
+    `M ${toX(0).toFixed(2)},${baseY.toFixed(2)} ` +
+    sorted.map((e, i) => `L ${toX(i).toFixed(2)},${toY(e.value).toFixed(2)}`).join(' ') +
+    ` L ${toX(sorted.length - 1).toFixed(2)},${baseY.toFixed(2)} Z`;
+
   return (
     <svg viewBox={`0 0 ${w} ${height}`} className="w-full" aria-label={`${b.name} trend chart`}>
+      <defs>
+        <VizGlow id={glowId} blur={2} />
+        <VizAreaGradient id={areaId} color={statusStroke} topOpacity={0.24} />
+      </defs>
       {range && (
         <rect
           x={pad}
@@ -60,16 +76,29 @@ export function MarkerChart({ markerId, entries, height = 120 }: MarkerChartProp
           rx={2}
         />
       )}
+      <path d={areaPath} fill={`url(#${areaId})`} stroke="none" />
       <polyline
         points={points}
         fill="none"
         stroke={statusStroke}
         strokeWidth={2}
         strokeLinejoin="round"
+        strokeLinecap="round"
+        filter={`url(#${glowId})`}
       />
-      {sorted.map((e, i) => (
-        <circle key={e.id} cx={toX(i)} cy={toY(e.value)} r={3} fill={statusStroke} />
-      ))}
+      {sorted.map((e, i) => {
+        const isLatest = i === sorted.length - 1;
+        return (
+          <circle
+            key={e.id}
+            cx={toX(i)}
+            cy={toY(e.value)}
+            r={isLatest ? 4 : 2.5}
+            fill={statusStroke}
+            filter={isLatest ? `url(#${glowId})` : undefined}
+          />
+        );
+      })}
     </svg>
   );
 }

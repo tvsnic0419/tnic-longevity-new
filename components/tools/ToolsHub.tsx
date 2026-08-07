@@ -120,6 +120,7 @@ export function ToolsHub() {
           title="Longevity Tools"
           description="Six evidence-graded calculators that turn library knowledge into practical models. Rule-based, transparent reasoning — not generative AI."
           theme="violet"
+          cinematic
           as="h1"
         />
 

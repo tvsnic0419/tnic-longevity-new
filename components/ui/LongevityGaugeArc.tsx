@@ -2,6 +2,7 @@
 
 import { useId, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { VizGlow } from '@/components/ui/vizDefs';
 
 interface LongevityGaugeArcProps {
   score: number;
@@ -26,6 +27,7 @@ export function LongevityGaugeArc({
 }: LongevityGaugeArcProps) {
   const uid = useId();
   const gradId = `lq-grad-${uid}`;
+  const glowId = `lq-glow-${uid}`;
   const ref = useRef<SVGSVGElement>(null);
   const inView = useInView(ref, { once: true, margin: '-40px' });
   const shouldDraw = immediate || inView;
@@ -48,6 +50,13 @@ export function LongevityGaugeArc({
   // Tick marks at 25 / 50 / 75 %
   const ticks = [25, 50, 75];
 
+  // Glowing end-cap that lands at the score terminus once the arc has drawn.
+  const clamped = Math.max(0, Math.min(100, score));
+  const capAngle = Math.PI * (1 - clamped / 100);
+  const capX = cx + r * Math.cos(capAngle);
+  const capY = cy - r * Math.sin(capAngle);
+  const capColor = color ?? 'var(--accent-emerald)';
+
   return (
     <svg
       ref={ref}
@@ -61,6 +70,7 @@ export function LongevityGaugeArc({
           <stop offset="48%"  stopColor="var(--accent-cyan)"    />
           <stop offset="100%" stopColor="var(--accent-emerald)" />
         </linearGradient>
+        <VizGlow id={glowId} blur={size * 0.02} />
       </defs>
 
       {/* Background track */}
@@ -105,9 +115,23 @@ export function LongevityGaugeArc({
         stroke={color ?? `url(#${gradId})`}
         strokeWidth={sw}
         strokeLinecap="round"
+        filter={`url(#${glowId})`}
         initial={{ pathLength: 0 }}
         animate={shouldDraw ? { pathLength: score / 100 } : { pathLength: 0 }}
         transition={{ duration: 1.4, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+      />
+
+      {/* Glowing end-cap — fades in where the arc terminates */}
+      <motion.circle
+        cx={capX}
+        cy={capY}
+        r={sw * 0.6}
+        fill={capColor}
+        filter={`url(#${glowId})`}
+        initial={{ opacity: 0, scale: 0 }}
+        animate={shouldDraw ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
+        transition={{ duration: 0.45, delay: 1.45, ease: [0.22, 1, 0.36, 1] }}
+        style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
       />
 
       {/* Score value — large, centered */}
@@ -118,6 +142,7 @@ export function LongevityGaugeArc({
         fontWeight="800"
         fill={color ?? 'var(--accent-emerald)'}
         fontFamily="monospace"
+        filter={`url(#${glowId})`}
       >
         {score.toFixed(1)}
       </text>

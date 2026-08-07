@@ -136,6 +136,12 @@ export function BiologicalAgeGauge({
   const tickX = cx + r * Math.cos(chronoRad);
   const tickY = cy + r * Math.sin(chronoRad);
 
+  // Glowing leading edge of the bio-age arc — sits at the current progress.
+  const leadAngle = startDeg + (endDeg - startDeg) * displayProgress;
+  const leadRad = (leadAngle * Math.PI) / 180;
+  const leadX = cx + r * Math.cos(leadRad);
+  const leadY = cy + r * Math.sin(leadRad);
+
   return (
     <div className={cn('bio-age-gauge', className)}>
       <div className="relative mx-auto" style={{ width: s.box, height: s.box * 0.72 }}>
@@ -212,6 +218,20 @@ export function BiologicalAgeGauge({
             filter="url(#bio-gauge-glow)"
             opacity={scanned ? 1 : 0.35}
           />
+
+          {/* Glowing leading edge of the bio-age arc */}
+          {scanned && (
+            <motion.circle
+              cx={leadX}
+              cy={leadY}
+              r={s.stroke * 0.5}
+              fill={toneColor}
+              filter="url(#bio-gauge-glow)"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: 1.3 }}
+            />
+          )}
 
           {/* Chrono age tick */}
           <circle
