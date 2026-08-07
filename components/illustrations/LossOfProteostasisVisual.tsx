@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 export const LossOfProteostasisVisual: React.FC<{ className?: string; showLabels?: boolean; accentColor?: string }> = ({
   className = '',
-  accentColor = '#67f6ff',
+  accentColor = '#00e0ff',
   showLabels = true,
 }) => {
   return (
@@ -35,9 +35,9 @@ export const LossOfProteostasisVisual: React.FC<{ className?: string; showLabels
             <ellipse cx="340" cy="110" rx="32" ry="24" fill="#020811" stroke={accentColor} strokeWidth="2" />
           </g>
 
-          <g stroke="#10b981" strokeWidth="2" strokeLinecap="round">
+          <g stroke="#34d399" strokeWidth="2" strokeLinecap="round">
             <path d="M280 100 L310 100" />
-            <polygon points="310,100 303,95 303,105" fill="#10b981" />
+            <polygon points="310,100 303,95 303,105" fill="#34d399" />
           </g>
         </svg>
       </motion.div>

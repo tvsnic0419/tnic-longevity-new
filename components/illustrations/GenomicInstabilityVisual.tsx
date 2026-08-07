@@ -12,7 +12,7 @@ interface GenomicInstabilityVisualProps {
 
 export const GenomicInstabilityVisual: React.FC<GenomicInstabilityVisualProps> = ({
   className = '',
-  accentColor = '#67f6ff',
+  accentColor = '#00e0ff',
   showLabels = true,
 }) => {
   return (
@@ -52,27 +52,27 @@ export const GenomicInstabilityVisual: React.FC<GenomicInstabilityVisualProps> =
             <text x="280" y="80" textAnchor="middle" fill="#fafafa" fontSize="10" fontWeight="600">PARP</text>
           </g>
 
-          <g stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round">
+          <g stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round">
             <path d="M310 75 L350 75" />
-            <polygon points="350,75 342,70 342,80" fill="#f59e0b" />
+            <polygon points="350,75 342,70 342,80" fill="#fbbf24" />
           </g>
 
           <g>
-            <rect x="360" y="55" width="45" height="40" rx="6" fill="#020811" stroke="#f59e0b" strokeWidth="2" />
+            <rect x="360" y="55" width="45" height="40" rx="6" fill="#020811" stroke="#fbbf24" strokeWidth="2" />
             <text x="382" y="80" textAnchor="middle" fill="#fafafa" fontSize="9" fontWeight="600">NAD+</text>
           </g>
 
-          <g stroke="#10b981" strokeWidth="2.5" strokeLinecap="round">
+          <g stroke="#34d399" strokeWidth="2.5" strokeLinecap="round">
             <path d="M200 130 L240 155" />
-            <polygon points="240,155 232,150 235,158" fill="#10b981" />
+            <polygon points="240,155 232,150 235,158" fill="#34d399" />
           </g>
 
           {showLabels && (
             <>
               <text x="200" y="45" textAnchor="middle" fill="#f472b6" fontSize="9">DNA Damage</text>
               <text x="280" y="55" textAnchor="middle" fill={accentColor} fontSize="9">PARP Activation</text>
-              <text x="382" y="50" textAnchor="middle" fill="#f59e0b" fontSize="9">NAD+ Drain</text>
-              <text x="195" y="175" textAnchor="start" fill="#10b981" fontSize="9">NRF2 / NMN Repair</text>
+              <text x="382" y="50" textAnchor="middle" fill="#fbbf24" fontSize="9">NAD+ Drain</text>
+              <text x="195" y="175" textAnchor="start" fill="#34d399" fontSize="9">NRF2 / NMN Repair</text>
             </>
           )}
         </svg>

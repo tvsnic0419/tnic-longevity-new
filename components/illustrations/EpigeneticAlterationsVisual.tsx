@@ -54,14 +54,14 @@ export const EpigeneticAlterationsVisual: React.FC<EpigeneticAlterationsVisualPr
         </g>
 
         {/* Gene Expression Arrow */}
-        <g stroke="#10b981" strokeWidth="2.5" strokeLinecap="round">
+        <g stroke="#34d399" strokeWidth="2.5" strokeLinecap="round">
           <path d="M250 100 L300 100" />
-          <polygon points="300,100 292,95 292,105" fill="#10b981" />
+          <polygon points="300,100 292,95 292,105" fill="#34d399" />
         </g>
 
         {/* Intervention (SIRT1 / NAD+) */}
         <g>
-          <circle cx="340" cy="70" r="20" fill="#020811" stroke="#10b981" strokeWidth="2" />
+          <circle cx="340" cy="70" r="20" fill="#020811" stroke="#34d399" strokeWidth="2" />
           <text x="340" y="75" textAnchor="middle" fill="#fafafa" fontSize="9" fontWeight="600">SIRT1</text>
         </g>
 
@@ -75,7 +75,7 @@ export const EpigeneticAlterationsVisual: React.FC<EpigeneticAlterationsVisualPr
           <>
             <text x="95" y="40" textAnchor="middle" fill={accentColor} fontSize="9">Methyl Marks</text>
             <text x="200" y="145" textAnchor="middle" fill={accentColor} fontSize="9">Chromatin</text>
-            <text x="340" y="45" textAnchor="middle" fill="#10b981" fontSize="9">SIRT1 / NAD+</text>
+            <text x="340" y="45" textAnchor="middle" fill="#34d399" fontSize="9">SIRT1 / NAD+</text>
           </>
         )}
       </svg>

@@ -33,20 +33,20 @@ export const ChronicInflammationVisual: React.FC<{ className?: string; showLabel
           </g>
 
           <g>
-            <circle cx="260" cy="95" r="25" fill="#020811" stroke="#f59e0b" strokeWidth="2.5" />
+            <circle cx="260" cy="95" r="25" fill="#020811" stroke="#fbbf24" strokeWidth="2.5" />
             <text x="260" y="100" textAnchor="middle" fill="#fafafa" fontSize="10" fontWeight="600">NF-κB</text>
           </g>
 
-          <g stroke="#10b981" strokeWidth="2.5" strokeLinecap="round">
+          <g stroke="#34d399" strokeWidth="2.5" strokeLinecap="round">
             <path d="M300 95 L350 95" />
-            <polygon points="350,95 342,90 342,100" fill="#10b981" />
+            <polygon points="350,95 342,90 342,100" fill="#34d399" />
           </g>
 
           {showLabels && (
             <>
               <text x="120" y="55" textAnchor="middle" fill={accentColor} fontSize="9">Inflamed Tissue</text>
-              <text x="260" y="65" textAnchor="middle" fill="#f59e0b" fontSize="9">NF-κB Active</text>
-              <text x="355" y="80" textAnchor="middle" fill="#10b981" fontSize="9">Resolution</text>
+              <text x="260" y="65" textAnchor="middle" fill="#fbbf24" fontSize="9">NF-κB Active</text>
+              <text x="355" y="80" textAnchor="middle" fill="#34d399" fontSize="9">Resolution</text>
             </>
           )}
         </svg>

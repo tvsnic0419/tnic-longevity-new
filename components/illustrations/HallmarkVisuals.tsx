@@ -10,11 +10,11 @@ interface HallmarkVisualProps {
 }
 
 const ACC: Record<string, { s: string; f: string; g: string }> = {
-  cyan:    { s: '#22d3ee', f: '#083344', g: '#22d3ee40' },
+  cyan:    { s: '#00e0ff', f: '#083344', g: '#00e0ff40' },
   emerald: { s: '#34d399', f: '#052e16', g: '#34d39940' },
-  violet:  { s: '#a78bfa', f: '#1e1b4b', g: '#a78bfa40' },
+  violet:  { s: '#c084fc', f: '#1e1b4b', g: '#c084fc40' },
   amber:   { s: '#fbbf24', f: '#292524', g: '#fbbf2440' },
-  rose:    { s: '#fb7185', f: '#2d0a12', g: '#fb718540' },
+  rose:    { s: '#f472b6', f: '#2d0a12', g: '#f472b640' },
 };
 
 function ac(color: string | undefined) {
@@ -51,9 +51,9 @@ export const GenomicInstabilityVisual: React.FC<HallmarkVisualProps> = ({
       {/* Damaged helix — left */}
       <path d="M40 40 Q60 80 40 120 Q60 160 40 200" stroke="#4b5563" strokeWidth="8" strokeLinecap="round" fill="none" />
       <path d="M70 40 Q50 80 70 120 Q50 160 70 200" stroke="#4b5563" strokeWidth="8" strokeLinecap="round" fill="none" />
-      <circle cx="55" cy="70" r="6" fill="#f87171" opacity="0.7" />
-      <circle cx="52" cy="140" r="5" fill="#f87171" opacity="0.6" />
-      <path d="M48 65 L62 75 M50 135 L60 145" stroke="#f87171" strokeWidth="2" />
+      <circle cx="55" cy="70" r="6" fill="#f472b6" opacity="0.7" />
+      <circle cx="52" cy="140" r="5" fill="#f472b6" opacity="0.6" />
+      <path d="M48 65 L62 75 M50 135 L60 145" stroke="#f472b6" strokeWidth="2" />
       {/* Repaired helix — right */}
       <path d="M180 40 Q200 80 180 120 Q200 160 180 200" stroke={c.s} strokeWidth="8" strokeLinecap="round" fill="none" />
       <path d="M210 40 Q190 80 210 120 Q190 160 210 200" stroke={c.s} strokeWidth="8" strokeLinecap="round" fill="none" />
@@ -123,10 +123,10 @@ export const EpigeneticAlterationsVisual: React.FC<HallmarkVisualProps> = ({
         return <circle key={i} cx={x} cy={y} r="4" fill={c.s} opacity="0.55" />;
       })}
       {/* Methylation marks */}
-      <circle cx="118" cy="90" r="6" fill="#fb7185" opacity="0.9" />
-      <circle cx="202" cy="90" r="6" fill="#fb7185" opacity="0.9" />
-      <text x="107" y="83" fill="#fb7185" fontSize="7" opacity="0.8">CH₃</text>
-      <text x="196" y="83" fill="#fb7185" fontSize="7" opacity="0.8">CH₃</text>
+      <circle cx="118" cy="90" r="6" fill="#f472b6" opacity="0.9" />
+      <circle cx="202" cy="90" r="6" fill="#f472b6" opacity="0.9" />
+      <text x="107" y="83" fill="#f472b6" fontSize="7" opacity="0.8">CH₃</text>
+      <text x="196" y="83" fill="#f472b6" fontSize="7" opacity="0.8">CH₃</text>
       {/* SIRT1 node */}
       <circle cx="264" cy="115" r="18" fill={c.f} stroke={c.s} strokeWidth="2" />
       <text x="264" y="112" textAnchor="middle" fill={c.s} fontSize="8">SIRT1</text>
@@ -146,7 +146,7 @@ export const ProteostasisVisual: React.FC<HallmarkVisualProps> = ({
   className = '',
   size = 320,
 }) => {
-  const accent = '#a78bfa';
+  const accent = '#c084fc';
   return (
     <svg width={size} height={size * 0.75} viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg" className={cn(className)} aria-label="Loss of Proteostasis — misfolded protein clearance" role="img">
       <rect width="320" height="240" fill="#111827" opacity="0.4" rx="8" />
@@ -179,7 +179,7 @@ export const AutophagyVisual: React.FC<HallmarkVisualProps> = ({
       <ellipse cx="130" cy="118" rx="50" ry="38" fill="#0a0f1a" stroke={c.s} strokeWidth="2.5" />
       <ellipse cx="130" cy="118" rx="36" ry="26" fill={c.f} stroke={c.s} strokeWidth="1.2" strokeOpacity="0.5" />
       {/* Cargo */}
-      <circle cx="122" cy="113" r="8" fill="#fb718530" stroke="#fb7185" strokeWidth="1.2" />
+      <circle cx="122" cy="113" r="8" fill="#f472b630" stroke="#f472b6" strokeWidth="1.2" />
       <circle cx="140" cy="122" r="6" fill="#fbbf2420" stroke="#fbbf24" strokeWidth="1.2" />
       {/* Lysosome */}
       <ellipse cx="235" cy="118" rx="30" ry="20" fill={c.f} stroke={c.s} strokeWidth="2" strokeOpacity="0.7" />
@@ -187,8 +187,8 @@ export const AutophagyVisual: React.FC<HallmarkVisualProps> = ({
       <path d="M181 118 L207 118" stroke={c.s} strokeWidth="2.5" />
       <path d="M200 113 L207 118 L200 123" stroke={c.s} strokeWidth="2" fill="none" />
       {/* mTOR inhibited */}
-      <rect x="38" y="86" width="46" height="18" rx="9" fill="#fb718510" stroke="#fb7185" strokeWidth="1.2" />
-      <text x="61" y="98" textAnchor="middle" fill="#fb7185" fontSize="8.5">mTOR ↓</text>
+      <rect x="38" y="86" width="46" height="18" rx="9" fill="#f472b610" stroke="#f472b6" strokeWidth="1.2" />
+      <text x="61" y="98" textAnchor="middle" fill="#f472b6" fontSize="8.5">mTOR ↓</text>
       <line x1="84" y1="95" x2="80" y2="106" stroke={c.s} strokeWidth="1.2" strokeDasharray="4,3" strokeOpacity="0.7" />
       <text x="55" y="158" textAnchor="middle" fill={c.s} fontSize="8.5" opacity="0.7">NMN · fasting</text>
       <text x="55" y="170" textAnchor="middle" fill={c.s} fontSize="8" opacity="0.6">AMPK ↑</text>
@@ -215,8 +215,8 @@ export const MitochondrialDysfunctionVisual: React.FC<HallmarkVisualProps> = ({
       <ellipse cx="160" cy="120" rx="95" ry="55" fill="url(#mitoGrad)" stroke="#4b5563" strokeWidth="3" />
       <path d="M80 90 Q100 110 85 140 Q105 160 82 185" stroke="#6b7280" strokeWidth="2.5" fill="none" />
       <path d="M95 95 Q115 120 92 155" stroke="#6b7280" strokeWidth="2" fill="none" />
-      <circle cx="75" cy="105" r="4" fill="#f87171" opacity="0.5" />
-      <circle cx="88" cy="165" r="3" fill="#f87171" opacity="0.4" />
+      <circle cx="75" cy="105" r="4" fill="#f472b6" opacity="0.5" />
+      <circle cx="88" cy="165" r="3" fill="#f472b6" opacity="0.4" />
       <ellipse cx="200" cy="120" rx="55" ry="35" fill="none" stroke={c.s} strokeWidth="2.5" />
       <path d="M175 95 Q195 115 178 145 Q198 165 175 185" stroke={c.s} strokeWidth="2.5" fill="none" />
       <circle cx="130" cy="95" r="7" fill={c.s} opacity="0.9" />
@@ -242,7 +242,7 @@ export const CellularSenescenceVisual: React.FC<HallmarkVisualProps> = ({
     <svg width={size} height={size * 0.75} viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg" className={cn(className)} aria-label="Cellular Senescence — SASP secretion and Fisetin senolytic clearance" role="img">
       <rect width="320" height="240" fill="#030712" rx="8" />
       {/* Enlarged senescent cell */}
-      <ellipse cx="140" cy="118" rx="68" ry="48" fill="#fb718510" stroke={c.s} strokeWidth="2.5" />
+      <ellipse cx="140" cy="118" rx="68" ry="48" fill="#f472b610" stroke={c.s} strokeWidth="2.5" />
       <ellipse cx="136" cy="118" rx="36" ry="24" fill={c.f} stroke={c.s} strokeWidth="1.5" strokeOpacity="0.7" />
       <text x="136" y="122" textAnchor="middle" fill={c.s} fontSize="8">p21/p53</text>
       {/* SASP dots */}
@@ -312,7 +312,7 @@ export const IntercellularCommunicationVisual: React.FC<HallmarkVisualProps> = (
         <circle key={i} cx={x} cy={i === 1 ? 112 : 128} r="7.5" fill={c.f} stroke={c.s} strokeWidth="1.5" />
       ))}
       {/* Inflammatory label */}
-      <text x="160" y="92" textAnchor="middle" fill="#fb7185" fontSize="7.5" opacity="0.7">pro-inflammatory cytokines</text>
+      <text x="160" y="92" textAnchor="middle" fill="#f472b6" fontSize="7.5" opacity="0.7">pro-inflammatory cytokines</text>
       {/* Omega-3 */}
       <rect x="110" y="162" width="100" height="20" rx="10" fill={c.f} stroke={c.s} strokeWidth="1.5" />
       <text x="160" y="175" textAnchor="middle" fill={c.s} fontSize="8.5">Omega-3 modulates</text>
@@ -379,7 +379,7 @@ export const DysbiosisVisual: React.FC<HallmarkVisualProps> = ({
       ))}
       {/* Pathogenic — right */}
       {[[210, 98],[228, 115],[210, 138]].map(([x,y],i) => (
-        <circle key={`p${i}`} cx={x} cy={y} r="8" fill="#fb718520" stroke="#fb7185" strokeWidth="1.5" />
+        <circle key={`p${i}`} cx={x} cy={y} r="8" fill="#f472b620" stroke="#f472b6" strokeWidth="1.5" />
       ))}
       <text x="160" y="162" textAnchor="middle" fill={c.s} fontSize="7.5" opacity="0.7">SCFAs ↓ · LPS ↑</text>
       {/* Intervention bar */}

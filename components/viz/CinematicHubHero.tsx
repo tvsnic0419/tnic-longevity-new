@@ -142,8 +142,8 @@ const HUBHERO_CSS = `
   display: inline-flex; align-items: center; gap: 10px;
   padding: 13px 24px; border-radius: 999px; text-decoration: none;
   font-weight: 600; font-size: 15px;
-  background: linear-gradient(135deg, var(--hue), color-mix(in srgb, var(--hue) 55%, #8c8cf5));
-  color: #050710; box-shadow: 0 0 30px color-mix(in srgb, var(--hue) 35%, transparent);
+  background: linear-gradient(135deg, var(--hue), color-mix(in srgb, var(--hue) 55%, #6ee7b7));
+  color: #030712; box-shadow: 0 0 30px color-mix(in srgb, var(--hue) 35%, transparent);
   transition: transform .2s ease, box-shadow .2s ease;
 }
 .hh-cta:hover { transform: translateY(-1px); box-shadow: 0 0 42px color-mix(in srgb, var(--hue) 50%, transparent); }

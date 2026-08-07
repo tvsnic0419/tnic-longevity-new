@@ -8,41 +8,49 @@
 
 export type RGB = [number, number, number];
 
-/** Core cinematic palette — mirrors the Descent scene and the STYLE_GUIDE accents. */
+/**
+ * Core cinematic palette — snapped to the site's canonical accent tokens
+ * (app/globals.css `--accent-*`, `--color-bg-*`) so the viz family and the rest
+ * of the UI read as one system. `indigo`/`gold`/`teal` are kept as named keys
+ * for existing consumers but now alias the nearest site accent (violet / amber /
+ * emerald) rather than a separate softer hue.
+ */
 export const VIZ = {
-  void: "#050710",
-  void2: "#0a0e1e",
-  panel: "#0e1426",
-  panel2: "#131a30",
-  line: "rgba(150,170,220,0.14)",
-  ink: "#eef2fb",
-  muted: "#96a0bc",
-  faint: "#5a6482",
-  // accents
-  cyan: "#5fe3e0",
-  indigo: "#8c8cf5",
-  violet: "#b98cf0",
-  gold: "#f0c46a",
-  rose: "#f08a7a",
-  amber: "#eaa24a",
-  teal: "#57d4b0",
+  void: "#020811",
+  void2: "#080f1c",
+  panel: "#0a111f",
+  panel2: "#0e1729",
+  line: "rgba(255,255,255,0.12)",
+  ink: "#fafafa",
+  muted: "#ced0d7",
+  faint: "#7f8794",
+  // accents — canonical site values
+  cyan: "#00e0ff",
+  indigo: "#c084fc",   // alias → violet (the site has no separate indigo accent)
+  violet: "#c084fc",
+  gold: "#fbbf24",     // alias → amber
+  rose: "#f472b6",
+  amber: "#fbbf24",
+  teal: "#34d399",     // alias → emerald
+  emerald: "#34d399",
 } as const;
 
-/** Accent hues as RGB triples, for canvas gradients / glow math. */
+/** Accent hues as RGB triples, for canvas gradients / glow math. Canonical. */
 export const HUES: Record<string, RGB> = {
-  cyan: [95, 227, 224],
-  indigo: [140, 140, 245],
-  violet: [185, 140, 240],
-  gold: [240, 196, 106],
-  rose: [240, 138, 122],
-  amber: [234, 162, 74],
-  teal: [87, 212, 176],
+  cyan: [0, 224, 255],
+  indigo: [192, 132, 252],
+  violet: [192, 132, 252],
+  gold: [251, 191, 36],
+  rose: [244, 114, 182],
+  amber: [251, 191, 36],
+  teal: [52, 211, 153],
   emerald: [52, 211, 153],
 };
 
-/** Curated signature-hue rotation — every compound gets a stable, on-brand color. */
+/** Curated signature-hue rotation — the five distinct site accents, so every
+ *  compound gets a stable, on-brand color. */
 const SIGNATURE_ORDER: Array<keyof typeof HUES> = [
-  "cyan", "indigo", "violet", "teal", "gold", "rose", "amber",
+  "cyan", "violet", "emerald", "amber", "rose",
 ];
 
 /** Deterministic string hash → stable index. */

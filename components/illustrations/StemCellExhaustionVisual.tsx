@@ -19,16 +19,16 @@ export const StemCellExhaustionVisual: React.FC<{ className?: string; showLabels
       <motion.div whileInView={{ opacity: 1 }} initial={{ opacity: 0.7 }} viewport={{ once: true }}>
         <svg viewBox="0 0 420 180" className="w-full h-auto">
           <g>
-            <circle cx="150" cy="90" r="30" fill="#020811" stroke="#10b981" strokeWidth="2.5" />
+            <circle cx="150" cy="90" r="30" fill="#020811" stroke="#34d399" strokeWidth="2.5" />
             <text x="150" y="95" textAnchor="middle" fill="#fafafa" fontSize="10" fontWeight="600">Stem Cell</text>
             
             {/* Depleted / exhausted indicators */}
-            <circle cx="220" cy="70" r="8" fill="#f59e0b" opacity="0.6" />
-            <circle cx="250" cy="100" r="7" fill="#f59e0b" opacity="0.5" />
+            <circle cx="220" cy="70" r="8" fill="#fbbf24" opacity="0.6" />
+            <circle cx="250" cy="100" r="7" fill="#fbbf24" opacity="0.5" />
             
             {/* Regeneration arrow */}
-            <path d="M300 90 L350 90" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" />
-            <polygon points="350,90 342,85 342,95" fill="#10b981" />
+            <path d="M300 90 L350 90" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" />
+            <polygon points="350,90 342,85 342,95" fill="#34d399" />
           </g>
         </svg>
       </motion.div>
