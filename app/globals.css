@@ -3016,6 +3016,42 @@ p,
   transform: translateY(0) scale(0.985);
 }
 
+/* ── Accent-aware tonal button ──
+   The sibling of .tnic-button-accent for secondary CTAs: a translucent accent
+   wash + hairline that deepens on hover. Replaces the ~10 inline
+   `bg-accent-X/10 border-accent-X/25 text-accent-X hover:bg-accent-X/20`
+   recipes. Tint via --btn-accent (default cyan); color-mix keeps it correct in
+   both themes. Callers keep their own padding/radius/size. */
+.tnic-button-tonal {
+  background: color-mix(in srgb, var(--btn-accent, var(--accent-cyan)) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--btn-accent, var(--accent-cyan)) 25%, transparent);
+  color: var(--btn-accent, var(--accent-cyan));
+  font-weight: 600;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+@media (hover: hover) {
+  .tnic-button-tonal:hover {
+    background: color-mix(in srgb, var(--btn-accent, var(--accent-cyan)) 18%, transparent);
+    border-color: color-mix(in srgb, var(--btn-accent, var(--accent-cyan)) 42%, transparent);
+  }
+}
+.tnic-button-tonal:active {
+  transform: translateY(0) scale(0.985);
+}
+
+/* ── Accent-aware chip ──
+   Small static tag/pill: translucent accent wash + accent text. Replaces the
+   inline `bg-accent-X/10 text-accent-X px-… rounded…` micro-tags. */
+.tnic-chip {
+  background: color-mix(in srgb, var(--chip-accent, var(--accent-cyan)) 12%, transparent);
+  color: var(--chip-accent, var(--accent-cyan));
+  border: 1px solid color-mix(in srgb, var(--chip-accent, var(--accent-cyan)) 22%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tnic-button-tonal { transition: none; }
+}
+
 /* ── Ghost glass secondary button ── */
 .tnic-button-secondary {
   background: rgba(255, 255, 255, 0.06);
