@@ -12,8 +12,10 @@ const HEIGHT = 490;
  * roles: the server-rendered first paint (before HeroSceneMount's client
  * effect can check WebGL/motion/viewport eligibility), the next/dynamic
  * `loading` placeholder while the 3D chunk downloads, and the permanent
- * fallback for reduced-motion, no-WebGL, and mobile. Purely decorative —
- * non-interactive by design, matching the 3D scene's own aria-hidden contract.
+ * fallback for reduced-motion, no-WebGL, and mobile. This is the *only*
+ * version those visitors ever see of what's now a real widget, so nodes are
+ * real links to their compound pages rather than purely decorative —
+ * everything else (edges, glow) stays non-interactive.
  */
 export function HeroScenePoster() {
   const nodes = buildHeroNetworkPoster2D(WIDTH, HEIGHT);
@@ -23,8 +25,7 @@ export function HeroScenePoster() {
     <svg
       viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
       className="h-full w-full"
-      role="presentation"
-      aria-hidden="true"
+      aria-label="Compound synergy network — select a compound to view its profile"
     >
       <defs>
         <radialGradient id="hero-network-glow" cx="50%" cy="50%" r="50%">
@@ -54,7 +55,12 @@ export function HeroScenePoster() {
         const color = HERO_NETWORK_TIER_COLOR[n.tier];
         const r = 7 + Math.min(n.degree, 6) * 1.15;
         return (
-          <g key={n.id}>
+          <a
+            key={n.id}
+            href={`/library/compounds/${n.id}`}
+            className="cursor-pointer outline-none transition-opacity hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
+          >
+            <title>{n.name}</title>
             <circle cx={n.x} cy={n.y} r={r + 6} fill={color} fillOpacity={0.1} />
             <circle
               cx={n.x}
@@ -66,7 +72,7 @@ export function HeroScenePoster() {
               strokeOpacity={0.7}
               strokeWidth={1.4}
             />
-          </g>
+          </a>
         );
       })}
     </svg>
