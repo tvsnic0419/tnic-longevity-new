@@ -1,5 +1,7 @@
 import { compounds } from '@/lib/data';
-import type { EvidenceTier } from '@/lib/types';
+import type { Compound, EvidenceTier } from '@/lib/types';
+import { emergentEffects } from '@/lib/relations';
+import { stackInteractions, hallmarkDisplayNames } from '@/lib/stack-analysis';
 
 /**
  * Shared node/edge/layout data for the homepage hero's 3D visual and its SVG
@@ -54,6 +56,12 @@ export const HERO_NETWORK_TIER_COLOR: Record<EvidenceTier, string> = {
   A: '#34d399',
   B: '#fbbf24',
   C: '#94a3b8',
+};
+
+export const HERO_NETWORK_TIER_LABEL: Record<EvidenceTier, string> = {
+  A: 'Tier A — strong evidence',
+  B: 'Tier B — moderate evidence',
+  C: 'Tier C — early evidence',
 };
 
 // ── 3D layout — deterministic Fibonacci sphere, computed once at module init ──
@@ -121,4 +129,83 @@ export function buildHeroNetworkPoster2D(width: number, height: number): HeroNet
   });
 
   return [...hubPositions, ...outerPositions];
+}
+
+// ── Click-to-explore data: partner lookup + real per-pair "why" text ──
+//
+// Backs the interactive hero widget's info panel (HeroInfoPanel.tsx). Every
+// function here is derived from the same live compound/relations/stack-
+// analysis data used elsewhere on the site — no copy is authored specifically
+// for this widget, so it can't drift out of sync with the rest of TNiC.
+
+const HERO_NETWORK_PARTNERS: Map<string, string[]> = (() => {
+  const map = new Map<string, string[]>();
+  for (const e of HERO_NETWORK_EDGES) {
+    map.set(e.a, [...(map.get(e.a) ?? []), e.b]);
+    map.set(e.b, [...(map.get(e.b) ?? []), e.a]);
+  }
+  return map;
+})();
+
+/** Ids of compounds directly connected to `id` in the synergy network. */
+export function getPartnerIds(id: string): string[] {
+  return HERO_NETWORK_PARTNERS.get(id) ?? [];
+}
+
+/** Full compound record for a network node — the node itself only carries id/name/tier/degree. */
+export function getHeroCompound(id: string): Compound | undefined {
+  return compounds.find((c) => c.id === id);
+}
+
+export interface HeroEdgeExplanation {
+  text: string;
+  source: 'emergent' | 'synergy-link' | 'derived';
+}
+
+/**
+ * Real "why" text for a synergy edge, in order of specificity: an authored
+ * emergent-effect writeup, then an authored stack-interaction note, then a
+ * fallback derived from the two compounds' own data (shared hallmarks or
+ * pathway). Never invents a mechanism that isn't backed by existing data.
+ */
+export function getEdgeExplanation(aId: string, bId: string): HeroEdgeExplanation {
+  const emergentMatches = emergentEffects.filter(
+    (e) => e.compoundIds.includes(aId) && e.compoundIds.includes(bId),
+  );
+  if (emergentMatches.length > 0) {
+    const best = emergentMatches.reduce((a, b) => (b.synergyMultiplier > a.synergyMultiplier ? b : a));
+    return { text: best.mechanism, source: 'emergent' };
+  }
+
+  const linkMatch = stackInteractions.find(
+    (i) =>
+      i.type === 'synergy' &&
+      ((i.compoundIds[0] === aId && i.compoundIds[1] === bId) ||
+        (i.compoundIds[0] === bId && i.compoundIds[1] === aId)),
+  );
+  if (linkMatch) {
+    return { text: linkMatch.detail, source: 'synergy-link' };
+  }
+
+  const a = getHeroCompound(aId);
+  const b = getHeroCompound(bId);
+  if (a && b) {
+    const sharedHallmarks = a.hallmarks.filter((h) => b.hallmarks.includes(h)).slice(0, 2);
+    if (sharedHallmarks.length > 0) {
+      const labels = sharedHallmarks.map((h) => hallmarkDisplayNames[h] ?? h).join(' and ');
+      return {
+        text: `${a.name} and ${b.name} both act on the ${labels} hallmark${sharedHallmarks.length > 1 ? 's' : ''} of aging.`,
+        source: 'derived',
+      };
+    }
+    if (a.pathway && a.pathway === b.pathway) {
+      return { text: `${a.name} and ${b.name} both act via ${a.pathway}.`, source: 'derived' };
+    }
+    return {
+      text: `${a.name} is listed as a complementary pairing with ${b.name} in the compound library.`,
+      source: 'derived',
+    };
+  }
+
+  return { text: 'Listed as a complementary pairing in the compound library.', source: 'derived' };
 }
