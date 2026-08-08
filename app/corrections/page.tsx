@@ -18,6 +18,7 @@ const corrections: Correction[] = [];
 export default function CorrectionsPage() {
   return (
     <TrustPageTemplate
+      standalone
       icon={ClipboardList}
       eyebrow="Trust · Corrections"
       title="Corrections"

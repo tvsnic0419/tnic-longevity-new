@@ -10,6 +10,7 @@ const LAST_UPDATED = 'July 20, 2026';
 export default function TermsPage() {
   return (
     <TrustPageTemplate
+      standalone
       icon={FileText}
       eyebrow="Trust · Terms"
       title="Terms of Use"

@@ -8,6 +8,7 @@ export const metadata = seoRoutes.editorialPolicy();
 export default function EditorialPolicyPage() {
   return (
     <TrustPageTemplate
+      standalone
       icon={BookOpen}
       eyebrow="Trust · Editorial"
       title="Editorial Policy"

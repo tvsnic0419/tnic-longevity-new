@@ -103,6 +103,31 @@ describe('site data integrity', () => {
     }
   });
 
+  it('every top-level route renders the shared site chrome (Nav + Footer)', () => {
+    // The root layout renders only {children} — Nav/ContextBar/Footer come from
+    // SubPageLayout (used directly, or via a nested app/<hub>/layout.tsx) or from
+    // a page importing Nav itself. A top-level page that does none of these
+    // renders with NO site navigation — a dead end. This happened to /about,
+    // /privacy, /supplement-guides, /partnerships and others; this guard fails
+    // if any single-segment route regresses to chrome-less.
+    const appDir = resolve(process.cwd(), 'app');
+    const chromeless: string[] = [];
+    for (const entry of readdirSync(appDir, { withFileTypes: true })) {
+      if (!entry.isDirectory() || entry.name.startsWith('(') || entry.name === 'api') continue;
+      const dir = resolve(appDir, entry.name);
+      const files = readdirSync(dir);
+      if (!files.includes('page.tsx')) continue;
+      // Chrome via an own nested layout wrapping SubPageLayout.
+      if (files.includes('layout.tsx')) continue;
+      const src = readFileSync(resolve(dir, 'page.tsx'), 'utf8');
+      // Chrome via SubPageLayout, a direct Nav import, or the TrustPageTemplate
+      // (which renders SubPageLayout when used standalone on a top-level route).
+      if (/SubPageLayout|from '@\/components\/Nav'|TrustPageTemplate/.test(src)) continue;
+      chromeless.push(`/${entry.name}`);
+    }
+    expect(chromeless, `top-level routes missing site chrome: ${chromeless.join(', ')}`).toEqual([]);
+  });
+
   it('the shareable scorecard states the live compound count, not a stale literal', () => {
     // The /scorecard/[code] card is a viral share surface: a hardcoded library
     // size (it once read "14 compounds") silently rots as the library grows and
