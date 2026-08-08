@@ -1,27 +1,26 @@
 # TNiC site upgrade plan
 
-Five phases, ordered so that anything with legal or trust exposure lands first and cosmetic work lands last. Each phase is independently shippable and independently revertable.
+Five phases, each independently shippable and independently revertable.
 
 Every item below was found by reading the current codebase, not assumed. Where something is a judgment call rather than a defect, it says so.
 
 ---
 
-## Phase 1 — Close the consent gap (do this first)
+## Phase 1 — The orphaned privacy notice *(corrected — no compliance gap)*
 
-**The finding.** `@vercel/analytics` is mounted site-wide in `app/layout.tsx`, and `app/api/go/[productId]/route.ts` additionally tracks server-side on every outbound product click. `lib/privacy.ts` already implements consent storage (`readPrivacyConsent` / `writePrivacyConsent`, key `tnic-privacy-consent`), and `components/PrivacyConsentBanner.tsx` is a complete, working banner wired to `PlatformContext`.
+**An earlier revision of this document claimed analytics was running while ignoring a user consent choice. That was wrong, and it is retracted here so nobody acts on it.** The correction, after reading the code rather than inferring from filenames:
 
-**The banner is never mounted.** It has been orphaned since `dfb5472`. So the consent machinery exists, the privacy page at `/privacy` tells visitors they have "a consent choice," and analytics runs regardless of it.
+- `components/PrivacyConsentBanner.tsx` is **not** an analytics opt-in. It is a notice — *"Local-only health data: labs, stacks, and notes stay in your browser."* Its "Got it" button sets `privacyConsent`, meaning "acknowledged the notice," not "agreed to be tracked."
+- The analytics is genuinely **cookieless**. `lib/analytics.ts` documents it, and the server-side `track()` in `app/api/go/[productId]/route.ts` sends only product ID, destination host, and a companion flag — explicitly no visitor identifier.
+- `/privacy` describes this accurately. Its "consent choice" line refers to what is kept in `localStorage`, which is correct.
 
-This is the one item on this list with real exposure: a health-adjacent site telling visitors they control tracking while shipping tracking that ignores that control. It also directly contradicts the homepage's own "Data stays on your device" copy.
+So no promise is being broken, and **gating cookieless analytics behind a local-data acknowledgement would be incoherent** — the banner never asks about analytics. Building that would add a consent prompt implying tracking that does not occur.
 
-**Work:**
-1. Mount `<PrivacyConsentBanner />` in `app/layout.tsx`.
-2. Gate `<Analytics />` on `privacyConsent` — analytics must not load before a choice is made. This needs a small client wrapper, since `layout.tsx` is a server component and consent lives in `PlatformContext`.
-3. Gate the server-side `track()` in `app/api/go/[productId]/route.ts`, or drop the identifying detail from it. Decide deliberately: outbound-click counts may be defensible as non-identifying, but that should be a stated decision, not an oversight.
-4. Reconcile `/privacy` copy with whatever the code actually does after (1)–(3).
-5. Test: consent default off, banner appears, accepting persists and loads analytics, declining keeps it off across a reload.
+**What is actually true, and much smaller:** the banner is finished, styled, accessible UI that was never mounted (orphaned since `dfb5472`). That is a completeness gap, not a compliance one.
 
-**Judgment call for the owner:** whether declining should be sticky forever or re-prompt. Recommend sticky.
+**Status: deliberately left dormant** (owner decision, 2026-08). The same local-data promise is already made on `/privacy`, in the footer, and in the homepage's "Data stays on your device" line, so an interstitial is not required. The component stays in the tree, available if an onboarding notice is wanted later.
+
+**Method note worth keeping:** this item was wrong because it was assembled from filenames and a grep for `consent` rather than from reading `PrivacyConsentBanner.tsx` and `lib/analytics.ts` end to end. Findings in an audit document need the same standard of evidence as code.
 
 ---
 
@@ -50,7 +49,22 @@ Deleting `TiltCard.tsx` is not cleanup theater: two tilt primitives with differe
 
 The library is the product; this phase raises how much a visitor learns per screen.
 
-1. **Per-pair synergy coverage.** `getEdgeExplanation` (added in PR #91) now reports its own provenance: `emergent` → `synergy-link` → `derived`. Add a script or test that prints the distribution across every edge in the live network. Every `derived` result is a pair whose "why" is generic — that list *is* the content backlog, ranked by how prominent the pair is (node degree). Author real mechanism text for the top ones into `stackInteractions`; the widget and every other surface pick it up for free.
+1. **Per-pair synergy coverage — ✅ tooling built, content work outstanding.**
+
+   `npm run synergy:coverage` (`lib/synergy-coverage.ts`, `lib/synergy-coverage.test.ts`) reports the provenance distribution across every edge and prints the backlog ranked by how visible each pair is in the graph.
+
+   **Baseline as of 2026-08:**
+
+   | Source | Edges | |
+   | --- | ---: | --- |
+   | `emergent` (authored, `lib/relations.ts`) | 7 | pair-specific prose |
+   | `synergy-link` (authored, `stackInteractions`) | 3 | pair-specific prose |
+   | `derived` (computed fallback) | **41** | true but generic |
+   | **Total** | **51** | **19.6% pair-specific** |
+
+   Four in five clickable pairs currently answer "why do these work together?" with a hallmark-overlap sentence. That is honest, but it is not the depth the library promises. The report names the highest-traffic gaps first — `CoQ10 + NMN`, `Taurine + NMN`, `Fisetin + NMN`, `Omega-3 + Trans-Resveratrol` lead the list, all hub pairings a visitor is most likely to click.
+
+   Fixing one is a single `{ type: 'synergy' }` entry in `stackInteractions`; the hero widget and every other synergy surface pick it up with no code change. The test carries an authored-edge floor that ratchets as coverage improves.
 
 2. **Evidence-tier transparency.** Tier A/B/C drives node color, ranking, and product picks sitewide, but the grading rubric is not consistently one click away from where a tier is shown. Link tier badges to `/trust/methodology`.
 
