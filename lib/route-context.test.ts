@@ -39,6 +39,21 @@ describe('route-context', () => {
     expect(ctx.breadcrumbs.some((c) => c.label === 'Stacks')).toBe(true);
   });
 
+  it('builds supplement-guide breadcrumbs under the guides hub', () => {
+    const crumbs = buildRouteBreadcrumbs('/nad-supplement-guide');
+    expect(crumbs.map((c) => c.label)).toEqual([
+      'TNiC',
+      'Supplement Guides',
+      'NAD+ Supplement Guide',
+    ]);
+    // The parent crumb must point at the real index so the "up" link resolves.
+    expect(crumbs[1].href).toBe('/supplement-guides');
+    // Master guide gets the same trail, not a flat title-cased slug.
+    expect(buildRouteBreadcrumbs('/longevity-supplements-guide')[1].href).toBe(
+      '/supplement-guides',
+    );
+  });
+
   it('returns empty breadcrumbs on homepage', () => {
     expect(buildRouteBreadcrumbs('/')).toEqual([]);
     expect(resolveHubKey('/')).toBeNull();

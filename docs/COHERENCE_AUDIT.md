@@ -95,3 +95,18 @@ carries complete presentation metadata. One list, one place.
 canonical `/library/<slug>` hallmark pages). Guides now link up into the
 mechanism map, not just sideways. Guarded by a test asserting every non-master
 guide resolves to real, number-ordered hallmark pages.
+
+### 8. Guide breadcrumbs — the "up" loop closed *(coherence)*
+
+The guide pages had gained sideways (sibling guides, comparisons) and downward
+(compounds, hallmarks) links via `GuideCrossLinks`, but no *upward* navigation:
+they were absent from `route-context`/`breadcrumb-titles` and rendered with
+`hideContextBar`, so a visitor had no breadcrumb back to the index. Now
+`buildRouteBreadcrumbs` special-cases the `*-supplement-guide` routes into a
+`TNiC › Supplement Guides › <title>` trail (titles from a new bundle-light
+`guideTitles` map, kept in sync with the `SUPPLEMENT_GUIDES` registry by a
+`breadcrumb-titles.test.ts` assertion — same single-source discipline as the
+other breadcrumb maps), and each guide switched from `hideContextBar` to
+`hideStackReadout` so the breadcrumb + next-action bar shows without a phantom
+saved-stack readout on what is a landing page. Guarded by a `route-context.test.ts`
+case asserting the trail and that the parent crumb resolves to the real index.

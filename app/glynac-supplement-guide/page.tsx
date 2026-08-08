@@ -156,7 +156,7 @@ function buildGlyNACSchemas() {
 
 export default function GlyNACGuidePage() {
   return (
-    <SubPageLayout hideContextBar guideHref="/glynac-supplement-guide">
+    <SubPageLayout hideStackReadout guideHref="/glynac-supplement-guide">
       <StructuredData schemas={buildGlyNACSchemas()} />
 
       {/* Hero */}

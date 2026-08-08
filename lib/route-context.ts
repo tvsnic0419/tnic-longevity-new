@@ -10,6 +10,7 @@ import {
   routeTitles,
   toolLabels,
   peptideTitles,
+  guideTitles,
 } from './breadcrumb-titles';
 
 export type HubKey = keyof typeof hubContexts;
@@ -147,6 +148,18 @@ export function buildRouteBreadcrumbs(pathname: string, searchTab?: string | nul
         { label: hallTitle, href: pathname },
       ];
     }
+  }
+
+  // Supplement-guide landing pages sit under the /supplement-guides index even
+  // though their routes are single-segment (/nad-supplement-guide, …). Give
+  // them a real parent crumb so the guide→hub "up" link matches the sideways
+  // guide↔guide links GuideCrossLinks already renders.
+  if (parts.length === 1 && guideTitles[pathname]) {
+    return [
+      ...crumbs,
+      { label: 'Supplement Guides', href: '/supplement-guides' },
+      { label: guideTitles[pathname], href: pathname },
+    ];
   }
 
   if (parts[0] === 'peptides' && parts.length === 2) {
