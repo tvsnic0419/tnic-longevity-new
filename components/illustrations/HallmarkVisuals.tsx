@@ -9,12 +9,15 @@ interface HallmarkVisualProps {
   accentColor?: string;
 }
 
+// Stroke hues mirror the canonical accent tokens (lib/design-system.ts palette /
+// --accent-* in globals.css) so the hallmark visuals draw the same cyan/violet
+// the rest of the instrument does — the previous #22d3ee / #a78bfa drifted off-brand.
 const ACC: Record<string, { s: string; f: string; g: string }> = {
-  cyan:    { s: '#22d3ee', f: '#083344', g: '#22d3ee40' },
+  cyan:    { s: '#00e0ff', f: '#083344', g: '#00e0ff40' },
   emerald: { s: '#34d399', f: '#052e16', g: '#34d39940' },
-  violet:  { s: '#a78bfa', f: '#1e1b4b', g: '#a78bfa40' },
+  violet:  { s: '#c084fc', f: '#1e1b4b', g: '#c084fc40' },
   amber:   { s: '#fbbf24', f: '#292524', g: '#fbbf2440' },
-  rose:    { s: '#fb7185', f: '#2d0a12', g: '#fb718540' },
+  rose:    { s: '#f472b6', f: '#2d0a12', g: '#f472b640' },
 };
 
 function ac(color: string | undefined) {
