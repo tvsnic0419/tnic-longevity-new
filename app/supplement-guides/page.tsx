@@ -193,7 +193,7 @@ export default function SupplementGuidesPage() {
                         <Icon className="h-5 w-5" style={{ color: accent }} />
                       </span>
                       <span
-                        className="rounded-full border px-2 py-0.5 font-mono text-[11px] font-medium"
+                        className="rounded-full border px-2 py-0.5 font-mono text-micro font-medium"
                         style={{
                           color: accent,
                           borderColor: `color-mix(in srgb, ${accent} 30%, transparent)`,

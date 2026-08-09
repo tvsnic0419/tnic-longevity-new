@@ -392,6 +392,14 @@ p,
   text-transform: uppercase;
 }
 
+/* Size-only micro text — the semantic home for small SANS micro-copy (badge
+   text, chips, fine print) that isn't a mono uppercase label. Fills the gap
+   below .text-caption (12px) so components stop reaching for arbitrary px. */
+.text-micro {
+  font-size: 0.625rem;
+  line-height: 1.4;
+}
+
 /* Default colors for the typography scale above, deliberately placed in
    Tailwind's `components` layer instead of left unlayered. Unlayered CSS
    always beats anything in `@layer utilities` regardless of source order or

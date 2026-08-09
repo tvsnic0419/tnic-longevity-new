@@ -303,12 +303,12 @@ function LabPartnerOAuthFlowInner() {
           {notifyEnabled ? 'Notifications on' : 'Enable result notifications'}
         </button>
         {watching && (
-          <span className="text-[10px] font-mono text-accent-cyan uppercase tracking-wider">
+          <span className="text-micro font-mono text-accent-cyan uppercase tracking-wider">
             Auto-watching {pendingCount} pending
           </span>
         )}
         {notifyPermission === 'denied' && (
-          <span className="text-[10px] text-accent-amber">Notifications blocked in browser</span>
+          <span className="text-micro text-accent-amber">Notifications blocked in browser</span>
         )}
       </div>
 
@@ -430,7 +430,7 @@ function LabPartnerOAuthFlowInner() {
         </div>
       )}
 
-      <p className="text-[10px] text-muted-foreground mt-4 font-mono">
+      <p className="text-micro text-muted-foreground mt-4 font-mono">
         API: GET /api/labs/partner/oauth/start · POST /api/labs/partner/oauth/token · POST
         /api/labs/partner/order · GET /api/labs/partner/events · POST /api/labs/partner/webhook
       </p>

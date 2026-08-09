@@ -32,7 +32,7 @@ export const DeregulatedNutrientSensingVisual: React.FC<{ className?: string; sh
       </motion.div>
 
       {showLabels && (
-        <div className="mt-3 text-[10px] text-[var(--color-text-muted)]">
+        <div className="mt-3 text-micro text-[var(--color-text-muted)]">
           Aging disrupts nutrient sensing pathways (mTOR, AMPK, SIRT1). Caloric restriction mimetics and proper timing help restore balance.
         </div>
       )}

@@ -65,7 +65,7 @@ export function PeptideDetail({
         <div className="grid lg:grid-cols-12 gap-10">
           <aside className="order-2 lg:order-1 lg:col-span-4 space-y-6">
             <div className="card-elevated p-6">
-              <p className="text-[10px] font-mono text-accent-cyan tracking-widest mb-2 uppercase">
+              <p className="text-micro font-mono text-accent-cyan tracking-widest mb-2 uppercase">
                 {categoryMeta.label}
               </p>
               <div className="flex flex-wrap gap-2 mb-4">
@@ -86,14 +86,14 @@ export function PeptideDetail({
             <div className="glass rounded-xl p-5">
               <div className="flex items-center gap-2 mb-3">
                 <Syringe className="w-4 h-4 text-accent-cyan" />
-                <p className="text-[10px] font-mono text-accent-cyan uppercase">Administration</p>
+                <p className="text-micro font-mono text-accent-cyan uppercase">Administration</p>
               </div>
               <p className="text-sm text-muted-foreground">{peptide.administrationRoute}</p>
             </div>
 
             {relatedHallmarks.length > 0 && (
               <div className="glass rounded-xl p-5">
-                <p className="text-[10px] font-mono text-accent-violet uppercase mb-3">Related hallmarks</p>
+                <p className="text-micro font-mono text-accent-violet uppercase mb-3">Related hallmarks</p>
                 <ul className="space-y-2">
                   {relatedHallmarks.map((h) => (
                     <li key={h.id}>
@@ -111,7 +111,7 @@ export function PeptideDetail({
 
             {relatedPeptides.length > 0 && (
               <div className="glass rounded-xl p-5">
-                <p className="text-[10px] font-mono text-accent-emerald uppercase mb-3">Related peptides</p>
+                <p className="text-micro font-mono text-accent-emerald uppercase mb-3">Related peptides</p>
                 <ul className="space-y-2">
                   {relatedPeptides.map((p) => (
                     <li key={p.id}>
@@ -185,7 +185,7 @@ export function PeptideDetail({
               <div className="gradient-border p-6 md:p-8">
                 <div className="flex items-center gap-2 mb-4">
                   <BookOpen className="w-4 h-4 text-accent-cyan" />
-                  <p className="text-[10px] font-mono text-accent-cyan uppercase">Deep dive</p>
+                  <p className="text-micro font-mono text-accent-cyan uppercase">Deep dive</p>
                 </div>
                 <MdxRenderer content={mdxBody} selfHref={`/peptides/${peptide.slug}`} />
               </div>

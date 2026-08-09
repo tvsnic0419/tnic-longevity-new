@@ -191,7 +191,7 @@ export function StackNetworkGraph({
         })}
       </svg>
 
-      <div className="flex flex-wrap gap-3 mt-3 justify-center text-[10px] font-mono">
+      <div className="flex flex-wrap gap-3 mt-3 justify-center text-micro font-mono">
         {(['synergy', 'potential', 'caution', 'contraindication'] as const).map((type) => (
           <span key={type} className="flex items-center gap-1.5 text-muted-foreground">
             <span

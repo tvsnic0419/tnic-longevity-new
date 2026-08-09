@@ -84,7 +84,7 @@ export function GuideCrossLinks({ currentHref }: { currentHref: string }) {
                   href={`/library/${h.slug}`}
                   className="focus-ring group inline-flex items-center gap-2 rounded-full border border-accent-emerald/25 bg-accent-emerald/[0.06] px-3.5 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-accent-emerald/50 hover:bg-accent-emerald/12"
                 >
-                  <span className="font-mono text-[11px] text-accent-emerald">
+                  <span className="font-mono text-micro text-accent-emerald">
                     {String(h.number).padStart(2, '0')}
                   </span>
                   {h.title}

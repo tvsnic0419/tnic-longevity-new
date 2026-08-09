@@ -22,7 +22,7 @@ export const GenomicInstabilityVisual: React.FC<GenomicInstabilityVisualProps> =
           <div className="text-label text-[var(--accent-cyan)] mb-0.5">HALLMARK 01</div>
           <h4 className="heading-card text-lg">Genomic Instability</h4>
         </div>
-        {showLabels && <div className="text-right text-[10px] text-[var(--color-text-muted)]">DNA Damage · Repair · NAD+</div>}
+        {showLabels && <div className="text-right text-micro text-[var(--color-text-muted)]">DNA Damage · Repair · NAD+</div>}
       </div>
 
       <motion.div whileInView={{ opacity: 1 }} initial={{ opacity: 0.6 }} viewport={{ once: true, margin: "-50px" }}>
@@ -79,7 +79,7 @@ export const GenomicInstabilityVisual: React.FC<GenomicInstabilityVisualProps> =
       </motion.div>
 
       {showLabels && (
-        <div className="mt-3 text-[10px] text-[var(--color-text-muted)] leading-snug">
+        <div className="mt-3 text-micro text-[var(--color-text-muted)] leading-snug">
           Daily DNA damage overwhelms repair systems. PARP consumes NAD+ rapidly. NMN + NRF2 activation supports repair and preserves NAD+ pools.
         </div>
       )}

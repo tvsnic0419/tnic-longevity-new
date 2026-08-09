@@ -31,7 +31,7 @@ export interface BiologicalAgeGaugeProps {
 }
 
 const SIZE = {
-  sm: { box: 160, stroke: 8, fontSize: 'text-2xl', label: 'text-[10px]' },
+  sm: { box: 160, stroke: 8, fontSize: 'text-2xl', label: 'text-micro' },
   md: { box: 220, stroke: 10, fontSize: 'text-4xl', label: 'text-xs' },
   lg: { box: 280, stroke: 12, fontSize: 'text-5xl', label: 'text-sm' },
 } as const;

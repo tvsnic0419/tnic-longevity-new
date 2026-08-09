@@ -124,15 +124,15 @@ export function StackNetworkTool() {
               <div className="grid grid-cols-3 gap-2 mt-4 text-center">
                 <GlassPanel depth="mid" className="rounded-lg py-2">
                   <p className="text-lg font-bold text-accent-cyan">{fullGraph.stats.networkDensity}</p>
-                  <p className="text-[9px] font-mono text-muted-foreground">DENSITY</p>
+                  <p className="text-micro font-mono text-muted-foreground">DENSITY</p>
                 </GlassPanel>
                 <GlassPanel depth="mid" className="rounded-lg py-2">
                   <p className="text-lg font-bold text-accent-emerald">{synergies.length}</p>
-                  <p className="text-[9px] font-mono text-muted-foreground">ACTIVE EDGES</p>
+                  <p className="text-micro font-mono text-muted-foreground">ACTIVE EDGES</p>
                 </GlassPanel>
                 <GlassPanel depth="mid" className="rounded-lg py-2">
                   <p className="text-lg font-bold text-accent-violet">{selected.length}</p>
-                  <p className="text-[9px] font-mono text-muted-foreground">COMPOUNDS</p>
+                  <p className="text-micro font-mono text-muted-foreground">COMPOUNDS</p>
                 </GlassPanel>
               </div>
             </CardContent>

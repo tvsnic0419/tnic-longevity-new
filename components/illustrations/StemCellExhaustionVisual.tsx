@@ -34,7 +34,7 @@ export const StemCellExhaustionVisual: React.FC<{ className?: string; showLabels
       </motion.div>
 
       {showLabels && (
-        <div className="mt-3 text-[10px] text-[var(--color-text-muted)]">
+        <div className="mt-3 text-micro text-[var(--color-text-muted)]">
           Stem cells lose regenerative capacity with age. Supporting niches and reducing chronic damage can help preserve function.
         </div>
       )}

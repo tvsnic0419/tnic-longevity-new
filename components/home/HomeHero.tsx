@@ -129,7 +129,7 @@ export function HomeHero() {
                       <span className="number-glow tnic-tabular block font-mono text-2xl font-bold tracking-tight text-white">
                         {stat.value}
                       </span>
-                      <span className="mt-1 block text-[11px] leading-tight text-white/80">
+                      <span className="mt-1 block text-micro leading-tight text-white/80">
                         {stat.label}
                       </span>
                     </dd>
@@ -147,7 +147,7 @@ export function HomeHero() {
                 aria-hidden="true"
               />
               <TiltGlassPanel depth="content" className="relative rounded-3xl p-7">
-                <p className="font-mono text-[10px] uppercase tracking-widest text-[var(--accent-emerald)] mb-2 flex items-center gap-1.5">
+                <p className="font-mono text-micro uppercase tracking-widest text-[var(--accent-emerald)] mb-2 flex items-center gap-1.5">
                   <span
                     className="h-1.5 w-1.5 rounded-full bg-[var(--accent-emerald)] animate-pulse-glow"
                     aria-hidden="true"
@@ -183,7 +183,7 @@ export function HomeHero() {
                 </Link>
               </TiltGlassPanel>
             </div>
-            <p className="mt-4 hidden text-center text-[11px] text-white/90 lg:block lg:text-right">
+            <p className="mt-4 hidden text-center text-micro text-white/90 lg:block lg:text-right">
               Nutrition, down to the cell — evidence you can trace
             </p>
           </div>

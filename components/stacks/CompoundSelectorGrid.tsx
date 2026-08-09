@@ -70,7 +70,7 @@ export function CompoundSelectorGrid({
           >
             {hasSynergy && !isOn && (
               <span
-                className="absolute top-2 right-2 text-[8px] font-bold font-mono px-1.5 py-0.5 rounded-full"
+                className="absolute top-2 right-2 text-micro font-bold font-mono px-1.5 py-0.5 rounded-full"
                 style={{
                   color: 'var(--accent-emerald)',
                   background: 'color-mix(in srgb, var(--accent-emerald) 12%, transparent)',
@@ -92,7 +92,7 @@ export function CompoundSelectorGrid({
               </span>
               <div className="flex items-center gap-1.5">
                 <span
-                  className="text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded"
+                  className="text-micro font-mono font-semibold px-1.5 py-0.5 rounded"
                   style={{ color: tColor, background: `color-mix(in srgb, ${tColor} 10%, transparent)` }}
                 >
                   {c.timing}
@@ -108,9 +108,9 @@ export function CompoundSelectorGrid({
             {bioavPct > 0 && (
               <div className="mb-2.5">
                 <div className="flex items-center justify-between mb-0.5">
-                  <span className="text-[8px] font-mono text-muted-foreground">Bioav.</span>
+                  <span className="text-micro font-mono text-muted-foreground">Bioav.</span>
                   <span
-                    className="text-[8px] font-mono"
+                    className="text-micro font-mono"
                     style={{ color: isOn ? 'var(--accent-violet)' : 'var(--muted-foreground)' }}
                   >
                     {bioavPct}%
@@ -137,7 +137,7 @@ export function CompoundSelectorGrid({
                 {targets.map((h) => (
                   <span
                     key={h}
-                    className="text-[8px] font-semibold px-1 py-0.5 rounded"
+                    className="text-micro font-semibold px-1 py-0.5 rounded"
                     style={{
                       color: hallmarkColor[h] ?? 'var(--accent-cyan)',
                       background: `color-mix(in srgb, ${hallmarkColor[h] ?? 'var(--accent-cyan)'} 10%, transparent)`,
@@ -148,7 +148,7 @@ export function CompoundSelectorGrid({
                 ))}
               </div>
             ) : showPathway ? (
-              <p className="text-[10px] text-caption mt-1 font-mono">{c.pathway}</p>
+              <p className="text-micro text-caption mt-1 font-mono">{c.pathway}</p>
             ) : null}
           </button>
         );

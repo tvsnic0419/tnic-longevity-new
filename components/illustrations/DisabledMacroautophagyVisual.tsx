@@ -29,7 +29,7 @@ export const DisabledMacroautophagyVisual: React.FC<{ className?: string; showLa
       </motion.div>
 
       {showLabels && (
-        <div className="mt-3 text-[10px] text-[var(--color-text-muted)]">
+        <div className="mt-3 text-micro text-[var(--color-text-muted)]">
           Impaired autophagy leads to accumulation of damaged proteins and organelles. Fasting, spermidine, and exercise can help restore this process.
         </div>
       )}

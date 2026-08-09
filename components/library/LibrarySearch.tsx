@@ -167,11 +167,11 @@ function SearchResultCard({ item, query }: { item: LibrarySearchItem; query: str
         )}
       >
         <div className="flex items-center justify-between gap-2 mb-2">
-          <span className={cn('text-[10px] font-mono uppercase', kindAccent[item.kind])}>
+          <span className={cn('text-micro font-mono uppercase', kindAccent[item.kind])}>
             {librarySearchKindLabels[item.kind]}
           </span>
           {item.evidenceTier && (
-            <span className="text-[10px] font-mono text-caption">Tier {item.evidenceTier}</span>
+            <span className="text-micro font-mono text-caption">Tier {item.evidenceTier}</span>
           )}
         </div>
         <p className="font-semibold text-sm leading-snug group-hover:text-accent-cyan transition-colors">

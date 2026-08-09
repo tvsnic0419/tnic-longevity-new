@@ -83,7 +83,7 @@ function CoverageSegmentRing({
         <span className="text-2xl font-bold font-mono tabular-nums bg-gradient-to-br from-accent-cyan via-accent-emerald to-accent-violet bg-clip-text text-transparent">
           {pct}%
         </span>
-        <span className="text-[9px] font-mono text-muted-foreground uppercase tracking-widest">
+        <span className="text-micro font-mono text-muted-foreground uppercase tracking-widest">
           {coveredCount}/{TOTAL}
         </span>
       </div>
@@ -147,7 +147,7 @@ function HallmarkCell({
           <div className="flex items-start justify-between gap-2 mb-2">
             <span
               className={cn(
-                'text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md border',
+                'text-micro font-mono font-bold px-1.5 py-0.5 rounded-md border',
                 covered ? cn(theme.text, theme.border, theme.bg) : 'text-muted-foreground border-border',
               )}
             >
@@ -156,7 +156,7 @@ function HallmarkCell({
             {covered ? (
               <span
                 className={cn(
-                  'flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold',
+                  'flex h-5 w-5 items-center justify-center rounded-full text-micro font-bold',
                   theme.bgSolid,
                   'text-primary-foreground shadow-sm',
                 )}
@@ -165,7 +165,7 @@ function HallmarkCell({
                 ✓
               </span>
             ) : (
-              <span className="text-[10px] font-mono text-muted-foreground opacity-60">—</span>
+              <span className="text-micro font-mono text-muted-foreground opacity-60">—</span>
             )}
           </div>
 
@@ -197,13 +197,13 @@ function HallmarkCell({
           </p>
 
           {!covered && suggestLabel && (
-            <p className={cn('text-[10px] font-mono mt-2 truncate', theme.text, 'opacity-80')}>
+            <p className={cn('text-micro font-mono mt-2 truncate', theme.text, 'opacity-80')}>
               + {suggestLabel}
             </p>
           )}
 
           {covered && (
-            <p className={cn('text-[9px] font-mono mt-2 opacity-0 group-hover:opacity-100 transition-opacity', theme.text)}>
+            <p className={cn('text-micro font-mono mt-2 opacity-0 group-hover:opacity-100 transition-opacity', theme.text)}>
               Active in stack →
             </p>
           )}
@@ -257,12 +257,12 @@ export function HallmarkCoverageGrid({ coveredIds, className }: HallmarkCoverage
             </p>
 
             <div className="flex flex-wrap gap-2 mt-4">
-              <span className="inline-flex items-center gap-1.5 text-[10px] font-mono px-2.5 py-1 rounded-full border border-accent-emerald/30 bg-accent-emerald/10 text-accent-emerald">
+              <span className="inline-flex items-center gap-1.5 text-micro font-mono px-2.5 py-1 rounded-full border border-accent-emerald/30 bg-accent-emerald/10 text-accent-emerald">
                 <span className="w-1.5 h-1.5 rounded-full bg-accent-emerald" />
                 {coveredCount} active
               </span>
               {gaps.length > 0 && (
-                <span className="inline-flex items-center gap-1.5 text-[10px] font-mono px-2.5 py-1 rounded-full border border-border bg-muted/30 text-muted-foreground">
+                <span className="inline-flex items-center gap-1.5 text-micro font-mono px-2.5 py-1 rounded-full border border-border bg-muted/30 text-muted-foreground">
                   <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/50" />
                   {gaps.length} open
                 </span>
@@ -270,7 +270,7 @@ export function HallmarkCoverageGrid({ coveredIds, className }: HallmarkCoverage
               {gaps.length > 0 && (
                 <Link
                   href="/stacks"
-                  className="inline-flex items-center gap-1 text-[10px] font-semibold text-accent-violet hover:text-accent-cyan focus-ring rounded-full px-2.5 py-1 transition-colors"
+                  className="inline-flex items-center gap-1 text-micro font-semibold text-accent-violet hover:text-accent-cyan focus-ring rounded-full px-2.5 py-1 transition-colors"
                 >
                   Close gaps
                   <ArrowRight className="w-3 h-3" aria-hidden="true" />

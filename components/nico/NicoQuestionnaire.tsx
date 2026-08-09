@@ -106,7 +106,7 @@ function ScaleButtons({
           </button>
         ))}
       </div>
-      <div className="flex justify-between text-[11px] font-mono text-caption mt-2">
+      <div className="flex justify-between text-micro font-mono text-caption mt-2">
         <span>{meta.low}</span>
         <span>{meta.high}</span>
       </div>
@@ -118,7 +118,7 @@ function StatTile({ value, label }: { value: string; label: string }) {
   return (
     <div className="rounded-xl border border-border/60 bg-card/40 p-4 text-center">
       <p className="text-2xl font-black font-mono text-accent-emerald mb-1">{value}</p>
-      <p className="text-[11px] text-muted-foreground uppercase tracking-wide">{label}</p>
+      <p className="text-micro text-muted-foreground uppercase tracking-wide">{label}</p>
     </div>
   );
 }
@@ -227,7 +227,7 @@ export function NicoQuestionnaire() {
         {!isResult && (
           <div className="mb-8">
             <div className="flex items-center justify-between mb-2">
-              <p className="font-mono text-[11px] uppercase tracking-widest text-accent-emerald">
+              <p className="font-mono text-micro uppercase tracking-widest text-accent-emerald">
                 Question {step + 1} of {QUESTION_COUNT}
               </p>
             </div>
@@ -256,7 +256,7 @@ export function NicoQuestionnaire() {
                     onClick={() => setAnswers((a) => ({ ...a, goals: toggle<NicoGoal>(a.goals, g.id) }))}
                   >
                     <span className="block">{g.label}</span>
-                    <span className="block text-[11px] font-normal text-muted-foreground mt-0.5">
+                    <span className="block text-micro font-normal text-muted-foreground mt-0.5">
                       {g.desc}
                     </span>
                   </Chip>
@@ -337,7 +337,7 @@ export function NicoQuestionnaire() {
                     onClick={() => setAnswers((a) => ({ ...a, focus: toggle<NicoFocus>(a.focus, f.id) }))}
                   >
                     <span className="block">{f.label}</span>
-                    <span className="block text-[11px] font-normal text-muted-foreground mt-0.5">
+                    <span className="block text-micro font-normal text-muted-foreground mt-0.5">
                       {f.desc}
                     </span>
                   </Chip>
@@ -378,7 +378,7 @@ export function NicoQuestionnaire() {
           {/* Result */}
           {isResult && result && (
             <section aria-labelledby="nico-result">
-              <p className="text-[10px] font-mono text-accent-emerald uppercase tracking-widest mb-1">
+              <p className="text-micro font-mono text-accent-emerald uppercase tracking-widest mb-1">
                 Your personalized stack
               </p>
               <h2 id="nico-result" tabIndex={-1} className="text-2xl font-black text-foreground mb-2 outline-none">
@@ -401,7 +401,7 @@ export function NicoQuestionnaire() {
                         <span className="text-sm font-bold text-foreground">{c.name}</span>
                         <EvidenceTag tier={c.evidence} size="sm" />
                       </div>
-                      <p className="text-[11px] font-mono text-foreground/70 mt-0.5">
+                      <p className="text-micro font-mono text-foreground/70 mt-0.5">
                         {c.dose} · {c.timing}
                       </p>
                       <p className="text-xs text-foreground/70 mt-1">{c.rationale}</p>
@@ -412,7 +412,7 @@ export function NicoQuestionnaire() {
 
               {result.drivers.length > 0 && (
                 <div className="card-elevated p-4 mb-4">
-                  <p className="text-[10px] font-mono text-accent-cyan uppercase tracking-wider mb-2">
+                  <p className="text-micro font-mono text-accent-cyan uppercase tracking-wider mb-2">
                     Why this stack
                   </p>
                   <ul className="space-y-1">
@@ -427,7 +427,7 @@ export function NicoQuestionnaire() {
 
               {result.safetyNotes.length > 0 && (
                 <div className="rounded-xl border border-accent-rose/30 bg-accent-rose/10 p-4 mb-6">
-                  <p className="text-[10px] font-mono text-accent-rose uppercase tracking-wider mb-2">
+                  <p className="text-micro font-mono text-accent-rose uppercase tracking-wider mb-2">
                     Safety notes
                   </p>
                   <ul className="space-y-1.5">

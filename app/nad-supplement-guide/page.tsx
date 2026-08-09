@@ -186,7 +186,7 @@ export default function NadSupplementGuidePage() {
           <div className="grid items-center gap-10 lg:grid-cols-12">
             <div className="lg:col-span-7">
               <div className="flex items-center gap-2 mb-4">
-                <span className="text-[10px] font-mono font-semibold uppercase tracking-widest text-accent-cyan bg-accent-cyan/10 border border-accent-cyan/20 px-3 py-1 rounded-full">
+                <span className="text-micro font-mono font-semibold uppercase tracking-widest text-accent-cyan bg-accent-cyan/10 border border-accent-cyan/20 px-3 py-1 rounded-full">
                   Evidence Guide · Updated 2026
                 </span>
               </div>
@@ -311,13 +311,13 @@ export default function NadSupplementGuidePage() {
                         <div className="flex items-center gap-2">
                           <h3 className="font-bold text-lg">{p.name}</h3>
                           <span
-                            className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full border"
+                            className="text-micro font-mono font-semibold px-2 py-0.5 rounded-full border"
                             style={{ color: p.color, background: `${p.color}12`, borderColor: `${p.color}30` }}
                           >
                             Tier {p.tier}
                           </span>
                           {i === 0 && (
-                            <span className="text-[10px] font-semibold text-accent-emerald bg-accent-emerald/10 border border-accent-emerald/20 px-2 py-0.5 rounded-full">
+                            <span className="text-micro font-semibold text-accent-emerald bg-accent-emerald/10 border border-accent-emerald/20 px-2 py-0.5 rounded-full">
                               TNiC Pick
                             </span>
                           )}
@@ -354,7 +354,7 @@ export default function NadSupplementGuidePage() {
 
                   <div className="grid md:grid-cols-2 gap-4 mb-4">
                     <div>
-                      <p className="text-[10px] font-mono text-accent-emerald uppercase mb-2">Advantages</p>
+                      <p className="text-micro font-mono text-accent-emerald uppercase mb-2">Advantages</p>
                       {p.pros.map((pro) => (
                         <div key={pro} className="flex items-start gap-1.5 text-xs text-foreground/90 mb-1">
                           <CheckCircle2 className="w-3 h-3 text-accent-emerald shrink-0 mt-0.5" />
@@ -363,7 +363,7 @@ export default function NadSupplementGuidePage() {
                       ))}
                     </div>
                     <div>
-                      <p className="text-[10px] font-mono text-accent-rose uppercase mb-2">Limitations</p>
+                      <p className="text-micro font-mono text-accent-rose uppercase mb-2">Limitations</p>
                       {p.cons.map((con) => (
                         <div key={con} className="flex items-start gap-1.5 text-xs text-muted-foreground mb-1">
                           <AlertTriangle className="w-3 h-3 text-accent-rose/70 shrink-0 mt-0.5" />

@@ -30,7 +30,7 @@ export const CellularSenescenceVisual: React.FC<CellularSenescenceVisualProps> =
           <h4 className="heading-card text-lg">Cellular Senescence</h4>
         </div>
         {showLabels && (
-          <div className="text-right text-[10px] text-[var(--color-text-muted)] leading-tight">
+          <div className="text-right text-micro text-[var(--color-text-muted)] leading-tight">
             p16⁺⁺ / SASP⁺<br />Senolytic clearance
           </div>
         )}
@@ -111,7 +111,7 @@ export const CellularSenescenceVisual: React.FC<CellularSenescenceVisualProps> =
       </svg>
 
       {showLabels && (
-        <div className="mt-3 text-[10px] text-[var(--color-text-muted)] leading-snug">
+        <div className="mt-3 text-micro text-[var(--color-text-muted)] leading-snug">
           Senescent cells accumulate with age and secrete pro-inflammatory SASP. Senolytics (e.g., D+Q, Fisetin) selectively clear them, reducing chronic inflammation and improving tissue function.
         </div>
       )}

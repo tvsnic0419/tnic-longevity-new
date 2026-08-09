@@ -127,7 +127,7 @@ export function LibraryModulesHub() {
                       <div className="flex items-center justify-between gap-2 mb-3">
                         <EvidenceTag tier={mod.evidenceTier} size="sm" />
                         {mod.requiresDisclaimer && (
-                          <span className="text-[10px] font-mono text-accent-amber">Rx</span>
+                          <span className="text-micro font-mono text-accent-amber">Rx</span>
                         )}
                       </div>
                       <h4 className="heading-card mb-1 group-hover:text-accent-cyan transition-colors">

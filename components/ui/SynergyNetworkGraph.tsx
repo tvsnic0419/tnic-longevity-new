@@ -350,7 +350,7 @@ export function SynergyNetworkGraph() {
               />
               <span className="font-bold text-sm text-foreground">{hoveredNode.name}</span>
               <span
-                className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border"
+                className="text-micro font-mono font-bold px-2 py-0.5 rounded-full border"
                 style={{
                   color: PATHWAY_COLOR[hoveredNode.pathway],
                   borderColor: `${PATHWAY_COLOR[hoveredNode.pathway]}40`,
@@ -360,21 +360,21 @@ export function SynergyNetworkGraph() {
                 {PATHWAY_LABEL[hoveredNode.pathway]}
               </span>
               <span
-                className="ml-auto text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border"
+                className="ml-auto text-micro font-mono font-bold px-2 py-0.5 rounded-full border"
                 style={{ color: getTierBadgeColor(hoveredNode.tier), borderColor: `${getTierBadgeColor(hoveredNode.tier)}40`, background: `${getTierBadgeColor(hoveredNode.tier)}12` }}
               >
                 Tier {hoveredNode.tier}
               </span>
               <Link
                 href={hoveredNode.href}
-                className="text-[10px] font-mono text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
+                className="text-micro font-mono text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
               >
                 Deep-dive <ExternalLink className="w-3 h-3" />
               </Link>
             </div>
             {hoveredEdges.length > 0 && (
               <div className="space-y-1.5">
-                <p className="text-[10px] font-mono text-muted-foreground uppercase mb-2">
+                <p className="text-micro font-mono text-muted-foreground uppercase mb-2">
                   {hoveredEdges.length} synergy connection{hoveredEdges.length !== 1 ? 's' : ''}
                 </p>
                 {hoveredEdges.slice(0, 3).map(edge => {
@@ -395,7 +395,7 @@ export function SynergyNetworkGraph() {
                   );
                 })}
                 {hoveredEdges.length > 3 && (
-                  <p className="text-[10px] text-muted-foreground pl-3.5">+{hoveredEdges.length - 3} more connections</p>
+                  <p className="text-micro text-muted-foreground pl-3.5">+{hoveredEdges.length - 3} more connections</p>
                 )}
               </div>
             )}
@@ -412,17 +412,17 @@ export function SynergyNetworkGraph() {
         {(Object.entries(PATHWAY_LABEL) as [Pathway, string][]).map(([pw, label]) => (
           <div key={pw} className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: PATHWAY_COLOR[pw] }} />
-            <span className="text-[11px] text-muted-foreground font-medium">{label}</span>
+            <span className="text-micro text-muted-foreground font-medium">{label}</span>
           </div>
         ))}
         <div className="flex items-center gap-3 border-l border-border pl-4">
           <div className="flex items-center gap-1.5">
             <span className="w-8 h-px bg-foreground/40" />
-            <span className="text-[11px] text-muted-foreground">Strong synergy</span>
+            <span className="text-micro text-muted-foreground">Strong synergy</span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-8 border-t border-dashed border-foreground/30" />
-            <span className="text-[11px] text-muted-foreground">Moderate</span>
+            <span className="text-micro text-muted-foreground">Moderate</span>
           </div>
         </div>
       </div>

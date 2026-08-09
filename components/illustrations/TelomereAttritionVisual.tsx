@@ -30,7 +30,7 @@ export const TelomereAttritionVisual: React.FC<{ className?: string; showLabels?
       </motion.div>
 
       {showLabels && (
-        <div className="mt-3 text-[10px] text-[var(--color-text-muted)]">
+        <div className="mt-3 text-micro text-[var(--color-text-muted)]">
           Progressive shortening of telomeres with each cell division. Telomerase activation and lifestyle factors can slow attrition.
         </div>
       )}

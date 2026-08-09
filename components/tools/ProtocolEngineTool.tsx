@@ -305,7 +305,7 @@ export function ProtocolEngineTool() {
                   <li key={step.id} className="flex gap-3 text-sm">
                     <span className="text-caption font-mono shrink-0 w-6">{i + 1}.</span>
                     <div className="flex-1">
-                      <p className="font-mono text-[10px] text-accent-cyan uppercase">{step.rule}</p>
+                      <p className="font-mono text-micro text-accent-cyan uppercase">{step.rule}</p>
                       <p className="text-muted-foreground text-xs mt-0.5">In: {step.input}</p>
                       <p className="text-foreground/90 mt-1 flex items-center gap-1">
                         <ChevronRight className="w-3 h-3 text-accent-emerald" />

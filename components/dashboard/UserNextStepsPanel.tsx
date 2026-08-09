@@ -123,7 +123,7 @@ export function UserNextStepsPanel() {
       <div className="flex items-center justify-between">
         <p className="text-label text-muted-foreground">YOUR NEXT STEPS</p>
         {quizResult && (
-          <span className="text-[10px] font-mono text-accent-cyan bg-accent-cyan/10 px-2 py-0.5 rounded-full">
+          <span className="text-micro font-mono text-accent-cyan bg-accent-cyan/10 px-2 py-0.5 rounded-full">
             Goal: {GOAL_LABEL[quizResult.goal] ?? quizResult.goal}
           </span>
         )}
