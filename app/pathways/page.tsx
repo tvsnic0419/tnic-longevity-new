@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Waypoints, ArrowRight } from 'lucide-react';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
+import { SynergyNetworkGraph } from '@/components/ui/SynergyNetworkGraph';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema } from '@/lib/seo';
 import {
@@ -40,8 +42,24 @@ const themeAccent: Record<string, string> = {
  * compounds and hallmarks. Every name/summary is real crawlable markup.
  */
 export default function PathwaysHubPage() {
+  const hallmarksEngaged = new Set(pathways.flatMap((p) => p.hallmarkIds)).size;
+
   return (
-    <div className="py-8 md:py-10">
+    <>
+      <CinematicHubHero
+        hue="violet"
+        kicker="Molecular Pathways"
+        title={<>The <em>machinery</em> of aging.</>}
+        lead="The mechanistic layer between what you take and what ages — the pathways compounds act through, each linked to the hallmarks it moves and the compounds that engage it."
+        stats={[
+          { value: String(pathways.length), label: 'Pathways mapped' },
+          { value: String(pathwayCategoryOrder.length), label: 'Mechanistic families' },
+          { value: String(hallmarksEngaged), label: 'Hallmarks engaged' },
+        ]}
+        primary={{ href: '/library', label: 'Browse the library' }}
+        secondary={{ href: '/stacks', label: 'Open the Stack Architect' }}
+      />
+      <div className="py-8 md:py-10">
       <StructuredData
         schemas={[
           buildBreadcrumbSchema([
@@ -56,7 +74,7 @@ export default function PathwaysHubPage() {
           eyebrow="Molecular Pathways"
           title="How compounds actually move a hallmark."
           description="The mechanistic layer between what you take and what ages — the pathways (PINK1/Parkin, SIRT3, NRF2, AMPK, mTOR, NAD⁺ …) that compounds engage. Each pathway links to the hallmarks it acts on and every compound that targets it."
-          theme="cyan"
+          theme="violet"
         />
 
         <p className="mx-auto mb-12 max-w-3xl text-body-sm text-muted-foreground">
@@ -101,7 +119,24 @@ export default function PathwaysHubPage() {
             </section>
           );
         })}
+
+        <section aria-labelledby="pathway-network-heading" className="mt-16">
+          <p className="text-label text-accent-violet mb-3">How it connects</p>
+          <h2
+            id="pathway-network-heading"
+            className="heading-section mb-4 text-xl md:text-2xl text-accent-violet"
+          >
+            One compound, many pathways.
+          </h2>
+          <p className="text-body-sm mb-8 max-w-3xl text-muted-foreground">
+            The same molecule often engages several pathways at once — which is why a small,
+            well-chosen stack can cover many hallmarks. Explore the synergy map: hover a node to
+            trace the pathways it touches.
+          </p>
+          <SynergyNetworkGraph />
+        </section>
       </div>
     </div>
+    </>
   );
 }

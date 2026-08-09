@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Nav } from '@/components/Nav';
-import { Footer } from '@/components/Footer';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
+import { citationRegistry } from '@/lib/trust';
 import { ArrowRight, Dna, FlaskConical } from 'lucide-react';
+import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { RevealItem } from '@/components/ui/RevealItem';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
@@ -46,54 +46,43 @@ const COVERAGE_COLOR = (pct: number) =>
     : 'var(--status-critical)';
 
 export default function HallmarksIndexPage() {
+  // Derived from the live library so the rail can never drift from what's
+  // published: unique compounds with Tier A/B evidence mapped to a hallmark.
+  const tierABCompounds = new Set(
+    hallmarkLibrary
+      .flatMap((h) => h.interventions)
+      .filter((i) => (i.evidence === 'A' || i.evidence === 'B') && i.compoundId)
+      .map((i) => i.compoundId as string),
+  ).size;
+
   return (
-    <div className="min-h-screen canvas-scrim text-foreground">
-      <Nav />
-      <main id="main-content" tabIndex={-1}>
+    <>
+      <CinematicHubHero
+        hue="emerald"
+        kicker="Longevity Science"
+        title={<>The molecular <em>causes</em> of aging.</>}
+        lead="Twelve cellular mechanisms drive how we age — each paired here with the PMID-cited interventions that move it. This is the map every rational protocol is built on."
+        stats={[
+          { value: String(hallmarkLibrary.length), label: 'Hallmarks mapped' },
+          { value: String(citationRegistry.length), label: 'PMID citations' },
+          { value: String(tierABCompounds), label: 'Tier A/B compounds' },
+        ]}
+        primary={{ href: '/stacks', label: 'Build my stack' }}
+        secondary={{ href: '/library', label: 'Interactive library' }}
+      />
 
-        {/* Hero — shared hub header pattern */}
-        <section className="pt-10 md:pt-12 lg:pt-14 pb-12 md:pb-16 relative">
-          <div className="relative container-page">
-            <PageHeader
-              icon={Dna}
-              eyebrow="Longevity Science"
-              title="The 12 Hallmarks of Aging"
-              description="First systematized by López-Otín et al. (2013, updated 2023), the hallmarks are the molecular and cellular mechanisms that cause organisms to age. Understanding them is the prerequisite for any rational anti-aging protocol."
-              theme="emerald"
-            />
-            <div className="flex flex-wrap justify-center gap-3">
-              <Link href="/stacks" className="focus-ring group inline-flex items-center gap-2 tnic-button-accent [--btn-accent:var(--accent-emerald)] rounded-xl px-5 py-3 text-sm">
-                Build My Stack <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-              <Link href="/library" className="focus-ring inline-flex items-center gap-2 rounded-xl border border-border px-5 py-3 text-sm font-medium text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground">
-                Interactive Library
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* Stats */}
-        <section className="py-10 border-y border-border/50 bg-card/20">
-          <div className="container-page">
-            <div className="grid grid-cols-3 gap-6 max-w-xl mx-auto text-center">
-              <div>
-                <p className="tnic-tabular mb-1 font-mono text-4xl font-black text-accent-emerald">12</p>
-                <p className="text-sm font-medium text-foreground">Hallmarks mapped</p>
-                <p className="mt-0.5 text-xs text-muted-foreground">López-Otín 2023 framework</p>
-              </div>
-              <div>
-                <p className="tnic-tabular mb-1 font-mono text-4xl font-black text-accent-cyan">150+</p>
-                <p className="text-sm font-medium text-foreground">PMIDs indexed</p>
-                <p className="mt-0.5 text-xs text-muted-foreground">Human trial evidence only in Tier A/B</p>
-              </div>
-              <div>
-                <p className="tnic-tabular mb-1 font-mono text-4xl font-black text-accent-violet">9</p>
-                <p className="text-sm font-medium text-foreground">Tier A/B compounds</p>
-                <p className="mt-0.5 text-xs text-muted-foreground">With full dosing + synergy profiles</p>
-              </div>
-            </div>
-          </div>
-        </section>
+      {/* Semantic page title + framework attribution */}
+      <section className="pt-12 md:pt-16 pb-2 relative">
+        <div className="relative container-page">
+          <PageHeader
+            icon={Dna}
+            eyebrow="Longevity Science"
+            title="The 12 Hallmarks of Aging"
+            description="First systematized by López-Otín et al. (2013, updated 2023), the hallmarks are the molecular and cellular mechanisms that cause organisms to age. Understanding them is the prerequisite for any rational anti-aging protocol."
+            theme="emerald"
+          />
+        </div>
+      </section>
 
         {/* Hallmark grid */}
         <section className="py-20">
@@ -230,9 +219,6 @@ export default function HallmarksIndexPage() {
             </div>
           </div>
         </section>
-
-      </main>
-      <Footer />
-    </div>
+    </>
   );
 }
