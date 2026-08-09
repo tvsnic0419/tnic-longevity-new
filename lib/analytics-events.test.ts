@@ -10,6 +10,7 @@ describe('analytics-events', () => {
       emailSubscribed: 'email_subscribed',
       stackExported: 'stack_exported',
       affiliateClick: 'affiliate_click',
+      sponsorClick: 'sponsor_click',
     });
   });
 

@@ -6,6 +6,7 @@ import { getAllBriefIssues } from '@/lib/brief-research-sync';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { BriefSubscribePanel } from './BriefSubscribePanel';
+import { SponsorSlot } from '@/components/sponsors/SponsorSlot';
 import { getHubContext } from '@/lib/hub-context';
 
 const allIssues = getAllBriefIssues();
@@ -25,6 +26,9 @@ export function ProtocolBriefHub() {
       />
 
       <BriefSubscribePanel />
+
+      {/* Clearly-labeled sponsor inventory — renders nothing until a placement is sold. */}
+      <SponsorSlot slot="brief" className="my-6" />
 
       <div className="space-y-6">
         {allIssues.map((entry, i) => (

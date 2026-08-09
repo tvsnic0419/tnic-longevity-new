@@ -14,6 +14,8 @@ export const ANALYTICS_EVENTS = {
   stackExported: 'stack_exported',
   /** A visitor clicked through the affiliate redirect layer (revenue signal). */
   affiliateClick: 'affiliate_click',
+  /** A visitor clicked a clearly-labeled sponsor placement (revenue signal). */
+  sponsorClick: 'sponsor_click',
 } as const;
 
 export type AnalyticsEventName =
