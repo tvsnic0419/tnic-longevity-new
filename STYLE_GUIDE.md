@@ -115,7 +115,7 @@ Import theme maps from `lib/design-system.ts`. **Card surfaces:** default to
 
 ## 7. Page Patterns
 
-### Hub pages — cinematic pattern (`/library`, `/stacks`, `/labs`, `/hallmarks`, `/peptides`, `/pathways`, `/tools`)
+### Hub pages — cinematic pattern (`/library`, `/stacks`, `/labs`, `/hallmarks`, `/peptides`, `/pathways`, `/tools`, `/trust`, `/products`, `/best`, `/supplement-guides`)
 
 Every top-level hub opens with the shared cinematic band, then anchors its
 semantic title beneath it:
