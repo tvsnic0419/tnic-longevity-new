@@ -89,7 +89,7 @@ export function OnboardingStrip() {
                 {step.label}
               </p>
               {!step.done && (
-                <p className="text-[10px] text-muted-foreground mt-0.5 leading-snug line-clamp-2">
+                <p className="text-micro text-muted-foreground mt-0.5 leading-snug line-clamp-2">
                   {step.sublabel}
                 </p>
               )}

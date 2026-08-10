@@ -43,7 +43,7 @@ export function CompareShareCard({ comparison, compact = false }: CompareShareCa
           e.stopPropagation();
           copy('link', shareUrl);
         }}
-        className="focus-ring inline-flex items-center gap-1 text-[10px] font-semibold text-muted-foreground hover:text-accent-cyan mt-2"
+        className="focus-ring inline-flex items-center gap-1 text-micro font-semibold text-muted-foreground hover:text-accent-cyan mt-2"
         title="Copy comparison link"
       >
         {copied === 'link' ? <CheckCircle2 className="w-3 h-3" /> : <Link2 className="w-3 h-3" />}
@@ -60,7 +60,7 @@ export function CompareShareCard({ comparison, compact = false }: CompareShareCa
           <p className="text-label text-accent-cyan">Share this comparison</p>
         </div>
         <p className="text-xs text-muted-foreground mb-3 leading-relaxed">{ogSnippet}</p>
-        <code className="block text-[10px] font-mono text-muted-foreground truncate mb-4">{shareUrl}</code>
+        <code className="block text-micro font-mono text-muted-foreground truncate mb-4">{shareUrl}</code>
 
         <div className="flex flex-wrap gap-2">
           <button

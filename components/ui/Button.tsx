@@ -1,4 +1,5 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import { cloneElement, isValidElement } from 'react';
+import type { ButtonHTMLAttributes, ReactElement, ReactNode } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import type { ThemeAccent } from '@/lib/design-system';
 import { buttonSizes, themes } from '@/lib/design-system';
@@ -14,6 +15,13 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon?: LucideIcon;
   children: ReactNode;
   fullWidth?: boolean;
+  /**
+   * Render the button's styling onto the single child element instead of a
+   * <button> — for <Link>/<a> CTAs that should share the exact same primary /
+   * ghost / outline treatment. The child keeps its own props; only className
+   * and the optional leading icon are merged in.
+   */
+  asChild?: boolean;
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
@@ -27,6 +35,35 @@ const variantStyles: Record<ButtonVariant, string> = {
   danger: 'text-muted-foreground hover:text-accent-rose bg-transparent',
 };
 
+/**
+ * Shared class recipe for the button treatment. Exported so link-shaped CTAs
+ * can opt into the exact same styling without re-deriving it inline.
+ */
+export function buttonClasses({
+  variant = 'primary',
+  theme = 'cyan',
+  size = 'md',
+  fullWidth = false,
+}: {
+  variant?: ButtonVariant;
+  theme?: ThemeAccent;
+  size?: ButtonSize;
+  fullWidth?: boolean;
+} = {}): string {
+  const t = themes[theme];
+  const accentPrimary =
+    variant === 'primary' && theme !== 'cyan'
+      ? `${t.bgSolid} text-primary-foreground hover:opacity-90`
+      : '';
+  return cn(
+    'focus-ring interactive inline-flex items-center justify-center gap-2 rounded-xl font-semibold disabled:opacity-40 disabled:pointer-events-none',
+    buttonSizes[size],
+    variantStyles[variant],
+    accentPrimary,
+    fullWidth && 'w-full',
+  );
+}
+
 export function Button({
   variant = 'primary',
   theme = 'cyan',
@@ -34,29 +71,33 @@ export function Button({
   icon: Icon,
   children,
   fullWidth,
+  asChild = false,
   className = '',
   ...props
 }: ButtonProps) {
-  const t = themes[theme];
-  const accentPrimary =
-    variant === 'primary' && theme !== 'cyan'
-      ? `${t.bgSolid} text-primary-foreground hover:opacity-90`
-      : '';
-
-  return (
-    <button
-      className={cn(
-        'focus-ring interactive inline-flex items-center justify-center gap-2 rounded-xl font-semibold disabled:opacity-40 disabled:pointer-events-none',
-        buttonSizes[size],
-        variantStyles[variant],
-        accentPrimary,
-        fullWidth && 'w-full',
-        className,
-      )}
-      {...props}
-    >
+  const classes = cn(buttonClasses({ variant, theme, size, fullWidth }), className);
+  const inner = (
+    <>
       {Icon && <Icon className="w-4 h-4 shrink-0" aria-hidden="true" />}
       {children}
+    </>
+  );
+
+  if (asChild && isValidElement(children)) {
+    const child = children as ReactElement<{ className?: string; children?: ReactNode }>;
+    return cloneElement(
+      child,
+      { className: cn(classes, child.props.className) },
+      <>
+        {Icon && <Icon className="w-4 h-4 shrink-0" aria-hidden="true" />}
+        {child.props.children}
+      </>,
+    );
+  }
+
+  return (
+    <button className={classes} {...props}>
+      {inner}
     </button>
   );
 }

@@ -42,7 +42,7 @@ interface UserFlowGuideProps {
 export function UserFlowGuide({ currentStep = 1 }: UserFlowGuideProps) {
   return (
     <div className="glass-deep glass-plane-mid rounded-2xl p-5 mb-8">
-      <p className="text-[10px] font-mono text-accent-rose uppercase tracking-wider mb-4">User Flow</p>
+      <p className="text-micro font-mono text-accent-rose uppercase tracking-wider mb-4">User Flow</p>
 
       {/* Step indicator row */}
       <div className="flex items-center mb-5 px-1">
@@ -53,7 +53,7 @@ export function UserFlowGuide({ currentStep = 1 }: UserFlowGuideProps) {
             <div key={s.step} className="flex items-center flex-1 last:flex-none">
               <div className="flex flex-col items-center gap-1">
                 <div
-                  className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold font-mono transition-all duration-300"
+                  className="w-7 h-7 rounded-full flex items-center justify-center text-micro font-bold font-mono transition-all duration-300"
                   style={{
                     background: isDone
                       ? 'var(--accent-emerald)'
@@ -75,7 +75,7 @@ export function UserFlowGuide({ currentStep = 1 }: UserFlowGuideProps) {
                   {s.step}
                 </div>
                 <span
-                  className="text-[8px] font-mono hidden sm:block"
+                  className="text-micro font-mono hidden sm:block"
                   style={{ color: isCurrent ? 'var(--accent-rose)' : 'var(--muted-foreground)', opacity: isCurrent ? 1 : 0.5 }}
                 >
                   {s.title.split(' ')[0]}
@@ -121,7 +121,7 @@ export function UserFlowGuide({ currentStep = 1 }: UserFlowGuideProps) {
             >
               <div className="flex items-center gap-2 mb-2">
                 <span
-                  className="text-[10px] font-mono"
+                  className="text-micro font-mono"
                   style={{ color: isCurrent ? 'var(--accent-rose)' : isDone ? 'var(--accent-emerald)' : 'var(--muted-foreground)', opacity: isCurrent || isDone ? 1 : 0.5 }}
                 >
                   0{s.step}
@@ -138,7 +138,7 @@ export function UserFlowGuide({ currentStep = 1 }: UserFlowGuideProps) {
                 {s.title}
               </h4>
               <p
-                className="text-[10px] leading-relaxed"
+                className="text-micro leading-relaxed"
                 style={{ color: 'var(--muted-foreground)', opacity: isCurrent ? 0.85 : isDone ? 0.6 : 0.35 }}
               >
                 {s.desc}

@@ -19,18 +19,18 @@ export const TelomereAttritionVisual: React.FC<{ className?: string; showLabels?
       <motion.div whileInView={{ opacity: 1 }} initial={{ opacity: 0.7 }} viewport={{ once: true }}>
         <svg viewBox="0 0 420 180" className="w-full h-auto">
           <g>
-            <rect x="80" y="60" width="260" height="12" rx="6" fill="#020811" stroke="#10b981" strokeWidth="2" />
-            <rect x="90" y="64" width="240" height="4" rx="2" fill="#10b981" opacity="0.6" />
+            <rect x="80" y="60" width="260" height="12" rx="6" fill="#020811" stroke="#34d399" strokeWidth="2" />
+            <rect x="90" y="64" width="240" height="4" rx="2" fill="#34d399" opacity="0.6" />
           </g>
           <g>
-            <circle cx="340" cy="66" r="18" fill="#020811" stroke="#f59e0b" strokeWidth="2" />
+            <circle cx="340" cy="66" r="18" fill="#020811" stroke="#fbbf24" strokeWidth="2" />
             <text x="340" y="71" textAnchor="middle" fill="#fafafa" fontSize="9" fontWeight="600">Telomerase</text>
           </g>
         </svg>
       </motion.div>
 
       {showLabels && (
-        <div className="mt-3 text-[10px] text-[var(--color-text-muted)]">
+        <div className="mt-3 text-micro text-[var(--color-text-muted)]">
           Progressive shortening of telomeres with each cell division. Telomerase activation and lifestyle factors can slow attrition.
         </div>
       )}

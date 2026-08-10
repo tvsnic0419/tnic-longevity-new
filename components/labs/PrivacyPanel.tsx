@@ -1,6 +1,6 @@
 'use client';
 
-import { Shield, HardDrive, WifiOff, Trash2, Download, Lock, Clock } from 'lucide-react';
+import { Shield, HardDrive, WifiOff, Trash2, Download, Lock, Clock, Check } from 'lucide-react';
 import { usePlatform } from '@/context/PlatformContext';
 import { PRIVACY_PRINCIPLES, getStorageSummary } from '@/lib/privacy';
 import { Badge } from '@/components/ui/Badge';
@@ -77,7 +77,7 @@ export function PrivacyPanel() {
         <ul className="space-y-2 mb-6">
           {PRIVACY_PRINCIPLES.map((p) => (
             <li key={p} className="text-xs text-muted-foreground flex gap-2">
-              <span className="text-accent-emerald shrink-0">✓</span> {p}
+              <Check className="h-3.5 w-3.5 mt-0.5 shrink-0 text-accent-emerald" aria-hidden="true" /> {p}
             </li>
           ))}
         </ul>
@@ -89,7 +89,7 @@ export function PrivacyPanel() {
               <div key={p.title} className="glass-deep glass-plane-mid rounded-xl p-4">
                 <Icon className="w-4 h-4 text-accent-emerald mb-2" aria-hidden="true" />
                 <h4 className="font-semibold text-xs mb-1">{p.title}</h4>
-                <p className="text-[11px] text-muted-foreground leading-relaxed">{p.desc}</p>
+                <p className="text-micro text-muted-foreground leading-relaxed">{p.desc}</p>
               </div>
             );
           })}
@@ -97,7 +97,7 @@ export function PrivacyPanel() {
       </div>
 
       <div className="glass-deep glass-plane-mid rounded-xl p-5">
-        <p className="text-[10px] font-mono text-muted-foreground uppercase mb-3">Storage mode</p>
+        <p className="text-micro font-mono text-muted-foreground uppercase mb-3">Storage mode</p>
         <div className="flex flex-wrap gap-2 mb-4">
           <button
             onClick={() => setPrivacyMode('local')}
@@ -124,7 +124,7 @@ export function PrivacyPanel() {
             Session only (clears on tab close)
           </button>
         </div>
-        <div className="flex flex-wrap gap-2 text-[10px]">
+        <div className="flex flex-wrap gap-2 text-micro">
           <Badge variant="info">{summary.labsCount} lab readings</Badge>
           {summary.hasStack && <Badge variant="default">Stack saved</Badge>}
           {summary.hasNotes && <Badge variant="default">Notes saved</Badge>}
@@ -132,7 +132,7 @@ export function PrivacyPanel() {
       </div>
 
       <div className="glass-deep glass-plane-mid rounded-xl p-5">
-        <p className="text-[10px] font-mono text-muted-foreground uppercase mb-3">Data controls</p>
+        <p className="text-micro font-mono text-muted-foreground uppercase mb-3">Data controls</p>
         <div className="flex flex-wrap gap-3">
           <button
             onClick={downloadCsv}

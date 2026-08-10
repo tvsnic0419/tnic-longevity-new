@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 export const LossOfProteostasisVisual: React.FC<{ className?: string; showLabels?: boolean; accentColor?: string }> = ({
   className = '',
-  accentColor = '#67f6ff',
+  accentColor = '#00e0ff',
   showLabels = true,
 }) => {
   return (
@@ -15,7 +15,7 @@ export const LossOfProteostasisVisual: React.FC<{ className?: string; showLabels
           <div className="text-label text-[var(--accent-cyan)] mb-0.5">HALLMARK 04</div>
           <h4 className="heading-card text-lg">Loss of Proteostasis</h4>
         </div>
-        {showLabels && <div className="text-right text-[10px] text-[var(--color-text-muted)]">Proteasome · Autophagy · Aggregates</div>}
+        {showLabels && <div className="text-right text-micro text-[var(--color-text-muted)]">Proteasome · Autophagy · Aggregates</div>}
       </div>
 
       <motion.div whileInView={{ opacity: 1 }} initial={{ opacity: 0.7 }} viewport={{ once: true, margin: "-30px" }}>
@@ -35,15 +35,15 @@ export const LossOfProteostasisVisual: React.FC<{ className?: string; showLabels
             <ellipse cx="340" cy="110" rx="32" ry="24" fill="#020811" stroke={accentColor} strokeWidth="2" />
           </g>
 
-          <g stroke="#10b981" strokeWidth="2" strokeLinecap="round">
+          <g stroke="#34d399" strokeWidth="2" strokeLinecap="round">
             <path d="M280 100 L310 100" />
-            <polygon points="310,100 303,95 303,105" fill="#10b981" />
+            <polygon points="310,100 303,95 303,105" fill="#34d399" />
           </g>
         </svg>
       </motion.div>
 
       {showLabels && (
-        <div className="mt-3 text-[10px] text-[var(--color-text-muted)] leading-snug">
+        <div className="mt-3 text-micro text-[var(--color-text-muted)] leading-snug">
           Accumulation of misfolded proteins due to declining proteasome and autophagy function. Interventions that upregulate NRF2 or support autophagy help restore proteostasis.
         </div>
       )}

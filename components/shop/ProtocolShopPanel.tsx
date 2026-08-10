@@ -149,7 +149,7 @@ function ProtocolShopPanelInner() {
         <div className="glass-deep glass-plane-mid rounded-xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center gap-3">
           <div className="flex items-center gap-2 min-w-0 flex-1">
             <Link2 className="w-4 h-4 text-accent-cyan shrink-0" />
-            <code className="text-[10px] sm:text-xs font-mono text-muted-foreground truncate">{shareUrl}</code>
+            <code className="text-micro sm:text-xs font-mono text-muted-foreground truncate">{shareUrl}</code>
           </div>
           <button
             type="button"
@@ -250,7 +250,7 @@ function ProtocolShopPanelInner() {
                           <h3 className="font-bold">{item.compoundName}</h3>
                           <span
                             className={cn(
-                              'text-[10px] font-mono uppercase px-2 py-0.5 rounded-full border',
+                              'text-micro font-mono uppercase px-2 py-0.5 rounded-full border',
                               item.priority === 'essential'
                                 ? 'text-accent-emerald bg-accent-emerald/10 border-accent-emerald/20'
                                 : 'text-accent-cyan bg-accent-cyan/10 border-accent-cyan/20',

@@ -63,7 +63,7 @@ export function LabPartnerPanel() {
       <div className="grid md:grid-cols-3 gap-4 mb-6">
         {labPartnerPanels.map((panel) => (
           <div key={panel.id} className="glass-deep glass-plane-mid rounded-xl p-5">
-            <span className="text-[10px] font-mono text-accent-amber uppercase tracking-wider">
+            <span className="text-micro font-mono text-accent-amber uppercase tracking-wider">
               {panel.status} · {panel.eta}
             </span>
             <h3 className="font-bold mt-2 mb-2">{panel.name}</h3>
@@ -72,7 +72,7 @@ export function LabPartnerPanel() {
               {panel.markers.map((m) => (
                 <span
                   key={m}
-                  className="text-[9px] font-mono bg-muted/50 px-1.5 py-0.5 rounded text-muted-foreground"
+                  className="text-micro font-mono bg-muted/50 px-1.5 py-0.5 rounded text-muted-foreground"
                 >
                   {m}
                 </span>

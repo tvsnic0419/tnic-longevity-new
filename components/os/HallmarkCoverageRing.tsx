@@ -65,7 +65,7 @@ export function HallmarkCoverageRing({
         />
       </svg>
       {showLabel && (
-        <span className="font-mono text-[10px] md:text-xs leading-tight">
+        <span className="font-mono text-micro md:text-xs leading-tight">
           <span className={cn('font-bold', tone)}>
             {covered}/{total}
           </span>

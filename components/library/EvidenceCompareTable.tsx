@@ -42,7 +42,7 @@ export function EvidenceCompareTable({ comparison }: EvidenceCompareTableProps) 
       </p>
 
       <div className="rounded-2xl border border-border overflow-hidden">
-        <div className="grid grid-cols-[1.2fr_1fr_1fr_auto] gap-0 bg-muted/30 border-b border-border text-[10px] font-mono uppercase tracking-wider">
+        <div className="grid grid-cols-[1.2fr_1fr_1fr_auto] gap-0 bg-muted/30 border-b border-border text-micro font-mono uppercase tracking-wider">
           <div className="p-4 text-muted-foreground">Dimension</div>
           <div className="p-4 text-accent-cyan border-l border-border">{labelA}</div>
           <div className="p-4 text-accent-violet border-l border-border">{labelB}</div>
@@ -64,17 +64,17 @@ export function EvidenceCompareTable({ comparison }: EvidenceCompareTableProps) 
               )}
             </div>
             <div className="p-4 border-t sm:border-t-0 sm:border-r border-border">
-              <p className="text-[10px] font-mono text-accent-cyan sm:hidden mb-1">{labelA}</p>
+              <p className="text-micro font-mono text-accent-cyan sm:hidden mb-1">{labelA}</p>
               <p className="text-sm text-muted-foreground">{row.a}</p>
             </div>
             <div className="p-4 border-t sm:border-t-0 sm:border-r border-border">
-              <p className="text-[10px] font-mono text-accent-violet sm:hidden mb-1">{labelB}</p>
+              <p className="text-micro font-mono text-accent-violet sm:hidden mb-1">{labelB}</p>
               <p className="text-sm text-muted-foreground">{row.b}</p>
             </div>
             <div className="p-4 border-t sm:border-t-0 border-border flex items-start gap-2">
               <span
                 className={cn(
-                  'text-[10px] font-mono px-2 py-1 rounded-full border shrink-0',
+                  'text-micro font-mono px-2 py-1 rounded-full border shrink-0',
                   verdictStyle[row.verdict],
                 )}
               >
@@ -85,7 +85,7 @@ export function EvidenceCompareTable({ comparison }: EvidenceCompareTableProps) 
                   href={`https://pubmed.ncbi.nlm.nih.gov/${row.pmid}/`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[10px] font-mono text-muted-foreground hover:text-accent-cyan inline-flex items-center gap-0.5"
+                  className="text-micro font-mono text-muted-foreground hover:text-accent-cyan inline-flex items-center gap-0.5"
                 >
                   PMID <ExternalLink className="w-3 h-3" />
                 </a>

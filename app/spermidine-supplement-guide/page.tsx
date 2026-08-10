@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { ArrowRight, FlaskConical, ExternalLink, CheckCircle2, AlertTriangle, Microscope, Recycle, TrendingUp } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { GuideHeroPanel } from '@/components/guides/GuideHeroPanel';
+import { DataTable } from '@/components/ui/DataTable';
+import { Accordion, AccordionItem } from '@/components/ui/Accordion';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
@@ -333,8 +335,7 @@ export default function SpermidineSupplementGuidePage() {
             Spermidine from food contributes meaningfully to total polyamine intake. Supplementation stacks on top of dietary intake.
           </p>
 
-          <div className="rounded-xl border border-border/60 overflow-hidden mb-6">
-            <table className="w-full text-sm">
+          <DataTable caption="Top food sources of spermidine" className="mb-6">
               <thead>
                 <tr className="border-b border-border bg-card/50">
                   <th className="text-left px-4 py-3 text-xs font-mono text-muted-foreground uppercase tracking-wide">Food</th>
@@ -360,8 +361,7 @@ export default function SpermidineSupplementGuidePage() {
                   </tr>
                 ))}
               </tbody>
-            </table>
-          </div>
+          </DataTable>
 
           <p className="text-xs text-muted-foreground italic">
             Note: Spermidine content varies by variety, ripeness, and preparation method. Values are approximate averages from published food polyamine databases.
@@ -375,8 +375,7 @@ export default function SpermidineSupplementGuidePage() {
           <p className="text-label mb-2">Protocol</p>
           <h2 className="heading-section mb-3">Spermidine Dosing Protocol</h2>
 
-          <div className="rounded-xl border border-border/60 overflow-hidden mb-8">
-            <table className="w-full text-sm">
+          <DataTable caption="Spermidine dosing protocol" className="mb-8">
               <thead>
                 <tr className="border-b border-border bg-card/50">
                   <th className="text-left px-4 py-3 text-xs font-mono text-muted-foreground uppercase tracking-wide">Phase</th>
@@ -400,8 +399,7 @@ export default function SpermidineSupplementGuidePage() {
                   </tr>
                 ))}
               </tbody>
-            </table>
-          </div>
+          </DataTable>
 
           {/* Do / Caution */}
           <div className="grid md:grid-cols-2 gap-5">
@@ -501,17 +499,13 @@ export default function SpermidineSupplementGuidePage() {
         <div className="container-page max-w-4xl">
           <p className="text-label mb-2">FAQ</p>
           <h2 className="heading-section mb-6">Spermidine FAQ</h2>
-          <div className="space-y-4">
+          <Accordion className="space-y-4">
             {FAQ.map((item) => (
-              <details key={item.q} className="group rounded-xl border border-border/60 bg-card/50">
-                <summary className="flex items-center justify-between gap-3 px-5 py-4 cursor-pointer font-medium text-sm text-foreground list-none">
-                  {item.q}
-                  <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0 group-open:rotate-90 transition-transform" aria-hidden="true" />
-                </summary>
-                <p className="px-5 pb-5 text-sm text-muted-foreground leading-relaxed">{item.a}</p>
-              </details>
+              <AccordionItem key={item.q} question={item.q}>
+                {item.a}
+              </AccordionItem>
             ))}
-          </div>
+          </Accordion>
         </div>
       </section>
 

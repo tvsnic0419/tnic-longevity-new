@@ -427,7 +427,7 @@ export function HeroScene3D() {
             />
             <span className="text-xs font-semibold text-white">{hoveredNode.name}</span>
             <span
-              className="text-label !text-[10px]"
+              className="text-label !text-micro"
               style={{ color: HERO_NETWORK_TIER_COLOR[hoveredNode.tier] }}
             >
               {HERO_NETWORK_TIER_LABEL[hoveredNode.tier]}

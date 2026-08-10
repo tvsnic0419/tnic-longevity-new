@@ -15,7 +15,7 @@ export const ChronicInflammationVisual: React.FC<{ className?: string; showLabel
           <div className="text-label text-[var(--accent-rose)] mb-0.5">HALLMARK 10</div>
           <h4 className="heading-card text-lg">Chronic Inflammation</h4>
         </div>
-        {showLabels && <div className="text-right text-[10px] text-[var(--color-text-muted)]">NF-κB · Cytokines · Resolution</div>}
+        {showLabels && <div className="text-right text-micro text-[var(--color-text-muted)]">NF-κB · Cytokines · Resolution</div>}
       </div>
 
       <motion.div whileInView={{ opacity: 1 }} initial={{ opacity: 0.7 }} viewport={{ once: true, margin: "-30px" }}>
@@ -33,27 +33,27 @@ export const ChronicInflammationVisual: React.FC<{ className?: string; showLabel
           </g>
 
           <g>
-            <circle cx="260" cy="95" r="25" fill="#020811" stroke="#f59e0b" strokeWidth="2.5" />
+            <circle cx="260" cy="95" r="25" fill="#020811" stroke="#fbbf24" strokeWidth="2.5" />
             <text x="260" y="100" textAnchor="middle" fill="#fafafa" fontSize="10" fontWeight="600">NF-κB</text>
           </g>
 
-          <g stroke="#10b981" strokeWidth="2.5" strokeLinecap="round">
+          <g stroke="#34d399" strokeWidth="2.5" strokeLinecap="round">
             <path d="M300 95 L350 95" />
-            <polygon points="350,95 342,90 342,100" fill="#10b981" />
+            <polygon points="350,95 342,90 342,100" fill="#34d399" />
           </g>
 
           {showLabels && (
             <>
               <text x="120" y="55" textAnchor="middle" fill={accentColor} fontSize="9">Inflamed Tissue</text>
-              <text x="260" y="65" textAnchor="middle" fill="#f59e0b" fontSize="9">NF-κB Active</text>
-              <text x="355" y="80" textAnchor="middle" fill="#10b981" fontSize="9">Resolution</text>
+              <text x="260" y="65" textAnchor="middle" fill="#fbbf24" fontSize="9">NF-κB Active</text>
+              <text x="355" y="80" textAnchor="middle" fill="#34d399" fontSize="9">Resolution</text>
             </>
           )}
         </svg>
       </motion.div>
 
       {showLabels && (
-        <div className="mt-3 text-[10px] text-[var(--color-text-muted)] leading-snug">
+        <div className="mt-3 text-micro text-[var(--color-text-muted)] leading-snug">
           Persistent low-grade inflammation drives aging. NF-κB activation sustains cytokine release. Omega-3s and specialized pro-resolving mediators (SPMs) help resolve it.
         </div>
       )}

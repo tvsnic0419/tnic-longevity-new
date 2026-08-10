@@ -108,7 +108,7 @@ export function DashboardStatusExport() {
           PNG snapshot
         </button>
       </div>
-      <p className="text-[10px] text-muted-foreground font-mono">
+      <p className="text-micro text-muted-foreground font-mono">
         Synergy {snapshot.synergyScore} · Labs {labLabel} · {snapshot.exportedAt.slice(0, 10)}
       </p>
     </div>

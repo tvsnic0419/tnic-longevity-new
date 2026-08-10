@@ -97,11 +97,11 @@ export function LifestylePillarsHub() {
                   <p className="text-xs text-muted-foreground mb-3 leading-relaxed">{pillar.headline}</p>
 
                   <div className="flex flex-wrap gap-1.5 mb-4">
-                    <span className={`inline-flex items-center gap-1 text-[9px] font-mono px-2 py-0.5 rounded-md ${t.bg} ${t.text} border ${t.border}`}>
+                    <span className={`inline-flex items-center gap-1 text-micro font-mono px-2 py-0.5 rounded-md ${t.bg} ${t.text} border ${t.border}`}>
                       <GitBranch className="w-3 h-3" aria-hidden="true" />
                       Decision tree
                     </span>
-                    <span className="inline-flex items-center gap-1 text-[9px] font-mono px-2 py-0.5 rounded-md bg-muted/40 text-muted-foreground border border-border/50">
+                    <span className="inline-flex items-center gap-1 text-micro font-mono px-2 py-0.5 rounded-md bg-muted/40 text-muted-foreground border border-border/50">
                       <FlaskConical className="w-3 h-3" aria-hidden="true" />
                       {pillar.labTieIns.length} labs
                     </span>

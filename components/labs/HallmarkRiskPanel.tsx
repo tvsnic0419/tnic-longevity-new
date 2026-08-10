@@ -74,10 +74,10 @@ export function HallmarkRiskPanel({ risks, healthspanScore }: HallmarkRiskPanelP
             >
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div>
-                  <p className="text-[10px] font-mono text-caption">HALLMARK {risk.hallmarkNumber}</p>
+                  <p className="text-micro font-mono text-caption">HALLMARK {risk.hallmarkNumber}</p>
                   <h4 className="font-semibold text-sm">{risk.hallmarkTitle}</h4>
                 </div>
-                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${style.bg} ${style.text}`}>
+                <span className={`text-micro font-semibold px-2 py-0.5 rounded-full ${style.bg} ${style.text}`}>
                   {risk.riskLevel}
                 </span>
               </div>
@@ -96,7 +96,7 @@ export function HallmarkRiskPanel({ risks, healthspanScore }: HallmarkRiskPanelP
                   {risk.drivingMarkers.map((m) => (
                     <span
                       key={m.markerId}
-                      className={`text-[9px] font-mono px-2 py-0.5 rounded-full ${
+                      className={`text-micro font-mono px-2 py-0.5 rounded-full ${
                         m.status === 'critical'
                           ? 'bg-accent-rose/10 text-accent-rose'
                           : m.status === 'watch'
@@ -111,7 +111,7 @@ export function HallmarkRiskPanel({ risks, healthspanScore }: HallmarkRiskPanelP
               )}
 
               {risk.priorityInterventions.length > 0 && (
-                <p className="text-[10px] text-caption mb-2">
+                <p className="text-micro text-caption mb-2">
                   Interventions: {risk.priorityInterventions.join(' · ')}
                 </p>
               )}

@@ -69,7 +69,7 @@ export function SystemsPage() {
             <div className="icon-badge-violet w-8 h-8 rounded-xl flex items-center justify-center">
               <Network className="w-4 h-4 text-accent-violet" />
             </div>
-            <p className="font-mono text-[10px] text-accent-violet tracking-widest uppercase">Systems Synthesis</p>
+            <p className="font-mono text-micro text-accent-violet tracking-widest uppercase">Systems Synthesis</p>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">
             Hallmark Systems Map
@@ -90,7 +90,7 @@ export function SystemsPage() {
         <div className="grid lg:grid-cols-12 gap-8">
           {/* Left — hallmark selector */}
           <div className="lg:col-span-4 space-y-2">
-            <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-3 px-1">
+            <p className="text-micro font-mono text-muted-foreground uppercase tracking-wider mb-3 px-1">
               Select Hallmark — sorted by leverage
             </p>
             {sorted.map((h) => {
@@ -110,7 +110,7 @@ export function SystemsPage() {
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
                     <span className={cn(
-                      'text-[10px] font-mono w-5 shrink-0',
+                      'text-micro font-mono w-5 shrink-0',
                       active ? accentBg[accent].split(' ')[2] : 'text-muted-foreground',
                     )}>
                       {String(h.number).padStart(2, '0')}
@@ -121,7 +121,7 @@ export function SystemsPage() {
                   </div>
                   {lv !== undefined && (
                     <span className={cn(
-                      'text-[10px] font-mono shrink-0 tabular-nums',
+                      'text-micro font-mono shrink-0 tabular-nums',
                       lv >= 85 ? 'text-accent-rose' : lv >= 75 ? 'text-accent-amber' : 'text-muted-foreground',
                     )}>
                       {lv}
@@ -133,19 +133,19 @@ export function SystemsPage() {
 
             {/* Leverage legend */}
             <div className="mt-4 p-3 rounded-xl border border-border/40 bg-card/20">
-              <p className="text-[9px] font-mono text-muted-foreground uppercase mb-2">Leverage Score Legend</p>
+              <p className="text-micro font-mono text-muted-foreground uppercase mb-2">Leverage Score Legend</p>
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-accent-rose shrink-0" />
-                  <span className="text-[10px] text-muted-foreground">85+ · High systems impact</span>
+                  <span className="text-micro text-muted-foreground">85+ · High systems impact</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-accent-amber shrink-0" />
-                  <span className="text-[10px] text-muted-foreground">75–84 · Moderate cascade</span>
+                  <span className="text-micro text-muted-foreground">75–84 · Moderate cascade</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-muted-foreground/40 shrink-0" />
-                  <span className="text-[10px] text-muted-foreground">below 75 · Downstream integrator</span>
+                  <span className="text-micro text-muted-foreground">below 75 · Downstream integrator</span>
                 </div>
               </div>
             </div>
@@ -166,12 +166,12 @@ export function SystemsPage() {
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <p className="font-mono text-[9px] text-muted-foreground uppercase tracking-widest">
+                        <p className="font-mono text-micro text-muted-foreground uppercase tracking-widest">
                           Hallmark {selectedHallmark.number} of 12
                         </p>
                         {leverage !== undefined && (
                           <span className={cn(
-                            'text-[10px] font-mono px-2 py-0.5 rounded-full border',
+                            'text-micro font-mono px-2 py-0.5 rounded-full border',
                             leverage >= 85
                               ? 'text-accent-rose bg-accent-rose/10 border-accent-rose/25'
                               : leverage >= 75

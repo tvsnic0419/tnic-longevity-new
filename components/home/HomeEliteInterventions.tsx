@@ -89,7 +89,7 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
             {hallmarks.slice(0, 3).map((h) => (
               <span
                 key={h}
-                className="rounded border border-accent-cyan/20 bg-accent-cyan/[0.08] px-1.5 py-0.5 text-[10px] font-semibold text-accent-cyan"
+                className="rounded border border-accent-cyan/20 bg-accent-cyan/[0.08] px-1.5 py-0.5 text-micro font-semibold text-accent-cyan"
               >
                 {hallmarkLabels[h] ?? h}
               </span>
@@ -101,11 +101,11 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
             supporting data reads as crisp instrument readout, not fine print. */}
         <dl className="mb-5 grid grid-cols-2 gap-x-3 gap-y-2 rounded-lg border border-border/60 bg-white/[0.025] px-3.5 py-3">
           <div>
-            <dt className="mb-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">Human studies cited</dt>
+            <dt className="mb-0.5 font-mono text-micro font-semibold uppercase tracking-[0.12em] text-muted-foreground">Human studies cited</dt>
             <dd className="tnic-tabular font-mono text-base font-semibold text-foreground">{studyCount}</dd>
           </div>
           <div>
-            <dt className="mb-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">Studied dose</dt>
+            <dt className="mb-0.5 font-mono text-micro font-semibold uppercase tracking-[0.12em] text-muted-foreground">Studied dose</dt>
             <dd className="text-sm font-semibold text-foreground">{dose}</dd>
           </div>
         </dl>

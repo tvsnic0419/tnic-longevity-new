@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { ArrowRight, FlaskConical, ExternalLink, CheckCircle2, AlertTriangle, Zap, TrendingUp, ShieldCheck } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { GuideHeroPanel } from '@/components/guides/GuideHeroPanel';
+import { DataTable } from '@/components/ui/DataTable';
+import { Accordion, AccordionItem } from '@/components/ui/Accordion';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
@@ -306,33 +308,31 @@ export default function TaurineGuidePage() {
             Taurine is one of the safest supplements available. The dosing question is mainly about reaching effective levels — not about safety ceiling.
           </p>
 
-          <div className="overflow-x-auto rounded-xl border border-border/60 mb-8">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border/60 bg-card/50">
-                  <th className="text-left p-4 font-mono text-xs text-muted-foreground">USE CASE</th>
-                  <th className="text-left p-4 font-mono text-xs text-muted-foreground">DOSE</th>
-                  <th className="text-left p-4 font-mono text-xs text-muted-foreground">TIMING</th>
-                  <th className="text-left p-4 font-mono text-xs text-muted-foreground">SOURCE</th>
+          <DataTable caption="Taurine dosing by use case" className="mb-8">
+            <thead>
+              <tr className="border-b border-border/60 bg-card/50">
+                <th className="text-left p-4 font-mono text-xs text-muted-foreground">USE CASE</th>
+                <th className="text-left p-4 font-mono text-xs text-muted-foreground">DOSE</th>
+                <th className="text-left p-4 font-mono text-xs text-muted-foreground">TIMING</th>
+                <th className="text-left p-4 font-mono text-xs text-muted-foreground">SOURCE</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { use: 'General metabolic support', dose: '1–2 g/day', timing: 'Any time, with food or water', source: 'Clinical safety studies' },
+                { use: 'Longevity protocol (TNiC)', dose: '2–3 g/day', timing: 'Split across 2–3 meals', source: 'Singh 2023 mouse scaling' },
+                { use: 'Clinical trials (heart failure)', dose: '3 g/day × 6 months', timing: '1 g × 3 with meals', source: 'Multiple HF RCTs' },
+                { use: 'Upper studied dose (safe)', dose: '6 g/day', timing: '2 g × 3 with meals', source: 'Clinical trial safety data' },
+              ].map((row) => (
+                <tr key={row.use} className="border-b border-border/40 last:border-0">
+                  <td className="p-4 font-medium">{row.use}</td>
+                  <td className="p-4 font-mono text-accent-emerald">{row.dose}</td>
+                  <td className="p-4 text-muted-foreground text-xs">{row.timing}</td>
+                  <td className="p-4 text-muted-foreground text-xs">{row.source}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {[
-                  { use: 'General metabolic support', dose: '1–2 g/day', timing: 'Any time, with food or water', source: 'Clinical safety studies' },
-                  { use: 'Longevity protocol (TNiC)', dose: '2–3 g/day', timing: 'Split across 2–3 meals', source: 'Singh 2023 mouse scaling' },
-                  { use: 'Clinical trials (heart failure)', dose: '3 g/day × 6 months', timing: '1 g × 3 with meals', source: 'Multiple HF RCTs' },
-                  { use: 'Upper studied dose (safe)', dose: '6 g/day', timing: '2 g × 3 with meals', source: 'Clinical trial safety data' },
-                ].map((row) => (
-                  <tr key={row.use} className="border-b border-border/40 last:border-0">
-                    <td className="p-4 font-medium">{row.use}</td>
-                    <td className="p-4 font-mono text-accent-emerald">{row.dose}</td>
-                    <td className="p-4 text-muted-foreground text-xs">{row.timing}</td>
-                    <td className="p-4 text-muted-foreground text-xs">{row.source}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </DataTable>
 
           <div className="grid md:grid-cols-2 gap-5">
             <div className="rounded-xl border border-accent-emerald/20 bg-accent-emerald/[0.04] p-5">
@@ -414,19 +414,13 @@ export default function TaurineGuidePage() {
       <section className="py-14 border-b border-border">
         <div className="container-page max-w-4xl">
           <h2 className="heading-section mb-8">Taurine FAQ</h2>
-          <div className="space-y-4">
+          <Accordion className="space-y-4">
             {FAQ.map((faq) => (
-              <details key={faq.q} className="group rounded-xl border border-border/60 bg-card/50">
-                <summary className="flex cursor-pointer items-center justify-between p-5 font-medium text-sm list-none">
-                  {faq.q}
-                  <ArrowRight className="w-4 h-4 text-muted-foreground transition-transform group-open:rotate-90 flex-shrink-0 ml-4" aria-hidden="true" />
-                </summary>
-                <div className="px-5 pb-5 text-sm text-muted-foreground leading-relaxed border-t border-border/40 pt-4">
-                  {faq.a}
-                </div>
-              </details>
+              <AccordionItem key={faq.q} question={faq.q}>
+                {faq.a}
+              </AccordionItem>
             ))}
-          </div>
+          </Accordion>
         </div>
       </section>
 

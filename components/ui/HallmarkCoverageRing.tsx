@@ -1,7 +1,8 @@
 'use client';
 
-import { useRef } from 'react';
+import { useId, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { VizGlow } from '@/components/ui/vizDefs';
 
 // 5 theme accent colors cycling around the ring for covered segments
 const SEGMENT_COLORS = [
@@ -58,6 +59,7 @@ export function HallmarkCoverageRing({
 }: HallmarkCoverageRingProps) {
   const ref = useRef<SVGSVGElement>(null);
   const inView = useInView(ref, { once: true, margin: '-30px' });
+  const glowId = `ring-glow-${useId()}`;
 
   const cx = size / 2;
   const cy = size / 2;
@@ -74,6 +76,10 @@ export function HallmarkCoverageRing({
       className={`w-full ${className}`}
       aria-label={`${count} of ${TOTAL_HALLMARKS} hallmarks covered`}
     >
+      <defs>
+        <VizGlow id={glowId} blur={size * 0.018} />
+      </defs>
+
       {/* Background ring (all segments muted) */}
       {Array.from({ length: TOTAL_HALLMARKS }, (_, i) => {
         const startDeg = startOffset + i * (360 / TOTAL_HALLMARKS) + GAP_DEG / 2;
@@ -87,27 +93,30 @@ export function HallmarkCoverageRing({
         );
       })}
 
-      {/* Animated covered segments */}
-      {Array.from({ length: TOTAL_HALLMARKS }, (_, i) => {
-        const startDeg = startOffset + i * (360 / TOTAL_HALLMARKS) + GAP_DEG / 2;
-        const isCovered = i < count;
-        if (!isCovered) return null;
+      {/* Animated covered segments — grouped under one glow so covered
+          hallmarks bloom as a lit ring. */}
+      <g filter={`url(#${glowId})`}>
+        {Array.from({ length: TOTAL_HALLMARKS }, (_, i) => {
+          const startDeg = startOffset + i * (360 / TOTAL_HALLMARKS) + GAP_DEG / 2;
+          const isCovered = i < count;
+          if (!isCovered) return null;
 
-        const color = SEGMENT_COLORS[i % SEGMENT_COLORS.length];
+          const color = SEGMENT_COLORS[i % SEGMENT_COLORS.length];
 
-        return (
-          <motion.path
-            key={`fg-${i}`}
-            d={donutSegment(cx, cy, outerR, innerR, startDeg, SEG_DEG)}
-            fill={color}
-            fillOpacity="0.88"
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={inView ? { opacity: 0.88, scale: 1 } : { opacity: 0, scale: 0.7 }}
-            style={{ transformOrigin: `${cx}px ${cy}px` }}
-            transition={{ duration: 0.35, delay: 0.1 + i * 0.055, ease: [0.22, 1, 0.36, 1] }}
-          />
-        );
-      })}
+          return (
+            <motion.path
+              key={`fg-${i}`}
+              d={donutSegment(cx, cy, outerR, innerR, startDeg, SEG_DEG)}
+              fill={color}
+              fillOpacity="0.88"
+              initial={{ opacity: 0, scale: 0.7 }}
+              animate={inView ? { opacity: 0.88, scale: 1 } : { opacity: 0, scale: 0.7 }}
+              style={{ transformOrigin: `${cx}px ${cy}px` }}
+              transition={{ duration: 0.35, delay: 0.1 + i * 0.055, ease: [0.22, 1, 0.36, 1] }}
+            />
+          );
+        })}
+      </g>
 
       {/* Center content */}
       {showLabel && (
@@ -119,6 +128,7 @@ export function HallmarkCoverageRing({
             fontWeight="800"
             fontFamily="monospace"
             fill="var(--accent-cyan)"
+            filter={`url(#${glowId})`}
           >
             {count}
           </text>

@@ -70,7 +70,7 @@ export function LibraryCategoryIndex({ category }: { category: LibraryModuleCate
                   <div className="mb-3 flex items-center justify-between gap-2">
                     <EvidenceTag tier={mod.evidenceTier} size="sm" />
                     {mod.requiresDisclaimer && (
-                      <span className="rounded border border-accent-amber/30 bg-accent-amber/10 px-1.5 py-0.5 text-[10px] font-mono font-semibold text-accent-amber">
+                      <span className="rounded border border-accent-amber/30 bg-accent-amber/10 px-1.5 py-0.5 text-micro font-mono font-semibold text-accent-amber">
                         Rx
                       </span>
                     )}

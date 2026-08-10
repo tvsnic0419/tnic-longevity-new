@@ -30,7 +30,7 @@ export const CellularSenescenceVisual: React.FC<CellularSenescenceVisualProps> =
           <h4 className="heading-card text-lg">Cellular Senescence</h4>
         </div>
         {showLabels && (
-          <div className="text-right text-[10px] text-[var(--color-text-muted)] leading-tight">
+          <div className="text-right text-micro text-[var(--color-text-muted)] leading-tight">
             p16⁺⁺ / SASP⁺<br />Senolytic clearance
           </div>
         )}
@@ -87,13 +87,13 @@ export const CellularSenescenceVisual: React.FC<CellularSenescenceVisualProps> =
         </g>
 
         {/* Senolytic intervention arrows / clearance pathway (right side) */}
-        <g stroke="#10b981" strokeWidth="2.2" strokeLinecap="round" opacity="0.85">
+        <g stroke="#34d399" strokeWidth="2.2" strokeLinecap="round" opacity="0.85">
           <path d="M385 85 L355 105" />
           <path d="M385 115 L355 130" />
           <path d="M385 145 L355 155" />
           {/* Arrowheads */}
-          <polygon points="355,105 348,100 352,108" fill="#10b981" />
-          <polygon points="355,130 348,125 352,133" fill="#10b981" />
+          <polygon points="355,105 348,100 352,108" fill="#34d399" />
+          <polygon points="355,130 348,125 352,133" fill="#34d399" />
         </g>
 
         {/* Labels (conditional) */}
@@ -101,7 +101,7 @@ export const CellularSenescenceVisual: React.FC<CellularSenescenceVisualProps> =
           <>
             <text x="210" y="102" textAnchor="middle" fill="#fafafa" fontSize="9.5" fontWeight="600">p16⁺⁺ Nucleus</text>
             <text x="340" y="55" textAnchor="middle" fill="#f472b6" fontSize="8.5">SASP factors</text>
-            <text x="372" y="170" textAnchor="end" fill="#10b981" fontSize="8.5">Senolytic clearance</text>
+            <text x="372" y="170" textAnchor="end" fill="#34d399" fontSize="8.5">Senolytic clearance</text>
           </>
         )}
 
@@ -111,7 +111,7 @@ export const CellularSenescenceVisual: React.FC<CellularSenescenceVisualProps> =
       </svg>
 
       {showLabels && (
-        <div className="mt-3 text-[10px] text-[var(--color-text-muted)] leading-snug">
+        <div className="mt-3 text-micro text-[var(--color-text-muted)] leading-snug">
           Senescent cells accumulate with age and secrete pro-inflammatory SASP. Senolytics (e.g., D+Q, Fisetin) selectively clear them, reducing chronic inflammation and improving tissue function.
         </div>
       )}

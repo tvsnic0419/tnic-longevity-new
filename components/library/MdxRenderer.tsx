@@ -227,11 +227,11 @@ function TableOfContents({ headings, readingMinutes }: { headings: Heading[]; re
       <div className="mb-3 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <ListTree className="h-4 w-4 text-accent-cyan" aria-hidden="true" />
-          <p className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+          <p className="text-micro font-mono uppercase tracking-wider text-muted-foreground">
             On this page
           </p>
         </div>
-        <p className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+        <p className="text-micro font-mono uppercase tracking-wider text-muted-foreground">
           ~{readingMinutes} min read
         </p>
       </div>
@@ -400,7 +400,7 @@ function renderDirective(
       >
         <div className="flex items-center gap-2 mb-2">
           <Eye className="w-4 h-4 text-accent-violet" aria-hidden="true" />
-          <p className="text-[10px] font-mono text-accent-violet uppercase tracking-wider">Suggested visual</p>
+          <p className="text-micro font-mono text-accent-violet uppercase tracking-wider">Suggested visual</p>
         </div>
         <p
           className="text-sm text-foreground/90 leading-relaxed"
@@ -437,7 +437,7 @@ function renderDirective(
       >
         <div className="flex items-center gap-2 mb-2">
           <AlertTriangle className="w-4 h-4 text-accent-amber" aria-hidden="true" />
-          <p className="text-[10px] font-mono text-accent-amber uppercase tracking-wider">
+          <p className="text-micro font-mono text-accent-amber uppercase tracking-wider">
             {attrs.title ?? 'Important'}
           </p>
         </div>
@@ -457,7 +457,7 @@ function renderDirective(
       >
         <div className="flex items-center gap-2 mb-3">
           <Lightbulb className="w-4 h-4 text-accent-cyan" aria-hidden="true" />
-          <p className="text-[10px] font-mono text-accent-cyan uppercase tracking-wider">
+          <p className="text-micro font-mono text-accent-cyan uppercase tracking-wider">
             {attrs.title ?? 'Practical application'}
           </p>
         </div>
@@ -475,7 +475,7 @@ function renderDirective(
       >
         <div className="flex items-center gap-2 mb-3">
           <OctagonX className="w-4 h-4 text-accent-rose" aria-hidden="true" />
-          <p className="text-[10px] font-mono text-accent-rose uppercase tracking-wider">
+          <p className="text-micro font-mono text-accent-rose uppercase tracking-wider">
             {attrs.title ?? 'Red flags'}
           </p>
         </div>
@@ -508,7 +508,7 @@ function renderDirective(
       >
         <div className="flex items-center gap-2 mb-3">
           <ClipboardList className="w-4 h-4 text-accent-emerald" aria-hidden="true" />
-          <p className="text-[10px] font-mono text-accent-emerald uppercase tracking-wider">
+          <p className="text-micro font-mono text-accent-emerald uppercase tracking-wider">
             {attrs.title ?? 'Personal results template'}
           </p>
         </div>
@@ -674,7 +674,7 @@ function renderMarkdownBlock(content: string, blockKey: number, linkedTerms: Set
                       <th
                         key={ci}
                         scope="col"
-                        className="py-2 px-3 text-left text-[10px] font-mono text-muted-foreground uppercase whitespace-nowrap"
+                        className="py-2 px-3 text-left text-micro font-mono text-muted-foreground uppercase whitespace-nowrap"
                         dangerouslySetInnerHTML={{ __html: renderInline(cell, linkedTerms) }}
                       />
                     ))}
@@ -700,7 +700,7 @@ function renderMarkdownBlock(content: string, blockKey: number, linkedTerms: Set
             </table>
           </div>
           {headerCells.length > 3 && (
-            <p className="mt-1.5 text-[10px] font-mono uppercase tracking-wider text-muted-foreground md:hidden">
+            <p className="mt-1.5 text-micro font-mono uppercase tracking-wider text-muted-foreground md:hidden">
               ← Swipe for more columns →
             </p>
           )}

@@ -63,14 +63,14 @@ function NextUpRow({ item, compact }: { item: NextUpItem; compact?: boolean }) {
           <p className={cn('font-semibold', compact ? 'text-xs' : 'text-sm')}>{item.title}</p>
           <span
             className={cn(
-              'text-[10px] font-mono uppercase px-2 py-0.5 rounded-full border',
+              'text-micro font-mono uppercase px-2 py-0.5 rounded-full border',
               meta.className,
             )}
           >
             {meta.label}
           </span>
           {item.sprint && (
-            <span className="text-[10px] font-mono text-muted-foreground">{item.sprint}</span>
+            <span className="text-micro font-mono text-muted-foreground">{item.sprint}</span>
           )}
         </div>
         {!compact && (
@@ -81,7 +81,7 @@ function NextUpRow({ item, compact }: { item: NextUpItem; compact?: boolean }) {
             {item.tags.map((tag) => (
               <span
                 key={tag}
-                className="text-[10px] font-mono text-muted-foreground bg-muted/50 px-2 py-0.5 rounded"
+                className="text-micro font-mono text-muted-foreground bg-muted/50 px-2 py-0.5 rounded"
               >
                 {tag}
               </span>

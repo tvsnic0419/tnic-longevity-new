@@ -120,6 +120,7 @@ export function ToolsHub() {
           title="Longevity Tools"
           description="Six evidence-graded calculators that turn library knowledge into practical models. Rule-based, transparent reasoning — not generative AI."
           theme="violet"
+          cinematic
           as="h1"
         />
 
@@ -241,7 +242,7 @@ export function ToolsHub() {
                     </div>
                     {t.badge && (
                       <span
-                        className="text-[9px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-full border"
+                        className="text-micro font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-full border"
                         style={{ color: accent, borderColor: `color-mix(in srgb, ${accent} 30%, transparent)`, background: `color-mix(in srgb, ${accent} 10%, transparent)` }}
                       >
                         {t.badge}
@@ -251,7 +252,7 @@ export function ToolsHub() {
                   <p className="font-semibold text-sm leading-tight" style={isActive ? { color: accent } : {}}>
                     {t.label}
                   </p>
-                  <p className="text-[11px] text-muted-foreground mt-0.5 leading-snug line-clamp-2">
+                  <p className="text-micro text-muted-foreground mt-0.5 leading-snug line-clamp-2">
                     {t.shortLabel}
                   </p>
                 </button>

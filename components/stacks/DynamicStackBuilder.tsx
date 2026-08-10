@@ -52,7 +52,7 @@ export function DynamicStackBuilder() {
                           className="flex justify-between text-sm py-1 border-b border-border last:border-0"
                         >
                           <span className="text-foreground/90">{c.name}</span>
-                          <span className="font-mono text-[10px] text-muted-foreground">{c.dose}</span>
+                          <span className="font-mono text-micro text-muted-foreground">{c.dose}</span>
                         </div>
                       ))}
                     </div>
@@ -68,7 +68,7 @@ export function DynamicStackBuilder() {
                           className="flex justify-between text-sm py-1 border-b border-border last:border-0"
                         >
                           <span className="text-foreground/90">{c.name}</span>
-                          <span className="font-mono text-[10px] text-muted-foreground">{c.dose}</span>
+                          <span className="font-mono text-micro text-muted-foreground">{c.dose}</span>
                         </div>
                       ))}
                     </div>
