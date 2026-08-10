@@ -29,7 +29,10 @@ export function RevealItem({ index = 0, children, className }: RevealItemProps) 
       transition={{
         delay: reducedMotion ? 0 : Math.min(index, 6) * 0.06,
         duration: 0.4,
-        ease: [0.22, 1, 0.36, 1],
+        // Matches EASE.entrance in components/viz/tokens.ts and --ease-glass
+        // (the curve premium-card hover uses) — one motion vocabulary for
+        // reveals and card transitions across the site.
+        ease: [0.16, 1, 0.3, 1],
       }}
     >
       {children}

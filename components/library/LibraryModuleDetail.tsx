@@ -364,7 +364,7 @@ export function LibraryModuleDetail({
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/stacks"
-                className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-accent-cyan/10 border border-accent-cyan/30 text-sm font-semibold text-accent-cyan hover:bg-accent-cyan/20"
+                className="focus-ring interactive tnic-button-tonal inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm"
               >
                 Build your stack
               </Link>

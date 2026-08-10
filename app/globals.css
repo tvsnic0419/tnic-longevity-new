@@ -466,8 +466,15 @@ p,
 
 /* ── Surfaces ── */
 .glass {
+  /* The lightweight glass tier of the v8 Deep-Glass system: shares its blur
+     token + saturation so .glass (121 uses — inputs, small panels) reads as the
+     same material as GlassPanel/glass-plane, not a separate generation. Fill and
+     border stay on the theme-aware --glass-bg/--glass-border tokens; no stacked
+     shadow (this tier sits flush, e.g. search inputs). Includes the -webkit
+     prefix the old recipe was missing (Safari backdrop blur). */
   background: var(--glass-bg);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(var(--glass-blur-mid)) saturate(1.1);
+  -webkit-backdrop-filter: blur(var(--glass-blur-mid)) saturate(1.1);
   border: 1px solid var(--glass-border);
 }
 
@@ -888,61 +895,9 @@ p,
   background-size: 128px 128px;
 }
 
-.card-premium {
-  position: relative;
-  /* Gradient fill (lighter at the top) reads as a lit, raised surface rather
-     than a flat outline on near-black. */
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--glass-bg) 88%, #ffffff 7%),
-    var(--glass-bg) 55%
-  );
-  backdrop-filter: blur(var(--glass-blur-mid));
-  border-radius: var(--radius-2xl);
-  border: 1px solid var(--color-border-subtle);
-  /* Depth: inset top highlight + the Deep Glass mid-plane stacked shadow
-     (Design System v8) — keeps this widely-reused card in step with the
-     rest of the depth system instead of its own one-off shadow numbers.
-     The branded cyan/emerald/violet ::before border below is intentional
-     brand accenting, kept separate from the neutral glass edge tokens. */
-  box-shadow:
-    inset 0 1px 0 0 color-mix(in srgb, #ffffff 10%, transparent),
-    var(--glass-shadow-mid);
-  overflow: hidden;
-}
-
-.card-premium::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(
-    145deg,
-    color-mix(in srgb, var(--accent-cyan) 50%, transparent),
-    color-mix(in srgb, var(--accent-emerald) 30%, transparent) 40%,
-    color-mix(in srgb, var(--accent-violet) 20%, transparent) 70%,
-    transparent
-  );
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-.card-premium::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(
-    ellipse at 30% 20%,
-    color-mix(in srgb, var(--accent-cyan) 8%, transparent),
-    transparent 50%
-  );
-  pointer-events: none;
-}
+/* .card-premium / .card-base retired — both fully unused after the card
+   consolidation (premium-card / card-elevated / GlassPanel are the canonical
+   trio). Removed to keep one card vocabulary in the stylesheet. */
 
 .stat-card {
   position: relative;
@@ -2982,16 +2937,16 @@ p,
    tnic-prefixed glass surface and button system.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-/* ── Legacy glass surface (deprecated) ──
-   DEPRECATED alias — prefer .card-base, the <Card> primitive, or GlassPanel.
-   Kept only so the 13 existing call sites keep working; for coherence its own
-   opaque navy fill (rgba(17,24,39,.85)) is dropped in favor of the site's
-   canonical translucent glass tokens so it stops reading as a heavier, off-key
-   surface next to every other card. Radius stays caller-controlled. */
+/* ── Premium glass surface ── */
+/* Glass vocabulary tiers (all on the v8 token material): .glass (lightweight —
+   inputs, small panels) · .tnic-glass (opaque glass card, used by the hallmark
+   illustration wrappers) · GlassPanel/glass-plane (deep panels) · nav-glass
+   (chrome). */
 .tnic-glass {
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur-mid)) saturate(1.2);
-  border: 1px solid var(--color-border-subtle);
+  background: rgba(17, 24, 39, 0.85);
+  backdrop-filter: blur(var(--glass-blur-mid)) saturate(1.4);
+  -webkit-backdrop-filter: blur(var(--glass-blur-mid)) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.09);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.05),
     var(--glass-shadow-mid);
@@ -3027,6 +2982,69 @@ p,
   }
 }
 
+/* ── Accent-aware solid CTA ──
+   One treatment for every "solid accent" button that was previously hand-rolled
+   a dozen slightly-different ways (bg-emerald-500, bg-accent-emerald,
+   bg-accent-cyan text-bg-base, with assorted hover tints). Tint per section with
+   --btn-accent (default cyan); dark ink stays legible on every brand accent.
+   Consistent lift + glow + press. */
+.tnic-button-accent {
+  /* No unlayered --btn-accent declaration here: the per-section tint comes from
+     a Tailwind arbitrary-property utility (`[--btn-accent:var(--accent-emerald)]`),
+     which lives in @layer utilities and would LOSE to an unlayered default. So
+     read it with a fallback instead — utility wins, cyan is the default. */
+  background: var(--btn-accent, var(--accent-cyan));
+  color: #04110c;
+  font-weight: 700;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+@media (hover: hover) {
+  .tnic-button-accent:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+    box-shadow: 0 10px 30px -10px color-mix(in srgb, var(--btn-accent, var(--accent-cyan)) 55%, transparent);
+  }
+}
+.tnic-button-accent:active {
+  transform: translateY(0) scale(0.985);
+}
+
+/* ── Accent-aware tonal button ──
+   The sibling of .tnic-button-accent for secondary CTAs: a translucent accent
+   wash + hairline that deepens on hover. Replaces the ~10 inline
+   `bg-accent-X/10 border-accent-X/25 text-accent-X hover:bg-accent-X/20`
+   recipes. Tint via --btn-accent (default cyan); color-mix keeps it correct in
+   both themes. Callers keep their own padding/radius/size. */
+.tnic-button-tonal {
+  background: color-mix(in srgb, var(--btn-accent, var(--accent-cyan)) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--btn-accent, var(--accent-cyan)) 25%, transparent);
+  color: var(--btn-accent, var(--accent-cyan));
+  font-weight: 600;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+@media (hover: hover) {
+  .tnic-button-tonal:hover {
+    background: color-mix(in srgb, var(--btn-accent, var(--accent-cyan)) 18%, transparent);
+    border-color: color-mix(in srgb, var(--btn-accent, var(--accent-cyan)) 42%, transparent);
+  }
+}
+.tnic-button-tonal:active {
+  transform: translateY(0) scale(0.985);
+}
+
+/* ── Accent-aware chip ──
+   Small static tag/pill: translucent accent wash + accent text. Replaces the
+   inline `bg-accent-X/10 text-accent-X px-… rounded…` micro-tags. */
+.tnic-chip {
+  background: color-mix(in srgb, var(--chip-accent, var(--accent-cyan)) 12%, transparent);
+  color: var(--chip-accent, var(--accent-cyan));
+  border: 1px solid color-mix(in srgb, var(--chip-accent, var(--accent-cyan)) 22%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tnic-button-tonal { transition: none; }
+}
+
 /* ── Ghost glass secondary button ── */
 .tnic-button-secondary {
   background: rgba(255, 255, 255, 0.06);
@@ -3048,7 +3066,8 @@ p,
 
 @media (prefers-reduced-motion: reduce) {
   .tnic-button-primary,
-  .tnic-button-secondary { transition: none; }
+  .tnic-button-secondary,
+  .tnic-button-accent { transition: none; }
 }
 /* ── Homepage compound & graphic section refinements (from design-polish pass) ── */
 .home-compound-card,
@@ -3380,6 +3399,30 @@ p,
   .premium-card:hover {
     transform: none;
   }
+}
+
+/* Light-theme parity — the base .premium-card fill is a white-on-dark gradient
+   that disappears on the light base (#f8fafc). Restore a real elevated white
+   surface + the v8 shadow (same approach as .card-elevated), and soften the
+   accent bloom, so the cards read in both themes. */
+[data-theme="light"] .premium-card {
+  background: var(--color-bg-elevated);
+  box-shadow: var(--glass-shadow-mid);
+}
+[data-theme="light"] .premium-card::after {
+  background: radial-gradient(
+    120% 80% at 50% -10%,
+    color-mix(in srgb, var(--card-accent, var(--accent-cyan)) 8%, transparent),
+    transparent 62%
+  );
+}
+/* Subtle white-on-dark surface overlays inside premium cards (chip fills, the
+   coverage-meter track) invert to a faint dark tint on the light base so they
+   don't vanish. Scoped to .premium-card so always-dark sections (e.g. the hero)
+   keep their intended white overlays. */
+[data-theme="light"] .premium-card .bg-white\/\[0\.02\],
+[data-theme="light"] .premium-card .bg-white\/\[0\.06\] {
+  background-color: color-mix(in srgb, var(--color-text-primary) 5%, transparent);
 }
 
 /* ============================================================================

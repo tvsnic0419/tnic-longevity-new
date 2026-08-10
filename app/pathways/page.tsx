@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Waypoints, ArrowRight } from 'lucide-react';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { StructuredData } from '@/components/seo/StructuredData';
+import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { buildPageMetadata, buildBreadcrumbSchema } from '@/lib/seo';
 import {
   pathways,
@@ -41,7 +42,8 @@ const themeAccent: Record<string, string> = {
  */
 export default function PathwaysHubPage() {
   return (
-    <div className="py-8 md:py-10">
+    <SubPageLayout>
+      <div className="py-8 md:py-10">
       <StructuredData
         schemas={[
           buildBreadcrumbSchema([
@@ -83,13 +85,14 @@ export default function PathwaysHubPage() {
                   <Link
                     key={p.slug}
                     href={`/pathways/${p.slug}`}
-                    className="focus-ring card-elevated group flex flex-col rounded-xl p-5 transition hover:border-accent-cyan/40"
+                    style={{ ['--card-accent' as string]: `var(--accent-${meta.theme})` }}
+                    className="premium-card focus-ring group h-full p-5"
                   >
                     <div className="mb-2 flex items-center justify-between gap-3">
                       <h3 className={`heading-card text-base ${themeAccent[meta.theme] ?? ''}`}>{p.name}</h3>
-                      <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition group-hover:translate-x-0.5 group-hover:text-accent-cyan" aria-hidden="true" />
+                      <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition group-hover:translate-x-0.5 group-hover:[color:var(--card-accent)]" aria-hidden="true" />
                     </div>
-                    <p className="text-body-sm text-muted-foreground">{p.summary}</p>
+                    <p className="text-body-sm flex-1 text-muted-foreground">{p.summary}</p>
                     <p className="text-caption mt-3 text-muted-foreground">
                       {p.compoundSlugs.length} compound{p.compoundSlugs.length === 1 ? '' : 's'} ·{' '}
                       {p.hallmarkIds.length} hallmark{p.hallmarkIds.length === 1 ? '' : 's'}
@@ -101,6 +104,7 @@ export default function PathwaysHubPage() {
           );
         })}
       </div>
-    </div>
+      </div>
+    </SubPageLayout>
   );
 }

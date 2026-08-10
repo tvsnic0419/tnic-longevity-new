@@ -95,3 +95,46 @@ carries complete presentation metadata. One list, one place.
 canonical `/library/<slug>` hallmark pages). Guides now link up into the
 mechanism map, not just sideways. Guarded by a test asserting every non-master
 guide resolves to real, number-ordered hallmark pages.
+
+### 8. Guide breadcrumbs — the "up" loop closed *(coherence)*
+
+The guide pages had gained sideways (sibling guides, comparisons) and downward
+(compounds, hallmarks) links via `GuideCrossLinks`, but no *upward* navigation:
+they were absent from `route-context`/`breadcrumb-titles` and rendered with
+`hideContextBar`, so a visitor had no breadcrumb back to the index. Now
+`buildRouteBreadcrumbs` special-cases the `*-supplement-guide` routes into a
+`TNiC › Supplement Guides › <title>` trail (titles from a new bundle-light
+`guideTitles` map, kept in sync with the `SUPPLEMENT_GUIDES` registry by a
+`breadcrumb-titles.test.ts` assertion — same single-source discipline as the
+other breadcrumb maps), and each guide switched from `hideContextBar` to
+`hideStackReadout` so the breadcrumb + next-action bar shows without a phantom
+saved-stack readout on what is a landing page. Guarded by a `route-context.test.ts`
+case asserting the trail and that the parent crumb resolves to the real index.
+
+### 9. Chrome-less pages given the shared site shell *(polish / cohesion)*
+
+The root layout renders only `{children}` — Nav, the ContextBar breadcrumb, and
+the Footer all come from `SubPageLayout` (used directly, via a nested
+`app/<hub>/layout.tsx`, or a page importing `Nav`). A set of top-level routes did
+**none** of these and so rendered with *no site navigation at all* — genuine
+dead-ends a visitor could only leave via the browser back button:
+`/supplement-guides`, `/about`, `/partnerships`, `/club`, `/pathways` (+ its
+`[slug]` detail), and the five top-level `TrustPageTemplate` pages `/privacy`,
+`/terms`, `/health-data`, `/editorial-policy`, `/corrections`. Each now routes
+through `SubPageLayout`, matching the working hub pages, so it gets the same Nav +
+breadcrumb + Footer:
+
+- `TrustPageTemplate` gained an opt-in `standalone` prop that wraps it in
+  `SubPageLayout`. It's set on the five top-level pages and left off the `/trust/*`
+  children (which already get chrome from `app/trust/layout.tsx`) so nothing
+  double-wraps.
+- The other pages were wrapped directly; `/supplement-guides` uses
+  `hideStackReadout` to match the guide detail pages from item #8.
+- A `site-integrity.test.ts` guard walks every single-segment `app/` route and
+  fails if any lacks a chrome source (nested layout, `SubPageLayout`, a `Nav`
+  import, or `TrustPageTemplate`), so a new page can't ship chrome-less.
+
+The two **noindex share cards** (`/scorecard/[code]`, `/club/[code]`) are left
+deliberately minimal — they are standalone share surfaces with their own explicit
+"explore TNiC" CTAs, and forcing the OS bar onto them is a product decision, not a
+coherence fix.

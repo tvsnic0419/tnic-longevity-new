@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, Building2, CheckCircle2, Handshake, ShieldCheck, Sparkles } from 'lucide-react';
 import { PageShell } from '@/components/ui/PageShell';
+import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildArticleSchema, buildBreadcrumbSchema } from '@/lib/seo';
@@ -48,7 +49,7 @@ function buildSchemas() {
 
 export default function PartnershipsPage() {
   return (
-    <main id="main-content" tabIndex={-1}>
+    <SubPageLayout>
       <PageShell>
         <StructuredData schemas={buildSchemas()} />
       <PageHeader
@@ -148,14 +149,14 @@ export default function PartnershipsPage() {
           </p>
           <a
             href={`mailto:${SITE.contactEmail}?subject=${encodeURIComponent('[TNiC partnerships] Collaboration inquiry')}`}
-            className="focus-ring inline-flex items-center justify-center gap-2 rounded-xl bg-accent-cyan px-5 py-3 text-sm font-bold text-black hover:bg-accent-emerald transition"
+            className="focus-ring inline-flex items-center justify-center gap-2 rounded-xl tnic-button-accent px-5 py-3 text-sm"
           >
             Partnership inquiries <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </a>
         </div>
       </section>
       </PageShell>
-    </main>
+    </SubPageLayout>
   );
 }
 

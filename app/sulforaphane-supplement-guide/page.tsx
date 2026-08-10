@@ -152,7 +152,7 @@ function buildSulforaphaneSchemas() {
 
 export default function SulforaphaneGuidePage() {
   return (
-    <SubPageLayout hideContextBar guideHref="/sulforaphane-supplement-guide">
+    <SubPageLayout hideStackReadout guideHref="/sulforaphane-supplement-guide">
       <StructuredData schemas={buildSulforaphaneSchemas()} />
 
       {/* Hero */}
@@ -175,7 +175,7 @@ export default function SulforaphaneGuidePage() {
               <div className="flex flex-wrap gap-3">
                 <Link
                   href="/library/compounds/sulforaphane"
-                  className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-accent-emerald text-bg-base font-semibold text-sm hover:bg-accent-emerald/90 transition"
+                  className="focus-ring interactive inline-flex items-center gap-2 tnic-button-accent [--btn-accent:var(--accent-emerald)] px-5 py-3 rounded-xl text-sm"
                 >
                   Compound deep-dive
                   <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -436,7 +436,7 @@ export default function SulforaphaneGuidePage() {
             <div className="flex flex-wrap gap-3 justify-center">
               <Link
                 href="/nico"
-                className="focus-ring interactive inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-accent-emerald text-bg-base font-semibold text-sm hover:bg-accent-emerald/90 transition"
+                className="focus-ring interactive inline-flex items-center gap-2 tnic-button-accent [--btn-accent:var(--accent-emerald)] px-6 py-3 rounded-xl text-sm"
               >
                 Take the NICO Starter Questionnaire
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />

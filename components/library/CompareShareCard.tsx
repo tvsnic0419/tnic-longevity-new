@@ -66,7 +66,7 @@ export function CompareShareCard({ comparison, compact = false }: CompareShareCa
           <button
             type="button"
             onClick={() => copy('link', shareUrl)}
-            className="focus-ring inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-accent-cyan/15 border border-accent-cyan/25 text-accent-cyan hover:bg-accent-cyan/25 transition"
+            className="focus-ring tnic-button-tonal inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs"
           >
             {copied === 'link' ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Link2 className="w-3.5 h-3.5" />}
             {copied === 'link' ? 'Copied' : 'Copy link'}

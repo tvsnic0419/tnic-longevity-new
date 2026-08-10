@@ -177,7 +177,7 @@ function buildNadGuideSchemas() {
 
 export default function NadSupplementGuidePage() {
   return (
-    <SubPageLayout hideContextBar guideHref="/nad-supplement-guide">
+    <SubPageLayout hideStackReadout guideHref="/nad-supplement-guide">
       <StructuredData schemas={buildNadGuideSchemas()} />
 
       {/* Hero */}
@@ -201,7 +201,7 @@ export default function NadSupplementGuidePage() {
               <div className="flex flex-wrap gap-4">
                 <Link
                   href="/library/compare/nmn-vs-nr"
-                  className="inline-flex items-center gap-2 bg-accent-cyan/10 border border-accent-cyan/25 text-accent-cyan px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-accent-cyan/20 transition"
+                  className="tnic-button-tonal inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm"
                 >
                   NMN vs NR — full comparison <ArrowRight className="w-4 h-4" />
                 </Link>

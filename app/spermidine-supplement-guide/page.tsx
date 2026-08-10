@@ -182,7 +182,7 @@ export default function SpermidineSupplementGuidePage() {
   const schemas = buildSpermidineSchemas();
 
   return (
-    <SubPageLayout hideContextBar guideHref="/spermidine-supplement-guide">
+    <SubPageLayout hideStackReadout guideHref="/spermidine-supplement-guide">
       <StructuredData schemas={schemas} />
 
       {/* Hero */}
@@ -205,7 +205,7 @@ export default function SpermidineSupplementGuidePage() {
               <div className="flex flex-wrap gap-3">
                 <Link
                   href="/library/compounds/spermidine"
-                  className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-accent-emerald text-bg-base font-semibold text-sm hover:bg-accent-emerald/90 transition"
+                  className="focus-ring interactive inline-flex items-center gap-2 tnic-button-accent [--btn-accent:var(--accent-emerald)] px-5 py-3 rounded-xl text-sm"
                 >
                   Compound deep-dive
                   <ArrowRight className="w-4 h-4" aria-hidden="true" />

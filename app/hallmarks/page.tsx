@@ -62,7 +62,7 @@ export default function HallmarksIndexPage() {
               theme="emerald"
             />
             <div className="flex flex-wrap justify-center gap-3">
-              <Link href="/stacks" className="focus-ring group inline-flex items-center gap-2 rounded-xl bg-accent-emerald px-5 py-3 text-sm font-bold text-[#04110c] shadow-[0_10px_30px_-10px_rgba(52,211,153,0.55)] transition hover:brightness-110">
+              <Link href="/stacks" className="focus-ring group inline-flex items-center gap-2 tnic-button-accent [--btn-accent:var(--accent-emerald)] rounded-xl px-5 py-3 text-sm">
                 Build My Stack <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link href="/library" className="focus-ring inline-flex items-center gap-2 rounded-xl border border-border px-5 py-3 text-sm font-medium text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground">
@@ -221,7 +221,7 @@ export default function HallmarksIndexPage() {
               so you know exactly which aging mechanisms your protocol addresses.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
-              <Link href="/stacks" className="focus-ring group inline-flex items-center gap-2 rounded-xl bg-accent-emerald px-6 py-3 text-sm font-bold text-[#04110c] shadow-[0_10px_30px_-10px_rgba(52,211,153,0.55)] transition hover:brightness-110">
+              <Link href="/stacks" className="focus-ring group inline-flex items-center gap-2 tnic-button-accent [--btn-accent:var(--accent-emerald)] rounded-xl px-6 py-3 text-sm">
                 Stack Architect <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link href="/bio-age" className="focus-ring inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3 text-sm font-medium text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground">

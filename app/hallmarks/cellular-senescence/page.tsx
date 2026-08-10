@@ -178,7 +178,7 @@ export default function CellularSenescencePage() {
               and interactions with everything else in your stack.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
-              <Link href="/stacks" className="inline-flex items-center gap-2 bg-emerald-500 text-black px-6 py-3 rounded-xl text-sm font-bold hover:bg-emerald-400 transition-colors">
+              <Link href="/stacks" className="inline-flex items-center gap-2 tnic-button-accent [--btn-accent:var(--accent-emerald)] focus-ring px-6 py-3 rounded-xl text-sm">
                 Stack Architect <ArrowRight className="w-4 h-4" />
               </Link>
               <Link href="/library" className="inline-flex items-center gap-2 border border-border px-6 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">

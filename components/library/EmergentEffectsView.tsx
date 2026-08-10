@@ -95,7 +95,7 @@ function EmergentCard({ effect, index }: { effect: EmergentEffect; index: number
             <Link
               key={id}
               href={href}
-              className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-lg border bg-accent-violet/10 text-accent-violet border-accent-violet/25 hover:bg-accent-violet/20 transition"
+              className="tnic-button-tonal [--btn-accent:var(--accent-violet)] inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg"
             >
               {label}
               <ArrowUpRight className="w-2.5 h-2.5" />

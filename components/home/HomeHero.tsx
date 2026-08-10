@@ -5,6 +5,7 @@ import { GlassPanel } from '@/components/ui/GlassPanel';
 import { TiltGlassPanel } from '@/components/ui/TiltGlassPanel';
 import { COMPOUND_COUNT } from '@/lib/library-modules';
 import { eliteInterventions } from '@/lib/elite-interventions';
+import { HeroSceneMount } from '@/components/home/HeroSceneMount';
 
 /**
  * Server-rendered homepage hero.
@@ -36,10 +37,10 @@ export function HomeHero() {
       <div aria-hidden="true" className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[radial-gradient(#12203c_0.8px,transparent_1px)] [background-size:22px_22px] opacity-50" />
         <div className="absolute -left-32 -top-40 h-[38rem] w-[38rem] rounded-full bg-[radial-gradient(circle,rgba(0,224,255,0.16),transparent_60%)] blur-2xl" />
-        {/* Violet, not emerald — the compound-synergy network sitting in this
-            corner already carries its own emerald/amber tier-color signal;
-            a second emerald wash here would compete with it instead of
-            grounding it. */}
+        {/* Violet, not emerald — the compound-synergy network below already
+            carries its own emerald/amber tier-color signal in its own band;
+            a second emerald wash up here would compete with it instead of
+            grounding this half of the hero. */}
         <div className="absolute -right-40 top-1/3 h-[34rem] w-[34rem] rounded-full bg-[radial-gradient(circle,rgba(192,132,252,0.10),transparent_60%)] blur-2xl" />
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-background" />
       </div>
@@ -186,6 +187,28 @@ export function HomeHero() {
             <p className="mt-4 hidden text-center text-micro text-white/90 lg:block lg:text-right">
               Nutrition, down to the cell — evidence you can trace
             </p>
+          </div>
+        </div>
+
+        {/* Synergy network — a real interactive widget, not ambient
+            decoration (see HeroScene3D.tsx). Its own full-width band below
+            the headline/CTA + NICO card grid so its info panel and links
+            have room to breathe without crowding the NICO CTA, which stays
+            the hero's primary conversion path. Non-glass instrument-viewport
+            treatment: the hero already spends its glass budget on the stat
+            row above and the NICO card. */}
+        <div className="mt-14 md:mt-20">
+          <div className="mb-5 text-center lg:text-left">
+            <h3 className="text-lg font-bold text-white md:text-xl">Explore the synergy network</h3>
+            <p className="mt-1 text-sm text-white/60">
+              Click a compound to see what it pairs with — and why.
+            </p>
+          </div>
+          {/* Wide and tall: the network centers itself, which leaves the left
+              third genuinely empty — exactly where the selection panel docks,
+              so the panel never occludes the graph it's describing. */}
+          <div className="h-[440px] overflow-hidden rounded-3xl border border-white/10 bg-white/[0.02] md:h-[540px]">
+            <HeroSceneMount />
           </div>
         </div>
       </div>

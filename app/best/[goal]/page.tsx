@@ -176,7 +176,7 @@ export default async function BestForGoalPage({
             </p>
             <Link
               href="/nico"
-              className="focus-ring inline-flex items-center gap-2 bg-accent-emerald text-black px-6 py-3 rounded-xl text-sm font-bold hover:bg-accent-emerald/90 transition-colors"
+              className="focus-ring inline-flex items-center gap-2 tnic-button-accent [--btn-accent:var(--accent-emerald)] px-6 py-3 rounded-xl text-sm"
             >
               Take the NICO Starter Questionnaire <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>

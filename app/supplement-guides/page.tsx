@@ -8,6 +8,8 @@ import { SITE } from '@/lib/site';
 import { SUPPLEMENT_GUIDES } from '@/lib/guides';
 import { themes } from '@/lib/design-system';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { RevealItem } from '@/components/ui/RevealItem';
+import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Longevity Supplement Guides 2026 — Evidence-Based Deep Dives | TNiC',
@@ -100,10 +102,10 @@ const itemListSchema = {
 
 export default function SupplementGuidesPage() {
   return (
-    <>
+    <SubPageLayout hideStackReadout>
       <StructuredData schemas={[collectionSchema, breadcrumbSchema, itemListSchema]} />
 
-      <main className="min-h-screen bg-bg-base">
+      <div className="bg-bg-base">
         {/* Hero */}
         <section className="py-20 md:py-28 border-b border-border section-mesh">
           <div className="container-page text-center">
@@ -121,7 +123,7 @@ export default function SupplementGuidesPage() {
             <div className="flex flex-wrap gap-3 justify-center">
               <Link
                 href="/longevity-supplements-guide"
-                className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-accent-cyan text-bg-base font-semibold text-sm hover:bg-accent-cyan/90 transition"
+                className="focus-ring interactive inline-flex items-center gap-2 tnic-button-accent px-5 py-3 rounded-xl text-sm"
               >
                 Start with the Master Guide
                 <ArrowRight className="w-4 h-4" />
@@ -171,15 +173,15 @@ export default function SupplementGuidesPage() {
             </div>
 
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {SUPPLEMENT_GUIDES.map((guide) => {
+              {SUPPLEMENT_GUIDES.map((guide, i) => {
                 const Icon = GUIDE_ICONS[guide.href] ?? BookOpen;
                 const accent = themes[guide.accent].cssVar;
                 return (
+                  <RevealItem key={guide.href} index={i} className="h-full">
                   <Link
-                    key={guide.href}
                     href={guide.href}
                     style={{ ['--card-accent' as string]: accent }}
-                    className="premium-card focus-ring group p-6"
+                    className="premium-card focus-ring group h-full p-6"
                   >
                     <div className="mb-4 flex items-start justify-between gap-3">
                       <span
@@ -231,6 +233,7 @@ export default function SupplementGuidesPage() {
                       </span>
                     </div>
                   </Link>
+                  </RevealItem>
                 );
               })}
             </div>
@@ -361,7 +364,7 @@ export default function SupplementGuidesPage() {
             </div>
           </div>
         </section>
-      </main>
-    </>
+      </div>
+    </SubPageLayout>
   );
 }
