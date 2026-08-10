@@ -35,6 +35,7 @@ import {
   Waves,
   ShieldOff,
   CircuitBoard,
+  Check,
   type LucideIcon,
 } from 'lucide-react';
 import { PageShell } from '@/components/ui/PageShell';
@@ -183,7 +184,7 @@ export function LearnCenter({ defaultTab }: { defaultTab?: TabId }) {
                     <span className={`w-10 h-10 rounded-xl font-bold flex items-center justify-center transition-all ${
                       done ? 'bg-accent-emerald/20 text-accent-emerald' : 'bg-accent-cyan/10 text-accent-cyan'
                     }`}>
-                      {done ? '✓' : step.step}
+                      {done ? <Check className="h-5 w-5" aria-hidden="true" /> : step.step}
                     </span>
                   </label>
                   <a href={step.link} className="flex-1 block">

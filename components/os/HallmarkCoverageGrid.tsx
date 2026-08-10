@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, Check } from 'lucide-react';
 import { HallmarkIcon } from '@/components/library/HallmarkIcon';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { getHallmarkVisual } from '@/lib/hallmark-visuals';
@@ -162,7 +162,7 @@ function HallmarkCell({
                 )}
                 aria-hidden="true"
               >
-                ✓
+                <Check className="h-3 w-3" />
               </span>
             ) : (
               <span className="text-micro font-mono text-muted-foreground opacity-60">—</span>

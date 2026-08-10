@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, FlaskConical, ShieldCheck, Clock, ExternalLink, CheckCircle2, AlertTriangle, Star } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
+import { Accordion, AccordionItem } from '@/components/ui/Accordion';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { seoRoutes } from '@/lib/seo-routes';
 import { buildHowToSchema, buildGuidePageSchema, buildBreadcrumbSchema } from '@/lib/seo';
@@ -343,19 +344,13 @@ export default function LongevitySupplementsGuidePage() {
         <div className="container-page max-w-3xl">
           <h2 className="text-2xl font-black text-white mb-10">Frequently Asked Questions</h2>
 
-          <div className="space-y-6">
+          <Accordion className="space-y-6">
             {GUIDE_FAQS.map((faq) => (
-              <details key={faq.question} className="group rounded-2xl border border-border/60 bg-card/30 overflow-hidden">
-                <summary className="flex items-center justify-between p-5 cursor-pointer list-none font-semibold text-sm text-foreground group-open:text-accent-cyan transition-colors">
-                  {faq.question}
-                  <ArrowRight className="w-4 h-4 shrink-0 transition-transform group-open:rotate-90 text-muted-foreground group-open:text-accent-cyan" />
-                </summary>
-                <div className="px-5 pb-5 text-sm text-muted-foreground leading-relaxed border-t border-border/40 pt-4">
-                  {faq.answer}
-                </div>
-              </details>
+              <AccordionItem key={faq.question} question={faq.question}>
+                {faq.answer}
+              </AccordionItem>
             ))}
-          </div>
+          </Accordion>
 
           <div className="mt-10 rounded-2xl border border-accent-cyan/15 bg-accent-cyan/[0.04] p-6 text-center">
             <p className="text-sm text-white/90 mb-4">

@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { ArrowRight, FlaskConical, ShieldCheck, TrendingUp, Zap, CheckCircle2, AlertTriangle, ExternalLink } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { GuideHeroPanel } from '@/components/guides/GuideHeroPanel';
+import { DataTable } from '@/components/ui/DataTable';
+import { Accordion, AccordionItem } from '@/components/ui/Accordion';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
@@ -309,8 +311,7 @@ export default function GlyNACGuidePage() {
             The research protocol uses weight-based dosing. Most practitioners start lower and titrate up over several weeks to minimize NAC-related GI discomfort.
           </p>
 
-          <div className="overflow-x-auto rounded-xl border border-border/60 mb-8">
-            <table className="w-full text-sm">
+          <DataTable caption="GlyNAC dosing protocol" className="mb-8">
               <thead>
                 <tr className="border-b border-border/60 bg-card/50">
                   <th className="text-left p-4 font-mono text-xs text-muted-foreground">PHASE</th>
@@ -334,8 +335,7 @@ export default function GlyNACGuidePage() {
                   </tr>
                 ))}
               </tbody>
-            </table>
-          </div>
+          </DataTable>
 
           <div className="grid md:grid-cols-2 gap-5">
             <div className="rounded-xl border border-accent-emerald/20 bg-accent-emerald/[0.04] p-5">
@@ -420,19 +420,13 @@ export default function GlyNACGuidePage() {
       <section className="py-14 border-b border-border">
         <div className="container-page max-w-4xl">
           <h2 className="heading-section mb-8">GlyNAC FAQ</h2>
-          <div className="space-y-4">
+          <Accordion className="space-y-4">
             {FAQ.map((faq) => (
-              <details key={faq.q} className="group rounded-xl border border-border/60 bg-card/50">
-                <summary className="flex cursor-pointer items-center justify-between p-5 font-medium text-sm list-none">
-                  {faq.q}
-                  <ArrowRight className="w-4 h-4 text-muted-foreground transition-transform group-open:rotate-90 flex-shrink-0 ml-4" aria-hidden="true" />
-                </summary>
-                <div className="px-5 pb-5 text-sm text-muted-foreground leading-relaxed border-t border-border/40 pt-4">
-                  {faq.a}
-                </div>
-              </details>
+              <AccordionItem key={faq.q} question={faq.q}>
+                {faq.a}
+              </AccordionItem>
             ))}
-          </div>
+          </Accordion>
         </div>
       </section>
 

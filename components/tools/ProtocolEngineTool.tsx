@@ -12,7 +12,7 @@ import {
   Cell,
 } from 'recharts';
 import { axisProps, barCursor, tooltipContentStyle, tooltipItemStyle, tooltipLabelStyle } from '@/components/ui/ChartKit';
-import { Sun, Moon, Brain, Sparkles, ChevronRight, FlaskConical } from 'lucide-react';
+import { Sun, Moon, Brain, Sparkles, ChevronRight, FlaskConical, Check } from 'lucide-react';
 import Link from 'next/link';
 import { usePlatform } from '@/context/PlatformContext';
 import { useToolsStore } from '@/stores/toolsStore';
@@ -140,8 +140,8 @@ export function ProtocolEngineTool() {
                 ]}
               />
               {labs.length > 0 && (
-                <p className="text-xs text-accent-emerald">
-                  ✓ {labs.length} lab entries integrated
+                <p className="text-xs text-accent-emerald flex items-center gap-1.5">
+                  <Check className="h-3.5 w-3.5 shrink-0" aria-hidden="true" /> {labs.length} lab entries integrated
                 </p>
               )}
             </CardContent>

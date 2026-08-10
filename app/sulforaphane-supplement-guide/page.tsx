@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowRight, ExternalLink, CheckCircle2, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { GuideHeroPanel } from '@/components/guides/GuideHeroPanel';
+import { Accordion, AccordionItem } from '@/components/ui/Accordion';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
@@ -414,19 +415,13 @@ export default function SulforaphaneGuidePage() {
       <section className="py-14 border-b border-border">
         <div className="container-page max-w-4xl">
           <h2 className="heading-section mb-8">Sulforaphane FAQ</h2>
-          <div className="space-y-4">
+          <Accordion className="space-y-4">
             {FAQ.map((faq) => (
-              <details key={faq.q} className="group rounded-xl border border-border/60 bg-card/50">
-                <summary className="flex cursor-pointer items-center justify-between p-5 font-medium text-sm list-none">
-                  {faq.q}
-                  <ArrowRight className="w-4 h-4 text-muted-foreground transition-transform group-open:rotate-90 flex-shrink-0 ml-4" aria-hidden="true" />
-                </summary>
-                <div className="px-5 pb-5 text-sm text-muted-foreground leading-relaxed border-t border-border/40 pt-4">
-                  {faq.a}
-                </div>
-              </details>
+              <AccordionItem key={faq.q} question={faq.q}>
+                {faq.a}
+              </AccordionItem>
             ))}
-          </div>
+          </Accordion>
         </div>
       </section>
 

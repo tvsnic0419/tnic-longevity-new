@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowLeft, CheckCircle2, AlertCircle, Info, FlaskConical } from 'lucide-react';
 import { buildPageMetadata } from '@/lib/seo';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { DataTable } from '@/components/ui/DataTable';
 import { getHubContext } from '@/lib/hub-context';
 
 export const metadata = buildPageMetadata({
@@ -145,8 +146,7 @@ export default function DeliverySystemsPage() {
       </div>
 
       {/* Desktop table */}
-      <div className="hidden md:block overflow-x-auto mb-10">
-        <table className="w-full text-sm border-collapse">
+      <DataTable caption="Delivery systems compared" className="hidden md:block mb-10">
           <thead>
             <tr className="border-b border-border text-left">
               <th className="py-4 pr-6 text-xs font-mono text-accent-emerald uppercase tracking-wider w-[18%]">System</th>
@@ -192,8 +192,7 @@ export default function DeliverySystemsPage() {
               </tr>
             ))}
           </tbody>
-        </table>
-      </div>
+      </DataTable>
 
       <div className="border-t border-border pt-8">
         <p className="text-label text-muted-foreground mb-4">RELATED</p>

@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { BookOpen, FlaskConical, Heart, User, Quote } from 'lucide-react';
+import { BookOpen, FlaskConical, Heart, User, Quote, Check } from 'lucide-react';
 import { SectionShell } from '@/components/SectionShell';
 
 const founder = {
@@ -104,7 +104,7 @@ export function AboutSection() {
           <ul className="space-y-2">
             {scopeNote.covered.map((item) => (
               <li key={item} className="text-sm text-foreground/90 flex items-start gap-2">
-                <span className="text-accent-emerald shrink-0">✓</span> {item}
+                <Check className="h-4 w-4 mt-0.5 shrink-0 text-accent-emerald" aria-hidden="true" /> {item}
               </li>
             ))}
           </ul>

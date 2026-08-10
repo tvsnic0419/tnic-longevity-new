@@ -1,6 +1,6 @@
 'use client';
 
-import { Shield, HardDrive, WifiOff, Trash2, Download, Lock, Clock } from 'lucide-react';
+import { Shield, HardDrive, WifiOff, Trash2, Download, Lock, Clock, Check } from 'lucide-react';
 import { usePlatform } from '@/context/PlatformContext';
 import { PRIVACY_PRINCIPLES, getStorageSummary } from '@/lib/privacy';
 import { Badge } from '@/components/ui/Badge';
@@ -77,7 +77,7 @@ export function PrivacyPanel() {
         <ul className="space-y-2 mb-6">
           {PRIVACY_PRINCIPLES.map((p) => (
             <li key={p} className="text-xs text-muted-foreground flex gap-2">
-              <span className="text-accent-emerald shrink-0">✓</span> {p}
+              <Check className="h-3.5 w-3.5 mt-0.5 shrink-0 text-accent-emerald" aria-hidden="true" /> {p}
             </li>
           ))}
         </ul>
