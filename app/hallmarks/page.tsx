@@ -158,7 +158,7 @@ export default function HallmarksIndexPage() {
                       <div className="mt-auto flex gap-2">
                         <Link
                           href={`/library/${h.slug}`}
-                          className="focus-ring flex-1 rounded-lg border border-border bg-white/[0.02] py-2 text-center text-xs font-medium text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
+                          className="tnic-button-outline focus-ring flex-1 rounded-lg py-2 text-center text-xs font-medium"
                         >
                           Library →
                         </Link>
@@ -213,7 +213,7 @@ export default function HallmarksIndexPage() {
               <Link href="/stacks" className="focus-ring group inline-flex items-center gap-2 tnic-button-accent [--btn-accent:var(--accent-emerald)] rounded-xl px-6 py-3 text-sm">
                 Stack Architect <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
-              <Link href="/bio-age" className="focus-ring inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3 text-sm font-medium text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground">
+              <Link href="/bio-age" className="tnic-button-outline focus-ring inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-medium">
                 Calculate Bio Age
               </Link>
             </div>

@@ -2955,6 +2955,31 @@ p,
   }
 }
 
+/* ── Neutral outline secondary ──
+   The theme-correct neutral sibling of the buttons above. .tnic-button-secondary
+   is a white-based ghost for always-dark heroes; this one is token-driven so it
+   reads correctly in BOTH themes. It consolidates the neutral
+   `border border-border … text-muted-foreground hover:text-foreground` recipe
+   that was hand-rolled ~15× across the hallmark deep-dive pages (and elsewhere).
+   Callers keep their own padding / radius / size / layout. */
+.tnic-button-outline {
+  background: transparent;
+  border: 1px solid var(--color-border-subtle);
+  color: var(--color-text-muted);
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+@media (hover: hover) {
+  .tnic-button-outline:hover {
+    color: var(--color-text-primary);
+    border-color: var(--color-border-strong);
+    background: var(--color-bg-muted);
+  }
+}
+.tnic-button-outline:active { transform: translateY(0) scale(0.985); }
+@media (prefers-reduced-motion: reduce) {
+  .tnic-button-outline { transition: none; }
+}
+
 /* ── Tabular numbers shorthand ── */
 .tnic-tabular { font-variant-numeric: tabular-nums; }
 

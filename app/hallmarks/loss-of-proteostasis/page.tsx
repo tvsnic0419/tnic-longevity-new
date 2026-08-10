@@ -57,7 +57,7 @@ export default function LossOfProteostasisPage() {
             </p>
             <div className="flex flex-wrap gap-3">
               <Link href="/stacks" className="inline-flex items-center gap-2 bg-amber-500 text-black px-5 py-3 rounded-xl text-sm font-bold hover:bg-amber-400 transition-colors">Build My Stack <ArrowRight className="w-4 h-4" /></Link>
-              <Link href="/bio-age" className="inline-flex items-center gap-2 border border-border px-5 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Assess My Bio Age</Link>
+              <Link href="/bio-age" className="inline-flex items-center gap-2 tnic-button-outline focus-ring px-5 py-3 rounded-xl text-sm font-medium">Assess My Bio Age</Link>
             </div>
             </div>
             <div className="lg:col-span-5">
@@ -70,7 +70,7 @@ export default function LossOfProteostasisPage() {
         <section className="py-20 border-t border-border/50">
           <div className="container-page max-w-4xl">
             <p className="text-xs text-amber-400 uppercase tracking-widest font-medium mb-4">The Mechanism</p>
-            <h2 className="text-3xl font-black tracking-tight text-foreground mb-6">Three failure modes of the proteostasis network</h2>
+            <h2 className="heading-section text-foreground mb-6">Three failure modes of the proteostasis network</h2>
             <div className="grid md:grid-cols-2 gap-8 text-muted-foreground leading-relaxed">
               <div className="space-y-4">
                 <p>
@@ -113,7 +113,7 @@ export default function LossOfProteostasisPage() {
               <Activity className="w-5 h-5 text-amber-400" />
               <p className="text-xs text-amber-400 uppercase tracking-widest font-medium">Monitoring</p>
             </div>
-            <h2 className="text-3xl font-black tracking-tight text-foreground mb-6">Biomarkers that track proteostasis health</h2>
+            <h2 className="heading-section text-foreground mb-6">Biomarkers that track proteostasis health</h2>
             <div className="rounded-2xl border border-border/60 bg-card/40 overflow-hidden">
               <div className="grid grid-cols-3 px-6 py-3 border-b border-border/40 text-xs text-muted-foreground uppercase tracking-wide font-medium">
                 <span>Marker</span><span>Reference range</span><span>Clinical note</span>
@@ -135,7 +135,7 @@ export default function LossOfProteostasisPage() {
               <FlaskConical className="w-5 h-5 text-emerald-400" />
               <p className="text-xs text-emerald-400 uppercase tracking-widest font-medium">Evidence-Graded Interventions</p>
             </div>
-            <h2 className="text-3xl font-black tracking-tight text-foreground mb-2">Proteostasis support with clinical evidence</h2>
+            <h2 className="heading-section text-foreground mb-2">Proteostasis support with clinical evidence</h2>
             <EvidenceTagLegend className="mb-8" />
             <InterventionCards interventions={hallmark.interventions} />
           </div>
@@ -144,11 +144,11 @@ export default function LossOfProteostasisPage() {
         <section className="py-20 border-t border-border/50">
           <div className="container-page text-center max-w-2xl">
             <ShieldCheck className="w-10 h-10 text-amber-400 mx-auto mb-5" />
-            <h2 className="text-3xl font-black tracking-tight text-foreground mb-4">Protect cognitive longevity.</h2>
+            <h2 className="heading-section text-foreground mb-4">Protect cognitive longevity.</h2>
             <p className="text-muted-foreground mb-8">Build a proteostasis-targeted protocol: GlyNAC + sulforaphane + heat exposure, mapped to hallmark coverage in real time.</p>
             <div className="flex flex-wrap justify-center gap-3">
               <Link href="/stacks" className="inline-flex items-center gap-2 tnic-button-accent [--btn-accent:var(--accent-emerald)] focus-ring px-6 py-3 rounded-xl text-sm">Stack Architect <ArrowRight className="w-4 h-4" /></Link>
-              <Link href="/hallmarks" className="inline-flex items-center gap-2 border border-border px-6 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"><BookOpen className="w-4 h-4" />All Hallmarks</Link>
+              <Link href="/hallmarks" className="inline-flex items-center gap-2 tnic-button-outline focus-ring px-6 py-3 rounded-xl text-sm font-medium"><BookOpen className="w-4 h-4" />All Hallmarks</Link>
             </div>
           </div>
         </section>

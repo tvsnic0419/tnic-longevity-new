@@ -66,7 +66,7 @@ export default function GenomicInstabilityPage() {
               <Link href="/stacks" className="inline-flex items-center gap-2 bg-cyan-500 text-black px-5 py-3 rounded-xl text-sm font-bold hover:bg-cyan-400 transition-colors">
                 Build My Stack <ArrowRight className="w-4 h-4" />
               </Link>
-              <Link href="/bio-age" className="inline-flex items-center gap-2 border border-border px-5 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              <Link href="/bio-age" className="inline-flex items-center gap-2 tnic-button-outline focus-ring px-5 py-3 rounded-xl text-sm font-medium">
                 Assess My Bio Age
               </Link>
             </div>
@@ -82,7 +82,7 @@ export default function GenomicInstabilityPage() {
         <section className="py-20 border-t border-border/50">
           <div className="container-page max-w-4xl">
             <p className="text-xs text-cyan-400 uppercase tracking-widest font-medium mb-4">The Mechanism</p>
-            <h2 className="text-3xl font-black tracking-tight text-foreground mb-6">Why DNA damage accumulates with age</h2>
+            <h2 className="heading-section text-foreground mb-6">Why DNA damage accumulates with age</h2>
             <div className="grid md:grid-cols-2 gap-8 text-muted-foreground leading-relaxed">
               <div className="space-y-4">
                 <p>
@@ -135,7 +135,7 @@ export default function GenomicInstabilityPage() {
               <Activity className="w-5 h-5 text-cyan-400" />
               <p className="text-xs text-cyan-400 uppercase tracking-widest font-medium">Monitoring</p>
             </div>
-            <h2 className="text-3xl font-black tracking-tight text-foreground mb-6">Biomarkers that track genomic health</h2>
+            <h2 className="heading-section text-foreground mb-6">Biomarkers that track genomic health</h2>
             <div className="rounded-2xl border border-border/60 bg-card/40 overflow-hidden">
               <div className="grid grid-cols-3 px-6 py-3 border-b border-border/40 text-xs text-muted-foreground uppercase tracking-wide font-medium">
                 <span>Marker</span>
@@ -163,7 +163,7 @@ export default function GenomicInstabilityPage() {
               <FlaskConical className="w-5 h-5 text-emerald-400" />
               <p className="text-xs text-emerald-400 uppercase tracking-widest font-medium">Evidence-Graded Interventions</p>
             </div>
-            <h2 className="text-3xl font-black tracking-tight text-foreground mb-2">What actually works</h2>
+            <h2 className="heading-section text-foreground mb-2">What actually works</h2>
             <EvidenceTagLegend className="mb-2" />
             <p className="text-muted-foreground mb-8">We don’t list Tier C interventions on this page.</p>
             <InterventionCards interventions={hallmark.interventions} />
@@ -174,7 +174,7 @@ export default function GenomicInstabilityPage() {
         <section className="py-20 border-t border-border/50">
           <div className="container-page text-center max-w-2xl">
             <ShieldCheck className="w-10 h-10 text-cyan-400 mx-auto mb-5" />
-            <h2 className="text-3xl font-black tracking-tight text-foreground mb-4">
+            <h2 className="heading-section text-foreground mb-4">
               Build a DNA-repair protocol.
             </h2>
             <p className="text-muted-foreground mb-8">
@@ -185,7 +185,7 @@ export default function GenomicInstabilityPage() {
               <Link href="/stacks" className="inline-flex items-center gap-2 tnic-button-accent [--btn-accent:var(--accent-emerald)] focus-ring px-6 py-3 rounded-xl text-sm">
                 Stack Architect <ArrowRight className="w-4 h-4" />
               </Link>
-              <Link href="/library" className="inline-flex items-center gap-2 border border-border px-6 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              <Link href="/library" className="inline-flex items-center gap-2 tnic-button-outline focus-ring px-6 py-3 rounded-xl text-sm font-medium">
                 <BookOpen className="w-4 h-4" />
                 All Hallmarks
               </Link>

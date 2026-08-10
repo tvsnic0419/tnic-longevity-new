@@ -231,7 +231,7 @@ export default function NadSupplementGuidePage() {
       {/* Why NAD+ Matters */}
       <section className="py-12 border-b border-border">
         <div className="container-page max-w-4xl">
-          <h2 className="text-2xl font-bold mb-4">Why NAD+ is central to longevity</h2>
+          <h2 className="heading-section mb-4">Why NAD+ is central to longevity</h2>
           <p className="text-muted-foreground leading-relaxed mb-6">
             NAD<sup>+</sup> (Nicotinamide Adenine Dinucleotide) is a coenzyme present in every living cell.
             It acts as an electron carrier in metabolism and as a substrate for longevity enzymes.
@@ -287,7 +287,7 @@ export default function NadSupplementGuidePage() {
       {/* Comparison Table */}
       <section className="py-12 border-b border-border">
         <div className="container-page max-w-5xl">
-          <h2 className="text-2xl font-bold mb-2">NAD+ Precursor Comparison</h2>
+          <h2 className="heading-section mb-2">NAD+ Precursor Comparison</h2>
           <p className="text-muted-foreground text-sm mb-8">
             Three human-studied NAD+ precursors — ranked by TNiC for longevity stack integration.
           </p>
@@ -389,7 +389,7 @@ export default function NadSupplementGuidePage() {
       {/* How to Choose — HowTo section */}
       <section className="py-12 border-b border-border">
         <div className="container-page max-w-4xl">
-          <h2 className="text-2xl font-bold mb-2">How to choose the right NAD+ supplement</h2>
+          <h2 className="heading-section mb-2">How to choose the right NAD+ supplement</h2>
           <p className="text-muted-foreground text-sm mb-8">A 5-step decision framework based on your goals, budget, and stack.</p>
           <div className="space-y-4">
             {[
@@ -436,7 +436,7 @@ export default function NadSupplementGuidePage() {
       {/* Timing Protocol */}
       <section className="py-12 border-b border-border bg-[#050a14]/50">
         <div className="container-page max-w-4xl">
-          <h2 className="text-2xl font-bold mb-2">Optimal NAD+ supplement timing</h2>
+          <h2 className="heading-section mb-2">Optimal NAD+ supplement timing</h2>
           <p className="text-muted-foreground text-sm mb-8">Based on TNiC protocol research and chronobiology data on NAD+ metabolism.</p>
           <div className="grid md:grid-cols-3 gap-4">
             {[
@@ -484,7 +484,7 @@ export default function NadSupplementGuidePage() {
       {/* FAQ */}
       <section className="py-12 border-b border-border">
         <div className="container-page max-w-4xl">
-          <h2 className="text-2xl font-bold mb-8">NAD+ Supplement FAQ</h2>
+          <h2 className="heading-section mb-8">NAD+ Supplement FAQ</h2>
           <div className="space-y-5">
             {GUIDE_FAQS.map((faq) => (
               <div key={faq.question} className="rounded-xl border border-border/60 p-5">

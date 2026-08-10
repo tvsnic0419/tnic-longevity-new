@@ -140,7 +140,7 @@ export default function LongevitySupplementsGuidePage() {
               </Link>
               <Link
                 href="/library"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold border border-white/15 text-white hover:border-white/30 hover:text-white transition-all focus-ring"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold tnic-button-secondary focus-ring"
               >
                 Browse Full Library
               </Link>
@@ -162,7 +162,7 @@ export default function LongevitySupplementsGuidePage() {
               { icon: Clock, color: 'var(--accent-cyan)', title: 'Epigenetic clock data', body: 'Where available, we show estimated biological age delta from methylation clock studies.' },
               { icon: Star, color: 'var(--accent-amber)', title: 'LQ composite score', body: '8-dimensional weighted score (0–100): CE · EB · ES · EE · SF · BV · HP minus Risk penalty.' },
             ].map(({ icon: Icon, color, title, body }) => (
-              <div key={title} className="rounded-2xl p-5 border border-border/60 bg-card/40">
+              <div key={title} className="premium-card p-5">
                 <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style={{ background: `${color}18` }}>
                   <Icon className="w-4.5 h-4.5" style={{ color }} />
                 </div>
@@ -177,7 +177,7 @@ export default function LongevitySupplementsGuidePage() {
       {/* Ranked Compound Table */}
       <section className="py-16 md:py-20 border-b border-border canvas-scrim">
         <div className="container-page">
-          <h2 className="text-2xl sm:text-3xl font-black text-white mb-3">
+          <h2 className="heading-section mb-3">
             Ranked: Best Longevity Supplements 2026
           </h2>
           <p className="text-muted-foreground mb-10 max-w-2xl">
@@ -193,7 +193,7 @@ export default function LongevitySupplementsGuidePage() {
               const tierBg = tier === 'A' ? 'bg-accent-emerald/10 border-accent-emerald/25' : tier === 'B' ? 'bg-accent-amber/10 border-accent-amber/25' : 'bg-accent-rose/10 border-accent-rose/25';
 
               return (
-                <div key={c.id} className="rounded-2xl border border-border/60 bg-card/30 p-5 sm:p-6 hover:border-border transition-all">
+                <div key={c.id} className="premium-card p-5 sm:p-6">
                   <div className="grid sm:grid-cols-12 gap-4 items-start">
                     {/* Rank + Name */}
                     <div className="sm:col-span-5 flex items-start gap-4">
@@ -272,7 +272,7 @@ export default function LongevitySupplementsGuidePage() {
             <div className="inline-flex items-center gap-2 text-micro font-mono uppercase tracking-[0.2em] text-accent-violet border border-accent-violet/20 bg-accent-violet/[0.06] px-4 py-2 rounded-full mb-5">
               Step-by-Step Protocol
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-white mb-3">
+            <h2 className="heading-section text-white mb-3">
               How to Build a Longevity Supplement Stack
             </h2>
             <p className="text-muted-foreground">
@@ -298,7 +298,7 @@ export default function LongevitySupplementsGuidePage() {
             <Link href="/nico" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold tnic-button-accent focus-ring">
               Start Step 1 — the NICO Starter Questionnaire <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link href="/stacks" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border border-white/15 text-white hover:border-white/30 transition focus-ring">
+            <Link href="/stacks" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold tnic-button-secondary focus-ring">
               Step 5 — Stack Architect
             </Link>
           </div>
@@ -308,7 +308,7 @@ export default function LongevitySupplementsGuidePage() {
       {/* Red flags to avoid */}
       <section className="py-16 border-b border-border canvas-scrim">
         <div className="container-page max-w-4xl">
-          <h2 className="text-2xl font-black text-white mb-3">Red Flags to Avoid When Buying</h2>
+          <h2 className="heading-section mb-3">Red Flags to Avoid When Buying</h2>
           <p className="text-muted-foreground mb-8">Most supplement marketing is misleading. These are the concrete signals of low-quality products:</p>
 
           <div className="grid sm:grid-cols-2 gap-3 mb-8">
@@ -342,7 +342,7 @@ export default function LongevitySupplementsGuidePage() {
       {/* FAQ */}
       <section className="py-16 canvas-scrim">
         <div className="container-page max-w-3xl">
-          <h2 className="text-2xl font-black text-white mb-10">Frequently Asked Questions</h2>
+          <h2 className="heading-section mb-10">Frequently Asked Questions</h2>
 
           <Accordion className="space-y-6">
             {GUIDE_FAQS.map((faq) => (
@@ -387,7 +387,7 @@ export default function LongevitySupplementsGuidePage() {
                 <Link
                   key={g.href}
                   href={g.href}
-                  className="group rounded-xl border border-border/50 bg-card/40 hover:border-accent-cyan/30 hover:bg-accent-cyan/[0.03] p-4 transition-all"
+                  className="premium-card group p-4"
                 >
                   <div className="flex items-center justify-between mb-1">
                     <p className="font-semibold text-sm text-foreground group-hover:text-accent-cyan transition-colors">{g.label}</p>
