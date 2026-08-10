@@ -170,7 +170,7 @@ export function ContextBar({ hideStackReadout = false }: ContextBarProps = {}) {
           )}
           <Link
             href={next.href}
-            className="focus-ring interactive inline-flex items-center gap-1 rounded-lg bg-accent-emerald/10 border border-accent-emerald/25 px-2.5 py-1.5 font-semibold text-accent-emerald hover:bg-accent-emerald/15 shrink-0"
+            className="focus-ring interactive tnic-button-tonal [--btn-accent:var(--accent-emerald)] inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 shrink-0"
           >
             {next.label}
             <ArrowRight className="w-3 h-3" aria-hidden="true" />
