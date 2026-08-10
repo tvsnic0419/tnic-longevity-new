@@ -10,7 +10,6 @@ import { Logo } from '@/components/ui/Logo';
 import { SiteSearch } from '@/components/SiteSearch';
 import { COMMAND_PALETTE_EVENT } from '@/components/os/os-events';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
-import { GlassPanel } from '@/components/ui/GlassPanel';
 
 export function Nav() {
   const pathname = usePathname();
@@ -80,10 +79,8 @@ export function Nav() {
 
   return (
     <nav className="fixed top-0 w-full z-50" aria-label="Main navigation">
-      <div
-        className={`absolute inset-0 nav-glass ${scrolled ? 'nav-glass-scrolled' : ''}`}
-      />
-      <div className="relative container-page py-3 md:py-4 flex justify-between items-center gap-4">
+      <div className={`absolute inset-0 nav-glass ${scrolled ? 'nav-glass-scrolled' : ''}`} />
+      <div className="relative container-page py-3 md:py-3.5 flex justify-between items-center gap-4">
         {/* No aria-label here: it would duplicate/conflict with the Logo's
             own role="img" + aria-label below, which Lighthouse's
             label-content-name-mismatch audit flags as visible text not
@@ -96,51 +93,62 @@ export function Nav() {
           <Logo variant="lockup" size="nav" alt="TNiC – Transformative Nutrition in Cell-Health · Home" />
         </Link>
 
-        <div className="hidden lg:flex gap-0.5 xl:gap-1">
-          {navLinks.map((link) =>
-            isInternal(link.href) ? (
-              <Link
-                key={link.href}
-                href={link.href}
-                aria-current={isActive(link.href) ? 'page' : undefined}
-                className="focus-ring interactive px-3.5 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent-cyan/10 transition-all"
-              >
+        {/* Primary links — a sliding underline (shared layoutId) tracks the
+            active section as you navigate, the signature motion of the bar. */}
+        <div className="hidden lg:flex items-center gap-0.5 xl:gap-1">
+          {navLinks.map((link) => {
+            const active = isActive(link.href);
+            const cls =
+              'focus-ring interactive relative px-3 py-2 rounded-lg text-[13px] font-medium tracking-tight transition-colors ' +
+              (active ? 'text-foreground' : 'text-muted-foreground hover:text-foreground');
+            const inner = (
+              <>
                 {link.label}
+                {active && (
+                  <motion.span
+                    layoutId="nav-active-underline"
+                    className="absolute left-3 right-3 -bottom-0.5 h-px rounded-full bg-gradient-to-r from-accent-cyan/50 via-accent-cyan to-accent-cyan/50"
+                    transition={{ type: 'spring', stiffness: 480, damping: 38 }}
+                  />
+                )}
+              </>
+            );
+            return isInternal(link.href) ? (
+              <Link key={link.href} href={link.href} aria-current={active ? 'page' : undefined} className={cls}>
+                {inner}
               </Link>
             ) : (
-              <a
-                key={link.href}
-                href={link.href}
-                className="focus-ring interactive px-3.5 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent-cyan/10 transition-all"
-              >
-                {link.label}
+              <a key={link.href} href={link.href} className={cls}>
+                {inner}
               </a>
-            ),
-          )}
+            );
+          })}
         </div>
 
-        <div className="hidden lg:flex items-center gap-2 shrink-0">
-          <ThemeToggle compact />
+        {/* Utility + actions — one clear hierarchy: quiet utilities, quiet
+            secondary links, a single filled primary. */}
+        <div className="hidden lg:flex items-center gap-1.5 shrink-0">
           <SiteSearch />
-          <GlassPanel depth="float" className="glass-hover rounded-full">
-            <Link
-              href="/quiz"
-              className="focus-ring inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground"
-            >
-              <ClipboardList className="w-4 h-4 text-accent-violet" aria-hidden="true" />
-              Quiz
-            </Link>
-          </GlassPanel>
-          <GlassPanel depth="float" className="glass-hover rounded-full">
-            <Link
-              href="/shop"
-              className="focus-ring inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground"
-            >
-              <ShieldCheck className="w-4 h-4 text-accent-amber" aria-hidden="true" />
-              Verify
-            </Link>
-          </GlassPanel>
-          <Link href="/dashboard" className="focus-ring btn-gradient text-sm !py-2.5 !px-5 !min-h-0 rounded-full">
+          <ThemeToggle compact />
+          <span className="mx-1 h-5 w-px bg-border/70" aria-hidden="true" />
+          <Link
+            href="/quiz"
+            className="focus-ring interactive inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-[13px] font-semibold text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ClipboardList className="w-4 h-4 text-accent-violet" aria-hidden="true" />
+            Quiz
+          </Link>
+          <Link
+            href="/shop"
+            className="focus-ring interactive inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-[13px] font-semibold text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ShieldCheck className="w-4 h-4 text-accent-amber" aria-hidden="true" />
+            Verify
+          </Link>
+          <Link
+            href="/dashboard"
+            className="focus-ring btn-gradient text-[13px] !py-2 !px-4 !min-h-0 rounded-full ml-0.5"
+          >
             Dashboard
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </Link>
@@ -179,54 +187,65 @@ export function Nav() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden relative nav-glass nav-glass-scrolled border-b border-border"
+            className="lg:hidden relative nav-glass nav-glass-scrolled border-b border-border overflow-hidden"
           >
-            <div className="container-page py-4 flex flex-col gap-1">
-              {navLinks.map((link) =>
-                isInternal(link.href) ? (
-                  <Link
+            <div className="container-page py-4 flex flex-col gap-0.5">
+              {navLinks.map((link, i) => {
+                const active = isActive(link.href);
+                const rowCls =
+                  'focus-ring interactive flex justify-between items-center py-3.5 min-h-[var(--space-touch)] text-base font-medium border-b border-border/50 last:border-0 transition-colors ' +
+                  (active ? 'text-accent-cyan' : 'text-foreground hover:text-accent-cyan');
+                const row = (
+                  <>
+                    <span>{link.label}</span>
+                    {active && <span className="h-1.5 w-1.5 rounded-full bg-accent-cyan" aria-hidden="true" />}
+                  </>
+                );
+                return (
+                  <motion.div
                     key={link.href}
-                    href={link.href}
-                    aria-current={isActive(link.href) ? 'page' : undefined}
-                    className="focus-ring interactive flex justify-between items-center text-foreground hover:text-accent-cyan py-3.5 min-h-[var(--space-touch)] text-base font-medium border-b border-border/50 last:border-0"
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.03 * i, duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    {link.label}
-                  </Link>
-                ) : (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    className="focus-ring interactive flex justify-between items-center text-foreground hover:text-accent-cyan py-3.5 min-h-[var(--space-touch)] text-base font-medium border-b border-border/50 last:border-0"
-                  >
-                    {link.label}
-                  </a>
-                ),
-              )}
-              <div className="flex flex-col gap-2 mt-3">
-                <GlassPanel depth="float" className="glass-hover rounded-xl">
+                    {isInternal(link.href) ? (
+                      <Link href={link.href} aria-current={active ? 'page' : undefined} className={rowCls}>
+                        {row}
+                      </Link>
+                    ) : (
+                      <a href={link.href} className={rowCls}>
+                        {row}
+                      </a>
+                    )}
+                  </motion.div>
+                );
+              })}
+              <div className="flex flex-col gap-2 mt-4">
+                <div className="grid grid-cols-2 gap-2">
                   <Link
                     href="/quiz"
                     onClick={() => setMobileOpen(false)}
-                    className="focus-ring block rounded-xl py-3 text-center text-sm font-semibold"
+                    className="focus-ring interactive inline-flex items-center justify-center gap-1.5 rounded-xl border border-border py-3 text-sm font-semibold text-foreground hover:border-accent-violet/50"
                   >
-                    3-Min Stack Quiz
+                    <ClipboardList className="w-4 h-4 text-accent-violet" aria-hidden="true" />
+                    Quiz
                   </Link>
-                </GlassPanel>
-                <GlassPanel depth="float" className="glass-hover rounded-xl">
                   <Link
                     href="/shop"
                     onClick={() => setMobileOpen(false)}
-                    className="focus-ring block rounded-xl py-3 text-center text-sm font-semibold"
+                    className="focus-ring interactive inline-flex items-center justify-center gap-1.5 rounded-xl border border-border py-3 text-sm font-semibold text-foreground hover:border-accent-amber/50"
                   >
-                    Verify a Product
+                    <ShieldCheck className="w-4 h-4 text-accent-amber" aria-hidden="true" />
+                    Verify
                   </Link>
-                </GlassPanel>
+                </div>
                 <Link
                   href="/dashboard"
                   onClick={() => setMobileOpen(false)}
                   className="focus-ring btn-gradient text-sm text-center justify-center"
                 >
                   Open Dashboard
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
                 </Link>
               </div>
             </div>

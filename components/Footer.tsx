@@ -60,10 +60,12 @@ export function Footer() {
       <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent-cyan/50 to-transparent" />
       <div className="container-page">
         <div className="mb-12 md:mb-16 text-center border-b border-border/40 pb-10 md:pb-14">
-          <p className="footer-manifesto max-w-3xl mx-auto mb-4">
-            Independent longevity intelligence — built on evidence, designed for privacy, free for everyone.
+          <p className="text-label mb-5 text-muted-foreground/70">The TNiC promise</p>
+          <p className="font-display max-w-3xl mx-auto mb-5 text-[clamp(1.5rem,3.2vw,2.4rem)] font-medium leading-[1.12] tracking-[-0.015em] text-foreground text-balance">
+            Independent longevity intelligence — built on evidence,
+            <span className="text-accent-cyan"> designed for privacy</span>, free for everyone.
           </p>
-          <p className="text-body-sm max-w-xl mx-auto">
+          <p className="text-body-sm max-w-xl mx-auto text-pretty">
             No supplement inventory to move. No user health data sales model.
             Just cell-health research made easier to inspect, question, and apply responsibly.
           </p>
@@ -175,10 +177,20 @@ export function Footer() {
             © 2026 TNiC · Independent · Evidence-First
             <span className="text-muted-foreground/60"> · Longevity OS coming soon</span>
           </p>
-          <div className="flex flex-wrap gap-x-4 gap-y-1 text-caption font-mono">
-            <span>Tier A: {tierACount} compounds</span>
-            <span>Tier B: {tierBCount} compounds</span>
-            <span>{citationRegistry.length} indexed PMIDs</span>
+          <div className="flex flex-wrap gap-2">
+            {[
+              { dot: 'bg-accent-cyan', label: `Tier A · ${tierACount}` },
+              { dot: 'bg-accent-amber', label: `Tier B · ${tierBCount}` },
+              { dot: 'bg-accent-emerald', label: `${citationRegistry.length} PMIDs` },
+            ].map((stat) => (
+              <span
+                key={stat.label}
+                className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-[var(--color-bg-muted)] px-2.5 py-1 text-caption font-mono text-muted-foreground"
+              >
+                <span className={`h-1.5 w-1.5 rounded-full ${stat.dot}`} aria-hidden="true" />
+                {stat.label}
+              </span>
+            ))}
           </div>
         </div>
       </div>
