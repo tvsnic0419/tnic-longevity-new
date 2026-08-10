@@ -166,6 +166,7 @@ const CSS = `
 .is-in .tnic-stage,
 .is-in .tnic-molcard,
 .is-in .tnic-hero-badges,
+.is-in .tnic-hero-cta,
 .is-in .tnic-final { opacity: 1; transform: none; }
 
 .tnic-hero { align-items: flex-start; text-align: left; }
@@ -183,6 +184,14 @@ const CSS = `
 }
 .tnic-hero-badges .pill b { color: var(--cyan); font-weight: 500; }
 .tnic-hero-badges .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+
+/* Primary action on the very first screen (Act 0) — a new visitor gets a clear
+   CTA above the fold instead of having to scroll the whole descent to act. */
+.tnic-hero-cta {
+  display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px;
+  opacity: 0; transform: translateY(14px);
+  transition: opacity 1s ease .45s, transform 1s ease .45s;
+}
 
 .tnic-cue {
   position: absolute; left: 50%; bottom: 34px; transform: translateX(-50%);
@@ -389,12 +398,14 @@ const CSS = `
 .tnic-cta {
   display: inline-flex; align-items: center; gap: 12px; margin-top: 22px;
   padding: 14px 24px; border-radius: 999px;
-  background: linear-gradient(135deg, var(--cyan), var(--indigo));
-  color: #050710; font-weight: 600; font-size: 15px; text-decoration: none;
-  box-shadow: 0 0 32px rgba(95,227,224,0.3);
+  /* Site signature gradient (matches .btn-gradient) so the descent's actions
+     read as the same primary CTA as the rest of the site. */
+  background: linear-gradient(135deg, #00e0ff 0%, #34d399 50%, #6ee7b7 100%);
+  color: #030712; font-weight: 600; font-size: 15px; text-decoration: none;
+  box-shadow: 0 0 32px rgba(0,224,255,0.32);
   transition: transform .2s ease, box-shadow .2s ease;
 }
-.tnic-cta:hover { transform: translateY(-1px); box-shadow: 0 0 40px rgba(95,227,224,0.5); }
+.tnic-cta:hover { transform: translateY(-1px); box-shadow: 0 0 42px rgba(0,224,255,0.5); }
 .tnic-cta .arr { display: inline-block; transition: transform .2s ease; }
 .tnic-cta:hover .arr { transform: translateX(4px); }
 .tnic-cta.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); box-shadow: none; margin-left: 12px; }
@@ -818,6 +829,12 @@ export function HomeDescent() {
           <span className="pill"><span className="dot" /><b>{COMPOUND_COUNT}</b>&nbsp;graded compounds</span>
           <span className="pill"><span className="dot" /><b>12</b>&nbsp;hallmarks of aging</span>
           <span className="pill"><span className="dot" /><b>A–C</b>&nbsp;evidence tiers</span>
+        </div>
+        <div className="tnic-hero-cta">
+          <Link href="/nico" className="tnic-cta">
+            Start the NICO Questionnaire <span className="arr" aria-hidden="true">→</span>
+          </Link>
+          <Link href="/library" className="tnic-cta ghost">Explore the evidence</Link>
         </div>
         <div className="tnic-cue"><span className="bar" />descend</div>
       </section>
