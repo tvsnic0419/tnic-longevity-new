@@ -114,8 +114,8 @@ export default function SupplementGuidesPage() {
         <CinematicHubHero
           hue="cyan"
           kicker="Evidence-Based · PubMed-Cited · 2026"
-          title={<>Longevity supplement <em>guides</em>.</>}
-          lead="Deep-dive guides for the compounds with the strongest evidence in aging science. Every claim is cited, every protocol honest about its limits — and affiliate links never drive the rankings."
+          title={<>The evidence, <em>compound by compound</em>.</>}
+          lead="Deep dives on the molecules with the strongest human data in aging science — mechanism, key trials, dosing, and honest cautions. Cited throughout; affiliate links never drive the rankings."
           stats={[
             { value: String(SUPPLEMENT_GUIDES.length), label: 'In-depth guides' },
             { value: String(compoundDeepDives.length), label: 'Compound profiles' },
