@@ -99,7 +99,7 @@ export default function LongevitySupplementsGuidePage() {
   ];
 
   return (
-    <SubPageLayout hideContextBar guideHref="/longevity-supplements-guide">
+    <SubPageLayout hideStackReadout guideHref="/longevity-supplements-guide">
       <StructuredData schemas={schemas} />
 
       {/* Hero */}

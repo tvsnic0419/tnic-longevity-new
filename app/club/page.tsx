@@ -4,6 +4,7 @@ import { Infinity as InfinityIcon, Check, ArrowRight, Dna } from 'lucide-react';
 import { JoinClub } from '@/components/club/JoinClub';
 import { CLUB_PLEDGE, CLUB_MANIFESTO } from '@/lib/club';
 import { buildPageMetadata } from '@/lib/seo';
+import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'The 150-Year Club — Commit to Maximum Healthspan',
@@ -15,7 +16,8 @@ export const metadata: Metadata = buildPageMetadata({
 
 export default function ClubPage() {
   return (
-    <div className="min-h-screen section-deep">
+    <SubPageLayout>
+      <div className="min-h-screen section-deep">
       <div className="container-page py-16 md:py-24 max-w-3xl">
         {/* Manifesto */}
         <div className="text-center mb-12">
@@ -79,6 +81,7 @@ export default function ClubPage() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </SubPageLayout>
   );
 }

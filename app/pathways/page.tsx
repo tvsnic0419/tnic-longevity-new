@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Waypoints, ArrowRight } from 'lucide-react';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { StructuredData } from '@/components/seo/StructuredData';
+import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { buildPageMetadata, buildBreadcrumbSchema } from '@/lib/seo';
 import {
   pathways,
@@ -41,7 +42,8 @@ const themeAccent: Record<string, string> = {
  */
 export default function PathwaysHubPage() {
   return (
-    <div className="py-8 md:py-10">
+    <SubPageLayout>
+      <div className="py-8 md:py-10">
       <StructuredData
         schemas={[
           buildBreadcrumbSchema([
@@ -102,6 +104,7 @@ export default function PathwaysHubPage() {
           );
         })}
       </div>
-    </div>
+      </div>
+    </SubPageLayout>
   );
 }

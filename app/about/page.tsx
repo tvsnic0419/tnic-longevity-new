@@ -1,5 +1,6 @@
 import { buildPageMetadata } from '@/lib/seo';
 import { AboutSection } from '@/components/sections/AboutSection';
+import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 
 export const metadata = buildPageMetadata({
   title: 'About — Tommy Nichols & TNiC',
@@ -11,8 +12,10 @@ export const metadata = buildPageMetadata({
 
 export default function AboutPage() {
   return (
-    <main id="main-content" tabIndex={-1} className="container-page py-8 md:py-12 max-w-4xl">
-      <AboutSection />
-    </main>
+    <SubPageLayout>
+      <div className="container-page py-8 md:py-12 max-w-4xl">
+        <AboutSection />
+      </div>
+    </SubPageLayout>
   );
 }

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowRight, Waypoints, Dna, FlaskConical } from 'lucide-react';
 import { StructuredData } from '@/components/seo/StructuredData';
+import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { buildArticleSchema, buildBreadcrumbSchema, buildPageMetadata } from '@/lib/seo';
 import {
   getAllPathwaySlugs,
@@ -67,7 +68,7 @@ export default async function PathwayPage({
   ];
 
   return (
-    <>
+    <SubPageLayout>
       <StructuredData
         schemas={[
           buildArticleSchema({
@@ -168,6 +169,6 @@ export default async function PathwayPage({
           </div>
         </div>
       </div>
-    </>
+    </SubPageLayout>
   );
 }

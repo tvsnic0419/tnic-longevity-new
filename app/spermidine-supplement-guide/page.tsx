@@ -180,7 +180,7 @@ export default function SpermidineSupplementGuidePage() {
   const schemas = buildSpermidineSchemas();
 
   return (
-    <SubPageLayout hideContextBar guideHref="/spermidine-supplement-guide">
+    <SubPageLayout hideStackReadout guideHref="/spermidine-supplement-guide">
       <StructuredData schemas={schemas} />
 
       {/* Hero */}

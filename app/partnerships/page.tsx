@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, Building2, CheckCircle2, Handshake, ShieldCheck, Sparkles } from 'lucide-react';
 import { PageShell } from '@/components/ui/PageShell';
+import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildArticleSchema, buildBreadcrumbSchema } from '@/lib/seo';
@@ -48,7 +49,7 @@ function buildSchemas() {
 
 export default function PartnershipsPage() {
   return (
-    <main id="main-content" tabIndex={-1}>
+    <SubPageLayout>
       <PageShell>
         <StructuredData schemas={buildSchemas()} />
       <PageHeader
@@ -155,7 +156,7 @@ export default function PartnershipsPage() {
         </div>
       </section>
       </PageShell>
-    </main>
+    </SubPageLayout>
   );
 }
 

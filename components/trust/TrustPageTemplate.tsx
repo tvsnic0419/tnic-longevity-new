@@ -4,6 +4,7 @@ import type { LucideIcon } from 'lucide-react';
 import type { ThemeAccent } from '@/lib/design-system';
 import { PageShell } from '@/components/ui/PageShell';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { DisclaimerInline } from './DisclaimerBanner';
 import { getTrustPageContext, type TrustPageKey } from '@/lib/hub-context';
 
@@ -17,6 +18,16 @@ interface TrustPageTemplateProps {
   children: React.ReactNode;
   showBackLink?: boolean;
   disclaimer?: string;
+  /**
+   * Trust *children* (/trust/methodology, …) render under `app/trust/layout.tsx`,
+   * which already supplies the Nav + ContextBar + Footer shell. But this template
+   * is also reused by top-level routes that live OUTSIDE /trust (privacy, terms,
+   * health-data, editorial-policy, corrections) — those have no ancestor layout,
+   * so without this they render with no site chrome at all. Pass `standalone` on
+   * exactly those pages to wrap the template in the shared `SubPageLayout` (and
+   * never on a /trust child, which would double the chrome).
+   */
+  standalone?: boolean;
 }
 
 /** Reusable template for /trust sub-pages */
@@ -30,8 +41,9 @@ export function TrustPageTemplate({
   children,
   showBackLink = true,
   disclaimer = 'TNiC is educational only — not medical advice. Consult your physician before starting any protocol.',
+  standalone = false,
 }: TrustPageTemplateProps) {
-  return (
+  const body = (
     <PageShell>
       {showBackLink && (
         <Link
@@ -55,4 +67,6 @@ export function TrustPageTemplate({
       <DisclaimerInline text={disclaimer} />
     </PageShell>
   );
+
+  return standalone ? <SubPageLayout>{body}</SubPageLayout> : body;
 }

@@ -11,6 +11,7 @@ const LAST_UPDATED = 'July 20, 2026';
 export default function PrivacyPage() {
   return (
     <TrustPageTemplate
+      standalone
       icon={Shield}
       eyebrow="Trust · Privacy"
       title="Privacy Policy"
