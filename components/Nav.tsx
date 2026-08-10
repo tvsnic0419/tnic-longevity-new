@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -11,11 +11,28 @@ import { SiteSearch } from '@/components/SiteSearch';
 import { COMMAND_PALETTE_EVENT } from '@/components/os/os-events';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { GlassPanel } from '@/components/ui/GlassPanel';
+import { cn } from '@/lib/utils';
+
+// useLayoutEffect warns during SSR; fall back to useEffect on the server so the
+// adaptive measurement still runs before first paint on the client.
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 export function Nav() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  // Adaptive fit: show the full desktop bar whenever it fits the available
+  // width and collapse to the hamburger only when it genuinely doesn't — at any
+  // width, measured, instead of flipping at one hardcoded breakpoint.
+  const [compact, setCompact] = useState(false);
+  const compactRef = useRef(false);
+  const requiredRef = useRef(0);
+  const rowRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLAnchorElement>(null);
+  const linksRef = useRef<HTMLDivElement>(null);
+  const actionsRef = useRef<HTMLDivElement>(null);
+
   const menuRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -32,6 +49,45 @@ export function Nav() {
       cancelAnimationFrame(rafId);
     };
   }, []);
+
+  useIsomorphicLayoutEffect(() => {
+    const row = rowRef.current;
+    if (!row) return;
+    const evaluate = () => {
+      const logo = logoRef.current;
+      const links = linksRef.current;
+      const actions = actionsRef.current;
+      // Cache the natural desktop width only while the clusters are in flow and
+      // measurable (they are shrink-0 + nowrap, so scrollWidth is the true
+      // content width, not a flex-compressed one). When compact the clusters are
+      // display:none and unmeasurable, so reuse the cached value — this is what
+      // prevents a measure-while-hidden flip loop.
+      if (logo && links && actions && !compactRef.current) {
+        requiredRef.current = logo.offsetWidth + links.scrollWidth + actions.scrollWidth + 40;
+      }
+      const cs = getComputedStyle(row);
+      const pad = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+      const available = row.clientWidth - pad;
+      const required = requiredRef.current;
+      if (required <= 0) return;
+      const next = required > available;
+      if (next !== compactRef.current) {
+        compactRef.current = next;
+        setCompact(next);
+      }
+    };
+    evaluate();
+    const ro = new ResizeObserver(evaluate);
+    ro.observe(row);
+    // Re-measure once web fonts settle — glyph widths shift the natural width.
+    document.fonts?.ready.then(evaluate).catch(() => {});
+    return () => ro.disconnect();
+  }, []);
+
+  // Whenever we expand back to the desktop bar, close the mobile menu.
+  useEffect(() => {
+    if (!compact && mobileOpen) setMobileOpen(false);
+  }, [compact, mobileOpen]);
 
   useEffect(() => {
     if (!mobileOpen) return;
@@ -92,13 +148,21 @@ export function Nav() {
       <div
         className={`absolute inset-0 nav-glass ${scrolled ? 'nav-glass-scrolled' : ''}`}
       />
-      <div className="relative container-page py-3 md:py-4 flex justify-between items-center gap-4">
+      {/* Full-bleed row (container-page's 1280px cap removed via !max-w-none):
+          the bar is wider than the article column, so it spans the viewport and
+          the adaptive measurement can compare content against real available
+          width. Padding is inherited from container-page. */}
+      <div
+        ref={rowRef}
+        className="relative container-page !max-w-none py-3 md:py-4 flex justify-between items-center gap-4"
+      >
         {/* No aria-label here: it would duplicate/conflict with the Logo's
             own role="img" + aria-label below, which Lighthouse's
             label-content-name-mismatch audit flags as visible text not
             reflected in the accessible name. Let the link's name derive
             from that single nested image role instead. */}
         <Link
+          ref={logoRef}
           href="/"
           className="focus-ring interactive flex items-center rounded-xl shrink-0 group transition-transform hover:scale-[1.02]"
         >
@@ -107,8 +171,9 @@ export function Nav() {
 
         {/* Grouped by intent (Learn / Build / Track / Shop) with a hairline
             divider between clusters, so the row reads as labeled families
-            rather than nine flat links. */}
-        <div className="hidden nav:flex items-center gap-1">
+            rather than nine flat links. Rendered whenever it fits (see the
+            adaptive measurement effect); otherwise it collapses below. */}
+        <div ref={linksRef} className={cn('items-center gap-1 shrink-0', compact ? 'hidden' : 'flex')}>
           {navGroups.map((group, gi) => (
             <div key={group.label} className="flex items-center gap-0.5" role="group" aria-label={group.label}>
               {gi > 0 && <span className="mx-1 h-4 w-px bg-border/60" aria-hidden="true" />}
@@ -126,14 +191,12 @@ export function Nav() {
           ))}
         </div>
 
-        <div className="hidden nav:flex items-center gap-2.5 shrink-0">
+        <div ref={actionsRef} className={cn('items-center gap-2.5 shrink-0', compact ? 'hidden' : 'flex')}>
           <ThemeToggle compact />
           <SiteSearch />
           {/* NICO (questionnaire) is the secondary action; Dashboard is the
-              single filled primary. The former "Verify" shortcut lives in the
-              mobile menu, the footer, and the on-page Protocol Shop CTAs —
-              keeping the desktop bar narrow enough to appear on standard
-              laptops (≥1440px) instead of only ultra-wide displays. */}
+              single filled primary. "Verify" lives in the mobile menu, the
+              footer, and the on-page Protocol Shop CTAs. */}
           <GlassPanel depth="float" className="glass-hover flex items-center rounded-full">
             <Link
               href="/nico"
@@ -141,7 +204,7 @@ export function Nav() {
               className="focus-ring inline-flex items-center gap-1.5 rounded-full py-2 px-4 text-sm font-semibold text-muted-foreground hover:text-foreground"
             >
               <ClipboardList className="w-4 h-4 text-accent-violet" aria-hidden="true" />
-              NICO
+              NICO Questionnaire
             </Link>
           </GlassPanel>
           <Link href="/dashboard" className="focus-ring btn-gradient text-sm !py-2.5 !px-5 !min-h-0 rounded-full">
@@ -150,7 +213,8 @@ export function Nav() {
           </Link>
         </div>
 
-        <div className="flex items-center gap-1 nav:hidden">
+        {/* Compact chrome — shown only when the full bar above does not fit. */}
+        <div className={cn('items-center gap-1', compact ? 'flex' : 'hidden')}>
           <ThemeToggle compact />
           <button
             onClick={() => window.dispatchEvent(new Event(COMMAND_PALETTE_EVENT))}
@@ -183,7 +247,7 @@ export function Nav() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="nav:hidden relative nav-glass nav-glass-scrolled border-b border-border"
+            className="relative nav-glass nav-glass-scrolled border-b border-border"
           >
             <div className="container-page py-4 flex flex-col gap-1">
               {navGroups.map((group) => (

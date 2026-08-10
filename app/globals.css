@@ -185,16 +185,12 @@
   --radius-xl: 1.25rem;
   --radius-2xl: 1.5rem;
 
-  /* The primary nav's desktop row (9 top-level links + search + theme toggle +
-     3 action items) measurably overflows its container below this width — the
-     Dashboard CTA sits past the viewport edge with no scroll affordance, i.e.
-     unreachable, not just cramped. Verified via headless measurement at
-     1280/1366/1440/1536 (97–197px overflow) vs 1920 (fits). The desktop row,
-     AND the mobile-menu trigger that must cover for it below this width, both
-     key off this one token (see Nav.tsx) so there is never a dead zone with
-     neither visible. If the link count changes, re-measure before touching
-     this value. */
-  --breakpoint-nav: 90rem; /* 1440px — full nav fits at ~1331px content (measured) with margin, so it now appears on standard laptops instead of only >1700px displays */
+  /* DEPRECATED: the nav no longer flips at a fixed breakpoint. Nav.tsx now
+     measures its own content vs. the available width (ResizeObserver) and shows
+     the full desktop bar whenever it fits, collapsing to the hamburger only when
+     it doesn't — at any width. This token is retained only so the `nav:` Tailwind
+     variant keeps resolving for any stray reference; it is otherwise unused. */
+  --breakpoint-nav: 90rem;
 
   --space-touch: 2.75rem;
   --leading-body: 1.65;
