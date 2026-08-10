@@ -1,8 +1,19 @@
 'use client';
 
-import { useMemo, useRef, useState, type PointerEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type PointerEvent } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { AdditiveBlending, Color, Group, Mesh, Sprite as SpriteObject, SpriteMaterial, Vector3 } from 'three';
+import {
+  ACESFilmicToneMapping,
+  AdditiveBlending,
+  Color,
+  CylinderGeometry,
+  Group,
+  Mesh,
+  Quaternion,
+  Vector3,
+} from 'three';
+import { createNodeMaterial } from '@/lib/hero-scene-materials';
+import { HeroScenePostFX } from './HeroScenePostFX';
 import {
   HERO_NETWORK_EDGES,
   HERO_NETWORK_NODES_3D,
@@ -37,29 +48,16 @@ const DIM_EDGE_COLOR = new Color('#1e293b');
 const IDLE_ROTATION_SPEED = 0.08;
 const FOCUSED_ROTATION_SPEED = 0.02;
 
-/** One shared radial-gradient texture for every node's glow sprite — built once, not per-node. */
-function useGlowTexture() {
-  return useMemo(() => {
-    if (typeof document === 'undefined') return null;
-    const canvas = document.createElement('canvas');
-    canvas.width = 64;
-    canvas.height = 64;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return null;
-    const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-    gradient.addColorStop(0, 'rgba(255,255,255,1)');
-    gradient.addColorStop(0.4, 'rgba(255,255,255,0.35)');
-    gradient.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, 64, 64);
-    return canvas;
-  }, []);
-}
+/**
+ * Unit-height cylinder shared by every edge — built once at module scope, so
+ * the ~50 edge meshes cost one geometry between them and scaling Y by the
+ * edge's length gives its exact span. Six radial segments is plenty at this
+ * thickness and keeps the vertex count trivial.
+ */
+const edgeGeometry = new CylinderGeometry(0.011, 0.011, 1, 6, 1, true);
 
 interface NodeMotionState {
   emissive: number;
-  glowOpacity: number;
-  glowScale: number;
   /** Node body opacity — emissive alone can't visibly dim a lit material. */
   opacity: number;
 }
@@ -94,53 +92,81 @@ function Scene({
   const groupRef = useRef<Group>(null);
   /** Hit-target meshes — also the anchor for tooltip projection. */
   const meshRefs = useRef(new Map<string, Mesh>());
-  /** Visible node bodies — the meshes whose material actually gets styled. */
-  const bodyRefs = useRef(new Map<string, Mesh>());
-  const glowRefs = useRef(new Map<string, SpriteObject>());
   const motion = useRef(new Map<string, NodeMotionState>());
   const idle = useRef(0);
   const { camera, size } = useThree();
   const projected = useMemo(() => new Vector3(), []);
-  const glowTexture = useGlowTexture();
 
   const nodeMap = useMemo(() => new Map(HERO_NETWORK_NODES_3D.map((n) => [n.id, n])), []);
+
+  /**
+   * One material per node, not per tier — emissive intensity and opacity are
+   * animated per node for the select/dim pass, so tier-shared materials would
+   * make every node of a tier light up together.
+   */
+  const nodeMaterials = useMemo(
+    () =>
+      new Map(
+        HERO_NETWORK_NODES_3D.map((n) => [n.id, createNodeMaterial(HERO_NETWORK_TIER_COLOR[n.tier])]),
+      ),
+    [],
+  );
+
+  useEffect(() => {
+    const materials = [...nodeMaterials.values()];
+    return () => materials.forEach((m) => m.dispose());
+  }, [nodeMaterials]);
+
   const partnerIds = useMemo(() => new Set(selectedId ? getPartnerIds(selectedId) : []), [selectedId]);
 
-  const edgePositions = useMemo(() => {
-    const positions: number[] = [];
-    for (const e of HERO_NETWORK_EDGES) {
-      const a = nodeMap.get(e.a);
-      const b = nodeMap.get(e.b);
-      if (!a || !b) continue;
-      positions.push(...a.position, ...b.position);
-    }
-    return new Float32Array(positions);
+  /**
+   * Edges as real instanced geometry rather than `lineSegments`.
+   *
+   * WebGL ignores `linewidth` on virtually every platform, so line-based
+   * edges are locked to one hairline pixel — they alias badly, thin out at
+   * distance, and have no volume for bloom to catch. Thin cylinders are
+   * actual geometry: they hold their weight at any DPR, and they glow.
+   * Precomputed here because the layout is static — only the colors change
+   * with selection, so the transforms never need recomputing.
+   */
+  const edgeInstances = useMemo(() => {
+    const valid = HERO_NETWORK_EDGES.filter((e) => nodeMap.has(e.a) && nodeMap.has(e.b));
+    const up = new Vector3(0, 1, 0);
+    const from = new Vector3();
+    const to = new Vector3();
+    const dir = new Vector3();
+    const quat = new Quaternion();
+
+    return valid.map((e) => {
+      const a = nodeMap.get(e.a)!;
+      const b = nodeMap.get(e.b)!;
+      from.set(...a.position);
+      to.set(...b.position);
+      dir.subVectors(to, from);
+      const length = dir.length();
+      quat.setFromUnitVectors(up, dir.clone().normalize());
+      return {
+        edge: e,
+        position: from.clone().add(to).multiplyScalar(0.5).toArray() as [number, number, number],
+        quaternion: quat.clone(),
+        length,
+      };
+    });
   }, [nodeMap]);
 
-  // Recomputed (new array reference) on every selection change, which R3F
-  // picks up by reinstantiating the bufferAttribute via its `args` prop —
-  // simpler and paint-safe (no post-mount black-line flash) than mutating a
-  // shared array in a useEffect that only runs after first paint.
-  const edgeColors = useMemo(() => {
-    const colors = new Float32Array(edgePositions.length);
-    let i = 0;
-    for (const e of HERO_NETWORK_EDGES) {
-      if (!nodeMap.has(e.a) || !nodeMap.has(e.b)) continue;
-      const isActive = selectedId !== null && (e.a === selectedId || e.b === selectedId);
-      const otherId = e.a === selectedId ? e.b : e.a;
-      const otherNode = isActive ? nodeMap.get(otherId) : undefined;
-      let c = NEUTRAL_EDGE_COLOR;
-      if (isActive && otherNode) c = new Color(HERO_NETWORK_TIER_COLOR[otherNode.tier]);
-      else if (selectedId !== null) c = DIM_EDGE_COLOR;
-      colors[i++] = c.r;
-      colors[i++] = c.g;
-      colors[i++] = c.b;
-      colors[i++] = c.r;
-      colors[i++] = c.g;
-      colors[i++] = c.b;
-    }
-    return colors;
-  }, [selectedId, nodeMap, edgePositions]);
+  const edgeColors = useMemo(
+    () =>
+      edgeInstances.map(({ edge }) => {
+        const isActive = selectedId !== null && (edge.a === selectedId || edge.b === selectedId);
+        if (isActive) {
+          const otherId = edge.a === selectedId ? edge.b : edge.a;
+          const otherNode = nodeMap.get(otherId);
+          if (otherNode) return new Color(HERO_NETWORK_TIER_COLOR[otherNode.tier]);
+        }
+        return selectedId !== null ? DIM_EDGE_COLOR : NEUTRAL_EDGE_COLOR;
+      }),
+    [edgeInstances, selectedId, nodeMap],
+  );
 
   useFrame((_, delta) => {
     idle.current += delta * (selectedId ? FOCUSED_ROTATION_SPEED : IDLE_ROTATION_SPEED);
@@ -161,9 +187,7 @@ function Scene({
 
     for (const n of HERO_NETWORK_NODES_3D) {
       const state = motion.current.get(n.id) ?? {
-        emissive: 0.65,
-        glowOpacity: 0.16,
-        glowScale: 1,
+        emissive: 0.18,
         opacity: 1,
       };
       const isSelected = n.id === selectedId;
@@ -171,33 +195,26 @@ function Scene({
       const isDimmed = selectedId !== null && !isSelected && !isPartner;
       const isHovered = n.id === hoveredId;
 
-      const emissiveTarget = isSelected ? 1.6 : isHovered ? 1.15 : isDimmed ? 0.2 : 0.65;
-      const glowOpacityTarget = isSelected ? 0.75 : isHovered || isPartner ? 0.45 : isDimmed ? 0.05 : 0.16;
-      const glowScaleTarget = isSelected ? 1.5 : 1;
+      // Lower across the board than the pre-bloom version: bloom multiplies
+      // apparent brightness, so the old 0.65 idle drove every node past the
+      // threshold and flattened them all to white.
+      const emissiveTarget = isSelected ? 0.7 : isHovered ? 0.4 : isDimmed ? 0.04 : 0.18;
       const opacityTarget = isDimmed ? 0.22 : 1;
 
       const lerpFactor = Math.min(delta * 8, 1);
       state.emissive += (emissiveTarget - state.emissive) * lerpFactor;
-      state.glowOpacity += (glowOpacityTarget - state.glowOpacity) * lerpFactor;
-      state.glowScale += (glowScaleTarget - state.glowScale) * lerpFactor;
       state.opacity += (opacityTarget - state.opacity) * lerpFactor;
       motion.current.set(n.id, state);
 
-      const body = bodyRefs.current.get(n.id);
-      const mat = body?.material;
-      if (mat && !Array.isArray(mat) && 'emissiveIntensity' in mat) {
-        const m = mat as unknown as { emissiveIntensity: number; opacity: number };
-        m.emissiveIntensity = state.emissive;
-        m.opacity = state.opacity;
-      }
-      const glow = glowRefs.current.get(n.id);
-      if (glow) {
-        const glowMat = glow.material as SpriteMaterial;
-        glowMat.opacity = state.glowOpacity;
-        const baseScale = 0.14 + Math.min(n.degree, 6) * 0.02;
-        // ~2.4x the node radius: a tight rim of light that reads as bloom.
-        // Larger multiples smear into a muddy haze across the whole cluster.
-        glow.scale.setScalar(baseScale * state.glowScale * 2.4);
+      const mat = nodeMaterials.get(n.id);
+      if (mat) {
+        mat.emissiveIntensity = state.emissive;
+        mat.opacity = state.opacity;
+        // Rim tracks the same curve, so a dimmed node loses its silhouette
+        // highlight instead of staying crisply outlined while its body fades.
+        const shader = (mat.userData as { shader?: { uniforms: Record<string, { value: unknown }> } })
+          .shader;
+        if (shader) shader.uniforms.uRimStrength.value = state.opacity * (isSelected ? 1.5 : 1);
       }
     }
 
@@ -226,51 +243,34 @@ function Scene({
 
   return (
     <group ref={groupRef}>
-      <lineSegments>
-        <bufferGeometry>
-          <bufferAttribute attach="attributes-position" args={[edgePositions, 3]} />
-          <bufferAttribute attach="attributes-color" args={[edgeColors, 3]} />
-        </bufferGeometry>
-        <lineBasicMaterial vertexColors transparent opacity={0.55} />
-      </lineSegments>
+      {edgeInstances.map((inst, i) => (
+        <mesh
+          key={`${inst.edge.a}::${inst.edge.b}`}
+          position={inst.position}
+          quaternion={inst.quaternion}
+          geometry={edgeGeometry}
+          scale={[1, inst.length, 1]}
+          raycast={() => null}
+        >
+          <meshBasicMaterial
+            color={edgeColors[i]}
+            transparent
+            opacity={0.42}
+            depthWrite={false}
+            blending={AdditiveBlending}
+          />
+        </mesh>
+      ))}
       {HERO_NETWORK_NODES_3D.map((n) => {
         const visibleRadius = 0.14 + Math.min(n.degree, 6) * 0.02;
         return (
           <group key={n.id} position={n.position}>
-            <mesh
-              ref={(m) => {
-                if (m) bodyRefs.current.set(n.id, m);
-                else bodyRefs.current.delete(n.id);
-              }}
-            >
-              <sphereGeometry args={[visibleRadius, 16, 16]} />
-              <meshStandardMaterial
-                color={HERO_NETWORK_TIER_COLOR[n.tier]}
-                emissive={HERO_NETWORK_TIER_COLOR[n.tier]}
-                emissiveIntensity={0.65}
-                roughness={0.35}
-                transparent
-              />
+            <mesh>
+              {/* 32 segments, not 16: at this size a 16-segment sphere shows
+                  a faceted silhouette once bloom lifts the rim. */}
+              <sphereGeometry args={[visibleRadius, 32, 32]} />
+              <primitive object={nodeMaterials.get(n.id)!} attach="material" />
             </mesh>
-            {glowTexture && (
-              <sprite
-                ref={(s) => {
-                  if (s) glowRefs.current.set(n.id, s);
-                  else glowRefs.current.delete(n.id);
-                }}
-                scale={[visibleRadius * 2.4, visibleRadius * 2.4, 1]}
-              >
-                <spriteMaterial
-                  color={HERO_NETWORK_TIER_COLOR[n.tier]}
-                  transparent
-                  opacity={0.25}
-                  depthWrite={false}
-                  blending={AdditiveBlending}
-                >
-                  <canvasTexture attach="map" args={[glowTexture]} />
-                </spriteMaterial>
-              </sprite>
-            )}
             {/* Invisible, larger hit target — hover/click precision on a small
                 node shouldn't require enlarging what the node visually reads as. */}
             <mesh
@@ -377,13 +377,27 @@ export function HeroScene3D() {
           background bleed, where overflowing the viewport was the point. */}
       <Canvas
         camera={{ position: [0, 0, 9], fov: 38 }}
-        dpr={[1, 2]}
+        // Capped at 1.5 rather than 2 now that bloom is in the pipeline:
+        // UnrealBloomPass is a multi-pass blur over the full framebuffer, so
+        // its cost scales with pixel count. 1.5 is ~44% fewer pixels than 2
+        // and the difference is not visible on a scene this soft-edged.
+        dpr={[1, 1.5]}
         gl={{ antialias: true, alpha: true }}
+        // ACES filmic instead of linear: bright emissive cores roll off into
+        // colour instead of clipping to flat white, which is what lets the
+        // bloom read as light rather than as blown-out pixels.
+        onCreated={({ gl }) => {
+          gl.toneMapping = ACESFilmicToneMapping;
+          gl.toneMappingExposure = 1.0;
+        }}
         onPointerMissed={() => setSelectedId(null)}
       >
-        <ambientLight intensity={0.7} />
-        <pointLight position={[5, 5, 5]} intensity={90} />
-        <pointLight position={[-5, -3, -5]} intensity={30} color="#22d3ee" />
+        <HeroScenePostFX />
+        {/* Dimmer than before: the environment map now carries most of the
+            fill, and these only shape the highlights. */}
+        <ambientLight intensity={0.25} />
+        <pointLight position={[5, 5, 5]} intensity={45} />
+        <pointLight position={[-5, -3, -5]} intensity={22} color="#22d3ee" />
         {/* Fog range follows the camera distance: nodes sit between ~6.7 and
             ~11.3 units out, so depth cueing has to start past the nearest. */}
         <fog attach="fog" args={['#020811', 8, 15]} />
