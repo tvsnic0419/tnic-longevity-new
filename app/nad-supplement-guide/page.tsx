@@ -356,7 +356,7 @@ export default function NadSupplementGuidePage() {
                     <div>
                       <p className="text-micro font-mono text-accent-emerald uppercase mb-2">Advantages</p>
                       {p.pros.map((pro) => (
-                        <div key={pro} className="flex items-start gap-1.5 text-xs text-foreground/90 mb-1">
+                        <div key={pro} className="flex items-start gap-1.5 text-xs text-[var(--color-text-secondary)] mb-1">
                           <CheckCircle2 className="w-3 h-3 text-accent-emerald shrink-0 mt-0.5" />
                           {pro}
                         </div>
@@ -470,7 +470,7 @@ export default function NadSupplementGuidePage() {
                 <ul className="space-y-2">
                   {slot.items.map((item) => (
                     <li key={item} className="text-xs text-muted-foreground leading-relaxed flex gap-2">
-                      <span className="text-foreground/40 shrink-0">·</span>
+                      <span className="text-[var(--color-text-faint)] shrink-0">·</span>
                       {item}
                     </li>
                   ))}

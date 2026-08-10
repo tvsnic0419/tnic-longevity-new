@@ -119,7 +119,7 @@ export default function GenomicInstabilityPage() {
               <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-4">Damage Cascade</p>
               <div className="flex flex-wrap items-center gap-2 text-sm">
                 {['ROS / UV / Replication errors', '→', 'DNA lesions (10k/cell/day)', '→', 'PARP + SIRT1 consume NAD+', '→', 'NAD+ depleted (~50% by age 60)', '→', 'Repair backlog accumulates', '→', 'Mutations / chromosomal rearrangements', '→', 'Senescence + cancer risk'].map((step, i) => (
-                  <span key={i} className={step === '→' ? 'text-muted-foreground/40' : 'px-2.5 py-1 rounded-lg bg-card border border-border/60 text-foreground font-medium text-xs'}>
+                  <span key={i} className={step === '→' ? 'text-[var(--color-text-faint)]' : 'px-2.5 py-1 rounded-lg bg-card border border-border/60 text-foreground font-medium text-xs'}>
                     {step}
                   </span>
                 ))}

@@ -265,7 +265,7 @@ function EquationBlock() {
   return (
     <div className="glass-deep glass-plane-mid border border-accent-emerald/25 rounded-2xl p-6 md:p-8">
       <p className="text-label text-accent-emerald mb-3">The Longevity Quotient equation</p>
-      <p className="font-mono text-sm md:text-base leading-relaxed text-foreground/90">
+      <p className="font-mono text-sm md:text-base leading-relaxed text-[var(--color-text-secondary)]">
         <span className="font-bold text-accent-amber">LQ(p)</span> = 0.22·CE + 0.18·EB + 0.16·ES + 0.14·EE + 0.12·SF + 0.10·BV + 0.05·HP − 0.03·R
       </p>
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs text-muted-foreground">

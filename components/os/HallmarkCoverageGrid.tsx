@@ -190,7 +190,7 @@ function HallmarkCell({
           <p
             className={cn(
               'text-xs font-semibold leading-snug line-clamp-2 flex-1',
-              covered ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground/90',
+              covered ? 'text-foreground' : 'text-muted-foreground group-hover:text-[var(--color-text-secondary)]',
             )}
           >
             {title}

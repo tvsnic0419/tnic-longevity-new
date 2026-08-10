@@ -55,7 +55,7 @@ export function HomeHero() {
                 logo lockup. */}
             <GlassPanel
               depth="float"
-              className="mb-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium text-white/90"
+              className="mb-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium text-white"
             >
               <Sparkles className="h-3.5 w-3.5 text-[var(--accent-cyan)]" aria-hidden="true" />
               The evidence-graded longevity library — and where to buy well
@@ -72,7 +72,7 @@ export function HomeHero() {
               <span className="gradient-sweep-text">for cell-health.</span>
             </h2>
 
-            <p className="mx-auto mb-8 max-w-xl text-lg leading-relaxed text-white/90 md:text-xl lg:mx-0">
+            <p className="mx-auto mb-8 max-w-xl text-lg leading-relaxed text-white md:text-xl lg:mx-0">
               TNiC — Transformative Nutrition in Cell-Health — is a PubMed-backed
               library of the nutrients shown to act on the 12 hallmarks of aging,
               graded by the strength of human evidence. Start with the elite
@@ -101,7 +101,7 @@ export function HomeHero() {
               </Link>
             </div>
 
-            <div className="mb-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-white/85 lg:justify-start">
+            <div className="mb-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-white lg:justify-start">
               <span>Free forever</span>
               <Dot />
               <span>Data stays on your device</span>
@@ -130,7 +130,7 @@ export function HomeHero() {
                       <span className="number-glow tnic-tabular block font-mono text-2xl font-bold tracking-tight text-white">
                         {stat.value}
                       </span>
-                      <span className="mt-1 block text-micro leading-tight text-white/80">
+                      <span className="mt-1 block text-micro leading-tight text-white">
                         {stat.label}
                       </span>
                     </dd>
@@ -156,7 +156,7 @@ export function HomeHero() {
                   Personalized
                 </p>
                 <h3 className="text-xl font-bold text-white mb-2">NICO Starter Questionnaire</h3>
-                <p className="text-sm text-white/90 mb-5">
+                <p className="text-sm text-white mb-5">
                   Answer a few questions — the NICO Starter Questionnaire builds your personalized, evidence-graded stack, loads it
                   into Stack Builder, and tracks it in your OS dashboard.
                 </p>
@@ -166,7 +166,7 @@ export function HomeHero() {
                     { icon: ShieldCheck, text: 'A built-in safety screen' },
                     { icon: FlaskConical, text: 'A stack computed for you — not a fixed preset' },
                   ].map(({ icon: Icon, text }) => (
-                    <li key={text} className="flex items-center gap-3 text-sm text-white/90">
+                    <li key={text} className="flex items-center gap-3 text-sm text-white">
                       <Icon className="h-4 w-4 shrink-0 text-[var(--accent-cyan)]" aria-hidden="true" />
                       {text}
                     </li>
@@ -184,7 +184,7 @@ export function HomeHero() {
                 </Link>
               </TiltGlassPanel>
             </div>
-            <p className="mt-4 hidden text-center text-micro text-white/90 lg:block lg:text-right">
+            <p className="mt-4 hidden text-center text-micro text-white lg:block lg:text-right">
               Nutrition, down to the cell — evidence you can trace
             </p>
           </div>
@@ -200,7 +200,7 @@ export function HomeHero() {
         <div className="mt-14 md:mt-20">
           <div className="mb-5 text-center lg:text-left">
             <h3 className="text-lg font-bold text-white md:text-xl">Explore the synergy network</h3>
-            <p className="mt-1 text-sm text-white/60">
+            <p className="mt-1 text-sm text-white/80">
               Click a compound to see what it pairs with — and why.
             </p>
           </div>

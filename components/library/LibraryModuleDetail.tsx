@@ -372,7 +372,7 @@ export function LibraryModuleDetail({
                 <GlassPanel depth="mid" className="glass-hover rounded-lg">
                   <Link
                     href={engineHref}
-                    className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-foreground/90"
+                    className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-[var(--color-text-secondary)]"
                   >
                     See how this scores
                   </Link>
@@ -381,7 +381,7 @@ export function LibraryModuleDetail({
               <GlassPanel depth="mid" className="glass-hover rounded-lg">
                 <Link
                   href="/labs"
-                  className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-foreground/90"
+                  className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-[var(--color-text-secondary)]"
                 >
                   Open Labs hub
                 </Link>
@@ -389,7 +389,7 @@ export function LibraryModuleDetail({
               <GlassPanel depth="mid" className="glass-hover rounded-lg">
                 <Link
                   href="/trust"
-                  className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-foreground/90"
+                  className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-[var(--color-text-secondary)]"
                 >
                   Evidence methodology
                 </Link>

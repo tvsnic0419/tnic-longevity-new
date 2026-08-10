@@ -92,7 +92,7 @@ export function HallmarkDetail({
               <p className="text-sm text-muted-foreground leading-relaxed mb-4">{hallmark.summary}</p>
               <GlassPanel depth="mid" className="rounded-xl p-5 mb-4">
                 <p className="text-micro font-mono text-accent-violet uppercase mb-2">Mechanism</p>
-                <p className="text-sm text-foreground/90 leading-relaxed">{hallmark.mechanism}</p>
+                <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">{hallmark.mechanism}</p>
                 {hallmark.keyMolecules && hallmark.keyMolecules.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-border/30">
                     <span className="text-micro font-mono text-muted-foreground uppercase tracking-wider self-center mr-1">Key targets:</span>
@@ -109,7 +109,7 @@ export function HallmarkDetail({
               </GlassPanel>
               <GlassPanel depth="mid" className="rounded-xl p-5">
                 <p className="text-micro font-mono text-accent-amber uppercase mb-2">Why it matters</p>
-                <p className="text-sm text-foreground/90 leading-relaxed">{hallmark.whyItMatters}</p>
+                <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">{hallmark.whyItMatters}</p>
               </GlassPanel>
             </motion.div>
 

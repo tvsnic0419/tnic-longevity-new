@@ -224,7 +224,7 @@ export function StackSimulatorTool() {
                         <AlertTriangle className="w-3.5 h-3.5 text-accent-amber shrink-0 mt-0.5" aria-hidden="true" />
                       )}
                       <div>
-                        <span className="text-foreground/90">{r.risk}</span>
+                        <span className="text-[var(--color-text-secondary)]">{r.risk}</span>
                         <p className="text-caption mt-0.5">{r.compoundName}</p>
                       </div>
                     </li>

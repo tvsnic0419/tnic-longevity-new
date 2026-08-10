@@ -107,7 +107,7 @@ export function LifestylePillarPanel({ slug }: LifestylePillarPanelProps) {
           {pillar.wearableSignals.map((sig) => (
             <li key={sig.label} className="flex justify-between gap-3 text-xs">
               <span className="text-muted-foreground">{sig.label}</span>
-              <span className="font-mono text-foreground/90 text-right">
+              <span className="font-mono text-[var(--color-text-secondary)] text-right">
                 {sig.target}
                 <span className="text-caption block">{sig.frequency}</span>
               </span>

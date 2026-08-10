@@ -125,7 +125,7 @@ export default function LongevitySupplementsGuidePage() {
               2026
             </h1>
 
-            <p className="text-lg sm:text-xl text-white/85 leading-relaxed mb-8 max-w-2xl">
+            <p className="text-lg sm:text-xl text-white leading-relaxed mb-8 max-w-2xl">
               Ranked by composite LQ score across 8 evidence dimensions: clinical trials, epigenetic
               biomarkers, effect size, evolutionary depth, safety, bioavailability, and human
               population data. Every claim linked to a PubMed ID.
@@ -140,13 +140,13 @@ export default function LongevitySupplementsGuidePage() {
               </Link>
               <Link
                 href="/library"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold border border-white/15 text-white/90 hover:border-white/30 hover:text-white transition-all focus-ring"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold border border-white/15 text-white hover:border-white/30 hover:text-white transition-all focus-ring"
               >
                 Browse Full Library
               </Link>
             </div>
 
-            <p className="mt-6 text-xs text-white/30 font-mono">
+            <p className="mt-6 text-xs text-white/60 font-mono">
               Educational only · Not medical advice · All citations PubMed-verified
             </p>
           </div>
@@ -197,7 +197,7 @@ export default function LongevitySupplementsGuidePage() {
                   <div className="grid sm:grid-cols-12 gap-4 items-start">
                     {/* Rank + Name */}
                     <div className="sm:col-span-5 flex items-start gap-4">
-                      <span className="text-2xl font-black text-white/15 tabular-nums w-8 shrink-0 leading-none mt-0.5">
+                      <span className="text-2xl font-black text-[var(--color-text-faint)] tabular-nums w-8 shrink-0 leading-none mt-0.5">
                         {String(i + 1).padStart(2, '0')}
                       </span>
                       <div className="flex-1">
@@ -211,7 +211,7 @@ export default function LongevitySupplementsGuidePage() {
                           </span>
                         </div>
                         <p className="text-xs text-muted-foreground mb-2">{c.category} · {c.full}</p>
-                        <p className="text-xs text-white/55 leading-relaxed">{c.mechanism}</p>
+                        <p className="text-xs text-muted-foreground leading-relaxed">{c.mechanism}</p>
                       </div>
                     </div>
 
@@ -229,8 +229,8 @@ export default function LongevitySupplementsGuidePage() {
                     {/* Clock estimate */}
                     <div className="sm:col-span-3">
                       <p className="text-micro font-mono text-muted-foreground mb-1 hidden sm:block">Clock estimate</p>
-                      <p className="text-xs text-white/85 font-mono leading-relaxed">{c.clock}</p>
-                      <p className="text-micro text-white/30 mt-1">{c.clockConfidence} confidence</p>
+                      <p className="text-xs text-[var(--color-text-primary)] font-mono leading-relaxed">{c.clock}</p>
+                      <p className="text-micro text-[var(--color-text-faint)] mt-1">{c.clockConfidence} confidence</p>
                     </div>
 
                     {/* CTA */}
@@ -298,7 +298,7 @@ export default function LongevitySupplementsGuidePage() {
             <Link href="/nico" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold tnic-button-accent focus-ring">
               Start Step 1 — the NICO Starter Questionnaire <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link href="/stacks" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border border-white/15 text-white/90 hover:border-white/30 transition focus-ring">
+            <Link href="/stacks" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border border-white/15 text-white hover:border-white/30 transition focus-ring">
               Step 5 — Stack Architect
             </Link>
           </div>
@@ -324,7 +324,7 @@ export default function LongevitySupplementsGuidePage() {
             ].map((flag) => (
               <div key={flag} className="flex items-start gap-3 rounded-xl p-4 border border-accent-rose/15 bg-accent-rose/[0.04]">
                 <AlertTriangle className="w-4 h-4 text-accent-rose shrink-0 mt-0.5" />
-                <p className="text-sm text-foreground/90">{flag}</p>
+                <p className="text-sm text-[var(--color-text-secondary)]">{flag}</p>
               </div>
             ))}
           </div>
@@ -353,7 +353,7 @@ export default function LongevitySupplementsGuidePage() {
           </Accordion>
 
           <div className="mt-10 rounded-2xl border border-accent-cyan/15 bg-accent-cyan/[0.04] p-6 text-center">
-            <p className="text-sm text-white/90 mb-4">
+            <p className="text-sm text-[var(--color-text-primary)] mb-4">
               More detailed answers — mechanism deep-dives, dosing nuances, interaction warnings — are in the TNiC Library.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">

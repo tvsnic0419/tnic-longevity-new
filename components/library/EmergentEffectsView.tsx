@@ -83,7 +83,7 @@ function EmergentCard({ effect, index }: { effect: EmergentEffect; index: number
       {/* Emergent benefit */}
       <div className="rounded-lg bg-accent-emerald/[0.07] border border-accent-emerald/20 p-3">
         <p className="text-micro font-mono text-accent-emerald uppercase mb-1.5">Emergent Benefit</p>
-        <p className="text-xs text-foreground/90 leading-relaxed">{effect.emergentBenefit}</p>
+        <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">{effect.emergentBenefit}</p>
       </div>
 
       {/* Compounds */}

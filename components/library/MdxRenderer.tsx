@@ -270,7 +270,7 @@ function ReferencesSection({ pmids }: { pmids: string[] }) {
                   {cite.authors ? (
                     <span>{cite.authors.replace(/\.\s*$/, '')}. </span>
                   ) : null}
-                  <span className="text-foreground/90">
+                  <span className="text-[var(--color-text-secondary)]">
                     {cite.title.replace(/\.\s*$/, '')}.
                   </span>{' '}
                   <em>{cite.journal}</em>
@@ -403,7 +403,7 @@ function renderDirective(
           <p className="text-micro font-mono text-accent-violet uppercase tracking-wider">Suggested visual</p>
         </div>
         <p
-          className="text-sm text-foreground/90 leading-relaxed"
+          className="text-sm text-[var(--color-text-secondary)] leading-relaxed"
           dangerouslySetInnerHTML={{ __html: renderInline(body || attrs.description || '', linkedTerms) }}
         />
       </div>
@@ -442,7 +442,7 @@ function renderDirective(
           </p>
         </div>
         <p
-          className="text-sm text-foreground/90 leading-relaxed"
+          className="text-sm text-[var(--color-text-secondary)] leading-relaxed"
           dangerouslySetInnerHTML={{ __html: renderInline(body, linkedTerms) }}
         />
       </div>
