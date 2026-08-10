@@ -194,7 +194,7 @@
      key off this one token (see Nav.tsx) so there is never a dead zone with
      neither visible. If the link count changes, re-measure before touching
      this value. */
-  --breakpoint-nav: 106.25rem; /* 1700px — measured natural-fit width is ~1633px; this leaves a real margin */
+  --breakpoint-nav: 90rem; /* 1440px — full nav fits at ~1331px content (measured) with margin, so it now appears on standard laptops instead of only >1700px displays */
 
   --space-touch: 2.75rem;
   --leading-body: 1.65;
