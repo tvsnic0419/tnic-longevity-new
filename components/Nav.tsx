@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ArrowRight, ClipboardList, Menu, Search, ShieldCheck, X } from 'lucide-react';
+import { ArrowRight, ClipboardList, Menu, Search, X } from 'lucide-react';
 import { navGroups } from '@/lib/data';
 import { Logo } from '@/components/ui/Logo';
 import { SiteSearch } from '@/components/SiteSearch';
@@ -81,7 +81,7 @@ export function Nav() {
   // a matching visual token so it is not announced-only. Keyed off the attribute
   // rather than a second isActive() branch, so the two can never diverge.
   const navLinkClass =
-    'focus-ring interactive whitespace-nowrap px-3.5 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent-cyan/10 transition-all ' +
+    'focus-ring interactive whitespace-nowrap px-2 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent-cyan/10 transition-all ' +
     'aria-[current=page]:text-foreground aria-[current=page]:bg-accent-cyan/10';
   const mobileNavLinkClass =
     'focus-ring interactive flex justify-between items-center text-foreground hover:text-accent-cyan py-3.5 min-h-[var(--space-touch)] text-base font-medium border-b border-border/50 last:border-0 ' +
@@ -110,8 +110,8 @@ export function Nav() {
             rather than nine flat links. */}
         <div className="hidden nav:flex items-center gap-1">
           {navGroups.map((group, gi) => (
-            <div key={group.label} className="flex items-center gap-1" role="group" aria-label={group.label}>
-              {gi > 0 && <span className="mx-1.5 h-4 w-px bg-border/60" aria-hidden="true" />}
+            <div key={group.label} className="flex items-center gap-0.5" role="group" aria-label={group.label}>
+              {gi > 0 && <span className="mx-1 h-4 w-px bg-border/60" aria-hidden="true" />}
               {group.links.map((link) => (
                 <Link
                   key={link.href}
@@ -129,25 +129,19 @@ export function Nav() {
         <div className="hidden nav:flex items-center gap-2.5 shrink-0">
           <ThemeToggle compact />
           <SiteSearch />
-          {/* One grouped shell for the two secondary actions — an internal
-              divider reads as "related pair" instead of two independent
-              pills, and it's narrower than two full GlassPanels. Dashboard
-              stays outside the glass as the single filled primary. */}
+          {/* NICO (questionnaire) is the secondary action; Dashboard is the
+              single filled primary. The former "Verify" shortcut lives in the
+              mobile menu, the footer, and the on-page Protocol Shop CTAs —
+              keeping the desktop bar narrow enough to appear on standard
+              laptops (≥1440px) instead of only ultra-wide displays. */}
           <GlassPanel depth="float" className="glass-hover flex items-center rounded-full">
             <Link
               href="/nico"
-              className="focus-ring inline-flex items-center gap-1.5 rounded-full py-2 pl-4 pr-3.5 text-sm font-semibold text-muted-foreground hover:text-foreground"
+              aria-label="NICO Starter Questionnaire"
+              className="focus-ring inline-flex items-center gap-1.5 rounded-full py-2 px-4 text-sm font-semibold text-muted-foreground hover:text-foreground"
             >
               <ClipboardList className="w-4 h-4 text-accent-violet" aria-hidden="true" />
-              NICO Starter Questionnaire
-            </Link>
-            <span className="h-4 w-px bg-border/70" aria-hidden="true" />
-            <Link
-              href="/shop"
-              className="focus-ring inline-flex items-center gap-1.5 rounded-full py-2 pl-3.5 pr-4 text-sm font-semibold text-muted-foreground hover:text-foreground"
-            >
-              <ShieldCheck className="w-4 h-4 text-accent-amber" aria-hidden="true" />
-              Verify
+              NICO
             </Link>
           </GlassPanel>
           <Link href="/dashboard" className="focus-ring btn-gradient text-sm !py-2.5 !px-5 !min-h-0 rounded-full">
