@@ -426,6 +426,27 @@ const CSS = `
 .tnic-descent[data-reduced="true"] .bar,
 .tnic-descent[data-reduced="true"] .edge.flow,
 .tnic-descent[data-reduced="true"] .node-pulse { animation: none !important; }
+
+/* Reduced motion: the per-element entrance reveals (opacity/transform on the
+   kicker, headlines, lead, stage, cards, badges, CTA, recap) are motion too —
+   show everything in its final composed state immediately instead of sliding
+   it in on scroll. */
+@media (prefers-reduced-motion: reduce) {
+  .tnic-descent .tnic-kicker,
+  .tnic-descent .tnic-h1,
+  .tnic-descent .tnic-h2,
+  .tnic-descent .tnic-lead,
+  .tnic-descent .tnic-note,
+  .tnic-descent .tnic-stage,
+  .tnic-descent .tnic-molcard,
+  .tnic-descent .tnic-hero-badges,
+  .tnic-descent .tnic-hero-cta,
+  .tnic-descent .tnic-final {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
 `;
 
 

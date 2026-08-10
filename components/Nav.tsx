@@ -110,7 +110,7 @@ export function Nav() {
             rather than nine flat links. */}
         <div className="hidden nav:flex items-center gap-1">
           {navGroups.map((group, gi) => (
-            <div key={group.label} className="flex items-center gap-1">
+            <div key={group.label} className="flex items-center gap-1" role="group" aria-label={group.label}>
               {gi > 0 && <span className="mx-1.5 h-4 w-px bg-border/60" aria-hidden="true" />}
               {group.links.map((link) => (
                 <Link
@@ -193,8 +193,18 @@ export function Nav() {
           >
             <div className="container-page py-4 flex flex-col gap-1">
               {navGroups.map((group) => (
-                <div key={group.label} className="pb-1">
-                  <p className="text-label text-muted-foreground pt-3 pb-1.5">{group.label}</p>
+                <div
+                  key={group.label}
+                  className="pb-1"
+                  role="group"
+                  aria-labelledby={`navgroup-${group.label.toLowerCase()}`}
+                >
+                  <p
+                    id={`navgroup-${group.label.toLowerCase()}`}
+                    className="text-label text-muted-foreground pt-3 pb-1.5"
+                  >
+                    {group.label}
+                  </p>
                   {group.links.map((link) => (
                     <Link
                       key={link.href}
