@@ -29,6 +29,41 @@ export const navLinks = [
   { href: '/compound-engine', label: 'Engine', mod: 'MOD-ENG-18' },
 ];
 
+/**
+ * The same destinations as `navLinks`, grouped by intent so the primary nav
+ * reads as three-to-four labeled clusters instead of nine undifferentiated
+ * links — a newcomer can tell reference (Learn) from builders (Build) from
+ * personal data (Track) from buying (Shop). Consumed by the Nav for both the
+ * desktop row (divider between groups) and the mobile drawer (labeled sections).
+ */
+export const navGroups = [
+  {
+    label: 'Learn',
+    links: [
+      { href: '/library', label: 'Library' },
+      { href: '/library/compounds', label: 'Compounds' },
+      { href: '/peptides', label: 'Peptides' },
+      { href: '/learn', label: 'Learn' },
+    ],
+  },
+  {
+    label: 'Build',
+    links: [
+      { href: '/stacks', label: 'Stacks' },
+      { href: '/tools', label: 'Tools' },
+      { href: '/compound-engine', label: 'Engine' },
+    ],
+  },
+  {
+    label: 'Track',
+    links: [{ href: '/labs', label: 'Labs' }],
+  },
+  {
+    label: 'Shop',
+    links: [{ href: '/products', label: 'Products' }],
+  },
+] as const;
+
 export const compounds: Compound[] = [
   {
     id: 'glynac',

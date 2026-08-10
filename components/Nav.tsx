@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ArrowRight, ClipboardList, Menu, Search, ShieldCheck, X } from 'lucide-react';
-import { navLinks } from '@/lib/data';
+import { navGroups } from '@/lib/data';
 import { Logo } from '@/components/ui/Logo';
 import { SiteSearch } from '@/components/SiteSearch';
 import { COMMAND_PALETTE_EVENT } from '@/components/os/os-events';
@@ -75,7 +75,6 @@ export function Nav() {
     setMobileOpen(false);
   }, [pathname]);
 
-  const isInternal = (href: string) => href.startsWith('/');
   const isActive = (href: string) => href === pathname || (href !== '/' && pathname.startsWith(`${href}/`));
 
   // The current route already carries aria-current="page"; these give that state
@@ -106,27 +105,25 @@ export function Nav() {
           <Logo variant="lockup" size="nav" alt="TNiC – Transformative Nutrition in Cell-Health · Home" />
         </Link>
 
-        <div className="hidden nav:flex gap-1">
-          {navLinks.map((link) =>
-            isInternal(link.href) ? (
-              <Link
-                key={link.href}
-                href={link.href}
-                aria-current={isActive(link.href) ? 'page' : undefined}
-                className={navLinkClass}
-              >
-                {link.label}
-              </Link>
-            ) : (
-              <a
-                key={link.href}
-                href={link.href}
-                className={navLinkClass}
-              >
-                {link.label}
-              </a>
-            ),
-          )}
+        {/* Grouped by intent (Learn / Build / Track / Shop) with a hairline
+            divider between clusters, so the row reads as labeled families
+            rather than nine flat links. */}
+        <div className="hidden nav:flex items-center gap-1">
+          {navGroups.map((group, gi) => (
+            <div key={group.label} className="flex items-center gap-1">
+              {gi > 0 && <span className="mx-1.5 h-4 w-px bg-border/60" aria-hidden="true" />}
+              {group.links.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  aria-current={isActive(link.href) ? 'page' : undefined}
+                  className={navLinkClass}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          ))}
         </div>
 
         <div className="hidden nav:flex items-center gap-2.5 shrink-0">
@@ -195,26 +192,21 @@ export function Nav() {
             className="nav:hidden relative nav-glass nav-glass-scrolled border-b border-border"
           >
             <div className="container-page py-4 flex flex-col gap-1">
-              {navLinks.map((link) =>
-                isInternal(link.href) ? (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    aria-current={isActive(link.href) ? 'page' : undefined}
-                    className={mobileNavLinkClass}
-                  >
-                    {link.label}
-                  </Link>
-                ) : (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    className={mobileNavLinkClass}
-                  >
-                    {link.label}
-                  </a>
-                ),
-              )}
+              {navGroups.map((group) => (
+                <div key={group.label} className="pb-1">
+                  <p className="text-label text-muted-foreground pt-3 pb-1.5">{group.label}</p>
+                  {group.links.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      aria-current={isActive(link.href) ? 'page' : undefined}
+                      className={mobileNavLinkClass}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              ))}
               <div className="flex flex-col gap-2 mt-3">
                 <GlassPanel depth="float" className="glass-hover rounded-xl">
                   <Link
