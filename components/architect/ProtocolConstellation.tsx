@@ -166,16 +166,8 @@ export function ProtocolConstellation() {
       <GlassPanel depth="content" className="relative isolate rounded-3xl overflow-hidden p-4 md:p-6">
         <div
           aria-hidden="true"
-          style={{
-            position: 'absolute',
-            top: '-20%',
-            left: '-10%',
-            width: '60%',
-            height: '60%',
-            background: 'radial-gradient(circle, color-mix(in srgb, var(--accent-violet) 22%, transparent), transparent 70%)',
-            filter: 'blur(60px)',
-            pointerEvents: 'none',
-          }}
+          className="absolute -top-[20%] -left-[10%] z-0 h-3/5 w-3/5 pointer-events-none blur-[60px]"
+          style={{ background: 'radial-gradient(circle, color-mix(in srgb, var(--accent-violet) 22%, transparent), transparent 70%)' }}
         />
         <div className="relative flex items-center gap-2 mb-3">
           <Sparkles className="w-4 h-4 text-accent-violet" aria-hidden="true" />

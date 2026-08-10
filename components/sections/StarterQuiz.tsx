@@ -288,29 +288,14 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
         <>
           <motion.div
             aria-hidden="true"
-            className="w-80 h-80 rounded-full pointer-events-none"
+            className="absolute -top-[120px] -right-[96px] z-0 w-80 h-80 rounded-full pointer-events-none blur-[60px]"
             animate={{ background: `radial-gradient(circle, color-mix(in srgb, ${stepAccent} 32%, transparent), transparent 70%)` }}
             transition={{ duration: 0.6 }}
-            // Inline position/inset/z-index, not Tailwind classes: this is a
-            // direct child of .glass-deep, whose unlayered `.glass-deep > *
-            // { position: relative; z-index: 2; }` rule beats any Tailwind
-            // utility class regardless of source order — silently turning
-            // `absolute` into `relative` and leaving this box's normal-flow
-            // space reserved (pushing content down) instead of floating
-            // free. Only an inline style wins over that rule.
-            style={{ position: 'absolute', top: '-120px', right: '-96px', zIndex: 0, filter: 'blur(60px)' }}
           />
           <div
             aria-hidden="true"
-            className="w-72 h-72 rounded-full pointer-events-none"
-            style={{
-              position: 'absolute',
-              bottom: '-100px',
-              left: '-90px',
-              zIndex: 0,
-              filter: 'blur(60px)',
-              background: 'radial-gradient(circle, color-mix(in srgb, var(--accent-emerald) 16%, transparent), transparent 70%)',
-            }}
+            className="absolute -bottom-[100px] -left-[90px] z-0 w-72 h-72 rounded-full pointer-events-none blur-[60px]"
+            style={{ background: 'radial-gradient(circle, color-mix(in srgb, var(--accent-emerald) 16%, transparent), transparent 70%)' }}
           />
         </>
       )}

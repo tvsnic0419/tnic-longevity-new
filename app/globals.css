@@ -3136,9 +3136,21 @@ p,
   pointer-events: none;
 }
 
-.glass-deep > * {
-  position: relative;
-  z-index: 2;
+/* Lifts content above the ::before edge and ::after wash.
+   In Tailwind's `components` layer for the same reason as the typography
+   colors above: unlayered CSS beats `@layer utilities` no matter the source
+   order or specificity, so this rule silently turned every `absolute` child
+   of a glass panel into a `relative` one. That reserves the child's space in
+   normal flow, which pushed sibling content down by the full height of what
+   should have been an out-of-flow decorative layer — diagnosed twice from
+   computed styles, and worked around both times with inline `position`
+   styles. Layered, `absolute`/`fixed`/`sticky` utilities now win as written,
+   and plain children still get the stacking they need. */
+@layer components {
+  .glass-deep > * {
+    position: relative;
+    z-index: 2;
+  }
 }
 
 .glass-plane-field {
