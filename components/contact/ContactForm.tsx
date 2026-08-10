@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { MessageSquare, Send, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { SITE } from '@/lib/site';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { Field, fieldControlClass } from '@/components/ui/Field';
+import { Button } from '@/components/ui/Button';
 import { getHubContext } from '@/lib/hub-context';
 
 const categories = [
@@ -98,15 +100,12 @@ export function ContactForm() {
         </div>
       ) : (
         <form onSubmit={submit} className="max-w-xl space-y-6">
-          <div>
-            <label htmlFor="contact-category" className="text-label block mb-2">
-              Category
-            </label>
+          <Field id="contact-category" label="Category">
             <select
               id="contact-category"
               value={category}
               onChange={(e) => setCategory(e.target.value as Category)}
-              className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm focus-ring"
+              className={fieldControlClass}
             >
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -114,27 +113,21 @@ export function ContactForm() {
                 </option>
               ))}
             </select>
-          </div>
+          </Field>
 
-          <div>
-            <label htmlFor="contact-email" className="text-label block mb-2">
-              Reply email (optional)
-            </label>
+          <Field id="contact-email" label="Reply email (optional)">
             <input
               id="contact-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm focus-ring"
+              className={fieldControlClass}
               autoComplete="email"
             />
-          </div>
+          </Field>
 
-          <div>
-            <label htmlFor="contact-message" className="text-label block mb-2">
-              Your question
-            </label>
+          <Field id="contact-message" label="Your question">
             <textarea
               id="contact-message"
               value={message}
@@ -142,17 +135,13 @@ export function ContactForm() {
               required
               rows={6}
               placeholder="e.g. The evidence tier on the sulforaphane page looks like it cites mechanistic studies — can you check it? (Please don't include personal lab values.)"
-              className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm focus-ring resize-y min-h-[140px]"
+              className={`${fieldControlClass} resize-y min-h-[140px]`}
             />
-          </div>
+          </Field>
 
-          <button
-            type="submit"
-            className="focus-ring w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-black px-8 py-3.5 rounded-xl font-semibold text-sm hover:bg-accent-cyan transition"
-          >
-            <Send className="w-4 h-4" />
+          <Button type="submit" icon={Send} className="w-full sm:w-auto">
             Open email to send
-          </button>
+          </Button>
         </form>
       )}
     </div>

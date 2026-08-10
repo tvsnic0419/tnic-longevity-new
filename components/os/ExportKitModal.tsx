@@ -1,10 +1,11 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Download, FileJson, FileText, Stethoscope, Table } from 'lucide-react';
 import { usePlatform } from '@/context/PlatformContext';
 import { downloadExport, type ExportFormat } from '@/lib/export-kit';
 import { Button } from '@/components/ui/Button';
+import { Modal } from '@/components/ui/Modal';
 import { cn } from '@/lib/utils';
 
 const formats: {
@@ -61,72 +62,14 @@ export function ExportKitModal({ open, onClose }: { open: boolean; onClose: () =
     [selected, profile, labs, checklist, hallmarkNotes, milestones, close],
   );
 
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') close();
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [open, close]);
-
-  if (!open) return null;
-
   return (
-    <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-      role="presentation"
-      onClick={close}
-    >
-      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" aria-hidden="true" />
-
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label="Export kit"
-        className="relative w-full max-w-lg glass rounded-2xl border border-border shadow-2xl overflow-hidden"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="border-b border-border px-5 py-4">
-          <h2 className="text-lg font-bold">Export kit</h2>
-          <p className="text-body-sm text-muted-foreground mt-1">
-            Downloads stay on your device — nothing is sent to TNiC servers.
-          </p>
-        </div>
-
-        <ul className="p-3 space-y-2">
-          {formats.map((f) => {
-            const Icon = f.icon;
-            const disabled = f.id === 'csv' && labs.length === 0;
-            return (
-              <li key={f.id}>
-                <button
-                  type="button"
-                  disabled={disabled}
-                  onClick={() => runExport(f.id)}
-                  className={cn(
-                    'focus-ring w-full flex items-start gap-3 rounded-xl border border-border p-3 text-left transition-colors',
-                    disabled
-                      ? 'opacity-40 cursor-not-allowed'
-                      : 'hover:border-accent-cyan/40 hover:bg-accent-cyan/5',
-                  )}
-                >
-                  <Icon className="w-5 h-5 text-accent-cyan shrink-0 mt-0.5" aria-hidden="true" />
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-semibold">{f.label}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">{f.desc}</p>
-                    {disabled && (
-                      <p className="text-caption text-accent-amber mt-1">Log labs first to export CSV</p>
-                    )}
-                  </div>
-                  <Download className="w-4 h-4 text-muted-foreground shrink-0" aria-hidden="true" />
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-
-        <div className="border-t border-border px-5 py-3 flex justify-end gap-2">
+    <Modal
+      open={open}
+      onClose={close}
+      title="Export kit"
+      description="Downloads stay on your device — nothing is sent to TNiC servers."
+      footer={
+        <>
           {lastFormat && (
             <p className="text-caption text-accent-emerald mr-auto self-center">
               Downloaded {lastFormat.replace('-', ' ')}
@@ -135,8 +78,40 @@ export function ExportKitModal({ open, onClose }: { open: boolean; onClose: () =
           <Button variant="ghost" size="sm" onClick={close}>
             Close
           </Button>
-        </div>
-      </div>
-    </div>
+        </>
+      }
+    >
+      <ul className="p-3 space-y-2">
+        {formats.map((f) => {
+          const Icon = f.icon;
+          const disabled = f.id === 'csv' && labs.length === 0;
+          return (
+            <li key={f.id}>
+              <button
+                type="button"
+                disabled={disabled}
+                onClick={() => runExport(f.id)}
+                className={cn(
+                  'focus-ring w-full flex items-start gap-3 rounded-xl border border-border p-3 text-left transition-colors',
+                  disabled
+                    ? 'opacity-40 cursor-not-allowed'
+                    : 'hover:border-accent-cyan/40 hover:bg-accent-cyan/5',
+                )}
+              >
+                <Icon className="w-5 h-5 text-accent-cyan shrink-0 mt-0.5" aria-hidden="true" />
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold">{f.label}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{f.desc}</p>
+                  {disabled && (
+                    <p className="text-caption text-accent-amber mt-1">Log labs first to export CSV</p>
+                  )}
+                </div>
+                <Download className="w-4 h-4 text-muted-foreground shrink-0" aria-hidden="true" />
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </Modal>
   );
 }
