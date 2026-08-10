@@ -97,7 +97,7 @@ export function LibrarySearch() {
             )}
             <button
               type="submit"
-              className="focus-ring hidden sm:inline-flex items-center gap-1 rounded-lg bg-accent-emerald/10 border border-accent-emerald/25 px-3 py-1.5 text-xs font-semibold text-accent-emerald hover:bg-accent-emerald/15"
+              className="focus-ring tnic-button-tonal [--btn-accent:var(--accent-emerald)] hidden sm:inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs"
             >
               Search
             </button>

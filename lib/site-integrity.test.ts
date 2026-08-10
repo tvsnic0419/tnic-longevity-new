@@ -73,10 +73,16 @@ describe('site data integrity', () => {
       hallmarkLibrary.map((h) => `/hallmarks/${h.slug}`),
     );
 
+    // Intentionally unlisted: /sheepeople is a deliberately "secret" back page.
+    // It carries robots noindex/nofollow and is kept out of the sitemap and nav
+    // on purpose — reachable only by its URL and one discreet footer link — so
+    // it must be excluded from the "every page must be sitemapped" guarantee.
+    const UNLISTED_BY_DESIGN = new Set(['/sheepeople']);
+
     const staticRoutes = collectStaticPageRoutes(resolve(process.cwd(), 'app'));
     const sitemapPaths = new Set(buildSitemapEntries().map((e) => new URL(e.url).pathname));
     for (const route of staticRoutes) {
-      if (CANONICALIZED_DUPLICATES.has(route)) continue;
+      if (CANONICALIZED_DUPLICATES.has(route) || UNLISTED_BY_DESIGN.has(route)) continue;
       expect(sitemapPaths.has(route), `app route ${route} has a page.tsx but is missing from the sitemap`).toBe(true);
     }
   });

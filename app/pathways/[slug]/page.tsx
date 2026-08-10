@@ -156,7 +156,7 @@ export default async function PathwayPage({
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/library/compounds"
-              className="focus-ring interactive inline-flex items-center gap-2 rounded-xl bg-accent-cyan/10 px-5 py-3 text-sm font-semibold text-accent-cyan transition hover:bg-accent-cyan/20"
+              className="focus-ring interactive tnic-button-tonal inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm"
             >
               Browse the compound library <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
