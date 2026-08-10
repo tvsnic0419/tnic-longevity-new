@@ -50,7 +50,7 @@ export function LifestylePillarPanel({ slug }: LifestylePillarPanelProps) {
                   </Link>
                   <span
                     className={[
-                      'text-[9px] font-mono uppercase px-1.5 py-0.5 rounded',
+                      'text-micro font-mono uppercase px-1.5 py-0.5 rounded',
                       hw.impact === 'primary'
                         ? `${t.bg} ${t.text} border ${t.border}`
                         : 'bg-muted/40 text-muted-foreground border border-border/50',

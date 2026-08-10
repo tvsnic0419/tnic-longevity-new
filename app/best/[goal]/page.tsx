@@ -126,7 +126,7 @@ export default async function BestForGoalPage({
                         <EvidenceTag tier={p.compound.evidence} size="sm" />
                       </div>
                       <p className="text-sm text-muted-foreground mb-2">{p.why}</p>
-                      <div className="flex flex-wrap items-center gap-3 text-[11px] font-mono text-caption">
+                      <div className="flex flex-wrap items-center gap-3 text-micro font-mono text-caption">
                         <span>{p.compound.dose}</span>
                         <span>·</span>
                         <span>{p.compound.timing}</span>

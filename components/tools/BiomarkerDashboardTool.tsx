@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from 'react';
 import {
-  LineChart,
   Line,
   XAxis,
   YAxis,
@@ -12,7 +11,7 @@ import {
   Area,
   ComposedChart,
 } from 'recharts';
-import { ChartGrid, ChartTooltip, axisProps, chartCursor } from '@/components/ui/ChartKit';
+import { ChartGrid, ChartTooltip, axisProps, chartCursor, chartActiveDot, ChartAreaGradient } from '@/components/ui/ChartKit';
 import Link from 'next/link';
 import {
   TrendingUp,
@@ -131,19 +130,19 @@ export function BiomarkerDashboardTool() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Card className="p-4 text-center">
           <p className="text-2xl font-bold text-accent-cyan">{dashboard.healthspanScore}</p>
-          <p className="text-[9px] font-mono text-muted-foreground">HEALTHSPAN SCORE</p>
+          <p className="text-micro font-mono text-muted-foreground">HEALTHSPAN SCORE</p>
         </Card>
         <Card className="p-4 text-center">
           <p className="text-2xl font-bold text-accent-emerald">{dashboard.dataCompleteness}%</p>
-          <p className="text-[9px] font-mono text-muted-foreground">PANEL COMPLETE</p>
+          <p className="text-micro font-mono text-muted-foreground">PANEL COMPLETE</p>
         </Card>
         <Card className="p-4 text-center">
           <p className="text-sm font-semibold text-accent-rose truncate">{dashboard.topConcern ?? '—'}</p>
-          <p className="text-[9px] font-mono text-muted-foreground">TOP CONCERN</p>
+          <p className="text-micro font-mono text-muted-foreground">TOP CONCERN</p>
         </Card>
         <Card className="p-4 text-center">
           <p className="text-sm font-semibold text-accent-emerald truncate">{dashboard.topWin ?? '—'}</p>
-          <p className="text-[9px] font-mono text-muted-foreground">TOP WIN</p>
+          <p className="text-micro font-mono text-muted-foreground">TOP WIN</p>
         </Card>
       </div>
 
@@ -238,20 +237,30 @@ export function BiomarkerDashboardTool() {
                 </CardHeader>
                 <CardContent>
                   <ResponsiveContainer width="100%" height={220}>
-                    <LineChart data={trendChartData}>
+                    <ComposedChart data={trendChartData}>
+                      <defs>
+                        <ChartAreaGradient id="biomarker-trend-area" color="var(--accent-cyan)" />
+                      </defs>
                       <ChartGrid />
                       <XAxis dataKey="date" {...axisProps} />
                       <YAxis {...axisProps} width={40} />
                       <Tooltip content={<ChartTooltip />} cursor={chartCursor} />
+                      <Area
+                        type="monotone"
+                        dataKey="value"
+                        stroke="none"
+                        fill="url(#biomarker-trend-area)"
+                        isAnimationActive={false}
+                      />
                       <Line
                         type="monotone"
                         dataKey="value"
                         stroke="var(--accent-cyan)"
                         strokeWidth={2.5}
                         dot={false}
-                        activeDot={{ r: 4, strokeWidth: 0 }}
+                        activeDot={chartActiveDot}
                       />
-                    </LineChart>
+                    </ComposedChart>
                   </ResponsiveContainer>
                 </CardContent>
               </Card>
@@ -298,7 +307,7 @@ export function BiomarkerDashboardTool() {
                           stroke="var(--accent-emerald)"
                           strokeWidth={2.5}
                           dot={false}
-                          activeDot={{ r: 4, strokeWidth: 0 }}
+                          activeDot={chartActiveDot}
                         />
                       </ComposedChart>
                     </ResponsiveContainer>

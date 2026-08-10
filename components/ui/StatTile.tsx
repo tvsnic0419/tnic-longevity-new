@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import type { ThemeAccent } from '@/lib/design-system';
 import { themes } from '@/lib/design-system';
@@ -29,13 +30,11 @@ export function StatTile({ icon: Icon, label, accent = 'cyan', children }: StatT
   const t = themes[accent];
 
   return (
-    <div className="relative overflow-hidden rounded-xl border border-border/60 bg-muted/10 p-4">
-      <span
-        className="absolute inset-x-4 top-0 h-px opacity-80"
-        style={{ background: `linear-gradient(90deg, ${t.cssVar}, transparent)` }}
-        aria-hidden="true"
-      />
-      <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+    <div
+      className="stat-instrument rounded-xl border border-border/60 p-4"
+      style={{ '--flair-accent': t.cssVar } as CSSProperties}
+    >
+      <div className="flex items-center gap-1.5 text-label text-muted-foreground">
         <Icon className={`h-3.5 w-3.5 ${t.text}`} aria-hidden="true" />
         {label}
       </div>

@@ -129,7 +129,7 @@ export default function HallmarksIndexPage() {
                             style={{ width: `${h.coverage}%`, ['--card-accent' as string]: coverageColor }}
                           />
                         </div>
-                        <p className="mt-1 text-[11px] text-muted-foreground">TNiC coverage</p>
+                        <p className="mt-1 text-micro text-muted-foreground">TNiC coverage</p>
                       </div>
 
                       {/* Biomarkers */}

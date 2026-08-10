@@ -45,7 +45,7 @@ export function CompareHub() {
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <div className="flex items-center gap-2">
                     <Icon className="w-4 h-4 text-accent-cyan" />
-                    <span className="text-[10px] font-mono text-muted-foreground uppercase">
+                    <span className="text-micro font-mono text-muted-foreground uppercase">
                       {comp.category}
                     </span>
                   </div>

@@ -26,21 +26,21 @@ interface Edge {
 }
 
 const nodes: Node[] = [
-  { id: 'nmn', label: 'NMN', x: 200, y: 120, color: '#22d3ee' },
+  { id: 'nmn', label: 'NMN', x: 200, y: 120, color: '#00e0ff' },
   { id: 'glynac', label: 'GlyNAC', x: 320, y: 80, color: '#34d399' },
   { id: 'sulforaphane', label: 'Sulforaphane', x: 320, y: 160, color: '#fbbf24' },
-  { id: 'resveratrol', label: 'Resveratrol', x: 120, y: 80, color: '#a78bfa' },
-  { id: 'ca-akg', label: 'Ca-AKG', x: 120, y: 160, color: '#f87171' },
-  { id: 'fisetin', label: 'Fisetin', x: 260, y: 200, color: '#fb7185' },
+  { id: 'resveratrol', label: 'Resveratrol', x: 120, y: 80, color: '#c084fc' },
+  { id: 'ca-akg', label: 'Ca-AKG', x: 120, y: 160, color: '#f472b6' },
+  { id: 'fisetin', label: 'Fisetin', x: 260, y: 200, color: '#f472b6' },
 ];
 
 const edges: Edge[] = [
-  { from: 'nmn', to: 'glynac', strength: 3, pathway: 'NAD+ + GSH', color: '#22d3ee' },
+  { from: 'nmn', to: 'glynac', strength: 3, pathway: 'NAD+ + GSH', color: '#00e0ff' },
   { from: 'glynac', to: 'sulforaphane', strength: 3, pathway: 'NRF2 + GSH', color: '#fbbf24' },
-  { from: 'nmn', to: 'resveratrol', strength: 2, pathway: 'SIRT1', color: '#a78bfa' },
-  { from: 'nmn', to: 'ca-akg', strength: 2, pathway: 'NAD+ + TCA', color: '#f87171' },
-  { from: 'glynac', to: 'fisetin', strength: 2, pathway: 'Antioxidant + Senolytic', color: '#fb7185' },
-  { from: 'sulforaphane', to: 'resveratrol', strength: 1, pathway: 'NRF2 + SIRT1', color: '#a78bfa' },
+  { from: 'nmn', to: 'resveratrol', strength: 2, pathway: 'SIRT1', color: '#c084fc' },
+  { from: 'nmn', to: 'ca-akg', strength: 2, pathway: 'NAD+ + TCA', color: '#f472b6' },
+  { from: 'glynac', to: 'fisetin', strength: 2, pathway: 'Antioxidant + Senolytic', color: '#f472b6' },
+  { from: 'sulforaphane', to: 'resveratrol', strength: 1, pathway: 'NRF2 + SIRT1', color: '#c084fc' },
 ];
 
 export const SynergyNetworkVisual: React.FC<SynergyNetworkProps> = ({
@@ -185,11 +185,11 @@ export const SynergyNetworkVisual: React.FC<SynergyNetworkProps> = ({
         {/* Legend */}
         <g transform="translate(20, 220)">
           <text x="0" y="0" fill="#9ca3af" fontSize="9" fontWeight="500">Synergy Strength</text>
-          <line x1="0" y1="12" x2="25" y2="12" stroke="#22d3ee" strokeWidth="3" />
+          <line x1="0" y1="12" x2="25" y2="12" stroke="#00e0ff" strokeWidth="3" />
           <text x="30" y="15" fill="#9ca3af" fontSize="8">Strong</text>
-          <line x1="70" y1="12" x2="95" y2="12" stroke="#22d3ee" strokeWidth="2" />
+          <line x1="70" y1="12" x2="95" y2="12" stroke="#00e0ff" strokeWidth="2" />
           <text x="100" y="15" fill="#9ca3af" fontSize="8">Medium</text>
-          <line x1="140" y1="12" x2="155" y2="12" stroke="#22d3ee" strokeWidth="1.5" />
+          <line x1="140" y1="12" x2="155" y2="12" stroke="#00e0ff" strokeWidth="1.5" />
           <text x="160" y="15" fill="#9ca3af" fontSize="8">Additive</text>
         </g>
       </svg>

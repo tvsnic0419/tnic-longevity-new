@@ -23,12 +23,12 @@ export function Select({ label, value, onChange, options, hint }: SelectProps) {
         className="input-base w-full appearance-none cursor-pointer"
       >
         {options.map((o) => (
-          <option key={o.value} value={o.value} className="bg-zinc-900">
+          <option key={o.value} value={o.value} className="bg-[var(--color-bg-elevated)]">
             {o.label}
           </option>
         ))}
       </select>
-      {hint && <p className="text-caption text-caption mt-1">{hint}</p>}
+      {hint && <p className="text-caption mt-1">{hint}</p>}
     </div>
   );
 }

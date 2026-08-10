@@ -79,7 +79,7 @@ export function LabRecommendations({ recommendations }: LabRecommendationsProps)
 
                   {/* Priority badge */}
                   <span
-                    className="text-[9px] font-bold font-mono px-2 py-0.5 rounded-full"
+                    className="text-micro font-bold font-mono px-2 py-0.5 rounded-full"
                     style={{
                       color: pri.color,
                       background: `color-mix(in srgb, ${pri.color} 12%, transparent)`,
@@ -91,7 +91,7 @@ export function LabRecommendations({ recommendations }: LabRecommendationsProps)
 
                   {/* Category chip */}
                   <span
-                    className="text-[9px] font-semibold font-mono px-1.5 py-0.5 rounded"
+                    className="text-micro font-semibold font-mono px-1.5 py-0.5 rounded"
                     style={{
                       color: cat.color,
                       background: `color-mix(in srgb, ${cat.color} 8%, transparent)`,
@@ -101,7 +101,7 @@ export function LabRecommendations({ recommendations }: LabRecommendationsProps)
                   </span>
 
                   {inStack && (
-                    <span className="text-[9px] font-mono text-accent-emerald bg-accent-emerald/10 px-1.5 py-0.5 rounded border border-accent-emerald/20">
+                    <span className="text-micro font-mono text-accent-emerald bg-accent-emerald/10 px-1.5 py-0.5 rounded border border-accent-emerald/20">
                       in stack
                     </span>
                   )}
@@ -134,7 +134,7 @@ export function LabRecommendations({ recommendations }: LabRecommendationsProps)
                       <Link
                         key={h}
                         href={`/library/${hallmarkSlug(h)}`}
-                        className="text-[9px] font-mono px-1.5 py-0.5 rounded transition-colors"
+                        className="text-micro font-mono px-1.5 py-0.5 rounded transition-colors"
                         style={{
                           color: 'var(--accent-cyan)',
                           background: 'color-mix(in srgb, var(--accent-cyan) 8%, transparent)',

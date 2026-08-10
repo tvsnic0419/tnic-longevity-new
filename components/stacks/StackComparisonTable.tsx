@@ -65,7 +65,7 @@ export function StackComparisonTable() {
   return (
     <div>
       <div className="flex flex-wrap items-center gap-3 mb-6">
-        <div className="flex items-center gap-2 text-[10px] font-mono text-accent-violet uppercase">
+        <div className="flex items-center gap-2 text-micro font-mono text-accent-violet uppercase">
           <Filter className="w-3.5 h-3.5" /> Filters
         </div>
         <select
@@ -101,7 +101,7 @@ export function StackComparisonTable() {
             <option key={s} value={s}>{simplicityLabels[s]}</option>
           ))}
         </select>
-        <span className="text-[10px] font-mono text-caption ml-auto">
+        <span className="text-micro font-mono text-caption ml-auto">
           {filtered.length} stack{filtered.length !== 1 ? 's' : ''}
         </span>
       </div>
@@ -143,14 +143,14 @@ export function StackComparisonTable() {
                 <td className="px-4 py-3">
                   <p className="font-semibold text-sm">{stack.name}</p>
                   {stack.rxCompounds && (
-                    <span className="text-[9px] font-mono text-accent-rose">Rx</span>
+                    <span className="text-micro font-mono text-accent-rose">Rx</span>
                   )}
                 </td>
                 <td className="px-4 py-3 text-xs text-muted-foreground">{goalLabels[stack.goal]}</td>
                 <td className="px-4 py-3">
                   <div className="flex flex-wrap gap-1 max-w-[200px]">
                     {stack.compoundIds.map((id) => (
-                      <span key={id} className="text-[9px] font-mono bg-accent-violet/10 text-accent-violet px-1.5 py-0.5 rounded">
+                      <span key={id} className="text-micro font-mono bg-accent-violet/10 text-accent-violet px-1.5 py-0.5 rounded">
                         {compounds.find((c) => c.id === id)?.name.split(' ')[0] ?? id}
                       </span>
                     ))}

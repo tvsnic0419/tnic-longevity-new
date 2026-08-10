@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { Sparkles, Library, ArrowRight, FlaskConical, ShieldCheck } from 'lucide-react';
 import { GlassPanel } from '@/components/ui/GlassPanel';
@@ -16,10 +17,10 @@ import { HeroSceneMount } from '@/components/home/HeroSceneMount';
  */
 
 const heroStats = [
-  { value: String(eliteInterventions.length), label: 'Elite interventions' },
-  { value: String(COMPOUND_COUNT), label: 'Graded compounds' },
-  { value: '12', label: 'Hallmarks of aging' },
-  { value: 'A–C', label: 'Evidence tiers' },
+  { value: String(eliteInterventions.length), label: 'Elite interventions', accent: 'var(--accent-cyan)' },
+  { value: String(COMPOUND_COUNT), label: 'Graded compounds', accent: 'var(--accent-emerald)' },
+  { value: '12', label: 'Hallmarks of aging', accent: 'var(--accent-violet)' },
+  { value: 'A–C', label: 'Evidence tiers', accent: 'var(--accent-amber)' },
 ];
 
 function Dot() {
@@ -119,13 +120,17 @@ export function HomeHero() {
             <GlassPanel depth="mid" className="scan-overlay relative overflow-hidden rounded-2xl">
               <dl className="grid grid-cols-2 gap-px sm:grid-cols-4">
                 {heroStats.map((stat) => (
-                  <div key={stat.label} className="bg-white/[0.03] px-4 py-4 text-center lg:text-left">
+                  <div
+                    key={stat.label}
+                    className="stat-instrument px-4 py-4 text-center lg:text-left"
+                    style={{ '--flair-accent': stat.accent } as CSSProperties}
+                  >
                     <dt className="sr-only">{stat.label}</dt>
                     <dd>
-                      <span className="tnic-tabular block font-mono text-2xl font-bold tracking-tight text-white">
+                      <span className="number-glow tnic-tabular block font-mono text-2xl font-bold tracking-tight text-white">
                         {stat.value}
                       </span>
-                      <span className="mt-1 block text-[11px] leading-tight text-white/80">
+                      <span className="mt-1 block text-micro leading-tight text-white/80">
                         {stat.label}
                       </span>
                     </dd>
@@ -143,7 +148,11 @@ export function HomeHero() {
                 aria-hidden="true"
               />
               <TiltGlassPanel depth="content" className="relative rounded-3xl p-7">
-                <p className="font-mono text-[10px] uppercase tracking-widest text-[var(--accent-emerald)] mb-2">
+                <p className="font-mono text-micro uppercase tracking-widest text-[var(--accent-emerald)] mb-2 flex items-center gap-1.5">
+                  <span
+                    className="h-1.5 w-1.5 rounded-full bg-[var(--accent-emerald)] animate-pulse-glow"
+                    aria-hidden="true"
+                  />
                   Personalized
                 </p>
                 <h3 className="text-xl font-bold text-white mb-2">NICO Starter Questionnaire</h3>
@@ -175,7 +184,7 @@ export function HomeHero() {
                 </Link>
               </TiltGlassPanel>
             </div>
-            <p className="mt-4 hidden text-center text-[11px] text-white/90 lg:block lg:text-right">
+            <p className="mt-4 hidden text-center text-micro text-white/90 lg:block lg:text-right">
               Nutrition, down to the cell — evidence you can trace
             </p>
           </div>

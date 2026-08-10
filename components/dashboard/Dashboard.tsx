@@ -88,6 +88,12 @@ export function Dashboard() {
     metabolic: 'Cardio-metabolic health',
   };
 
+  // The "what this is / why it matters / what next" explainer rail is onboarding
+  // for a first-time visitor — but for a returning user who already has a stack,
+  // labs, or a quiz result it's friction they scroll past every visit. Show it
+  // only until they've engaged; after that the dashboard leads with their data.
+  const hasEngaged = selectedCompounds.length > 0 || labs.length > 0 || Boolean(quizResult);
+
   return (
     <PageShell>
       <header className="mb-8 flex flex-wrap items-end justify-between gap-4 section-header-mesh">
@@ -113,7 +119,9 @@ export function Dashboard() {
         </button>
       </header>
 
-      <ContextRail {...getHubContext('dashboard')} theme="emerald" className="mb-8" />
+      {!hasEngaged && (
+        <ContextRail {...getHubContext('dashboard')} theme="emerald" className="mb-8" />
+      )}
 
       <OnboardingStrip />
 

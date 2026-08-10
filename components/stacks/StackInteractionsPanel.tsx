@@ -86,7 +86,7 @@ export function StackInteractionsPanel({ analysis, className = '' }: StackIntera
               <button
                 type="button"
                 onClick={() => setShowAllConsultIf((prev) => !prev)}
-                className="focus-ring interactive flex items-center gap-1 text-[10px] font-mono text-accent-amber pl-5 uppercase tracking-wide"
+                className="focus-ring interactive flex items-center gap-1 text-micro font-mono text-accent-amber pl-5 uppercase tracking-wide"
                 aria-expanded={showAllConsultIf}
               >
                 <ChevronDown

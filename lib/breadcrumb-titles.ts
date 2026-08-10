@@ -28,6 +28,23 @@ export const routeTitles: Record<string, string> = {
   'pathway-architect': 'Pathway Architect',
 };
 
+/**
+ * Supplement-guide route → breadcrumb leaf label. Keyed by full route so
+ * `buildRouteBreadcrumbs` can special-case the `/…-supplement-guide` pages into
+ * a `TNiC › Supplement Guides › <title>` trail. Duplicated from the
+ * `SUPPLEMENT_GUIDES` registry titles (kept out of this bundle-light module on
+ * purpose); `breadcrumb-titles.test.ts` asserts the two never drift.
+ */
+export const guideTitles: Record<string, string> = {
+  '/longevity-supplements-guide': 'Best Longevity Supplements 2026',
+  '/nad-supplement-guide': 'NAD+ Supplement Guide',
+  '/glynac-supplement-guide': 'GlyNAC Supplement Guide',
+  '/berberine-supplement-guide': 'Berberine Guide',
+  '/taurine-supplement-guide': 'Taurine Longevity Guide',
+  '/sulforaphane-supplement-guide': 'Sulforaphane & NRF2 Guide',
+  '/spermidine-supplement-guide': 'Spermidine Guide',
+};
+
 export const comparisonTitles: Record<string, string> = {
   'nmn-vs-nr': 'NMN vs NR',
   'glynac-vs-liposomal-glutathione': 'GlyNAC vs Liposomal Glutathione',

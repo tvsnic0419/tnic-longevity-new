@@ -58,7 +58,7 @@ export function TabBar<T extends string>({
             {Icon && <Icon className="w-4 h-4" aria-hidden="true" />}
             <span>{tab.label}</span>
             {tab.badge && (
-              <span className="text-[10px] font-mono opacity-90">{tab.badge}</span>
+              <span className="text-label opacity-90">{tab.badge}</span>
             )}
           </button>
         );

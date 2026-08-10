@@ -88,7 +88,7 @@ export function HallmarkHeroVisual({ hallmark }: { hallmark: HallmarkLibraryEntr
           <span className="tnic-tabular mt-1 text-xl font-bold" style={{ color: meta.colorVar }}>
             {hallmark.coverage}%
           </span>
-          <span className="text-[9px] font-mono uppercase tracking-wider text-muted-foreground">TNiC coverage</span>
+          <span className="text-micro font-mono uppercase tracking-wider text-muted-foreground">TNiC coverage</span>
         </div>
 
         {top.map((iv, i) => {
@@ -103,7 +103,7 @@ export function HallmarkHeroVisual({ hallmark }: { hallmark: HallmarkLibraryEntr
               title={iv.name}
             >
               <span
-                className="flex h-full w-full items-center justify-center rounded-full border font-mono text-[10px] font-bold backdrop-blur-sm"
+                className="flex h-full w-full items-center justify-center rounded-full border font-mono text-micro font-bold backdrop-blur-sm"
                 style={{ borderColor: TIER_COLOR[iv.evidence], color: TIER_COLOR[iv.evidence], background: 'color-mix(in srgb, var(--glass-bg) 88%, transparent)' }}
               >
                 {iv.evidence}
@@ -130,7 +130,7 @@ export function HallmarkHeroVisual({ hallmark }: { hallmark: HallmarkLibraryEntr
           {hallmark.keyMolecules.map((m) => (
             <span
               key={m}
-              className="rounded-md border border-border/60 bg-card/60 px-2 py-1 font-mono text-[10px] text-muted-foreground"
+              className="rounded-md border border-border/60 bg-card/60 px-2 py-1 font-mono text-micro text-muted-foreground"
             >
               {m}
             </span>

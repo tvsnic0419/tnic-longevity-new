@@ -74,6 +74,8 @@
   --glow-cyan: 0 0 24px rgba(0, 224, 255, 0.22), 0 0 48px rgba(0, 224, 255, 0.08);
   --glow-violet: 0 0 24px rgba(192, 132, 252, 0.18), 0 0 48px rgba(192, 132, 252, 0.07);
   --glow-emerald: 0 0 24px rgba(52, 211, 153, 0.18), 0 0 48px rgba(52, 211, 153, 0.07);
+  --glow-rose: 0 0 24px rgba(244, 114, 182, 0.18), 0 0 48px rgba(244, 114, 182, 0.07);
+  --glow-amber: 0 0 24px rgba(251, 191, 36, 0.18), 0 0 48px rgba(251, 191, 36, 0.07);
 
   /* Effects */
   --glass-bg: rgba(12, 20, 40, 0.62);
@@ -390,6 +392,14 @@ p,
   text-transform: uppercase;
 }
 
+/* Size-only micro text — the semantic home for small SANS micro-copy (badge
+   text, chips, fine print) that isn't a mono uppercase label. Fills the gap
+   below .text-caption (12px) so components stop reaching for arbitrary px. */
+.text-micro {
+  font-size: 0.625rem;
+  line-height: 1.4;
+}
+
 /* Default colors for the typography scale above, deliberately placed in
    Tailwind's `components` layer instead of left unlayered. Unlayered CSS
    always beats anything in `@layer utilities` regardless of source order or
@@ -482,6 +492,25 @@ p,
       0 0 0 1px color-mix(in srgb, var(--accent-cyan) 10%, transparent),
       0 12px 32px -12px rgba(0, 0, 0, 0.15);
   }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   CANONICAL SURFACES — use these; do not add new card/glass classes.
+     • .card-base        neutral translucent panel (mid depth)
+     • .card-elevated    lifted panel with the premium gradient edge
+     • .premium-card     themeable accent card (set --card-accent) — the v9 idiom
+     • .glass-deep       layered "Deep Glass" planes (via <GlassPanel>)
+   The .card-premium / .card-ultra / .card-depth / .stat-card* / .gradient-border
+   / .tnic-glass classes are retained variants/aliases that all now draw from the
+   shared v8/v9 shadow + edge tokens; reach for a canonical class in new code.
+   ───────────────────────────────────────────────────────────────────────── */
+.card-base {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur-mid));
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+  /* Section-surface depth (Design System v8 mid-plane) — was flat before. */
+  box-shadow: var(--glass-shadow-mid);
 }
 
 .card-elevated {
@@ -2845,23 +2874,37 @@ p,
   -webkit-backdrop-filter: blur(var(--glass-blur-mid)) saturate(1.4);
   border: 1px solid rgba(255, 255, 255, 0.09);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
     var(--glass-shadow-mid);
 }
 
-/* ── White solid CTA button ── */
+/* ── CANONICAL CTA BUTTONS ──
+   The primary/secondary CTA skins. For new code prefer the <Button> primitive
+   (variant="primary" uses the same gradient recipe); these class skins exist so
+   link-shaped CTAs keep caller-controlled padding/radius. The primary was a
+   one-off white button that made the homepage hero's main CTA read differently
+   from every other primary CTA on the site — it now uses the signature
+   cyan→emerald gradient (matching .btn-gradient / <Button> primary). */
 .tnic-button-primary {
-  background: #ffffff;
-  color: #0A0F1C;
+  color: #030712;
   font-weight: 600;
-  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-emerald) 50%, #6ee7b7 100%);
+  background-size: 200% 200%;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--accent-cyan) 40%, transparent),
+    0 8px 32px -4px color-mix(in srgb, var(--accent-cyan) 45%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-position 0.4s ease;
 }
 
 @media (hover: hover) {
   .tnic-button-primary:hover {
-    background: #00F5FF;
     transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(0, 245, 255, 0.35);
+    background-position: 100% 50%;
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--accent-emerald) 50%, transparent),
+      0 12px 48px -4px color-mix(in srgb, var(--accent-cyan) 55%, transparent),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
   }
 }
 
@@ -2932,14 +2975,14 @@ p,
 .tnic-button-secondary {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.9);
   transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
 @media (hover: hover) {
   .tnic-button-secondary:hover {
     background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(0, 245, 255, 0.3);
+    border-color: color-mix(in srgb, var(--accent-cyan) 35%, transparent);
     transform: translateY(-1px);
   }
 }
@@ -3366,4 +3409,124 @@ p,
 .prose-tnic h3,
 .prose-tnic h4 {
   color: var(--color-text-primary);
+}
+
+/* ============================================================================
+   Sprint 22 — Cinematic flair layer
+   ----------------------------------------------------------------------------
+   Reusable building blocks for the visual-flair pass: an instrument-cluster
+   stat cell, a themeable ambient hero field for hub headers, and an accent
+   glow utility. Themeable via `--flair-accent` (defaults cyan). Every motion
+   here is gated on prefers-reduced-motion.
+   ========================================================================== */
+
+/* Instrument-cluster stat cell — an "on" readout with an accent floor glow and
+   a hairline top light-catch. Used by the homepage hero stat cluster and any
+   compact figure grid. Set `--flair-accent` per cell to color the glow. */
+.stat-instrument {
+  --flair-accent: var(--accent-cyan);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.004));
+  transition: background 0.4s var(--ease-glass), box-shadow 0.4s var(--ease-glass);
+}
+.stat-instrument::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 1px;
+  z-index: 2;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--flair-accent) 55%, transparent), transparent);
+  opacity: 0.7;
+  pointer-events: none;
+}
+/* Accent floor bloom — the "powered-on" tell, warms on hover. */
+.stat-instrument::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(120% 90% at 50% 118%, color-mix(in srgb, var(--flair-accent) 22%, transparent), transparent 68%);
+  opacity: 0.55;
+  transition: opacity 0.4s var(--ease-glass);
+  pointer-events: none;
+}
+.stat-instrument > * { position: relative; z-index: 1; }
+@media (hover: hover) {
+  .stat-instrument:hover::after { opacity: 1; }
+  .stat-instrument:hover {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.006));
+  }
+}
+
+/* Themeable ambient hero field for cinematic hub headers — two slow-drifting
+   accent orbs behind a header. Purely decorative; sits at z-0 behind content.
+   Wrap with `position: relative; overflow: hidden` on the header and set
+   `--flair-accent` (+ optional `--flair-accent-2`) to the hub color. */
+.hub-hero-field {
+  --flair-accent: var(--accent-cyan);
+  --flair-accent-2: var(--accent-emerald);
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.hub-hero-field::before,
+.hub-hero-field::after {
+  content: "";
+  position: absolute;
+  width: 42rem;
+  height: 42rem;
+  border-radius: 9999px;
+  filter: blur(60px);
+  opacity: 0.5;
+}
+.hub-hero-field::before {
+  top: -22rem;
+  left: -10rem;
+  background: radial-gradient(circle, color-mix(in srgb, var(--flair-accent) 30%, transparent), transparent 62%);
+  animation: hub-field-drift-a 22s ease-in-out infinite;
+}
+.hub-hero-field::after {
+  top: -18rem;
+  right: -12rem;
+  background: radial-gradient(circle, color-mix(in srgb, var(--flair-accent-2) 22%, transparent), transparent 62%);
+  animation: hub-field-drift-b 26s ease-in-out infinite;
+}
+/* Fine dot-grid overlay ties the field to the homepage-hero backdrop idiom. */
+.hub-hero-field .hub-hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(color-mix(in srgb, var(--flair-accent) 20%, transparent) 0.8px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.25;
+  mask-image: linear-gradient(180deg, #000 0%, transparent 82%);
+}
+
+@keyframes hub-field-drift-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(4rem, 2rem, 0) scale(1.08); }
+}
+@keyframes hub-field-drift-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.05); }
+  50%      { transform: translate3d(-3rem, 2.5rem, 0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hub-hero-field::before,
+  .hub-hero-field::after { animation: none; }
+}
+
+/* Accent glow utility — a soft luminous halo for figures/icons/nodes. */
+.flair-glow-cyan   { filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent-cyan) 55%, transparent)); }
+.flair-glow-emerald{ filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent-emerald) 55%, transparent)); }
+.flair-glow-violet { filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent-violet) 55%, transparent)); }
+.flair-glow-rose   { filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent-rose) 55%, transparent)); }
+
+/* Tabular figure with a faint accent text-glow — for hero/stat headline numbers. */
+.number-glow {
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 18px color-mix(in srgb, var(--flair-accent, var(--accent-cyan)) 35%, transparent);
 }

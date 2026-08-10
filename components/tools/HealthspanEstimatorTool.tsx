@@ -9,7 +9,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import { ChartGrid, ChartTooltip, axisProps, chartCursor } from '@/components/ui/ChartKit';
+import { ChartGrid, ChartTooltip, axisProps, chartCursor, chartActiveDot } from '@/components/ui/ChartKit';
 import { TrendingUp, TrendingDown, Activity, Scan } from 'lucide-react';
 import Link from 'next/link';
 import { usePlatform } from '@/context/PlatformContext';
@@ -158,8 +158,8 @@ export function HealthspanEstimatorTool() {
                   <YAxis yAxisId="left" domain={[0, 100]} {...axisProps} />
                   <YAxis yAxisId="right" orientation="right" domain={['dataMin - 2', 'dataMax + 2']} {...axisProps} />
                   <Tooltip content={<ChartTooltip />} cursor={chartCursor} />
-                  <Line yAxisId="left" type="monotone" dataKey="healthspan" stroke="var(--accent-emerald)" strokeWidth={2.5} dot={false} activeDot={{ r: 4, strokeWidth: 0 }} name="Healthspan" />
-                  <Line yAxisId="right" type="monotone" dataKey="bioAge" stroke="var(--accent-violet)" strokeWidth={2.5} dot={false} activeDot={{ r: 4, strokeWidth: 0 }} name="Bio age" />
+                  <Line yAxisId="left" type="monotone" dataKey="healthspan" stroke="var(--accent-emerald)" strokeWidth={2.5} dot={false} activeDot={chartActiveDot} name="Healthspan" />
+                  <Line yAxisId="right" type="monotone" dataKey="bioAge" stroke="var(--accent-violet)" strokeWidth={2.5} dot={false} activeDot={chartActiveDot} name="Bio age" />
                 </LineChart>
               </ResponsiveContainer>
               <p className="text-body-sm mt-4">{estimate.summary}</p>

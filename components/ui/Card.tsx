@@ -10,13 +10,16 @@ interface CardProps {
   variant?: CardVariant;
   /** @deprecated use variant="elevated" */
   elevated?: boolean;
+  /** Opt-in accent hover-lift + glow (uses the existing `.card-depth-hover`
+   *  treatment) — for interactive card grids that should feel alive on hover. */
+  hover?: boolean;
 }
 
-export function Card({ children, className = '', variant, elevated = false }: CardProps) {
+export function Card({ children, className = '', variant, elevated = false, hover = false }: CardProps) {
   const resolved = variant ?? (elevated ? 'elevated' : 'default');
 
   return (
-    <div className={cn(cardVariants[resolved], 'p-5 md:p-6', className)}>
+    <div className={cn(cardVariants[resolved], 'p-5 md:p-6', hover && 'card-depth-hover', className)}>
       {children}
     </div>
   );

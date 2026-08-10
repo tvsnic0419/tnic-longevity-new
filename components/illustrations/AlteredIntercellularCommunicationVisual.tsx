@@ -35,7 +35,7 @@ export const AlteredIntercellularCommunicationVisual: React.FC<{ className?: str
       </motion.div>
 
       {showLabels && (
-        <div className="mt-3 text-[10px] text-[var(--color-text-muted)]">
+        <div className="mt-3 text-micro text-[var(--color-text-muted)]">
           Aging disrupts normal cell-to-cell signaling. Chronic inflammatory signals and reduced beneficial communication accelerate tissue dysfunction.
         </div>
       )}

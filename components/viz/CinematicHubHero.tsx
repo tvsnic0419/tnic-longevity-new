@@ -131,6 +131,7 @@ const HUBHERO_CSS = `
 .hh-stat .v {
   font-family: ${FONT.display}; font-size: clamp(28px, 4vw, 42px); font-weight: 500;
   line-height: 1; letter-spacing: -0.02em; color: var(--hue);
+  text-shadow: 0 0 26px color-mix(in srgb, var(--hue) 28%, transparent);
 }
 .hh-stat .k {
   font-family: ${FONT.mono}; font-size: 10.5px; letter-spacing: 0.16em;
@@ -141,8 +142,8 @@ const HUBHERO_CSS = `
   display: inline-flex; align-items: center; gap: 10px;
   padding: 13px 24px; border-radius: 999px; text-decoration: none;
   font-weight: 600; font-size: 15px;
-  background: linear-gradient(135deg, var(--hue), color-mix(in srgb, var(--hue) 55%, #8c8cf5));
-  color: #050710; box-shadow: 0 0 30px color-mix(in srgb, var(--hue) 35%, transparent);
+  background: linear-gradient(135deg, var(--hue), color-mix(in srgb, var(--hue) 55%, #6ee7b7));
+  color: #030712; box-shadow: 0 0 30px color-mix(in srgb, var(--hue) 35%, transparent);
   transition: transform .2s ease, box-shadow .2s ease;
 }
 .hh-cta:hover { transform: translateY(-1px); box-shadow: 0 0 42px color-mix(in srgb, var(--hue) 50%, transparent); }
@@ -153,4 +154,23 @@ const HUBHERO_CSS = `
   border: 1px solid ${VIZ.line}; box-shadow: none;
 }
 .hh-cta.ghost:hover { border-color: var(--hue); }
+
+/* Cinematic staggered entrance — the hero elements rise in on load. Gated on
+   motion preference; reduced-motion users get the final composed state. */
+@media (prefers-reduced-motion: no-preference) {
+  .hh-kicker, .hh-title, .hh-lead, .hh-stat, .hh-ctas {
+    animation: hh-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .hh-title { animation-delay: 0.05s; }
+  .hh-lead  { animation-delay: 0.12s; }
+  .hh-stat  { animation-delay: 0.20s; }
+  .hh-stat:nth-child(2) { animation-delay: 0.26s; }
+  .hh-stat:nth-child(3) { animation-delay: 0.32s; }
+  .hh-stat:nth-child(4) { animation-delay: 0.38s; }
+  .hh-ctas  { animation-delay: 0.44s; }
+}
+@keyframes hh-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 `;

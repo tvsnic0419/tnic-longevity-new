@@ -9,6 +9,7 @@ import { SUPPLEMENT_GUIDES } from '@/lib/guides';
 import { themes } from '@/lib/design-system';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { RevealItem } from '@/components/ui/RevealItem';
+import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Longevity Supplement Guides 2026 — Evidence-Based Deep Dives | TNiC',
@@ -101,10 +102,10 @@ const itemListSchema = {
 
 export default function SupplementGuidesPage() {
   return (
-    <>
+    <SubPageLayout hideStackReadout>
       <StructuredData schemas={[collectionSchema, breadcrumbSchema, itemListSchema]} />
 
-      <main className="min-h-screen bg-bg-base">
+      <div className="bg-bg-base">
         {/* Hero */}
         <section className="py-20 md:py-28 border-b border-border section-mesh">
           <div className="container-page text-center">
@@ -194,7 +195,7 @@ export default function SupplementGuidesPage() {
                         <Icon className="h-5 w-5" style={{ color: accent }} />
                       </span>
                       <span
-                        className="rounded-full border px-2 py-0.5 font-mono text-[11px] font-medium"
+                        className="rounded-full border px-2 py-0.5 font-mono text-micro font-medium"
                         style={{
                           color: accent,
                           borderColor: `color-mix(in srgb, ${accent} 30%, transparent)`,
@@ -363,7 +364,7 @@ export default function SupplementGuidesPage() {
             </div>
           </div>
         </section>
-      </main>
-    </>
+      </div>
+    </SubPageLayout>
   );
 }

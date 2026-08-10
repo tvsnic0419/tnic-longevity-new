@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { BookOpen, FlaskConical, Heart, User, Quote } from 'lucide-react';
+import { BookOpen, FlaskConical, Heart, User, Quote, Check } from 'lucide-react';
 import { SectionShell } from '@/components/SectionShell';
 
 const founder = {
@@ -100,17 +100,17 @@ export function AboutSection() {
 
       <div className="grid md:grid-cols-2 gap-6">
         <div className="gradient-border p-6">
-          <p className="text-[10px] font-mono text-accent-emerald uppercase tracking-wider mb-3">Currently Covered</p>
+          <p className="text-micro font-mono text-accent-emerald uppercase tracking-wider mb-3">Currently Covered</p>
           <ul className="space-y-2">
             {scopeNote.covered.map((item) => (
               <li key={item} className="text-sm text-foreground/90 flex items-start gap-2">
-                <span className="text-accent-emerald shrink-0">✓</span> {item}
+                <Check className="h-4 w-4 mt-0.5 shrink-0 text-accent-emerald" aria-hidden="true" /> {item}
               </li>
             ))}
           </ul>
         </div>
         <div className="gradient-border p-6">
-          <p className="text-[10px] font-mono text-accent-amber uppercase tracking-wider mb-3">Planned / Advanced (Roadmap)</p>
+          <p className="text-micro font-mono text-accent-amber uppercase tracking-wider mb-3">Planned / Advanced (Roadmap)</p>
           <ul className="space-y-2">
             {scopeNote.planned.map((item) => (
               <li key={item} className="text-sm text-muted-foreground flex items-start gap-2">

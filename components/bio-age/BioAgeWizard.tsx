@@ -41,8 +41,8 @@ function Slider({
       />
       {(lowLabel || highLabel) && (
         <div className="flex justify-between mt-1">
-          <span className="text-[10px] text-muted-foreground">{lowLabel}</span>
-          <span className="text-[10px] text-muted-foreground">{highLabel}</span>
+          <span className="text-micro text-muted-foreground">{lowLabel}</span>
+          <span className="text-micro text-muted-foreground">{highLabel}</span>
         </div>
       )}
     </div>
@@ -174,7 +174,7 @@ function AgeControl({
         className="w-full age-slider"
         aria-label="Chronological age slider"
       />
-      <div id="bio-age-age-range" className="mt-1 flex justify-between text-[10px] text-muted-foreground">
+      <div id="bio-age-age-range" className="mt-1 flex justify-between text-micro text-muted-foreground">
         <span>{AGE_MIN}</span>
         <span>{AGE_MAX}</span>
       </div>
@@ -202,7 +202,7 @@ function WizardProgress({ step }: { step: number }) {
         {steps.map((s, i) => (
           <span
             key={s}
-            className={`text-[10px] font-medium tracking-wide transition-colors ${
+            className={`text-micro font-medium tracking-wide transition-colors ${
               i === step ? 'text-emerald-400' : i < step ? 'text-muted-foreground' : 'text-foreground/70'
             }`}
           >
@@ -246,8 +246,8 @@ function DomainBar({
         />
       </div>
       <div className="flex justify-between mt-1">
-        <span className="text-[10px] text-muted-foreground capitalize">{grade}</span>
-        <span className="text-[10px] font-mono text-muted-foreground">{score}/100</span>
+        <span className="text-micro text-muted-foreground capitalize">{grade}</span>
+        <span className="text-micro font-mono text-muted-foreground">{score}/100</span>
       </div>
     </div>
   );
@@ -385,28 +385,28 @@ function ResultReasoning({ result, context }: { result: BioAgeResult; context: R
           </p>
         </div>
         <div className="rounded-lg border border-cyan-500/20 bg-background/60 px-3 py-2 text-right">
-          <p className="text-[10px] uppercase tracking-wide text-muted-foreground">Input confidence</p>
+          <p className="text-micro uppercase tracking-wide text-muted-foreground">Input confidence</p>
           <p className="text-sm font-semibold text-cyan-300">{context.confidenceLabel}</p>
         </div>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-3">
         <div className="rounded-lg border border-border/60 bg-background/50 p-3">
-          <p className="text-[10px] uppercase tracking-wide text-muted-foreground">Bio-age delta</p>
+          <p className="text-micro uppercase tracking-wide text-muted-foreground">Bio-age delta</p>
           <p className="text-lg font-bold font-mono text-foreground">
             {result.ageDelta > 0 ? '+' : ''}{result.ageDelta.toFixed(1)} yr
           </p>
           <p className="text-xs text-muted-foreground">Relative to age {result.chronologicalAge}</p>
         </div>
         <div className="rounded-lg border border-border/60 bg-background/50 p-3">
-          <p className="text-[10px] uppercase tracking-wide text-muted-foreground">Strongest driver</p>
+          <p className="text-micro uppercase tracking-wide text-muted-foreground">Strongest driver</p>
           <p className="text-sm font-semibold text-foreground">{strongest?.name ?? 'Mixed'}</p>
           <p className="text-xs text-muted-foreground">
             {strongest ? `${strongest.delta > 0 ? '+' : ''}${strongest.delta.toFixed(1)} yr contribution` : 'No dominant domain'}
           </p>
         </div>
         <div className="rounded-lg border border-border/60 bg-background/50 p-3">
-          <p className="text-[10px] uppercase tracking-wide text-muted-foreground">Next precision upgrade</p>
+          <p className="text-micro uppercase tracking-wide text-muted-foreground">Next precision upgrade</p>
           <p className="text-sm font-semibold text-foreground">{context.nextMeasurement}</p>
           <p className="text-xs text-muted-foreground">{context.labSignals} lab signals entered</p>
         </div>

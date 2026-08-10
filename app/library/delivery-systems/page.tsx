@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowLeft, CheckCircle2, AlertCircle, Info, FlaskConical } from 'lucide-react';
 import { buildPageMetadata } from '@/lib/seo';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { DataTable } from '@/components/ui/DataTable';
 import { getHubContext } from '@/lib/hub-context';
 
 export const metadata = buildPageMetadata({
@@ -101,7 +102,7 @@ export default function DeliverySystemsPage() {
                 <h2 className="font-bold text-base">{s.name}</h2>
                 {s.subtitle && <p className="text-xs text-muted-foreground">{s.subtitle}</p>}
               </div>
-              <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full shrink-0 ${s.tagColor}`}>
+              <span className={`text-micro font-mono px-2 py-0.5 rounded-full shrink-0 ${s.tagColor}`}>
                 {s.tag}
               </span>
             </div>
@@ -145,8 +146,7 @@ export default function DeliverySystemsPage() {
       </div>
 
       {/* Desktop table */}
-      <div className="hidden md:block overflow-x-auto mb-10">
-        <table className="w-full text-sm border-collapse">
+      <DataTable caption="Delivery systems compared" className="hidden md:block mb-10">
           <thead>
             <tr className="border-b border-border text-left">
               <th className="py-4 pr-6 text-xs font-mono text-accent-emerald uppercase tracking-wider w-[18%]">System</th>
@@ -162,7 +162,7 @@ export default function DeliverySystemsPage() {
                 <td className="py-5 pr-6">
                   <p className="font-semibold">{s.name}</p>
                   {s.subtitle && <p className="text-xs text-muted-foreground mt-0.5">{s.subtitle}</p>}
-                  <span className={`inline-block text-[10px] font-mono px-2 py-0.5 rounded-full mt-2 ${s.tagColor}`}>
+                  <span className={`inline-block text-micro font-mono px-2 py-0.5 rounded-full mt-2 ${s.tagColor}`}>
                     {s.tag}
                   </span>
                 </td>
@@ -192,8 +192,7 @@ export default function DeliverySystemsPage() {
               </tr>
             ))}
           </tbody>
-        </table>
-      </div>
+      </DataTable>
 
       <div className="border-t border-border pt-8">
         <p className="text-label text-muted-foreground mb-4">RELATED</p>

@@ -119,7 +119,7 @@ export function LibraryModuleDetail({
             )}
 
             <div className="card-elevated p-6">
-              <p className="text-[10px] font-mono text-accent-cyan tracking-widest mb-2 uppercase">
+              <p className="text-micro font-mono text-accent-cyan tracking-widest mb-2 uppercase">
                 {categoryMeta.label}
               </p>
               <EvidenceTag tier={module.evidenceTier} size="lg" className="mb-4" />
@@ -136,7 +136,7 @@ export function LibraryModuleDetail({
 
             {relatedHallmarks.length > 0 && (
               <GlassPanel depth="mid" className="rounded-xl p-5">
-                <p className="text-[10px] font-mono text-accent-violet uppercase mb-3">Related hallmarks</p>
+                <p className="text-micro font-mono text-accent-violet uppercase mb-3">Related hallmarks</p>
                 <ul className="space-y-2">
                   {relatedHallmarks.map((h) => (
                     <li key={h.id}>
@@ -154,7 +154,7 @@ export function LibraryModuleDetail({
 
             {pathways.length > 0 && (
               <GlassPanel depth="mid" className="rounded-xl p-5">
-                <p className="text-[10px] font-mono text-accent-cyan uppercase mb-3">Pathways engaged</p>
+                <p className="text-micro font-mono text-accent-cyan uppercase mb-3">Pathways engaged</p>
                 <ul className="space-y-2">
                   {pathways.map((p) => (
                     <li key={p.slug}>
@@ -172,7 +172,7 @@ export function LibraryModuleDetail({
 
             {relatedCompound && (
               <GlassPanel depth="mid" className="rounded-xl p-5">
-                <p className="text-[10px] font-mono text-accent-emerald uppercase mb-3">TNiC compound</p>
+                <p className="text-micro font-mono text-accent-emerald uppercase mb-3">TNiC compound</p>
                 <p className="text-sm font-semibold text-foreground">{relatedCompound.name}</p>
                 <p className="text-xs text-muted-foreground mt-1">{relatedCompound.dose} · {relatedCompound.timing}</p>
                 <Link href="/stacks" className="text-xs text-accent-cyan hover:text-accent-emerald mt-3 inline-block">
@@ -183,7 +183,7 @@ export function LibraryModuleDetail({
 
             {synergyCompounds.length > 0 && (
               <GlassPanel depth="mid" className="rounded-xl p-5">
-                <p className="text-[10px] font-mono text-accent-emerald uppercase mb-3">Stack compounds</p>
+                <p className="text-micro font-mono text-accent-emerald uppercase mb-3">Stack compounds</p>
                 <ul className="space-y-2">
                   {synergyCompounds.map((c) => (
                     <li key={c!.id} className="text-sm text-muted-foreground">
@@ -201,7 +201,7 @@ export function LibraryModuleDetail({
               <GlassPanel depth="mid" className="rounded-xl p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <Layers className="w-4 h-4 text-accent-cyan" />
-                  <p className="text-[10px] font-mono text-accent-cyan uppercase">Related synergies</p>
+                  <p className="text-micro font-mono text-accent-cyan uppercase">Related synergies</p>
                 </div>
                 <ul className="space-y-2">
                   {module.relatedSynergySlugs.map((slug) => (
@@ -222,7 +222,7 @@ export function LibraryModuleDetail({
               <GlassPanel depth="mid" className="rounded-xl p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <Scale className="w-4 h-4 text-accent-cyan" />
-                  <p className="text-[10px] font-mono text-accent-cyan uppercase">Compare {module.title}</p>
+                  <p className="text-micro font-mono text-accent-cyan uppercase">Compare {module.title}</p>
                 </div>
                 <ul className="space-y-2.5">
                   {comparisons.map((comparison) => (
@@ -246,7 +246,7 @@ export function LibraryModuleDetail({
               <GlassPanel depth="mid" className="rounded-xl p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <Pill className="w-4 h-4 text-accent-emerald" />
-                  <p className="text-[10px] font-mono text-accent-emerald uppercase">Related compounds</p>
+                  <p className="text-micro font-mono text-accent-emerald uppercase">Related compounds</p>
                 </div>
                 <ul className="space-y-2.5">
                   {relatedCompounds.map((rc) => (
@@ -351,7 +351,7 @@ export function LibraryModuleDetail({
               <div className="gradient-border p-6 md:p-8">
                 <div className="flex items-center gap-2 mb-4">
                   <BookOpen className="w-4 h-4 text-accent-cyan" />
-                  <p className="text-[10px] font-mono text-accent-cyan uppercase">Deep dive</p>
+                  <p className="text-micro font-mono text-accent-cyan uppercase">Deep dive</p>
                 </div>
                 <MdxRenderer content={mdxBody} selfHref={getModulePath(module)} />
               </div>

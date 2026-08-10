@@ -212,13 +212,13 @@ export function PathwayArchitect() {
                         <Circle className="h-[18px] w-[18px] shrink-0 text-foreground/30" aria-hidden="true" />
                       )}
                     </div>
-                    <p className="relative z-10 mt-1 text-[11px] font-medium leading-snug text-foreground/70">{c.cls}</p>
-                    <p className="relative z-10 mt-1.5 text-[11px] leading-snug text-foreground/60">{c.dose}</p>
+                    <p className="relative z-10 mt-1 text-micro font-medium leading-snug text-foreground/70">{c.cls}</p>
+                    <p className="relative z-10 mt-1.5 text-micro leading-snug text-foreground/60">{c.dose}</p>
                     {c.libraryHref && (
                       <Link
                         href={c.libraryHref}
                         onClick={(e) => e.stopPropagation()}
-                        className="focus-ring relative z-10 mt-2 inline-flex items-center gap-1 text-[11px] font-medium text-foreground/60 hover:text-accent-violet"
+                        className="focus-ring relative z-10 mt-2 inline-flex items-center gap-1 text-micro font-medium text-foreground/60 hover:text-accent-violet"
                       >
                         Evidence page <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
                       </Link>
@@ -264,7 +264,7 @@ export function PathwayArchitect() {
                         className="focus-ring card-elevated rounded-lg p-2.5 text-left transition-colors hover:border-accent-violet/40"
                       >
                         <div className="text-sm font-semibold text-foreground">{s.name}</div>
-                        <div className="mt-0.5 text-[11px] text-foreground/65">{s.blurb}</div>
+                        <div className="mt-0.5 text-micro text-foreground/65">{s.blurb}</div>
                       </button>
                     ))}
                   </div>
@@ -280,7 +280,7 @@ export function PathwayArchitect() {
                       <div key={id} className="card-elevated flex items-center justify-between rounded-lg px-2.5 py-1.5">
                         <div className="min-w-0">
                           <div className="truncate text-sm font-semibold text-foreground">{c.name}</div>
-                          <div className="truncate text-[11px] text-foreground/60">{c.dose}</div>
+                          <div className="truncate text-micro text-foreground/60">{c.dose}</div>
                         </div>
                         <button
                           type="button"
@@ -297,7 +297,7 @@ export function PathwayArchitect() {
 
                 {/* Synergy intelligence — real detections from analyzeStack() */}
                 <div className="mb-3" aria-live="polite">
-                  <p className="mb-2 text-[11px] font-mono uppercase tracking-wider text-foreground/60">
+                  <p className="mb-2 text-micro font-mono uppercase tracking-wider text-foreground/60">
                     Synergy intelligence
                   </p>
                   {analysis.synergies.length === 0 && analysis.cautions.length === 0 && analysis.redundancies.length === 0 ? (
@@ -305,19 +305,19 @@ export function PathwayArchitect() {
                   ) : (
                     <div className="flex flex-col gap-1.5">
                       {analysis.synergies.map((s) => (
-                        <div key={`${s.a}-${s.b}`} className="flex items-start gap-2 rounded-lg bg-accent-emerald/10 px-2.5 py-1.5 text-[12px] leading-snug text-foreground">
+                        <div key={`${s.a}-${s.b}`} className="flex items-start gap-2 rounded-lg bg-accent-emerald/10 px-2.5 py-1.5 text-caption leading-snug text-foreground">
                           <Sparkles className="mt-[1px] h-3.5 w-3.5 shrink-0 text-accent-emerald" aria-hidden="true" />
                           <span><strong>{s.a} + {s.b}:</strong> {s.rationale}</span>
                         </div>
                       ))}
                       {analysis.redundancies.map((r) => (
-                        <div key={r.label} className="flex items-start gap-2 rounded-lg bg-accent-amber/10 px-2.5 py-1.5 text-[12px] leading-snug text-foreground">
+                        <div key={r.label} className="flex items-start gap-2 rounded-lg bg-accent-amber/10 px-2.5 py-1.5 text-caption leading-snug text-foreground">
                           <AlertTriangle className="mt-[1px] h-3.5 w-3.5 shrink-0 text-accent-amber" aria-hidden="true" />
                           <span><strong>{r.label}:</strong> {r.rationale}</span>
                         </div>
                       ))}
                       {analysis.cautions.map((c) => (
-                        <div key={`${c.a}-${c.b}`} className="flex items-start gap-2 rounded-lg bg-accent-rose/10 px-2.5 py-1.5 text-[12px] leading-snug text-foreground">
+                        <div key={`${c.a}-${c.b}`} className="flex items-start gap-2 rounded-lg bg-accent-rose/10 px-2.5 py-1.5 text-caption leading-snug text-foreground">
                           <AlertTriangle className="mt-[1px] h-3.5 w-3.5 shrink-0 text-accent-rose" aria-hidden="true" />
                           <span><strong>{c.a} + {c.b}:</strong> {c.rationale}</span>
                         </div>
@@ -329,14 +329,14 @@ export function PathwayArchitect() {
                 {/* Convergent pathways */}
                 {analysis.convergent.length > 0 && (
                   <div className="mb-3">
-                    <p className="mb-2 text-[11px] font-mono uppercase tracking-wider text-foreground/60">
+                    <p className="mb-2 text-micro font-mono uppercase tracking-wider text-foreground/60">
                       Convergent pathways
                     </p>
                     <div className="flex flex-wrap gap-1.5">
                       {analysis.convergent.map((cv) => (
                         <span
                           key={cv.p}
-                          className="rounded-md border border-accent-cyan/25 bg-accent-cyan/10 px-2 py-1 text-[11px] font-medium text-accent-cyan"
+                          className="rounded-md border border-accent-cyan/25 bg-accent-cyan/10 px-2 py-1 text-micro font-medium text-accent-cyan"
                           title={cv.members.join(', ')}
                         >
                           {PATHWAY_LABELS[cv.p]} · {cv.count}
@@ -348,7 +348,7 @@ export function PathwayArchitect() {
 
                 {/* Hallmark coverage */}
                 <div className="mb-3">
-                  <div className="mb-2 flex items-center justify-between text-[11px] font-mono uppercase tracking-wider text-foreground/60">
+                  <div className="mb-2 flex items-center justify-between text-micro font-mono uppercase tracking-wider text-foreground/60">
                     <span>Hallmark coverage</span>
                     <span>{analysis.coveredCount}/{HALLMARKS.length}</span>
                   </div>
@@ -358,7 +358,7 @@ export function PathwayArchitect() {
                       const on = depth > 0;
                       return (
                         <div key={h.id} className="flex items-center gap-2">
-                          <span className="w-[110px] shrink-0 truncate text-right text-[11px] text-foreground/60" title={h.label}>
+                          <span className="w-[110px] shrink-0 truncate text-right text-micro text-foreground/60" title={h.label}>
                             {h.short}
                           </span>
                           <div className="h-1.5 flex-1 overflow-hidden rounded bg-border/40">
@@ -377,11 +377,11 @@ export function PathwayArchitect() {
                   <div className="mb-3 grid grid-cols-2 gap-2">
                     <div className="card-elevated rounded-lg p-2.5 text-center">
                       <p className="text-xl font-black font-mono text-accent-violet">{Math.round(analysis.synergyScore)}</p>
-                      <p className="text-[10px] uppercase tracking-wide text-foreground/60">Synergy /100</p>
+                      <p className="text-micro uppercase tracking-wide text-foreground/60">Synergy /100</p>
                     </div>
                     <div className="card-elevated rounded-lg p-2.5 text-center">
                       <p className="text-xl font-black font-mono text-accent-violet">{analysis.coveragePct}%</p>
-                      <p className="text-[10px] uppercase tracking-wide text-foreground/60">Hallmark coverage</p>
+                      <p className="text-micro uppercase tracking-wide text-foreground/60">Hallmark coverage</p>
                     </div>
                   </div>
                 )}
@@ -415,7 +415,7 @@ export function PathwayArchitect() {
                   </button>
                 </div>
 
-                <p className="mt-3 text-[11px] leading-relaxed text-foreground/55">
+                <p className="mt-3 text-micro leading-relaxed text-foreground/55">
                   Educational planning tool, not medical advice. Consult a qualified healthcare provider before
                   starting any regimen — synergy and caution notes reflect published mechanistic literature curated
                   by TNiC, not a personalized safety review.

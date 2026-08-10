@@ -40,6 +40,39 @@ export const chartCursor = { stroke: 'var(--accent-cyan)', strokeOpacity: 0.3, s
 /** Hover cursor fill for bar charts. */
 export const barCursor = { fill: 'var(--accent-cyan)', fillOpacity: 0.06 } as const;
 
+/**
+ * Active dot for <Line>/<Area> — a larger point ringed in the surface color so
+ * the hovered value lifts crisply off the line. Recharts fills it with the
+ * series color automatically. `<Line ... activeDot={chartActiveDot} />`
+ */
+export const chartActiveDot = {
+  r: 5,
+  strokeWidth: 2,
+  stroke: 'var(--color-bg-elevated)',
+} as const;
+
+/**
+ * Reusable vertical area-fill gradient for recharts. Drop a <defs> child into
+ * the chart, render this with a unique id, and reference it as
+ * `fill={`url(#${id})`}` on an <Area>. Keeps every filled area on one recipe.
+ */
+export function ChartAreaGradient({
+  id,
+  color = 'var(--accent-cyan)',
+  topOpacity = 0.28,
+}: {
+  id: string;
+  color?: string;
+  topOpacity?: number;
+}) {
+  return (
+    <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stopColor={color} stopOpacity={topOpacity} />
+      <stop offset="100%" stopColor={color} stopOpacity={0} />
+    </linearGradient>
+  );
+}
+
 /* Branded tooltip styling for charts that rely on recharts `formatter` /
    `labelFormatter` (where a custom content component can't be used). Matches
    the <ChartTooltip> look so every tooltip on the site is identical. */
