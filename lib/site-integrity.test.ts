@@ -148,6 +148,23 @@ describe('site data integrity', () => {
     expect(src).not.toMatch(/\b\d+ compounds, 12 hallmarks/);
   });
 
+  it('the hallmarks hub derives its stat rail, not stale literals', () => {
+    // The /hallmarks hero once hand-rolled a stat band claiming "150+" PMIDs and
+    // "9" Tier A/B compounds — numbers that drift the moment the library grows.
+    // The rail must derive from the live registries (hallmarkLibrary length,
+    // citationRegistry length, and a Tier A/B compound count computed from the
+    // hallmark interventions) so it can never understate what's published.
+    const src = readFileSync(
+      resolve(process.cwd(), 'app/hallmarks/page.tsx'),
+      'utf8',
+    );
+    expect(src).toContain('citationRegistry.length');
+    expect(src).toContain('hallmarkLibrary.length');
+    // The old hardcoded band rendered "150+" and a bare "9" as font-black stats.
+    expect(src).not.toMatch(/>150\+</);
+    expect(src).not.toMatch(/text-4xl font-black/);
+  });
+
   it('vercel.json enforces HSTS preload and www→apex redirect', () => {
     const vercel = JSON.parse(
       readFileSync(resolve(process.cwd(), 'vercel.json'), 'utf8'),

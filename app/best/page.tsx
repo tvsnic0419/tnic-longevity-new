@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, Target } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
@@ -33,9 +34,26 @@ export default function BestHubPage() {
     { name: 'Best supplements by goal', path: '/best' },
   ]);
 
+  // Derived from the goal registry so the rail always matches what's listed.
+  const compoundsRanked = new Set(bestForGoals.flatMap((g) => g.boost)).size;
+  const hallmarksMapped = new Set(bestForGoals.flatMap((g) => g.hallmarkIds)).size;
+
   return (
     <SubPageLayout hideContextBar>
       <StructuredData schemas={[itemListSchema, breadcrumbSchema]} />
+      <CinematicHubHero
+        hue="emerald"
+        kicker="Evidence-ranked"
+        title={<>Best supplements, <em>by goal</em>.</>}
+        lead="Start from what you want to improve. Each goal ranks the evidence-graded compounds that act on its mechanisms — by strength of human evidence, not marketing — with doses, citations, and a hand-off into a personalized stack."
+        stats={[
+          { value: String(bestForGoals.length), label: 'Goals covered' },
+          { value: String(compoundsRanked), label: 'Compounds ranked' },
+          { value: String(hallmarksMapped), label: 'Hallmarks mapped' },
+        ]}
+        primary={{ href: '/nico', label: 'Take the questionnaire' }}
+        secondary={{ href: '/library', label: 'Browse the library' }}
+      />
       <div className="container-page py-10 md:py-14">
         <PageHeader
           icon={Target}
@@ -52,15 +70,16 @@ export default function BestHubPage() {
               <Link
                 key={g.slug}
                 href={`/best/${g.slug}`}
-                className="focus-ring interactive group rounded-2xl border border-border/60 bg-card/40 p-5 flex flex-col hover:border-accent-emerald/40 transition-colors"
+                style={{ ['--card-accent' as string]: 'var(--accent-emerald)' }}
+                className="premium-card focus-ring group p-5 flex flex-col"
               >
-                <h2 className="font-bold text-foreground group-hover:text-accent-emerald transition-colors mb-2">
+                <h2 className="font-bold text-foreground transition-colors group-hover:[color:var(--card-accent)] mb-2">
                   {g.title}
                 </h2>
-                <p className="text-xs text-muted-foreground leading-relaxed mb-4 flex-1">
+                <p className="text-caption text-muted-foreground leading-relaxed mb-4 flex-1">
                   Top picks: {top.map((p) => p.compound.name.replace(/\s*\(.*\)$/, '')).join(', ')}
                 </p>
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent-emerald">
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold [color:var(--card-accent)]">
                   See the ranking <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                 </span>
               </Link>

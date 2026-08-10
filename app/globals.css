@@ -641,24 +641,6 @@ p,
   mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 10%, transparent 75%);
 }
 
-.orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(70px);
-  pointer-events: none;
-  animation: float 14s ease-in-out infinite;
-}
-
-.orb-1 { width: 520px; height: 520px; background: radial-gradient(circle, rgba(0,224,255,0.38) 0%, transparent 70%); top: -5%; left: 5%; filter: blur(80px); opacity: 0.9; }
-.orb-2 { width: 380px; height: 380px; background: radial-gradient(circle, rgba(52,211,153,0.30) 0%, transparent 70%); top: 35%; right: 3%; animation-delay: -5s; filter: blur(70px); opacity: 0.85; }
-.orb-3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(192,132,252,0.24) 0%, transparent 70%); bottom: 10%; left: 35%; animation-delay: -9s; filter: blur(60px); opacity: 0.8; }
-
-@keyframes float {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  30% { transform: translate(40px, -30px) scale(1.07); }
-  65% { transform: translate(-25px, 20px) scale(0.93); }
-}
-
 /* ── Glow utilities ── */
 .glow-cyan {
   box-shadow: 0 0 24px color-mix(in srgb, var(--accent-cyan) 45%, transparent),
@@ -2763,62 +2745,6 @@ p,
   pointer-events: none;
 }
 
-/* ── 7. Bento grid layout ─────────────────────────────────────────────────
-   Asymmetric 12-col grid for feature showcases. */
-.bento-grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(3, 1fr);
-}
-
-@media (max-width: 1024px) {
-  .bento-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 640px) {
-  .bento-grid { grid-template-columns: 1fr; }
-}
-
-.bento-span-2 { grid-column: span 2; }
-.bento-row-2  { grid-row: span 2; }
-
-.bento-cell {
-  position: relative;
-  background: color-mix(in srgb, var(--glass-bg) 90%, transparent);
-  backdrop-filter: blur(24px);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-2xl);
-  overflow: hidden;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-.bento-cell::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    color-mix(in srgb, var(--accent-cyan) 40%, transparent),
-    transparent
-  );
-  opacity: 0.28;
-  transition: opacity 0.3s;
-}
-
-@media (hover: hover) {
-  .bento-cell:hover {
-    border-color: color-mix(in srgb, var(--accent-cyan) 22%, transparent);
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--accent-cyan) 8%, transparent),
-      0 8px 32px -8px color-mix(in srgb, var(--accent-cyan) 20%, transparent),
-      0 24px 60px -16px rgba(0,0,0,0.2);
-    transform: translateY(-3px);
-  }
-  .bento-cell:hover::before { opacity: 1; }
-}
-
 /* ── 8. Gradient rule with center orb ─────────────────────────────────────
    Premium section divider. Usage: <div class="gradient-rule-orb"><span class="gradient-rule-orb-dot"/></div> */
 .gradient-rule-orb {
@@ -3069,35 +2995,6 @@ p,
   .tnic-button-secondary,
   .tnic-button-accent { transition: none; }
 }
-/* ── Homepage compound & graphic section refinements (from design-polish pass) ── */
-.home-compound-card,
-.compound-graphic {
-  border-color: rgba(103, 246, 255, 0.3);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  background: rgba(255, 255, 255, 0.02);
-}
-.home-compound-card:hover,
-.compound-graphic:hover {
-  border-color: #00e5ff;
-  background: rgba(0, 229, 255, 0.04);
-  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  transform: translateY(-1px);
-}
-.graphic-text,
-.compound-description {
-  color: #d1d5db;
-  font-weight: 500;
-  line-height: 1.65;
-}
-.compound-name {
-  color: #f4f4f5;
-  font-weight: 600;
-  letter-spacing: -0.015em;
-}
-.graphic-glow {
-  box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
-}
-
 /* ═══════════════════════════════════════════════════════════════════════════
    Design System v8 — Deep Glass
    ───────────────────────────────────────────────────────────────────────────

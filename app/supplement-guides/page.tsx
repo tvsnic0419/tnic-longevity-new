@@ -10,6 +10,8 @@ import { themes } from '@/lib/design-system';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { RevealItem } from '@/components/ui/RevealItem';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
+import { PageHeader } from '@/components/ui/PageHeader';
+import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Longevity Supplement Guides 2026 — Evidence-Based Deep Dives | TNiC',
@@ -106,57 +108,33 @@ export default function SupplementGuidesPage() {
       <StructuredData schemas={[collectionSchema, breadcrumbSchema, itemListSchema]} />
 
       <div className="bg-bg-base">
-        {/* Hero */}
-        <section className="py-20 md:py-28 border-b border-border section-mesh">
-          <div className="container-page text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono bg-accent-cyan/10 text-accent-cyan border border-accent-cyan/20 mb-6">
-              <BookOpen className="w-3.5 h-3.5" />
-              Evidence-Based · PubMed-Cited · Updated 2026
-            </div>
-            <h1 className="heading-page mb-5 max-w-4xl mx-auto">
-              Longevity Supplement Guides
-            </h1>
-            <p className="text-body max-w-2xl mx-auto mb-8 text-muted-foreground">
-              Deep-dive guides for the compounds with the strongest evidence in aging science.
-              Every claim is cited. Every protocol is honest about limitations. Affiliate links never drive the rankings.
-            </p>
-            <div className="flex flex-wrap gap-3 justify-center">
-              <Link
-                href="/longevity-supplements-guide"
-                className="focus-ring interactive inline-flex items-center gap-2 tnic-button-accent px-5 py-3 rounded-xl text-sm"
-              >
-                Start with the Master Guide
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/library/compounds/nmn"
-                className="focus-ring interactive inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-border/60 bg-card text-foreground font-medium text-sm hover:border-accent-cyan/30 transition"
-              >
-                Compound Library
-              </Link>
-            </div>
-          </div>
-        </section>
+        {/* Cinematic hub hero — decorative band; the semantic <h1> is the
+            PageHeader below. Stat rail derives from the live arrays (no
+            hardcoded literals) so it can never drift below what's listed. */}
+        <CinematicHubHero
+          hue="cyan"
+          kicker="Evidence-Based · PubMed-Cited · 2026"
+          title={<>Longevity supplement <em>guides</em>.</>}
+          lead="Deep-dive guides for the compounds with the strongest evidence in aging science. Every claim is cited, every protocol honest about its limits — and affiliate links never drive the rankings."
+          stats={[
+            { value: String(SUPPLEMENT_GUIDES.length), label: 'In-depth guides' },
+            { value: String(compoundDeepDives.length), label: 'Compound profiles' },
+            { value: String(comparisons.length), label: 'Head-to-head comparisons' },
+          ]}
+          primary={{ href: '/longevity-supplements-guide', label: 'Start with the Master Guide' }}
+          secondary={{ href: '/library', label: 'Compound library' }}
+        />
 
-        {/* Stats row */}
-        <section className="border-b border-border py-8">
+        {/* Semantic page title */}
+        <section className="pt-12 md:pt-16 pb-2">
           <div className="container-page">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {[
-                // Derived from the live arrays so these can never drift below
-                // what the page actually lists (the coherence principle the
-                // footer/hero stats already follow).
-                { stat: String(SUPPLEMENT_GUIDES.length), label: 'In-depth guides' },
-                { stat: String(compoundDeepDives.length), label: 'Compound profiles' },
-                { stat: String(comparisons.length), label: 'Head-to-head comparisons' },
-                { stat: '50+', label: 'PubMed citations' },
-              ].map((item) => (
-                <div key={item.label} className="text-center">
-                  <p className="text-3xl font-bold text-accent-cyan mb-1">{item.stat}</p>
-                  <p className="text-xs text-muted-foreground font-mono">{item.label}</p>
-                </div>
-              ))}
-            </div>
+            <PageHeader
+              icon={BookOpen}
+              eyebrow="Supplement Guides"
+              title="Longevity Supplement Guides"
+              description="Mechanism, key human-trial data, dosing protocol, and honest cautions for each major longevity compound — structured around the 12 Hallmarks of Aging."
+              theme="cyan"
+            />
           </div>
         </section>
 

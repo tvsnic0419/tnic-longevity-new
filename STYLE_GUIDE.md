@@ -1,7 +1,8 @@
 # TNiC Design System & Style Guide
 
-> Version 1.0 · June 2026  
-> Governs typography, spacing, components, accessibility, and page patterns across tnic.help.
+> Version 1.1 · August 2026  
+> Governs typography, spacing, components, accessibility, and page patterns across tnic.help.  
+> v1.1 documents the cinematic viz family (§7, §12) that the premium hubs are built on.
 
 ---
 
@@ -88,9 +89,11 @@
 | `Button` | primary / secondary / ghost / danger |
 | `Accordion` | Expandable detail without page jump |
 | `DataTable` | Scrollable table + `sr-only` caption |
-| `Card` patterns | `.card-base`, `.card-elevated`, `.glass` |
+| Card surfaces | `.premium-card` (canonical), `GlassPanel` / `.glass-deep`, `.card-elevated`, `.glass` |
 
-Import theme maps from `lib/design-system.ts`.
+Import theme maps from `lib/design-system.ts`. **Card surfaces:** default to
+`.premium-card` (accent-aware via `--card-accent`) for content cards and
+`GlassPanel` for layered glass moments; the legacy `.card-base` was retired.
 
 ---
 
@@ -112,10 +115,30 @@ Import theme maps from `lib/design-system.ts`.
 
 ## 7. Page Patterns
 
-### Hub pages (`/library`, `/stacks`, `/labs`)
+### Hub pages — cinematic pattern (`/library`, `/stacks`, `/labs`, `/hallmarks`, `/peptides`, `/pathways`, `/tools`, `/trust`, `/products`, `/best`, `/supplement-guides`)
+
+Every top-level hub opens with the shared cinematic band, then anchors its
+semantic title beneath it:
 
 ```
-PageShell
+SubPageLayout (folder layout.tsx → Nav + ContextBar + Footer)
+  └─ CinematicHubHero   (decorative: molecular field + hero title + derived stat rail + CTAs)
+  └─ PageHeader as="h1" (the single semantic <h1> — hero title is a non-heading <p>)
+  └─ content grid (.premium-card / GlassPanel)
+```
+
+- **One `<h1>` per page.** `CinematicHubHero`'s `hh-title` is intentionally a
+  decorative `<p>`; the real `<h1>` lives in the `PageHeader` (or a
+  title-bearing content component) directly below it.
+- **Hero accent = the page's `PageHeader` theme**, so hero and header read as one unit.
+- **Stats are derived, never literals** — pass values joined from the live
+  registries (`COMPOUND_COUNT`, `hallmarkLibrary.length`, `citationRegistry.length`, …)
+  so a hero can never drift below what's published. See `lib/platform-stats.ts`.
+
+### Interior / utility hub pages
+
+```
+PageShell (or SubPageLayout)
   └─ PageHeader (theme-colored eyebrow)
   └─ StatStrip (optional metrics)
   └─ TabBar (scrollable mobile)
@@ -251,6 +274,34 @@ import { TabBar } from '@/components/ui/TabBar';
 <label htmlFor="marker" className="text-label block mb-1">Biomarker</label>
 <select id="marker" className="input-base">...</select>
 ```
+
+---
+
+## 12. Cinematic viz system (`components/viz/`)
+
+The premium visual language that the hub pages share. Draw from these instead
+of hand-rolling a new header/graphic — reaching for the old flat `PageHeader`
+alone is what created the earlier "two-tier" unevenness.
+
+| Component / token | Purpose |
+|-------------------|---------|
+| `viz/tokens.ts` | Single source of truth for the cinematic palette/glow/stroke/type (`VIZ`, `FONT`, `HUES`, `tierColor`, `signatureHue`). Every viz surface draws from here. |
+| `CinematicHubHero` | Reusable hub opening band — full-bleed `MoleculeStage` field, Fraunces headline, derived stat rail, gradient CTAs, keyed to a hub hue. |
+| `MoleculeStage` | Shared canvas renderer: `mode="molecule"` (real ball-and-stick geometry) or `mode="field"` (abstract orbital field when no structure exists — never fabricate a molecule). |
+| `NetworkStage` | Network sibling of `MoleculeStage` — the synergy graph as a rotating 3D artwork. |
+| `CompoundHero` / `ModuleHero` | Per-compound overture bands built only from real `lib/data.ts` / library fields. |
+| `ui/CellularDivider` | Numbered, hue-keyed section seam between homepage sections. |
+| `ui/GlassPanel` (`.glass-deep`) | The canonical layered-glass panel (Deep Glass v8): tokenized, theme-aware shadows. Budget 1–2 glass moments per page. |
+| `.premium-card` | The canonical accent-aware content card (`--card-accent`). |
+
+**Honesty contract:** a named ball-and-stick structure ships only when its
+skeleton was actually laid out (`viz/molecule.ts`); everything else falls back
+to the abstract field. Accent hexes in canvas/SVG components must match the
+canonical tokens in `lib/design-system.ts` `palette` / `--accent-*`.
+
+**Motion:** all viz honors `prefers-reduced-motion` (global
+`MotionConfig reducedMotion="user"` + per-component guards) and is
+visibility-gated via `lib/raf-visibility`.
 
 ---
 

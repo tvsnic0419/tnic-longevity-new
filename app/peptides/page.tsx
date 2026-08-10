@@ -6,6 +6,7 @@ import { RevealItem } from '@/components/ui/RevealItem';
 import { DisclaimerBanner } from '@/components/trust/DisclaimerBanner';
 import { EvidenceTagLegend } from '@/components/trust/EvidenceTag';
 import { peptideCategoryMeta, peptideLibrary, getPeptidesByCategory } from '@/lib/peptides-library';
+import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { disclaimers } from '@/lib/trust';
 import { getHubContext } from '@/lib/hub-context';
 import { seoRoutes } from '@/lib/seo-routes';
@@ -24,12 +25,26 @@ export default function PeptidesHubPage() {
   const legalDisclaimer = disclaimers.find((d) => d.id === 'peptides-legal-status')!;
 
   return (
-    <div className="py-8 md:py-10">
-      <div className="container-page">
-        <PageHeader
-          icon={Syringe}
-          eyebrow="Peptide Library"
-          title="Anti-aging peptides, graded honestly."
+    <>
+      <CinematicHubHero
+        hue="rose"
+        kicker="Peptide Library"
+        title={<>The peptide <em>frontier</em>.</>}
+        lead="Eight of the most-discussed longevity peptides — evidence tier, mechanism, and the legal status of every one, stated plainly before anything else."
+        stats={[
+          { value: String(peptideLibrary.length), label: 'Peptides covered' },
+          { value: String(categoryOrder.length), label: 'Mechanistic classes' },
+          { value: 'A–C', label: 'Evidence tiers' },
+        ]}
+        primary={{ href: '/nico', label: 'Find your personalized stack' }}
+        secondary={{ href: '/library', label: 'Browse the library' }}
+      />
+      <div className="py-8 md:py-10">
+        <div className="container-page">
+          <PageHeader
+            icon={Syringe}
+            eyebrow="Peptide Library"
+            title="Anti-aging peptides, graded honestly."
           description="Eight of the most-discussed longevity peptides — evidence tier, mechanism, dosing patterns reported in the literature, and the legal status of every single one, stated plainly before anything else."
           theme="rose"
           context={getHubContext('peptides')}
@@ -75,5 +90,6 @@ export default function PeptidesHubPage() {
         </p>
       </div>
     </div>
+    </>
   );
 }

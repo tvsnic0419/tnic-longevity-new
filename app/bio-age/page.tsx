@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
 import { Activity } from 'lucide-react';
-import { Nav } from '@/components/Nav';
-import { Footer } from '@/components/Footer';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { BioAgeWizard } from '@/components/bio-age/BioAgeWizard';
 
@@ -17,10 +15,8 @@ export const metadata: Metadata = {
 
 export default function BioAgePage() {
   return (
-    <div className="min-h-screen canvas-scrim text-foreground">
-      <Nav />
-      <main id="main-content" tabIndex={-1} className="pt-20 pb-24">
-        <div className="container-page py-12">
+    <div className="pb-24">
+      <div className="container-page py-12">
           {/* Header */}
           <PageHeader
             icon={Activity}
@@ -64,9 +60,7 @@ export default function BioAgePage() {
               </div>
             ))}
           </div>
-        </div>
-      </main>
-      <Footer />
+      </div>
     </div>
   );
 }
