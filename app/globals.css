@@ -894,10 +894,11 @@ p,
   padding: 1.25rem 1rem;
   text-align: center;
   overflow: hidden;
+  /* Tokenized so the elevation reads on both themes — the previous hardcoded
+     black drop-shadows became grey smudges on the light base. */
   box-shadow:
     inset 0 1px 0 0 color-mix(in srgb, #ffffff 12%, transparent),
-    0 2px 4px -2px rgba(0, 0, 0, 0.35),
-    0 18px 40px -24px rgba(0, 0, 0, 0.6);
+    var(--glass-shadow-mid);
   transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
 }
 
@@ -2676,51 +2677,6 @@ p,
   }
 }
 
-/* ── 5. Neon / glow stat numbers ──────────────────────────────────────────
-   Use .stat-neon or .stat-neon-{color} on big numbers. */
-.stat-neon {
-  font-family: var(--font-mono);
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
-  color: var(--accent-cyan);
-  text-shadow:
-    0 0 8px color-mix(in srgb, var(--accent-cyan) 90%, transparent),
-    0 0 24px color-mix(in srgb, var(--accent-cyan) 50%, transparent),
-    0 0 50px color-mix(in srgb, var(--accent-cyan) 25%, transparent);
-}
-
-.stat-neon-emerald {
-  color: var(--accent-emerald);
-  text-shadow:
-    0 0 8px color-mix(in srgb, var(--accent-emerald) 90%, transparent),
-    0 0 24px color-mix(in srgb, var(--accent-emerald) 50%, transparent),
-    0 0 50px color-mix(in srgb, var(--accent-emerald) 25%, transparent);
-}
-
-.stat-neon-violet {
-  color: var(--accent-violet);
-  text-shadow:
-    0 0 8px color-mix(in srgb, var(--accent-violet) 90%, transparent),
-    0 0 24px color-mix(in srgb, var(--accent-violet) 50%, transparent),
-    0 0 50px color-mix(in srgb, var(--accent-violet) 25%, transparent);
-}
-
-.stat-neon-amber {
-  color: var(--accent-amber);
-  text-shadow:
-    0 0 8px color-mix(in srgb, var(--accent-amber) 90%, transparent),
-    0 0 24px color-mix(in srgb, var(--accent-amber) 50%, transparent),
-    0 0 50px color-mix(in srgb, var(--accent-amber) 25%, transparent);
-}
-
-/* Light-mode: reduce neon to a subtle underlight */
-[data-theme="light"] .stat-neon,
-[data-theme="light"] .stat-neon-emerald,
-[data-theme="light"] .stat-neon-violet,
-[data-theme="light"] .stat-neon-amber {
-  text-shadow: none;
-}
 
 /* ── 6. Section deep atmosphere ───────────────────────────────────────────
    Richer background treatment for key sections (add .section-deep). */
@@ -2876,6 +2832,18 @@ p,
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.05),
     var(--glass-shadow-mid);
+}
+
+/* Light-theme parity — .tnic-glass hardcoded an opaque dark navy
+   (rgba(17,24,39,.85)) with no light variant, so its panels (the /library
+   filter rail + hallmark visual frames, RecommendedNextSteps) rendered as dark
+   islands on the light base. Restore a real elevated surface + the tokenized v8
+   shadow and a theme border, matching .premium-card so every surface reads as
+   one material in both themes. */
+[data-theme="light"] .tnic-glass {
+  background: var(--color-bg-elevated);
+  border-color: var(--color-border-subtle);
+  box-shadow: var(--glass-shadow-mid);
 }
 
 /* ── CANONICAL CTA BUTTONS ──
