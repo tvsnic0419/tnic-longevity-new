@@ -2878,6 +2878,18 @@ p,
     var(--glass-shadow-mid);
 }
 
+/* Light-theme parity — .tnic-glass hardcoded an opaque dark navy
+   (rgba(17,24,39,.85)) with no light variant, so its panels (the /library
+   filter rail + hallmark visual frames, RecommendedNextSteps) rendered as dark
+   islands on the light base. Restore a real elevated surface + the tokenized v8
+   shadow and a theme border, matching .premium-card so every surface reads as
+   one material in both themes. */
+[data-theme="light"] .tnic-glass {
+  background: var(--color-bg-elevated);
+  border-color: var(--color-border-subtle);
+  box-shadow: var(--glass-shadow-mid);
+}
+
 /* ── CANONICAL CTA BUTTONS ──
    The primary/secondary CTA skins. For new code prefer the <Button> primitive
    (variant="primary" uses the same gradient recipe); these class skins exist so
