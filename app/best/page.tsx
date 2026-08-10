@@ -44,8 +44,8 @@ export default function BestHubPage() {
       <CinematicHubHero
         hue="emerald"
         kicker="Evidence-ranked"
-        title={<>Best supplements, <em>by goal</em>.</>}
-        lead="Start from what you want to improve. Each goal ranks the evidence-graded compounds that act on its mechanisms — by strength of human evidence, not marketing — with doses, citations, and a hand-off into a personalized stack."
+        title={<>What do you want to <em>improve</em>?</>}
+        lead="Nine goals — energy, sleep, longevity, cognition, metabolic health and more — each resolved to the compounds with the strongest human evidence for it, not the loudest marketing."
         stats={[
           { value: String(bestForGoals.length), label: 'Goals covered' },
           { value: String(compoundsRanked), label: 'Compounds ranked' },
