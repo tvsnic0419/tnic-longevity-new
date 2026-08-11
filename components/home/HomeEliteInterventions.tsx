@@ -157,6 +157,7 @@ export function HomeEliteInterventions() {
           <h2 id="home-elite-heading" className="heading-section mb-3">
             The compounds with the strongest human evidence — and where to buy them well.
           </h2>
+          <div className="heading-accent-rule mb-4" aria-hidden="true" />
           <p className="text-body">
             {eliteInterventions.length} nutrients that act on the hallmarks of aging, each graded by
             the strength of human trials ({tierA} at Tier A), paired with one verified product that

@@ -59,6 +59,7 @@ export function HomeSteps() {
           <h2 id="home-steps-heading" className="heading-section mb-3">
             From curious to confident — no account needed.
           </h2>
+          <div className="heading-accent-rule is-center mb-4" aria-hidden="true" />
           <p className="text-body mx-auto max-w-xl">
             No sign-up, no upsell, no data leaving your device — just a clear path from the
             science to a decision you can stand behind.
@@ -68,15 +69,18 @@ export function HomeSteps() {
         {/* Connecting track — badges sit at the flex row's own edges via
             justify-between, so a 22px inset (half the 44px badge) on each
             side lands the line exactly at every badge's center. Desktop only;
-            each step shows its own badge inline below on mobile instead. */}
+            each step shows its own badge inline below on mobile instead.
+            The track is emerald end-to-end (this section's accent) and deepens
+            left→right so the three badges read as an ordered progression, not
+            three equal dots. */}
         <div aria-hidden="true" className="relative mb-8 hidden items-center justify-between md:flex">
-          <div className="absolute left-[22px] right-[22px] top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-accent-cyan/50 via-border to-accent-emerald/50" />
+          <div className="absolute left-[22px] right-[22px] top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-accent-emerald/30 via-accent-emerald/50 to-accent-emerald/70" />
           {steps.map(({ num, icon: Icon }) => (
             <span
               key={num}
-              className="relative z-10 flex h-11 w-11 items-center justify-center rounded-full icon-badge-cyan ring-4 ring-background"
+              className="relative z-10 flex h-11 w-11 items-center justify-center rounded-full icon-badge-emerald ring-4 ring-background"
             >
-              <Icon className="h-5 w-5 text-accent-cyan" aria-hidden="true" />
+              <Icon className="h-5 w-5 text-accent-emerald" aria-hidden="true" />
             </span>
           ))}
         </div>
@@ -85,17 +89,17 @@ export function HomeSteps() {
           {steps.map(({ num, icon: Icon, title, desc, cta, href }, i) => (
             <li key={num}>
               <RevealItem index={i}>
-                <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-full icon-badge-cyan md:hidden">
-                  <Icon className="h-5 w-5 text-accent-cyan" aria-hidden="true" />
+                <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-full icon-badge-emerald md:hidden">
+                  <Icon className="h-5 w-5 text-accent-emerald" aria-hidden="true" />
                 </span>
-                <p className="mb-1.5 font-mono text-xs font-bold tracking-widest text-accent-cyan/70">
+                <p className="mb-1.5 font-mono text-xs font-bold tracking-widest text-accent-emerald/70">
                   STEP {num}
                 </p>
                 <h3 className="heading-card mb-2 text-lg">{title}</h3>
                 <p className="text-body-sm mb-4 leading-relaxed">{desc}</p>
                 <Link
                   href={href}
-                  className="focus-ring group inline-flex items-center gap-1.5 rounded-md text-sm font-semibold text-accent-cyan"
+                  className="focus-ring group inline-flex items-center gap-1.5 rounded-md text-sm font-semibold text-accent-emerald"
                 >
                   {cta}
                   <ArrowRight

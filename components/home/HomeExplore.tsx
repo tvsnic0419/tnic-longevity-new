@@ -121,6 +121,7 @@ export function HomeExplore() {
             <h2 id="home-explore-heading" className="heading-section mb-3">
               From the science to the shelf — one honest path.
             </h2>
+            <div className="heading-accent-rule mb-4" aria-hidden="true" />
             <p className="text-body">
               Six places to look, each doing one thing well: understand the biology, read the
               graded evidence, and know what&apos;s genuinely worth buying.
@@ -161,6 +162,22 @@ export function HomeExplore() {
               </GlassPanel>
             </RevealItem>
           ))}
+        </div>
+
+        {/* Mobile fallback — the header's "full site map" link is desktop-only
+            (sm:inline-flex), so give phone users the same route out rather than
+            stranding them (matches HomeHallmarks' mobile pattern). */}
+        <div className="mt-8 text-center sm:hidden">
+          <Link
+            href="/site-map"
+            className="focus-ring group inline-flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground"
+          >
+            See the full site map
+            <ArrowUpRight
+              className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              aria-hidden="true"
+            />
+          </Link>
         </div>
       </div>
     </section>
