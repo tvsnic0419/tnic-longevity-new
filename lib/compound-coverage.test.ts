@@ -13,7 +13,7 @@ import { compoundModules, COMPOUND_COUNT, libraryModules } from './library-modul
  * update EXPECTED_COMPOUND_COUNT in the same commit — that edit is the paper trail.
  */
 
-const EXPECTED_COMPOUND_COUNT = 55;
+const EXPECTED_COMPOUND_COUNT = 65;
 const COMPOUNDS_DIR = resolve(process.cwd(), 'content/compounds');
 
 function mdxSlugs(): string[] {
