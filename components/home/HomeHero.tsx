@@ -3,6 +3,7 @@ import { Sparkles, Library, ArrowRight, FlaskConical, ShieldCheck } from 'lucide
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { TiltGlassPanel } from '@/components/ui/TiltGlassPanel';
 import { HeroSceneMount } from '@/components/home/HeroSceneMount';
+import { CountLink } from '@/components/ui/CountLink';
 
 /**
  * Server-rendered homepage hero.
@@ -64,10 +65,11 @@ export function HomeHero() {
 
             <p className="mx-auto mb-8 max-w-xl text-lg leading-relaxed text-white md:text-xl lg:mx-0">
               TNiC — Transformative Nutrition in Cell-Health — is a PubMed-backed
-              library of the nutrients shown to act on the 12 hallmarks of aging,
-              graded by the strength of human evidence. Start with the elite
-              interventions and the verified products to act on them. Free, private,
-              no account.
+              library of the nutrients shown to act on the{' '}
+              <CountLink href="/hallmarks">12 hallmarks of aging</CountLink>,
+              graded by the strength of human evidence. Start with the{' '}
+              <CountLink href="/elite-8">elite interventions</CountLink> and the
+              verified products to act on them. Free, private, no account.
             </p>
 
             <div className="mb-6 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">

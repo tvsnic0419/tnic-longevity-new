@@ -64,8 +64,8 @@ export default function HallmarksIndexPage() {
         lead="Twelve cellular mechanisms drive how we age — each paired here with the PMID-cited interventions that move it. This is the map every rational protocol is built on."
         stats={[
           { value: String(hallmarkLibrary.length), label: 'Hallmarks mapped' },
-          { value: String(citationRegistry.length), label: 'PMID citations' },
-          { value: String(tierABCompounds), label: 'Tier A/B compounds' },
+          { value: String(citationRegistry.length), label: 'PMID citations', href: '/trust' },
+          { value: String(tierABCompounds), label: 'Tier A/B compounds', href: '/library/compounds?tiers=A,B' },
         ]}
         primary={{ href: '/stacks', label: 'Build my stack' }}
         secondary={{ href: '/library', label: 'Interactive library' }}

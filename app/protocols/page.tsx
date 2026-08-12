@@ -32,9 +32,9 @@ export default function ProtocolsPage() {
         lead="Not a pile of pills — a set of curated, evidence-based protocols where each compound has a job and a time. Every stack targets a specific system, layers compounds that cover each other's gaps, and links to the evidence behind every choice."
         stats={[
           { value: String(protocols.length), label: 'Protocols' },
-          { value: 'A–C', label: 'Evidence-graded' },
+          { value: 'A–C', label: 'Evidence-graded', href: '/trust/methodology' },
           { value: 'AM/PM', label: 'Timed choreography' },
-          { value: '12', label: 'Hallmarks covered' },
+          { value: '12', label: 'Hallmarks covered', href: '/hallmarks' },
         ]}
         primary={{ href: '/stacks', label: 'Build your own in Stack Architect' }}
         secondary={{ href: '/library', label: 'Browse compounds' }}

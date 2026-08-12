@@ -59,10 +59,10 @@ export default function LibraryPage() {
         title={<>Every intervention, <em>graded</em>.</>}
         lead="The 12 hallmarks of aging, each paired with PMID-cited interventions and mechanistic visuals — the free, evidence-first reference the whole site is built on."
         stats={[
-          { value: String(COMPOUND_COUNT), label: 'Graded compounds' },
-          { value: '12', label: 'Hallmarks of aging' },
-          { value: 'A–C', label: 'Evidence tiers' },
-          { value: String(eliteInterventions.length), label: 'Elite interventions' },
+          { value: String(COMPOUND_COUNT), label: 'Graded compounds', href: '/library/compounds' },
+          { value: '12', label: 'Hallmarks of aging', href: '/hallmarks' },
+          { value: 'A–C', label: 'Evidence tiers', href: '/trust/methodology' },
+          { value: String(eliteInterventions.length), label: 'Elite interventions', href: '/elite-8' },
         ]}
         primary={{ href: '/nico', label: 'Find your personalized stack' }}
         secondary={{ href: '/stacks', label: 'Open the Stack Architect' }}

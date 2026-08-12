@@ -51,10 +51,10 @@ export default function InsightsPage() {
         title={<>The library, <em>as data</em>.</>}
         lead="Every figure on this page is counted from the graded compounds themselves — evidence tiers, hallmark coverage, absorption, dosing rhythm, and how compounds, pathways, and hallmarks connect. Nothing here is a marketing number."
         stats={[
-          { value: String(INSIGHTS_TOTALS.compounds), label: 'Graded compounds' },
-          { value: String(INSIGHTS_TOTALS.studies), label: 'Studies cited' },
-          { value: String(INSIGHTS_TOTALS.pathways), label: 'Pathways' },
-          { value: `A–C`, label: 'Evidence tiers' },
+          { value: String(INSIGHTS_TOTALS.compounds), label: 'Graded compounds', href: '/library/compounds' },
+          { value: String(INSIGHTS_TOTALS.studies), label: 'Studies cited', href: '/trust' },
+          { value: String(INSIGHTS_TOTALS.pathways), label: 'Pathways', href: '/pathways' },
+          { value: `A–C`, label: 'Evidence tiers', href: '/trust/methodology' },
         ]}
         primary={{ href: '/library', label: 'Open the library' }}
         secondary={{ href: '/hallmarks', label: 'The 12 hallmarks' }}

@@ -34,10 +34,10 @@ export default function TrustPage() {
         title={<>Evidence you can <em>audit</em>.</>}
         lead="Every grade, dose, and claim traces back to named human trials — with a public methodology, a corrections log, and no pay-for-placement, ever."
         stats={[
-          { value: String(COMPOUND_COUNT), label: 'Compounds graded' },
+          { value: String(COMPOUND_COUNT), label: 'Compounds graded', href: '/library/compounds' },
           { value: String(pmidSet.size), label: 'PubMed citations' },
-          { value: 'A–C', label: 'Evidence tiers' },
-          { value: '12', label: 'Hallmarks of aging' },
+          { value: 'A–C', label: 'Evidence tiers', href: '/trust/methodology' },
+          { value: '12', label: 'Hallmarks of aging', href: '/hallmarks' },
         ]}
         primary={{ href: '/trust/methodology', label: 'How we grade the evidence' }}
         secondary={{ href: '/corrections', label: 'Corrections log' }}
