@@ -5,6 +5,7 @@ import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { InsightsCharts } from '@/components/insights/InsightsCharts';
 import { ConnectionMatrix } from '@/components/insights/ConnectionMatrix';
 import { FieldNotes } from '@/components/insights/FieldNotes';
+import { CountUp } from '@/components/ui/CountUp';
 import { buildPageMetadata } from '@/lib/seo';
 import { INSIGHTS_TOTALS } from '@/lib/insights';
 
@@ -22,12 +23,12 @@ export const metadata = buildPageMetadata({
   ],
 });
 
-const bandStats: { value: string; label: string; sub: string }[] = [
-  { value: String(INSIGHTS_TOTALS.compounds), label: 'Graded compounds', sub: 'Rated A–C on human evidence' },
-  { value: String(INSIGHTS_TOTALS.studies), label: 'Studies cited', sub: 'Human / clinical, PMID-linked' },
-  { value: String(INSIGHTS_TOTALS.pathways), label: 'Pathways', sub: 'The "verb" between take & age' },
-  { value: String(INSIGHTS_TOTALS.hallmarks), label: 'Hallmarks', sub: 'Full mechanistic coverage' },
-  { value: `${INSIGHTS_TOTALS.medianBioavailability}%`, label: 'Median bioavailability', sub: `Across ${INSIGHTS_TOTALS.withBioavailability} measured` },
+const bandStats: { value: number; suffix?: string; label: string; sub: string }[] = [
+  { value: INSIGHTS_TOTALS.compounds, label: 'Graded compounds', sub: 'Rated A–C on human evidence' },
+  { value: INSIGHTS_TOTALS.studies, label: 'Studies cited', sub: 'Human / clinical, PMID-linked' },
+  { value: INSIGHTS_TOTALS.pathways, label: 'Pathways', sub: 'The "verb" between take & age' },
+  { value: INSIGHTS_TOTALS.hallmarks, label: 'Hallmarks', sub: 'Full mechanistic coverage' },
+  { value: INSIGHTS_TOTALS.medianBioavailability, suffix: '%', label: 'Median bioavailability', sub: `Across ${INSIGHTS_TOTALS.withBioavailability} measured` },
 ];
 
 function SectionHead({ eyebrow, title, children }: { eyebrow: string; title: string; children: React.ReactNode }) {
@@ -67,7 +68,7 @@ export default function InsightsPage() {
               <div key={s.label} className="stat-card">
                 <dt className="sr-only">{s.label}</dt>
                 <dd>
-                  <span className="stat-value block">{s.value}</span>
+                  <CountUp value={s.value} suffix={s.suffix} className="stat-value block" />
                   <span className="mt-1 block text-body-sm font-medium text-foreground">{s.label}</span>
                   <span className="mt-0.5 block text-micro text-muted-foreground">{s.sub}</span>
                 </dd>

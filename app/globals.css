@@ -185,6 +185,19 @@
   --radius-xl: 1.25rem;
   --radius-2xl: 1.5rem;
 
+  /* ── Motion tokens ──
+     One easing vocabulary, values identical to components/viz/tokens.ts `EASE`
+     so CSS transitions and framer-motion animations share the same curves.
+     `--ease-glass` (Deep Glass) is aliased to `--ease-entrance` below so there
+     is a single source of truth. Durations give the three most-used speeds a
+     name; per-rule values that don't map cleanly stay literal. */
+  --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-standard: var(--ease-standard);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --dur-fast: 0.2s;
+  --dur-base: 0.3s;
+  --dur-slow: 0.45s;
+
   /* The primary nav's desktop row (9 top-level links + search + theme toggle +
      3 action items) measurably overflows its container below this width — the
      Dashboard CTA sits past the viewport edge with no scroll affordance, i.e.
@@ -478,7 +491,7 @@ p,
   border: 1px solid var(--glass-border);
 }
 
-.glass-hover { transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+.glass-hover { transition: all 0.35s var(--ease-standard); }
 
 @media (hover: hover) {
   /* :not(.glass-deep) — Deep Glass panels (GlassPanel/.glass-plane-*) own their
@@ -552,10 +565,12 @@ p,
     var(--color-bg-elevated) 55%
   );
   border-radius: var(--radius-2xl);
+  /* Shares the tokenized mid-plane shadow every other card uses (was a
+     hardcoded dark-only rgba stack that turned to grey smudges in light
+     theme) — one elevation recipe, theme-correct in both. */
   box-shadow:
     inset 0 1px 0 0 color-mix(in srgb, #ffffff 8%, transparent),
-    0 2px 4px -2px rgba(0, 0, 0, 0.4),
-    0 24px 48px -28px rgba(0, 0, 0, 0.6);
+    var(--glass-shadow-mid);
 }
 
 /* ── Forms ── */
@@ -1425,7 +1440,7 @@ p,
 
 @media (hover: hover) {
   .card-ultra-hover {
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+    transition: transform 0.35s var(--ease-standard), box-shadow 0.35s ease, border-color 0.35s ease;
   }
   .card-ultra-hover:hover {
     transform: translateY(-4px) scale(1.01);
@@ -2263,7 +2278,7 @@ p,
 
 /* ── Section gradient transitions ── */
 .section-fade-in-up {
-  animation: section-reveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: section-reveal 0.7s var(--ease-entrance) both;
 }
 
 @keyframes section-reveal {
@@ -2356,7 +2371,7 @@ p,
 }
 
 .chip-stagger > * {
-  animation: chip-appear 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: chip-appear 0.4s var(--ease-entrance) both;
 }
 
 .chip-stagger > *:nth-child(1) { animation-delay: 0.0s; }
@@ -2368,7 +2383,7 @@ p,
 /* ── OS grid card depth variant ── */
 @media (hover: hover) {
   .card-depth-hover {
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+    transition: transform 0.3s var(--ease-standard), box-shadow 0.3s ease, border-color 0.3s ease;
   }
 
   .card-depth-hover:hover {
@@ -2677,7 +2692,7 @@ p,
 
 @media (hover: hover) {
   .card-floating-hover {
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+    transition: transform 0.35s var(--ease-standard), box-shadow 0.35s ease, border-color 0.35s ease;
   }
   .card-floating-hover:hover {
     transform: translateY(-6px);
@@ -3049,7 +3064,7 @@ p,
   --footer-lift-shadow: 0 -20px 40px -28px rgba(0, 0, 0, 0.35);
 
   /* Motion — slow, weighted, spring-feeling rather than linear/ease-out. */
-  --ease-glass: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-glass: var(--ease-entrance);
   --glass-tilt-max: 5deg;
 }
 
@@ -3464,6 +3479,22 @@ p,
   overflow: hidden;
   pointer-events: none;
 }
+
+/* Both-theme parity for the cinematic hub hero (components/viz/CinematicHubHero).
+   Its inline styles use the dark-tuned VIZ palette (near-white ink, light-grey
+   muted/faint, white hairline), so in LIGHT theme the title, lead, stat labels,
+   and ghost CTA wash out on the light hero. Re-point them at the theme-aware
+   text/border tokens — scoped to [data-theme="light"] only (this site is
+   dark-first, so the dark hero is left exactly as designed) and at higher
+   specificity than the component's own .hh-* rules so it wins. */
+[data-theme="light"] .hh-title { color: var(--color-text-primary); }
+[data-theme="light"] .hh-lead { color: var(--color-text-secondary); }
+[data-theme="light"] .hh-stat .k { color: var(--color-text-muted); }
+[data-theme="light"] .hh-cta.ghost {
+  color: var(--color-text-primary);
+  border-color: var(--color-border-strong);
+}
+
 .hub-hero-field::before,
 .hub-hero-field::after {
   content: "";
