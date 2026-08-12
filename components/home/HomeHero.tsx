@@ -1,10 +1,7 @@
-import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { Sparkles, Library, ArrowRight, FlaskConical, ShieldCheck } from 'lucide-react';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { TiltGlassPanel } from '@/components/ui/TiltGlassPanel';
-import { COMPOUND_COUNT } from '@/lib/library-modules';
-import { eliteInterventions } from '@/lib/elite-interventions';
 import { HeroSceneMount } from '@/components/home/HeroSceneMount';
 
 /**
@@ -15,13 +12,6 @@ import { HeroSceneMount } from '@/components/home/HeroSceneMount';
  * point is the NICO Starter Questionnaire, promoted as the hero's primary CTA
  * and content card, both fully static and crawlable.
  */
-
-const heroStats = [
-  { value: String(eliteInterventions.length), label: 'Elite interventions', accent: 'var(--accent-cyan)' },
-  { value: String(COMPOUND_COUNT), label: 'Graded compounds', accent: 'var(--accent-emerald)' },
-  { value: '12', label: 'Hallmarks of aging', accent: 'var(--accent-violet)' },
-  { value: 'A–C', label: 'Evidence tiers', accent: 'var(--accent-amber)' },
-];
 
 function Dot() {
   return <span className="h-1 w-1 rounded-full bg-white/25" aria-hidden="true" />;
@@ -101,43 +91,16 @@ export function HomeHero() {
               </Link>
             </div>
 
-            <div className="mb-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-white/70 lg:justify-start">
+            {/* The four headline counts live once, in the Descent overture
+                above; this hero owns the value prop + independence proof, and
+                hands off without re-stating the same numbers. */}
+            <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-white/70 lg:justify-start">
               <span>Free forever</span>
               <Dot />
               <span>Data stays on your device</span>
               <Dot />
               <span>No account needed</span>
             </div>
-
-            {/* Mid plane — evidence stat row sits just above the backdrop.
-                gap-px against the panel's own fill, with a faint per-cell
-                overlay, reproduces the hairline grid without a hard-coded bg.
-                scan-overlay's hairline texture + monospace tabular figures
-                read as an instrument readout rather than a marketing stat
-                block — bracket-corner ornaments are reserved for larger
-                section-level containers (see SectionShell.tsx), too coarse
-                for this compact single row. */}
-            <GlassPanel depth="mid" className="scan-overlay relative overflow-hidden rounded-2xl">
-              <dl className="grid grid-cols-2 gap-px sm:grid-cols-4">
-                {heroStats.map((stat) => (
-                  <div
-                    key={stat.label}
-                    className="stat-instrument px-4 py-4 text-center lg:text-left"
-                    style={{ '--flair-accent': stat.accent } as CSSProperties}
-                  >
-                    <dt className="sr-only">{stat.label}</dt>
-                    <dd>
-                      <span className="number-glow tnic-tabular block font-mono text-2xl font-bold tracking-tight text-white">
-                        {stat.value}
-                      </span>
-                      <span className="mt-1 block text-micro leading-tight text-white/70">
-                        {stat.label}
-                      </span>
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </GlassPanel>
           </div>
 
           {/* Content plane — the hero's one primary glass moment, with pointer tilt */}

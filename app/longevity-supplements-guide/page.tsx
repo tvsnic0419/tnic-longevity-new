@@ -189,8 +189,10 @@ export default function LongevitySupplementsGuidePage() {
               const score = Math.max(0, Math.min(100, c.score));
               const scoreColor = score >= 78 ? '#34d399' : score >= 68 ? '#00e0ff' : '#fbbf24';
               const tier = c.evidenceTier ?? 'B';
-              const tierColor = tier === 'A' ? 'text-accent-emerald' : tier === 'B' ? 'text-accent-amber' : 'text-accent-rose';
-              const tierBg = tier === 'A' ? 'bg-accent-emerald/10 border-accent-emerald/25' : tier === 'B' ? 'bg-accent-amber/10 border-accent-amber/25' : 'bg-accent-rose/10 border-accent-rose/25';
+              // Canonical evidence-tier colors — A=emerald, B=cyan, C=amber
+              // (must match EvidenceTag / lib/trust.ts).
+              const tierColor = tier === 'A' ? 'text-accent-emerald' : tier === 'B' ? 'text-accent-cyan' : 'text-accent-amber';
+              const tierBg = tier === 'A' ? 'bg-accent-emerald/10 border-accent-emerald/25' : tier === 'B' ? 'bg-accent-cyan/10 border-accent-cyan/25' : 'bg-accent-amber/10 border-accent-amber/25';
 
               return (
                 <div key={c.id} className="premium-card p-5 sm:p-6">
