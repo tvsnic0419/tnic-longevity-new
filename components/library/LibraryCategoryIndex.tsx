@@ -17,14 +17,35 @@ import { signatureHue } from '@/components/viz/tokens';
  * of a soft-404, and — for /library/compounds — a permanent home listing all of
  * the compound deep-dives so none of them can quietly fall off the site.
  */
-export function LibraryCategoryIndex({ category }: { category: LibraryModuleCategory }) {
+export function LibraryCategoryIndex({
+  category,
+  activeTiers = [],
+}: {
+  category: LibraryModuleCategory;
+  activeTiers?: Array<'A' | 'B' | 'C'>;
+}) {
   const meta = libraryCategoryMeta[category];
-  const modules = getModulesByCategory(category);
+  const allModules = getModulesByCategory(category);
 
-  const tierCounts = modules.reduce<Record<string, number>>((acc, m) => {
+  const tierCounts = allModules.reduce<Record<string, number>>((acc, m) => {
     acc[m.evidenceTier] = (acc[m.evidenceTier] ?? 0) + 1;
     return acc;
   }, {});
+
+  // A tier deep-link (?tiers=B) resolves to exactly that set. Badges below are
+  // clickable filters that toggle a tier in/out of the active set.
+  const isFiltering = activeTiers.length > 0;
+  const modules = isFiltering
+    ? allModules.filter((m) => activeTiers.includes(m.evidenceTier as 'A' | 'B' | 'C'))
+    : allModules;
+
+  const base = `/library/${category}`;
+  const tierHref = (tier: 'A' | 'B' | 'C') => {
+    const next = activeTiers.includes(tier)
+      ? activeTiers.filter((t) => t !== tier)
+      : [...activeTiers, tier].sort();
+    return next.length ? `${base}?tiers=${next.join(',')}` : base;
+  };
 
   return (
     <div className="min-h-screen canvas-scrim text-foreground pt-6 md:pt-8 pb-20">
@@ -44,17 +65,46 @@ export function LibraryCategoryIndex({ category }: { category: LibraryModuleCate
           theme="emerald"
         />
 
-        <div className="mb-8 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
-          <span className="font-semibold text-foreground">{modules.length} entries</span>
+        <div className="mb-4 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
+          <span className="font-semibold text-foreground">
+            {isFiltering ? `${modules.length} of ${allModules.length}` : `${allModules.length} entries`}
+          </span>
           {(['A', 'B', 'C'] as const).map((tier) =>
             tierCounts[tier] ? (
-              <span key={tier} className="inline-flex items-center gap-1.5">
+              <Link
+                key={tier}
+                href={tierHref(tier)}
+                aria-pressed={activeTiers.includes(tier)}
+                className={`focus-ring inline-flex items-center gap-1.5 rounded-full border px-2 py-1 transition-colors ${
+                  activeTiers.includes(tier)
+                    ? 'border-accent-cyan/60 bg-accent-cyan/10 text-foreground'
+                    : 'border-transparent hover:border-[var(--color-border-subtle)]'
+                }`}
+              >
                 <EvidenceTag tier={tier} size="sm" />
                 <span>{tierCounts[tier]}</span>
-              </span>
+              </Link>
             ) : null,
           )}
         </div>
+
+        {isFiltering && (
+          <div className="mb-8 flex flex-wrap items-center justify-center gap-3 text-xs">
+            <span className="text-muted-foreground">
+              Showing{' '}
+              <span className="font-semibold text-foreground">
+                Tier {activeTiers.join(' + ')}
+              </span>{' '}
+              only
+            </span>
+            <Link
+              href={base}
+              className="focus-ring rounded-full border border-[var(--color-border-subtle)] px-2.5 py-0.5 text-muted-foreground hover:border-accent-rose hover:text-accent-rose transition-colors"
+            >
+              Clear filter
+            </Link>
+          </div>
+        )}
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {modules.map((mod, i) => {

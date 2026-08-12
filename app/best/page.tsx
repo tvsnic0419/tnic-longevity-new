@@ -48,8 +48,8 @@ export default function BestHubPage() {
         lead="Nine goals — energy, sleep, longevity, cognition, metabolic health and more — each resolved to the compounds with the strongest human evidence for it, not the loudest marketing."
         stats={[
           { value: String(bestForGoals.length), label: 'Goals covered' },
-          { value: String(compoundsRanked), label: 'Compounds ranked' },
-          { value: String(hallmarksMapped), label: 'Hallmarks mapped' },
+          { value: String(compoundsRanked), label: 'Compounds ranked', href: '/library/compounds' },
+          { value: String(hallmarksMapped), label: 'Hallmarks mapped', href: '/hallmarks' },
         ]}
         primary={{ href: '/nico', label: 'Take the questionnaire' }}
         secondary={{ href: '/library', label: 'Browse the library' }}

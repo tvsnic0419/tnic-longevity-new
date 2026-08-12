@@ -184,6 +184,8 @@ const CSS = `
 }
 .tnic-hero-badges .pill b { color: var(--cyan); font-weight: 500; }
 .tnic-hero-badges .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+.tnic-hero-badges a.pill { text-decoration: none; transition: border-color .2s ease, color .2s ease, background .2s ease; }
+.tnic-hero-badges a.pill:hover { border-color: color-mix(in srgb, var(--cyan) 55%, transparent); color: var(--ink); background: rgba(14,20,38,0.8); }
 
 /* Primary action on the very first screen (Act 0) — a new visitor gets a clear
    CTA above the fold instead of having to scroll the whole descent to act. */
@@ -847,10 +849,10 @@ export function HomeDescent() {
           continuous descent, from a molecule to the life it defends.
         </p>
         <div className="tnic-hero-badges">
-          <span className="pill"><span className="dot" /><b>{eliteInterventions.length}</b>&nbsp;elite interventions</span>
-          <span className="pill"><span className="dot" /><b>{COMPOUND_COUNT}</b>&nbsp;graded compounds</span>
-          <span className="pill"><span className="dot" /><b>12</b>&nbsp;hallmarks of aging</span>
-          <span className="pill"><span className="dot" /><b>A–C</b>&nbsp;evidence tiers</span>
+          <Link href="/elite-8" className="pill"><span className="dot" /><b>{eliteInterventions.length}</b>&nbsp;elite interventions</Link>
+          <Link href="/library/compounds" className="pill"><span className="dot" /><b>{COMPOUND_COUNT}</b>&nbsp;graded compounds</Link>
+          <Link href="/hallmarks" className="pill"><span className="dot" /><b>12</b>&nbsp;hallmarks of aging</Link>
+          <Link href="/trust/methodology" className="pill"><span className="dot" /><b>A–C</b>&nbsp;evidence tiers</Link>
         </div>
         <div className="tnic-hero-cta">
           <Link href="/nico" className="tnic-cta">
