@@ -37,6 +37,7 @@ export function HomeHallmarks() {
             <h2 id="home-hallmarks-heading" className="heading-section mb-3">
               Twelve mechanisms of aging. A ranked, cited intervention for each.
             </h2>
+            <div className="heading-accent-rule mb-4" aria-hidden="true" />
             <p className="text-body mb-4">
               Every hallmark links to its highest-evidence levers — compounds, lifestyle
               changes, and clinical options — ranked by impact and traced to PubMed, not

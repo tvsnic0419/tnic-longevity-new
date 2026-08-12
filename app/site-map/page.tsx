@@ -1,5 +1,7 @@
 import Link from 'next/link';
+import { Map as MapIcon } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { PRIORITY_INDEX_PATHS, POPULAR_GUIDE_LINKS } from '@/lib/index-priority';
 import { buildSitemapEntries } from '@/lib/sitemap-urls';
 import { buildPageMetadata } from '@/lib/seo';
@@ -26,12 +28,14 @@ export default function SiteMapPage() {
   return (
     <SubPageLayout hideContextBar>
       <div className="container-page py-12 md:py-16">
-        <header className="mb-10">
-          <h1 className="heading-section">Site Map</h1>
-          <p className="text-muted-foreground mt-3 max-w-2xl">
-            Every public page on TNiC — prioritized for crawlers and readers.
-          </p>
-        </header>
+        <PageHeader
+          icon={MapIcon}
+          eyebrow="Index"
+          title="Site Map"
+          description="Every public page on TNiC — prioritized for crawlers and readers."
+          theme="cyan"
+          align="left"
+        />
 
       <section className="mb-10">
         <h2 className="heading-card mb-4">Popular guides</h2>
