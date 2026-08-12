@@ -38,7 +38,10 @@ const ELITE_SEEDS: EliteSeed[] = [
   { compoundId: 'spermidine', mechanismLine: 'Induces autophagy — the cell’s self-cleanup pathway' },
   { compoundId: 'taurine', mechanismLine: 'A mitochondrial osmolyte that declines with age' },
   { compoundId: 'rala', mechanismLine: 'Recycles antioxidants across water and lipid compartments' },
-  { compoundId: 'pterostilbene', mechanismLine: 'A more bioavailable SIRT1 activator than resveratrol' },
+  // Note: pterostilbene is not a standalone elite entry — it rides with
+  // resveratrol in the Elite 8 ranking (lib/elite-8-data.ts: resveratrol_pterostilbene),
+  // so the elite set is 8, matching the "Elite 8" branding. It remains a full
+  // library compound at /library/compounds/pterostilbene.
 ];
 
 export interface EliteIntervention {
