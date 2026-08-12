@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import type { CSSProperties } from 'react';
 import {
   TIER_SPLIT,
@@ -73,9 +74,15 @@ function Bar({
         {label}
       </span>
       <span className="relative h-2.5 flex-1 overflow-hidden rounded-full bg-white/[0.05]">
-        <span
-          className="absolute inset-y-0 left-0 rounded-full transition-[width] duration-500"
-          style={{ width: `${pct}%`, background: color }}
+        {/* Grows from zero when scrolled into view — the bar "drawing itself".
+            framer-motion honors the site-wide reduced-motion config. */}
+        <motion.span
+          className="absolute inset-y-0 left-0 rounded-full"
+          style={{ background: color }}
+          initial={{ width: 0 }}
+          whileInView={{ width: `${pct}%` }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         />
       </span>
       {badge && <span className="w-4 shrink-0 text-center font-mono text-micro font-bold" style={{ color }}>{badge}</span>}
