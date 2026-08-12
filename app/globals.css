@@ -1438,6 +1438,26 @@ p,
 }
 
 /* ── Gradient CTA buttons ── */
+/* Signature primary CTA — the cyan→emerald gradient. ONE source of truth for
+   the gradient, shadow, and motion, shared by .btn-gradient (which adds full
+   button layout below) and .tnic-button-primary (a skin-only variant for
+   link-shaped CTAs that own their padding/radius) so the two can never drift
+   apart the way they did as copy-pasted recipes. The <Button> primitive's
+   primary variant applies .btn-gradient, so the React and CSS paths share this
+   same recipe too. */
+.btn-gradient,
+.tnic-button-primary {
+  color: #030712;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-emerald) 50%, #6ee7b7 100%);
+  background-size: 200% 200%;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--accent-cyan) 40%, transparent),
+    0 8px 32px -4px color-mix(in srgb, var(--accent-cyan) 45%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-position 0.4s ease;
+}
+
 .btn-gradient {
   position: relative;
   display: inline-flex;
@@ -1447,16 +1467,7 @@ p,
   padding: 1rem 1.75rem;
   min-height: var(--space-touch);
   border-radius: 1rem;
-  font-weight: 600;
   font-size: 0.9375rem;
-  color: #030712;
-  background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-emerald) 50%, #6ee7b7 100%);
-  background-size: 200% 200%;
-  box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--accent-cyan) 40%, transparent),
-    0 8px 32px -4px color-mix(in srgb, var(--accent-cyan) 45%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background-position 0.4s ease;
   overflow: hidden;
 }
 
@@ -1470,14 +1481,18 @@ p,
 }
 
 @media (hover: hover) {
-  .btn-gradient:hover {
-    transform: translateY(-2px);
+  .btn-gradient:hover,
+  .tnic-button-primary:hover {
     background-position: 100% 50%;
     box-shadow:
       0 0 0 1px color-mix(in srgb, var(--accent-emerald) 50%, transparent),
       0 12px 48px -4px color-mix(in srgb, var(--accent-cyan) 55%, transparent),
       inset 0 1px 0 rgba(255, 255, 255, 0.3);
   }
+  /* Each keeps its own lift: the full button lifts a touch more than the
+     link skin, matching their prior hand-tuned values exactly. */
+  .btn-gradient:hover { transform: translateY(-2px); }
+  .tnic-button-primary:hover { transform: translateY(-1px); }
   .btn-gradient:hover::before { transform: translateX(100%); }
 }
 
@@ -2853,28 +2868,10 @@ p,
    one-off white button that made the homepage hero's main CTA read differently
    from every other primary CTA on the site — it now uses the signature
    cyan→emerald gradient (matching .btn-gradient / <Button> primary). */
-.tnic-button-primary {
-  color: #030712;
-  font-weight: 600;
-  background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-emerald) 50%, #6ee7b7 100%);
-  background-size: 200% 200%;
-  box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--accent-cyan) 40%, transparent),
-    0 8px 32px -4px color-mix(in srgb, var(--accent-cyan) 45%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background-position 0.4s ease;
-}
-
-@media (hover: hover) {
-  .tnic-button-primary:hover {
-    transform: translateY(-1px);
-    background-position: 100% 50%;
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--accent-emerald) 50%, transparent),
-      0 12px 48px -4px color-mix(in srgb, var(--accent-cyan) 55%, transparent),
-      inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  }
-}
+/* .tnic-button-primary's gradient/shadow/hover recipe is defined once,
+   together with .btn-gradient, up in the "Hero & ambient" button block — see
+   the "Signature primary CTA" rule. It's a skin only (no layout of its own), so
+   link-shaped CTAs keep their caller-controlled padding, radius, and size. */
 
 /* ── Accent-aware solid CTA ──
    One treatment for every "solid accent" button that was previously hand-rolled
