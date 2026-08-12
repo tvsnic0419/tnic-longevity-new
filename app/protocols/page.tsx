@@ -3,6 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { ProtocolCard } from '@/components/protocols/ProtocolCard';
+import { RevealItem } from '@/components/ui/RevealItem';
 import { buildPageMetadata } from '@/lib/seo';
 import { protocols } from '@/lib/protocols';
 
@@ -52,8 +53,10 @@ export default function ProtocolsPage() {
         </div>
 
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-          {protocols.map((p) => (
-            <ProtocolCard key={p.slug} protocol={p} />
+          {protocols.map((p, i) => (
+            <RevealItem key={p.slug} index={i} className="h-full">
+              <ProtocolCard protocol={p} />
+            </RevealItem>
           ))}
         </div>
 

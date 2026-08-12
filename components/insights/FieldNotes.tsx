@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { FIELD_NOTES } from '@/lib/field-notes';
 import { TIER_ACCENT } from '@/lib/insights';
+import { RevealItem } from '@/components/ui/RevealItem';
 import type { CSSProperties } from 'react';
 
 /**
@@ -19,6 +20,7 @@ export function FieldNotes() {
         const accent = TIER_ACCENT[n.tier];
         return (
           <li key={n.title}>
+            <RevealItem index={i} className="h-full">
             <Link
               href={n.href}
               className="focus-ring group flex h-full flex-col rounded-2xl border border-border/70 bg-gradient-to-b from-card/60 to-card/20 p-5 transition-[transform,border-color] duration-300 hover:-translate-y-0.5 hover:border-accent-cyan/40"
@@ -55,6 +57,7 @@ export function FieldNotes() {
                 <span className="text-micro font-mono text-faint">{n.source}</span>
               </div>
             </Link>
+            </RevealItem>
           </li>
         );
       })}
