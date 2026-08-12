@@ -3479,6 +3479,22 @@ p,
   overflow: hidden;
   pointer-events: none;
 }
+
+/* Both-theme parity for the cinematic hub hero (components/viz/CinematicHubHero).
+   Its inline styles use the dark-tuned VIZ palette (near-white ink, light-grey
+   muted/faint, white hairline), so in LIGHT theme the title, lead, stat labels,
+   and ghost CTA wash out on the light hero. Re-point them at the theme-aware
+   text/border tokens — scoped to [data-theme="light"] only (this site is
+   dark-first, so the dark hero is left exactly as designed) and at higher
+   specificity than the component's own .hh-* rules so it wins. */
+[data-theme="light"] .hh-title { color: var(--color-text-primary); }
+[data-theme="light"] .hh-lead { color: var(--color-text-secondary); }
+[data-theme="light"] .hh-stat .k { color: var(--color-text-muted); }
+[data-theme="light"] .hh-cta.ghost {
+  color: var(--color-text-primary);
+  border-color: var(--color-border-strong);
+}
+
 .hub-hero-field::before,
 .hub-hero-field::after {
   content: "";
