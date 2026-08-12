@@ -26,6 +26,7 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     { url: `${base}/learn`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/faq`, lastModified, changeFrequency: 'monthly', priority: 0.85 },
     { url: `${base}/stacks`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${base}/protocols`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/labs`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/tools`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/elite-8`, lastModified, changeFrequency: 'monthly', priority: 0.75 },

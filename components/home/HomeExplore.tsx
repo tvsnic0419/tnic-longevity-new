@@ -8,6 +8,7 @@ import {
   Pill,
   ShoppingBag,
   BarChart3,
+  ListChecks,
   ArrowUpRight,
   type LucideIcon,
 } from 'lucide-react';
@@ -73,6 +74,14 @@ const destinations: Destination[] = [
     title: 'Stacks & Protocols',
     desc: 'Assemble protocols that target the pathways driving your aging, with synergy scoring and clear, sourced dosing.',
     accent: 'emerald',
+  },
+  {
+    href: '/protocols',
+    icon: ListChecks,
+    eyebrow: 'Follow',
+    title: 'The Protocol Library',
+    desc: "Curated, evidence-based stacks — each compound with a job and a time. NRF2 defense, NAD⁺, cardiovascular, senolytic, cognition, and more.",
+    accent: 'violet',
   },
   {
     href: '/labs',
