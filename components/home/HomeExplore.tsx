@@ -7,6 +7,7 @@ import {
   LineChart,
   Pill,
   ShoppingBag,
+  BarChart3,
   ArrowUpRight,
   type LucideIcon,
 } from 'lucide-react';
@@ -48,6 +49,14 @@ const destinations: Destination[] = [
     title: 'The Evidence Library',
     desc: `The 12 hallmarks of aging and ${COMPOUND_COUNT} nutrients and compounds — each graded A–C by the strength of human evidence, with PubMed citations.`,
     accent: 'cyan',
+  },
+  {
+    href: '/insights',
+    icon: BarChart3,
+    eyebrow: 'The data',
+    title: 'Longevity by the Numbers',
+    desc: 'The library as data — evidence-tier breakdown, hallmark coverage, bioavailability, and a compound × pathway × hallmark map. Every figure counted, not claimed.',
+    accent: 'violet',
   },
   {
     href: '/learn',

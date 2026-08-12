@@ -38,14 +38,16 @@ export function CompoundHero(data: CompoundHeroData) {
   const geom = structured ? getGeometry(data.id) : null;
   const tint = tierColor(data.evidence);
 
-  const facts: Array<{ k: string; v: string }> = [
+  const facts: Array<{ k: string; v: string; meter?: number }> = [
     { k: "Evidence", v: `Tier ${data.evidence}` },
     { k: "Studies", v: `${data.studyCount} cited` },
     { k: "Dose", v: data.dose },
     { k: "Timing", v: data.timing },
   ];
   if (typeof data.bioavailability === "number") {
-    facts.push({ k: "Oral bioavail.", v: `${data.bioavailability}%` });
+    // Rendered with a gauge (see .chero-meter) so absorption reads as an
+    // instrument value, not just a number.
+    facts.push({ k: "Oral bioavail.", v: `${data.bioavailability}%`, meter: data.bioavailability });
   }
   facts.push({ k: "Synergies", v: `${data.synergyCount} mapped` });
 
@@ -82,6 +84,11 @@ export function CompoundHero(data: CompoundHeroData) {
               <div className="chero-fact" key={f.k}>
                 <span className="k">{f.k}</span>
                 <span className="v">{f.v}</span>
+                {typeof f.meter === "number" && (
+                  <span className="chero-meter" aria-hidden="true">
+                    <span className="fill" style={{ width: `${Math.max(0, Math.min(100, f.meter))}%` }} />
+                  </span>
+                )}
               </div>
             ))}
           </div>
@@ -156,7 +163,15 @@ const CHERO_CSS = `
   border: 1px solid ${VIZ.line}; border-radius: 12px;
 }
 .chero-fact .k { font-family: ${FONT.mono}; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: ${VIZ.faint}; }
-.chero-fact .v { font-size: 14px; color: ${VIZ.ink}; font-weight: 500; }
+.chero-fact .v { font-size: 14px; color: ${VIZ.ink}; font-weight: 500; font-variant-numeric: tabular-nums; }
+.chero-fact .chero-meter {
+  position: relative; height: 3px; margin-top: 3px; border-radius: 999px;
+  background: rgba(255,255,255,0.08); overflow: hidden;
+}
+.chero-fact .chero-meter .fill {
+  position: absolute; inset: 0 auto 0 0; border-radius: 999px;
+  background: linear-gradient(90deg, var(--hue), color-mix(in srgb, var(--hue) 45%, transparent));
+}
 
 .chero-hallmarks { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 6px; }
 .chero-hallmarks .lbl { font-family: ${FONT.mono}; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: ${VIZ.faint}; margin-right: 4px; }
