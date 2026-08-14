@@ -3495,6 +3495,41 @@ p,
   border-color: var(--color-border-strong);
 }
 
+/* Same both-theme parity for the per-compound / per-module cinematic overtures
+   (components/viz/CompoundHero .chero-* and ModuleHero .mhero-*), which also
+   draw their body text/labels/hairlines from the dark-only VIZ palette. Light
+   theme only, higher specificity than the components' own rules; the dark
+   molecule stage (left column) is intentionally left as a dark viewport. */
+[data-theme="light"] .tnic-chero,
+[data-theme="light"] .tnic-mhero,
+[data-theme="light"] .chero-name,
+[data-theme="light"] .mhero-name,
+[data-theme="light"] .chero-fact .v,
+[data-theme="light"] .mhero-fact .v {
+  color: var(--color-text-primary);
+}
+[data-theme="light"] .chero-mech,
+[data-theme="light"] .mhero-mech {
+  color: var(--color-text-secondary);
+}
+[data-theme="light"] .chero-hallmarks .chip,
+[data-theme="light"] .mhero-hallmarks .chip {
+  color: var(--color-text-muted);
+  border-color: var(--color-border-subtle);
+}
+[data-theme="light"] .chero-cap,
+[data-theme="light"] .mhero-cap,
+[data-theme="light"] .chero-fact .k,
+[data-theme="light"] .mhero-fact .k,
+[data-theme="light"] .chero-hallmarks .lbl,
+[data-theme="light"] .mhero-hallmarks .lbl {
+  color: var(--color-text-faint);
+}
+[data-theme="light"] .chero-fact,
+[data-theme="light"] .mhero-fact {
+  border-color: var(--color-border-subtle);
+}
+
 .hub-hero-field::before,
 .hub-hero-field::after {
   content: "";
