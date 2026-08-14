@@ -11,11 +11,14 @@ import { cn } from '@/lib/utils';
 export function EvidenceDimension({
   dimension,
   accentVar,
+  index = 0,
   className = '',
 }: {
   dimension: TnicDimension;
   /** CSS color for the filled portion, e.g. 'var(--accent-emerald)'. */
   accentVar: string;
+  /** Row position, used to stagger the grow-in reveal. */
+  index?: number;
   className?: string;
 }) {
   const { label, value, note } = dimension;
@@ -43,10 +46,11 @@ export function EvidenceDimension({
       >
         {hasValue && (
           <div
-            className="h-full rounded-full transition-[width] duration-700 ease-out"
+            className="score-bar-fill h-full rounded-full"
             style={
               {
-                width: `${value}%`,
+                ['--bar-w']: `${value}%`,
+                ['--i']: index,
                 background: `linear-gradient(90deg, color-mix(in srgb, ${accentVar} 55%, transparent), ${accentVar})`,
               } as CSSProperties
             }

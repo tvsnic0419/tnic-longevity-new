@@ -7,6 +7,8 @@ import { cn } from '@/lib/utils';
 import { ConfidenceIndicator } from './ConfidenceIndicator';
 import { ScoreBreakdown } from './ScoreBreakdown';
 import { HallmarkCoverage } from './HallmarkCoverage';
+import { ScoreReveal } from './ScoreReveal';
+import { ScoreCountText } from './ScoreCountText';
 
 /**
  * TnicScoreCard — the signature proprietary "TNiC SCORE 82 / 100" presentation.
@@ -44,9 +46,12 @@ function ScoreRing({ score, accentVar }: { score: number | null; accentVar: stri
     >
       {/* Track */}
       <circle cx={c} cy={c} r={r} fill="none" stroke="currentColor" strokeOpacity={0.1} strokeWidth={stroke} />
-      {/* Progress — rotated so it starts at 12 o'clock */}
+      {/* Progress — rotated so it starts at 12 o'clock. Final offset is baked in
+          via --dash-final (SSR/no-JS shows the finished ring); ScoreReveal drives
+          the draw from --dash-c (empty) to final in CSS. */}
       {score != null && (
         <circle
+          className="score-ring-prog"
           cx={c}
           cy={c}
           r={r}
@@ -55,24 +60,38 @@ function ScoreRing({ score, accentVar }: { score: number | null; accentVar: stri
           strokeWidth={stroke}
           strokeLinecap="round"
           strokeDasharray={circumference}
-          strokeDashoffset={circumference * (1 - pct)}
           transform={`rotate(-90 ${c} ${c})`}
-          style={{ transition: 'stroke-dashoffset 900ms cubic-bezier(0.22,1,0.36,1)' }}
+          style={
+            {
+              ['--dash-c']: circumference,
+              ['--dash-final']: circumference * (1 - pct),
+            } as Record<string, string | number>
+          }
         />
       )}
-      {/* Value */}
+      {/* Value — optically centered as a number + "/100" stack. */}
       <text
         x={c}
-        y={c - 4}
+        y={c - 3}
         textAnchor="middle"
+        dominantBaseline="central"
         className="font-display"
-        fontSize={46}
+        fontSize={48}
         fontWeight={700}
         fill="currentColor"
       >
-        {score == null ? '—' : score}
+        {score == null ? '—' : <ScoreCountText value={score} />}
       </text>
-      <text x={c} y={c + 22} textAnchor="middle" fontSize={13} fill="currentColor" fillOpacity={0.5} fontFamily="monospace">
+      <text
+        x={c}
+        y={c + 30}
+        textAnchor="middle"
+        dominantBaseline="central"
+        fontSize={13}
+        fill="currentColor"
+        fillOpacity={0.5}
+        fontFamily="monospace"
+      >
         / 100
       </text>
     </svg>
@@ -95,7 +114,7 @@ export function TnicScoreCard({
 
   return (
     <section
-      className={cn('premium-card p-6 md:p-7', className)}
+      className={cn('premium-card tnic-scorecard p-6 md:p-7', className)}
       style={{ ['--card-accent' as string]: accentVar }}
       aria-label={`TNiC Score for ${score.compoundName}`}
     >
@@ -109,7 +128,7 @@ export function TnicScoreCard({
         {score.tier && <EvidenceTag tier={score.tier} size="sm" />}
       </div>
 
-      <div className="grid gap-7 md:grid-cols-[auto_1fr] md:items-center md:gap-8">
+      <ScoreReveal className="score-reveal grid gap-7 md:grid-cols-[auto_1fr] md:items-center md:gap-8">
         {/* Ring + band */}
         <div className="flex flex-col items-center gap-3 text-center" style={{ color: accentVar }}>
           <ScoreRing score={score.score} accentVar={accentVar} />
@@ -120,7 +139,7 @@ export function TnicScoreCard({
 
         {/* Breakdown */}
         <ScoreBreakdown dimensions={score.dimensions} accentVar={accentVar} />
-      </div>
+      </ScoreReveal>
 
       {/* Footer — confidence, hallmark coverage, methodology */}
       <div className="mt-6 border-t border-border/50 pt-5">

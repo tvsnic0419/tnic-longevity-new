@@ -3303,6 +3303,54 @@ p,
   }
 }
 
+/* ── TNiC Scorecard — the signature instrument ─────────────────────────────
+   The scorecard is a data instrument, not an interactive card: give it a
+   calmer, slightly more opaque field so the ring and dimension bars read as
+   signal (the near-transparent premium-card fill lets the page's molecule art
+   bleed through behind the data), and drop the hover-lift it inherits. */
+.tnic-scorecard {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.012)),
+    color-mix(in srgb, var(--color-bg-elevated) 88%, transparent);
+}
+.tnic-scorecard:hover {
+  transform: none;
+  border-color: var(--color-border-subtle);
+  box-shadow: none;
+}
+
+/* Score-reveal choreography. Final values are baked into the SSR HTML
+   (`--dash-final`, `--bar-w`), so with no JS the finished score renders. When
+   ScoreReveal marks the region [data-enhanced] it starts empty, then draws to
+   final on [data-revealed] (set when scrolled into view). */
+.score-ring-prog {
+  stroke-dashoffset: var(--dash-final);
+}
+.score-bar-fill {
+  width: var(--bar-w);
+}
+.score-reveal[data-enhanced] .score-ring-prog {
+  stroke-dashoffset: var(--dash-c);
+  transition: stroke-dashoffset 1000ms var(--ease-entrance);
+}
+.score-reveal[data-enhanced][data-revealed] .score-ring-prog {
+  stroke-dashoffset: var(--dash-final);
+}
+.score-reveal[data-enhanced] .score-bar-fill {
+  width: 0;
+  transition: width 720ms var(--ease-entrance);
+  transition-delay: calc(var(--i, 0) * 70ms + 140ms);
+}
+.score-reveal[data-enhanced][data-revealed] .score-bar-fill {
+  width: var(--bar-w);
+}
+@media (prefers-reduced-motion: reduce) {
+  .score-reveal[data-enhanced] .score-ring-prog,
+  .score-reveal[data-enhanced] .score-bar-fill {
+    transition: none;
+  }
+}
+
 /* Light-theme parity — the base .premium-card fill is a white-on-dark gradient
    that disappears on the light base (#f8fafc). Restore a real elevated white
    surface + the v8 shadow (same approach as .card-elevated), and soften the

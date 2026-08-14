@@ -21,8 +21,8 @@ export function ScoreBreakdown({
         <span className="text-micro font-mono text-muted-foreground">of 100</span>
       </div>
       <div className="grid gap-3.5">
-        {dimensions.map((d) => (
-          <EvidenceDimension key={d.key} dimension={d} accentVar={accentVar} />
+        {dimensions.map((d, i) => (
+          <EvidenceDimension key={d.key} dimension={d} accentVar={accentVar} index={i} />
         ))}
       </div>
     </div>
