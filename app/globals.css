@@ -192,7 +192,7 @@
      is a single source of truth. Durations give the three most-used speeds a
      name; per-rule values that don't map cleanly stay literal. */
   --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-standard: var(--ease-standard);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-exit: cubic-bezier(0.4, 0, 1, 1);
   --dur-fast: 0.2s;
   --dur-base: 0.3s;
