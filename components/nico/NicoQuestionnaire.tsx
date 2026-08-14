@@ -28,6 +28,8 @@ import {
   type NicoSafetyFlag,
   type Scale,
 } from '@/lib/nico-questionnaire';
+import { trackEvent } from '@/lib/analytics';
+import { ANALYTICS_EVENTS } from '@/lib/analytics-events';
 
 /**
  * One question per screen.
@@ -160,7 +162,16 @@ export function NicoQuestionnaire() {
   // 3/5 midpoint, focus and safety both legitimately empty).
   const canAdvance = stepId === 'goals' ? answers.goals.length > 0 : true;
 
-  const goNext = () => setStep((s) => Math.min(STEP_IDS.length - 1, s + 1));
+  // Fire nico_started once, the moment the visitor commits past the first
+  // question — a page view is not a funnel start.
+  const startedRef = useRef(false);
+  const goNext = () => {
+    if (!startedRef.current) {
+      startedRef.current = true;
+      trackEvent(ANALYTICS_EVENTS.nicoStarted);
+    }
+    setStep((s) => Math.min(STEP_IDS.length - 1, s + 1));
+  };
   const goBack = () => setStep((s) => Math.max(0, s - 1));
   const restart = () => {
     setAnswers({ ...NICO_DEFAULT_ANSWERS });
@@ -186,6 +197,17 @@ export function NicoQuestionnaire() {
     }
     cardRef.current?.querySelector<HTMLElement>('h2')?.focus();
   }, [step]);
+
+  // Fire nico_completed once, when the visitor first reaches the recommended
+  // stack. This is the key funnel-completion signal (previously defined in
+  // ANALYTICS_EVENTS but never emitted).
+  const completedRef = useRef(false);
+  useEffect(() => {
+    if (isResult && !completedRef.current) {
+      completedRef.current = true;
+      trackEvent(ANALYTICS_EVENTS.nicoCompleted, { stackSize: result?.compoundIds.length ?? 0 });
+    }
+  }, [isResult, result]);
 
   const stackHref =
     result && result.compoundIds.length

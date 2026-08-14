@@ -44,9 +44,9 @@ export default function ProductsPage() {
       <StructuredData schemas={productSchemas} />
       <CinematicHubHero
         hue="emerald"
-        kicker="Verified Picks"
-        title={<>One vetted product, <em>per compound</em>.</>}
-        lead="For each evidence-graded compound, a single third-party-tested product that meets the studied dose and form — affiliate disclosure in plain sight. TNiC sells nothing; commission never moves a ranking."
+        kicker="TNiC Verified"
+        title={<>TNiC <em>Verified</em>.</>}
+        lead="Evidence-aligned products selected on compound, dose, formulation, quality, and evidence — each with a transparent TNiC Match score. Affiliate disclosure in plain sight; commission never moves a ranking."
         stats={[
           { value: String(picks.length), label: 'Verified picks' },
           { value: String(brands), label: 'Independent brands' },

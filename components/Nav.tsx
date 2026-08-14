@@ -129,23 +129,25 @@ export function Nav() {
         <div className="hidden nav:flex items-center gap-2.5 shrink-0">
           <ThemeToggle compact />
           <SiteSearch />
-          {/* NICO (questionnaire) is the secondary action; Dashboard is the
-              single filled primary. The former "Verify" shortcut lives in the
-              mobile menu, the footer, and the on-page Protocol Shop CTAs —
-              keeping the desktop bar narrow enough to appear on standard
-              laptops (≥1440px) instead of only ultra-wide displays. */}
+          {/* Build My Protocol (the NICO questionnaire) is the single filled
+              primary — the persistent conversion CTA across the whole site.
+              Dashboard is the calmer returning-user route beside it. Kept to two
+              actions so the desktop bar still fits standard laptops (≥1440px). */}
           <GlassPanel depth="float" className="glass-hover flex items-center rounded-full">
             <Link
-              href="/nico"
-              aria-label="NICO Starter Questionnaire"
+              href="/dashboard"
+              aria-label="Open your dashboard"
               className="focus-ring inline-flex items-center gap-1.5 rounded-full py-2 px-4 text-sm font-semibold text-muted-foreground hover:text-foreground"
             >
               <ClipboardList className="w-4 h-4 text-accent-violet" aria-hidden="true" />
-              NICO
+              Dashboard
             </Link>
           </GlassPanel>
-          <Link href="/dashboard" className="focus-ring btn-gradient text-sm !py-2.5 !px-5 !min-h-0 rounded-full">
-            Dashboard
+          <Link
+            href="/nico"
+            className="focus-ring btn-gradient text-sm !py-2.5 !px-5 !min-h-0 rounded-full"
+          >
+            Build My Protocol
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </Link>
         </div>
@@ -212,31 +214,32 @@ export function Nav() {
                 </div>
               ))}
               <div className="flex flex-col gap-2 mt-3">
-                <GlassPanel depth="float" className="glass-hover rounded-xl">
-                  <Link
-                    href="/nico"
-                    onClick={() => setMobileOpen(false)}
-                    className="focus-ring block rounded-xl py-3 text-center text-sm font-semibold"
-                  >
-                    NICO Starter Questionnaire
-                  </Link>
-                </GlassPanel>
-                <GlassPanel depth="float" className="glass-hover rounded-xl">
-                  <Link
-                    href="/shop"
-                    onClick={() => setMobileOpen(false)}
-                    className="focus-ring block rounded-xl py-3 text-center text-sm font-semibold"
-                  >
-                    Verify a Product
-                  </Link>
-                </GlassPanel>
+                {/* Build My Protocol is the primary conversion CTA on mobile too. */}
                 <Link
-                  href="/dashboard"
+                  href="/nico"
                   onClick={() => setMobileOpen(false)}
                   className="focus-ring btn-gradient text-sm text-center justify-center"
                 >
-                  Open Dashboard
+                  Build My Protocol
                 </Link>
+                <GlassPanel depth="float" className="glass-hover rounded-xl">
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setMobileOpen(false)}
+                    className="focus-ring block rounded-xl py-3 text-center text-sm font-semibold"
+                  >
+                    Open Dashboard
+                  </Link>
+                </GlassPanel>
+                <GlassPanel depth="float" className="glass-hover rounded-xl">
+                  <Link
+                    href="/products"
+                    onClick={() => setMobileOpen(false)}
+                    className="focus-ring block rounded-xl py-3 text-center text-sm font-semibold"
+                  >
+                    Shop TNiC Verified
+                  </Link>
+                </GlassPanel>
               </div>
             </div>
           </motion.div>

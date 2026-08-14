@@ -842,7 +842,9 @@ export function HomeDescent() {
       {/* ACT 0 — ARRIVE */}
       <section ref={s0} data-idx="0" className="tnic-act tnic-hero">
         <p className="tnic-kicker">TNiC · longevity, shown honestly</p>
-        <h1 className="tnic-h1">See what{' '}<br />you&apos;re <em>protecting</em>.</h1>
+        {/* h2, not h1 — the homepage's single <h1> is the hero's value prop.
+            This cinematic overture now plays below the conversion layer. */}
+        <h2 className="tnic-h1">See what{' '}<br />you&apos;re <em>protecting</em>.</h2>
         <p className="tnic-lead">
           You can&apos;t feel a cell aging. So we made it visible — the real biology
           behind your stack, rendered instead of promised. Five scenes. One

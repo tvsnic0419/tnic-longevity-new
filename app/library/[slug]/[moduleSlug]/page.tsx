@@ -24,6 +24,7 @@ import {
 import { evidenceTagDefinitions } from '@/lib/trust';
 import { getComparisonsForCompound } from '@/lib/comparison-relations';
 import { resolveCompound as resolveEngineCompound } from '@/lib/compound-engine-data';
+import { computeTnicScore } from '@/lib/tnic-score';
 import { buildEngineStackUrl } from '@/lib/stack-url';
 import { getGuideForCompound, getRelatedCompounds } from '@/lib/library-graph';
 import { getPathwaysForCompound } from '@/lib/pathways';
@@ -193,6 +194,13 @@ export default async function LibraryModulePage({
           breadcrumb,
         ];
 
+  // TNiC Score — computed server-side (like engineHref) so the scoring
+  // libraries stay off the client bundle and the score is SSR'd into HTML.
+  // Prefer the canonical dataset id; fall back to the library slug so engine-
+  // backed library-only compounds are scored too. Null score → no card.
+  const tnicScore =
+    mod.category === 'compounds' ? computeTnicScore(mod.compoundId ?? mod.slug) : null;
+
   return (
     <>
       <StructuredData schemas={schemas} />
@@ -209,6 +217,7 @@ export default async function LibraryModulePage({
         lastUpdated={mdx?.frontmatter.last_updated}
         author={mdx?.frontmatter.author}
         reviewer={reviewer}
+        tnicScore={tnicScore}
       />
     </>
   );

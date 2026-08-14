@@ -38,29 +38,32 @@ export const navLinks = [
  */
 export const navGroups = [
   {
-    label: 'Learn',
+    label: 'Explore',
     links: [
-      { href: '/library', label: 'Library' },
       { href: '/library/compounds', label: 'Compounds' },
+      { href: '/hallmarks', label: 'Hallmarks' },
       { href: '/peptides', label: 'Peptides' },
-      { href: '/learn', label: 'Learn' },
+      { href: '/learn', label: 'Research' },
     ],
   },
   {
     label: 'Build',
     links: [
       { href: '/stacks', label: 'Stacks' },
-      { href: '/tools', label: 'Tools' },
+      { href: '/protocols', label: 'Protocols' },
       { href: '/compound-engine', label: 'Engine' },
     ],
   },
   {
-    label: 'Track',
+    label: 'Measure',
     links: [{ href: '/labs', label: 'Labs' }],
   },
   {
     label: 'Shop',
-    links: [{ href: '/products', label: 'Products' }],
+    links: [
+      { href: '/products', label: 'TNiC Verified' },
+      { href: '/library/compare', label: 'Comparisons' },
+    ],
   },
 ] as const;
 

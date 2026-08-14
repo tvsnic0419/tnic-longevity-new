@@ -11,6 +11,8 @@ import { getHubContext } from '@/lib/hub-context';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { RevealCard } from '@/components/ui/RevealCard';
+import { TnicMatchChecklist } from '@/components/shop/TnicMatchChecklist';
+import { computeTnicMatch } from '@/lib/tnic-match';
 import type { EvidenceTier } from '@/lib/types';
 
 const picks = Object.values(PRODUCT_PICKS).filter((p) => p.compoundId !== 'nr');
@@ -28,6 +30,7 @@ function ProductCard({ pick }: { pick: ProductPick }) {
   const compound = compounds.find((c) => c.id === pick.compoundId);
   const tier = compound?.evidence as EvidenceTier | undefined;
   const hallmarkTargets = compound?.hallmarks?.slice(0, 3) ?? [];
+  const match = computeTnicMatch(pick);
 
   /*
     Deep Glass surface (matches every other card on the page), but the stretched
@@ -77,9 +80,16 @@ function ProductCard({ pick }: { pick: ProductPick }) {
       </div>
 
       <div className="relative pointer-events-none p-5 flex flex-col flex-1">
-        <p className="text-micro font-semibold text-accent-emerald uppercase tracking-widest mb-1">
-          {pick.brand}
-        </p>
+        <div className="mb-1 flex items-center justify-between gap-2">
+          <p className="text-micro font-semibold text-accent-emerald uppercase tracking-widest">
+            {pick.brand}
+          </p>
+          {pick.compoundName && (
+            <p className="text-micro font-mono uppercase tracking-widest text-muted-foreground">
+              {pick.compoundName}
+            </p>
+          )}
+        </div>
         <h2 className="font-bold text-foreground group-hover:text-accent-cyan transition-colors leading-snug mb-2">
           {pick.productName}
         </h2>
@@ -101,6 +111,8 @@ function ProductCard({ pick }: { pick: ProductPick }) {
             ))}
           </div>
         )}
+
+        <TnicMatchChecklist match={match} className="mb-4" />
 
         <p className="text-xs text-muted-foreground leading-relaxed flex-1 mb-4">{pick.whyThisPick}</p>
         <div className="pt-3 border-t border-border/50 flex items-center justify-between gap-2">
@@ -131,9 +143,9 @@ export function ProductsHub() {
     <div className="container-page py-10 md:py-14 max-w-6xl section-mesh">
       <PageHeader
         icon={Package}
-        eyebrow="Verified Picks"
-        title="Recommended Products"
-        description="One evidence-aligned product per compound. TNiC may earn a commission on purchases via affiliate links — it never influences which products are listed or their evidence tier."
+        eyebrow="TNiC Verified"
+        title="TNiC Verified"
+        description="Evidence-aligned products selected using compound, dose, formulation, quality, and evidence criteria — each shown with a transparent TNiC Match score you can inspect line by line."
         theme="emerald"
         align="left"
         context={getHubContext('products')}
@@ -142,10 +154,10 @@ export function ProductsHub() {
       <div className="rounded-xl border border-accent-amber/25 bg-accent-amber/5 p-4 mb-10 flex gap-3 text-sm">
         <ShieldCheck className="w-5 h-5 text-accent-amber shrink-0 mt-0.5" />
         <p className="text-muted-foreground leading-relaxed">
-          <strong className="text-foreground">Zero inventory conflict.</strong> TNiC does not sell or
-          stock supplements. Picks link to manufacturers and may include an affiliate token —{' '}
-          <strong className="text-foreground">no extra cost to you</strong>, and commission never
-          influences listings or evidence tiers. Always request a{' '}
+          <strong className="text-foreground">TNiC may earn commissions from qualifying purchases.</strong>{' '}
+          Commercial relationships do not determine evidence scores or rankings. TNiC does not sell or
+          stock supplements and performs no independent laboratory testing — the TNiC Match reflects
+          compound, dose, and evidence fit only. Always request a{' '}
           <strong className="text-foreground">Certificate of Analysis (COA)</strong> before purchasing.
         </p>
       </div>

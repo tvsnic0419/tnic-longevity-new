@@ -6,6 +6,7 @@ describe('analytics-events', () => {
   // Renaming one silently splits its history, so pin the exact wire values.
   it('exposes the stable canonical event names', () => {
     expect(ANALYTICS_EVENTS).toEqual({
+      nicoStarted: 'nico_started',
       nicoCompleted: 'nico_completed',
       emailSubscribed: 'email_subscribed',
       stackExported: 'stack_exported',

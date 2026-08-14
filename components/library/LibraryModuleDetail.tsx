@@ -18,6 +18,8 @@ import { getBuyerGuideByModuleSlug } from '@/lib/buyer-guides';
 import type { LifestyleSlug } from '@/lib/lifestyle-pillars';
 import { ModuleContextStrip } from './ModuleContextStrip';
 import { CompoundGlancePanel } from './CompoundGlancePanel';
+import { TnicScoreCard } from '@/components/scorecard/TnicScoreCard';
+import type { TnicScore } from '@/lib/tnic-score';
 import { ModuleGlancePanel } from './ModuleGlancePanel';
 import { recordModuleVisit } from '@/lib/recent-modules';
 import { GlassPanel } from '@/components/ui/GlassPanel';
@@ -51,6 +53,7 @@ export function LibraryModuleDetail({
   lastUpdated,
   author,
   reviewer,
+  tnicScore,
 }: {
   module: LibraryModule;
   mdxBody: string | null;
@@ -69,6 +72,8 @@ export function LibraryModuleDetail({
   lastUpdated?: string;
   author?: string;
   reviewer?: string;
+  /** Precomputed TNiC Score (server-side) — the scoring libs never reach this client bundle. */
+  tnicScore?: TnicScore | null;
 }) {
   const categoryMeta = libraryCategoryMeta[module.category];
   const relatedHallmarks = hallmarkLibrary.filter((h) => module.relatedHallmarkIds.includes(h.id));
@@ -336,6 +341,10 @@ export function LibraryModuleDetail({
               module.category === 'compounds' && (
                 <ModuleGlancePanel module={module} studyCount={mdxStudyCount} />
               )
+            )}
+
+            {tnicScore && tnicScore.score != null && (
+              <TnicScoreCard score={tnicScore} href="/library/compare" />
             )}
 
             {module.requiresDisclaimer && (

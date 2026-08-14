@@ -131,7 +131,7 @@ export function HomeExplore() {
       aria-labelledby="home-explore-heading"
       className="relative border-t border-border/50 py-20 md:py-28"
     >
-      <CellularDivider hue="var(--accent-cyan)" index="04" label="The library" />
+      <CellularDivider hue="var(--accent-cyan)" index="05" label="The library" />
       <div className="container-page">
         <RevealItem className="mb-10 flex flex-col gap-4 md:mb-14 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">

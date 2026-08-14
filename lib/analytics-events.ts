@@ -6,6 +6,8 @@
  * Vercel Analytics client into a server bundle.
  */
 export const ANALYTICS_EVENTS = {
+  /** A visitor advanced past the first NICO question — the funnel actually started. */
+  nicoStarted: 'nico_started',
   /** A visitor finished the NICO Starter Questionnaire and saw a recommended stack. */
   nicoCompleted: 'nico_completed',
   /** A visitor subscribed to the Protocol Brief. */

@@ -3,6 +3,7 @@ import { Footer } from '@/components/Footer';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { HomeHero } from '@/components/home/HomeHero';
 import { HomeDescent } from '@/components/home/HomeDescent';
+import { HomeTnicScore } from '@/components/home/HomeTnicScore';
 import { HomeEliteInterventions } from '@/components/home/HomeEliteInterventions';
 import { HomeHallmarks } from '@/components/home/HomeHallmarks';
 import { HomeGuides } from '@/components/home/HomeGuides';
@@ -63,13 +64,18 @@ export default function HomePage() {
       <ScrollProgress />
       <Nav />
       <main id="main-content" tabIndex={-1}>
-        <HomeDescent />
+        {/* Conversion layer first: value prop → the TNiC Score → the science →
+            the build path → verified products → wayfinding. The cinematic
+            HomeDescent overture now plays *below* that layer, before the final
+            CTA, so the first viewport sells product value, not spectacle. */}
         <HomeHero />
-        <HomeEliteInterventions />
+        <HomeTnicScore />
         <HomeHallmarks />
-        <HomeGuides />
-        <HomeExplore />
         <HomeSteps />
+        <HomeEliteInterventions />
+        <HomeExplore />
+        <HomeGuides />
+        <HomeDescent />
         <HomeCTA />
       </main>
       <Footer />

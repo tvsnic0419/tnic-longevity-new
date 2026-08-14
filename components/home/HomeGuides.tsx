@@ -62,7 +62,7 @@ export function HomeGuides() {
       aria-labelledby="home-guides-heading"
       className="relative border-t border-border/50 py-20 md:py-28"
     >
-      <CellularDivider hue="var(--accent-violet)" index="03" label="The guides" />
+      <CellularDivider hue="var(--accent-violet)" index="06" label="The guides" />
       <div className="container-page">
         <RevealItem className="mb-10 flex flex-col gap-4 md:mb-14 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
