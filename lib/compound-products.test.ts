@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { COMPOUND_PRODUCTS, getCompoundProducts, hasCompoundProducts } from './compound-products';
+import { COMPOUND_PRODUCTS, getCompoundProducts, hasCompoundProducts, isTopPick } from './compound-products';
 
 /**
  * Content-lock for the per-compound retail lists that replaced the illustrative
@@ -19,9 +19,12 @@ const COMPOUND_HERO_IDS = [
 describe('compound-products data integrity', () => {
   for (const [id, list] of Object.entries(COMPOUND_PRODUCTS)) {
     describe(id, () => {
-      it('has between 1 and 5 products', () => {
-        expect(list.length).toBeGreaterThanOrEqual(1);
-        expect(list.length).toBeLessThanOrEqual(5);
+      it('has exactly 5 products', () => {
+        expect(list.length).toBe(5);
+      });
+
+      it('has exactly one highlighted top pick (verified or recommended)', () => {
+        expect(list.filter(isTopPick).length).toBe(1);
       });
 
       it('every product has a real https link and required fields', () => {

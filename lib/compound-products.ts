@@ -27,6 +27,13 @@ export interface CompoundRetailProduct {
   note?: string;
   /** True for the compound's curated TNiC pick (mirrors lib/product-picks.ts). */
   verified?: boolean;
+  /** The single recommended product when there is no curated `verified` pick. */
+  recommended?: boolean;
+}
+
+/** The one product to highlight for a compound — the verified pick, else the recommended one. */
+export function isTopPick(p: CompoundRetailProduct): boolean {
+  return Boolean(p.verified || p.recommended);
 }
 
 export const COMPOUND_PRODUCTS: Record<string, CompoundRetailProduct[]> = {
@@ -45,38 +52,39 @@ export const COMPOUND_PRODUCTS: Record<string, CompoundRetailProduct[]> = {
     { brand: 'Double Wood', product: 'Resveratrol', dose: '500 mg / serving', url: 'https://doublewoodsupplements.com', note: 'Trans-resveratrol, US GMP.' },
   ],
   berberine: [
-    { brand: 'Thorne', product: 'Berberine', dose: '500 mg / capsule', url: 'https://www.thorne.com', note: 'NSF Contents Certified.' },
+    { brand: 'Thorne', product: 'Berberine', dose: '500 mg / capsule', url: 'https://www.thorne.com', note: 'NSF Contents Certified.', recommended: true },
     { brand: 'Double Wood', product: 'Berberine HCl', dose: '500 mg / capsule', url: 'https://doublewoodsupplements.com', note: 'US GMP facility, third-party tested.' },
     { brand: 'Nutricost', product: 'Berberine HCl', dose: '500 mg / capsule', url: 'https://nutricost.com', note: 'Third-party tested; budget option.' },
     { brand: 'Vitality Pro', product: 'Advanced Berberine', dose: '500 mg + milk thistle', url: 'https://vitality-pro.com', note: 'Adds 125 mg milk thistle; GMP.' },
     { brand: 'Best Naturals', product: 'Berberine', dose: '500 mg / capsule', url: 'https://www.bestnaturals.com', note: 'US GMP, third-party lab tested.' },
   ],
   coq10: [
-    { brand: 'Momentous', product: 'Ubiquinol (Kaneka®)', dose: 'per label', url: 'https://www.livemomentous.com', note: 'NSF Certified for Sport; Kaneka Ubiquinol®.' },
+    { brand: 'Momentous', product: 'Ubiquinol (Kaneka®)', dose: 'per label', url: 'https://www.livemomentous.com', note: 'NSF Certified for Sport; Kaneka Ubiquinol®.', recommended: true },
     { brand: 'Qunol', product: 'Ultra CoQ10', dose: '100 mg / softgel', url: 'https://qunol.com', note: 'Water/fat-soluble absorption form.' },
     { brand: 'Nordic Naturals', product: 'CoQ10 Ubiquinol', dose: '100 mg / softgel', url: 'https://www.nordicnaturals.com', note: 'Per-batch COA available.' },
     { brand: 'Healthy Origins', product: 'Ubiquinol (Kaneka®)', dose: '100 mg / softgel', url: 'https://www.healthyorigins.com', note: 'ConsumerLab-approved value pick.' },
     { brand: 'Thorne', product: 'CoQ10', dose: 'per label', url: 'https://www.thorne.com', note: 'NSF facility, third-party tested.' },
   ],
   omega3: [
-    { brand: 'Nordic Naturals', product: 'Ultimate Omega', dose: '1280 mg EPA+DHA', url: 'https://www.nordicnaturals.com', note: 'Triglyceride form; third-party purity tested.' },
+    { brand: 'Nordic Naturals', product: 'Ultimate Omega', dose: '1280 mg EPA+DHA', url: 'https://www.nordicnaturals.com', note: 'Triglyceride form; third-party purity tested.', recommended: true },
     { brand: 'Thorne', product: 'Omega-3 with CoQ10', dose: 'per label', url: 'https://www.thorne.com', note: 'Independent + in-house testing.' },
     { brand: 'Carlson', product: 'Maximum Omega 2000', dose: '2000 mg EPA+DHA', url: 'https://carlsonlabs.com', note: 'High-potency triglyceride form.' },
     { brand: 'NOW Foods', product: 'Ultra Omega-3', dose: '750 mg EPA+DHA', url: 'https://www.nowfoods.com', note: 'GMP A-rated; value option.' },
     { brand: 'Metagenics', product: 'OmegaGenics EPA-DHA', dose: '1000 mg EPA+DHA', url: 'https://www.metagenics.com', note: 'Practitioner brand.' },
   ],
   fisetin: [
-    { brand: 'Double Wood', product: 'Fisetin', dose: '100 mg / capsule', url: 'https://doublewoodsupplements.com/products/fisetin', note: 'Real 100 mg (not a blend); US third-party tested.' },
+    { brand: 'Double Wood', product: 'Fisetin', dose: '100 mg / capsule', url: 'https://doublewoodsupplements.com/products/fisetin', note: 'Real 100 mg (not a blend); US third-party tested.', recommended: true },
     { brand: 'Omre', product: 'Quercetin + Fisetin', dose: '100 mg fisetin', url: 'https://omre.co', note: '98% purity; adds quercetin phytosome.' },
     { brand: 'Nutricost', product: 'Fisetin', dose: '100 mg / capsule', url: 'https://nutricost.com', note: 'Third-party tested; budget option.' },
     { brand: 'ProHealth Longevity', product: 'Fisetin', dose: '100 mg / capsule', url: 'https://www.prohealth.com', note: 'Third-party lab tested.' },
     { brand: 'Jinfiniti', product: 'SenoAid', dose: '170 mg fisetin', url: 'https://www.jinfiniti.com', note: 'Higher-dose fisetin + quercetin.' },
   ],
   'urolithin-a': [
-    { brand: 'Timeline', product: 'Mitopure®', dose: '500 mg / serving', url: 'https://www.timeline.com', note: 'The urolithin A used in most human trials; NSF for Sport.' },
+    { brand: 'Timeline', product: 'Mitopure®', dose: '500 mg / serving', url: 'https://www.timeline.com', note: 'The urolithin A used in most human trials; NSF for Sport.', recommended: true },
     { brand: 'Neurogan Health', product: 'Urolithin A', dose: '500 mg / serving', url: 'https://neuroganhealth.com/collections/urolithin-a-supplements', note: 'COAs posted on site.' },
     { brand: 'Omre', product: 'Urolithin A', dose: '500 mg / serving', url: 'https://omre.co', note: 'Same clinical dose, lower cost.' },
     { brand: 'Double Wood', product: 'Urolithin A', dose: '500 mg / serving', url: 'https://doublewoodsupplements.com', note: 'US GMP, third-party tested.' },
+    { brand: 'ProHealth Longevity', product: 'Urolithin A', dose: '500 mg / serving', url: 'https://www.prohealth.com', note: 'Third-party lab tested.' },
   ],
   spermidine: [
     { brand: 'Oxford Healthspan', product: 'Primeadine® Original', dose: '1 mg / 3 caps', url: 'https://oxfordhealthspan.com', note: 'Whole-food wheat-germ spermidine; COAs posted. TNiC default pick.', verified: true },
@@ -90,6 +98,7 @@ export const COMPOUND_PRODUCTS: Record<string, CompoundRetailProduct[]> = {
     { brand: 'ProHealth Longevity', product: 'Calcium AKG Longevity', dose: '1000 mg / serving', url: 'https://www.prohealth.com', note: 'Batch third-party tested in US labs.' },
     { brand: 'Vitality Pro', product: 'CaAKG', dose: '500 mg / capsule', url: 'https://vitality-pro.com', note: '98%+ purity; ISO-lab tested.' },
     { brand: 'DoNotAge', product: 'Pure Ca-AKG', dose: '1000 mg / serving', url: 'https://donotage.org', note: 'Longevity-focused brand; COAs posted.' },
+    { brand: 'Renue By Science', product: 'Ca-AKG', dose: '1000 mg / serving', url: 'https://renuebyscience.com', note: 'Longevity brand; COAs posted.' },
   ],
   taurine: [
     { brand: 'Life Extension', product: 'Taurine', dose: '1000 mg / capsule', url: 'https://www.lifeextension.com/vitamins-supplements/item01827/taurine', note: 'Established clinical brand. TNiC default pick.', verified: true },
@@ -110,6 +119,7 @@ export const COMPOUND_PRODUCTS: Record<string, CompoundRetailProduct[]> = {
     { brand: 'Nutricost', product: 'Pterostilbene', dose: '100 mg / capsule', url: 'https://nutricost.com', note: 'Clean, third-party tested, budget.' },
     { brand: 'Vitality Pro', product: 'Advanced Pterostilbene', dose: 'per label', url: 'https://vitality-pro.com/product/advanced-pterostilbene-60/', note: 'ISO 17025-lab tested.' },
     { brand: 'ProHealth Longevity', product: 'Pterostilbene', dose: 'per label', url: 'https://www.prohealth.com', note: 'Third-party lab tested.' },
+    { brand: 'Toniiq', product: 'Pterostilbene', dose: '100 mg / capsule', url: 'https://www.toniiq.com', note: 'High-purity; COA access.' },
   ],
   rala: [
     { brand: 'GeroNova', product: 'Bio-Enhanced R-Lipoic Acid', dose: '300 mg / capsule', url: 'https://geronova.com/product/bio-enhanced-r-lipoic-acid-vegcaps-300mg-60caps/', note: 'Stabilized R-form (not racemic). TNiC default pick.', verified: true },
@@ -130,8 +140,8 @@ export const COMPOUND_PRODUCTS: Record<string, CompoundRetailProduct[]> = {
 /** Up to `max` real retail products for a compound (verified pick first). */
 export function getCompoundProducts(compoundId: string, max = 5): CompoundRetailProduct[] {
   const list = COMPOUND_PRODUCTS[compoundId] ?? [];
-  // Verified pick always leads, otherwise preserve authored order.
-  const ordered = [...list].sort((a, b) => Number(Boolean(b.verified)) - Number(Boolean(a.verified)));
+  // The top pick (verified, else recommended) always leads; otherwise authored order.
+  const ordered = [...list].sort((a, b) => Number(isTopPick(b)) - Number(isTopPick(a)));
   return ordered.slice(0, max);
 }
 

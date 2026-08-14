@@ -67,18 +67,24 @@ export function CompoundHero(data: CompoundHeroData) {
           {products.length > 0 ? (
             <>
               <ul className="chero-plist">
-                {products.map((p, i) => (
-                  <li key={`${p.brand}-${p.product}`} className={p.verified ? "is-verified" : ""}>
+                {products.map((p, i) => {
+                  const top = p.verified || p.recommended;
+                  return (
+                  <li key={`${p.brand}-${p.product}`} className={top ? "is-verified" : ""}>
                     <a
                       href={p.url}
                       target="_blank"
                       rel="noopener noreferrer nofollow sponsored"
                     >
-                      <span className="rank" aria-hidden="true">{p.verified ? "✓" : i + 1}</span>
+                      <span className="rank" aria-hidden="true">{top ? "✓" : i + 1}</span>
                       <span className="pmain">
                         <span className="pbrand">
                           {p.brand}
-                          {p.verified && <em className="vbadge">TNiC pick</em>}
+                          {p.verified ? (
+                            <em className="vbadge">TNiC pick</em>
+                          ) : p.recommended ? (
+                            <em className="vbadge">Recommended</em>
+                          ) : null}
                         </span>
                         <span className="pname">
                           {p.product}
@@ -89,7 +95,8 @@ export function CompoundHero(data: CompoundHeroData) {
                       <span className="parrow" aria-hidden="true">↗</span>
                     </a>
                   </li>
-                ))}
+                  );
+                })}
               </ul>
               <p className="chero-cap">
                 Real retail options from reputable brands — confirm the current formulation and its
