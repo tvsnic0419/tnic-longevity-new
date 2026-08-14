@@ -3577,6 +3577,22 @@ p,
 [data-theme="light"] .mhero-fact {
   border-color: var(--color-border-subtle);
 }
+/* The per-compound "where to buy" list also draws from the dark VIZ palette. */
+[data-theme="light"] .chero-plist .pbrand { color: var(--color-text-primary); }
+[data-theme="light"] .chero-plist .pname { color: var(--color-text-secondary); }
+[data-theme="light"] .chero-plist .pnote,
+[data-theme="light"] .chero-plist .pdose,
+[data-theme="light"] .chero-plist .parrow,
+[data-theme="light"] .chero-buy-head .lbl,
+[data-theme="light"] .chero-cap { color: var(--color-text-faint); }
+[data-theme="light"] .chero-plist a,
+[data-theme="light"] .chero-plist .rank,
+[data-theme="light"] .chero-buy-empty { border-color: var(--color-border-subtle); }
+[data-theme="light"] .chero-plist a {
+  background: var(--color-bg-elevated);
+}
+[data-theme="light"] .chero-plist .rank { color: var(--color-text-muted); background: var(--color-bg-muted); }
+[data-theme="light"] .chero-buy-empty p { color: var(--color-text-secondary); }
 
 .hub-hero-field::before,
 .hub-hero-field::after {

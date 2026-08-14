@@ -1,15 +1,17 @@
 "use client";
 
-import { MoleculeStage } from "./MoleculeStage";
-import { hasGeometry, getGeometry } from "./molecule";
 import { VIZ, FONT, tierColor, signatureHue } from "./tokens";
+import type { CompoundRetailProduct } from "@/lib/compound-products";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CompoundHero — a "mini-Descent" overture band for every compound page.
-// Composes the shared MoleculeStage with an editorial header, evidence
-// medallion, mechanism hook, and a fact rail built entirely from real fields
-// in lib/data.ts. The compound's large cover name is decorative (aria-hidden)
-// — the page's semantic <h1> still lives in LibraryModuleDetail below.
+// The left column is a real "where to buy" list (top retail products for this
+// compound, verified pick first) — the earlier orbital motif was illustrative,
+// not a real structure, so it was replaced with something useful. The right
+// column keeps the editorial header, evidence medallion, mechanism hook, and a
+// fact rail built entirely from real fields in lib/data.ts. The compound's large
+// cover name is decorative (aria-hidden) — the page's semantic <h1> still lives
+// in LibraryModuleDetail below.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type CompoundHeroData = {
@@ -24,6 +26,8 @@ export type CompoundHeroData = {
   studyCount: number;
   synergyCount: number;
   hallmarks: string[];
+  /** Real retail products for this compound (verified pick first). */
+  products?: CompoundRetailProduct[];
 };
 
 function firstSentence(text: string): string {
@@ -34,9 +38,8 @@ function firstSentence(text: string): string {
 export function CompoundHero(data: CompoundHeroData) {
   const hue = signatureHue(data.id);
   const hueCss = `rgb(${hue[0]},${hue[1]},${hue[2]})`;
-  const structured = hasGeometry(data.id);
-  const geom = structured ? getGeometry(data.id) : null;
   const tint = tierColor(data.evidence);
+  const products = data.products ?? [];
 
   const facts: Array<{ k: string; v: string; meter?: number }> = [
     { k: "Evidence", v: `Tier ${data.evidence}` },
@@ -56,19 +59,49 @@ export function CompoundHero(data: CompoundHeroData) {
       <style>{CHERO_CSS}</style>
 
       <div className="chero-grid">
-        <div className="chero-stage-wrap">
-          <div className="chero-stage">
-            <MoleculeStage geometryId={structured ? data.id : undefined} hue={hue} />
-            <div className="chero-hint">
-              <span className="dot" />
-              {structured ? "drag · scroll to zoom" : "orbital field · illustrative"}
-            </div>
+        <div className="chero-buy">
+          <div className="chero-buy-head">
+            <span className="lbl">Where to buy · {data.name}</span>
+            <a className="all" href="/products">TNiC Verified →</a>
           </div>
-          <p className="chero-cap">
-            {structured
-              ? `Rendered structure${geom?.label ? ` · ${geom.label}` : ""} · stylized for legibility, not a crystallographic reproduction`
-              : "Illustrative orbital motif — not the literal molecular structure. See the deep-dive below for the mechanism."}
-          </p>
+          {products.length > 0 ? (
+            <>
+              <ul className="chero-plist">
+                {products.map((p, i) => (
+                  <li key={`${p.brand}-${p.product}`} className={p.verified ? "is-verified" : ""}>
+                    <a
+                      href={p.url}
+                      target="_blank"
+                      rel="noopener noreferrer nofollow sponsored"
+                    >
+                      <span className="rank" aria-hidden="true">{p.verified ? "✓" : i + 1}</span>
+                      <span className="pmain">
+                        <span className="pbrand">
+                          {p.brand}
+                          {p.verified && <em className="vbadge">TNiC pick</em>}
+                        </span>
+                        <span className="pname">
+                          {p.product}
+                          {p.dose ? <span className="pdose"> · {p.dose}</span> : null}
+                        </span>
+                        {p.note ? <span className="pnote">{p.note}</span> : null}
+                      </span>
+                      <span className="parrow" aria-hidden="true">↗</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <p className="chero-cap">
+                Real retail options from reputable brands — confirm the current formulation and its
+                third-party COA before buying. No brand pays for placement.
+              </p>
+            </>
+          ) : (
+            <div className="chero-buy-empty">
+              <p>No verified retail pick published yet for {data.name}.</p>
+              <a href="/products">Browse TNiC Verified →</a>
+            </div>
+          )}
         </div>
 
         <div className="chero-body">
@@ -116,25 +149,71 @@ const CHERO_CSS = `
   -webkit-font-smoothing: antialiased;
 }
 .tnic-chero * { box-sizing: border-box; }
-.chero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(20px, 4vw, 44px); align-items: center; }
+.chero-grid { display: grid; grid-template-columns: 1fr 1.05fr; gap: clamp(20px, 4vw, 44px); align-items: start; }
 @media (max-width: 860px) { .chero-grid { grid-template-columns: 1fr; } }
 
-.chero-stage-wrap { display: flex; flex-direction: column; gap: 10px; }
-.chero-stage {
-  position: relative; width: 100%; aspect-ratio: 16/11; border-radius: 20px; overflow: hidden;
+/* Left column — real "where to buy" list (replaces the old illustrative motif). */
+.chero-buy { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.chero-buy-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.chero-buy-head .lbl {
+  font-family: ${FONT.mono}; font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+  color: ${VIZ.faint}; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.chero-buy-head .all {
+  font-family: ${FONT.mono}; font-size: 11px; letter-spacing: .04em; color: var(--hue);
+  text-decoration: none; white-space: nowrap; opacity: .9; transition: opacity .2s ease;
+}
+.chero-buy-head .all:hover { opacity: 1; }
+
+.chero-plist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.chero-plist li { margin: 0; }
+.chero-plist a {
+  display: grid; grid-template-columns: 26px 1fr auto; align-items: center; gap: 12px;
+  padding: 11px 13px; border-radius: 13px; text-decoration: none;
+  background: linear-gradient(180deg, rgba(19,26,48,0.55), rgba(14,20,38,0.55));
   border: 1px solid ${VIZ.line};
-  background:
-    radial-gradient(100% 100% at 30% 20%, color-mix(in srgb, var(--hue) 14%, transparent), transparent 60%),
-    radial-gradient(100% 100% at 80% 90%, rgba(140,140,245,0.06), transparent 60%),
-    linear-gradient(180deg, rgba(14,20,38,0.6), rgba(10,14,30,0.9));
+  transition: border-color .22s ease, transform .22s ease, background .22s ease;
 }
-.chero-hint {
-  position: absolute; bottom: 12px; right: 14px;
-  font-family: ${FONT.mono}; font-size: 11px; color: ${VIZ.faint}; letter-spacing: .06em;
-  display: flex; align-items: center; gap: 7px; pointer-events: none;
+.chero-plist a:hover {
+  border-color: color-mix(in srgb, var(--hue) 42%, transparent);
+  transform: translateY(-1px);
+  background: linear-gradient(180deg, rgba(24,32,58,0.7), rgba(16,22,42,0.7));
 }
-.chero-hint .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--hue); box-shadow: 0 0 10px var(--hue); }
-.chero-cap { font-family: ${FONT.mono}; font-size: 11px; color: ${VIZ.faint}; letter-spacing: .03em; line-height: 1.5; margin: 0; }
+.chero-plist a:focus-visible { outline: 2px solid color-mix(in srgb, var(--hue) 70%, transparent); outline-offset: 2px; }
+.chero-plist .rank {
+  display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px;
+  border-radius: 999px; font-family: ${FONT.mono}; font-size: 12px; font-weight: 600;
+  color: ${VIZ.muted}; background: rgba(255,255,255,0.05); border: 1px solid ${VIZ.line};
+}
+.chero-plist li.is-verified .rank {
+  color: #051018; background: var(--hue); border-color: transparent;
+  box-shadow: 0 0 12px -2px var(--hue);
+}
+.chero-plist li.is-verified a { border-color: color-mix(in srgb, var(--hue) 34%, transparent); }
+.chero-plist .pmain { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.chero-plist .pbrand {
+  display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  font-size: 14px; font-weight: 600; color: ${VIZ.ink}; line-height: 1.2;
+}
+.chero-plist .vbadge {
+  font-family: ${FONT.mono}; font-style: normal; font-size: 9px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--hue); border: 1px solid color-mix(in srgb, var(--hue) 45%, transparent);
+  padding: 1px 6px; border-radius: 999px;
+}
+.chero-plist .pname { font-size: 12.5px; color: ${VIZ.muted}; line-height: 1.35; overflow-wrap: anywhere; }
+.chero-plist .pdose { color: ${VIZ.faint}; }
+.chero-plist .pnote { font-size: 11px; color: ${VIZ.faint}; line-height: 1.4; margin-top: 1px; }
+.chero-plist .parrow { color: ${VIZ.faint}; font-size: 14px; transition: transform .22s ease, color .22s ease; }
+.chero-plist a:hover .parrow { color: var(--hue); transform: translate(2px, -2px); }
+
+.chero-buy-empty {
+  display: flex; flex-direction: column; gap: 8px; align-items: flex-start;
+  padding: 20px; border-radius: 14px; border: 1px dashed ${VIZ.line};
+}
+.chero-buy-empty p { margin: 0; font-size: 14px; color: ${VIZ.muted}; }
+.chero-buy-empty a { font-family: ${FONT.mono}; font-size: 12px; color: var(--hue); text-decoration: none; }
+
+.chero-cap { font-family: ${FONT.mono}; font-size: 11px; color: ${VIZ.faint}; letter-spacing: .03em; line-height: 1.5; margin: 2px 0 0; }
 
 .chero-body { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
 .chero-kicker {
@@ -181,6 +260,7 @@ const CHERO_CSS = `
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .chero-hint .dot { box-shadow: none; }
+  .chero-plist a:hover { transform: none; }
+  .chero-plist a:hover .parrow { transform: none; }
 }
 `;

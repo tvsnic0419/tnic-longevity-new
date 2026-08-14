@@ -25,6 +25,7 @@ import { evidenceTagDefinitions } from '@/lib/trust';
 import { getComparisonsForCompound } from '@/lib/comparison-relations';
 import { resolveCompound as resolveEngineCompound } from '@/lib/compound-engine-data';
 import { computeTnicScore } from '@/lib/tnic-score';
+import { getCompoundProducts } from '@/lib/compound-products';
 import { buildEngineStackUrl } from '@/lib/stack-url';
 import { getGuideForCompound, getRelatedCompounds } from '@/lib/library-graph';
 import { getPathwaysForCompound } from '@/lib/pathways';
@@ -108,6 +109,7 @@ export default async function LibraryModulePage({
         hallmarks: heroCompound.hallmarks
           .map((hid) => hallmarkLibrary.find((h) => h.id === hid)?.title ?? hid)
           .filter(Boolean),
+        products: getCompoundProducts(heroCompound.id),
       }
     : null;
 
