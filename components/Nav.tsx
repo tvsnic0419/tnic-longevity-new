@@ -105,7 +105,7 @@ export function Nav() {
           <Logo variant="lockup" size="nav" alt="TNiC – Transformative Nutrition in Cell-Health · Home" />
         </Link>
 
-        {/* Grouped by intent (Learn / Build / Track / Shop) with a hairline
+        {/* Grouped by intent (Explore / Build / Measure / Shop) with a hairline
             divider between clusters, so the row reads as labeled families
             rather than nine flat links. */}
         <div className="hidden nav:flex items-center gap-1">
