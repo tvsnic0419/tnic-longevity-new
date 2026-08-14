@@ -17,8 +17,8 @@ interface StatStripProps {
 }
 
 export function StatStrip({ stats, ariaLabel = 'Key metrics', variant = 'default' }: StatStripProps) {
-  const cardClass = variant === 'hero' ? 'stat-card-v3' : 'stat-card';
-  const valueClass = variant === 'hero' ? 'stat-value-v3' : 'stat-value';
+  const cardClass = variant === 'hero' ? 'stat-card-hero' : 'stat-card';
+  const valueClass = variant === 'hero' ? 'stat-value-hero' : 'stat-value';
 
   return (
     <div
