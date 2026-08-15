@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { BookOpen, FlaskConical, Heart, User, Quote, Check } from 'lucide-react';
 import { SectionShell } from '@/components/SectionShell';
+import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 
 const founder = {
   name: 'Tommy Nichols',
@@ -45,7 +46,21 @@ const scopeNote = {
 
 export function AboutSection() {
   return (
-    <SectionShell
+    <>
+      <CinematicHubHero
+        hue="cyan"
+        kicker="About TNiC"
+        title={<>Evidence first. <em>Independence</em> always.</>}
+        lead="Not a supplement store, not a health blog — a structured, evidence-graded platform where every major claim is traceable and every commercial tie is disclosed."
+        stats={[
+          { value: 'A–C', label: 'Evidence tiers' },
+          { value: '$0', label: 'Inventory sold' },
+          { value: 'Cited', label: 'Every major claim' },
+        ]}
+        primary={{ href: '/library', label: 'Explore the library' }}
+        secondary={{ href: '/trust', label: 'How we grade evidence' }}
+      />
+      <SectionShell
       id="about"
       mod="MOD-ABT-00"
       theme="cyan"
@@ -128,5 +143,6 @@ export function AboutSection() {
         Last reviewed: June 2026 · Content version 1.2 · Evidence tiers re-evaluated quarterly
       </p>
     </SectionShell>
+    </>
   );
 }
