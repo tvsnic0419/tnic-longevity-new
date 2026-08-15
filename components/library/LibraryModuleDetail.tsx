@@ -10,6 +10,7 @@ import type { GuideLink, RelatedCompoundLink } from '@/lib/library-graph';
 import { getModulePath, libraryCategoryMeta } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { compounds } from '@/lib/data';
+import { getEdgeExplanation } from '@/lib/hero-network';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { MdxRenderer } from './MdxRenderer';
 import { CompoundBuyerGuidePanel } from './CompoundBuyerGuide';
@@ -187,6 +188,36 @@ export function LibraryModuleDetail({
                 <p className="text-xs text-muted-foreground mt-1">{relatedCompound.dose} · {relatedCompound.timing}</p>
                 <Link href="/stacks" className="text-xs text-accent-cyan hover:text-accent-emerald mt-3 inline-block">
                   Add to stack →
+                </Link>
+              </GlassPanel>
+            )}
+
+            {/* Compound pages: each synergy partner with its real pair-specific
+                mechanism (lib/synergy-mechanisms.ts) — the "why they pair" on
+                the page, not just a list of names. */}
+            {relatedCompound && relatedCompound.synergies.length > 0 && (
+              <GlassPanel depth="mid" className="rounded-xl p-5">
+                <p className="text-micro font-mono text-accent-emerald uppercase mb-3">Synergizes with</p>
+                <ul className="space-y-3">
+                  {relatedCompound.synergies.map((partnerId) => {
+                    const partner = compounds.find((c) => c.id === partnerId);
+                    if (!partner) return null;
+                    const why = getEdgeExplanation(relatedCompound.id, partner.id).text;
+                    return (
+                      <li key={partnerId}>
+                        <Link
+                          href={`/library/compounds/${partner.id}`}
+                          className="text-sm font-semibold text-foreground hover:text-accent-cyan transition"
+                        >
+                          {partner.name}
+                        </Link>
+                        <p className="mt-0.5 text-xs leading-snug text-muted-foreground">{why}</p>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <Link href="/stacks" className="text-xs text-accent-cyan hover:text-accent-emerald mt-4 inline-block">
+                  Open Stack Architect →
                 </Link>
               </GlassPanel>
             )}

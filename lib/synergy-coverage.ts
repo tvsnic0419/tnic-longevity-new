@@ -14,7 +14,7 @@ import { HERO_NETWORK_EDGES, HERO_NETWORK_NODES, getEdgeExplanation, getHeroComp
  * first, so authoring effort goes where it is noticed.
  */
 
-export type SynergySource = 'emergent' | 'synergy-link' | 'derived';
+export type SynergySource = 'emergent' | 'synergy-link' | 'authored' | 'derived';
 
 export interface SynergyCoverageGap {
   a: string;
@@ -37,7 +37,7 @@ export interface SynergyCoverageReport {
 
 export function buildSynergyCoverageReport(): SynergyCoverageReport {
   const degree = new Map(HERO_NETWORK_NODES.map((n) => [n.id, n.degree]));
-  const bySource: Record<SynergySource, number> = { emergent: 0, 'synergy-link': 0, derived: 0 };
+  const bySource: Record<SynergySource, number> = { emergent: 0, 'synergy-link': 0, authored: 0, derived: 0 };
   const gaps: SynergyCoverageGap[] = [];
 
   for (const e of HERO_NETWORK_EDGES) {
@@ -61,7 +61,7 @@ export function buildSynergyCoverageReport(): SynergyCoverageReport {
   gaps.sort((x, y) => y.prominence - x.prominence || x.label.localeCompare(y.label));
 
   const totalEdges = HERO_NETWORK_EDGES.length;
-  const authored = bySource.emergent + bySource['synergy-link'];
+  const authored = bySource.emergent + bySource['synergy-link'] + bySource.authored;
 
   return {
     totalEdges,
@@ -80,6 +80,7 @@ export function formatSynergyCoverageReport(report: SynergyCoverageReport): stri
     `Total edges:            ${report.totalEdges}`,
     `  authored (emergent):  ${report.bySource.emergent}`,
     `  authored (stack):     ${report.bySource['synergy-link']}`,
+    `  authored (mechanism): ${report.bySource.authored}`,
     `  generic (derived):    ${report.bySource.derived}`,
     `Pair-specific coverage: ${pct(report.authoredShare)}`,
     '',
@@ -97,9 +98,9 @@ export function formatSynergyCoverageReport(report: SynergyCoverageReport): stri
     lines.push(`        ${gap.text}`);
   }
   lines.push('');
-  lines.push('To fix one: add a { type: "synergy" } entry for the pair to');
-  lines.push('stackInteractions in lib/stack-analysis.ts. The hero widget and');
-  lines.push('every other synergy surface pick it up automatically.');
+  lines.push('To fix one: add an entry to lib/synergy-mechanisms.ts (prose');
+  lines.push('only, no scoring impact). The hero widget and every other');
+  lines.push('synergy surface pick it up automatically.');
 
   return lines.join('\n');
 }
