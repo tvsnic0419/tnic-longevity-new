@@ -49,11 +49,18 @@ export async function generateMetadata({
 
 export default async function HallmarkPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ tiers?: string }>;
 }) {
   const { slug } = await params;
   if (isCategorySlug(slug)) {
+    const { tiers } = await searchParams;
+    const activeTiers = (tiers ?? '')
+      .split(',')
+      .map((t) => t.trim().toUpperCase())
+      .filter((t): t is 'A' | 'B' | 'C' => t === 'A' || t === 'B' || t === 'C');
     // Advertise the machine-readable compound dataset to Google Dataset Search
     // and LLM crawlers so /compounds.json becomes a discoverable, citeable source.
     const datasetSchema =
@@ -81,7 +88,7 @@ export default async function HallmarkPage({
     return (
       <>
         {datasetSchema.length > 0 && <StructuredData schemas={datasetSchema} />}
-        <LibraryCategoryIndex category={slug} />
+        <LibraryCategoryIndex category={slug} activeTiers={activeTiers} />
       </>
     );
   }

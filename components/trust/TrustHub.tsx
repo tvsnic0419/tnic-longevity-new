@@ -113,7 +113,7 @@ export function TrustHub() {
                 href={link.href}
                 className="focus-ring interactive group flex items-center justify-between p-4"
               >
-                <span className="flex items-center gap-2 text-sm font-semibold text-foreground/90 group-hover:text-accent-emerald">
+                <span className="flex items-center gap-2 text-sm font-semibold text-[var(--color-text-secondary)] group-hover:text-accent-emerald">
                   <Icon className="w-4 h-4" aria-hidden="true" />
                   {link.label}
                 </span>
@@ -181,7 +181,7 @@ export function TrustHub() {
                       </span>
                     ))}
                   </div>
-                  <p className="text-caption mt-4 pt-4 border-t border-border/40 text-muted-foreground/70">
+                  <p className="text-caption mt-4 pt-4 border-t border-border/40 text-muted-foreground">
                     All citations are peer-reviewed. Tiers A/B/C assigned by literature strength and re-evaluated quarterly.
                   </p>
                 </div>

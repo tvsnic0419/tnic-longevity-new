@@ -122,7 +122,17 @@ export function LibraryModuleDetail({
               <p className="text-micro font-mono text-accent-cyan tracking-widest mb-2 uppercase">
                 {categoryMeta.label}
               </p>
-              <EvidenceTag tier={module.evidenceTier} size="lg" className="mb-4" />
+              <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                <EvidenceTag tier={module.evidenceTier} size="lg" />
+                {module.category === 'compounds' && (
+                  <Link
+                    href={`/library/compounds?tiers=${module.evidenceTier}`}
+                    className="focus-ring rounded text-xs text-muted-foreground hover:text-accent-cyan transition-colors"
+                  >
+                    See all Tier {module.evidenceTier} compounds →
+                  </Link>
+                )}
+              </div>
               <h2 className="text-lg font-bold mb-4">Module outline</h2>
               <ol className="space-y-2">
                 {module.outline.map((item, i) => (
@@ -372,7 +382,7 @@ export function LibraryModuleDetail({
                 <GlassPanel depth="mid" className="glass-hover rounded-lg">
                   <Link
                     href={engineHref}
-                    className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-foreground/90"
+                    className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-[var(--color-text-secondary)]"
                   >
                     See how this scores
                   </Link>
@@ -381,7 +391,7 @@ export function LibraryModuleDetail({
               <GlassPanel depth="mid" className="glass-hover rounded-lg">
                 <Link
                   href="/labs"
-                  className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-foreground/90"
+                  className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-[var(--color-text-secondary)]"
                 >
                   Open Labs hub
                 </Link>
@@ -389,7 +399,7 @@ export function LibraryModuleDetail({
               <GlassPanel depth="mid" className="glass-hover rounded-lg">
                 <Link
                   href="/trust/methodology"
-                  className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-foreground/90"
+                  className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-[var(--color-text-secondary)]"
                 >
                   Evidence methodology
                 </Link>

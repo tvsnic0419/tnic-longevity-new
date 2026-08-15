@@ -382,7 +382,16 @@ export function HeroScene3D() {
         // its cost scales with pixel count. 1.5 is ~44% fewer pixels than 2
         // and the difference is not visible on a scene this soft-edged.
         dpr={[1, 1.5]}
-        gl={{ antialias: true, alpha: true }}
+        // antialias:false is deliberate, not a regression. The scene renders
+        // through an EffectComposer (HeroScenePostFX), so RenderPass draws into
+        // its own render targets and the final OutputPass is a full-screen quad
+        // with no geometry edges — the default framebuffer's MSAA never touched
+        // the composited image, so `antialias:true` only allocated a
+        // multisampled buffer for nothing. Bloom + fog keep the soft edges
+        // smooth. powerPreference asks the browser for the discrete GPU on
+        // dual-GPU laptops instead of the integrated one, which is the
+        // difference between a steady 60fps and a hitchy one on this pipeline.
+        gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
         // ACES filmic instead of linear: bright emissive cores roll off into
         // colour instead of clipping to flat white, which is what lets the
         // bloom read as light rather than as blown-out pixels.

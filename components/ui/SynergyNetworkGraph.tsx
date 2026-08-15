@@ -105,8 +105,10 @@ function hex2rgba(hex: string, alpha: number) {
   return `rgba(${r},${g},${b},${alpha})`;
 }
 
+// Canonical evidence-tier colors — A=emerald, B=cyan (must match EvidenceTag
+// / lib/trust.ts / --accent-* tokens).
 function getTierBadgeColor(tier: 'A' | 'B') {
-  return tier === 'A' ? '#34d399' : '#fbbf24';
+  return tier === 'A' ? '#34d399' : '#00e0ff';
 }
 
 export function SynergyNetworkGraph() {

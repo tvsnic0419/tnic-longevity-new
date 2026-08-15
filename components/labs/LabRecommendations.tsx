@@ -108,7 +108,7 @@ export function LabRecommendations({ recommendations }: LabRecommendationsProps)
                 </div>
 
                 <p className="text-xs text-muted-foreground mb-1.5 leading-relaxed">{rec.rationale}</p>
-                <p className="text-xs text-foreground/90 leading-relaxed">{rec.action}</p>
+                <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">{rec.action}</p>
 
                 {/* Add to stack CTA */}
                 {rec.compoundId && !inStack && (

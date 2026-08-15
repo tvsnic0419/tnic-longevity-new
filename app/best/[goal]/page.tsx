@@ -115,7 +115,7 @@ export default async function BestForGoalPage({
                   className="focus-ring interactive group block rounded-2xl border border-border/60 bg-card/40 p-5 hover:border-accent-emerald/40 transition-colors"
                 >
                   <div className="flex items-start gap-4">
-                    <span className="shrink-0 font-mono text-lg font-black text-muted-foreground/70 w-8 text-center">
+                    <span className="shrink-0 font-mono text-lg font-black text-muted-foreground w-8 text-center">
                       {i + 1}
                     </span>
                     <div className="min-w-0 flex-1">

@@ -145,7 +145,7 @@ export function ContextBar({ hideStackReadout = false }: ContextBarProps = {}) {
           {selected.length > 0 && !hideStackReadout && (
             <>
               <HallmarkCoverageRing covered={analysis.hallmarkCount} />
-              <span className="hidden md:inline truncate font-medium text-foreground/90 max-w-[200px] lg:max-w-xs">
+              <span className="hidden md:inline truncate font-medium text-[var(--color-text-secondary)] max-w-[200px] lg:max-w-xs">
                 {stackLabel}
               </span>
               <button

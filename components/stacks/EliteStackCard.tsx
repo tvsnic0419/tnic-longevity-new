@@ -154,7 +154,7 @@ export function EliteStackCard({ stack, expanded: defaultExpanded = false }: Eli
                   <p className="text-micro font-mono text-accent-amber uppercase tracking-wider mb-3">Dosing Schedule</p>
                   {stack.dosingSchedule.map((block, i) => (
                     <div key={i} className="mb-3 last:mb-0">
-                      <p className="text-xs font-semibold text-foreground/90 mb-1">
+                      <p className="text-xs font-semibold text-[var(--color-text-secondary)] mb-1">
                         {block.period} {block.time && `· ${block.time}`}
                       </p>
                       {block.items.map((item, j) => {

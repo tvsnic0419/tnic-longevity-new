@@ -54,7 +54,7 @@ export default function PathwaysHubPage() {
         stats={[
           { value: String(pathways.length), label: 'Pathways mapped' },
           { value: String(pathwayCategoryOrder.length), label: 'Mechanistic families' },
-          { value: String(hallmarksEngaged), label: 'Hallmarks engaged' },
+          { value: String(hallmarksEngaged), label: 'Hallmarks engaged', href: '/hallmarks' },
         ]}
         primary={{ href: '/library', label: 'Browse the library' }}
         secondary={{ href: '/stacks', label: 'Open the Stack Architect' }}

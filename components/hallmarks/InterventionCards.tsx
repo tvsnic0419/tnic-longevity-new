@@ -13,9 +13,9 @@ import { compounds } from '@/lib/data';
 // Canonical evidence-tier colors — must match EvidenceTag / trust.ts
 // (A = clinical/emerald, B = emerging/cyan, C = preclinical/amber).
 const TIER_CLASSES: Record<HallmarkIntervention['evidence'], string> = {
-  A: 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30',
-  B: 'bg-cyan-500/15 text-cyan-400 border border-cyan-500/30',
-  C: 'bg-amber-500/15 text-amber-400 border border-amber-500/30',
+  A: 'bg-accent-emerald/15 text-accent-emerald border border-accent-emerald/30',
+  B: 'bg-accent-cyan/15 text-accent-cyan border border-accent-cyan/30',
+  C: 'bg-accent-amber/15 text-accent-amber border border-accent-amber/30',
 };
 
 const CATEGORY_LABEL: Record<HallmarkIntervention['category'], string> = {
@@ -51,7 +51,7 @@ export function InterventionCards({ interventions }: { interventions: HallmarkIn
                   href={`https://pubmed.ncbi.nlm.nih.gov/${iv.pmid}/`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-cyan-400 hover:border-cyan-500/40 transition-colors"
+                  className="px-2.5 py-1 rounded-lg bg-card border border-border/60 text-accent-cyan hover:border-accent-cyan/40 transition-colors"
                 >
                   PMID {iv.pmid}
                 </a>
