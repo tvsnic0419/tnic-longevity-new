@@ -47,7 +47,7 @@ export function ModuleGlancePanel({
     >
       <div className="mb-5 flex items-center justify-between gap-4">
         <p className="text-label text-accent-cyan">Compound at a glance</p>
-        <EvidenceTag tier={module.evidenceTier} showTooltip />
+        <EvidenceTag tier={module.evidenceTier} showTooltip href="/trust/methodology" />
       </div>
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">

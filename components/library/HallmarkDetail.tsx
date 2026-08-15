@@ -1,10 +1,16 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowLeft, BookOpen, Dna, Network, Pill } from 'lucide-react';
+import { ArrowLeft, BookOpen, Dna, Network, Pill, Route } from 'lucide-react';
 import Link from 'next/link';
 import type { HallmarkLibraryEntry } from '@/lib/types';
-import type { CompoundLink } from '@/lib/library-graph';
+import type { CompoundLink, GuideLink } from '@/lib/library-graph';
+
+interface PathwayLink {
+  slug: string;
+  name: string;
+  summary: string;
+}
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -25,6 +31,8 @@ export function HallmarkDetail({
   mdxBody,
   targetingCompounds = [],
   compoundHrefs = {},
+  guides = [],
+  pathways = [],
   lastUpdated,
   author,
   reviewer,
@@ -33,6 +41,8 @@ export function HallmarkDetail({
   mdxBody: string | null;
   targetingCompounds?: CompoundLink[];
   compoundHrefs?: Record<string, string>;
+  guides?: GuideLink[];
+  pathways?: PathwayLink[];
   lastUpdated?: string;
   author?: string;
   reviewer?: string;
@@ -173,6 +183,37 @@ export function HallmarkDetail({
               </div>
             )}
 
+            {guides.length > 0 && (
+              <div>
+                <div className="flex items-center gap-2 mb-4">
+                  <BookOpen className="w-4 h-4 text-accent-emerald" />
+                  <p className="text-micro font-mono text-accent-emerald uppercase tracking-wider">
+                    Supplement guides for {hallmark.title}
+                  </p>
+                </div>
+                <ul className="grid gap-3 sm:grid-cols-2">
+                  {guides.map((guide, i) => (
+                    <li key={guide.href}>
+                      <RevealCard index={i} depth="mid" className="glass-hover rounded-xl">
+                        <Link
+                          href={guide.href}
+                          className="focus-ring interactive group flex items-center gap-3 rounded-xl p-4"
+                        >
+                          <BookOpen className="w-5 h-5 text-accent-emerald shrink-0" />
+                          <div className="min-w-0">
+                            <p className="text-sm font-semibold text-foreground group-hover:text-accent-emerald transition truncate">
+                              {guide.label}
+                            </p>
+                            <p className="text-xs text-muted-foreground">Dosing, forms &amp; evidence</p>
+                          </div>
+                        </Link>
+                      </RevealCard>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             <div>
               <p className="text-micro font-mono text-accent-emerald uppercase tracking-wider mb-4">
                 Intervention Explorer — ranked by evidence
@@ -183,6 +224,34 @@ export function HallmarkDetail({
                 compoundHrefs={compoundHrefs}
               />
             </div>
+
+            {pathways.length > 0 && (
+              <div>
+                <div className="flex items-center gap-2 mb-4">
+                  <Route className="w-4 h-4 text-accent-violet" />
+                  <p className="text-micro font-mono text-accent-violet uppercase tracking-wider">
+                    Pathways it acts through
+                  </p>
+                </div>
+                <ul className="grid gap-3 sm:grid-cols-2">
+                  {pathways.map((p, i) => (
+                    <li key={p.slug}>
+                      <RevealCard index={i} depth="mid" className="glass-hover rounded-xl h-full">
+                        <Link
+                          href={`/pathways/${p.slug}`}
+                          className="focus-ring interactive group flex h-full flex-col gap-1 rounded-xl p-4"
+                        >
+                          <span className="text-sm font-semibold text-foreground group-hover:text-accent-violet transition">
+                            {p.name}
+                          </span>
+                          <span className="text-xs text-muted-foreground leading-relaxed">{p.summary}</span>
+                        </Link>
+                      </RevealCard>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
             {/* Systems Synthesis */}
             <div>

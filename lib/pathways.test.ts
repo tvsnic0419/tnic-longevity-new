@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { pathways, getAllPathwaySlugs } from './pathways';
+import { pathways, getAllPathwaySlugs, getPathwaysForHallmark } from './pathways';
 import { hallmarkLibrary } from './hallmarks-library';
 import { libraryModules } from './library-modules';
 
@@ -35,6 +35,24 @@ describe('pathway registry integrity', () => {
     for (const p of pathways) {
       expect(p.hallmarkIds.length, `${p.slug} has no hallmarks`).toBeGreaterThan(0);
       expect(p.compoundSlugs.length, `${p.slug} has no compounds`).toBeGreaterThan(0);
+    }
+  });
+});
+
+describe('pathways: hallmark → pathways', () => {
+  it('every pathway returned for a hallmark actually acts on it', () => {
+    for (const id of hallmarkIds) {
+      for (const p of getPathwaysForHallmark(id)) {
+        expect(p.hallmarkIds).toContain(id);
+      }
+    }
+  });
+
+  it('round-trips: each pathway is returned for every hallmark it lists', () => {
+    for (const p of pathways) {
+      for (const id of p.hallmarkIds) {
+        expect(getPathwaysForHallmark(id).map((x) => x.slug)).toContain(p.slug);
+      }
     }
   });
 });

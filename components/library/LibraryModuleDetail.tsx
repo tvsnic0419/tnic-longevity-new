@@ -388,7 +388,7 @@ export function LibraryModuleDetail({
               </GlassPanel>
               <GlassPanel depth="mid" className="glass-hover rounded-lg">
                 <Link
-                  href="/trust"
+                  href="/trust/methodology"
                   className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-foreground/90"
                 >
                   Evidence methodology

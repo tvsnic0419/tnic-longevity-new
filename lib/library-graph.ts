@@ -130,6 +130,24 @@ export function getCompoundSlugsForGuide(guideHref: string): string[] {
     .map(([slug]) => slug);
 }
 
+/**
+ * The compound deep-dives a guide covers, as ready-to-render links (name +
+ * evidence tier), strongest-evidence first. Derived from the same compound→guide
+ * map as everything else, so a guide's compound rail can neither drift from nor
+ * 404 against the library — replacing the fragile hand-authored compound links
+ * guide pages previously carried.
+ */
+export function getCompoundLinksForGuide(guideHref: string): CompoundLink[] {
+  const out: CompoundLink[] = [];
+  for (const slug of getCompoundSlugsForGuide(guideHref)) {
+    const mod = libraryModules.find((m) => m.category === 'compounds' && m.slug === slug);
+    if (mod) out.push({ slug: mod.slug, name: mod.title, evidence: mod.evidenceTier });
+  }
+  return out.sort(
+    (a, b) => a.evidence.localeCompare(b.evidence) || a.name.localeCompare(b.name),
+  );
+}
+
 export interface HallmarkLink {
   /** Resolves to the canonical hallmark page at /library/<slug>. */
   slug: string;
@@ -157,6 +175,30 @@ export function getHallmarksForGuide(guideHref: string): HallmarkLink[] {
     if (h) links.push({ slug: h.slug, title: h.title, number: h.number });
   }
   return links.sort((a, b) => a.number - b.number);
+}
+
+/**
+ * The inverse of `getHallmarksForGuide`: the supplement guides that address a
+ * given hallmark, because at least one compound they cover targets it. Closes
+ * the hallmark→guide loop — guides already point *up* to hallmarks, but until
+ * now hallmark pages had no rail *down* to the high-intent buyer guides. Derived
+ * from the same compound→hallmark map, so it can never drift from
+ * `getHallmarksForGuide`.
+ */
+export function getGuidesForHallmark(hallmarkId: string): GuideLink[] {
+  const out: GuideLink[] = [];
+  const seen = new Set<string>();
+  for (const href of getMappedGuideHrefs()) {
+    const covers = getCompoundSlugsForGuide(href).some((slug) => {
+      const mod = libraryModules.find((m) => m.category === 'compounds' && m.slug === slug);
+      return mod?.relatedHallmarkIds.includes(hallmarkId) ?? false;
+    });
+    if (!covers || seen.has(href)) continue;
+    seen.add(href);
+    const label = Object.values(compoundGuides).find((g) => g.href === href)?.label ?? href;
+    out.push({ href, label });
+  }
+  return out;
 }
 
 /**

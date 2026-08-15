@@ -270,6 +270,16 @@ export function getPathwaysForCompound(compoundSlug: string): Pathway[] {
   return pathways.filter((p) => p.compoundSlugs.includes(compoundSlug));
 }
 
+/**
+ * Pathways that act on a given hallmark (by hallmark id) — for hallmark pages.
+ * The "verb" layer between a hallmark and the compounds that move it, so a
+ * hallmark page links out to the mechanistic pathways instead of leaving that
+ * relationship to prose auto-links alone. Mirrors `getPathwaysForCompound`.
+ */
+export function getPathwaysForHallmark(hallmarkId: string): Pathway[] {
+  return pathways.filter((p) => p.hallmarkIds.includes(hallmarkId));
+}
+
 export const pathwayCategoryOrder: PathwayCategory[] = [
   'sirtuins',
   'sensing',

@@ -7,6 +7,8 @@ import { hallmarkLibrary } from './hallmarks-library';
 import {
   getCompoundsForHallmark,
   getGuideForCompound,
+  getGuidesForHallmark,
+  getHallmarksForGuide,
   getMappedGuideHrefs,
 } from './library-graph';
 
@@ -65,5 +67,36 @@ describe('library-graph: compound → guide', () => {
   it('returns a guide for a mapped compound and nothing for an unmapped one', () => {
     expect(getGuideForCompound('nmn')?.href).toBe('/nad-supplement-guide');
     expect(getGuideForCompound('grapeseed')).toBeUndefined();
+  });
+});
+
+describe('library-graph: hallmark → guides (inverse of guide → hallmarks)', () => {
+  const slugToId = new Map(hallmarkLibrary.map((h) => [h.slug, h.id]));
+
+  it('every guide returned for a hallmark resolves to a real app route', () => {
+    for (const h of hallmarkLibrary) {
+      for (const g of getGuidesForHallmark(h.id)) {
+        const dir = join(process.cwd(), 'app', g.href.replace(/^\//, ''));
+        expect(existsSync(join(dir, 'page.tsx'))).toBe(true);
+      }
+    }
+  });
+
+  it('round-trips with getHallmarksForGuide: a guide is returned for every hallmark it targets', () => {
+    for (const href of getMappedGuideHrefs()) {
+      for (const hl of getHallmarksForGuide(href)) {
+        const id = slugToId.get(hl.slug);
+        expect(id).toBeDefined();
+        const hrefs = getGuidesForHallmark(id!).map((g) => g.href);
+        expect(hrefs).toContain(href);
+      }
+    }
+  });
+
+  it('surfaces the NAD+ guide for a hallmark NMN targets', () => {
+    const nmn = libraryModules.find((m) => m.category === 'compounds' && m.slug === 'nmn');
+    expect(nmn).toBeDefined();
+    const targetHallmark = nmn!.relatedHallmarkIds[0];
+    expect(getGuidesForHallmark(targetHallmark).map((g) => g.href)).toContain('/nad-supplement-guide');
   });
 });
