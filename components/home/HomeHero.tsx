@@ -155,24 +155,20 @@ export function HomeHero() {
           </div>
         </div>
 
-        {/* Synergy network — a real interactive widget, not ambient
-            decoration (see HeroScene3D.tsx). Its own full-width band below
-            the headline/CTA + NICO card grid so its info panel and links
-            have room to breathe without crowding the NICO CTA, which stays
-            the hero's primary conversion path. Non-glass instrument-viewport
-            treatment: the hero already spends its glass budget on the stat
-            row above and the NICO card. */}
+        {/* Pathway Flow — a directed mechanism map (see HeroPathwayScene.tsx),
+            its own full-width band below the headline/CTA + NICO card grid.
+            The left→right flow suits a wide band, and the empty left third is
+            where the selection panel docks without occluding the diagram.
+            Non-glass instrument-viewport treatment: the hero already spends
+            its glass budget on the NICO card. */}
         <div className="mt-14 md:mt-20">
           <div className="mb-5 text-center lg:text-left">
-            <h3 className="text-lg font-bold text-white md:text-xl">Explore the synergy network</h3>
+            <h3 className="text-lg font-bold text-white md:text-xl">Follow the pathway</h3>
             <p className="mt-1 text-sm text-white/80">
-              Click a compound to see what it pairs with — and why.
+              See how a compound flows through a mechanism to a hallmark of aging.
             </p>
           </div>
-          {/* Wide and tall: the network centers itself, which leaves the left
-              third genuinely empty — exactly where the selection panel docks,
-              so the panel never occludes the graph it's describing. */}
-          <div className="h-[440px] overflow-hidden rounded-3xl border border-white/10 bg-white/[0.02] md:h-[540px]">
+          <div className="h-[460px] overflow-hidden rounded-3xl border border-white/10 bg-white/[0.02] md:h-[560px]">
             <HeroSceneMount />
           </div>
         </div>
