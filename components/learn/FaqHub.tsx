@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ArrowRight, BookOpen, HelpCircle } from 'lucide-react';
 import { consumerFAQ } from '@/lib/data';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { getHubContext } from '@/lib/hub-context';
 
 const faqCategories = [
@@ -26,15 +27,29 @@ export function FaqHub() {
       : consumerFAQ.filter((f) => f.category === faqFilter);
 
   return (
-    <div className="container-page pt-10 md:pt-12 lg:pt-14 pb-16 md:pb-20 lg:pb-24">
-      <PageHeader
-        icon={HelpCircle}
-        eyebrow="Learn"
-        title="Frequently Asked Questions"
-        description={`${consumerFAQ.length} expert answers about TNiC protocols, compound and peptide science, safety, evidence tiers, data privacy, and how we differ from supplement stores.`}
-        context={getHubContext('faq')}
-        contextVariant="compact"
+    <>
+      <CinematicHubHero
+        hue="cyan"
+        kicker="Learn · FAQ"
+        title={<>Straight answers, <em>no spin</em>.</>}
+        lead="Expert answers on protocols, compound and peptide science, safety, evidence tiers, data privacy, and how we differ from a supplement store."
+        stats={[
+          { value: String(consumerFAQ.length), label: 'Expert answers' },
+          { value: 'A–C', label: 'Evidence tiers' },
+          { value: String(faqCategories.length - 1), label: 'Topics' },
+        ]}
+        primary={{ href: '/library', label: 'Explore the library' }}
+        secondary={{ href: '/nico', label: 'Find your stack' }}
       />
+      <div className="container-page pt-10 md:pt-12 lg:pt-14 pb-16 md:pb-20 lg:pb-24">
+        <PageHeader
+          icon={HelpCircle}
+          eyebrow="Learn"
+          title="Frequently Asked Questions"
+          description={`${consumerFAQ.length} expert answers about TNiC protocols, compound and peptide science, safety, evidence tiers, data privacy, and how we differ from supplement stores.`}
+          context={getHubContext('faq')}
+          contextVariant="compact"
+        />
 
       <div className="flex flex-wrap gap-2 mb-8">
         {faqCategories.map((cat) => (
@@ -108,6 +123,7 @@ export function FaqHub() {
           <ArrowRight className="w-4 h-4" aria-hidden="true" />
         </Link>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
