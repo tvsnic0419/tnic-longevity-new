@@ -34,7 +34,7 @@ export default function PeptidesHubPage() {
         stats={[
           { value: String(peptideLibrary.length), label: 'Peptides covered' },
           { value: String(categoryOrder.length), label: 'Mechanistic classes' },
-          { value: 'A–C', label: 'Evidence tiers' },
+          { value: 'A–C', label: 'Evidence tiers', href: '/trust/methodology' },
         ]}
         primary={{ href: '/nico', label: 'Find your personalized stack' }}
         secondary={{ href: '/library', label: 'Browse the library' }}
