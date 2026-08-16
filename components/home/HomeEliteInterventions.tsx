@@ -73,7 +73,7 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
         <span className="absolute left-3 top-3 z-10">
           <EvidenceTag tier={evidence} size="sm" />
         </span>
-        <span className="absolute right-4 top-2 z-10 font-display text-3xl leading-none text-foreground/20 tabular-nums">
+        <span className="absolute right-4 top-2 z-10 font-display text-3xl leading-none text-[var(--color-text-faint)] tabular-nums">
           {String(intervention.rank).padStart(2, '0')}
         </span>
       </div>
@@ -82,7 +82,7 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
       <div className="flex flex-1 flex-col p-5">
         <p className="text-label mb-1 text-accent-cyan">{pathway}</p>
         <h3 className="font-display mb-1.5 text-2xl font-medium tracking-tight text-foreground">{compoundName}</h3>
-        <p className="mb-4 text-[0.9375rem] leading-relaxed text-foreground/85 antialiased">{mechanismLine}</p>
+        <p className="mb-4 text-[0.9375rem] leading-relaxed text-[var(--color-text-secondary)] antialiased">{mechanismLine}</p>
 
         {hallmarks.length > 0 && (
           <div className="mb-4 flex flex-wrap gap-1">
@@ -114,7 +114,7 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
         <div className="mt-auto">
           <p className="text-label mb-1 text-accent-emerald">Verified pick</p>
           <p className="mb-3 text-sm font-medium text-foreground">
-            {pick.brand} — <span className="text-foreground/90">{pick.productName}</span>
+            {pick.brand} — <span className="text-[var(--color-text-secondary)]">{pick.productName}</span>
           </p>
           <div className="flex flex-col gap-2">
             <a
@@ -129,7 +129,7 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
             </a>
             <Link
               href={intervention.libraryHref}
-              className="focus-ring inline-flex items-center justify-center gap-1.5 rounded-xl border border-border/70 px-4 py-2.5 text-sm font-semibold text-foreground/90 transition-colors hover:border-accent-cyan/40 hover:text-accent-cyan"
+              className="focus-ring inline-flex items-center justify-center gap-1.5 rounded-xl border border-border/70 px-4 py-2.5 text-sm font-semibold text-[var(--color-text-secondary)] transition-colors hover:border-accent-cyan/40 hover:text-accent-cyan"
             >
               <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
               Read the evidence
@@ -157,6 +157,7 @@ export function HomeEliteInterventions() {
           <h2 id="home-elite-heading" className="heading-section mb-3">
             The compounds with the strongest human evidence — and where to buy them well.
           </h2>
+          <div className="heading-accent-rule mb-4" aria-hidden="true" />
           <p className="text-body">
             {eliteInterventions.length} nutrients that act on the hallmarks of aging, each graded by
             the strength of human trials ({tierA} at Tier A), paired with one verified product that
@@ -197,7 +198,7 @@ export function HomeEliteInterventions() {
           </Link>
           <Link
             href="/shop"
-            className="focus-ring inline-flex items-center justify-center gap-2 rounded-xl border border-border/70 px-5 py-3 text-sm font-semibold text-foreground/90 transition-colors hover:border-accent-amber/40 hover:text-accent-amber"
+            className="focus-ring inline-flex items-center justify-center gap-2 rounded-xl border border-border/70 px-5 py-3 text-sm font-semibold text-[var(--color-text-secondary)] transition-colors hover:border-accent-amber/40 hover:text-accent-amber"
           >
             Verify a product before you buy
           </Link>

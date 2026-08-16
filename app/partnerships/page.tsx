@@ -102,7 +102,7 @@ export default function PartnershipsPage() {
             {fit.map((item) => (
               <div key={item} className="glass rounded-xl p-4">
                 <CheckCircle2 className="w-4 h-4 text-accent-emerald mb-2" aria-hidden="true" />
-                <p className="text-sm text-foreground/85 leading-relaxed">{item}</p>
+                <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">{item}</p>
               </div>
             ))}
           </div>

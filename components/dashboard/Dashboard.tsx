@@ -101,7 +101,7 @@ export function Dashboard() {
           <div className="inline-flex items-center gap-2 card-ultra rounded-full px-4 py-2.5 mb-4 text-body-sm">
             <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent-emerald animate-pulse-glow" aria-hidden="true" />
             <LayoutDashboard className="w-4 h-4 text-accent-emerald" aria-hidden="true" />
-            <span className="font-mono text-xs tracking-wide text-foreground/90 uppercase">Personal command center</span>
+            <span className="font-mono text-xs tracking-wide text-[var(--color-text-secondary)] uppercase">Personal command center</span>
           </div>
           <h1 className="heading-page">My Longevity OS</h1>
           <p className="text-body text-muted-foreground mt-3 max-w-2xl">

@@ -86,7 +86,7 @@ export function AboutSection() {
           </div>
           <div className="flex-1 space-y-3">
             {founder.bio.map((para, i) => (
-              <p key={i} className="text-sm text-foreground/90 leading-relaxed">{para}</p>
+              <p key={i} className="text-sm text-[var(--color-text-secondary)] leading-relaxed">{para}</p>
             ))}
             <div className="flex items-start gap-3 pt-3 border-t border-border mt-4">
               <Quote className="w-4 h-4 text-accent-cyan shrink-0 mt-0.5" />
@@ -118,7 +118,7 @@ export function AboutSection() {
           <p className="text-micro font-mono text-accent-emerald uppercase tracking-wider mb-3">Currently Covered</p>
           <ul className="space-y-2">
             {scopeNote.covered.map((item) => (
-              <li key={item} className="text-sm text-foreground/90 flex items-start gap-2">
+              <li key={item} className="text-sm text-[var(--color-text-secondary)] flex items-start gap-2">
                 <Check className="h-4 w-4 mt-0.5 shrink-0 text-accent-emerald" aria-hidden="true" /> {item}
               </li>
             ))}

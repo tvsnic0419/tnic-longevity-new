@@ -43,7 +43,7 @@ export default function ClubPage() {
                 <span className="w-8 h-8 rounded-xl bg-accent-emerald/10 text-accent-emerald flex items-center justify-center shrink-0">
                   <Check className="w-4 h-4" aria-hidden="true" />
                 </span>
-                <p className="text-body-sm text-foreground/90 self-center">{line}</p>
+                <p className="text-body-sm text-[var(--color-text-secondary)] self-center">{line}</p>
               </li>
             ))}
           </ul>

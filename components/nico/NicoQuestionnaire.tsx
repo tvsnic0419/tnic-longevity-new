@@ -138,7 +138,7 @@ function QuestionHeading({
       <h2 id={id} tabIndex={-1} className="text-lg font-bold text-foreground mb-1 outline-none">
         {question}
       </h2>
-      {helper && <p className="text-sm text-foreground/75">{helper}</p>}
+      {helper && <p className="text-sm text-muted-foreground">{helper}</p>}
     </div>
   );
 }
@@ -355,7 +355,7 @@ export function NicoQuestionnaire() {
                   Any of these apply to you?
                 </h2>
               </div>
-              <p className="text-sm text-foreground/75 mb-5">
+              <p className="text-sm text-muted-foreground mb-5">
                 Select anything that applies so the stack can hold back compounds with a known interaction. Leave
                 blank if none apply. This is educational, not a substitute for your prescriber.
               </p>
@@ -384,7 +384,7 @@ export function NicoQuestionnaire() {
               <h2 id="nico-result" tabIndex={-1} className="text-2xl font-black text-foreground mb-2 outline-none">
                 {result.protocolName}
               </h2>
-              <p className="text-sm text-foreground/80 mb-5">{result.summary}</p>
+              <p className="text-sm text-[var(--color-text-secondary)] mb-5">{result.summary}</p>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
                 <StatTile value={`${result.synergy}`} label="Synergy /100" />
@@ -401,10 +401,10 @@ export function NicoQuestionnaire() {
                         <span className="text-sm font-bold text-foreground">{c.name}</span>
                         <EvidenceTag tier={c.evidence} size="sm" />
                       </div>
-                      <p className="text-micro font-mono text-foreground/70 mt-0.5">
+                      <p className="text-micro font-mono text-muted-foreground mt-0.5">
                         {c.dose} · {c.timing}
                       </p>
-                      <p className="text-xs text-foreground/70 mt-1">{c.rationale}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{c.rationale}</p>
                     </div>
                   </li>
                 ))}
@@ -417,7 +417,7 @@ export function NicoQuestionnaire() {
                   </p>
                   <ul className="space-y-1">
                     {result.drivers.map((d) => (
-                      <li key={d} className="text-xs text-foreground/75">
+                      <li key={d} className="text-xs text-muted-foreground">
                         {d}
                       </li>
                     ))}
@@ -432,7 +432,7 @@ export function NicoQuestionnaire() {
                   </p>
                   <ul className="space-y-1.5">
                     {result.safetyNotes.map((n) => (
-                      <li key={n} className="text-xs text-foreground/85">
+                      <li key={n} className="text-xs text-[var(--color-text-secondary)]">
                         {n}
                       </li>
                     ))}
@@ -449,14 +449,14 @@ export function NicoQuestionnaire() {
                 </Link>
                 <Link
                   href="/dashboard"
-                  className="focus-ring inline-flex items-center gap-2 border border-border px-5 py-3 rounded-xl text-sm font-medium text-foreground/80 hover:text-foreground hover:border-foreground/40 transition-colors"
+                  className="focus-ring inline-flex items-center gap-2 border border-border px-5 py-3 rounded-xl text-sm font-medium text-[var(--color-text-secondary)] hover:text-foreground hover:border-foreground/40 transition-colors"
                 >
                   <LayoutDashboard className="w-4 h-4" /> Track in OS dashboard
                 </Link>
                 <button
                   type="button"
                   onClick={restart}
-                  className="focus-ring inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
+                  className="focus-ring inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium text-[var(--color-text-secondary)] hover:text-foreground transition-colors"
                 >
                   <RotateCcw className="w-4 h-4" /> Retake
                 </button>
@@ -472,7 +472,7 @@ export function NicoQuestionnaire() {
               type="button"
               onClick={goBack}
               disabled={step === 0}
-              className="focus-ring interactive inline-flex items-center gap-2 text-sm text-foreground/80 hover:text-foreground disabled:opacity-40 disabled:pointer-events-none rounded-md px-2 py-1"
+              className="focus-ring interactive inline-flex items-center gap-2 text-sm text-[var(--color-text-secondary)] hover:text-foreground disabled:opacity-40 disabled:pointer-events-none rounded-md px-2 py-1"
             >
               <ArrowLeft className="w-4 h-4" /> Back
             </button>

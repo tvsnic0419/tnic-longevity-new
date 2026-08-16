@@ -108,7 +108,7 @@ function PathwayCard({ group, highlight }: { group: PathwayGroup; highlight?: bo
               {/* Synergy insight */}
               <div className={cn('rounded-lg p-3', ac.bg)}>
                 <p className={cn('text-micro font-mono uppercase mb-1.5', ac.text)}>Synergy Mechanism</p>
-                <p className="text-xs text-foreground/90 leading-relaxed">{group.synergy}</p>
+                <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">{group.synergy}</p>
               </div>
 
               {/* Compounds */}

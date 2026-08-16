@@ -86,7 +86,7 @@
 | `PageHeader` | Eyebrow + title + description + meta |
 | `TabBar` | Accessible tablist with scroll on mobile |
 | `StatStrip` | 2-col mobile → auto-fit desktop summary |
-| `Button` | primary / secondary / ghost / danger |
+| `Button` | primary / secondary / ghost / danger / outline (the canonical CTA primitive) |
 | `Accordion` | Expandable detail without page jump |
 | `DataTable` | Scrollable table + `sr-only` caption |
 | Card surfaces | `.premium-card` (canonical), `GlassPanel` / `.glass-deep`, `.card-elevated`, `.glass` |
@@ -94,6 +94,19 @@
 Import theme maps from `lib/design-system.ts`. **Card surfaces:** default to
 `.premium-card` (accent-aware via `--card-accent`) for content cards and
 `GlassPanel` for layered glass moments; the legacy `.card-base` was retired.
+Every card class draws its elevation from the shared `--glass-shadow-*` tokens
+(one shadow recipe), so surfaces read at the same depth in both themes.
+
+**Buttons — one system.** Reach for the `<Button>` primitive
+(`components/ui/Button.tsx`) in new code; `variant="primary"` is the signature
+cyan→emerald gradient. That gradient — its fill, shadow, and hover — is defined
+**once** in `globals.css` on a shared `.btn-gradient, .tnic-button-primary` rule
+(the "Signature primary CTA" block), so the React path and the CSS skins can
+never drift. The `.tnic-button-*` classes are **skins for link-shaped CTAs**
+(`<Link>`/`<a>`) that must control their own padding/radius: `-primary`
+(gradient), `-accent` (solid, tinted via `--btn-accent`), `-tonal` (translucent
+accent), `-outline` (theme-neutral). Don't hand-roll a button — use the
+primitive or one of these skins.
 
 ---
 

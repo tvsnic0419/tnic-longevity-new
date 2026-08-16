@@ -11,6 +11,7 @@ import { MoleculeStage } from "@/components/viz/MoleculeStage";
 import { NetworkStage, type NetworkNode, type NetworkEdge } from "@/components/viz/NetworkStage";
 import { HUES } from "@/components/viz/tokens";
 import { runWhenVisible, cappedDpr } from "@/lib/raf-visibility";
+import { createGlowCache, blitGlow } from "@/lib/canvas-glow";
 
 // Canvas draw colors are plain rgba literals (not CSS custom properties), so
 // they can't pick up the `.tnic-descent` light-theme override in the CSS
@@ -183,6 +184,8 @@ const CSS = `
 }
 .tnic-hero-badges .pill b { color: var(--cyan); font-weight: 500; }
 .tnic-hero-badges .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+.tnic-hero-badges a.pill { text-decoration: none; transition: border-color .2s ease, color .2s ease, background .2s ease; }
+.tnic-hero-badges a.pill:hover { border-color: color-mix(in srgb, var(--cyan) 55%, transparent); color: var(--ink); background: rgba(14,20,38,0.8); }
 
 /* Primary action on the very first screen (Act 0) — a new visitor gets a clear
    CTA above the fold instead of having to scroll the whole descent to act. */
@@ -640,6 +643,11 @@ export function HomeDescent() {
       [95,227,224], [95,227,224], [140,140,245], [240,196,106], [95,227,224],
     ];
     let cur: [number, number, number] = [95,227,224];
+    // Cached glow sprites keyed by the (slowly cross-fading) rounded palette
+    // color — a fresh sprite is baked only when the rounded color changes, so
+    // the 200+ particles/frame blit a bitmap instead of each allocating and
+    // rasterizing its own radial gradient.
+    const glow = createGlowCache();
     const light = isLightTheme();
     // Same hues, dialed back on light: the dark-theme alpha values (0.55–0.85)
     // were calibrated as a glow against near-black — at full strength on a
@@ -682,11 +690,7 @@ export function HomeDescent() {
           const tw = 0.55 + Math.sin(p.ph) * 0.45;
           const px = p.x * w, py = p.y * h;
           const rad = p.r * (li === 2 ? 8 : li === 1 ? 5 : 3);
-          const g = ctx.createRadialGradient(px, py, 0, px, py, rad);
-          g.addColorStop(0, `rgba(${cr},${cg},${cb},${l.alpha * tw * alphaMul})`);
-          g.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
-          ctx.fillStyle = g;
-          ctx.beginPath(); ctx.arc(px, py, rad, 0, Math.PI * 2); ctx.fill();
+          blitGlow(ctx, glow([cr, cg, cb]), px, py, rad, l.alpha * tw * alphaMul);
           if (li < 2) {
             // Sparkle core: near-white reads as a bright twinkle against the
             // dark backdrop but is nearly invisible white-on-white in light
@@ -845,10 +849,10 @@ export function HomeDescent() {
           continuous descent, from a molecule to the life it defends.
         </p>
         <div className="tnic-hero-badges">
-          <span className="pill"><span className="dot" /><b>{eliteInterventions.length}</b>&nbsp;elite interventions</span>
-          <span className="pill"><span className="dot" /><b>{COMPOUND_COUNT}</b>&nbsp;graded compounds</span>
-          <span className="pill"><span className="dot" /><b>12</b>&nbsp;hallmarks of aging</span>
-          <span className="pill"><span className="dot" /><b>A–C</b>&nbsp;evidence tiers</span>
+          <Link href="/elite-8" className="pill"><span className="dot" /><b>{eliteInterventions.length}</b>&nbsp;elite interventions</Link>
+          <Link href="/library/compounds" className="pill"><span className="dot" /><b>{COMPOUND_COUNT}</b>&nbsp;graded compounds</Link>
+          <Link href="/hallmarks" className="pill"><span className="dot" /><b>12</b>&nbsp;hallmarks of aging</Link>
+          <Link href="/trust/methodology" className="pill"><span className="dot" /><b>A–C</b>&nbsp;evidence tiers</Link>
         </div>
         <div className="tnic-hero-cta">
           <Link href="/nico" className="tnic-cta">

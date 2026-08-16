@@ -282,7 +282,7 @@ export function LearnCenter({ defaultTab }: { defaultTab?: TabId }) {
                   </div>
                   {openTerm === g.term && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-3">
-                      <p className="text-sm text-foreground/90 mb-2">{g.simple}</p>
+                      <p className="text-sm text-[var(--color-text-secondary)] mb-2">{g.simple}</p>
                       <p className="text-xs text-muted-foreground border-t border-border pt-2">
                         <span className="text-accent-cyan font-mono">Why it matters: </span>{g.why}
                       </p>

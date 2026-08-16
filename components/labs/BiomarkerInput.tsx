@@ -245,7 +245,7 @@ export function BiomarkerInput() {
           <div className="grid sm:grid-cols-2 gap-3 max-h-[320px] overflow-y-auto pr-1">
             {biomarkers.map((b) => (
               <div key={b.id} className="glass-deep glass-plane-mid rounded-xl p-3">
-                <label htmlFor={`panel-marker-${b.id}`} className="text-xs font-semibold text-foreground/90 block mb-1">{b.name}</label>
+                <label htmlFor={`panel-marker-${b.id}`} className="text-xs font-semibold text-[var(--color-text-secondary)] block mb-1">{b.name}</label>
                 <div className="flex items-center gap-2">
                   <input
                     id={`panel-marker-${b.id}`}

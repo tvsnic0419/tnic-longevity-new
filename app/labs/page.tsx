@@ -48,9 +48,9 @@ export default function LabsPage() {
         lead="A local-first biomarker tracker with longevity-optimized reference ranges — log your labs, watch the trends, and map each marker to the interventions that move it. Your data never leaves your device."
         stats={[
           { value: String(biomarkers.length), label: 'Tracked biomarkers' },
-          { value: String(COMPOUND_COUNT), label: 'Graded compounds' },
-          { value: '12', label: 'Hallmarks of aging' },
-          { value: 'A–C', label: 'Evidence tiers' },
+          { value: String(COMPOUND_COUNT), label: 'Graded compounds', href: '/library/compounds' },
+          { value: '12', label: 'Hallmarks of aging', href: '/hallmarks' },
+          { value: 'A–C', label: 'Evidence tiers', href: '/trust/methodology' },
         ]}
         primary={{ href: '/nico', label: 'Find your personalized stack' }}
         secondary={{ href: '/library', label: 'Browse the library' }}

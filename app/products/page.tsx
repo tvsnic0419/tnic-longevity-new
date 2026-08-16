@@ -50,7 +50,7 @@ export default function ProductsPage() {
         stats={[
           { value: String(picks.length), label: 'Verified picks' },
           { value: String(brands), label: 'Independent brands' },
-          { value: String(hallmarksAddressed), label: 'Hallmarks addressed' },
+          { value: String(hallmarksAddressed), label: 'Hallmarks addressed', href: '/hallmarks' },
         ]}
         primary={{ href: '/shop', label: 'Open the Protocol Shop' }}
         secondary={{ href: '/library', label: 'Browse the library' }}

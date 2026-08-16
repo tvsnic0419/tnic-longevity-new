@@ -60,7 +60,7 @@ export function HeroInfoPanel({ selectedId, onSelectPartner, onClose }: HeroInfo
         <button
           type="button"
           onClick={onClose}
-          className="focus-ring absolute -right-1 -top-1 rounded-full p-1.5 text-white/60 hover:text-white"
+          className="focus-ring absolute -right-1 -top-1 rounded-full p-1.5 text-white/80 hover:text-white"
           aria-label="Close compound details"
         >
           <X className="h-4 w-4" aria-hidden="true" />
@@ -87,11 +87,11 @@ export function HeroInfoPanel({ selectedId, onSelectPartner, onClose }: HeroInfo
         {/* Clamped: mechanism prose runs long for some compounds, and the
             partner list below is the educational payload this panel exists
             for — the full text lives on the compound page linked at the end. */}
-        <p className="mb-4 line-clamp-3 text-sm leading-relaxed text-white/70">{compound.mechanism}</p>
+        <p className="mb-4 line-clamp-3 text-sm leading-relaxed text-white/90">{compound.mechanism}</p>
 
         {partnerIds.length > 0 && (
           <div className="mb-4">
-            <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-white/50">
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-white/70">
               Synergizes with
             </p>
             <ul className="space-y-2">
@@ -109,11 +109,11 @@ export function HeroInfoPanel({ selectedId, onSelectPartner, onClose }: HeroInfo
                       <span className="mb-0.5 flex items-center gap-1.5 text-sm font-semibold text-white">
                         {partner.name}
                         <ArrowRight
-                          className="h-3 w-3 text-white/40 transition-transform group-hover:translate-x-0.5"
+                          className="h-3 w-3 text-white/60 transition-transform group-hover:translate-x-0.5"
                           aria-hidden="true"
                         />
                       </span>
-                      <span className="block text-xs leading-snug text-white/60">
+                      <span className="block text-xs leading-snug text-white/80">
                         {explanation.text}
                       </span>
                     </button>

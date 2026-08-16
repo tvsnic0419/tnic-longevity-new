@@ -8,6 +8,7 @@ import { getGeometry, type Geometry } from "./molecule";
 import type { RGB } from "./tokens";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { runWhenVisible, cappedDpr } from "@/lib/raf-visibility";
+import { makeGlowSprite, blitGlow, createGlowCache } from "@/lib/canvas-glow";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // MoleculeStage — the shared cinematic renderer for the viz family.
@@ -19,13 +20,44 @@ import { runWhenVisible, cappedDpr } from "@/lib/raf-visibility";
 // Both honor prefers-reduced-motion.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const ELEMENT_COLOR: Record<string, { core: RGB; hi: RGB; glow: string }> = {
-  C: { core: [216, 234, 255], hi: [255, 255, 255], glow: "rgba(95,227,224," },
-  O: { core: [244, 142, 126], hi: [255, 220, 210], glow: "rgba(240,138,122," },
-  N: { core: [140, 160, 245], hi: [220, 228, 255], glow: "rgba(140,140,245," },
-  S: { core: [240, 210, 120], hi: [255, 244, 210], glow: "rgba(240,196,106," },
-  P: { core: [248, 170, 96], hi: [255, 226, 190], glow: "rgba(245,165,90," },
+const ELEMENT_COLOR: Record<string, { core: RGB; hi: RGB; glow: string; glowRgb: RGB }> = {
+  C: { core: [216, 234, 255], hi: [255, 255, 255], glow: "rgba(95,227,224,", glowRgb: [95, 227, 224] },
+  O: { core: [244, 142, 126], hi: [255, 220, 210], glow: "rgba(240,138,122,", glowRgb: [240, 138, 122] },
+  N: { core: [140, 160, 245], hi: [220, 228, 255], glow: "rgba(140,140,245,", glowRgb: [140, 140, 245] },
+  S: { core: [240, 210, 120], hi: [255, 244, 210], glow: "rgba(240,196,106,", glowRgb: [240, 196, 106] },
+  P: { core: [248, 170, 96], hi: [255, 226, 190], glow: "rgba(245,165,90,", glowRgb: [245, 165, 90] },
 };
+
+/**
+ * Bake a lit-sphere sprite for one element once, reproducing the exact
+ * highlight-offset radial gradient the per-atom draw used to allocate every
+ * frame (hi → core → shaded rim, light from upper-left). Blitted scaled to each
+ * atom's projected radius and modulated with `globalAlpha` for depth, so the
+ * whole molecule costs five baked bitmaps instead of two live gradients per
+ * atom per frame.
+ */
+function makeSphereSprite(pal: { core: RGB; hi: RGB }): HTMLCanvasElement {
+  const s = 96;
+  const half = s / 2;
+  const cv = document.createElement("canvas");
+  cv.width = s;
+  cv.height = s;
+  const c = cv.getContext("2d")!;
+  const dark: RGB = [
+    Math.round(pal.core[0] * 0.35),
+    Math.round(pal.core[1] * 0.4),
+    Math.round(pal.core[2] * 0.5),
+  ];
+  const g = c.createRadialGradient(half - half * 0.4, half - half * 0.45, half * 0.05, half, half, half);
+  g.addColorStop(0, `rgba(${pal.hi[0]},${pal.hi[1]},${pal.hi[2]},1)`);
+  g.addColorStop(0.35, `rgba(${pal.core[0]},${pal.core[1]},${pal.core[2]},1)`);
+  g.addColorStop(1, `rgba(${dark[0]},${dark[1]},${dark[2]},1)`);
+  c.fillStyle = g;
+  c.beginPath();
+  c.arc(half, half, half, 0, Math.PI * 2);
+  c.fill();
+  return cv;
+}
 
 export function MoleculeStage({
   geometryId,
@@ -60,6 +92,18 @@ export function MoleculeStage({
     const ctx = cv.getContext("2d"); if (!ctx) return;
     let w = 0, h = 0;
     const dpr = cappedDpr();
+
+    // Pre-baked glow + sphere sprites, built once per mount. The molecule's
+    // element palette is fixed, so its atom bloom + sphere become five cached
+    // bitmaps each; the field's tint animates, so its glow is cached lazily by
+    // rounded hue. See lib/canvas-glow for why this beats per-frame gradients.
+    const bloomSprites = new Map<string, HTMLCanvasElement>();
+    const sphereSprites = new Map<string, HTMLCanvasElement>();
+    for (const [el, pal] of Object.entries(ELEMENT_COLOR)) {
+      bloomSprites.set(el, makeGlowSprite(pal.glowRgb, 0.55));
+      sphereSprites.set(el, makeSphereSprite(pal));
+    }
+    const fieldGlow = createGlowCache();
 
     // field-mode particles (only used when there is no geometry)
     const N = 64;
@@ -138,19 +182,13 @@ export function MoleculeStage({
         const depth = (p.z + 3) / 6;
         const isHetero = p.el !== "C";
         const rad = (isHetero ? 11 : 9) * p.persp * (1.2 - depth * 0.3);
-        const pal = ELEMENT_COLOR[p.el] ?? ELEMENT_COLOR.C;
+        const el = ELEMENT_COLOR[p.el] ? p.el : "C";
         const a = 0.94 - depth * 0.35;
-        const bloom = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, rad * 3);
-        bloom.addColorStop(0, `${pal.glow}${0.55 * a})`);
-        bloom.addColorStop(1, `${pal.glow}0)`);
-        ctx.fillStyle = bloom;
-        ctx.beginPath(); ctx.arc(p.sx, p.sy, rad * 3, 0, Math.PI * 2); ctx.fill();
-        const sphere = ctx.createRadialGradient(p.sx - rad * 0.4, p.sy - rad * 0.45, rad * 0.05, p.sx, p.sy, rad);
-        sphere.addColorStop(0, `rgba(${pal.hi[0]},${pal.hi[1]},${pal.hi[2]},${a})`);
-        sphere.addColorStop(0.35, `rgba(${pal.core[0]},${pal.core[1]},${pal.core[2]},${a})`);
-        sphere.addColorStop(1, `rgba(${Math.round(pal.core[0] * 0.35)},${Math.round(pal.core[1] * 0.4)},${Math.round(pal.core[2] * 0.5)},${a})`);
-        ctx.fillStyle = sphere;
-        ctx.beginPath(); ctx.arc(p.sx, p.sy, rad, 0, Math.PI * 2); ctx.fill();
+        // Bloom halo, then the lit sphere — both cached bitmaps blitted at this
+        // atom's radius and dimmed by depth via globalAlpha (was two live
+        // radial gradients allocated per atom, per frame).
+        blitGlow(ctx, bloomSprites.get(el)!, p.sx, p.sy, rad * 3, 0.55 * a);
+        blitGlow(ctx, sphereSprites.get(el)!, p.sx, p.sy, rad, a);
         ctx.strokeStyle = `rgba(180,220,255,${0.4 * a})`; ctx.lineWidth = 0.9;
         ctx.beginPath(); ctx.arc(p.sx, p.sy, rad, Math.PI * 0.15, Math.PI * 0.85); ctx.stroke();
         if (p.el === "O") {
@@ -203,11 +241,7 @@ export function MoleculeStage({
       for (const p of proj) {
         const tw = 0.55 + Math.sin(t * 2 + p.ph) * 0.45;
         const rad = p.rad * 3 * p.persp;
-        const g = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, rad);
-        g.addColorStop(0, `rgba(${cr},${cg},${cb},${0.85 * tw})`);
-        g.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
-        ctx.fillStyle = g;
-        ctx.beginPath(); ctx.arc(p.sx, p.sy, rad, 0, Math.PI * 2); ctx.fill();
+        blitGlow(ctx, fieldGlow([cr, cg, cb]), p.sx, p.sy, rad, 0.85 * tw);
         ctx.fillStyle = `rgba(240,248,255,${0.7 * tw})`;
         ctx.beginPath(); ctx.arc(p.sx, p.sy, p.rad * 0.7 * p.persp, 0, Math.PI * 2); ctx.fill();
       }

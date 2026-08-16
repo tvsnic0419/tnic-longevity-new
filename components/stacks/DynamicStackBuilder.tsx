@@ -51,7 +51,7 @@ export function DynamicStackBuilder() {
                           key={c.id}
                           className="flex justify-between text-sm py-1 border-b border-border last:border-0"
                         >
-                          <span className="text-foreground/90">{c.name}</span>
+                          <span className="text-[var(--color-text-secondary)]">{c.name}</span>
                           <span className="font-mono text-micro text-muted-foreground">{c.dose}</span>
                         </div>
                       ))}
@@ -67,7 +67,7 @@ export function DynamicStackBuilder() {
                           key={c.id}
                           className="flex justify-between text-sm py-1 border-b border-border last:border-0"
                         >
-                          <span className="text-foreground/90">{c.name}</span>
+                          <span className="text-[var(--color-text-secondary)]">{c.name}</span>
                           <span className="font-mono text-micro text-muted-foreground">{c.dose}</span>
                         </div>
                       ))}

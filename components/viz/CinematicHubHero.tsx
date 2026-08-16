@@ -12,7 +12,12 @@ import { VIZ, FONT, HUES, type RGB } from "./tokens";
 // Content is real: callers pass stats joined from lib data, never invented.
 // ─────────────────────────────────────────────────────────────────────────────
 
-export type HubStat = { value: string; label: string };
+export type HubStat = {
+  value: string;
+  label: string;
+  /** When set, the stat becomes a deep-link to the exact set it counts. */
+  href?: string;
+};
 
 export function CinematicHubHero({
   hue = "violet",
@@ -27,7 +32,8 @@ export function CinematicHubHero({
   kicker: string;
   /** Headline; wrap the accent fragment in <em> for the hue-colored italic. */
   title: React.ReactNode;
-  lead: string;
+  /** Supporting line; a string, or rich content with inline CountLinks. */
+  lead: React.ReactNode;
   stats: HubStat[];
   primary?: { href: string; label: string };
   secondary?: { href: string; label: string };
@@ -55,12 +61,27 @@ export function CinematicHubHero({
 
         {stats.length > 0 && (
           <div className="hh-stats">
-            {stats.map((s) => (
-              <div className="hh-stat" key={s.label}>
-                <span className="v">{s.value}</span>
-                <span className="k">{s.label}</span>
-              </div>
-            ))}
+            {stats.map((s) =>
+              s.href ? (
+                <Link
+                  href={s.href}
+                  key={s.label}
+                  className="hh-stat hh-stat-link focus-ring"
+                  aria-label={`${s.value} ${s.label} — view all`}
+                >
+                  <span className="v">
+                    {s.value}
+                    <span className="hh-stat-arr" aria-hidden="true">→</span>
+                  </span>
+                  <span className="k">{s.label}</span>
+                </Link>
+              ) : (
+                <div className="hh-stat" key={s.label}>
+                  <span className="v">{s.value}</span>
+                  <span className="k">{s.label}</span>
+                </div>
+              ),
+            )}
           </div>
         )}
 
@@ -136,6 +157,23 @@ const HUBHERO_CSS = `
 .hh-stat .k {
   font-family: ${FONT.mono}; font-size: 10.5px; letter-spacing: 0.16em;
   text-transform: uppercase; color: ${VIZ.faint};
+}
+/* Linkable stat — a deep-link to the exact set it counts. */
+a.hh-stat-link {
+  text-decoration: none; border-radius: 12px; margin: -6px -10px; padding: 6px 10px;
+  transition: background .2s ease, transform .2s ease;
+}
+a.hh-stat-link .v { display: inline-flex; align-items: baseline; gap: 8px; }
+.hh-stat-arr {
+  font-size: 0.5em; color: ${VIZ.faint}; transform: translateX(-4px);
+  opacity: 0; transition: opacity .2s ease, transform .2s ease, color .2s ease;
+}
+a.hh-stat-link:hover { background: color-mix(in srgb, var(--hue) 8%, transparent); }
+a.hh-stat-link:hover .hh-stat-arr { opacity: 1; transform: translateX(0); color: var(--hue); }
+a.hh-stat-link:hover .k { color: ${VIZ.muted}; }
+@media (prefers-reduced-motion: reduce) {
+  a.hh-stat-link, .hh-stat-arr { transition: none; }
+  a.hh-stat-link:hover .hh-stat-arr { transform: none; }
 }
 .hh-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
 .hh-cta {
