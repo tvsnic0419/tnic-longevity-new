@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowLeft, BookOpen, FlaskConical, Syringe, Scale } from 'lucide-react';
 import type { Peptide } from '@/lib/types';
+import type { CompoundLink } from '@/lib/library-graph';
 import { peptideCategoryMeta, peptideLibrary } from '@/lib/peptides-library';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
@@ -25,12 +26,16 @@ const themeVisual: Record<string, { badgeClass: string; glowClass: string; textC
 export function PeptideDetail({
   peptide,
   mdxBody,
+  relatedCompounds = [],
+  relatedPathways = [],
   lastUpdated,
   author,
   reviewer,
 }: {
   peptide: Peptide;
   mdxBody: string | null;
+  relatedCompounds?: CompoundLink[];
+  relatedPathways?: { slug: string; name: string }[];
   lastUpdated?: string;
   author?: string;
   reviewer?: string;
@@ -118,6 +123,48 @@ export function PeptideDetail({
                       <Link
                         href={`/peptides/${p.slug}`}
                         className="text-sm text-muted-foreground hover:text-accent-cyan transition"
+                      >
+                        {p.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {relatedCompounds.length > 0 && (
+              <div className="glass rounded-xl p-5">
+                <p className="text-micro font-mono text-accent-cyan uppercase mb-1">
+                  Compounds sharing its targets
+                </p>
+                <p className="text-caption text-muted-foreground mb-3">
+                  Evidence-graded compounds that act on the same hallmarks.
+                </p>
+                <ul className="space-y-2">
+                  {relatedCompounds.map((c) => (
+                    <li key={c.slug} className="flex items-center justify-between gap-2">
+                      <Link
+                        href={`/library/compounds/${c.slug}`}
+                        className="text-sm text-muted-foreground hover:text-accent-cyan transition truncate"
+                      >
+                        {c.name}
+                      </Link>
+                      <EvidenceTag tier={c.evidence} size="sm" className="shrink-0" />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {relatedPathways.length > 0 && (
+              <div className="glass rounded-xl p-5">
+                <p className="text-micro font-mono text-accent-amber uppercase mb-3">Pathways engaged</p>
+                <ul className="space-y-2">
+                  {relatedPathways.map((p) => (
+                    <li key={p.slug}>
+                      <Link
+                        href={`/pathways/${p.slug}`}
+                        className="text-sm text-muted-foreground hover:text-accent-amber transition"
                       >
                         {p.name}
                       </Link>
