@@ -5,6 +5,8 @@ import { StructuredData } from '@/components/seo/StructuredData';
 import { ModuleHero, type ModuleHeroData } from '@/components/viz/ModuleHero';
 import { getPeptideBySlug, peptideCategoryMeta, peptideLibrary } from '@/lib/peptides-library';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
+import { getCompoundsForPeptideHallmarks } from '@/lib/library-graph';
+import { getMolecularPathwaysForHallmark } from '@/lib/pathways';
 import { loadMdx } from '@/lib/mdx';
 import { buildMedicalWebPageSchema, buildBreadcrumbSchema, getCitationsFromBody } from '@/lib/seo';
 import { seoRoutes } from '@/lib/seo-routes';
@@ -70,6 +72,21 @@ export default async function PeptidePage({
       .filter((t): t is string => Boolean(t)),
   };
 
+  // Derived cross-type bridges (computed server-side to keep the datasets out of
+  // the client bundle): compounds that share this peptide's target hallmarks, and
+  // the molecular pathways those hallmarks run through. Both are honest
+  // derivations from authored data — no invented peptide↔compound edges.
+  const relatedCompounds = getCompoundsForPeptideHallmarks(peptide.relatedHallmarkIds);
+  const relatedPathways = (() => {
+    const bySlug = new Map<string, { slug: string; name: string }>();
+    for (const hid of peptide.relatedHallmarkIds) {
+      for (const p of getMolecularPathwaysForHallmark(hid)) {
+        if (!bySlug.has(p.slug)) bySlug.set(p.slug, { slug: p.slug, name: p.name });
+      }
+    }
+    return [...bySlug.values()].slice(0, 6);
+  })();
+
   return (
     <>
       <StructuredData schemas={schemas} />
@@ -77,6 +94,8 @@ export default async function PeptidePage({
       <PeptideDetail
         peptide={peptide}
         mdxBody={mdx?.body ?? null}
+        relatedCompounds={relatedCompounds}
+        relatedPathways={relatedPathways}
         lastUpdated={mdx?.frontmatter.last_updated}
         author={mdx?.frontmatter.author}
         reviewer={reviewer}
