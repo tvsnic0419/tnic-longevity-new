@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { LibraryModuleDetail } from '@/components/library/LibraryModuleDetail';
+import { CompoundIntelligenceMatrix } from '@/components/library/CompoundIntelligenceMatrix';
 import { CompoundHero, type CompoundHeroData } from '@/components/viz/CompoundHero';
 import { ModuleHero, type ModuleHeroData } from '@/components/viz/ModuleHero';
 import { StructuredData } from '@/components/seo/StructuredData';
@@ -198,6 +199,7 @@ export default async function LibraryModulePage({
       <StructuredData schemas={schemas} />
       {heroData && <CompoundHero {...heroData} />}
       {moduleHeroData && <ModuleHero {...moduleHeroData} />}
+      {engineCompound && <CompoundIntelligenceMatrix compound={engineCompound} />}
       <LibraryModuleDetail
         module={mod}
         mdxBody={mdx?.body ?? null}
