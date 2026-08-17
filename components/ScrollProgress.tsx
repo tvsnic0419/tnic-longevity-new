@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { navLinks } from '@/lib/data';
+import { navLinks } from '@/lib/nav-data';
 
 export function ScrollProgress() {
   const [progress, setProgress] = useState(0);
