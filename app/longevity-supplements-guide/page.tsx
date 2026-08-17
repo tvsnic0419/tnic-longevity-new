@@ -6,6 +6,7 @@ import { StructuredData } from '@/components/seo/StructuredData';
 import { seoRoutes } from '@/lib/seo-routes';
 import { buildHowToSchema, buildGuidePageSchema, buildBreadcrumbSchema } from '@/lib/seo';
 import { getScoredCompounds } from '@/lib/elite-8-data';
+import { PRODUCT_PICKS } from '@/lib/product-picks';
 
 export const metadata = seoRoutes.longevityGuide();
 
@@ -180,8 +181,15 @@ export default function LongevitySupplementsGuidePage() {
           <h2 className="heading-section mb-3">
             Ranked: Best Longevity Supplements 2026
           </h2>
-          <p className="text-muted-foreground mb-10 max-w-2xl">
-            Sorted by composite LQ score. Click any compound to read the full evidence deep-dive with PMIDs, dosing protocols, and monitoring checklists.
+          <p className="text-muted-foreground mb-4 max-w-2xl">
+            Sorted by composite LQ score. Click any compound to read the full evidence deep-dive with PMIDs, dosing protocols, and monitoring checklists — or jump straight to the one verified product TNiC picks for it.
+          </p>
+          <p className="mb-10 flex items-start gap-2 max-w-2xl text-xs leading-relaxed text-muted-foreground">
+            <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent-amber" aria-hidden="true" />
+            <span>
+              &ldquo;Buy pick&rdquo; links go to the manufacturer and may carry an affiliate token — at no extra cost to you.
+              TNiC sells nothing and commission never moves a ranking or evidence tier. Educational information, not medical advice.
+            </span>
           </p>
 
           <div className="space-y-4">
@@ -236,7 +244,24 @@ export default function LongevitySupplementsGuidePage() {
                     </div>
 
                     {/* CTA */}
-                    <div className="sm:col-span-2 flex sm:justify-end items-start">
+                    <div className="sm:col-span-2 flex flex-wrap sm:flex-col sm:items-end items-start gap-2">
+                      {/* Derive the pick id from the canonical library slug — the
+                          ranked-table ids (glycine_nac, resveratrol_pterostilbene)
+                          differ from the product-pick keys (glynac, pterostilbene). */}
+                      {(() => {
+                        const pickId = c.libraryHref?.split('/').pop();
+                        return pickId && PRODUCT_PICKS[pickId] ? (
+                          <a
+                            href={`/api/go/${pickId}`}
+                            target="_blank"
+                            rel="noopener noreferrer sponsored"
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-accent-emerald/15 text-accent-emerald border border-accent-emerald/25 transition-colors hover:bg-accent-emerald/25"
+                            aria-label={`Buy the verified ${c.name} pick — opens manufacturer site`}
+                          >
+                            Buy pick <ExternalLink className="w-3 h-3" />
+                          </a>
+                        ) : null;
+                      })()}
                       {c.libraryHref ? (
                         <Link
                           href={c.libraryHref}
