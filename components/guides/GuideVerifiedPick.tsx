@@ -26,9 +26,12 @@ import { EvidenceTag } from '@/components/trust/EvidenceTag';
 export function GuideVerifiedPick({
   compoundId,
   className = '',
+  showDisclosure = true,
 }: {
   compoundId: string;
   className?: string;
+  /** Hide the per-card disclosure when the surface renders one shared note. */
+  showDisclosure?: boolean;
 }) {
   const pick = PRODUCT_PICKS[compoundId];
   const compound = compounds.find((c) => c.id === compoundId);
@@ -112,6 +115,7 @@ export function GuideVerifiedPick({
       </div>
 
       {/* Affiliate disclosure — required wherever a buy link leads */}
+      {showDisclosure && (
       <p className="flex items-start gap-2 border-t border-accent-emerald/15 bg-black/10 px-5 py-3 text-xs leading-relaxed text-muted-foreground sm:px-6">
         <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent-amber" aria-hidden="true" />
         <span>
@@ -120,6 +124,7 @@ export function GuideVerifiedPick({
           information, not medical advice; request a Certificate of Analysis before you buy.
         </span>
       </p>
+      )}
     </aside>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, BookOpen, Layers, FlaskConical, HeartPulse, AlertTriangle, Scale, Pill, type LucideIcon } from 'lucide-react';
+import { ArrowLeft, BookOpen, Layers, FlaskConical, HeartPulse, AlertTriangle, Scale, Pill, ShoppingBag, ShieldCheck, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import type { LibraryModule, LibraryModuleCategory } from '@/lib/library-modules';
 import type { ComparisonLink } from '@/lib/comparison-relations';
@@ -13,6 +13,8 @@ import { compounds } from '@/lib/data';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { MdxRenderer } from './MdxRenderer';
 import { CompoundBuyerGuidePanel } from './CompoundBuyerGuide';
+import { ProductPickCard } from '@/components/shop/ProductPickCard';
+import { getProductPick } from '@/lib/product-picks';
 import { LifestylePillarPanel } from './LifestylePillarPanel';
 import { getBuyerGuideByModuleSlug } from '@/lib/buyer-guides';
 import type { LifestyleSlug } from '@/lib/lifestyle-pillars';
@@ -78,6 +80,14 @@ export function LibraryModuleDetail({
     .filter(Boolean) ?? [];
   const buyerGuide =
     module.category === 'compounds' ? getBuyerGuideByModuleSlug(module.slug) : undefined;
+  // A compound can have a verified pick without a full authored buyer guide
+  // (e.g. R-ALA). Without this fallback its evidence page would carry no buy
+  // path at all — surface the pick directly so the revenue action is never
+  // missing where one exists.
+  const fallbackPick =
+    module.category === 'compounds' && !buyerGuide && module.compoundId
+      ? getProductPick(module.compoundId)
+      : undefined;
   // Library-first compounds have no canonical dataset entry to drive the rich
   // glance panel; surface the same shape from a live count of the PMIDs cited
   // in the deep-dive body so all 55 compound pages stay coherent.
@@ -355,6 +365,24 @@ export function LibraryModuleDetail({
 
             {buyerGuide && (
               <CompoundBuyerGuidePanel guide={buyerGuide} />
+            )}
+
+            {fallbackPick && (
+              <div className="gradient-border p-6 md:p-8">
+                <div className="flex items-center gap-2 mb-4">
+                  <ShoppingBag className="w-4 h-4 text-accent-emerald" aria-hidden="true" />
+                  <p className="text-micro font-mono text-accent-emerald uppercase">Verified pick</p>
+                </div>
+                <ProductPickCard pick={fallbackPick} />
+                <p className="mt-3 flex items-start gap-2 text-xs leading-relaxed text-muted-foreground">
+                  <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent-amber" aria-hidden="true" />
+                  <span>
+                    Links to the manufacturer and may carry an affiliate token — at no extra cost to
+                    you. Commission never influences the pick or its evidence tier. Educational
+                    information, not medical advice; request a Certificate of Analysis before you buy.
+                  </span>
+                </p>
+              </div>
             )}
 
             {mdxBody ? (
