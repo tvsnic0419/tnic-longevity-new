@@ -3,6 +3,7 @@
 import { Shield, HardDrive, WifiOff, Trash2, Download, Lock, Clock, Check } from 'lucide-react';
 import { usePlatform } from '@/context/PlatformContext';
 import { PRIVACY_PRINCIPLES, getStorageSummary } from '@/lib/privacy';
+import { exportLabsCsv } from '@/lib/labs';
 import { Badge } from '@/components/ui/Badge';
 
 const principles = [
@@ -32,7 +33,6 @@ export function PrivacyPanel() {
   const {
     labs,
     clearLabs,
-    exportLabsCsv,
     exportAll,
     privacyMode,
     setPrivacyMode,
@@ -42,7 +42,7 @@ export function PrivacyPanel() {
   const summary = getStorageSummary(privacyMode);
 
   const downloadCsv = () => {
-    const blob = new Blob([exportLabsCsv()], { type: 'text/csv' });
+    const blob = new Blob([exportLabsCsv(labs)], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;

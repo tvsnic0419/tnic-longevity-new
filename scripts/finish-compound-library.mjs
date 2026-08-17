@@ -51,7 +51,7 @@ async function pubmed(term) {
 }
 
 function mdx(m, studies, rx) {
-  const [slug,name,tier,pathway,dose,timing,hallmarks,badge,synergies,summary]=m;
+  const [slug,name,tier,pathway,dose,timing,hallmarks,,synergies,summary]=m;
   const citations=studies.map(s=>`PMID ${s.pmid}`).join(', ');
   const rows=studies.map(s=>`| ${s.title.replaceAll('|','/')} | ${s.journal.replaceAll('|','/')} | ${s.year} | [PMID ${s.pmid}](https://pubmed.ncbi.nlm.nih.gov/${s.pmid}/) |`).join('\n');
   const links=synergies.filter(x=>x!=='collagen').map(x=>`| [${x}](/library/compounds/${x}) | Complementary pathway; assess the combination against goals, labs, and total burden. |`).join('\n');
@@ -64,7 +64,7 @@ function compound(m, studies) {
 }
 
 function moduleEntry(m, rx) {
-  const [slug,name,tier,pathway,,,,,synergies,summary]=m;
+  const [slug,name,tier,pathway,,,,,,summary]=m;
   return {slug,category:'compounds',title:name,tagline:`${pathway} — evidence-graded deep dive`,summary:summary[0].toUpperCase()+summary.slice(1)+'.',evidenceTier:tier,relatedHallmarkIds:m[6],...(rx?{requiresDisclaimer:true}:{compoundId:slug}),relatedSynergySlugs:[],outline:['What it does and hallmark mapping','Mechanism and biological context','Evidence summary','Dosing protocol','Monitoring','Safety and red flags','Synergies and stack integration','Personal results template'],mdxSlug:slug};
 }
 

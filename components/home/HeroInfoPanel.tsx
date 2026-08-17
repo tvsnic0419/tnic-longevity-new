@@ -91,7 +91,7 @@ export function HeroInfoPanel({ selectedId, onSelectPartner, onClose }: HeroInfo
 
         {partnerIds.length > 0 && (
           <div className="mb-4">
-            <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-white/70">
+            <p className="mb-2 text-label text-white/70">
               Synergizes with
             </p>
             <ul className="space-y-2">

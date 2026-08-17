@@ -16,10 +16,10 @@ import {
 } from 'lucide-react';
 import { POPULAR_GUIDE_LINKS } from '@/lib/index-priority';
 import { citationRegistry } from '@/lib/trust';
-import { compounds } from '@/lib/data';
+import { compoundTierCount } from '@/lib/compound-core';
 
-const tierACount = compounds.filter((c) => c.evidence === 'A').length;
-const tierBCount = compounds.filter((c) => c.evidence === 'B').length;
+const tierACount = compoundTierCount('A');
+const tierBCount = compoundTierCount('B');
 
 const hubLinks = [
   { href: '/dashboard', label: 'My Dashboard', icon: LayoutDashboard },
