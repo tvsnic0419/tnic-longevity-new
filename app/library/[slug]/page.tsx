@@ -7,7 +7,8 @@ import { SITE } from '@/lib/site';
 import { getHallmarkBySlug, hallmarkLibrary } from '@/lib/hallmarks-library';
 import { loadMdx } from '@/lib/mdx';
 import { buildArticleSchema, buildBreadcrumbSchema, buildPageMetadata, getCitationsFromBody } from '@/lib/seo';
-import { getCompoundsForHallmark, getCompoundIdToSlugMap } from '@/lib/library-graph';
+import { getCompoundsForHallmark, getCompoundIdToSlugMap, getPeptidesForHallmark } from '@/lib/library-graph';
+import { getMolecularPathwaysForHallmark } from '@/lib/pathways';
 import { libraryCategoryMeta, type LibraryModuleCategory } from '@/lib/library-modules';
 import { seoRoutes } from '@/lib/seo-routes';
 
@@ -98,6 +99,12 @@ export default async function HallmarkPage({
   const path = `/library/${hallmark.slug}`;
   const targetingCompounds = getCompoundsForHallmark(hallmark.id);
   const compoundHrefs = getCompoundIdToSlugMap();
+  const targetingPeptides = getPeptidesForHallmark(hallmark.id);
+  const drivingPathways = getMolecularPathwaysForHallmark(hallmark.id).map((p) => ({
+    slug: p.slug,
+    name: p.name,
+    summary: p.summary,
+  }));
 
   const reviewer = mdx?.frontmatter.reviewer;
   const breadcrumbItems = [
@@ -124,6 +131,8 @@ export default async function HallmarkPage({
         hallmark={hallmark}
         mdxBody={mdx?.body ?? null}
         targetingCompounds={targetingCompounds}
+        targetingPeptides={targetingPeptides}
+        drivingPathways={drivingPathways}
         compoundHrefs={compoundHrefs}
         lastUpdated={mdx?.frontmatter.last_updated}
         author={mdx?.frontmatter.author}

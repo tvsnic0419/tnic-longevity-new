@@ -20,6 +20,8 @@ import {
 } from 'lucide-react';
 import { usePlatform } from '@/context/PlatformContext';
 import { stackPresets, type PresetKey } from '@/lib/presets';
+import { COMPOUND_COUNT } from '@/lib/library-modules';
+import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import {
   getNrAlternativeShopItem,
   getNrShopItems,
@@ -113,7 +115,21 @@ function ProtocolShopPanelInner() {
   const presetFromUrl = stackParam && isPresetKey(stackParam) ? stackPresets[stackParam].label : null;
 
   return (
-    <div>
+    <>
+      <CinematicHubHero
+        hue="amber"
+        kicker="Protocol Shop"
+        title={<>Buy smart, <em>not branded</em>.</>}
+        lead="Stack-filtered verification checklists from the buyer guides — what to look for on a label before you spend, never who paid to be listed."
+        stats={[
+          { value: String(Object.keys(stackPresets).length), label: 'Stack presets' },
+          { value: String(COMPOUND_COUNT), label: 'Compounds covered' },
+          { value: 'COA-first', label: 'Verification standard' },
+        ]}
+        primary={{ href: '/stacks', label: 'Build a stack to filter' }}
+        secondary={{ href: '/products', label: 'See product picks' }}
+      />
+      <div>
       <PageHeader
         icon={ShoppingBag}
         eyebrow="Protocol Shop"
@@ -349,6 +365,7 @@ function ProtocolShopPanelInner() {
         </>
       )}
     </div>
+    </>
   );
 }
 

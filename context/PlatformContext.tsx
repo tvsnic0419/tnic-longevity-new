@@ -9,10 +9,12 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { compounds, synergyScore, calculateDefenseProfile } from '@/lib/data';
+import { calculateDefenseProfile } from '@/lib/defense-profile';
+import { isStackCompoundId } from '@/lib/compound-core';
+import type { Compound } from '@/lib/types';
 import { stackPresets, type PresetKey } from '@/lib/presets';
 import { readStackFromSearch } from '@/lib/stack-url';
-import { exportLabsCsv as labsToCsv, type LabEntry } from '@/lib/labs';
+import type { LabEntry } from '@/lib/labs';
 import {
   type HallmarkNotesMap,
   type HallmarkPersonalEntry,
@@ -30,11 +32,8 @@ import {
   setPrivacyConsent,
   type PrivacyStorageMode,
 } from '@/lib/privacy';
-import {
-  detectNewMilestones,
-  type UserMilestone,
-} from '@/lib/milestone-engine';
-import { validatePlatformImport, type ImportResult } from '@/lib/import-validation';
+import type { UserMilestone } from '@/lib/milestone-engine';
+import type { ImportResult } from '@/lib/import-validation';
 export interface QuizRecord {
   goal: string;
   age?: string;
@@ -58,7 +57,7 @@ interface PlatformContextValue {
   setSelected: (ids: string[]) => void;
   applyPreset: (key: PresetKey) => void;
   score: number;
-  selectedCompounds: typeof compounds;
+  selectedCompounds: Compound[];
   shareUrl: string;
   saveStack: () => void;
   saved: boolean;
@@ -70,13 +69,12 @@ interface PlatformContextValue {
   importLabs: (rows: { markerId: string; value: number; date: string }[]) => number;
   removeLab: (id: string) => void;
   clearLabs: () => void;
-  exportLabsCsv: () => string;
   checklist: string[];
   toggleChecklist: (step: string) => void;
   hallmarkNotes: HallmarkNotesMap;
   setHallmarkNote: (hallmarkId: string, patch: Partial<HallmarkPersonalEntry>) => void;
   exportAll: () => string;
-  importAll: (json: string) => ImportResult;
+  importAll: (json: string) => Promise<ImportResult>;
   milestones: UserMilestone[];
   addMilestone: (milestone: UserMilestone) => void;
   privacyMode: PrivacyStorageMode;
@@ -119,6 +117,27 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
   const [privacyConsent, setPrivacyConsentState] = useState(false);
   const [prevLabsCount, setPrevLabsCount] = useState(0);
   const [quizResult, setQuizResultState] = useState<QuizRecord | null>(null);
+  // The rich compound objects + synergy scorer are only needed once a stack
+  // actually exists, so the full data layer (~150 kB of source) is loaded on
+  // demand instead of riding in the shared client bundle of every page. With
+  // an empty stack the derived values below are identical without it.
+  const [stackData, setStackData] = useState<{
+    compounds: Compound[];
+    synergyScore: (selectedIds: string[]) => number;
+  } | null>(null);
+
+  useEffect(() => {
+    if (selected.length === 0 || stackData) return;
+    let cancelled = false;
+    void import('@/lib/data').then((m) => {
+      if (!cancelled) {
+        setStackData({ compounds: m.compounds, synergyScore: m.synergyScore });
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [selected, stackData]);
 
   // One-time hydration from URL + client-only storage after mount; neither is available
   // during SSR, so the initial client render must match the server before these apply.
@@ -137,7 +156,7 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
 
     if (fromUrl) setSelectedState(fromUrl);
     else if (stackRaw.length) {
-      setSelectedState(stackRaw.filter((id) => compounds.some((c) => c.id === id)));
+      setSelectedState(stackRaw.filter((id) => isStackCompoundId(id)));
     }
     if (profileRaw) setProfileState({ ...DEFAULT_PROFILE, ...profileRaw });
     setLabs(sanitizeLabEntries(labsRaw));
@@ -175,21 +194,26 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
   const runMilestoneDetection = useCallback(
     (stack: string[], prof: Profile, labList: LabEntry[], labsBefore: number) => {
       if (!hydrated) return;
-      setMilestones((prev) => {
-        const earned = detectNewMilestones({
-          selected: stack,
-          profile: prof,
-          labs: labList,
-          prevLabsCount: labsBefore,
-          existing: prev,
+      // Detection only fires after a user action (stack/profile/lab change),
+      // so the milestone engine — which drags the full stack-analysis + data
+      // layer with it — is loaded on first use rather than on every page.
+      void import('@/lib/milestone-engine').then(({ detectNewMilestones }) => {
+        setMilestones((prev) => {
+          const earned = detectNewMilestones({
+            selected: stack,
+            profile: prof,
+            labs: labList,
+            prevLabsCount: labsBefore,
+            existing: prev,
+          });
+          if (earned.length === 0) return prev;
+          const kinds = new Set(prev.map((m) => m.kind));
+          const fresh = earned.filter((m) => !kinds.has(m.kind));
+          if (fresh.length === 0) return prev;
+          const next = [...prev, ...fresh];
+          writeStorageItem(STORAGE_KEYS.milestones, next, privacyMode);
+          return next;
         });
-        if (earned.length === 0) return prev;
-        const kinds = new Set(prev.map((m) => m.kind));
-        const fresh = earned.filter((m) => !kinds.has(m.kind));
-        if (fresh.length === 0) return prev;
-        const next = [...prev, ...fresh];
-        writeStorageItem(STORAGE_KEYS.milestones, next, privacyMode);
-        return next;
       });
     },
     [hydrated, privacyMode],
@@ -291,8 +315,6 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
 
   const clearLabs = useCallback(() => persistLabs([]), [persistLabs]);
 
-  const exportLabsCsv = useCallback(() => labsToCsv(labs), [labs]);
-
   const setHallmarkNote = useCallback((hallmarkId: string, patch: Partial<HallmarkPersonalEntry>) => {
     setHallmarkNotesState((prev) => {
       const next = {
@@ -339,7 +361,7 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
   );
 
   const importAll = useCallback(
-    (json: string): ImportResult => {
+    async (json: string): Promise<ImportResult> => {
       let parsed: unknown;
       try {
         parsed = JSON.parse(json);
@@ -347,6 +369,9 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
         return { ok: false, errors: ['Invalid JSON'] };
       }
 
+      // The validator pulls the full data layer for id checks; imports are a
+      // rare, explicit user action, so it loads on first use only.
+      const { validatePlatformImport } = await import('@/lib/import-validation');
       const result = validatePlatformImport(parsed);
       if (!result.ok) return result;
 
@@ -413,9 +438,17 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
     [profile],
   );
 
+  // Until the on-demand data layer resolves (or while the stack is empty —
+  // the state every visitor starts in before hydration), these match what
+  // the eager versions produced for an empty stack: [] and score 0.
   const selectedCompounds = useMemo(
-    () => compounds.filter((c) => selected.includes(c.id)),
-    [selected],
+    () => (stackData ? stackData.compounds.filter((c) => selected.includes(c.id)) : []),
+    [stackData, selected],
+  );
+
+  const score = useMemo(
+    () => (stackData ? stackData.synergyScore(selected) : 0),
+    [stackData, selected],
   );
 
   const shareUrl = useMemo(() => {
@@ -430,7 +463,7 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
     toggle,
     setSelected,
     applyPreset,
-    score: synergyScore(selected),
+    score,
     selectedCompounds,
     shareUrl,
     saveStack,
@@ -443,7 +476,6 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
     importLabs,
     removeLab,
     clearLabs,
-    exportLabsCsv,
     checklist,
     toggleChecklist,
     hallmarkNotes,

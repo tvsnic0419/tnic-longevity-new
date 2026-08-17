@@ -270,6 +270,17 @@ export function getPathwaysForCompound(compoundSlug: string): Pathway[] {
   return pathways.filter((p) => p.compoundSlugs.includes(compoundSlug));
 }
 
+/**
+ * The molecular pathways that drive a given hallmark (by id), inverting
+ * `pathway.hallmarkIds`. These resolve to linkable `/pathways/<slug>` deep-dives.
+ * Named distinctly from `relations.ts`'s `getPathwaysForHallmark` (which returns
+ * the high-level `PathwayGroup`s that have no pages) so the hallmark hub can link
+ * down into the mechanistic layer it currently only receives links from.
+ */
+export function getMolecularPathwaysForHallmark(hallmarkId: string): Pathway[] {
+  return pathways.filter((p) => p.hallmarkIds.includes(hallmarkId));
+}
+
 export const pathwayCategoryOrder: PathwayCategory[] = [
   'sirtuins',
   'sensing',
