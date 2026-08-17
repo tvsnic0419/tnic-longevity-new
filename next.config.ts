@@ -48,6 +48,17 @@ const nextConfig: NextConfig = {
         destination: '/library/compare/urolithin-a-vs-coq10',
         permanent: true,
       },
+      // The Anti-Aging Library visual grid pins hallmark #12 to
+      // /hallmarks/disabled-macroautophagy — the "nutrient sensing gone wrong"
+      // framing that covers both macroautophagy and the mTOR/AMPK switch.
+      // /hallmarks/disabled-autophagy was an earlier duplicate deep-dive on the
+      // same concept. Consolidating to one canonical route so inbound links
+      // land on the current page.
+      {
+        source: '/hallmarks/disabled-autophagy',
+        destination: '/hallmarks/disabled-macroautophagy',
+        permanent: true,
+      },
     ];
   },
 

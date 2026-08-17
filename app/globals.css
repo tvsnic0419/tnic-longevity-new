@@ -192,7 +192,12 @@
      is a single source of truth. Durations give the three most-used speeds a
      name; per-rule values that don't map cleanly stay literal. */
   --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-standard: var(--ease-standard);
+  /* Canonical "material standard" easing — matches EASE.standard in
+     components/viz/tokens.ts so CSS transitions and Framer animations share the
+     same curve. Previous value was a self-reference (`var(--ease-standard)`),
+     which resolved to `initial` and quietly fell back to the browser default
+     `ease` everywhere it was consumed. */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-exit: cubic-bezier(0.4, 0, 1, 1);
   --dur-fast: 0.2s;
   --dur-base: 0.3s;
@@ -331,13 +336,17 @@ body::after {
   line-height: 1.08;
 }
 
-/* Editorial display utility — Fraunces, for headline moments site-wide. */
+/* Editorial display utility — Fraunces, for the biggest headline moments
+   site-wide (Elite 8 hero, etc.). Consolidated from two separate blocks that
+   previously cascaded into each other; the values below are what the merged
+   cascade actually produced — so no visual change, one source of truth. */
 .font-display { font-family: var(--font-display); }
 .text-display {
   font-family: var(--font-display);
-  font-weight: 400;
-  letter-spacing: -0.025em;
-  line-height: 0.98;
+  font-size: var(--type-6xl);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
 }
 
 /* ── Typographic coherence & polish ──────────────────────────────────────────
@@ -509,26 +518,16 @@ p,
 
 /* ─────────────────────────────────────────────────────────────────────────
    CANONICAL SURFACES — use these; do not add new card/glass classes.
-     • .card-base        neutral translucent panel (mid depth)
-     • .card-elevated    lifted panel with the premium gradient edge
      • .premium-card     themeable accent card (set --card-accent) — the v9 idiom
+     • .card-elevated    lifted panel with the premium gradient edge
      • .glass-deep       layered "Deep Glass" planes (via <GlassPanel>)
-   The .card-premium / .card-ultra / .card-depth / .stat-card* / .gradient-border
-   / .tnic-glass classes are retained variants/aliases that all now draw from the
-   shared v8/v9 shadow + edge tokens; reach for a canonical class in new code.
+   The .card-ultra / .card-depth / .stat-card* / .gradient-border / .tnic-glass
+   classes are retained variants/aliases that all now draw from the shared v8/v9
+   shadow + edge tokens; reach for a canonical class in new code. Legacy
+   .card-base / .card-premium blocks were removed after their last consumers
+   migrated (Accordion → .premium-card in v2.1). Any grep hit on those names
+   below this line is a bug — file it and migrate the call site.
    ───────────────────────────────────────────────────────────────────────── */
-.card-base {
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur-mid));
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-xl);
-  /* Section-surface depth (Design System v8 mid-plane) — was flat before.
-     A hairline top light-catch pairs with the stacked shadow so the panel
-     reads as a raised glass plane, matching .premium-card's edge language. */
-  box-shadow:
-    inset 0 1px 0 0 color-mix(in srgb, #ffffff 5%, transparent),
-    var(--glass-shadow-mid);
-}
 
 .card-elevated {
   position: relative;
@@ -1150,13 +1149,9 @@ p,
    Design System v3 — Cinematic escalation (Sprint 20)
    ═══════════════════════════════════════════════════════════════════════════ */
 
-/* ── Display typography (uses --type-6xl scale token) ── */
-.text-display {
-  font-size: var(--type-6xl);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1.02;
-}
+/* .text-display was previously redeclared here; it is now defined once beside
+   .font-display near the top of this file — see the "Editorial display utility"
+   block. Nothing else needs a redeclaration in this section. */
 
 /* ── Site-wide ambient canvas ── */
 /* ── Route-aware ambient tint ──
@@ -1628,8 +1623,12 @@ p,
   opacity: 0.7;
 }
 
-/* ── Stat card v3 ── */
-.stat-card-v3 {
+/* ── Stat card — hero variant ──
+   Sits inside StatStrip when `variant="hero"`. Renamed from the previous
+   `-v3` versioned suffix to the semantic `-hero` name (the version scheme was
+   accumulating -v3 without ever retiring the earlier revisions, which is a
+   dead-end pattern). The default `.stat-card` above stays the workhorse. */
+.stat-card-hero {
   position: relative;
   background: linear-gradient(
     180deg,
@@ -1648,7 +1647,7 @@ p,
     0 18px 40px -24px rgba(0, 0, 0, 0.6);
 }
 
-.stat-card-v3::before {
+.stat-card-hero::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -1656,7 +1655,7 @@ p,
   pointer-events: none;
 }
 
-.stat-value-v3 {
+.stat-value-hero {
   font-size: clamp(1.75rem, 3.5vw, 2.25rem);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
@@ -1666,7 +1665,7 @@ p,
   -webkit-text-fill-color: transparent;
 }
 
-[data-theme="light"] .stat-value-v3 {
+[data-theme="light"] .stat-value-hero {
   background: linear-gradient(135deg, var(--color-text-primary) 0%, var(--accent-cyan) 60%, var(--accent-emerald) 100%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -3235,14 +3234,6 @@ p,
   border: 1px solid var(--color-border-subtle);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.006));
-  /* Resting elevation — a top light-catch + the tokenized stacked shadow
-     (contact + lift + ambient), theme-aware in both palettes. Previously the
-     card had no resting shadow and read flat against the dark ground until
-     hover; now it sits as a real raised plane, and the hover lift below reads
-     as depth growing rather than a shadow appearing from nothing. */
-  box-shadow:
-    inset 0 1px 0 0 color-mix(in srgb, #ffffff 5%, transparent),
-    var(--glass-shadow-mid);
   transition:
     transform 0.32s var(--ease-glass),
     border-color 0.32s ease,
@@ -3288,7 +3279,6 @@ p,
   transform: translateY(-4px);
   border-color: color-mix(in srgb, var(--card-accent) 42%, transparent);
   box-shadow:
-    inset 0 1px 0 0 color-mix(in srgb, #ffffff 7%, transparent),
     0 24px 60px -28px color-mix(in srgb, var(--card-accent) 55%, transparent),
     var(--glass-shadow-content);
 }
