@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowRight, FlaskConical, ShieldCheck, Clock, ExternalLink, CheckCircle2, AlertTriangle, Zap } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { GuideHeroPanel } from '@/components/guides/GuideHeroPanel';
+import { GuideVerifiedPick } from '@/components/guides/GuideVerifiedPick';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata } from '@/lib/seo';
 import { buildBreadcrumbSchema } from '@/lib/seo';
@@ -225,6 +226,13 @@ export default function NadSupplementGuidePage() {
               />
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Verified pick — connect commercial-intent readers to the buy path early */}
+      <section className="py-10 border-b border-border">
+        <div className="container-page max-w-4xl">
+          <GuideVerifiedPick compoundId="nmn" />
         </div>
       </section>
 

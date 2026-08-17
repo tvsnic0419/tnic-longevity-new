@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowRight, ExternalLink, CheckCircle2, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { GuideHeroPanel } from '@/components/guides/GuideHeroPanel';
+import { GuideVerifiedPick } from '@/components/guides/GuideVerifiedPick';
 import { Accordion, AccordionItem } from '@/components/ui/Accordion';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
@@ -201,6 +202,13 @@ export default function SulforaphaneGuidePage() {
               />
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Verified pick — connect commercial-intent readers to the buy path early */}
+      <section className="py-10 border-b border-border">
+        <div className="container-page max-w-4xl">
+          <GuideVerifiedPick compoundId="sulforaphane" />
         </div>
       </section>
 

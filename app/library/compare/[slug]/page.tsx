@@ -1,11 +1,14 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, Scale } from 'lucide-react';
+import { ArrowLeft, Scale, ShieldCheck } from 'lucide-react';
 import { EvidenceCompareTable } from '@/components/library/EvidenceCompareTable';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { GuideVerifiedPick } from '@/components/guides/GuideVerifiedPick';
+import { getComparePicks } from '@/lib/product-picks';
+import { compounds } from '@/lib/data';
 import {
   getAllComparisonSlugs,
   getComparison,
@@ -53,6 +56,14 @@ export default async function CompareDetailPage({
   if (!comparison) notFound();
 
   const relatedComparisons = getRelatedComparisons(slug);
+  // Verified buy paths for whichever compared compounds have a curated pick —
+  // "X vs Y" is peak purchase intent, so surface the product action here.
+  // Restrict to picks whose compound is graded in lib/data.ts, since the card
+  // shows an evidence tier and must never render a buy button beside an absent
+  // one (e.g. NR/TUDCA have picks but no graded compound).
+  const comparePicks = getComparePicks(slug).filter((pick) =>
+    compounds.some((c) => c.id === pick.compoundId),
+  );
 
   // FAQ composed faithfully from the comparison's own authored verdict and
   // when-to-choose guidance — no new claims — to win FAQ-rich SERP results.
@@ -109,6 +120,31 @@ export default async function CompareDetailPage({
         />
 
         <EvidenceCompareTable comparison={comparison} />
+
+        {comparePicks.length > 0 && (
+          <section className="mt-10" aria-labelledby="compare-picks-heading">
+            <h2 id="compare-picks-heading" className="text-label text-accent-emerald mb-2">
+              {comparePicks.length > 1 ? 'The verified picks' : 'The verified pick'}
+            </h2>
+            <p className="text-body-sm text-muted-foreground mb-4 max-w-2xl">
+              Decided? Each verified pick matches the studied dose and form, and links straight to the
+              manufacturer.
+            </p>
+            <div className="grid gap-4">
+              {comparePicks.map((pick) => (
+                <GuideVerifiedPick key={pick.compoundId} compoundId={pick.compoundId} showDisclosure={false} />
+              ))}
+            </div>
+            <p className="mt-3 flex items-start gap-2 text-xs leading-relaxed text-muted-foreground">
+              <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent-amber" aria-hidden="true" />
+              <span>
+                Links go to the manufacturer and may carry an affiliate token — at no extra cost to you.
+                TNiC sells nothing and commission never moves a ranking or evidence tier. Educational
+                information, not medical advice.
+              </span>
+            </p>
+          </section>
+        )}
 
         {relatedComparisons.length > 0 && (
           <section className="mt-10" aria-labelledby="related-comparisons-heading">
