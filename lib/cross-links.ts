@@ -43,6 +43,18 @@ const COMPOUND_NAMES: Record<string, string[]> = {
   boswellia: ['Boswellia'],
   lithium: ['Low-Dose Lithium'],
   tocotrienols: ['Tocotrienols'],
+  // The 2026 library expansion — distinctive prose forms only (bare "cocoa",
+  // "collagen", "nitrate" are too generic and would over-match).
+  'aged-garlic': ['Aged Garlic Extract', 'Aged Garlic'],
+  'beetroot-nitrate': ['Beetroot Nitrate', 'Dietary Nitrate', 'Beetroot'],
+  bergamot: ['Citrus Bergamot', 'Bergamot'],
+  citicoline: ['Citicoline', 'CDP-Choline'],
+  'cocoa-flavanols': ['Cocoa Flavanols', 'Cocoa Flavanol'],
+  'collagen-peptides': ['Collagen Peptides', 'Collagen Peptide', 'Collagen Hydrolysate'],
+  'l-theanine': ['L-Theanine', 'Theanine'],
+  'lions-mane': ["Lion's Mane", 'Lions Mane', 'Hericium erinaceus'],
+  mitoq: ['MitoQ', 'Mitoquinol'],
+  nattokinase: ['Nattokinase'],
 };
 
 /** Compounds linked by their title-cased slug when no custom name is needed. */
