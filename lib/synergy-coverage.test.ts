@@ -17,7 +17,10 @@ const report = buildSynergyCoverageReport();
 describe('synergy coverage', () => {
   it('accounts for every edge exactly once', () => {
     const counted =
-      report.bySource.emergent + report.bySource['synergy-link'] + report.bySource.derived;
+      report.bySource.emergent +
+      report.bySource['synergy-link'] +
+      report.bySource.authored +
+      report.bySource.derived;
     expect(report.totalEdges).toBe(HERO_NETWORK_EDGES.length);
     expect(counted).toBe(report.totalEdges);
   });
@@ -42,11 +45,19 @@ describe('synergy coverage', () => {
   // pair was deleted or a compound's synergies changed underneath it. Raise
   // this floor as coverage improves — that edit is the paper trail, same
   // convention as EXPECTED_COMPOUND_COUNT in compound-coverage.test.ts.
-  const AUTHORED_EDGE_FLOOR = 6;
+  // Every network edge now carries pair-specific prose, so the floor is the
+  // full edge count.
+  const AUTHORED_EDGE_FLOOR = 51;
 
   it(`keeps at least ${AUTHORED_EDGE_FLOOR} pair-specific authored edges`, () => {
-    const authored = report.bySource.emergent + report.bySource['synergy-link'];
+    const authored =
+      report.bySource.emergent + report.bySource['synergy-link'] + report.bySource.authored;
     expect(authored).toBeGreaterThanOrEqual(AUTHORED_EDGE_FLOOR);
+  });
+
+  it('has no generic fallbacks left — every edge is pair-specific', () => {
+    expect(report.bySource.derived).toBe(0);
+    expect(report.gaps).toHaveLength(0);
   });
 
   it('prints the coverage report', () => {

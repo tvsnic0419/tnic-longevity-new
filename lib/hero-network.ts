@@ -2,6 +2,7 @@ import { compounds } from '@/lib/data';
 import type { Compound, EvidenceTier } from '@/lib/types';
 import { emergentEffects } from '@/lib/relations';
 import { stackInteractions, hallmarkDisplayNames } from '@/lib/stack-analysis';
+import { getSynergyMechanism } from '@/lib/synergy-mechanisms';
 
 /**
  * Shared node/edge/layout data for the homepage hero's 3D visual and its SVG
@@ -133,7 +134,7 @@ export function buildHeroNetworkPoster2D(width: number, height: number): HeroNet
 
 // ── Click-to-explore data: partner lookup + real per-pair "why" text ──
 //
-// Backs the interactive hero widget's info panel (HeroInfoPanel.tsx). Every
+// Backs the interactive hero widget's info panel (HeroPathwayPanel.tsx). Every
 // function here is derived from the same live compound/relations/stack-
 // analysis data used elsewhere on the site — no copy is authored specifically
 // for this widget, so it can't drift out of sync with the rest of TNiC.
@@ -159,12 +160,13 @@ export function getHeroCompound(id: string): Compound | undefined {
 
 export interface HeroEdgeExplanation {
   text: string;
-  source: 'emergent' | 'synergy-link' | 'derived';
+  source: 'emergent' | 'synergy-link' | 'authored' | 'derived';
 }
 
 /**
  * Real "why" text for a synergy edge, in order of specificity: an authored
  * emergent-effect writeup, then an authored stack-interaction note, then a
+ * pair-specific authored mechanism (lib/synergy-mechanisms.ts), then a
  * fallback derived from the two compounds' own data (shared hallmarks or
  * pathway). Never invents a mechanism that isn't backed by existing data.
  */
@@ -185,6 +187,11 @@ export function getEdgeExplanation(aId: string, bId: string): HeroEdgeExplanatio
   );
   if (linkMatch) {
     return { text: linkMatch.detail, source: 'synergy-link' };
+  }
+
+  const authored = getSynergyMechanism(aId, bId);
+  if (authored) {
+    return { text: authored, source: 'authored' };
   }
 
   const a = getHeroCompound(aId);

@@ -49,7 +49,7 @@ describe('hero-network — edge explanations', () => {
     for (const e of HERO_NETWORK_EDGES) {
       const explanation = getEdgeExplanation(e.a, e.b);
       expect(explanation.text.trim().length).toBeGreaterThan(0);
-      expect(['emergent', 'synergy-link', 'derived']).toContain(explanation.source);
+      expect(['emergent', 'synergy-link', 'authored', 'derived']).toContain(explanation.source);
     }
   });
 
