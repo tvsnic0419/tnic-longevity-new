@@ -42,7 +42,7 @@ describe('synergy coverage', () => {
   // pair was deleted or a compound's synergies changed underneath it. Raise
   // this floor as coverage improves — that edit is the paper trail, same
   // convention as EXPECTED_COMPOUND_COUNT in compound-coverage.test.ts.
-  const AUTHORED_EDGE_FLOOR = 6;
+  const AUTHORED_EDGE_FLOOR = 18;
 
   it(`keeps at least ${AUTHORED_EDGE_FLOOR} pair-specific authored edges`, () => {
     const authored = report.bySource.emergent + report.bySource['synergy-link'];
