@@ -131,7 +131,7 @@ export function ProductsHub() {
     <div className="container-page py-10 md:py-14 max-w-6xl section-mesh">
       <PageHeader
         icon={Package}
-        eyebrow="Verified Picks"
+        eyebrow="How we pick"
         title="Recommended Products"
         description="One evidence-aligned product per compound. TNiC may earn a commission on purchases via affiliate links — it never influences which products are listed or their evidence tier."
         theme="emerald"

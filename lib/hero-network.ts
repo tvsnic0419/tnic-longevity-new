@@ -134,7 +134,7 @@ export function buildHeroNetworkPoster2D(width: number, height: number): HeroNet
 
 // ── Click-to-explore data: partner lookup + real per-pair "why" text ──
 //
-// Backs the interactive hero widget's info panel (HeroInfoPanel.tsx). Every
+// Backs the interactive hero widget's info panel (HeroPathwayPanel.tsx). Every
 // function here is derived from the same live compound/relations/stack-
 // analysis data used elsewhere on the site — no copy is authored specifically
 // for this widget, so it can't drift out of sync with the rest of TNiC.

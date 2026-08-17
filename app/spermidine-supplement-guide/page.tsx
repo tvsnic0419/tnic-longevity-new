@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowRight, FlaskConical, ExternalLink, CheckCircle2, AlertTriangle, Microscope, Recycle, TrendingUp } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { GuideHeroPanel } from '@/components/guides/GuideHeroPanel';
+import { GuideVerifiedPick } from '@/components/guides/GuideVerifiedPick';
 import { DataTable } from '@/components/ui/DataTable';
 import { Accordion, AccordionItem } from '@/components/ui/Accordion';
 import { StructuredData } from '@/components/seo/StructuredData';
@@ -231,6 +232,13 @@ export default function SpermidineSupplementGuidePage() {
               />
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Verified pick — connect commercial-intent readers to the buy path early */}
+      <section className="py-10 border-b border-border">
+        <div className="container-page max-w-4xl">
+          <GuideVerifiedPick compoundId="spermidine" />
         </div>
       </section>
 

@@ -156,6 +156,7 @@ function SearchResultCard({ item, query }: { item: LibrarySearchItem; query: str
     compound: 'text-accent-emerald',
     compare: 'text-accent-amber',
     brief: 'text-accent-rose',
+    peptide: 'text-accent-rose',
   };
 
   return (

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ArrowRight, ClipboardList, Menu, Search, X } from 'lucide-react';
-import { navGroups } from '@/lib/data';
+import { navGroups } from '@/lib/nav-data';
 import { Logo } from '@/components/ui/Logo';
 import { SiteSearch } from '@/components/SiteSearch';
 import { COMMAND_PALETTE_EVENT } from '@/components/os/os-events';

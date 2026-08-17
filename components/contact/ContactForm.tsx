@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { MessageSquare, Send, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { SITE } from '@/lib/site';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { Field, fieldControlClass } from '@/components/ui/Field';
 import { Button } from '@/components/ui/Button';
 import { getHubContext } from '@/lib/hub-context';
@@ -60,7 +61,15 @@ export function ContactForm() {
   };
 
   return (
-    <div>
+    <>
+      <CinematicHubHero
+        hue="cyan"
+        kicker="Get in touch"
+        title={<>Questions, corrections, <em>partnerships</em>.</>}
+        lead="Content corrections, evidence and platform questions, privacy requests, and partnership inquiries — educational only, never individual medical advice."
+        stats={[]}
+      />
+      <div>
       <PageHeader
         icon={MessageSquare}
         eyebrow="Contact"
@@ -145,5 +154,6 @@ export function ContactForm() {
         </form>
       )}
     </div>
+    </>
   );
 }

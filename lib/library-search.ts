@@ -4,8 +4,9 @@ import { libraryModules, getModulePath, libraryCategoryMeta } from './library-mo
 import { evidenceComparisons } from './comparisons';
 import { getAllBriefIssues } from './brief-research-sync';
 import { lifestylePillars } from './lifestyle-pillars';
+import { peptideLibrary, peptideCategoryMeta } from './peptides-library';
 
-export type LibrarySearchKind = 'hallmark' | 'module' | 'compound' | 'compare' | 'brief';
+export type LibrarySearchKind = 'hallmark' | 'module' | 'compound' | 'compare' | 'brief' | 'peptide';
 
 export interface LibrarySearchItem {
   id: string;
@@ -124,7 +125,33 @@ function buildIndex(): LibrarySearchItem[] {
     ],
   }));
 
-  return [...hallmarkItems, ...moduleItems, ...compoundItems, ...compareItems, ...briefItems];
+  const peptideItems: LibrarySearchItem[] = peptideLibrary.map((p) => ({
+    id: `peptide-${p.id}`,
+    kind: 'peptide',
+    title: p.name,
+    subtitle: `Peptide · ${peptideCategoryMeta[p.category].label} · Tier ${p.evidenceTier}`,
+    href: `/peptides/${p.slug}`,
+    evidenceTier: p.evidenceTier,
+    keywords: [
+      p.name.toLowerCase(),
+      p.tagline.toLowerCase(),
+      p.summary.toLowerCase(),
+      p.slug,
+      p.id,
+      'peptide',
+      ...(p.aliases ?? []).map((a) => a.toLowerCase()),
+      ...p.relatedHallmarkIds,
+    ],
+  }));
+
+  return [
+    ...hallmarkItems,
+    ...moduleItems,
+    ...compoundItems,
+    ...compareItems,
+    ...briefItems,
+    ...peptideItems,
+  ];
 }
 
 const librarySearchIndex = buildIndex();
@@ -149,6 +176,7 @@ export function searchLibrary(query: string, limit = 24): LibrarySearchItem[] {
       if (item.kind === 'compound' && (q.includes('stack') || q.includes('supplement'))) score += 3;
       if (item.kind === 'compare' && (q.includes('vs') || q.includes('compare'))) score += 15;
       if (item.kind === 'brief' && (q.includes('brief') || q.includes('digest'))) score += 12;
+      if (item.kind === 'peptide' && q.includes('peptide')) score += 8;
 
       return { item, score };
     })
@@ -164,6 +192,7 @@ export const librarySearchKindLabels: Record<LibrarySearchKind, string> = {
   compound: 'Compound',
   compare: 'Compare',
   brief: 'Brief',
+  peptide: 'Peptide',
 };
 
 export const librarySearchSuggestions = [

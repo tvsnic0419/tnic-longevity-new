@@ -4,7 +4,7 @@ import { CANONICAL_SITE_URL } from '@/lib/site';
 
 const CANONICAL_HOST = new URL(CANONICAL_SITE_URL).hostname;
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const host = request.headers.get('host')?.split(':')[0]?.toLowerCase();
 
   if (host === `www.${CANONICAL_HOST}`) {
