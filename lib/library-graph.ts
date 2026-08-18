@@ -1,7 +1,8 @@
 import { compounds } from './data';
 import { libraryModules } from './library-modules';
 import { hallmarkLibrary } from './hallmarks-library';
-import type { EvidenceTier } from './types';
+import { peptideLibrary } from './peptides-library';
+import type { EvidenceTier, PeptideLegalStatus } from './types';
 
 /**
  * Cross-type interlinking for the library. Derives relationships between
@@ -214,4 +215,55 @@ export function getCompoundIdToSlugMap(): Record<string, string> {
 /** All distinct guide routes referenced by the compound → guide map. */
 export function getMappedGuideHrefs(): string[] {
   return [...new Set(Object.values(compoundGuides).map((g) => g.href))];
+}
+
+export interface PeptideLink {
+  /** Resolves to /peptides/<slug>. */
+  slug: string;
+  name: string;
+  evidenceTier: EvidenceTier;
+  legalStatus: PeptideLegalStatus;
+}
+
+/**
+ * Peptides that target a given hallmark (by id, e.g. 'proteostasis'), inverting
+ * `peptide.relatedHallmarkIds`. Strongest evidence first. The symmetric partner
+ * to `getCompoundsForHallmark`, so a hallmark page can surface the peptides
+ * addressing it — closing the hallmark↔peptide loop the peptide library already
+ * encodes but nothing rendered.
+ */
+export function getPeptidesForHallmark(hallmarkId: string): PeptideLink[] {
+  return peptideLibrary
+    .filter((p) => p.relatedHallmarkIds.includes(hallmarkId))
+    .map((p) => ({
+      slug: p.slug,
+      name: p.name,
+      evidenceTier: p.evidenceTier,
+      legalStatus: p.legalStatus,
+    }))
+    .sort(
+      (a, b) => a.evidenceTier.localeCompare(b.evidenceTier) || a.name.localeCompare(b.name),
+    );
+}
+
+/**
+ * Compounds that share at least one target hallmark with a peptide — a DERIVED,
+ * honest bridge (peptides carry no direct compound edges, and we don't invent
+ * them). Unions `getCompoundsForHallmark` over the peptide's hallmark ids,
+ * deduped, strongest evidence first. Powers a "Compounds that share its targets"
+ * rail on peptide pages so peptides stop being a dead end in the graph.
+ */
+export function getCompoundsForPeptideHallmarks(
+  hallmarkIds: string[],
+  limit = 8,
+): CompoundLink[] {
+  const bySlug = new Map<string, CompoundLink>();
+  for (const hid of hallmarkIds) {
+    for (const c of getCompoundsForHallmark(hid)) {
+      if (!bySlug.has(c.slug)) bySlug.set(c.slug, c);
+    }
+  }
+  return [...bySlug.values()]
+    .sort((a, b) => a.evidence.localeCompare(b.evidence) || a.name.localeCompare(b.name))
+    .slice(0, limit);
 }

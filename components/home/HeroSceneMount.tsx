@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { HeroScenePoster } from './HeroScenePoster';
 
-const HeroScene3D = dynamic(() => import('./HeroScene3D').then((m) => m.HeroScene3D), {
+const HeroPathwayScene = dynamic(() => import('./HeroPathwayScene').then((m) => m.HeroPathwayScene), {
   ssr: false,
   loading: () => <HeroScenePoster />,
 });
@@ -94,5 +94,5 @@ export function HeroSceneMount() {
 
   const eligible = webglOk && desktop && !reducedMotion;
 
-  return <div className="h-full w-full">{eligible ? <HeroScene3D /> : <HeroScenePoster />}</div>;
+  return <div className="h-full w-full">{eligible ? <HeroPathwayScene /> : <HeroScenePoster />}</div>;
 }

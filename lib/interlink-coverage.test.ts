@@ -6,7 +6,7 @@ import {
   getGuidesForHallmark,
   getMappedGuideHrefs,
 } from './library-graph';
-import { pathways, getPathwaysForHallmark, getPathwaysForCompound } from './pathways';
+import { pathways, getMolecularPathwaysForHallmark, getPathwaysForCompound } from './pathways';
 
 /**
  * Reachability / anti-orphan guard. The other interlink tests assert that links
@@ -35,7 +35,7 @@ describe('interlink coverage: no orphaned nodes', () => {
   it('every pathway is reachable from both a hallmark page and a compound page', () => {
     const fromHallmark = new Set<string>();
     for (const h of hallmarkLibrary) {
-      for (const p of getPathwaysForHallmark(h.id)) fromHallmark.add(p.slug);
+      for (const p of getMolecularPathwaysForHallmark(h.id)) fromHallmark.add(p.slug);
     }
     for (const p of pathways) {
       expect(fromHallmark.has(p.slug), `pathway "${p.slug}" is linked from no hallmark page`).toBe(true);

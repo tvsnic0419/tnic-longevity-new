@@ -1,10 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowLeft, BookOpen, Dna, Network, Pill, Route } from 'lucide-react';
+import { ArrowLeft, BookOpen, Dna, Network, Pill, Syringe } from 'lucide-react';
 import Link from 'next/link';
 import type { HallmarkLibraryEntry } from '@/lib/types';
-import type { CompoundLink, GuideLink } from '@/lib/library-graph';
+import type { CompoundLink, GuideLink, PeptideLink } from '@/lib/library-graph';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -30,9 +30,10 @@ export function HallmarkDetail({
   hallmark,
   mdxBody,
   targetingCompounds = [],
+  targetingPeptides = [],
+  drivingPathways = [],
   compoundHrefs = {},
   guides = [],
-  pathways = [],
   lastUpdated,
   author,
   reviewer,
@@ -40,9 +41,10 @@ export function HallmarkDetail({
   hallmark: HallmarkLibraryEntry;
   mdxBody: string | null;
   targetingCompounds?: CompoundLink[];
+  targetingPeptides?: PeptideLink[];
+  drivingPathways?: PathwayLink[];
   compoundHrefs?: Record<string, string>;
   guides?: GuideLink[];
-  pathways?: PathwayLink[];
   lastUpdated?: string;
   author?: string;
   reviewer?: string;
@@ -214,6 +216,80 @@ export function HallmarkDetail({
               </div>
             )}
 
+            {drivingPathways.length > 0 && (
+              <div>
+                <div className="flex items-center justify-between gap-3 mb-4">
+                  <div className="flex items-center gap-2">
+                    <Network className="w-4 h-4 text-accent-violet" />
+                    <p className="text-micro font-mono text-accent-violet uppercase tracking-wider">
+                      Pathways that drive {hallmark.title}
+                    </p>
+                  </div>
+                  <Link
+                    href="/pathways"
+                    className="text-xs font-semibold text-accent-violet hover:text-accent-cyan transition shrink-0"
+                  >
+                    All pathways →
+                  </Link>
+                </div>
+                <ul className="grid gap-3 sm:grid-cols-2">
+                  {drivingPathways.map((pathway, i) => (
+                    <li key={pathway.slug}>
+                      <RevealCard index={i} depth="mid" className="glass-hover rounded-xl h-full">
+                        <Link
+                          href={`/pathways/${pathway.slug}`}
+                          className="focus-ring interactive group flex h-full flex-col gap-1 rounded-xl p-4"
+                        >
+                          <span className="text-sm font-semibold text-foreground group-hover:text-accent-violet transition">
+                            {pathway.name}
+                          </span>
+                          <span className="text-xs text-muted-foreground line-clamp-2">
+                            {pathway.summary}
+                          </span>
+                        </Link>
+                      </RevealCard>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {targetingPeptides.length > 0 && (
+              <div>
+                <div className="flex items-center justify-between gap-3 mb-4">
+                  <div className="flex items-center gap-2">
+                    <Syringe className="w-4 h-4 text-accent-rose" />
+                    <p className="text-micro font-mono text-accent-rose uppercase tracking-wider">
+                      Peptides targeting {hallmark.title}
+                    </p>
+                  </div>
+                  <Link
+                    href="/peptides"
+                    className="text-xs font-semibold text-accent-rose hover:text-accent-cyan transition shrink-0"
+                  >
+                    All peptides →
+                  </Link>
+                </div>
+                <ul className="grid gap-3 sm:grid-cols-2">
+                  {targetingPeptides.map((peptide, i) => (
+                    <li key={peptide.slug}>
+                      <RevealCard index={i} depth="mid" className="glass-hover rounded-xl">
+                        <Link
+                          href={`/peptides/${peptide.slug}`}
+                          className="focus-ring interactive group flex items-center justify-between gap-3 rounded-xl p-4"
+                        >
+                          <span className="text-sm font-semibold text-foreground group-hover:text-accent-rose transition truncate">
+                            {peptide.name}
+                          </span>
+                          <EvidenceTag tier={peptide.evidenceTier} size="sm" className="shrink-0" />
+                        </Link>
+                      </RevealCard>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             <div>
               <p className="text-micro font-mono text-accent-emerald uppercase tracking-wider mb-4">
                 Intervention Explorer — ranked by evidence
@@ -224,34 +300,6 @@ export function HallmarkDetail({
                 compoundHrefs={compoundHrefs}
               />
             </div>
-
-            {pathways.length > 0 && (
-              <div>
-                <div className="flex items-center gap-2 mb-4">
-                  <Route className="w-4 h-4 text-accent-violet" />
-                  <p className="text-micro font-mono text-accent-violet uppercase tracking-wider">
-                    Pathways it acts through
-                  </p>
-                </div>
-                <ul className="grid gap-3 sm:grid-cols-2">
-                  {pathways.map((p, i) => (
-                    <li key={p.slug}>
-                      <RevealCard index={i} depth="mid" className="glass-hover rounded-xl h-full">
-                        <Link
-                          href={`/pathways/${p.slug}`}
-                          className="focus-ring interactive group flex h-full flex-col gap-1 rounded-xl p-4"
-                        >
-                          <span className="text-sm font-semibold text-foreground group-hover:text-accent-violet transition">
-                            {p.name}
-                          </span>
-                          <span className="text-xs text-muted-foreground leading-relaxed">{p.summary}</span>
-                        </Link>
-                      </RevealCard>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
 
             {/* Systems Synthesis */}
             <div>

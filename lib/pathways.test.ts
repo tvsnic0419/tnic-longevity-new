@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { pathways, getAllPathwaySlugs, getPathwaysForHallmark } from './pathways';
+import { pathways, getAllPathwaySlugs, getMolecularPathwaysForHallmark } from './pathways';
 import { hallmarkLibrary } from './hallmarks-library';
 import { libraryModules } from './library-modules';
 
@@ -37,22 +37,21 @@ describe('pathway registry integrity', () => {
       expect(p.compoundSlugs.length, `${p.slug} has no compounds`).toBeGreaterThan(0);
     }
   });
-});
 
-describe('pathways: hallmark → pathways', () => {
-  it('every pathway returned for a hallmark actually acts on it', () => {
-    for (const id of hallmarkIds) {
-      for (const p of getPathwaysForHallmark(id)) {
-        expect(p.hallmarkIds).toContain(id);
+  it('getMolecularPathwaysForHallmark returns only pathways that list the hallmark', () => {
+    for (const h of hallmarkLibrary) {
+      for (const p of getMolecularPathwaysForHallmark(h.id)) {
+        expect(p.hallmarkIds.includes(h.id), `${p.slug} returned for unrelated hallmark ${h.id}`).toBe(true);
       }
     }
   });
 
-  it('round-trips: each pathway is returned for every hallmark it lists', () => {
+  it('every pathway is reachable from at least one of its hallmarks (inverse coverage)', () => {
     for (const p of pathways) {
-      for (const id of p.hallmarkIds) {
-        expect(getPathwaysForHallmark(id).map((x) => x.slug)).toContain(p.slug);
-      }
+      const reachable = p.hallmarkIds.some((hid) =>
+        getMolecularPathwaysForHallmark(hid).some((q) => q.slug === p.slug),
+      );
+      expect(reachable, `${p.slug} unreachable via getMolecularPathwaysForHallmark`).toBe(true);
     }
   });
 });

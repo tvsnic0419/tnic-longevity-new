@@ -4,8 +4,11 @@ import { join } from 'node:path';
 import { compounds } from './data';
 import { libraryModules } from './library-modules';
 import { hallmarkLibrary } from './hallmarks-library';
+import { peptideLibrary } from './peptides-library';
 import {
   getCompoundsForHallmark,
+  getPeptidesForHallmark,
+  getCompoundsForPeptideHallmarks,
   getGuideForCompound,
   getGuidesForHallmark,
   getHallmarksForGuide,
@@ -16,6 +19,7 @@ const hallmarkIds = new Set(hallmarkLibrary.map((h) => h.id));
 const compoundModuleSlugs = new Set(
   libraryModules.filter((m) => m.category === 'compounds').map((m) => m.slug),
 );
+const peptideSlugs = new Set(peptideLibrary.map((p) => p.slug));
 
 describe('library-graph: hallmark → compounds', () => {
   it('every hallmark id referenced by a compound is a real hallmark', () => {
@@ -45,6 +49,44 @@ describe('library-graph: hallmark → compounds', () => {
     const tiers = getCompoundsForHallmark('inflammation').map((l) => l.evidence);
     const sorted = [...tiers].sort();
     expect(tiers).toEqual(sorted);
+  });
+});
+
+describe('library-graph: hallmark → peptides', () => {
+  it('every hallmark id referenced by a peptide is a real hallmark', () => {
+    for (const p of peptideLibrary) {
+      for (const id of p.relatedHallmarkIds) {
+        expect(hallmarkIds.has(id)).toBe(true);
+      }
+    }
+  });
+
+  it('returns only peptides that resolve to a real peptide page', () => {
+    for (const h of hallmarkLibrary) {
+      for (const link of getPeptidesForHallmark(h.id)) {
+        expect(peptideSlugs.has(link.slug)).toBe(true);
+      }
+    }
+  });
+
+  it('surfaces peptides for a hallmark the library encodes (proteostasis)', () => {
+    const links = getPeptidesForHallmark('proteostasis');
+    expect(links.length).toBeGreaterThan(0);
+    // BPC-157 lists 'proteostasis' among its related hallmarks.
+    expect(links.map((l) => l.slug)).toContain('bpc-157');
+  });
+
+  it('sorts peptides by evidence tier (A before B before C)', () => {
+    const tiers = getPeptidesForHallmark('mito').map((l) => l.evidenceTier);
+    expect(tiers).toEqual([...tiers].sort());
+  });
+
+  it('peptide→compound bridge returns only real compound pages', () => {
+    for (const p of peptideLibrary) {
+      for (const link of getCompoundsForPeptideHallmarks(p.relatedHallmarkIds)) {
+        expect(compoundModuleSlugs.has(link.slug)).toBe(true);
+      }
+    }
   });
 });
 

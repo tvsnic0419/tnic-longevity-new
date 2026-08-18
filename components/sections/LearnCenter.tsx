@@ -40,6 +40,7 @@ import {
 } from 'lucide-react';
 import { PageShell } from '@/components/ui/PageShell';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import {
   gettingStartedSteps,
   glossary,
@@ -131,7 +132,21 @@ export function LearnCenter({ defaultTab }: { defaultTab?: TabId }) {
     : consumerFAQ.filter((f) => f.category === faqFilter);
 
   return (
-    <PageShell className="bg-background">
+    <>
+      <CinematicHubHero
+        hue="cyan"
+        kicker="Learn Center"
+        title={<>Learn before you <em>stack</em>.</>}
+        lead="Intelligent consumers ask hard questions. TNiC answers them openly — from first-time basics to the supplement industry's red flags."
+        stats={[
+          { value: String(consumerFAQ.length), label: 'FAQ answers' },
+          { value: String(glossary.length), label: 'Glossary terms' },
+          { value: String(tabs.length), label: 'Learning tracks' },
+        ]}
+        primary={{ href: '/library', label: 'Open the library' }}
+        secondary={{ href: '/nico', label: 'Find your stack' }}
+      />
+      <PageShell className="bg-background">
       <PageHeader
         icon={BookOpen}
         eyebrow="Learn"
@@ -401,5 +416,6 @@ export function LearnCenter({ defaultTab }: { defaultTab?: TabId }) {
         )}
       </AnimatePresence>
     </PageShell>
+    </>
   );
 }

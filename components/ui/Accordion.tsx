@@ -19,7 +19,7 @@ interface AccordionItemProps {
 
 export function AccordionItem({ question, children, defaultOpen, className }: AccordionItemProps) {
   return (
-    <details open={defaultOpen} className={cn('group card-base overflow-hidden', className)}>
+    <details open={defaultOpen} className={cn('group premium-card overflow-hidden', className)}>
       <summary className="focus-ring flex cursor-pointer list-none items-center justify-between gap-4 p-5 text-sm font-medium">
         <span className="flex-1">{question}</span>
         <ChevronDown

@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, BookOpen, Layers, FlaskConical, HeartPulse, AlertTriangle, Scale, Pill, type LucideIcon } from 'lucide-react';
+import { ArrowLeft, BookOpen, Layers, FlaskConical, HeartPulse, AlertTriangle, Scale, Pill, ShoppingBag, ShieldCheck, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import type { LibraryModule, LibraryModuleCategory } from '@/lib/library-modules';
 import type { ComparisonLink } from '@/lib/comparison-relations';
@@ -10,9 +10,12 @@ import type { GuideLink, RelatedCompoundLink } from '@/lib/library-graph';
 import { getModulePath, libraryCategoryMeta } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { compounds } from '@/lib/data';
+import { getEdgeExplanation } from '@/lib/hero-network';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { MdxRenderer } from './MdxRenderer';
 import { CompoundBuyerGuidePanel } from './CompoundBuyerGuide';
+import { ProductPickCard } from '@/components/shop/ProductPickCard';
+import { getProductPick } from '@/lib/product-picks';
 import { LifestylePillarPanel } from './LifestylePillarPanel';
 import { getBuyerGuideByModuleSlug } from '@/lib/buyer-guides';
 import type { LifestyleSlug } from '@/lib/lifestyle-pillars';
@@ -78,6 +81,14 @@ export function LibraryModuleDetail({
     .filter(Boolean) ?? [];
   const buyerGuide =
     module.category === 'compounds' ? getBuyerGuideByModuleSlug(module.slug) : undefined;
+  // A compound can have a verified pick without a full authored buyer guide
+  // (e.g. R-ALA). Without this fallback its evidence page would carry no buy
+  // path at all — surface the pick directly so the revenue action is never
+  // missing where one exists.
+  const fallbackPick =
+    module.category === 'compounds' && !buyerGuide && module.compoundId
+      ? getProductPick(module.compoundId)
+      : undefined;
   // Library-first compounds have no canonical dataset entry to drive the rich
   // glance panel; surface the same shape from a live count of the PMIDs cited
   // in the deep-dive body so all 55 compound pages stay coherent.
@@ -187,6 +198,36 @@ export function LibraryModuleDetail({
                 <p className="text-xs text-muted-foreground mt-1">{relatedCompound.dose} · {relatedCompound.timing}</p>
                 <Link href="/stacks" className="text-xs text-accent-cyan hover:text-accent-emerald mt-3 inline-block">
                   Add to stack →
+                </Link>
+              </GlassPanel>
+            )}
+
+            {/* Compound pages: each synergy partner with its real pair-specific
+                mechanism (lib/synergy-mechanisms.ts) — the "why they pair" on
+                the page, not just a list of names. */}
+            {relatedCompound && relatedCompound.synergies.length > 0 && (
+              <GlassPanel depth="mid" className="rounded-xl p-5">
+                <p className="text-micro font-mono text-accent-emerald uppercase mb-3">Synergizes with</p>
+                <ul className="space-y-3">
+                  {relatedCompound.synergies.map((partnerId) => {
+                    const partner = compounds.find((c) => c.id === partnerId);
+                    if (!partner) return null;
+                    const why = getEdgeExplanation(relatedCompound.id, partner.id).text;
+                    return (
+                      <li key={partnerId}>
+                        <Link
+                          href={`/library/compounds/${partner.id}`}
+                          className="text-sm font-semibold text-foreground hover:text-accent-cyan transition"
+                        >
+                          {partner.name}
+                        </Link>
+                        <p className="mt-0.5 text-xs leading-snug text-muted-foreground">{why}</p>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <Link href="/stacks" className="text-xs text-accent-cyan hover:text-accent-emerald mt-4 inline-block">
+                  Open Stack Architect →
                 </Link>
               </GlassPanel>
             )}
@@ -355,6 +396,24 @@ export function LibraryModuleDetail({
 
             {buyerGuide && (
               <CompoundBuyerGuidePanel guide={buyerGuide} />
+            )}
+
+            {fallbackPick && (
+              <div className="gradient-border p-6 md:p-8">
+                <div className="flex items-center gap-2 mb-4">
+                  <ShoppingBag className="w-4 h-4 text-accent-emerald" aria-hidden="true" />
+                  <p className="text-micro font-mono text-accent-emerald uppercase">Verified pick</p>
+                </div>
+                <ProductPickCard pick={fallbackPick} />
+                <p className="mt-3 flex items-start gap-2 text-xs leading-relaxed text-muted-foreground">
+                  <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent-amber" aria-hidden="true" />
+                  <span>
+                    Links to the manufacturer and may carry an affiliate token — at no extra cost to
+                    you. Commission never influences the pick or its evidence tier. Educational
+                    information, not medical advice; request a Certificate of Analysis before you buy.
+                  </span>
+                </p>
+              </div>
             )}
 
             {mdxBody ? (

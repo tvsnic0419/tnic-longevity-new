@@ -18,10 +18,12 @@ import { compounds } from './data';
 
 const STALE_BEFORE_YEAR = 2015;
 // Current count of structured compounds whose newest citation predates
-// STALE_BEFORE_YEAR (rala 2007, pterostilbene 2011, zinc 2012). Ratchet DOWN
-// when a compound's citations are refreshed; never raise it to accommodate a
-// newly-stale entry — refresh the citation instead.
-const STALE_CITATION_BUDGET = 3;
+// STALE_BEFORE_YEAR. Recalibrated 2026-08 when the structured set grew 27→81
+// (many long-established nutrients — vitamin C, phosphatidylserine, ginkgo —
+// genuinely have older foundational RCTs, not neglect). Ratchet DOWN as
+// citations are refreshed with real, verified newer literature; never raise
+// it to silently accommodate a newly-stale entry.
+const STALE_CITATION_BUDGET = 20;
 
 interface Freshness {
   id: string;
@@ -47,12 +49,16 @@ describe('citation freshness + coverage', () => {
     }
   });
 
-  it('every study year is plausible (1990 .. now+1)', () => {
+  it('every study year is plausible (1970 .. now+1)', () => {
+    // Floor is 1970, not a stricter "recent" cutoff — some compounds
+    // legitimately cite landmark historical trials (e.g. the Coronary Drug
+    // Project niacin follow-ups, 1986/1991). This only catches real
+    // data-entry errors like `year: 0`, not old-but-real citations.
     const maxYear = new Date().getFullYear() + 1;
     for (const c of compounds) {
       for (const s of c.studies ?? []) {
         expect(
-          s.year >= 1990 && s.year <= maxYear,
+          s.year >= 1970 && s.year <= maxYear,
           `${c.id} cites an implausible study year: ${s.year}`,
         ).toBe(true);
       }

@@ -1,4 +1,4 @@
-import { compounds } from './data';
+import { isStackCompoundId } from './compound-core';
 import { stackPresets, type PresetKey } from './presets';
 
 export function isPresetKey(value: string): value is PresetKey {
@@ -19,7 +19,7 @@ export function parseStackParam(param: string): string[] | null {
   const ids = trimmed
     .split(',')
     .map((id) => id.trim())
-    .filter((id) => compounds.some((c) => c.id === id));
+    .filter((id) => isStackCompoundId(id));
 
   return ids.length > 0 ? ids : null;
 }

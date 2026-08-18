@@ -271,12 +271,13 @@ export function getPathwaysForCompound(compoundSlug: string): Pathway[] {
 }
 
 /**
- * Pathways that act on a given hallmark (by hallmark id) — for hallmark pages.
- * The "verb" layer between a hallmark and the compounds that move it, so a
- * hallmark page links out to the mechanistic pathways instead of leaving that
- * relationship to prose auto-links alone. Mirrors `getPathwaysForCompound`.
+ * The molecular pathways that drive a given hallmark (by id), inverting
+ * `pathway.hallmarkIds`. These resolve to linkable `/pathways/<slug>` deep-dives.
+ * Named distinctly from `relations.ts`'s `getPathwaysForHallmark` (which returns
+ * the high-level `PathwayGroup`s that have no pages) so the hallmark hub can link
+ * down into the mechanistic layer it currently only receives links from.
  */
-export function getPathwaysForHallmark(hallmarkId: string): Pathway[] {
+export function getMolecularPathwaysForHallmark(hallmarkId: string): Pathway[] {
   return pathways.filter((p) => p.hallmarkIds.includes(hallmarkId));
 }
 

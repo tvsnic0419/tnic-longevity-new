@@ -5,7 +5,7 @@ import type {
   SourceCitation,
   UpdateHistoryEntry,
 } from './types';
-import { researchFeed } from './data';
+import { researchFeed } from './research-feed';
 
 /** Evidence tier definitions for tagging system */
 export const evidenceTagDefinitions: Record<
