@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, BookOpen, Layers, FlaskConical, HeartPulse, AlertTriangle, Scale, Pill, ShoppingBag, ShieldCheck, type LucideIcon } from 'lucide-react';
+import { ArrowLeft, BookOpen, Layers, FlaskConical, HeartPulse, AlertTriangle, Scale, Pill, ShoppingBag, Info, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import type { LibraryModule, LibraryModuleCategory } from '@/lib/library-modules';
 import type { ComparisonLink } from '@/lib/comparison-relations';
@@ -25,6 +25,7 @@ import { ModuleGlancePanel } from './ModuleGlancePanel';
 import { recordModuleVisit } from '@/lib/recent-modules';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { ContentByline } from '@/components/trust/ContentByline';
+import { AffiliateDisclosure } from '@/components/trust/AffiliateDisclosure';
 import { libraryModuleTitles } from '@/lib/breadcrumb-titles';
 
 /**
@@ -134,7 +135,7 @@ export function LibraryModuleDetail({
                 {categoryMeta.label}
               </p>
               <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1.5">
-                <EvidenceTag tier={module.evidenceTier} size="lg" />
+                <EvidenceTag tier={module.evidenceTier} size="lg" href="/trust/methodology" />
                 {module.category === 'compounds' && (
                   <Link
                     href={`/library/compounds?tiers=${module.evidenceTier}`}
@@ -405,13 +406,34 @@ export function LibraryModuleDetail({
                   <p className="text-micro font-mono text-accent-emerald uppercase">Verified pick</p>
                 </div>
                 <ProductPickCard pick={fallbackPick} />
-                <p className="mt-3 flex items-start gap-2 text-xs leading-relaxed text-muted-foreground">
-                  <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent-amber" aria-hidden="true" />
-                  <span>
-                    Links to the manufacturer and may carry an affiliate token — at no extra cost to
-                    you. Commission never influences the pick or its evidence tier. Educational
-                    information, not medical advice; request a Certificate of Analysis before you buy.
-                  </span>
+                <AffiliateDisclosure className="mt-3" />
+              </div>
+            )}
+
+            {/* Honest empty state for compounds with neither a buyer's-guide
+                checklist nor a verified pick — never a fabricated buy card,
+                just an honest note plus a real next step. Gated on
+                'compounds' for the same reason buyerGuide/fallbackPick are:
+                both are unconditionally undefined for every other category
+                (synergies/lifestyle/guides), so without this clause the box
+                would incorrectly render there too. */}
+            {!buyerGuide && !fallbackPick && module.category === 'compounds' && (
+              <div className="gradient-border p-6 md:p-8">
+                <div className="flex items-center gap-2 mb-3">
+                  <Info className="w-4 h-4 text-muted-foreground" aria-hidden="true" />
+                  <p className="text-micro font-mono text-muted-foreground uppercase">No verified pick yet</p>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  TNiC hasn&apos;t verified a manufacturer pick for {module.title} yet — picks are added
+                  only after dose-matched COA verification, not before. See what TNiC has verified on{' '}
+                  <Link href="/products" className="text-accent-cyan hover:underline">
+                    Products
+                  </Link>
+                  , or take the{' '}
+                  <Link href="/nico" className="text-accent-cyan hover:underline">
+                    NICO Starter Questionnaire
+                  </Link>{' '}
+                  for a personalized stack from compounds that are covered.
                 </p>
               </div>
             )}

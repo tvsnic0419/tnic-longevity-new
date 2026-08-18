@@ -71,7 +71,7 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
           unoptimized={pick.imageSrc.endsWith('.svg')}
         />
         <span className="absolute left-3 top-3 z-10">
-          <EvidenceTag tier={evidence} size="sm" />
+          <EvidenceTag tier={evidence} size="sm" href="/trust/methodology" />
         </span>
         <span className="absolute right-4 top-2 z-10 font-display text-3xl leading-none text-[var(--color-text-faint)] tabular-nums">
           {String(intervention.rank).padStart(2, '0')}

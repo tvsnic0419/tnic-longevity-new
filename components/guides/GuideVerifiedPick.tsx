@@ -1,9 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ExternalLink, BookOpen, ShieldCheck } from 'lucide-react';
+import { ExternalLink, BookOpen } from 'lucide-react';
 import { PRODUCT_PICKS } from '@/lib/product-picks';
 import { compounds } from '@/lib/data';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { AffiliateDisclosure } from '@/components/trust/AffiliateDisclosure';
 
 /**
  * Verified-pick buy card for the commercial-intent supplement guides.
@@ -49,7 +50,7 @@ export function GuideVerifiedPick({
         {/* Product image */}
         <div className="relative flex h-28 w-28 shrink-0 items-center justify-center self-center rounded-xl border border-border/50 bg-white/[0.03] sm:self-auto">
           <span className="absolute left-2 top-2 z-10">
-            <EvidenceTag tier={compound.evidence} size="sm" />
+            <EvidenceTag tier={compound.evidence} size="sm" href="/trust/methodology" />
           </span>
           <Image
             src={pick.imageSrc}
@@ -116,14 +117,7 @@ export function GuideVerifiedPick({
 
       {/* Affiliate disclosure — required wherever a buy link leads */}
       {showDisclosure && (
-      <p className="flex items-start gap-2 border-t border-accent-emerald/15 bg-black/10 px-5 py-3 text-xs leading-relaxed text-muted-foreground sm:px-6">
-        <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent-amber" aria-hidden="true" />
-        <span>
-          Links to the manufacturer and may carry an affiliate token — at no extra cost to you.
-          Commission never influences which product is picked or its evidence tier. Educational
-          information, not medical advice; request a Certificate of Analysis before you buy.
-        </span>
-      </p>
+        <AffiliateDisclosure className="border-t border-accent-emerald/15 bg-black/10 px-5 py-3 sm:px-6" />
       )}
     </aside>
   );

@@ -68,7 +68,12 @@ function ProductCard({ pick }: { pick: ProductPick }) {
         />
         {tier && (
           <div className="absolute top-3 left-3">
-            <EvidenceTag tier={tier} size="sm" />
+            <EvidenceTag
+              tier={tier}
+              size="sm"
+              href="/trust/methodology"
+              className="pointer-events-auto relative z-10"
+            />
           </div>
         )}
         <span className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity inline-flex items-center gap-1 text-micro font-semibold bg-accent-emerald/90 text-black px-2 py-1 rounded-full">
