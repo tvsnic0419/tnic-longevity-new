@@ -92,7 +92,7 @@ export default function GenomicInstabilityPage() {
           </div>
 
           {/* Cascade diagram (text-based) */}
-          <div className="mt-10 rounded-2xl border border-border/60 bg-card/40 p-6">
+          <div className="premium-card mt-10 p-6">
             <p className="text-label text-muted-foreground mb-4">Damage Cascade</p>
             <div className="flex flex-wrap items-center gap-2 text-body-sm">
               {CASCADE_STEPS.map((step, i) => (
@@ -113,7 +113,7 @@ export default function GenomicInstabilityPage() {
             <p className="text-label text-accent-cyan">Monitoring</p>
           </div>
           <h2 className="heading-section text-foreground mb-6">Biomarkers that track genomic health</h2>
-          <div className="rounded-2xl border border-border/60 bg-card/40 overflow-hidden">
+          <div className="premium-card">
             <div className="grid grid-cols-3 px-6 py-3 border-b border-border/40 text-label text-muted-foreground">
               <span>Marker</span>
               <span>Reference range</span>

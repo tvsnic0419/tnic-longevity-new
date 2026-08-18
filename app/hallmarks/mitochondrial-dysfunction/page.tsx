@@ -84,7 +84,7 @@ export default function MitochondrialDysfunctionPage() {
             </div>
           </div>
 
-          <div className="mt-10 rounded-2xl border border-border/60 bg-card/40 p-6">
+          <div className="premium-card mt-10 p-6">
             <p className="text-label text-muted-foreground mb-4">Key Molecular Axes</p>
             <div className="grid sm:grid-cols-3 gap-4 text-body-sm">
               {MOLECULAR_AXES.map((item) => (
@@ -105,7 +105,7 @@ export default function MitochondrialDysfunctionPage() {
             <p className="text-label text-accent-amber">Monitoring</p>
           </div>
           <h2 className="heading-section text-foreground mb-6">Biomarkers that track mitochondrial health</h2>
-          <div className="rounded-2xl border border-border/60 bg-card/40 overflow-hidden">
+          <div className="premium-card">
             <div className="grid grid-cols-3 px-6 py-3 border-b border-border/40 text-label text-muted-foreground">
               <span>Marker</span>
               <span>Reference range</span>
