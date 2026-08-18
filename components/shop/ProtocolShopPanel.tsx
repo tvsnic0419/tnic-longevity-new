@@ -17,6 +17,7 @@ import {
   Link2,
   CheckCircle2,
   Copy,
+  Info,
 } from 'lucide-react';
 import { usePlatform } from '@/context/PlatformContext';
 import { stackPresets, type PresetKey } from '@/lib/presets';
@@ -26,6 +27,7 @@ import {
   getNrAlternativeShopItem,
   getNrShopItems,
   getStackShopItems,
+  getUnmatchedStackCompounds,
   shopDisclosure,
 } from '@/lib/protocol-shop';
 import { buildShopStackUrl, isPresetKey, parseStackParam } from '@/lib/stack-url';
@@ -53,6 +55,10 @@ function ProtocolShopPanelInner() {
   const items = isNrOnlyMode ? getNrShopItems() : getStackShopItems(selected);
   const nrAlternative =
     !isNrOnlyMode && selected.includes('nmn') ? getNrAlternativeShopItem() : null;
+  // NR-only mode's `items` comes from a fixed single card unrelated to
+  // `selected` — comparing them there would falsely claim compounds are
+  // missing that were never meant to be shown as a stack.
+  const unmatched = isNrOnlyMode ? [] : getUnmatchedStackCompounds(selected);
   const [deepLinked, setDeepLinked] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -252,6 +258,33 @@ function ProtocolShopPanelInner() {
         </div>
       ) : (
         <>
+          {unmatched.length > 0 && (
+            <div className="rounded-xl border border-accent-amber/25 bg-accent-amber/5 p-4 mb-6 flex gap-3">
+              <Info className="w-5 h-5 text-accent-amber shrink-0 mt-0.5" />
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {unmatched.length} compound{unmatched.length !== 1 ? 's' : ''} in your stack{' '}
+                {unmatched.length !== 1 ? "don't" : "doesn't"} have a verified pick yet — TNiC adds
+                manufacturer picks only after dose-matched COA verification:{' '}
+                {unmatched.map((c, i) => (
+                  <span key={c.compoundId}>
+                    {i > 0 && ', '}
+                    {c.moduleHref ? (
+                      <Link href={c.moduleHref} className="text-accent-cyan hover:underline">
+                        {c.compoundName}
+                      </Link>
+                    ) : (
+                      c.compoundName
+                    )}
+                  </span>
+                ))}
+                . See what IS verified on{' '}
+                <Link href="/products" className="text-accent-cyan hover:underline">
+                  Products
+                </Link>
+                .
+              </p>
+            </div>
+          )}
           <div className="space-y-4 mb-8">
             {items.map((item) => (
               <div

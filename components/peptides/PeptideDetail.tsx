@@ -74,7 +74,7 @@ export function PeptideDetail({
                 {categoryMeta.label}
               </p>
               <div className="flex flex-wrap gap-2 mb-4">
-                <EvidenceTag tier={peptide.evidenceTier} size="lg" />
+                <EvidenceTag tier={peptide.evidenceTier} size="lg" href="/trust/methodology" />
                 <PeptideLegalBadge status={peptide.legalStatus} size="lg" />
               </div>
               <h2 className="text-lg font-bold mb-4">Page outline</h2>

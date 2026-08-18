@@ -41,7 +41,7 @@ export function ProtocolCard({ protocol }: { protocol: Protocol }) {
           </p>
           <h3 className="heading-card mt-1.5 text-xl">{protocol.name}</h3>
         </div>
-        <EvidenceTag tier={protocol.evidence} size="sm" />
+        <EvidenceTag tier={protocol.evidence} size="sm" href="/trust/methodology" />
       </div>
 
       <p className="text-body-sm font-medium text-foreground">{protocol.goal}</p>
