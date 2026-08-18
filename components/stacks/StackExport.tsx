@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { Copy, CheckCheck, Download, FileJson, Share2 } from 'lucide-react';
+import Link from 'next/link';
+import { Copy, CheckCheck, Download, FileJson, Share2, ShoppingBag } from 'lucide-react';
 import { useStack } from '@/context/PlatformContext';
 import { analyzeStack, formatStackExport, formatStackJson } from '@/lib/stack-analysis';
 import { GlassPanel } from '@/components/ui/GlassPanel';
+import { buildShopStackUrl } from '@/lib/stack-url';
 import {
   formatSimulatorExport,
   type StackSimulatorResult,
@@ -83,6 +85,13 @@ export function StackExport({ stackName, simulatorResult, age }: StackExportProp
 
   return (
     <GlassPanel depth="mid" className="rounded-2xl p-5">
+      <Link
+        href={buildShopStackUrl(selected)}
+        className="focus-ring interactive mb-4 flex w-full items-center justify-center gap-2 rounded-xl bg-accent-amber/15 border border-accent-amber/30 px-4 py-3 text-sm font-semibold text-accent-amber transition-colors hover:bg-accent-amber/25"
+      >
+        <ShoppingBag className="w-4 h-4" aria-hidden="true" />
+        Shop this stack
+      </Link>
       <p className="text-label text-accent-violet mb-4">Export protocol</p>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         <GlassPanel depth="mid" className="h-full rounded-xl">
