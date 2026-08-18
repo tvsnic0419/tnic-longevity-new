@@ -60,18 +60,20 @@ export default function ProtocolsPage() {
           ))}
         </div>
 
-        <div className="mt-10 flex flex-col items-start gap-3 rounded-2xl border border-border/70 bg-card/30 p-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-body-sm max-w-xl text-muted-foreground">
-            Want a stack tuned to your own goals, biomarkers, and safety profile? The Stack Architect
-            builds one for you — with synergy scoring and contraindication checks.
-          </p>
-          <Link
-            href="/stacks"
-            className="btn-gradient focus-ring group shrink-0 justify-center rounded-full text-sm !py-3 !px-6"
-          >
-            Open Stack Architect
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-          </Link>
+        <div className="premium-card mt-10 p-6">
+          <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-body-sm max-w-xl text-muted-foreground">
+              Want a stack tuned to your own goals, biomarkers, and safety profile? The Stack Architect
+              builds one for you — with synergy scoring and contraindication checks.
+            </p>
+            <Link
+              href="/stacks"
+              className="btn-gradient focus-ring group shrink-0 justify-center rounded-full text-sm !py-3 !px-6"
+            >
+              Open Stack Architect
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+            </Link>
+          </div>
         </div>
       </div>
     </SubPageLayout>

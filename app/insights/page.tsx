@@ -117,18 +117,20 @@ export default function InsightsPage() {
         </section>
 
         {/* Close */}
-        <div className="flex flex-col items-start gap-3 rounded-2xl border border-border/70 bg-card/30 p-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-body-sm max-w-xl text-muted-foreground">
-            Every number here is derived live from the library — it can&apos;t drift above what&apos;s
-            actually published. Explore the full evidence, compound by compound.
-          </p>
-          <Link
-            href="/library"
-            className="btn-gradient focus-ring group shrink-0 justify-center rounded-full text-sm !py-3 !px-6"
-          >
-            Explore the library
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-          </Link>
+        <div className="premium-card p-6">
+          <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-body-sm max-w-xl text-muted-foreground">
+              Every number here is derived live from the library — it can&apos;t drift above what&apos;s
+              actually published. Explore the full evidence, compound by compound.
+            </p>
+            <Link
+              href="/library"
+              className="btn-gradient focus-ring group shrink-0 justify-center rounded-full text-sm !py-3 !px-6"
+            >
+              Explore the library
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+            </Link>
+          </div>
         </div>
       </div>
     </SubPageLayout>
