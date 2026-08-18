@@ -6,10 +6,95 @@ master prompt — its durable operating rules are already merged into
 
 ## Current phase
 
-**Phase 2 complete** — a follow-up visual/UI-depth pass on top of Phase 1
-(Steps 0–7, below). Everything in both phases is done, verified, and pushed.
-Next session should start a fresh pass rather than resuming this one — see
+**Phase 3 complete** — a conversion-funnel pass on top of Phases 1–2 (below).
+Everything across all three phases is done, verified, and pushed. Next
+session should start a fresh pass rather than resuming this one — see
 "Explicitly deferred" for what's next in priority order.
+
+## Phase 3 — conversion-funnel fixes (5 workstreams)
+
+Same audit-and-extend discipline as Phase 2, applied to the site's actual
+monetization surface. **Never fabricates**: every fix is code/UX/copy —
+nothing here invents a product pick, a reviewer identity, or any claim not
+already backed by real, already-authored data. Two Explore agents audited
+the actual buy-path/CTA structure and trust-signal placement; a Plan agent
+turned the findings into a file-by-file plan, which I then independently
+re-verified against source before executing — and found the plan's own
+claim that 2 of 5 "duplicate" disclosure boxes were near-duplicates was
+wrong on direct read (see Workstream 3 below), so didn't force a merge that
+would have been a content regression.
+
+1. **Honest empty-state for the ~75% of compounds with no buy path** — 47 of
+   63 compound library modules had zero buy CTA, including 5 that already
+   have a full buyer's-guide checklist (rapamycin, berberine, urolithin-a,
+   coq10, omega3) with literally nothing after it. `CompoundBuyerGuide.tsx`
+   and `LibraryModuleDetail.tsx` now show an honest "TNiC hasn't verified a
+   manufacturer pick yet" note with a real next step (`/products`, `/nico`)
+   instead of silence — never a fabricated pick. **Flagged for Thomas, not
+   executed**: actually sourcing/vetting real products for more compounds
+   (the 5 with existing checklists first — half the vetting work is already
+   done) is almost certainly the single highest-revenue lever on this whole
+   list, but it's a business/data task no code fix substitutes for.
+2. **Fixed a silent data-loss bug in the site's own flagship funnel.** NICO
+   quiz → Stack Builder → "Protocol Shop" is the most-repeated CTA path on
+   the homepage (5 links). `getStackShopItems()` only recognized 10
+   hardcoded compound ids and silently dropped everything else with no
+   message — a user could lose half their built stack at the exact moment
+   they were ready to buy. New `getUnmatchedStackCompounds()` in
+   `lib/protocol-shop.ts` (additive, existing behavior untouched) now
+   surfaces what got dropped, linking to a library page when one exists (31
+   of 81 stack-buildable ids have none — those render as plain text, never
+   a dead link).
+3. **Consolidated buy-CTA disclosure + made evidence-tier badges clickable.**
+   New `components/trust/AffiliateDisclosure.tsx` de-duplicates 2 genuinely
+   near-identical inline copies (`GuideVerifiedPick.tsx`,
+   `LibraryModuleDetail.tsx`'s fallbackPick block) and closes a real gap —
+   `CompoundBuyerGuidePanel`, used on ~10 compound pages with a live buy
+   card, had *no* disclosure at all. **Correction to the plan**: I
+   independently re-read `ProductsHub.tsx`'s and `HomeEliteInterventions.tsx`'s
+   own disclosure boxes before touching them and found both are genuinely
+   distinct, page-appropriate copy, not near-duplicates —
+   `HomeEliteInterventions.tsx`'s has strictly *more* content (a "talk to a
+   clinician" line found nowhere else); forcing the shared component's
+   shorter text in either would have been a content regression disguised as
+   cleanup, so both were left untouched. Also wired the existing (already
+   built, just unused) `href` prop on `EvidenceTag` at every buy-adjacent
+   site that was safe to touch (6 files) — was hover-only via a native
+   `title` attribute almost everywhere, unreachable on mobile right at the
+   decision point. Excluded 2 sites (`CompoundSelectorGrid.tsx`,
+   `EliteStackCard.tsx`) where the tag sits inside a `<button onClick>` —
+   adding `href` there would nest an `<a>` inside a `<button>`.
+4. **Sitewide email capture.** The only working capture mechanism
+   (`BriefSubscribePanel`, real backend) rendered only on `/brief`, which
+   isn't in nav and isn't linked from the homepage or footer. New
+   `components/brief/FooterBriefSubscribe.tsx` reuses
+   `submitBriefSubscription()` — the same function the full panel calls, so
+   validation/save/API behavior is 100% shared — condensed to one input +
+   button, now in the sitewide footer.
+5. **Shortened the funnel's last mile.** `StackExport.tsx` previously
+   offered only Copy Text/JSON/Download/Share once a stack was built — no
+   buy/shop action anywhere in the builder. Added a prominent "Shop this
+   stack" button (reusing the existing `buildShopStackUrl()` helper),
+   sequenced after item 2 so it never routes into the silent-drop dead end
+   that used to exist. `StackExport` has exactly 2 consumers, so this closes
+   the gap in both the Stack Architect and the Advanced Stack Simulator at
+   once.
+
+**Verification**: `npm run lint`/`typecheck`/`test` clean at every commit
+(41 files / 571 tests). Full clean rebuild succeeded with 0 errors/warnings.
+Manual QA against the real build (curl for SSR content, Playwright for the
+client-rendered `/shop` page since it's behind a pre-existing Suspense
+boundary by design): confirmed the empty-state renders server-side on
+`rapamycin`/`fisetin`, confirmed `nmn`/`glynac`-only stacks show no
+regression, confirmed the unmatched-compounds notice appears for a mixed
+stack and correctly lists a linked library page vs. plain text for
+compounds with none, confirmed the `isNrOnlyMode` and empty-stack states are
+unaffected (using a fresh, isolated browser context — the first pass showed
+a false negative from stack-selection state persisting across sequential
+navigations in one context, which is itself correct pre-existing behavior,
+not a bug), confirmed "Shop this stack" generates the right URL end-to-end
+from Stack Builder into the shop notice. Exactly one `<h1>` on every touched
+page — no heading regression.
 
 ## Phase 2 — visual/UI depth pass (3 workstreams)
 
