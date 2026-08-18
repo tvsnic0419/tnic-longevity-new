@@ -13,6 +13,7 @@ import {
   Rocket,
   Syringe,
   Waypoints,
+  BarChart3,
 } from 'lucide-react';
 import { POPULAR_GUIDE_LINKS } from '@/lib/index-priority';
 import { citationRegistry } from '@/lib/trust';
@@ -28,7 +29,9 @@ const hubLinks = [
   { href: '/peptides', label: 'Peptide Library', icon: Syringe },
   { href: '/pathways', label: 'Pathways', icon: Waypoints },
   { href: '/learn', label: 'Learn Hub', icon: GraduationCap },
+  { href: '/insights', label: 'Longevity by the Numbers', icon: BarChart3 },
   { href: '/stacks', label: 'Stacks & Protocols', icon: Layers },
+  { href: '/protocols', label: 'Protocol Library', icon: Layers },
   { href: '/labs', label: 'Lab Analysis Hub', icon: FlaskConical },
   { href: '/compound-engine', label: 'Compound Engine', icon: Cpu },
 ];
@@ -191,8 +194,9 @@ export function Footer() {
             © 2026 TNiC · Independent · Evidence-First
           </p>
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-caption font-mono">
-            <span>Tier A: {tierACount} compounds</span>
-            <span>Tier B: {tierBCount} compounds</span>
+            <span title="Of the stack-buildable set — the full library carries more at every tier">
+              Stack-buildable — Tier A: {tierACount} · Tier B: {tierBCount}
+            </span>
             <span>{citationRegistry.length} indexed PMIDs</span>
           </div>
         </div>

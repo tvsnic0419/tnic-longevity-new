@@ -3,6 +3,7 @@ import {
   SUPPLEMENT_GUIDES,
   getSiblingGuides,
   getCompoundSlugsForGuide,
+  getCompoundLinksForGuide,
   getHallmarksForGuide,
 } from './guides';
 import { getMappedGuideHrefs } from './library-graph';
@@ -71,6 +72,24 @@ describe('getHallmarksForGuide', () => {
       expect(numbers, `${guide.href} hallmarks should be ordered by number`).toEqual([...numbers].sort((a, b) => a - b));
       for (const h of hallmarks) {
         expect(hallmarkSlugs, `${guide.href} links hallmark "${h.slug}" that has no page`).toContain(h.slug);
+      }
+    }
+  });
+});
+
+describe('getCompoundLinksForGuide', () => {
+  it('resolves every non-master guide to real, tier-sorted compound pages that match its slug set', () => {
+    for (const guide of SUPPLEMENT_GUIDES) {
+      if (guide.isMaster) continue;
+      const links = getCompoundLinksForGuide(guide.href);
+      const slugs = getCompoundSlugsForGuide(guide.href);
+      // One link per covered compound that has a page (all do, per the guard above).
+      expect(links.length, `${guide.href} derived no compound links`).toBe(slugs.length);
+      const tiers = links.map((l) => l.evidence);
+      expect(tiers, `${guide.href} compound links should be tier-sorted`).toEqual([...tiers].sort());
+      for (const l of links) {
+        expect(compoundModuleSlugs, `${guide.href} links compound "${l.slug}" with no page`).toContain(l.slug);
+        expect(l.name.length, `${l.slug} missing display name`).toBeGreaterThan(0);
       }
     }
   });

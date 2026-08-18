@@ -56,13 +56,14 @@
 | `.heading-page` | clamp 30–48px | Hub H1 |
 | `.heading-section` | clamp 24–40px | Section H2 |
 | `.heading-card` | 16px / 600 | Card titles |
+| `.text-h3` | clamp 19–22px | Sub-section heading, one step below `.heading-section` — long-form/utility pages (trust, legal) via `.prose-tnic` |
 | `.text-body` | 16px / 1.65 | Descriptions |
 | `.text-body-sm` | 14px / 1.6 | Card body, table cells |
 | `.text-caption` | 12px | Meta, disclaimers |
 | `.text-label` | 11px mono uppercase | Eyebrows, column headers |
 
 **Before:** Mixed `text-[10px]`, `text-xs`, `text-sm` with no hierarchy.  
-**After:** Six semantic classes used consistently via `PageHeader`, `SectionShell`, cards.
+**After:** Seven semantic classes used consistently via `PageHeader`, `SectionShell`, cards.
 
 ---
 

@@ -61,7 +61,7 @@ export default async function ScorecardPage({ params }: Props) {
           <div className={`text-[7rem] md:text-[9rem] font-black leading-none font-mono ${gradeTextColor[grade]}`}>
             {grade}
           </div>
-          <p className="text-xl md:text-2xl font-bold mt-2">{gradeLabels[grade]}</p>
+          <p className="text-h3 mt-2">{gradeLabels[grade]}</p>
           {delta && (
             <p className="text-body mt-3 text-muted-foreground">&ldquo;{delta}&rdquo;</p>
           )}

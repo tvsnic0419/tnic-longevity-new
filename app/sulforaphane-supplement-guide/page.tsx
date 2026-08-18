@@ -1,7 +1,9 @@
+import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { ArrowRight, ExternalLink, CheckCircle2, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { GuideHeroPanel } from '@/components/guides/GuideHeroPanel';
+import { GuideMoleculeWell } from '@/components/guides/GuideMoleculeWell';
 import { GuideVerifiedPick } from '@/components/guides/GuideVerifiedPick';
 import { Accordion, AccordionItem } from '@/components/ui/Accordion';
 import { StructuredData } from '@/components/seo/StructuredData';
@@ -220,7 +222,7 @@ export default function SulforaphaneGuidePage() {
             NRF2 (Nuclear Factor Erythroid 2-Related Factor 2) is the master regulator of cellular antioxidant defense — it controls the transcription of over 200 cytoprotective genes. Sulforaphane is the most potent known natural NRF2 activator.
           </p>
 
-          <div className="rounded-2xl border border-accent-emerald/20 bg-accent-emerald/[0.04] p-6 mb-8">
+          <div className="premium-card p-6 mb-8" style={{ '--card-accent': 'var(--accent-emerald)' } as CSSProperties}>
             <p className="font-mono text-sm text-accent-emerald mb-2">THE MECHANISM</p>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Normally, Keap1 protein keeps NRF2 bound in the cytoplasm and marks it for degradation. Sulforaphane reacts covalently with cysteine residues on Keap1 (particularly C151, C273, C288), changing its shape. Keap1 releases NRF2, which translocates to the nucleus, binds antioxidant response elements (AREs), and activates the cytoprotective gene battery — including enzymes for glutathione synthesis, detoxification, heme catabolism, and anti-inflammatory signaling.
@@ -239,6 +241,13 @@ export default function SulforaphaneGuidePage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Molecule illustration */}
+      <section className="py-10">
+        <div className="container-page max-w-4xl">
+          <GuideMoleculeWell compoundId="sulforaphane" />
         </div>
       </section>
 
@@ -373,6 +382,7 @@ export default function SulforaphaneGuidePage() {
                 authors: 'Fahey JW et al. · 2002',
                 color: 'text-accent-cyan',
                 badge: 'bg-accent-cyan/10 border-accent-cyan/20',
+                accent: 'var(--accent-cyan)',
               },
               {
                 title: 'Non-alcoholic liver disease (NAFLD)',
@@ -381,6 +391,7 @@ export default function SulforaphaneGuidePage() {
                 authors: 'Shimizu T et al. · 2018',
                 color: 'text-accent-violet',
                 badge: 'bg-accent-violet/10 border-accent-violet/20',
+                accent: 'var(--accent-violet)',
               },
               {
                 title: 'Autism spectrum disorder (ASD)',
@@ -389,6 +400,7 @@ export default function SulforaphaneGuidePage() {
                 authors: 'Singh K et al. · 2014',
                 color: 'text-accent-emerald',
                 badge: 'bg-accent-emerald/10 border-accent-emerald/20',
+                accent: 'var(--accent-emerald)',
               },
               {
                 title: 'Air pollution oxidative stress',
@@ -397,9 +409,10 @@ export default function SulforaphaneGuidePage() {
                 authors: 'Egner PA et al. · 2014',
                 color: 'text-accent-rose',
                 badge: 'bg-accent-rose/10 border-accent-rose/20',
+                accent: 'var(--accent-rose)',
               },
             ].map((trial) => (
-              <div key={trial.title} className={`rounded-xl border p-5 ${trial.badge} bg-card/50`}>
+              <div key={trial.title} className="premium-card p-5" style={{ '--card-accent': trial.accent } as CSSProperties}>
                 <h3 className="font-semibold text-sm mb-2">{trial.title}</h3>
                 <p className="text-xs text-muted-foreground mb-3">{trial.result}</p>
                 <div className="flex items-center justify-between">

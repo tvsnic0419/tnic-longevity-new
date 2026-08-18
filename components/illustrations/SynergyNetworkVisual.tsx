@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import { VIZ } from '@/components/viz/tokens';
+import { getEdgeExplanation } from '@/lib/hero-network';
 
 interface SynergyNetworkProps {
   className?: string;
@@ -21,26 +23,35 @@ interface Edge {
   from: string;
   to: string;
   strength: number; // 1-3
+  /** Short cluster label, shown as a compact subtitle — the full "why" text
+   *  comes from getEdgeExplanation(from, to) at render time (see below), not
+   *  from this field, so it can't silently drift from the canonical
+   *  synergy-mechanism data. */
   pathway: string;
   color: string;
 }
 
+// Sourced from the canonical viz tokens, not restated, so this can't drift
+// from EvidenceTag/tierColor() the way a second hardcoded copy could.
 const nodes: Node[] = [
-  { id: 'nmn', label: 'NMN', x: 200, y: 120, color: '#00e0ff' },
-  { id: 'glynac', label: 'GlyNAC', x: 320, y: 80, color: '#34d399' },
-  { id: 'sulforaphane', label: 'Sulforaphane', x: 320, y: 160, color: '#fbbf24' },
-  { id: 'resveratrol', label: 'Resveratrol', x: 120, y: 80, color: '#c084fc' },
-  { id: 'ca-akg', label: 'Ca-AKG', x: 120, y: 160, color: '#f472b6' },
-  { id: 'fisetin', label: 'Fisetin', x: 260, y: 200, color: '#f472b6' },
+  { id: 'nmn', label: 'NMN', x: 200, y: 120, color: VIZ.cyan },
+  { id: 'glynac', label: 'GlyNAC', x: 320, y: 80, color: VIZ.emerald },
+  { id: 'sulforaphane', label: 'Sulforaphane', x: 320, y: 160, color: VIZ.amber },
+  { id: 'resveratrol', label: 'Resveratrol', x: 120, y: 80, color: VIZ.violet },
+  // 'cakg', not 'ca-akg' — the real compound id used everywhere else
+  // (lib/data.ts, EmergentEffectsView's compoundHrefs); the old id was a
+  // silent dead-end for any id-based lookup against this node.
+  { id: 'cakg', label: 'Ca-AKG', x: 120, y: 160, color: VIZ.rose },
+  { id: 'fisetin', label: 'Fisetin', x: 260, y: 200, color: VIZ.rose },
 ];
 
 const edges: Edge[] = [
-  { from: 'nmn', to: 'glynac', strength: 3, pathway: 'NAD+ + GSH', color: '#00e0ff' },
-  { from: 'glynac', to: 'sulforaphane', strength: 3, pathway: 'NRF2 + GSH', color: '#fbbf24' },
-  { from: 'nmn', to: 'resveratrol', strength: 2, pathway: 'SIRT1', color: '#c084fc' },
-  { from: 'nmn', to: 'ca-akg', strength: 2, pathway: 'NAD+ + TCA', color: '#f472b6' },
-  { from: 'glynac', to: 'fisetin', strength: 2, pathway: 'Antioxidant + Senolytic', color: '#f472b6' },
-  { from: 'sulforaphane', to: 'resveratrol', strength: 1, pathway: 'NRF2 + SIRT1', color: '#c084fc' },
+  { from: 'nmn', to: 'glynac', strength: 3, pathway: 'NAD+ + GSH', color: VIZ.cyan },
+  { from: 'glynac', to: 'sulforaphane', strength: 3, pathway: 'NRF2 + GSH', color: VIZ.amber },
+  { from: 'nmn', to: 'resveratrol', strength: 2, pathway: 'SIRT1', color: VIZ.violet },
+  { from: 'nmn', to: 'cakg', strength: 2, pathway: 'NAD+ + TCA', color: VIZ.rose },
+  { from: 'glynac', to: 'fisetin', strength: 2, pathway: 'Antioxidant + Senolytic', color: VIZ.rose },
+  { from: 'sulforaphane', to: 'resveratrol', strength: 1, pathway: 'NRF2 + SIRT1', color: VIZ.violet },
 ];
 
 export const SynergyNetworkVisual: React.FC<SynergyNetworkProps> = ({
@@ -200,6 +211,37 @@ export const SynergyNetworkVisual: React.FC<SynergyNetworkProps> = ({
           {nodes.find(n => n.id === hoveredNode)?.label} • {getConnectedEdges(hoveredNode).length} synergies
         </div>
       )}
+
+      {/* Always-visible fallback table — the diagram above only surfaces
+          edge data on hover; this gives the same data to anyone who doesn't
+          want the interaction (or can't use it). */}
+      <div className="mt-3 scroll-region rounded-2xl border border-white/10 bg-card/30">
+        <table className="w-full border-collapse text-left">
+          <caption className="sr-only">
+            All {edges.length} synergy connections shown in this diagram, with strength and mechanism.
+          </caption>
+          <thead>
+            <tr className="border-b border-white/10">
+              <th scope="col" className="px-3 py-2 text-label text-muted-foreground">Compound A</th>
+              <th scope="col" className="px-3 py-2 text-label text-muted-foreground">Compound B</th>
+              <th scope="col" className="px-3 py-2 text-label text-muted-foreground">Strength</th>
+              <th scope="col" className="px-3 py-2 text-label text-muted-foreground">Mechanism</th>
+            </tr>
+          </thead>
+          <tbody>
+            {edges.map((e) => (
+              <tr key={`${e.from}-${e.to}`} className="border-t border-white/5">
+                <td className="px-3 py-2 text-body-sm">{nodes.find((n) => n.id === e.from)?.label ?? e.from}</td>
+                <td className="px-3 py-2 text-body-sm">{nodes.find((n) => n.id === e.to)?.label ?? e.to}</td>
+                <td className="px-3 py-2 text-caption text-muted-foreground">
+                  {e.strength === 3 ? 'Strong' : e.strength === 2 ? 'Medium' : 'Additive'}
+                </td>
+                <td className="px-3 py-2 text-body-sm text-muted-foreground">{getEdgeExplanation(e.from, e.to).text}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

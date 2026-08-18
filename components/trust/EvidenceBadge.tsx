@@ -8,11 +8,16 @@ import {
 } from '@/lib/trust';
 import { cn } from '@/lib/utils';
 
+// Strong/Moderate/Mechanistic mirror Tier A/B/C 1:1 (via evidenceLevelFromTier)
+// and must use the same canonical colors as EvidenceTag/tierColor() — a Tier-C
+// compound can't show amber on /library and violet on /stacks for the same
+// grade. Emerging/Personal are a separate axis (evidence *type*, not grade)
+// and keep their own colors.
 const levelStyles: Record<EvidenceLevel, string> = {
   Strong: 'bg-accent-emerald/90 text-white border-accent-emerald/40',
   Moderate: 'bg-accent-cyan/90 text-white border-accent-cyan/40',
-  Mechanistic: 'bg-accent-violet/90 text-white border-accent-violet/40',
-  Personal: 'bg-accent-amber/90 text-white border-accent-amber/40',
+  Mechanistic: 'bg-accent-amber/90 text-white border-accent-amber/40',
+  Personal: 'bg-accent-violet/90 text-white border-accent-violet/40',
   Emerging: 'bg-muted text-muted-foreground border-border',
 };
 

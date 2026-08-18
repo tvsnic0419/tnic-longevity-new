@@ -3,8 +3,9 @@ import { CompoundIntelligenceEngine } from '@/components/engine/CompoundIntellig
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildBreadcrumbSchema, buildArticleSchema } from '@/lib/seo';
 import { seoRoutes } from '@/lib/seo-routes';
-import { COMPOUND_DB } from '@/lib/compound-engine-data';
+import { COMPOUND_DB, DEFAULT_WEIGHTS } from '@/lib/compound-engine-data';
 import { SITE } from '@/lib/site';
+import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 
 export const metadata = seoRoutes.compoundEngine();
 
@@ -62,6 +63,19 @@ export default function CompoundEnginePage() {
   return (
     <SubPageLayout hideStackReadout>
       <StructuredData schemas={buildEngineSchemas()} />
+      <CinematicHubHero
+        hue="cyan"
+        kicker="Compound Intelligence"
+        title={<>Score every compound, <em>mechanistically</em>.</>}
+        lead="A transparent, rule-based instrument — evidence, effect, breadth, bioavailability, and safety scored per compound, then resolved across the twelve hallmarks of aging."
+        stats={[
+          { value: String(COMPOUND_DB.length), label: 'Curated compounds' },
+          { value: String(Object.keys(DEFAULT_WEIGHTS).length), label: 'Scoring dimensions' },
+          { value: '12', label: 'Hallmarks mapped' },
+        ]}
+        primary={{ href: '/library', label: 'Browse the compound library' }}
+        secondary={{ href: '/tools', label: 'All interactive tools' }}
+      />
       <CompoundIntelligenceEngine />
     </SubPageLayout>
   );

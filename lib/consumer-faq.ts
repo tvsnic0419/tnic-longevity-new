@@ -2,6 +2,11 @@
 // through it route-context + the always-rendered ContextBar) doesn't pull the
 // compound data layer into every page's client bundle. Re-exported from
 // lib/data.ts for back-compat.
+//
+// Imports the lightweight compound-core mirror (not lib/data.ts) so the
+// stack-buildable count below stays live without reintroducing the bundle
+// weight this split was meant to avoid.
+import { compoundCore } from './compound-core';
 
 export const consumerFAQ = [
   {
@@ -49,8 +54,8 @@ export const consumerFAQ = [
   {
     id: 'faq8',
     category: 'products' as const,
-    question: 'Why 14 compounds and not dozens like other sites?',
-    answer: 'More is not better. Each additional compound increases interaction risk and usually means sub-therapeutic doses. TNiC curates 14 evidence-graded compounds — every one with PubMed-cited human data — selected for the strongest mechanistic coverage across all 12 hallmarks. Quality and synergy beat quantity. A stack of 30 unverified compounds with zero clinical evidence is not a protocol — it is a guess.',
+    question: `Why ${compoundCore.length} compounds and not dozens like other sites?`,
+    answer: `More is not better. Each additional compound increases interaction risk and usually means sub-therapeutic doses. TNiC curates ${compoundCore.length} evidence-graded, stack-buildable compounds — every one with PubMed-cited human data — selected for the strongest mechanistic coverage across all 12 hallmarks. Quality and synergy beat quantity. A stack of 30 unverified compounds with zero clinical evidence is not a protocol — it is a guess.`,
   },
   {
     id: 'faq9',

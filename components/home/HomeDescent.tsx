@@ -890,7 +890,7 @@ export function HomeDescent() {
               <div className="fact"><span className="k">Target</span><span className="v">SIRT1 activator</span></div>
               <div className="fact"><span className="k">Family</span><span className="v">Stilbenoid polyphenol</span></div>
               <div className="fact"><span className="k">First isolated</span><span className="v">1939, white hellebore</span></div>
-              <div className="fact"><span className="k">Evidence tier</span><span className="v" style={{ color: 'var(--gold)' }}>B — Human</span></div>
+              <div className="fact"><span className="k">Evidence tier</span><span className="v" style={{ color: 'var(--accent-cyan)' }}>B — Human</span></div>
             </div>
             <p className="why">
               The two carbon rings and the trans double bond form the exact
@@ -1145,8 +1145,11 @@ export function HomeDescent() {
                   <div className="name">{e.compoundName}</div>
                   <div className="path">{e.pathway} · {e.mechanismLine}</div>
                 </div>
+                {/* Canonical tier colors (must match EvidenceTag/tierColor()
+                    site-wide) — not this section's local --cyan/--gold/--indigo
+                    palette, which would disagree with every other tier badge. */}
                 <span className="tier" style={{
-                  color: e.evidence === 'A' ? 'var(--cyan)' : e.evidence === 'B' ? 'var(--gold)' : 'var(--indigo)',
+                  color: e.evidence === 'A' ? 'var(--accent-emerald)' : e.evidence === 'B' ? 'var(--accent-cyan)' : 'var(--accent-amber)',
                 }}>Tier {e.evidence}</span>
               </Link>
             ))}

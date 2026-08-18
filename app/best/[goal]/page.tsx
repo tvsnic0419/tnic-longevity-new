@@ -156,7 +156,7 @@ export default async function BestForGoalPage({
                 {hallmarks.map((h) => (
                   <Link
                     key={h.id}
-                    href={`/hallmarks/${h.slug}`}
+                    href={`/library/${h.slug}`}
                     className="focus-ring interactive text-xs px-3 py-1.5 rounded-lg border border-border/60 bg-card/40 text-muted-foreground hover:text-foreground hover:border-accent-violet/40 transition-colors"
                   >
                     {h.title}

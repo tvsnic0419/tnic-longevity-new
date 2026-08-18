@@ -1,7 +1,9 @@
+import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { ArrowRight, FlaskConical, ShieldCheck, Clock, ExternalLink, CheckCircle2, AlertTriangle, Zap } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { GuideHeroPanel } from '@/components/guides/GuideHeroPanel';
+import { GuideMoleculeWell } from '@/components/guides/GuideMoleculeWell';
 import { GuideVerifiedPick } from '@/components/guides/GuideVerifiedPick';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata } from '@/lib/seo';
@@ -191,7 +193,7 @@ export default function NadSupplementGuidePage() {
                   Evidence Guide · Updated 2026
                 </span>
               </div>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-5 leading-[1.1]">
+              <h1 className="heading-page mb-5">
                 NAD<span className="text-accent-cyan">+</span> Supplement Guide 2026
               </h1>
               <p className="text-lg text-muted-foreground leading-relaxed mb-8 max-w-2xl">
@@ -251,30 +253,34 @@ export default function NadSupplementGuidePage() {
                 title: 'Sirtuin activation (SIRT1–7)',
                 desc: 'Sirtuins require NAD+ as a cofactor. They regulate histone deacetylation, DNA repair, mitochondrial biogenesis, and inflammation suppression. When NAD+ drops, sirtuin activity drops proportionally.',
                 color: 'text-accent-cyan',
+                accent: 'var(--accent-cyan)',
               },
               {
                 title: 'PARP-1 DNA repair',
                 desc: 'PARP-1 uses NAD+ to detect and repair DNA strand breaks. NAD+ depletion in aging cells leaves DNA damage unrepaired — a driver of genomic instability and cancer risk.',
                 color: 'text-accent-violet',
+                accent: 'var(--accent-violet)',
               },
               {
                 title: 'Mitochondrial energy (Complex I)',
                 desc: 'NAD+ is the electron acceptor at Complex I of the electron transport chain. Low NAD+ = reduced ATP production = cellular energy crisis, especially in muscle and brain.',
                 color: 'text-accent-emerald',
+                accent: 'var(--accent-emerald)',
               },
               {
                 title: 'CD38 enzyme competition',
                 desc: 'CD38 is an NAD+ consumer that increases with age and inflammation. It outcompetes SIRT1 for NAD+. Supplementation must overcome CD38 degradation — which is why higher doses are sometimes needed.',
                 color: 'text-accent-amber',
+                accent: 'var(--accent-amber)',
               },
             ].map((item) => (
-              <div key={item.title} className="rounded-xl border border-border/60 bg-card/30 p-5">
+              <div key={item.title} className="premium-card p-5" style={{ '--card-accent': item.accent } as CSSProperties}>
                 <h3 className={`font-bold text-sm mb-2 ${item.color}`}>{item.title}</h3>
                 <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
-          <div className="rounded-xl border border-accent-cyan/20 bg-accent-cyan/[0.05] p-5">
+          <div className="premium-card p-5" style={{ '--card-accent': 'var(--accent-cyan)' } as CSSProperties}>
             <p className="text-sm leading-relaxed">
               <span className="font-semibold text-accent-cyan">The key number: </span>
               Zhu et al. 2015 (Cell Metabolism) showed NAD+ levels in skeletal muscle decline ~50% from age 20 to 50 in humans.
@@ -289,6 +295,13 @@ export default function NadSupplementGuidePage() {
               </a>
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* Molecule illustration */}
+      <section className="py-10">
+        <div className="container-page max-w-4xl">
+          <GuideMoleculeWell compoundId="nmn" />
         </div>
       </section>
 
@@ -442,7 +455,7 @@ export default function NadSupplementGuidePage() {
       </section>
 
       {/* Timing Protocol */}
-      <section className="py-12 border-b border-border bg-[#050a14]/50">
+      <section className="py-12 border-b border-border bg-[var(--color-bg-elevated)]/50">
         <div className="container-page max-w-4xl">
           <h2 className="heading-section mb-2">Optimal NAD+ supplement timing</h2>
           <p className="text-muted-foreground text-sm mb-8">Based on TNiC protocol research and chronobiology data on NAD+ metabolism.</p>

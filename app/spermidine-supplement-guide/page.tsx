@@ -1,7 +1,9 @@
+import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { ArrowRight, FlaskConical, ExternalLink, CheckCircle2, AlertTriangle, Microscope, Recycle, TrendingUp } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { GuideHeroPanel } from '@/components/guides/GuideHeroPanel';
+import { GuideMoleculeWell } from '@/components/guides/GuideMoleculeWell';
 import { GuideVerifiedPick } from '@/components/guides/GuideVerifiedPick';
 import { DataTable } from '@/components/ui/DataTable';
 import { Accordion, AccordionItem } from '@/components/ui/Accordion';
@@ -149,6 +151,7 @@ const mechanisms = [
     icon: Recycle,
     color: 'text-accent-emerald',
     badge: 'icon-badge-emerald',
+    accent: 'var(--accent-emerald)',
     title: 'Autophagy induction via EP300 inhibition',
     detail:
       'Spermidine inhibits the acetyltransferase EP300, triggering TFEB nuclear translocation and upregulation of 50+ ATG genes. This directly increases autophagic flux — the rate at which damaged cellular material is identified, engulfed, and recycled.',
@@ -157,6 +160,7 @@ const mechanisms = [
     icon: FlaskConical,
     color: 'text-accent-violet',
     badge: 'icon-badge-violet',
+    accent: 'var(--accent-violet)',
     title: 'eIF5A hypusination',
     detail:
       'Spermidine is the sole substrate for hypusination of eIF5A (eukaryotic initiation factor 5A) — a post-translational modification required for translating autophagy-related mRNAs. Without adequate spermidine, autophagy protein synthesis is impaired even when autophagy genes are transcribed.',
@@ -165,6 +169,7 @@ const mechanisms = [
     icon: Microscope,
     color: 'text-accent-cyan',
     badge: 'icon-badge-cyan',
+    accent: 'var(--accent-cyan)',
     title: 'mTOR-independent autophagy',
     detail:
       "Unlike rapamycin (which blocks mTORC1), spermidine activates autophagy largely independently of mTOR. This means it can synergize with rapamycin and does not create nutrient-sensing conflicts. It also targets mitophagy (damaged mitochondria), lipophagy (lipid droplets), and aggrephagy (protein aggregates) — the full autophagic spectrum.",
@@ -173,6 +178,7 @@ const mechanisms = [
     icon: TrendingUp,
     color: 'text-accent-rose',
     badge: 'icon-badge-rose',
+    accent: 'var(--accent-rose)',
     title: 'Cardiovascular and cognitive protection',
     detail:
       'The Kiechl 2018 Neurology study (PMID 29514097) followed 829 adults for 20 years and found that those in the highest dietary spermidine tertile had significantly lower all-cause mortality (HR 0.60) and cardiovascular mortality (HR 0.40). Human cardiac spermidine levels decline with age — restoration correlates with preserved cardiac function in mouse studies.',
@@ -255,7 +261,7 @@ export default function SpermidineSupplementGuidePage() {
             {mechanisms.map((m) => {
               const Icon = m.icon;
               return (
-                <div key={m.title} className="rounded-xl border border-border/60 bg-card/50 p-5">
+                <div key={m.title} className="premium-card p-5" style={{ '--card-accent': m.accent } as CSSProperties}>
                   <div className="flex items-center gap-3 mb-3">
                     <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${m.badge}`}>
                       <Icon className={`w-4.5 h-4.5 ${m.color}`} aria-hidden="true" />
@@ -267,6 +273,13 @@ export default function SpermidineSupplementGuidePage() {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* Molecule illustration */}
+      <section className="py-10">
+        <div className="container-page max-w-4xl">
+          <GuideMoleculeWell compoundId="spermidine" />
         </div>
       </section>
 
@@ -411,7 +424,7 @@ export default function SpermidineSupplementGuidePage() {
 
           {/* Do / Caution */}
           <div className="grid md:grid-cols-2 gap-5">
-            <div className="rounded-xl border border-accent-emerald/25 bg-accent-emerald/[0.04] p-5">
+            <div className="premium-card p-5" style={{ '--card-accent': 'var(--accent-emerald)' } as CSSProperties}>
               <div className="flex items-center gap-2 mb-4">
                 <CheckCircle2 className="w-4.5 h-4.5 text-accent-emerald" aria-hidden="true" />
                 <p className="font-semibold text-accent-emerald text-sm">Best practices</p>
@@ -432,10 +445,10 @@ export default function SpermidineSupplementGuidePage() {
                 ))}
               </ul>
             </div>
-            <div className="rounded-xl border border-amber-500/25 bg-amber-500/[0.04] p-5">
+            <div className="premium-card p-5" style={{ '--card-accent': 'var(--accent-amber)' } as CSSProperties}>
               <div className="flex items-center gap-2 mb-4">
-                <AlertTriangle className="w-4.5 h-4.5 text-amber-400" aria-hidden="true" />
-                <p className="font-semibold text-amber-400 text-sm">Cautions</p>
+                <AlertTriangle className="w-4.5 h-4.5 text-accent-amber" aria-hidden="true" />
+                <p className="font-semibold text-accent-amber text-sm">Cautions</p>
               </div>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 {[

@@ -1,5 +1,5 @@
 import type { ThemeAccent } from './design-system';
-import { getCompoundSlugsForGuide, getHallmarksForGuide } from './library-graph';
+import { getCompoundSlugsForGuide, getCompoundLinksForGuide, getHallmarksForGuide } from './library-graph';
 
 /**
  * Single source of truth for the supplement-guide landing pages. The compound a
@@ -134,4 +134,4 @@ export function getSiblingGuides(currentHref: string, limit = 4): SupplementGuid
 }
 
 /** Re-export so callers have one import for guide relationships. */
-export { getCompoundSlugsForGuide, getHallmarksForGuide };
+export { getCompoundSlugsForGuide, getCompoundLinksForGuide, getHallmarksForGuide };
