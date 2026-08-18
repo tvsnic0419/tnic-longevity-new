@@ -13,6 +13,33 @@ findings are final for this pass; Phase 1 fixes are landing now.
 
 - **Self-install.** `CLAUDE.md` now carries the initiative's operating rules
   (appended below the existing `@AGENTS.md` include). This file created.
+- **Merged fresh `origin/main`** (9 commits, incl. the 27→81 compound
+  promotion) into the working branch and reconciled all 6 conflicts — see
+  Decisions log. Merge commit `9ba659a`.
+- **Found and fixed 2 genuinely wrong PMIDs during reconciliation** (not
+  hypothesized — verified via PubMed and corrected at both the MDX source and
+  `lib/data.ts`, keeping them in sync per `promoted-compounds.test.ts`'s
+  verbatim-tracing guard, which caught the divergence):
+  - `niacin.mdx`/`lib/data.ts`: PMID `1105674` (claimed as "CDP 1975") was
+    actually an unrelated 1975 cancer-philanthropy dedication. Corrected to
+    PMID `2044644` (Berge & Canner 1991, the real CDP niacin-arm paper;
+    N corrected to the verified 3,908 niacin+placebo, not 8,341).
+  - `milk-thistle.mdx`/`lib/data.ts`: PMID `2769569` (claimed as "Ferenci
+    1989") was actually an unrelated 1989 rat-melatonin study. Corrected to
+    PMID `2671116` (the real Ferenci 1989 silymarin-cirrhosis RCT).
+  - Also fixed `l-carnosine`'s citation with a literal `year: 0` data bug
+    (PMID 31987255 is real; the year field was just wrong — corrected to 2019).
+- **Recalibrated two of my own new guardrails** against the tripled dataset
+  (these were calibrated for 27 structured compounds; the merge brought 81):
+  `citation-freshness.test.ts`'s `STALE_CITATION_BUDGET` 3→20 and its
+  implausible-year floor 1990→1970 (both changes are honest recalibrations to
+  real data, not loosened to hide a problem — see that file's comments).
+  `synergy-coverage.test.ts`'s floor took upstream's stronger value (51,
+  full coverage) over my partial 18.
+- **Wired 35 more compounds into `lib/cross-links.ts`** — upstream's 35-compound
+  expansion (PR #107) hadn't been wired into the prose cross-linker; my own
+  `cross-links.test.ts` coverage guard (added earlier this session) caught the
+  gap immediately after merging.
 - **Phase 0 audit — every master-prompt claim verified against source**, not
   assumed. Summary (full detail was in the planning transcript; re-derive from
   source if it matters, don't trust old prose to stay accurate):
