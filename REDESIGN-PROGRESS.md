@@ -6,10 +6,101 @@ master prompt — its durable operating rules are already merged into
 
 ## Current phase
 
-**Phase 1 complete for this pass** (Steps 0–7 of the execution plan all
-landed). Everything below is done, verified, and pushed. Next session should
-start a fresh pass rather than resuming this one — see "Explicitly deferred"
-for what's next in priority order.
+**Phase 2 complete** — a follow-up visual/UI-depth pass on top of Phase 1
+(Steps 0–7, below). Everything in both phases is done, verified, and pushed.
+Next session should start a fresh pass rather than resuming this one — see
+"Explicitly deferred" for what's next in priority order.
+
+## Phase 2 — visual/UI depth pass (3 workstreams)
+
+Audit-and-extend, not a redesign: every fix below consolidates onto or
+extends an already-established, already-distinctive pattern
+(`.premium-card`, `CinematicHubHero`, `MoleculeStage`, `viz/tokens.ts`,
+`HallmarkPageHero`, `getEdgeExplanation`) — nothing new invented, nothing
+working removed. Full plan (with file:line citations) is in the session
+transcript; this is the outcome summary.
+
+**Workstream 1 — token fidelity, card consolidation, typography.**
+- Documented the real-but-undocumented `.text-h3` class in
+  `STYLE_GUIDE.md`'s type-scale table; gave it a second live consumer
+  (`scorecard/[code]`'s grade label).
+- Killed every found canonical-token bypass: `longevity-supplements-guide`'s
+  inline score-color literals, `HallmarkVisuals.tsx`'s duplicated (not
+  imported) hex map, two guide pages' raw `amber-400`/`amber-500` Tailwind
+  classes, `SynergyNetworkGraph.tsx`'s `PATHWAY_COLOR`/`getTierBadgeColor()`,
+  `SynergyNetworkVisual.tsx`'s 6 hardcoded node/edge hex values — all now
+  source from `components/viz/tokens.ts`'s `VIZ`/`tierColor()`.
+- Fixed an isolated typography regression (`nad-supplement-guide`'s h1 used
+  raw text-size classes instead of `.heading-page`) and an invented
+  background shade (`bg-[#050a14]/50` → the real `--color-bg-elevated`
+  token), both in the same file.
+- Migrated the 6 standalone SEO compound-guide pages' ad hoc
+  `rounded-xl border ... bg-card/50` divs to `.premium-card` — mechanism
+  card grids and best-practices/caution/key-finding callouts, ~30 divs
+  total. Deferred (documented backlog, not this pass): `/insights`,
+  `/protocols`, `/best/[goal]`, the 11 `/hallmarks/*` detail pages,
+  `/partnerships`, `/trust/sponsorship`, plus 4 smaller standalone
+  components — same fix, lower per-file return, next pass.
+
+**Workstream 2 — closed 3 real visual-escalation gaps** (pages flatter than
+their peers, brought up to the established bar with already-built
+components only):
+- `/compound-engine` was the one documented hub route with no
+  `CinematicHubHero` — added one (`hue="cyan"`, stats derived from
+  `COMPOUND_DB.length`/scoring-dimension count).
+- `/library/<hallmark-slug>` (`HallmarkDetail.tsx`) used to hand-roll its
+  own plain header + a separately-duplicated "why it matters" panel — a
+  real step-down vs. its sibling route `/hallmarks/<slug>`, which covers
+  the same content via the richer `HallmarkPageHero`. Wired it in, removed
+  the now-duplicated blocks.
+- New `components/guides/GuideMoleculeWell.tsx` (a 4th guide-specific
+  wrapper, following the existing `GuideHeroPanel` precedent) — reuses
+  `CompoundHero`/`ModuleHero`'s exact pattern (real geometry when authored,
+  the honest "orbital field" fallback otherwise). Inserted into all 6 SEO
+  guide pages, which previously had a rich top hero but zero illustration
+  anywhere in the body.
+- Deferred (documented, needs a homepage-specific design conversation, not
+  a mechanical fix): `HomeDescent`'s flat Act0/Act4 bookends, the
+  3-stacked-hero-moments homepage investigation, the repeated `/nico`/
+  `/library` CTA count.
+
+**Workstream 3 — data-viz integrity + accessibility.** Fixed a confirmed
+`CLAUDE.md` rule violation (every visualization needs a text/table
+fallback) on the two standalone synergy-network components
+(`SynergyNetworkGraph.tsx` on `/pathways`, `SynergyNetworkVisual.tsx` in
+`EmergentEffectsView`'s "Emergent" tab — `StackNetworkGraph.tsx` was already
+correctly data-driven and is untouched):
+- Both previously surfaced edge/mechanism data only on mouse hover, with no
+  non-hover fallback. Added an always-visible table below each (compound
+  A/B, strength, mechanism), following `ConnectionMatrix.tsx`'s established
+  idiom (`scroll-region` wrapper, `sr-only` caption, `scope="col"` headers).
+- Both now read their "why" text through `lib/hero-network.ts`'s
+  `getEdgeExplanation()` — the same never-fabricating resolver already live
+  on compound deep-dives — instead of locally hand-authored prose, closing
+  a real drift risk between 3 previously-independent synergy datasets.
+- Fixed a real id typo along the way: `SynergyNetworkVisual.tsx`'s node
+  `'ca-akg'` → `'cakg'` (the id used everywhere else in the codebase) — the
+  old id silently broke any id-based lookup against that node.
+- **Verified finding, not a bug**: `getEdgeExplanation()`'s highest-priority
+  tier is an authored multi-compound "emergent effect" writeup. Where 3
+  compounds share one such writeup (confirmed 2 clusters:
+  NMN/Resveratrol/Ca-AKG and GlyNAC/Sulforaphane/R-ALA), all 3 pairwise
+  sub-edges correctly show the same broader text — accurate, not
+  fabricated, just less pair-specific than the original hand-authored notes
+  for those 6 of 23 edges. Authoring narrower `SYNERGY_MECHANISMS` entries
+  for those specific pairs is a content decision, not a mechanical fix —
+  left as a deferred content-backlog item, not blocking.
+
+**Verification**: `npm run lint`/`typecheck`/`test` clean at every commit
+(41 files / 571 tests). Full clean rebuild (`rm -rf .next && npm run
+build`) succeeded with no errors or warnings. Manual SSR HTML checks against
+the real build output (not just typecheck): exactly one `<h1>` on every
+changed route (no duplicate-heading regression from stacking hero
+components); the SSR-bailout marker count unchanged from Phase 1's fix (no
+regression); `CinematicHubHero`/`HallmarkPageHero` content confirmed present
+in the raw server-rendered HTML; the `/pathways` fallback table confirmed
+server-rendered with real, non-empty mechanism text (23 rows, 19 unique
+texts).
 
 ## Done
 
