@@ -8,11 +8,16 @@ import { FieldNotes } from '@/components/insights/FieldNotes';
 import { CountUp } from '@/components/ui/CountUp';
 import { buildPageMetadata } from '@/lib/seo';
 import { INSIGHTS_TOTALS } from '@/lib/insights';
+import {
+  LIBRARY_COMPOUND_COUNT,
+  LIBRARY_HALLMARK_COVERAGE,
+  LIBRARY_TIER_SPLIT,
+} from '@/lib/insights-library';
 
 export const metadata = buildPageMetadata({
   title: 'Longevity by the Numbers — The Library as Data',
   description:
-    'A data view of the TNiC library: evidence-tier breakdown, hallmark coverage, oral bioavailability, dosing rhythm, and a compound × pathway × hallmark map — every figure computed from the graded compounds, not marketing.',
+    'A data view of the TNiC library: evidence-tier breakdown and hallmark coverage across every compound deep-dive, plus oral bioavailability, dosing rhythm and a compound × pathway × hallmark map for the fully-graded set — every figure computed from the library, not marketing.',
   path: '/insights',
   keywords: [
     'longevity data',
@@ -24,11 +29,11 @@ export const metadata = buildPageMetadata({
 });
 
 const bandStats: { value: number; suffix?: string; label: string; sub: string }[] = [
-  { value: INSIGHTS_TOTALS.compounds, label: 'Graded compounds', sub: 'Rated A–C on human evidence' },
-  { value: INSIGHTS_TOTALS.studies, label: 'Studies cited', sub: 'Human / clinical, PMID-linked' },
+  { value: LIBRARY_COMPOUND_COUNT, label: 'Compound deep-dives', sub: 'Each rated A–C on human evidence' },
+  { value: INSIGHTS_TOTALS.studies, label: 'Studies cited', sub: `Across the ${INSIGHTS_TOTALS.compounds} fully-graded compounds` },
   { value: INSIGHTS_TOTALS.pathways, label: 'Pathways', sub: 'The "verb" between take & age' },
   { value: INSIGHTS_TOTALS.hallmarks, label: 'Hallmarks', sub: 'Full mechanistic coverage' },
-  { value: INSIGHTS_TOTALS.medianBioavailability, suffix: '%', label: 'Median bioavailability', sub: `Across ${INSIGHTS_TOTALS.withBioavailability} measured` },
+  { value: INSIGHTS_TOTALS.medianBioavailability, suffix: '%', label: 'Median bioavailability', sub: `Across ${INSIGHTS_TOTALS.withBioavailability} measured compounds` },
 ];
 
 function SectionHead({ eyebrow, title, children }: { eyebrow: string; title: string; children: React.ReactNode }) {
@@ -49,9 +54,9 @@ export default function InsightsPage() {
         hue="cyan"
         kicker="Longevity by the Numbers"
         title={<>The library, <em>as data</em>.</>}
-        lead="Every figure on this page is counted from the graded compounds themselves — evidence tiers, hallmark coverage, absorption, dosing rhythm, and how compounds, pathways, and hallmarks connect. Nothing here is a marketing number."
+        lead={`Every figure on this page is counted from the library itself. Evidence tiers and hallmark coverage span all ${LIBRARY_COMPOUND_COUNT} compound deep-dives; absorption, dosing rhythm, citation depth and the connection map describe the ${INSIGHTS_TOTALS.compounds} fully-graded compounds that carry those fields. Nothing here is a marketing number.`}
         stats={[
-          { value: String(INSIGHTS_TOTALS.compounds), label: 'Graded compounds', href: '/library/compounds' },
+          { value: String(LIBRARY_COMPOUND_COUNT), label: 'Compound deep-dives', href: '/library/compounds' },
           { value: String(INSIGHTS_TOTALS.studies), label: 'Studies cited', href: '/trust' },
           { value: String(INSIGHTS_TOTALS.pathways), label: 'Pathways', href: '/pathways' },
           { value: `A–C`, label: 'Evidence tiers', href: '/trust/methodology' },
@@ -80,17 +85,23 @@ export default function InsightsPage() {
         {/* Charts */}
         <section className="mb-20">
           <SectionHead eyebrow="By the numbers" title="Five reads on the library">
-            Distribution, coverage, absorption, and citation depth — the shape of the evidence at a
-            glance. Bars and tiles link straight to the compounds and hallmarks behind them.
+            Distribution and coverage across all {LIBRARY_COMPOUND_COUNT} deep-dives; absorption,
+            dosing rhythm and citation depth across the {INSIGHTS_TOTALS.compounds} fully-graded
+            compounds that carry those measurements. Bars and tiles link straight to the compounds
+            and hallmarks behind them.
           </SectionHead>
-          <InsightsCharts />
+          <InsightsCharts
+            libraryTierSplit={LIBRARY_TIER_SPLIT}
+            libraryHallmarkCoverage={LIBRARY_HALLMARK_COVERAGE}
+            libraryCompoundCount={LIBRARY_COMPOUND_COUNT}
+          />
         </section>
 
         {/* Connection matrix */}
         <section className="mb-20">
           <SectionHead eyebrow="The map" title="Compound × pathway × hallmark">
-            How the library connects: each compound acts through a pathway onto the hallmarks of
-            aging. Cells are colored by evidence tier, so you can see both <em>what</em> a compound
+            How the library connects: each of the {INSIGHTS_TOTALS.compounds} fully-graded compounds
+            acts through a pathway onto the hallmarks of aging. Cells are colored by evidence tier, so you can see both <em>what</em> a compound
             touches and <em>how well-proven</em> it is in one grid.
           </SectionHead>
           <ConnectionMatrix />

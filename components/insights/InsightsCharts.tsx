@@ -10,6 +10,8 @@ import {
   BIOAVAILABILITY_RANK,
   DOSING_TIME,
   MOST_CITED,
+  type HallmarkCoverage,
+  type TierSlice,
 } from '@/lib/insights';
 
 /**
@@ -148,8 +150,29 @@ function ProportionBar({
   );
 }
 
-export function InsightsCharts() {
-  const coverageMax = Math.max(...HALLMARK_COVERAGE.map((h) => h.count));
+interface InsightsChartsProps {
+  /**
+   * Library-wide tier mix and hallmark coverage, computed on the server from
+   * lib/insights-library.ts. Passed as props rather than imported so
+   * lib/library-modules.ts never crosses into this client bundle. When absent
+   * the charts fall back to the graded-set constants.
+   */
+  libraryTierSplit?: TierSlice[];
+  libraryHallmarkCoverage?: HallmarkCoverage[];
+  libraryCompoundCount?: number;
+}
+
+export function InsightsCharts({
+  libraryTierSplit,
+  libraryHallmarkCoverage,
+  libraryCompoundCount,
+}: InsightsChartsProps = {}) {
+  const tierSplit = libraryTierSplit ?? TIER_SPLIT;
+  const hallmarkCoverage = libraryHallmarkCoverage ?? HALLMARK_COVERAGE;
+  const scopeLabel = libraryCompoundCount
+    ? `all ${libraryCompoundCount} compound deep-dives`
+    : 'the graded compounds';
+  const coverageMax = Math.max(...hallmarkCoverage.map((h) => h.count));
   const citedMax = Math.max(...MOST_CITED.map((c) => c.studyCount));
   const topCited = MOST_CITED.slice(0, 8);
 
@@ -158,11 +181,11 @@ export function InsightsCharts() {
       {/* Evidence tiers */}
       <ChartCard
         eyebrow="Evidence"
-        title="How the graded set breaks down"
-        note="Every compound is rated A / B / C by the strength of human evidence."
+        title="How the library breaks down"
+        note={`Every one of ${scopeLabel} is rated A / B / C by the strength of human evidence.`}
       >
         <ProportionBar
-          slices={TIER_SPLIT.map((t) => ({
+          slices={tierSplit.map((t) => ({
             key: t.tier,
             label: `Tier ${t.tier}`,
             count: t.count,
@@ -175,8 +198,8 @@ export function InsightsCharts() {
       {/* Dosing time */}
       <ChartCard
         eyebrow="Circadian"
-        title="When the library is dosed"
-        note="Timing drawn from each compound's studied protocol — morning, evening, or split."
+        title="When the graded set is dosed"
+        note="Timing drawn from the studied protocol of each fully-graded compound — morning, evening, or split."
       >
         <ProportionBar
           slices={DOSING_TIME.map((t) => ({
@@ -192,10 +215,10 @@ export function InsightsCharts() {
       <ChartCard
         eyebrow="Coverage"
         title="Levers per hallmark of aging"
-        note="How many graded compounds act on each of the 12 hallmarks. Click a row to open it."
+        note={`How many of ${scopeLabel} act on each of the 12 hallmarks. Click a row to open it.`}
       >
         <div>
-          {HALLMARK_COVERAGE.map((h) => (
+          {hallmarkCoverage.map((h) => (
             <Bar
               key={h.id}
               label={h.title}
@@ -235,7 +258,7 @@ export function InsightsCharts() {
       <ChartCard
         eyebrow="Citations"
         title="Most-cited compounds"
-        note="Ranked by the number of human / clinical studies cited on each compound's page."
+        note="Fully-graded compounds, ranked by the number of human / clinical studies cited on each compound's page."
       >
         <div>
           {topCited.map((c) => (
