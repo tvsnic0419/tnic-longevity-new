@@ -6,8 +6,10 @@ master prompt — its durable operating rules are already merged into
 
 ## Current phase
 
-**Phase 0 (audit) → Phase 1 (fix what's confirmed broken).** Phase 0's
-findings are final for this pass; Phase 1 fixes are landing now.
+**Phase 1 complete for this pass** (Steps 0–7 of the execution plan all
+landed). Everything below is done, verified, and pushed. Next session should
+start a fresh pass rather than resuming this one — see "Explicitly deferred"
+for what's next in priority order.
 
 ## Done
 
@@ -122,9 +124,58 @@ findings are final for this pass; Phase 1 fixes are landing now.
    non-canonical palette to the real `--accent-*` tokens. Left its separate
    `TIER` object (synergy-edge confidence: established/mechanistic/
    exploratory/caution) alone — different axis, not a tier-grade color.
-5. Guard `.animate-pulse-glow` for reduced motion.
-6. Resolve the Compounds/Library nav redundancy.
-7. a11y: manual pass if time allows, otherwise note the tooling gap honestly.
+5. ~~Guard `.animate-pulse-glow` for reduced motion.~~ **DONE** — extended
+   the existing `prefers-reduced-motion` block in `app/globals.css` to also
+   cover `.animate-pulse-glow`, `.animate-breathe`, `.animate-gradient` (found
+   two more instances of the identical gap while checking neighboring
+   `@keyframes` — same fix, same pass).
+6. ~~Resolve the Compounds/Library nav redundancy.~~ **DONE** — removed the
+   standalone "Compounds" nav entry from `lib/nav-data.ts` (both `navLinks`
+   and `navGroups.Learn`); the route itself stays (load-bearing for every
+   `/library/compounds/<slug>` deep-dive), it's just not double-billed
+   alongside the `CompoundExplorer` section already on `/library`.
+7. ~~a11y: manual pass~~ **DONE, with real tooling this time** — added
+   `axe-core` as a devDependency (`playwright-core` was already present for
+   the Chromium binary) and ran a WCAG 2.1 A/AA + best-practice sweep against
+   a genuine production build (`next build` + `next start`) on 5 representative
+   pages (`/`, a compound deep-dive, a hallmark page, `/trust/methodology`,
+   `/stacks`). Found and fixed 3 real violations, all at shared components so
+   the fix applies sitewide, not just to the sampled pages:
+   - `scrollable-region-focusable` + `landmark-unique` on every MDX-rendered
+     data table (`components/library/MdxRenderer.tsx`): the horizontally
+     -scrolling table wrapper wasn't keyboard-focusable, and every table
+     shared the identical generic `aria-label="Data table"`. Fixed by adding
+     `tabIndex={0}` and deriving a per-table label from that table's own
+     header row.
+   - `heading-order` on hallmark pages (`components/library/InterventionExplorer.tsx`):
+     each intervention row's title was an `<h4>`, but a hallmark page's MDX
+     body only ever emits up to `<h2>` — so the DOM heading sequence skipped
+     `<h3>` entirely. Changed to `<h3>`; confirmed no other heading on the
+     page depends on the old level, and confirmed the component's other call
+     site (`AntiAgingLibrary.tsx`) already precedes it with an `<h3>` of its
+     own, so this is a sibling relationship, not a new skip.
+   - Re-ran the sweep against a genuinely clean rebuild after both fixes:
+     **0 violations across all 5 pages.**
+   - **A red herring worth recording**, in case a future session hits the
+     same shape of bug: mid-investigation, 2 of the 5 pages appeared to show
+     `region`/`skip-link` violations caused by a `ChunkLoadError` for a chunk
+     file (`1panoj_-juawn.js`) that didn't exist in the build output, sending
+     the page to its client-side `ErrorBoundary` fallback instead of real
+     content. This looked like a genuine, deterministic site bug — it
+     reproduced identically across what appeared to be two separate builds.
+     Root cause, once found: a `next start` process from an *earlier* build
+     cycle never actually died between test runs; deleting and rebuilding
+     `.next` out from under it (`rm -rf .next && npm run build`) left the
+     still-running old process holding its old, now-stale in-memory chunk
+     manifest, so any client request for that build's chunk names 500'd
+     against the new file layout. A later `npm run start` attempt correctly
+     failed with `EADDRINUSE` — that was the tell. Killed the stale process,
+     confirmed via `ps` that the new one's start time was after the rebuild,
+     re-ran the sweep: the `ChunkLoadError` and both violations were gone.
+     **Not a production bug** — Vercel deploys don't have this "rebuild under
+     a live local dev server" failure mode — but a real trap for local
+     verification: always confirm the serving process's PID/start-time
+     postdates your last build before trusting a local repro.
 
 ## Explicitly deferred (future sessions, not this pass)
 

@@ -70,7 +70,6 @@ describe('citation freshness + coverage', () => {
     if (stale.length > 0) {
       // Surface the review queue in test output (oldest first).
       const queue = stale.map((f) => `  ${f.newestYear}  ${f.id} (${f.studyCount} studies)`).join('\n');
-      // eslint-disable-next-line no-console
       console.log(`\nCitation review queue (newest citation before ${STALE_BEFORE_YEAR}):\n${queue}\n`);
     }
     expect(

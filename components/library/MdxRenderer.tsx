@@ -665,7 +665,17 @@ function renderMarkdownBlock(content: string, blockKey: number, linkedTerms: Set
       const headerCells = rows[0]?.split('|').filter(Boolean).map((c) => c.trim()) ?? [];
       elements.push(
         <div key={key} className="my-4">
-          <div className="overflow-x-auto" role="region" aria-label="Data table">
+          {/* Two axe-core findings fixed here: (1) scrollable-region-focusable —
+              tabIndex makes the horizontally-scrolling region keyboard-reachable;
+              (2) landmark-unique — a per-table label (from its own header row)
+              instead of a generic "Data table" repeated across every table on a
+              page, so screen-reader landmark navigation can tell them apart. */}
+          <div
+            className="overflow-x-auto"
+            role="region"
+            tabIndex={0}
+            aria-label={headerCells.length > 0 ? `Data table: ${headerCells.slice(0, 3).join(', ')}` : 'Data table'}
+          >
             <table className="w-full text-sm border-collapse">
               {rows.length > 0 && (
                 <thead>
