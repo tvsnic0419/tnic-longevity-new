@@ -93,10 +93,16 @@ findings are final for this pass; Phase 1 fixes are landing now.
 
 ## In progress / next (this pass)
 
-1. Merge fresh `origin/main` into the working branch, reconcile file-level
-   overlap with prior in-flight work (see Decisions below), re-verify, finish
-   uncommitted edits, commit, push, PR.
-2. Fix the Suspense/SSR bailout bug (`SubPageLayout.tsx`) — top priority.
+1. ~~Merge fresh `origin/main`...~~ **DONE** — merge commit `9ba659a`,
+   reconciliation commit `c9d348e`. PR #114 (draft) open.
+2. ~~Fix the Suspense/SSR bailout bug~~ **DONE** — commit `95a805e`. Verified
+   against the real build output, not just typecheck: swept all 238 built HTML
+   routes for the `BAILOUT_TO_CLIENT_SIDE_RENDERING` marker's position. 0 of
+   238 now show the old symptom (marker in the first ~2KB with nothing else in
+   the file). Real content confirmed present throughout (e.g. 68 mentions of
+   "glutathione" spanning a full compound deep-dive). Remaining markers are
+   correctly narrow-scoped: the one `ContextBar` aside, plus the legitimately
+   unavoidable client-only toast-notification region.
 3. Fix the three hardcoded "14" literals; update the two stale docs; add
    population labels to the contradictory stats.
 4. Consolidate tier colors (`EvidenceBadge.tsx`, `HomeDescent.tsx`) onto the
