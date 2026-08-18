@@ -113,8 +113,15 @@ findings are final for this pass; Phase 1 fixes are landing now.
    diagram, not the library) and `lib/next-up.ts`'s "Sprint 40/41... 14
    compounds" entries are a genuine historical sprint changelog — left both
    alone; rewriting either would misrepresent, not correct.
-4. Consolidate tier colors (`EvidenceBadge.tsx`, `HomeDescent.tsx`) onto the
-   canonical `tierColor()`/`EvidenceTag` mapping.
+4. ~~Consolidate tier colors...~~ **DONE** — commit `7bbb7d4`. Both confirmed
+   still live post-merge (upstream's own tier-color unification pass didn't
+   reach these two files). `EvidenceBadge.tsx`: swapped Mechanistic↔Personal
+   so Tier-C-derived badges show canonical amber, not violet (safe — the only
+   place all 5 colors render together, `EvidenceBadgeLegend`, is orphaned).
+   `HomeDescent.tsx`: repointed its two tier-color expressions from a local
+   non-canonical palette to the real `--accent-*` tokens. Left its separate
+   `TIER` object (synergy-edge confidence: established/mechanistic/
+   exploratory/caution) alone — different axis, not a tier-grade color.
 5. Guard `.animate-pulse-glow` for reduced motion.
 6. Resolve the Compounds/Library nav redundancy.
 7. a11y: manual pass if time allows, otherwise note the tooling gap honestly.
