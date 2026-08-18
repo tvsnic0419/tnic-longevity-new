@@ -29,7 +29,7 @@ function mdxSlugs(): string[] {
     .sort();
 }
 
-describe('compound library coverage — the 55 never silently disappear', () => {
+describe('compound library coverage — the full set never silently disappears', () => {
   it(`exposes exactly ${EXPECTED_COMPOUND_COUNT} compound modules`, () => {
     expect(COMPOUND_COUNT).toBe(EXPECTED_COMPOUND_COUNT);
     expect(compoundModules).toHaveLength(EXPECTED_COMPOUND_COUNT);

@@ -194,8 +194,9 @@ export function Footer() {
             © 2026 TNiC · Independent · Evidence-First
           </p>
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-caption font-mono">
-            <span>Tier A: {tierACount} compounds</span>
-            <span>Tier B: {tierBCount} compounds</span>
+            <span title="Of the stack-buildable set — the full library carries more at every tier">
+              Stack-buildable — Tier A: {tierACount} · Tier B: {tierBCount}
+            </span>
             <span>{citationRegistry.length} indexed PMIDs</span>
           </div>
         </div>

@@ -30,8 +30,15 @@ export const stackPresets = {
     ids: ['berberine', 'omega3', 'coq10', 'rala'],
   },
   full: {
-    label: 'Full-Spectrum 14',
-    desc: 'All 14 evidence-graded compounds',
+    // "Full-Spectrum" describes this preset's own curated coverage, not the
+    // whole library (which has grown well past this set) — label/desc derive
+    // from the ids below so they can never silently drift from it.
+    get label() {
+      return `Full-Spectrum ${this.ids.length}`;
+    },
+    get desc() {
+      return `${this.ids.length} curated evidence-graded compounds`;
+    },
     ids: ['glynac', 'sulforaphane', 'nmn', 'cakg', 'rala', 'resveratrol', 'taurine', 'spermidine', 'pterostilbene', 'berberine', 'urolithin-a', 'fisetin', 'coq10', 'omega3'],
   },
 } as const;

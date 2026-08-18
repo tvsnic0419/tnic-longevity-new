@@ -1846,7 +1846,7 @@ export const roadmap: RoadmapItem[] = [
     phase: 'LIVE',
     title: 'Defense Stack Architect',
     desc: 'Synergy-scored compound protocols with AM/PM dosing intelligence.',
-    specs: ['14 evidence-graded compounds', 'Synergy matrix', 'Hallmark coverage mapping', 'Evidence tier grading'],
+    specs: [`${compounds.length} evidence-graded compounds`, 'Synergy matrix', 'Hallmark coverage mapping', 'Evidence tier grading'],
     active: true,
   },
   {
