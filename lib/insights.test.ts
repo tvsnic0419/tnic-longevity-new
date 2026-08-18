@@ -25,8 +25,8 @@ describe('insights — derived analytics stay honest', () => {
   });
 
   it('headline totals match the current library', () => {
-    expect(INSIGHTS_TOTALS.compounds).toBe(27);
-    expect(INSIGHTS_TOTALS.tierA).toBe(8);
+    expect(INSIGHTS_TOTALS.compounds).toBe(81);
+    expect(INSIGHTS_TOTALS.tierA).toBe(9);
     expect(INSIGHTS_TOTALS.hallmarks).toBe(12);
     expect(INSIGHTS_TOTALS.withBioavailability).toBe(17);
     // studies total = sum of every compound's cited-study entries
