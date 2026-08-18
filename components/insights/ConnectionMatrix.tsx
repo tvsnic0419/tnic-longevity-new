@@ -6,7 +6,9 @@ import { MATRIX_COMPOUNDS, MATRIX_HALLMARKS, TIER_ACCENT } from '@/lib/insights'
 import type { EvidenceTier } from '@/lib/types';
 
 /**
- * Compound × Pathway × Hallmark map. Rows are the graded compounds — each
+ * Compound × Pathway × Hallmark map. Rows are the fully-graded compounds (the
+ * lib/data.ts set that carries a pathway) rather than the whole deep-dive
+ * library — each
  * carrying its pathway "verb" and evidence tier — and the 12 columns are the
  * hallmarks of aging. A filled cell means the compound acts on that hallmark
  * (lib/data.ts `hallmarks`), painted in the compound's tier color so evidence
@@ -33,7 +35,7 @@ export function ConnectionMatrix() {
       <div className="scroll-region rounded-2xl border border-border/70 bg-card/30">
         <table className="w-full border-collapse text-left">
           <caption className="sr-only">
-            Graded compounds (rows, with their pathway and evidence tier) mapped to the twelve
+            Fully-graded compounds (rows, with their pathway and evidence tier) mapped to the twelve
             hallmarks of aging (columns). A filled cell means the compound acts on that hallmark.
           </caption>
           <thead>
