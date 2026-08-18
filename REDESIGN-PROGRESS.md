@@ -103,8 +103,16 @@ findings are final for this pass; Phase 1 fixes are landing now.
    "glutathione" spanning a full compound deep-dive). Remaining markers are
    correctly narrow-scoped: the one `ContextBar` aside, plus the legitimately
    unavoidable client-only toast-notification region.
-3. Fix the three hardcoded "14" literals; update the two stale docs; add
-   population labels to the contradictory stats.
+3. ~~Fix the three hardcoded "14" literals...~~ **DONE** — commit `3f76feb`.
+   `/insights` turned out already fixed upstream (PR #112 rescoped it with
+   proper population labels — re-verified, no action needed there). Footer's
+   tier counts now labeled "stack-buildable" so they don't silently disagree
+   with `/library`'s full-set tier pills on the same page. Two items from the
+   original 3 hardcoded literals were reclassified on closer read: the
+   `SynergyNetworkGraph` "14" is correct (describes its own fixed 14-node
+   diagram, not the library) and `lib/next-up.ts`'s "Sprint 40/41... 14
+   compounds" entries are a genuine historical sprint changelog — left both
+   alone; rewriting either would misrepresent, not correct.
 4. Consolidate tier colors (`EvidenceBadge.tsx`, `HomeDescent.tsx`) onto the
    canonical `tierColor()`/`EvidenceTag` mapping.
 5. Guard `.animate-pulse-glow` for reduced motion.
