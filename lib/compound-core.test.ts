@@ -24,7 +24,11 @@ describe('compound-core mirror', () => {
     expect(isStackCompoundId('nmn')).toBe(true);
     expect(isStackCompoundId('not-a-compound')).toBe(false);
     // Library-only deep-dives (no lib/data.ts entry) must not validate.
-    expect(isStackCompoundId('ashwagandha')).toBe(false);
+    // `lithium` stays library-only on purpose: its deep-dive states "No
+    // self-directed dose established", so it is deliberately not promoted into
+    // the stack-buildable set.
+    expect(isStackCompoundId('lithium')).toBe(false);
+    expect(isStackCompoundId('mitoq')).toBe(false);
   });
 
   it('tier counts agree with lib/data.ts', () => {
