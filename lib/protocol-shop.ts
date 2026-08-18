@@ -1,6 +1,8 @@
 import { getBuyerGuide } from './buyer-guides';
 import type { CompoundBuyerGuide } from './buyer-guides';
 import { getProductPick, type ProductPick } from './product-picks';
+import { compounds } from './data';
+import { getModuleBySlug, getModulePath } from './library-modules';
 
 export interface StackShopItem {
   compoundId: string;
@@ -26,6 +28,34 @@ const compoundModuleMap: Record<string, { name: string; slug: string; synergy?: 
   pterostilbene: { name: 'Pterostilbene', slug: 'pterostilbene' },
   tudca: { name: 'TUDCA', slug: 'tudca' },
 };
+
+export interface UnmatchedStackCompound {
+  compoundId: string;
+  compoundName: string;
+  /** Undefined when no library page exists for this id — never guess one. */
+  moduleHref?: string;
+}
+
+/**
+ * Stack compounds that getStackShopItems() silently drops (not in
+ * compoundModuleMap, above). Previously nothing told the user why their
+ * stack showed fewer items on /shop than they built in the Architect — this
+ * is the one place that gap is computed, so ProtocolShopPanel can surface it
+ * instead of a silent data loss at the site's highest-purchase-intent moment.
+ */
+export function getUnmatchedStackCompounds(compoundIds: string[]): UnmatchedStackCompound[] {
+  const unique = [...new Set(compoundIds)];
+  return unique
+    .filter((id) => !compoundModuleMap[id])
+    .map((id) => {
+      const libraryModule = getModuleBySlug('compounds', id);
+      return {
+        compoundId: id,
+        compoundName: compounds.find((c) => c.id === id)?.name ?? id,
+        moduleHref: libraryModule ? getModulePath(libraryModule) : undefined,
+      };
+    });
+}
 
 /** NR alternative shop card when user chose NR over NMN */
 export function getNrAlternativeShopItem(): StackShopItem | null {

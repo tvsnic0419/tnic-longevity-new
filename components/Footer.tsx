@@ -18,6 +18,7 @@ import {
 import { POPULAR_GUIDE_LINKS } from '@/lib/index-priority';
 import { citationRegistry } from '@/lib/trust';
 import { compoundTierCount } from '@/lib/compound-core';
+import { FooterBriefSubscribe } from '@/components/brief/FooterBriefSubscribe';
 
 const tierACount = compoundTierCount('A');
 const tierBCount = compoundTierCount('B');
@@ -76,6 +77,8 @@ export function Footer() {
             Just cell-health research made easier to inspect, question, and apply responsibly.
           </p>
         </div>
+
+        <FooterBriefSubscribe />
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-10 mb-10">
           <div className="sm:col-span-2 lg:col-span-1">
