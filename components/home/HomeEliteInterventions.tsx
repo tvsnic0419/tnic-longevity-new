@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowUpRight, ExternalLink, ShieldCheck, BookOpen } from 'lucide-react';
@@ -174,15 +175,17 @@ export function HomeEliteInterventions() {
         </div>
 
         {/* Disclosure — required because this section leads with product buys */}
-        <div className="mt-8 flex items-start gap-3 rounded-xl border border-accent-amber/25 bg-accent-amber/[0.06] p-4 text-sm">
-          <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-accent-amber" aria-hidden="true" />
-          <p className="leading-relaxed text-muted-foreground">
-            <strong className="text-foreground">How to read this.</strong> TNiC doesn&apos;t sell or
-            stock supplements. Picks link to the manufacturer and may carry an affiliate token — at
-            no extra cost to you, and commission never influences which products are listed or their
-            evidence tier. This is educational information, not medical advice; talk to a clinician
-            before starting anything, and always request a Certificate of Analysis before you buy.
-          </p>
+        <div className="premium-card mt-8 p-4 text-sm" style={{ '--card-accent': 'var(--accent-amber)' } as CSSProperties}>
+          <div className="flex items-start gap-3">
+            <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-accent-amber" aria-hidden="true" />
+            <p className="leading-relaxed text-muted-foreground">
+              <strong className="text-foreground">How to read this.</strong> TNiC doesn&apos;t sell or
+              stock supplements. Picks link to the manufacturer and may carry an affiliate token — at
+              no extra cost to you, and commission never influences which products are listed or their
+              evidence tier. This is educational information, not medical advice; talk to a clinician
+              before starting anything, and always request a Certificate of Analysis before you buy.
+            </p>
+          </div>
         </div>
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">

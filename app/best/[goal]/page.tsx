@@ -97,13 +97,15 @@ export default async function BestForGoalPage({
           />
 
           {/* How we rank — honesty note */}
-          <div className="rounded-xl border border-border/60 bg-card/30 p-4 mb-8 flex items-start gap-3">
-            <ScrollText className="w-4 h-4 text-accent-cyan shrink-0 mt-0.5" aria-hidden="true" />
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Ranked by strength of human evidence (Tier A &gt; B &gt; C) and mechanistic fit — computed from the
-              compound registry, not hand-picked. Every entry links to its full evidence deep-dive with PubMed
-              citations. Educational only, not medical advice.
-            </p>
+          <div className="premium-card mb-8 p-4">
+            <div className="flex items-start gap-3">
+              <ScrollText className="w-4 h-4 text-accent-cyan shrink-0 mt-0.5" aria-hidden="true" />
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Ranked by strength of human evidence (Tier A &gt; B &gt; C) and mechanistic fit — computed from the
+                compound registry, not hand-picked. Every entry links to its full evidence deep-dive with PubMed
+                citations. Educational only, not medical advice.
+              </p>
+            </div>
           </div>
 
           {/* Ranked list */}
@@ -188,7 +190,7 @@ export default async function BestForGoalPage({
               <h2 className="text-lg font-bold text-foreground mb-4">Frequently asked</h2>
               <div className="space-y-4">
                 {g.faqs.map((f) => (
-                  <div key={f.question} className="rounded-xl border border-border/60 bg-card/30 p-5">
+                  <div key={f.question} className="premium-card p-5">
                     <h3 className="text-sm font-bold text-foreground mb-2">{f.question}</h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">{f.answer}</p>
                   </div>

@@ -202,6 +202,44 @@ export function StackNetworkGraph({
           </span>
         ))}
       </div>
+
+      {/* Always-visible fallback table — the graph above only surfaces edge
+          data on hover/focus; this gives the same data to anyone who doesn't
+          want the interaction (or can't use it). Matches
+          ConnectionMatrix.tsx's established idiom. */}
+      {visibleEdges.length > 0 && (
+        <div className="mt-4 scroll-region rounded-2xl border border-border/70 bg-card/30">
+          <table className="w-full border-collapse text-left">
+            <caption className="sr-only">
+              All {visibleEdges.length} interactions in this stack&apos;s network, with type and detail.
+            </caption>
+            <thead>
+              <tr className="border-b border-border/60">
+                <th scope="col" className="px-3 py-2 text-label text-muted-foreground">Compound A</th>
+                <th scope="col" className="px-3 py-2 text-label text-muted-foreground">Compound B</th>
+                <th scope="col" className="px-3 py-2 text-label text-muted-foreground">Type</th>
+                <th scope="col" className="px-3 py-2 text-label text-muted-foreground">Detail</th>
+              </tr>
+            </thead>
+            <tbody>
+              {visibleEdges.map((edge) => {
+                const source = nodeMap.get(edge.source);
+                const target = nodeMap.get(edge.target);
+                return (
+                  <tr key={edge.id} className="border-t border-border/50">
+                    <td className="px-3 py-2 text-body-sm">{source?.label ?? edge.source}</td>
+                    <td className="px-3 py-2 text-body-sm">{target?.label ?? edge.target}</td>
+                    <td className="px-3 py-2 text-caption capitalize" style={{ color: edgeColors[edge.type] }}>
+                      {edge.type}
+                    </td>
+                    <td className="px-3 py-2 text-body-sm text-muted-foreground">{edge.detail}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

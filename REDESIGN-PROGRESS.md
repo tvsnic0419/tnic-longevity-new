@@ -6,10 +6,124 @@ master prompt — its durable operating rules are already merged into
 
 ## Current phase
 
-**Phase 3 complete** — a conversion-funnel pass on top of Phases 1–2 (below).
-Everything across all three phases is done, verified, and pushed. Next
-session should start a fresh pass rather than resuming this one — see
-"Explicitly deferred" for what's next in priority order.
+**Phase 4 complete** — a coherence/UI-consistency pass on top of Phases 1–3
+(below). Everything across all four phases is done, verified, and pushed.
+Next session should start a fresh pass rather than resuming this one — see
+"Explicitly deferred" for what's next, and **read the flagged finding below
+first** — it's a real content/taxonomy issue that needs Thomas's decision,
+found during this pass, not fixed.
+
+## ⚠ Flagged for Thomas — hallmark taxonomy conflict (found, not fixed)
+
+While closing out Phase 2's deferred `.premium-card` backlog, found that
+`app/hallmarks/disabled-autophagy/page.tsx` was the one structural outlier
+among the 12 hallmark pages (self-hosted its own Nav/Footer/`<main>` instead
+of using the shared layout — a live, duplicate-landmark a11y bug). Migrated
+it to match its 11 siblings (same fix pattern as everything else in this
+phase) — then discovered while verifying live that `next.config.ts` has a
+**permanent redirect** sending `/hallmarks/disabled-autophagy` →
+`/hallmarks/disabled-macroautophagy`, with a comment claiming the former
+"was an earlier duplicate deep-dive on the same concept."
+
+That framing doesn't hold up against the actual data:
+- `lib/hallmarks-library.ts` has **13** hallmark entries for a "12 hallmarks
+  of aging" framework. `disabled-autophagy` (id `autophagy`, numbered **5**)
+  and `disabled-macroautophagy` (id `nutrient`, numbered **12**) are both
+  fully-authored, real, non-overlapping content — different mechanism text,
+  different key molecules, different interventions. Neither is a stub or a
+  copy of the other.
+- Content-wise, they appear to be **mislabeled relative to the standard
+  scientific framework**: `disabled-autophagy`'s mechanism text (ULK1,
+  BECN1/VPS34, LC3 lipidation, lysosomal fusion, PINK1/Parkin mitophagy) is
+  what the literature calls *"disabled macroautophagy"* — the autophagy
+  machinery itself failing. `disabled-macroautophagy`'s mechanism text
+  (mTORC1/AMPK, Rapamycin, Metformin, Berberine, insulin/IGF-1 signaling) is
+  what the literature calls *"deregulated nutrient-sensing"* — the upstream
+  regulatory switch. The two entries' titles and their actual scientific
+  content look swapped.
+- `app/hallmarks/page.tsx`'s `EDITORIAL_SLUGS` set still lists **both**
+  slugs as if they were 2 of the "official 12" shown on the hallmarks index
+  grid — so a real user clicking the "Disabled Autophagy" card right now
+  gets silently 308-redirected to a page titled "Disabled Macroautophagy"
+  whose content is actually about nutrient-sensing, not autophagy. This is
+  a live, user-facing bug on production today, independent of anything in
+  this session.
+- 8 other files still treat `disabled-autophagy` as the live, canonical
+  slug: `lib/cross-links.ts`, `lib/breadcrumb-titles.ts`, `lib/research-feed.ts`
+  (4 references), `lib/protocol-brief.ts`, `components/illustrations/HallmarkVisuals.tsx`.
+
+**Not fixed, deliberately** — this is a content/taxonomy decision (which
+title is correct for which mechanism, whether to keep 13 entries under a
+relabeled 12, merge the two, or something else), not a mechanical bug I
+should resolve unilaterally. My `disabled-autophagy/page.tsx` rewrite itself
+is still a net improvement regardless of how this gets resolved (real
+non-fabricated data, fixed the duplicate-landmark bug, fixed the wrong
+canonical URL) — it just doesn't reach users until the redirect question is
+settled. Recommend Thomas decide: (a) which title matches which mechanism
+correctly and rename, (b) whether both are worth keeping as distinct
+hallmarks or should merge, (c) then update the redirect/`EDITORIAL_SLUGS`/
+the 8 other reference sites to agree with whatever's decided.
+
+## Phase 4 — coherence / UI-consistency pass
+
+Finished Phase 2's explicitly-deferred `.premium-card` migration backlog,
+plus one more confirmed a11y-fallback-table gap found in the same family as
+two already fixed in Phase 2. Re-surveyed current state first (a prior
+session's find can go stale) rather than trusting old notes.
+
+**`.premium-card` migration — 21 ad hoc cards across 16 files, with
+documented exceptions where migrating would be a regression:**
+- All 12 `/hallmarks/<slug>` detail pages' biomarkers-table wrappers, plus 3
+  extra accent-neutral wrapper cards found along the way (cellular-senescence,
+  genomic-instability, mitochondrial-dysfunction).
+- `/insights`, `/protocols` closing CTA bands; `/best/[goal]`'s "How we
+  rank" note and FAQ cards; `HomeEliteInterventions.tsx`'s disclosure notice.
+- Where a card needs a horizontal `sm:flex-row` layout, `.premium-card` went
+  on an *outer* wrapper with the flex layout moved to a *nested inner* div —
+  `.premium-card`'s own unlayered CSS forces `flex-direction: column` on
+  itself (unlayered always beats Tailwind `@layer utilities`, confirmed from
+  `app/globals.css`'s own comment on this), so putting it directly on a
+  flex-row element would silently collapse the row. The nested-wrapper
+  approach only lets it affect its own layout, not descendants.
+- **Explicitly NOT migrated, verified against `.premium-card`'s actual CSS
+  before deciding** (documented in the commit, not silently skipped):
+  `HomeEliteInterventions.tsx`'s elite-card itself (already has a more
+  sophisticated, deliberate hover system — CLAUDE.md protects exactly this
+  kind of distinctive design from being flattened for consistency's sake);
+  several cards deliberately accent-tinted *at rest* (best/[goal]'s NICO
+  CTA, partnerships' "Non-negotiables", trust/sponsorship's "Professional
+  review" notice, cellular-senescence's Senolytics/Senomorphics sub-cards) —
+  `.premium-card` only shows accent via a thin hairline at rest and a
+  hover-triggered glow, so forcing these onto it would downgrade cards
+  meant to stand out immediately; `Modal.tsx` and `CommandPalette.tsx`'s
+  dialog panels — stationary, keyboard-driven, constantly-hovered-while-in-
+  use surfaces where `.premium-card:hover`'s `translateY(-4px)` would
+  visibly jump the panel; `PrivacyConsentBanner.tsx` — a fixed persistent
+  toast, same hover-jump problem while reading/dismissing; trust/sponsorship's
+  5 "principle" cards, which already stack `.glass` — combining `.glass`'s
+  own background with `.premium-card`'s separately-declared one would
+  silently discard `.glass`'s tinted backdrop rather than layer with it.
+
+**`disabled-autophagy/page.tsx` migrated to `HallmarkPageHero`** (matching
+its 11 siblings), fixing a real duplicate-landmark a11y bug and a wrong
+canonical URL along the way — see the flagged taxonomy finding above for why
+this page doesn't currently reach real users despite being fixed.
+
+**`StackNetworkGraph.tsx`** (the Advanced Stack Simulator's interaction-network
+graph) — confirmed still hover-only with no text/table fallback, the same
+CLAUDE.md violation already fixed twice in Phase 2. Unlike those two, its
+edges already carry real `label`/`detail`/`severity` text computed live from
+the user's stack (`buildStackNetwork()`) — no resolver needed, just never
+rendered outside the hover interaction. Added the same always-visible-table
+idiom as `ConnectionMatrix.tsx`.
+
+**Verification**: `npm run lint`/`typecheck`/`test` clean at every commit
+(41 files / 571 tests). Full clean rebuild (`rm -rf .next && npm run build`)
+succeeded with 0 errors/warnings, confirmed `/hallmarks/disabled-autophagy`
+still builds as a static route. Manual QA against the real build: exactly
+one `<h1>` on every touched page (spot-checked 5 hallmark pages plus the 3
+non-hallmark pages), `.premium-card` class confirmed present in the live
+SSR HTML on `/insights`, `/protocols`, and a real `/best/<goal>` page.
 
 ## Phase 3 — conversion-funnel fixes (5 workstreams)
 

@@ -74,7 +74,7 @@ export default function CellularSenescencePage() {
             </div>
           </div>
 
-          <div className="mt-10 rounded-2xl border border-border/60 bg-card/40 p-6">
+          <div className="premium-card mt-10 p-6">
             <p className="text-label text-muted-foreground mb-4">Two Therapeutic Strategies</p>
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="rounded-xl border border-accent-rose/25 bg-accent-rose/5 p-4">
@@ -97,7 +97,7 @@ export default function CellularSenescencePage() {
             <p className="text-label text-accent-rose">Monitoring</p>
           </div>
           <h2 className="heading-section text-foreground mb-6">Biomarkers that track senescent burden</h2>
-          <div className="rounded-2xl border border-border/60 bg-card/40 overflow-hidden">
+          <div className="premium-card">
             <div className="grid grid-cols-3 px-6 py-3 border-b border-border/40 text-label text-muted-foreground">
               <span>Marker</span>
               <span>Reference range</span>
