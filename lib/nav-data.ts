@@ -5,7 +5,10 @@
 export const navLinks = [
   { href: '/products', label: 'Products', mod: 'MOD-PRD-16' },
   { href: '/library', label: 'Library', mod: 'MOD-LIB-13' },
-  { href: '/library/compounds', label: 'Compounds', mod: 'MOD-CMP-17' },
+  // No separate "Compounds" nav item: /library/compounds duplicates the
+  // CompoundExplorer section already embedded on /library (same dataset,
+  // same tier filter). The route stays — it's load-bearing for every
+  // /library/compounds/<slug> deep-dive — just not double-billed in nav.
   { href: '/peptides', label: 'Peptides', mod: 'MOD-PEP-15' },
   { href: '/learn', label: 'Learn', mod: 'MOD-LRN-09' },
   { href: '/stacks', label: 'Stacks', mod: 'MOD-ARC-04' },
@@ -29,7 +32,6 @@ export const navGroups = [
     label: 'Learn',
     links: [
       { href: '/library', label: 'Library' },
-      { href: '/library/compounds', label: 'Compounds' },
       { href: '/peptides', label: 'Peptides' },
       { href: '/insights', label: 'Insights' },
       { href: '/learn', label: 'Learn' },
