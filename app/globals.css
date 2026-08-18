@@ -2465,7 +2465,10 @@ p,
   .gradient-sweep-text,
   .section-fade-in-up,
   .chip-stagger > *,
-  .skeleton::after {
+  .skeleton::after,
+  .animate-pulse-glow,
+  .animate-breathe,
+  .animate-gradient {
     animation: none !important;
   }
 }
