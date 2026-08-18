@@ -1,7 +1,9 @@
+import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { ArrowRight, FlaskConical, ExternalLink, CheckCircle2, AlertTriangle, Zap, TrendingUp, ShieldCheck } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { GuideHeroPanel } from '@/components/guides/GuideHeroPanel';
+import { GuideMoleculeWell } from '@/components/guides/GuideMoleculeWell';
 import { GuideVerifiedPick } from '@/components/guides/GuideVerifiedPick';
 import { DataTable } from '@/components/ui/DataTable';
 import { Accordion, AccordionItem } from '@/components/ui/Accordion';
@@ -214,7 +216,7 @@ export default function TaurineGuidePage() {
             · Science · 2023 · Singh P, Gollapalli K, Mangiola S et al.
           </p>
 
-          <div className="rounded-2xl border border-accent-emerald/20 bg-accent-emerald/[0.04] p-6 mb-8">
+          <div className="premium-card p-6 mb-8" style={{ '--card-accent': 'var(--accent-emerald)' } as CSSProperties}>
             <p className="font-mono text-sm text-accent-emerald mb-2">HEADLINE FINDING</p>
             <p className="text-lg font-semibold">
               Taurine supplementation in middle-aged mice extended median lifespan by{' '}
@@ -229,21 +231,24 @@ export default function TaurineGuidePage() {
                 body: 'The study measured taurine in blood samples from humans (ages 5–85), mice, and monkeys. By age 60, taurine levels had fallen ~80% from young adult baseline. This is not a diet issue — it reflects a fundamental age-related decline in taurine synthesis and recycling efficiency.',
                 color: 'text-accent-rose',
                 badge: 'bg-accent-rose/10 border-accent-rose/20',
+                accent: 'var(--accent-rose)',
               },
               {
                 title: 'Discovery 2: Lifespan extension in mice',
                 body: 'Middle-aged mice (1.5 years, equivalent to ~45 human years) given taurine in drinking water showed 10% longer median lifespan in males and 12% in females. Healthspan improvements were across-the-board — not just survival.',
                 color: 'text-accent-emerald',
                 badge: 'bg-accent-emerald/10 border-accent-emerald/20',
+                accent: 'var(--accent-emerald)',
               },
               {
                 title: 'Discovery 3: Monkey data confirms human relevance',
                 body: "In rhesus monkeys (most relevant model for humans), taurine restored epigenetic age markers, reduced inflammation, improved bone density, reduced liver fat, and improved insulin sensitivity. Monkeys' physiological similarity to humans makes this particularly meaningful.",
                 color: 'text-accent-cyan',
                 badge: 'bg-accent-cyan/10 border-accent-cyan/20',
+                accent: 'var(--accent-cyan)',
               },
             ].map((card) => (
-              <div key={card.title} className={`rounded-xl border p-5 ${card.badge} bg-card/50`}>
+              <div key={card.title} className="premium-card p-5" style={{ '--card-accent': card.accent } as CSSProperties}>
                 <h3 className={`font-semibold mb-2 text-sm ${card.color}`}>{card.title}</h3>
                 <p className="text-sm text-muted-foreground">{card.body}</p>
               </div>
@@ -262,6 +267,7 @@ export default function TaurineGuidePage() {
                 icon: Zap,
                 color: 'text-accent-cyan',
                 badge: 'bg-accent-cyan/10 border-accent-cyan/20',
+                accent: 'var(--accent-cyan)',
                 title: 'Mitochondrial function',
                 body: 'Taurine is incorporated into mitochondrial tRNA as a modified uridine (5-taurinomethyluridine). Without sufficient taurine, mitochondrial protein translation becomes impaired — specifically the proteins of the electron transport chain. Taurine deficiency = mitochondrial dysfunction, even if NAD+ is adequate. This pathway is distinct from and complementary to NMN/NAD+ biology.',
               },
@@ -269,6 +275,7 @@ export default function TaurineGuidePage() {
                 icon: ShieldCheck,
                 color: 'text-accent-emerald',
                 badge: 'bg-accent-emerald/10 border-accent-emerald/20',
+                accent: 'var(--accent-emerald)',
                 title: 'Antioxidant and anti-inflammatory',
                 body: 'Taurine is one of the most abundant intracellular organic acids. It reacts with hypochlorous acid (HOCl, produced by immune cells during inflammation) to form taurine chloramine — a far less reactive species. This reduces neutrophil-driven tissue damage. Taurine also modulates NF-κB, a master switch for inflammaging.',
               },
@@ -276,6 +283,7 @@ export default function TaurineGuidePage() {
                 icon: TrendingUp,
                 color: 'text-accent-violet',
                 badge: 'bg-accent-violet/10 border-accent-violet/20',
+                accent: 'var(--accent-violet)',
                 title: 'Osmotic regulation',
                 body: 'Taurine is the primary organic osmolyte in many tissues — it regulates cell volume under osmotic stress. Age-related taurine decline impairs this function, causing cells to handle volume stress less effectively. This contributes to the performance decline in muscle, kidney, and brain tissue observed in aging.',
               },
@@ -283,18 +291,20 @@ export default function TaurineGuidePage() {
                 icon: ArrowRight,
                 color: 'text-accent-rose',
                 badge: 'bg-accent-rose/10 border-accent-rose/20',
+                accent: 'var(--accent-rose)',
                 title: 'Gut and bile acid health',
                 body: 'Taurine conjugates bile acids in the liver (forming taurocholate, taurochenodeoxycholate). Taurine-conjugated bile acids are more water-soluble and have better antimicrobial properties in the gut than glycine-conjugated forms. Age-related taurine decline shifts the bile acid pool toward glycine conjugates, potentially worsening gut dysbiosis.',
               },
               {
                 icon: FlaskConical,
-                color: 'text-amber-400',
-                badge: 'bg-amber-400/10 border-amber-400/20',
+                color: 'text-accent-amber',
+                badge: 'bg-accent-amber/10 border-accent-amber/20',
+                accent: 'var(--accent-amber)',
                 title: 'DNA and epigenetic protection',
                 body: 'Taurine supplementation in the Singh 2023 monkey study restored epigenetic age markers — lower methylation at aging-associated CpG sites. The mechanism is not fully characterized, but likely involves reduced oxidative damage to DNA (via antioxidant function) and indirect epigenetic effects from improved mitochondrial function and reduced inflammation.',
               },
             ].map((item) => (
-              <div key={item.title} className={`flex gap-4 rounded-xl border p-5 ${item.badge} bg-card/50`}>
+              <div key={item.title} className="flex gap-4 premium-card p-5" style={{ '--card-accent': item.accent } as CSSProperties}>
                 <div className={`flex-shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-lg border ${item.badge}`}>
                   <item.icon className={`w-4 h-4 ${item.color}`} aria-hidden="true" />
                 </div>
@@ -305,6 +315,13 @@ export default function TaurineGuidePage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Molecule illustration */}
+      <section className="py-10">
+        <div className="container-page max-w-4xl">
+          <GuideMoleculeWell compoundId="taurine" />
         </div>
       </section>
 
@@ -343,7 +360,7 @@ export default function TaurineGuidePage() {
           </DataTable>
 
           <div className="grid md:grid-cols-2 gap-5">
-            <div className="rounded-xl border border-accent-emerald/20 bg-accent-emerald/[0.04] p-5">
+            <div className="premium-card p-5" style={{ '--card-accent': 'var(--accent-emerald)' } as CSSProperties}>
               <div className="flex items-center gap-2 mb-3">
                 <CheckCircle2 className="w-4 h-4 text-accent-emerald" aria-hidden="true" />
                 <p className="font-semibold text-accent-emerald text-sm">Best practices</p>
@@ -356,10 +373,10 @@ export default function TaurineGuidePage() {
                 <li>· No known upper toxic dose at supplemental ranges; widely safe</li>
               </ul>
             </div>
-            <div className="rounded-xl border border-amber-400/20 bg-amber-400/[0.04] p-5">
+            <div className="premium-card p-5" style={{ '--card-accent': 'var(--accent-amber)' } as CSSProperties}>
               <div className="flex items-center gap-2 mb-3">
-                <AlertTriangle className="w-4 h-4 text-amber-400" aria-hidden="true" />
-                <p className="font-semibold text-amber-400 text-sm">Context</p>
+                <AlertTriangle className="w-4 h-4 text-accent-amber" aria-hidden="true" />
+                <p className="font-semibold text-accent-amber text-sm">Context</p>
               </div>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>· No prescription interactions known; safe with most medications</li>

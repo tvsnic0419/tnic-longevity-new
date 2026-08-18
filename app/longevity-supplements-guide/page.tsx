@@ -7,6 +7,7 @@ import { seoRoutes } from '@/lib/seo-routes';
 import { buildHowToSchema, buildGuidePageSchema, buildBreadcrumbSchema } from '@/lib/seo';
 import { getScoredCompounds } from '@/lib/elite-8-data';
 import { PRODUCT_PICKS } from '@/lib/product-picks';
+import { VIZ } from '@/components/viz/tokens';
 
 export const metadata = seoRoutes.longevityGuide();
 
@@ -195,10 +196,11 @@ export default function LongevitySupplementsGuidePage() {
           <div className="space-y-4">
             {scored.map((c, i) => {
               const score = Math.max(0, Math.min(100, c.score));
-              const scoreColor = score >= 78 ? '#34d399' : score >= 68 ? '#00e0ff' : '#fbbf24';
+              const scoreColor = score >= 78 ? VIZ.emerald : score >= 68 ? VIZ.cyan : VIZ.amber;
               const tier = c.evidenceTier ?? 'B';
               // Canonical evidence-tier colors — A=emerald, B=cyan, C=amber
-              // (must match EvidenceTag / lib/trust.ts).
+              // (must match EvidenceTag / lib/trust.ts). Sourced from VIZ, not
+              // restated, so this can't silently drift from the real tokens.
               const tierColor = tier === 'A' ? 'text-accent-emerald' : tier === 'B' ? 'text-accent-cyan' : 'text-accent-amber';
               const tierBg = tier === 'A' ? 'bg-accent-emerald/10 border-accent-emerald/25' : tier === 'B' ? 'bg-accent-cyan/10 border-accent-cyan/25' : 'bg-accent-amber/10 border-accent-amber/25';
 

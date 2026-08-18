@@ -7,8 +7,8 @@ import type { HallmarkLibraryEntry } from '@/lib/types';
 import type { CompoundLink, GuideLink, PeptideLink } from '@/lib/library-graph';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { GlassPanel } from '@/components/ui/GlassPanel';
-import { PageHeader } from '@/components/ui/PageHeader';
 import { RevealCard } from '@/components/ui/RevealCard';
+import { HallmarkPageHero } from '@/components/hallmarks/HallmarkPageHero';
 import { HallmarkVisual } from './HallmarkVisual';
 import { getHallmarkVisual } from '@/lib/hallmark-visuals';
 import { InterventionExplorer } from './InterventionExplorer';
@@ -56,7 +56,15 @@ export function HallmarkDetail({
     : 0;
 
   return (
-    <div className="min-h-screen canvas-scrim text-foreground pt-6 md:pt-8 pb-20">
+    <>
+      {/* Cinematic hero, matching /hallmarks/<slug>'s treatment for the same
+          content — this page used to hand-roll its own plain PageHeader here,
+          a real step-down vs. its sibling hub route. HallmarkPageHero's own
+          PageHeader carries description={whyItMatters} and the hero's lead
+          defaults to the summary, so both are removed below to avoid
+          duplicating the same sentence twice on one page. */}
+      <HallmarkPageHero hallmark={hallmark} hue={visualMeta.theme} theme={visualMeta.theme} icon={Dna} />
+      <div className="min-h-screen canvas-scrim text-foreground pt-6 md:pt-8 pb-20">
       <div className="max-w-7xl mx-auto px-6">
         <Link
           href="/library"
@@ -92,16 +100,6 @@ export function HallmarkDetail({
 
           <div className="order-1 lg:order-2 min-w-0 lg:col-span-8 space-y-10">
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-              <PageHeader
-                icon={Dna}
-                eyebrow={`Hallmark ${hallmark.number} of 12`}
-                title={hallmark.title}
-                description={hallmark.tagline}
-                theme={visualMeta.theme}
-                as="h1"
-                align="left"
-              />
-              <p className="text-sm text-muted-foreground leading-relaxed mb-4">{hallmark.summary}</p>
               <GlassPanel depth="mid" className="rounded-xl p-5 mb-4">
                 <p className="text-micro font-mono text-accent-violet uppercase mb-2">Mechanism</p>
                 <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">{hallmark.mechanism}</p>
@@ -118,10 +116,6 @@ export function HallmarkDetail({
                     ))}
                   </div>
                 )}
-              </GlassPanel>
-              <GlassPanel depth="mid" className="rounded-xl p-5">
-                <p className="text-micro font-mono text-accent-amber uppercase mb-2">Why it matters</p>
-                <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">{hallmark.whyItMatters}</p>
               </GlassPanel>
             </motion.div>
 
@@ -323,5 +317,6 @@ export function HallmarkDetail({
         </div>
       </div>
     </div>
+    </>
   );
 }
