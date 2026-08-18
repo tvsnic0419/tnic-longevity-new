@@ -43,6 +43,7 @@ export const navGroups = [
       { href: '/library', label: 'Library' },
       { href: '/library/compounds', label: 'Compounds' },
       { href: '/peptides', label: 'Peptides' },
+      { href: '/insights', label: 'Insights' },
       { href: '/learn', label: 'Learn' },
     ],
   },
@@ -50,6 +51,7 @@ export const navGroups = [
     label: 'Build',
     links: [
       { href: '/stacks', label: 'Stacks' },
+      { href: '/protocols', label: 'Protocols' },
       { href: '/tools', label: 'Tools' },
       { href: '/compound-engine', label: 'Engine' },
     ],

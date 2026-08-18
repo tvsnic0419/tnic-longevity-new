@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, CheckCircle2, AlertCircle, Info, FlaskConical } from 'lucide-react';
 import { buildPageMetadata } from '@/lib/seo';
@@ -61,6 +62,40 @@ const systems = [
     maturityColor: 'text-accent-rose',
   },
 ];
+
+// Compound names that appear in the `bestFor` strings and have library
+// deep-dives. Linking them turns this page from a near-island into a real hub
+// node — a visitor reading about phytosomes can jump straight to the compound.
+const COMPOUND_SLUGS: Record<string, string> = {
+  curcumin: 'curcumin',
+  resveratrol: 'resveratrol',
+  egcg: 'egcg',
+  sulforaphane: 'sulforaphane',
+  fisetin: 'fisetin',
+  quercetin: 'quercetin',
+};
+
+function LinkifyCompounds({ text }: { text: string }) {
+  const re = new RegExp(`\\b(${Object.keys(COMPOUND_SLUGS).join('|')})\\b`, 'gi');
+  const parts: ReactNode[] = [];
+  let last = 0;
+  let key = 0;
+  for (let m = re.exec(text); m !== null; m = re.exec(text)) {
+    if (m.index > last) parts.push(text.slice(last, m.index));
+    parts.push(
+      <Link
+        key={key++}
+        href={`/library/compounds/${COMPOUND_SLUGS[m[1].toLowerCase()]}`}
+        className="text-accent-cyan hover:underline focus-ring rounded"
+      >
+        {m[0]}
+      </Link>,
+    );
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) parts.push(text.slice(last));
+  return <>{parts}</>;
+}
 
 export default function DeliverySystemsPage() {
   return (
@@ -133,7 +168,7 @@ export default function DeliverySystemsPage() {
               </div>
               <div>
                 <dt className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Best Suited For</dt>
-                <dd className="text-xs text-muted-foreground">{s.bestFor}</dd>
+                <dd className="text-xs text-muted-foreground"><LinkifyCompounds text={s.bestFor} /></dd>
               </div>
               <div>
                 <dt className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Maturity</dt>
@@ -184,7 +219,7 @@ export default function DeliverySystemsPage() {
                     ))}
                   </ul>
                 </td>
-                <td className="py-5 pr-6 text-xs text-muted-foreground">{s.bestFor}</td>
+                <td className="py-5 pr-6 text-xs text-muted-foreground"><LinkifyCompounds text={s.bestFor} /></td>
                 <td className="py-5">
                   <p className={`text-xs font-semibold ${s.maturityColor}`}>{s.maturity}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">{s.maturityNote}</p>
