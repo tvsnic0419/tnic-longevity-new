@@ -462,6 +462,20 @@ export function analyzeStack(selectedIds: string[]): StackAnalysis {
   };
 }
 
+/**
+ * One-line label for the active stack, shared by the dashboard status card and
+ * the N=1 status export so the two can never disagree (previously each inlined
+ * its own copy of this logic). First-word names keep the line compact; past
+ * three compounds it truncates to "A + B + C + N more" so the status card and
+ * the canvas-rendered PNG export can't overflow their fixed widths.
+ */
+export function formatActiveProtocol(compoundNames: string[]): string {
+  if (compoundNames.length === 0) return 'No active stack';
+  const firstWords = compoundNames.map((n) => n.split(' ')[0]);
+  if (firstWords.length <= 3) return firstWords.join(' + ');
+  return `${firstWords.slice(0, 3).join(' + ')} + ${firstWords.length - 3} more`;
+}
+
 export function formatStackExport(
   selectedIds: string[],
   analysis: StackAnalysis,
