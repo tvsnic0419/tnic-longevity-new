@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { ArrowRight, Activity, FlaskConical, LayoutDashboard } from 'lucide-react';
 import { LongevityGaugeArc } from '@/components/ui/LongevityGaugeArc';
 import { usePlatform } from '@/context/PlatformContext';
-import { analyzeStack } from '@/lib/stack-analysis';
+import { analyzeStack, formatActiveProtocol } from '@/lib/stack-analysis';
 import { runBiomarkerDashboard } from '@/lib/tools/biomarker-dashboard';
 import { journeyMilestones } from '@/lib/journey';
 import type { EvidenceLevel } from '@/lib/types';
@@ -49,10 +49,7 @@ export function Dashboard() {
   const { selected, selectedCompounds, score, profile, defenseProfile, labs, quizResult } = usePlatform();
   const analysis = analyzeStack(selected);
 
-  const activeProtocol =
-    selectedCompounds.length > 0
-      ? selectedCompounds.map((c) => c.name.split(' ')[0]).join(' + ')
-      : 'No active stack';
+  const activeProtocol = formatActiveProtocol(selectedCompounds.map((c) => c.name));
 
   const latestLabDate =
     labs.length > 0
@@ -136,7 +133,11 @@ export function Dashboard() {
               <p className="text-caption text-muted-foreground">Active protocol</p>
               <p className="text-2xl font-bold mt-1 leading-snug">{activeProtocol}</p>
               <p className="text-body-sm text-muted-foreground mt-1">
-                {selected.length} compound{selected.length === 1 ? '' : 's'} · Tier {analysis.evidenceTier}
+                {selected.length} compound{selected.length === 1 ? '' : 's'}
+                {/* An empty stack has no evidence grade — never print "Tier C"
+                    (a weak-evidence verdict) just because the averaging helper
+                    defaults there when it has nothing to average. */}
+                {selected.length > 0 ? ` · Tier ${analysis.evidenceTier}` : ' · Not graded'}
               </p>
             </div>
 
