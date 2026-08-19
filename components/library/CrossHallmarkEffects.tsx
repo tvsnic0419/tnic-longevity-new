@@ -28,14 +28,14 @@ const hallmarkNames: Record<string, string> = {
   telomeres:    'Telomere Attrition',
   epigenetic:   'Epigenetic Alterations',
   proteostasis: 'Loss of Proteostasis',
-  autophagy:    'Disabled Autophagy',
+  autophagy:    'Disabled Macroautophagy',
   mito:         'Mitochondrial Dysfunction',
   senescence:   'Cellular Senescence',
   stem:         'Stem Cell Exhaustion',
   communication:'Altered Communication',
   inflammation: 'Chronic Inflammation',
   dysbiosis:    'Gut Dysbiosis',
-  nutrient:     'Nutrient Dysregulation',
+  nutrient:     'Deregulated Nutrient Sensing',
 };
 
 const accentText: Record<string, string> = {

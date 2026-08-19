@@ -13,14 +13,14 @@ const HALLMARKS = [
   { num: 2, label: 'Telomere Attrition' },
   { num: 3, label: 'Epigenetic Alterations' },
   { num: 4, label: 'Loss of Proteostasis' },
-  { num: 5, label: 'Deregulated Nutrient Sensing' },
+  { num: 5, label: 'Disabled Macroautophagy' },
   { num: 6, label: 'Mitochondrial Dysfunction' },
   { num: 7, label: 'Cellular Senescence' },
   { num: 8, label: 'Stem Cell Exhaustion' },
   { num: 9, label: 'Altered Intercellular Communication' },
   { num: 10, label: 'Chronic Inflammation' },
   { num: 11, label: 'Dysbiosis' },
-  { num: 12, label: 'Disabled Macroautophagy' },
+  { num: 12, label: 'Deregulated Nutrient Sensing' },
 ];
 
 const TIERS = ['A', 'B', 'C'] as const;

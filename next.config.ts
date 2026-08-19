@@ -48,15 +48,23 @@ const nextConfig: NextConfig = {
         destination: '/library/compare/urolithin-a-vs-coq10',
         permanent: true,
       },
-      // The Anti-Aging Library visual grid pins hallmark #12 to
-      // /hallmarks/disabled-macroautophagy — the "nutrient sensing gone wrong"
-      // framing that covers both macroautophagy and the mTOR/AMPK switch.
-      // /hallmarks/disabled-autophagy was an earlier duplicate deep-dive on the
-      // same concept. Consolidating to one canonical route so inbound links
-      // land on the current page.
+      // Phase 6 taxonomy correction: the hallmark registry originally shipped
+      // two entries whose titles were swapped relative to their content. The
+      // autophagy-machinery hallmark (ULK1/LC3/mitophagy — canonical "disabled
+      // macroautophagy", López-Otín 2023) sat at /hallmarks/disabled-autophagy,
+      // while the mTOR/AMPK nutrient-sensing hallmark sat at
+      // /hallmarks/disabled-macroautophagy. Content now lives at the correct
+      // slugs: disabled-macroautophagy (H5) and deregulated-nutrient-sensing
+      // (H12). Permanently redirect the retired autophagy slug so inbound
+      // links and index entries land on the macroautophagy content they mean.
       {
         source: '/hallmarks/disabled-autophagy',
         destination: '/hallmarks/disabled-macroautophagy',
+        permanent: true,
+      },
+      {
+        source: '/library/disabled-autophagy',
+        destination: '/library/disabled-macroautophagy',
         permanent: true,
       },
     ];

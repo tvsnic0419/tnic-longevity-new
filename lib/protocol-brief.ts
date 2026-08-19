@@ -88,7 +88,7 @@ export const protocolBriefIssues: ProtocolBriefEntry[] = [
     pmids: ['19587683', '25540326'],
     libraryHrefs: [
       { label: 'Rapamycin module', href: '/library/compounds/rapamycin' },
-      { label: 'Disabled autophagy hallmark', href: '/library/disabled-autophagy' },
+      { label: 'Nutrient sensing hallmark', href: '/library/deregulated-nutrient-sensing' },
       { label: 'Trust disclaimers', href: '/trust/disclaimers' },
     ],
     takeaway: 'OTC stacks complement — never substitute — physician-managed rapamycin.',

@@ -24,14 +24,14 @@ const EDITORIAL_SLUGS = new Set([
   'telomere-attrition',
   'epigenetic-alterations',
   'loss-of-proteostasis',
-  'disabled-autophagy',
+  'disabled-macroautophagy',
   'mitochondrial-dysfunction',
   'cellular-senescence',
   'stem-cell-exhaustion',
   'altered-intercellular-communication',
   'chronic-inflammation',
   'dysbiosis',
-  'disabled-macroautophagy',
+  'deregulated-nutrient-sensing',
 ]);
 
 // Coverage keeps its semantic green→amber→rose signal (how well TNiC covers the

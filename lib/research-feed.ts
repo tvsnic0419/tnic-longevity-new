@@ -136,7 +136,7 @@ export const researchFeed = [
     impact: 'breakthrough' as const,
     relatedHrefs: [
       { label: '12 Hallmarks library', href: '/library' },
-      { label: 'Disabled Autophagy hallmark', href: '/library/disabled-autophagy' },
+      { label: 'Deregulated Nutrient Sensing hallmark', href: '/library/deregulated-nutrient-sensing' },
       { label: 'Protocol Brief digest', href: '/brief' },
     ],
   },
@@ -244,7 +244,7 @@ export const researchFeed = [
     impact: 'clinical' as const,
     relatedHrefs: [
       { label: 'Mitochondrial Dysfunction', href: '/library/mitochondrial-dysfunction' },
-      { label: 'Disabled Autophagy', href: '/library/disabled-autophagy' },
+      { label: 'Disabled Macroautophagy', href: '/library/disabled-macroautophagy' },
       { label: 'Mitochondrial preset', href: '/stacks?preset=mito' },
     ],
   },
@@ -258,7 +258,7 @@ export const researchFeed = [
     pmid: '29563638',
     impact: 'clinical' as const,
     relatedHrefs: [
-      { label: 'Disabled Autophagy', href: '/library/disabled-autophagy' },
+      { label: 'Disabled Macroautophagy', href: '/library/disabled-macroautophagy' },
       { label: 'Stem Cell Exhaustion', href: '/library/stem-cell-exhaustion' },
       { label: 'Learn hub', href: '/learn' },
     ],
@@ -273,7 +273,7 @@ export const researchFeed = [
     pmid: '18396172',
     impact: 'clinical' as const,
     relatedHrefs: [
-      { label: 'Disabled Macroautophagy', href: '/library/disabled-macroautophagy' },
+      { label: 'Deregulated Nutrient Sensing', href: '/library/deregulated-nutrient-sensing' },
       { label: 'Mitochondrial preset', href: '/stacks?preset=mito' },
       { label: 'Protocol Brief digest', href: '/brief' },
     ],
@@ -289,7 +289,7 @@ export const researchFeed = [
     impact: 'clinical' as const,
     relatedHrefs: [
       { label: 'Mitochondrial Dysfunction', href: '/library/mitochondrial-dysfunction' },
-      { label: 'Disabled Autophagy', href: '/library/disabled-autophagy' },
+      { label: 'Disabled Macroautophagy', href: '/library/disabled-macroautophagy' },
       { label: 'Mitochondrial preset', href: '/stacks?preset=mito' },
     ],
   },
@@ -363,7 +363,7 @@ export const researchFeed = [
     pmid: '32910831',
     impact: 'breakthrough' as const,
     relatedHrefs: [
-      { label: 'Disabled Macroautophagy', href: '/library/disabled-macroautophagy' },
+      { label: 'Deregulated Nutrient Sensing', href: '/library/deregulated-nutrient-sensing' },
       { label: 'Mitochondrial Dysfunction', href: '/library/mitochondrial-dysfunction' },
       { label: 'Protocol Brief digest', href: '/brief' },
     ],
