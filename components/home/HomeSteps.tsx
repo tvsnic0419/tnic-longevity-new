@@ -52,7 +52,7 @@ export function HomeSteps() {
       aria-labelledby="home-steps-heading"
       className="relative border-t border-border/50 py-20 md:py-28"
     >
-      <CellularDivider hue="var(--accent-emerald)" index="05" label="The path" />
+      <CellularDivider hue="var(--accent-emerald)" index="05" label="Protocol" />
       <div className="container-page">
         <RevealItem className="mx-auto mb-12 max-w-2xl text-center">
           <p className="text-label mb-3 text-accent-emerald">Get started in 3 steps</p>

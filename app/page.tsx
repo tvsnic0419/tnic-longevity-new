@@ -1,14 +1,11 @@
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { ScrollProgress } from '@/components/ScrollProgress';
-import { HomeHero } from '@/components/home/HomeHero';
 import { HomeDescent } from '@/components/home/HomeDescent';
 import { HomeEliteInterventions } from '@/components/home/HomeEliteInterventions';
 import { HomeHallmarks } from '@/components/home/HomeHallmarks';
-import { HomeGuides } from '@/components/home/HomeGuides';
-import { HomeExplore } from '@/components/home/HomeExplore';
 import { HomeSteps } from '@/components/home/HomeSteps';
-import { HomeCTA } from '@/components/home/HomeCTA';
+import { HomeNicoStarter } from '@/components/home/HomeNicoStarter';
 import { StructuredData } from '@/components/seo/StructuredData';
 import {
   buildSoftwareApplicationSchema,
@@ -20,11 +17,15 @@ import { eliteInterventions } from '@/lib/elite-interventions';
 
 /**
  * Homepage — a server component so the full page renders to HTML on the server
- * and is crawlable. The page leads with the elite-interventions showcase
- * (products anchored to graded evidence) directly under the hero, then the
- * evidence depth that justifies those picks (hallmarks + guides), then the
- * wayfinding grid and how-to path. Interactive pieces (nav) are isolated
- * client islands within this server shell.
+ * and is crawlable. Structured as a six-chapter descent:
+ *   hero + 01 System (synergy network) + 02 Goal (morbidity curve) live in the
+ *   cinematic HomeDescent overture, then 03 Interventions (elite picks +
+ *   hallmark filter), 04 Mechanisms (the 12 hallmarks), 05 Protocol (the
+ *   three-step path), and 06 Personalize (the on-page NICO starter). The full
+ *   guide/hub wayfinding lives in the footer (and is reachability-guarded from
+ *   the hallmark pages), so the body stays a single, legible narrative.
+ *   Interactive pieces (nav, the elite filter, the NICO starter) are isolated
+ *   client islands within this server shell.
  */
 
 const HOME_TITLE = 'TNiC — Evidence-Graded Longevity Supplements & Anti-Aging Library';
@@ -64,13 +65,10 @@ export default function HomePage() {
       <Nav />
       <main id="main-content" tabIndex={-1}>
         <HomeDescent />
-        <HomeHero />
         <HomeEliteInterventions />
         <HomeHallmarks />
-        <HomeGuides />
-        <HomeExplore />
         <HomeSteps />
-        <HomeCTA />
+        <HomeNicoStarter />
       </main>
       <Footer />
     </div>

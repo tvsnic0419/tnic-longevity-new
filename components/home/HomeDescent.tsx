@@ -866,17 +866,17 @@ export function HomeDescent() {
           <Link href="/trust/methodology" className="pill"><span className="dot" /><b>A–C</b>&nbsp;evidence tiers</Link>
         </div>
         <div className="tnic-hero-cta">
-          <Link href="/nico" className="tnic-cta">
-            Start the NICO Questionnaire <span className="arr" aria-hidden="true">→</span>
+          <Link href="/elite-8" className="tnic-cta">
+            Explore the Elite Eight <span className="arr" aria-hidden="true">→</span>
           </Link>
-          <Link href="/library" className="tnic-cta ghost">Explore the evidence</Link>
+          <Link href="#system" className="tnic-cta ghost">View the network</Link>
         </div>
         <div className="tnic-cue"><span className="bar" />descend</div>
       </section>
 
       {/* ACT 1 — MOLECULE */}
       <section ref={s1} data-idx="1" className="tnic-act">
-        <p className="tnic-kicker">01 — the molecule</p>
+        <p className="tnic-kicker">The molecule · rendered live</p>
         <h2 className="tnic-h2">It starts smaller{' '}<br />than you can <em>picture</em>.</h2>
         <p className="tnic-lead">
           Trans-resveratrol — studied for sirtuin activation and healthy-aging
@@ -921,8 +921,8 @@ export function HomeDescent() {
       </section>
 
       {/* ACT 2 — NETWORK */}
-      <section ref={s2} data-idx="2" className="tnic-act">
-        <p className="tnic-kicker">02 — your stack, alive</p>
+      <section ref={s2} data-idx="2" id="system" className="tnic-act">
+        <p className="tnic-kicker">01 / System · Your stack, alive</p>
         <h2 className="tnic-h2">Nothing works <em>alone</em>.</h2>
         <p className="tnic-lead">
           Every graded compound, plotted against the ones it boosts and the ones
@@ -973,8 +973,8 @@ export function HomeDescent() {
       </section>
 
       {/* ACT 3 — TIMELINE */}
-      <section ref={s3} data-idx="3" className="tnic-act">
-        <p className="tnic-kicker">03 — the honest dream</p>
+      <section ref={s3} data-idx="3" id="goal" className="tnic-act">
+        <p className="tnic-kicker">02 / Goal · The honest dream</p>
         <h2 className="tnic-h2">Not longer. <span className="warm">Well</span>, longer.</h2>
         <p className="tnic-lead">
           Longevity&apos;s real goal isn&apos;t just more years — it&apos;s keeping function
@@ -1117,7 +1117,7 @@ export function HomeDescent() {
             <path d={goalPath} fill="none" stroke="var(--gold)" strokeWidth="2.5" strokeOpacity="0.38" />
           </g>
         </svg>
-        <p className="tnic-kicker">04 — the path from here</p>
+        <p className="tnic-kicker">The path from here</p>
         <h2 className="tnic-h2">You&apos;ve seen the shape. <br />Now <em>build</em> to it.</h2>
         <p className="tnic-lead">
           Everything below this section is the working version of what you just

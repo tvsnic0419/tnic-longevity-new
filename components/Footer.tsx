@@ -89,6 +89,7 @@ export function Footer() {
             >
               <Logo variant="lockup" size="md" alt="TNiC – Transformative Nutrition in Cell-Health · Home" />
             </Link>
+            <p className="text-label mb-3 text-muted-foreground">Cell-Health Library</p>
             <p className="text-body-sm max-w-xs">
               Independent longevity intelligence. Evidence-graded compounds,
               transparent methodology, and consumer safety at the center of every recommendation.
