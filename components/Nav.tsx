@@ -98,12 +98,26 @@ export function Nav() {
             label-content-name-mismatch audit flags as visible text not
             reflected in the accessible name. Let the link's name derive
             from that single nested image role instead. */}
-        <Link
-          href="/"
-          className="focus-ring interactive flex items-center rounded-xl shrink-0 group transition-transform hover:scale-[1.02]"
-        >
-          <Logo variant="lockup" size="nav" alt="TNiC – Transformative Nutrition in Cell-Health · Home" />
-        </Link>
+        <div className="flex items-center gap-2.5 shrink-0">
+          <Link
+            href="/"
+            className="focus-ring interactive flex items-center rounded-xl group transition-transform hover:scale-[1.02]"
+          >
+            <Logo variant="lockup" size="nav" alt="TNiC – Transformative Nutrition in Cell-Health · Home" />
+          </Link>
+          {/* Brand descriptor from the site wordmark. Decorative (aria-hidden)
+              and kept OUTSIDE the logo link so it can't create a
+              label-content-name-mismatch with the link's accessible name.
+              Wide screens only, so the ≥1440px nav row stays uncrowded. */}
+          <span
+            aria-hidden="true"
+            className="hidden xl:block border-l border-border/60 pl-2.5 font-mono text-[0.58rem] font-semibold uppercase leading-[1.25] tracking-[0.18em] text-muted-foreground"
+          >
+            Cell-Health
+            <br />
+            Library
+          </span>
+        </div>
 
         {/* Grouped by intent (Learn / Build / Track / Shop) with a hairline
             divider between clusters, so the row reads as labeled families
@@ -141,7 +155,7 @@ export function Nav() {
               className="focus-ring inline-flex items-center gap-1.5 rounded-full py-2 px-4 text-sm font-semibold text-muted-foreground hover:text-foreground"
             >
               <ClipboardList className="w-4 h-4 text-accent-violet" aria-hidden="true" />
-              NICO
+              Begin NICO
             </Link>
           </GlassPanel>
           <Link href="/dashboard" className="focus-ring btn-gradient text-sm !py-2.5 !px-5 !min-h-0 rounded-full">
