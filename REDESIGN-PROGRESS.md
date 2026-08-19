@@ -6,11 +6,64 @@ master prompt — its durable operating rules are already merged into
 
 ## Current phase
 
-**Phase 5 complete** — homepage structure fixes + tool-surface elevation
-(stack analyzer family), on branch `redesign/phase-5-ui-elevation` with a PR
-open (not merged — Thomas merges). The Phase 4 flagship finding below is
-**still open and still Thomas's call** — Phase 5 deliberately did not touch
-the disabled-autophagy/macroautophagy taxonomy question.
+**Phase 6 complete** — hallmark taxonomy correction (the Phase 4 flagship
+finding), decided and shipped under Thomas's blanket delegation of 2026-08-19
+("make the decisions for me on all these matters that best serves the site's
+interest"). Phase 5 was merged as PR #117 (squash, `c02e144`); Phase 6 rides
+branch `redesign/phase-6-hallmark-taxonomy`.
+
+## Phase 6 — hallmark taxonomy correction (the Phase 4 flag, resolved)
+
+**Decision (delegated by Thomas 2026-08-19):** align the registry to the
+canonical López-Otín 2023 framework and to the site's own engine layer, which
+already used the correct labels (`compound-engine-data.ts` HALLMARKS and
+`stack-engine.ts` HALLMARK_LABEL both map id `autophagy` → "Disabled
+macroautophagy" and id `nutrient` → "Deregulated nutrient sensing"). The two
+library entries' **titles/slugs were swapped relative to their content**;
+content was never wrong, only labels. No merge, no deletion — both sets of
+fully-authored content stay, now under the correct names:
+
+- Entry `autophagy` (#5, ULK1/LC3/mitophagy content): slug
+  `disabled-autophagy` → **`disabled-macroautophagy`**, title → **Disabled
+  Macroautophagy**.
+- Entry `nutrient` (#12, mTORC1/AMPK/rapamycin/metformin content): slug
+  `disabled-macroautophagy` → **`deregulated-nutrient-sensing`**, title →
+  **Deregulated Nutrient Sensing**.
+- Hallmark numbers unchanged (#5 / #12 — the site appends the three 2023
+  additions at 10–12; MDX bodies cross-reference these numbers throughout).
+- Join-key `id`s unchanged (`autophagy`, `nutrient`) — zero data-model blast
+  radius; only the user-facing label/URL layer moved.
+
+**What changed:**
+- `lib/hallmarks-library.ts` — the two entries' slug/title/mdxSlug.
+- Pages: `app/hallmarks/disabled-macroautophagy/` now serves the macroautophagy
+  deep-dive (moved from `disabled-autophagy/`, metadata retitled);
+  `app/hallmarks/deregulated-nutrient-sensing/` now serves the nutrient-sensing
+  deep-dive (moved from the old `disabled-macroautophagy/`).
+- MDX: `content/hallmarks/disabled-macroautophagy.mdx` (macroautophagy content)
+  and `deregulated-nutrient-sensing.mdx` (nutrient content) renamed with
+  frontmatter titles and all intra-MDX cross-links retargeted.
+- Redirects (`next.config.ts`): `/hallmarks/disabled-autophagy` →
+  `/hallmarks/disabled-macroautophagy` (kept — now lands on the *correct*
+  content; the old "duplicate deep-dive" comment was wrong and is rewritten),
+  plus new `/library/disabled-autophagy` → `/library/disabled-macroautophagy`.
+  The nutrient content's old URL keeps serving — now under its correct name at
+  the new slug.
+- Reference sweep (each audited by semantic intent, not blind sed):
+  research-feed (rapamycin r12 + berberine r22 + metformin r28 → nutrient
+  sensing; urolithin A r20/r23 + spermidine r21 → macroautophagy),
+  protocol-brief rapamycin link → nutrient sensing, comparisons
+  nmn-vs-spermidine label, cross-links HALLMARKS, breadcrumb-titles
+  hallmarkTitles (guardrail-tested against the registry), data.ts hallmark
+  card titles, CrossHallmarkEffects + ImpactPropagationView label maps
+  (also fixed a third drifting variant, "Nutrient Dysregulation"),
+  LibraryFacetFilters chips (5↔12 were swapped), HallmarkVisuals aria/visible
+  labels + legacy slug map, DisabledMacroautophagyVisual/DeregulatedNutrient-
+  SensingVisual internal "HALLMARK nn" badges (were inverted), /library visual
+  grid order, 4 compound MDX "primary hallmarks" links, ELEVATION-CHECKLIST.
+- `app/hallmarks/page.tsx` EDITORIAL_SLUGS — the index grid now shows the
+  correct 12 names and clicking the macroautophagy card no longer 308s into
+  the nutrient-sensing page (the live production bug from the Phase 4 flag).
 
 ## Phase 5 — homepage structure + tool-surface elevation
 
@@ -81,56 +134,19 @@ confirmed in `/stacks` SSR output. Visual QA against the production build
 plus preset-selected state; Act 3 labels separated; Act 4 ascent backdrop
 renders; footer columns balanced.
 
-## ⚠ Flagged for Thomas — hallmark taxonomy conflict (found, not fixed)
+## ✅ Resolved — hallmark taxonomy conflict (was Phase 4's open flag)
 
-While closing out Phase 2's deferred `.premium-card` backlog, found that
-`app/hallmarks/disabled-autophagy/page.tsx` was the one structural outlier
-among the 12 hallmark pages (self-hosted its own Nav/Footer/`<main>` instead
-of using the shared layout — a live, duplicate-landmark a11y bug). Migrated
-it to match its 11 siblings (same fix pattern as everything else in this
-phase) — then discovered while verifying live that `next.config.ts` has a
-**permanent redirect** sending `/hallmarks/disabled-autophagy` →
-`/hallmarks/disabled-macroautophagy`, with a comment claiming the former
-"was an earlier duplicate deep-dive on the same concept."
-
-That framing doesn't hold up against the actual data:
-- `lib/hallmarks-library.ts` has **13** hallmark entries for a "12 hallmarks
-  of aging" framework. `disabled-autophagy` (id `autophagy`, numbered **5**)
-  and `disabled-macroautophagy` (id `nutrient`, numbered **12**) are both
-  fully-authored, real, non-overlapping content — different mechanism text,
-  different key molecules, different interventions. Neither is a stub or a
-  copy of the other.
-- Content-wise, they appear to be **mislabeled relative to the standard
-  scientific framework**: `disabled-autophagy`'s mechanism text (ULK1,
-  BECN1/VPS34, LC3 lipidation, lysosomal fusion, PINK1/Parkin mitophagy) is
-  what the literature calls *"disabled macroautophagy"* — the autophagy
-  machinery itself failing. `disabled-macroautophagy`'s mechanism text
-  (mTORC1/AMPK, Rapamycin, Metformin, Berberine, insulin/IGF-1 signaling) is
-  what the literature calls *"deregulated nutrient-sensing"* — the upstream
-  regulatory switch. The two entries' titles and their actual scientific
-  content look swapped.
-- `app/hallmarks/page.tsx`'s `EDITORIAL_SLUGS` set still lists **both**
-  slugs as if they were 2 of the "official 12" shown on the hallmarks index
-  grid — so a real user clicking the "Disabled Autophagy" card right now
-  gets silently 308-redirected to a page titled "Disabled Macroautophagy"
-  whose content is actually about nutrient-sensing, not autophagy. This is
-  a live, user-facing bug on production today, independent of anything in
-  this session.
-- 8 other files still treat `disabled-autophagy` as the live, canonical
-  slug: `lib/cross-links.ts`, `lib/breadcrumb-titles.ts`, `lib/research-feed.ts`
-  (4 references), `lib/protocol-brief.ts`, `components/illustrations/HallmarkVisuals.tsx`.
-
-**Not fixed, deliberately** — this is a content/taxonomy decision (which
-title is correct for which mechanism, whether to keep 13 entries under a
-relabeled 12, merge the two, or something else), not a mechanical bug I
-should resolve unilaterally. My `disabled-autophagy/page.tsx` rewrite itself
-is still a net improvement regardless of how this gets resolved (real
-non-fabricated data, fixed the duplicate-landmark bug, fixed the wrong
-canonical URL) — it just doesn't reach users until the redirect question is
-settled. Recommend Thomas decide: (a) which title matches which mechanism
-correctly and rename, (b) whether both are worth keeping as distinct
-hallmarks or should merge, (c) then update the redirect/`EDITORIAL_SLUGS`/
-the 8 other reference sites to agree with whatever's decided.
+Resolved in Phase 6 (above) under Thomas's 2026-08-19 delegation. Summary of
+what the flag had established, preserved for the record: the registry carried
+two entries whose titles/slugs were swapped relative to their content —
+`disabled-autophagy` (id `autophagy`, #5) held the autophagy-machinery
+content the literature calls *disabled macroautophagy*, and
+`disabled-macroautophagy` (id `nutrient`, #12) held the mTOR/AMPK content the
+literature calls *deregulated nutrient-sensing*; a permanent redirect sent
+the autophagy URL to the nutrient-sensing page. The Phase 4 note's "13
+entries" was an overcount — the library always held exactly 12; the bug was
+labeling, not cardinality. Phase 6 relabeled to the canonical framework,
+fixed the redirect semantics, and swept every reference site.
 
 ## Phase 4 — coherence / UI-consistency pass
 

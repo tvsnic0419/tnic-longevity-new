@@ -70,14 +70,14 @@ export const hallmarkTitles: Record<string, string> = {
   'telomere-attrition': 'Telomere Attrition',
   'epigenetic-alterations': 'Epigenetic Alterations',
   'loss-of-proteostasis': 'Loss of Proteostasis',
-  'disabled-autophagy': 'Disabled Autophagy',
+  'disabled-macroautophagy': 'Disabled Macroautophagy',
   'mitochondrial-dysfunction': 'Mitochondrial Dysfunction',
   'cellular-senescence': 'Cellular Senescence',
   'stem-cell-exhaustion': 'Stem Cell Exhaustion',
   'altered-intercellular-communication': 'Altered Intercellular Communication',
   'chronic-inflammation': 'Chronic Inflammation',
   dysbiosis: 'Dysbiosis',
-  'disabled-macroautophagy': 'Disabled Macroautophagy',
+  'deregulated-nutrient-sensing': 'Deregulated Nutrient Sensing',
 };
 
 /** Keyed by `${category}/${slug}`. */

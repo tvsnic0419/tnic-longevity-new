@@ -150,14 +150,14 @@ const HALLMARKS: Array<{ name: string; slug: string }> = [
   { name: 'Telomere Attrition', slug: 'telomere-attrition' },
   { name: 'Epigenetic Alterations', slug: 'epigenetic-alterations' },
   { name: 'Loss of Proteostasis', slug: 'loss-of-proteostasis' },
-  { name: 'Disabled Autophagy', slug: 'disabled-autophagy' },
+  { name: 'Disabled Macroautophagy', slug: 'disabled-macroautophagy' },
   { name: 'Mitochondrial Dysfunction', slug: 'mitochondrial-dysfunction' },
   { name: 'Cellular Senescence', slug: 'cellular-senescence' },
   { name: 'Stem Cell Exhaustion', slug: 'stem-cell-exhaustion' },
   { name: 'Altered Intercellular Communication', slug: 'altered-intercellular-communication' },
   { name: 'Chronic Inflammation', slug: 'chronic-inflammation' },
   { name: 'Dysbiosis', slug: 'dysbiosis' },
-  { name: 'Disabled Macroautophagy', slug: 'disabled-macroautophagy' },
+  { name: 'Deregulated Nutrient Sensing', slug: 'deregulated-nutrient-sensing' },
 ];
 
 function titleCase(slug: string): string {

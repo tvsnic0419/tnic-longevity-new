@@ -171,7 +171,7 @@ export const ProteostasisVisual: React.FC<HallmarkVisualProps> = ({
   );
 };
 
-/* ─── 5. Disabled Autophagy ─── */
+/* ─── 5. Disabled Macroautophagy ─── */
 export const AutophagyVisual: React.FC<HallmarkVisualProps> = ({
   className = '',
   size = 320,
@@ -179,7 +179,7 @@ export const AutophagyVisual: React.FC<HallmarkVisualProps> = ({
 }) => {
   const c = ac(accentColor);
   return (
-    <svg width={size} height={size * 0.75} viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg" className={cn(className)} aria-label="Disabled Autophagy — lysosomal recycling pathway" role="img">
+    <svg width={size} height={size * 0.75} viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg" className={cn(className)} aria-label="Disabled Macroautophagy — lysosomal recycling pathway" role="img">
       <rect width="320" height="240" fill="#030712" rx="8" />
       {/* Autophagosome */}
       <ellipse cx="130" cy="118" rx="50" ry="38" fill="#0a0f1a" stroke={c.s} strokeWidth="2.5" />
@@ -198,7 +198,7 @@ export const AutophagyVisual: React.FC<HallmarkVisualProps> = ({
       <line x1="84" y1="95" x2="80" y2="106" stroke={c.s} strokeWidth="1.2" strokeDasharray="4,3" strokeOpacity="0.7" />
       <text x="55" y="158" textAnchor="middle" fill={c.s} fontSize="8.5" opacity="0.7">NMN · fasting</text>
       <text x="55" y="170" textAnchor="middle" fill={c.s} fontSize="8" opacity="0.6">AMPK ↑</text>
-      <text x="160" y="232" textAnchor="middle" fill="#9ca3af" fontSize="11">Disabled Autophagy</text>
+      <text x="160" y="232" textAnchor="middle" fill="#9ca3af" fontSize="11">Disabled Macroautophagy</text>
     </svg>
   );
 };
@@ -452,7 +452,8 @@ export const hallmarkVisualMap: Record<string, React.ComponentType<HallmarkVisua
   'telomere-attrition':           TelomereAttritionVisual,
   'epigenetic-alterations':       EpigeneticAlterationsVisual,
   'loss-of-proteostasis':         ProteostasisVisual,
-  'disabled-autophagy':           AutophagyVisual,
+  'disabled-autophagy':           AutophagyVisual, // retired slug, redirects to disabled-macroautophagy
+  'disabled-macroautophagy':      AutophagyVisual,
   'mitochondrial-dysfunction':    MitochondrialDysfunctionVisual,
   'cellular-senescence':          CellularSenescenceVisual,
   'stem-cell-exhaustion':         StemCellExhaustionVisual,
@@ -460,4 +461,5 @@ export const hallmarkVisualMap: Record<string, React.ComponentType<HallmarkVisua
   'chronic-inflammation':         ChronicInflammationVisual,
   'dysbiosis':                    DysbiosisVisual,
   'nutrient-sensing':             NutrientSensingVisual,
+  'deregulated-nutrient-sensing': NutrientSensingVisual,
 };

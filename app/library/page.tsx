@@ -40,14 +40,14 @@ const visuals = [
   { Component: TelomereAttritionVisual, title: 'Telomere Attrition' },
   { Component: EpigeneticAlterationsVisual, title: 'Epigenetic Alterations' },
   { Component: LossOfProteostasisVisual, title: 'Loss of Proteostasis' },
-  { Component: DeregulatedNutrientSensingVisual, title: 'Deregulated Nutrient Sensing' },
+  { Component: DisabledMacroautophagyVisual, title: 'Disabled Macroautophagy' },
   { Component: MitochondrialDysfunctionVisual, title: 'Mitochondrial Dysfunction' },
   { Component: CellularSenescenceVisual, title: 'Cellular Senescence' },
   { Component: StemCellExhaustionVisual, title: 'Stem Cell Exhaustion' },
   { Component: AlteredIntercellularCommunicationVisual, title: 'Altered Intercellular Communication' },
   { Component: ChronicInflammationVisual, title: 'Chronic Inflammation' },
   { Component: DysbiosisVisual, title: 'Dysbiosis' },
-  { Component: DisabledMacroautophagyVisual, title: 'Disabled Macroautophagy' },
+  { Component: DeregulatedNutrientSensingVisual, title: 'Deregulated Nutrient Sensing' },
 ];
 
 export default function LibraryPage() {
