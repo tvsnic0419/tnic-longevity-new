@@ -57,7 +57,11 @@ function ProductCard({ pick }: { pick: ProductPick }) {
         className="absolute inset-0 z-0 rounded-2xl focus-ring"
         aria-label={`Buy ${pick.productName} from ${pick.brand} — opens manufacturer site`}
       />
-      <div className="relative pointer-events-none flex items-center justify-center bg-white/[0.03] h-48 overflow-hidden border-b border-border/50">
+      {/* Manufacturer packshots are photographed on white, so they sit on a
+          dedicated ivory `.product-stage` shelf (globals.css) instead of a
+          3%-white tint — the photo blends into the stage like e-commerce
+          photography rather than reading as a floating white rectangle. */}
+      <div className="relative pointer-events-none flex items-center justify-center product-stage h-48 overflow-hidden border-b border-border/50">
         <Image
           src={pick.imageSrc}
           alt={`${pick.brand} ${pick.productName}`}
@@ -157,7 +161,7 @@ export function ProductsHub() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-14">
         {picks.map((pick) => (
-          <ProductCard key={pick.compoundId} pick={pick} />
+          <ProductCard key={pick.compoundId} pick={pick.compoundId} />
         ))}
       </div>
 
