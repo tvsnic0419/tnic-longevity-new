@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Sparkles, Library, ArrowRight, FlaskConical, ShieldCheck } from 'lucide-react';
+import { Sparkles, ArrowRight, FlaskConical, ShieldCheck } from 'lucide-react';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { TiltGlassPanel } from '@/components/ui/TiltGlassPanel';
 import { HeroSceneMount } from '@/components/home/HeroSceneMount';
@@ -52,12 +52,12 @@ export function HomeHero() {
               The evidence-graded longevity library — and where to buy well
             </GlassPanel>
 
-            {/* !text-white: .headline-editorial is unlayered CSS and sets its
-                own theme-aware color, which beats Tailwind's `text-white`
-                utility by cascade-layer rules regardless of source order.
-                This hero is intentionally always-dark (bg-[#020811] above),
-                so force white with Tailwind's `!` important-modifier. */}
-            <h2 id="home-hero-heading" className="headline-editorial mb-5 !text-white">
+            {/* !text-white: the shared heading scale (.heading-section and
+                siblings) sets its own theme-aware color, and this hero is
+                intentionally always-dark (bg-[#020811] above) — force white
+                with Tailwind's `!` important-modifier so a light-theme color
+                override can never win here. */}
+            <h2 id="home-hero-heading" className="heading-section mb-5 !text-white">
               Transformative nutrition{' '}
               <br />
               <span className="gradient-sweep-text">for cell-health.</span>
@@ -72,26 +72,10 @@ export function HomeHero() {
               verified products to act on them. Free, private, no account.
             </p>
 
-            <div className="mb-6 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
-              <Link
-                href="/nico"
-                className="tnic-button-primary focus-ring group inline-flex items-center justify-center gap-2.5 rounded-2xl px-7 py-3.5 text-base"
-              >
-                <Sparkles className="h-5 w-5" aria-hidden="true" />
-                Start the NICO Starter Questionnaire
-                <ArrowRight
-                  className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                  aria-hidden="true"
-                />
-              </Link>
-              <Link
-                href="/library"
-                className="tnic-button-secondary focus-ring inline-flex items-center justify-center gap-2.5 rounded-2xl px-7 py-3.5 text-base"
-              >
-                <Library className="h-5 w-5" aria-hidden="true" />
-                Explore the evidence
-              </Link>
-            </div>
+            {/* One hero per page: the Descent overture above already carries
+                the primary NICO / Explore-the-evidence CTA pair, so this band
+                deliberately has no duplicated button row — the NICO card's
+                "Begin" is its action. */}
 
             {/* The four headline counts live once, in the Descent overture
                 above; this hero owns the value prop + independence proof, and

@@ -84,6 +84,7 @@ export const sampleNetworkGraph: Partial<StackNetworkGraph> = {
     activeSynergyCount: 3,
     activeConflictCount: 1,
     networkDensity: 0.42,
+    isolatedCount: 0,
   },
 };
 

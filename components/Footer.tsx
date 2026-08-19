@@ -80,7 +80,7 @@ export function Footer() {
 
         <FooterBriefSubscribe />
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-10 mb-10">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-6 gap-8 lg:gap-10 mb-10">
           <div className="sm:col-span-2 lg:col-span-1">
             {/* No aria-label here — see the matching comment in Nav.tsx. */}
             <Link
@@ -112,9 +112,12 @@ export function Footer() {
             </ul>
           </div>
 
-          <div>
+          {/* Popular Guides runs ~2× the link count of its sibling columns,
+              so it takes two grid tracks and flows its own list into two
+              sub-columns — no single towering tail unbalancing the footer. */}
+          <div className="lg:col-span-2">
             <p className="text-label mb-4">Popular Guides</p>
-            <ul className="space-y-3">
+            <ul className="space-y-3 lg:grid lg:grid-cols-2 lg:gap-x-6 lg:gap-y-3 lg:space-y-0">
               {POPULAR_GUIDE_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link

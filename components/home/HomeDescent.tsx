@@ -430,6 +430,14 @@ const CSS = `
 .tnic-descent[data-reduced="true"] .edge.flow,
 .tnic-descent[data-reduced="true"] .node-pulse { animation: none !important; }
 
+/* Act 4 capstone backdrop — the goal curve from Act 3, mirrored into an
+   ascent behind the closing section. Negative z stays inside the act's
+   stacking context (.tnic-act creates one via z-index:3), behind the text. */
+.tnic-act4-sky {
+  position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%;
+  pointer-events: none; opacity: .55;
+}
+
 /* Reduced motion: the per-element entrance reveals (opacity/transform on the
    kicker, headlines, lead, stage, cards, badges, CTA, recap) are motion too —
    show everything in its final composed state immediately instead of sliding
@@ -570,8 +578,11 @@ const CURVE_BASE: Array<[number, number]> = [[30,92],[40,87],[50,79],[60,67],[70
 const CURVE_GOAL: Array<[number, number]> = [[30,96],[40,94],[50,90],[60,85],[70,77],[80,63],[90,38],[95,16]];
 const CURVE_ELITE: Array<[number, number]> = [[30,98],[40,97],[50,95],[60,92],[70,86],[80,74],[90,52],[95,22]];
 
-const MILESTONES: Array<{ at: number; label: string; c: string }> = [
-  { at: 40, label: "NAD⁺ decline steepens", c: "#5fe3e0" },
+const MILESTONES: Array<{ at: number; label: string; c: string; below?: boolean }> = [
+  // NAD⁺ at x=40 sits high on the goal curve, where an above-curve label
+  // collides with the "function preserved →" axis label and crowds the
+  // x=50 milestone — this one renders below its marker instead.
+  { at: 40, label: "NAD⁺ decline steepens", c: "#5fe3e0", below: true },
   { at: 50, label: "Senescent-cell window", c: "#b98cf0" },
   { at: 65, label: "Sarcopenia inflection", c: "#eaa24a" },
   { at: 80, label: "Morbidity horizon", c: "#f08a7a" },
@@ -1030,7 +1041,7 @@ export function HomeDescent() {
                     stroke={m.c} strokeOpacity="0.15" strokeWidth="1" />
                   <circle cx={ageToX(m.at)} cy={vitToY(interp(CURVE_GOAL, m.at))} r="4"
                     fill={m.c} opacity={age >= m.at ? 1 : 0.35} />
-                  <text x={ageToX(m.at) + 6} y={vitToY(interp(CURVE_GOAL, m.at)) - 10}
+                  <text x={ageToX(m.at) + 6} y={vitToY(interp(CURVE_GOAL, m.at)) + (m.below ? 24 : -10)}
                     fontFamily="'JetBrains Mono',monospace" fontSize="10" fill={m.c} opacity={age >= m.at ? 0.95 : 0.4}>
                     {m.label}
                   </text>
@@ -1091,6 +1102,21 @@ export function HomeDescent() {
 
       {/* ACT 4 — YOUR PATH */}
       <section ref={s4} data-idx="4" className="tnic-act">
+        {/* Capstone backdrop — Act 3's goal curve mirrored into an ascent:
+            the descent you just scrolled becomes the climb you build. Purely
+            decorative; the text below carries the actual content. */}
+        <svg className="tnic-act4-sky" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs>
+            <linearGradient id="tnic-act4-rise" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="rgba(240,196,106,0.28)" />
+              <stop offset="100%" stopColor="rgba(240,196,106,0.02)" />
+            </linearGradient>
+          </defs>
+          <g transform="translate(1000,0) scale(-1,1)">
+            <path d={`${goalPath} L ${TW - PAD.r} ${TH} L ${PAD.l} ${TH} Z`} fill="url(#tnic-act4-rise)" />
+            <path d={goalPath} fill="none" stroke="var(--gold)" strokeWidth="2.5" strokeOpacity="0.38" />
+          </g>
+        </svg>
         <p className="tnic-kicker">04 — the path from here</p>
         <h2 className="tnic-h2">You&apos;ve seen the shape. <br />Now <em>build</em> to it.</h2>
         <p className="tnic-lead">

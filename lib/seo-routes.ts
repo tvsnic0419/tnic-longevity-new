@@ -11,6 +11,14 @@
 
 import { buildPageMetadata } from './seo';
 import { glossary, consumerFAQ } from './data';
+import { toolsRegistry } from './registry';
+
+// Number-word so the title reads like prose, not a template slot — kept in
+// sync with the registry via this map instead of a hardcoded "Six".
+const TOOL_COUNT_WORD: Record<number, string> = {
+  5: 'Five', 6: 'Six', 7: 'Seven', 8: 'Eight', 9: 'Nine', 10: 'Ten',
+};
+const toolCountWord = TOOL_COUNT_WORD[toolsRegistry.length] ?? String(toolsRegistry.length);
 
 export const seoRoutes = {
   home: () =>
@@ -165,9 +173,9 @@ export const seoRoutes = {
 
   tools: () =>
     buildPageMetadata({
-      title: 'Longevity Tools — Six Interactive Calculators',
+      title: `Longevity Tools — ${toolCountWord} Interactive Calculators`,
       description:
-        'Six free longevity tools: stack simulator, compound interaction network, protocol engine, biomarker trend visualizer, intervention impact ranking, and healthspan estimator. All local — no paywall, no account.',
+        `${toolCountWord} free longevity tools: ${toolsRegistry.map((t) => t.label.toLowerCase()).join(', ')}. All local — no paywall, no account.`,
       path: '/tools',
       keywords: ['longevity calculator', 'supplement interaction graph', 'healthspan estimator', 'biological age calculator'],
     }),
