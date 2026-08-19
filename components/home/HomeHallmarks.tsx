@@ -33,7 +33,7 @@ export function HomeHallmarks() {
       <div className="container-page">
         <div className="mb-10 items-center gap-10 lg:mb-14 lg:grid lg:grid-cols-12">
           <RevealItem className="lg:col-span-7">
-            <p className="text-label mb-3 text-accent-emerald">Interventions by hallmark</p>
+            <p className="text-label mb-3 text-accent-emerald">04 / Mechanisms</p>
             <h2 id="home-hallmarks-heading" className="heading-section mb-3">
               Twelve mechanisms of aging. A ranked, cited intervention for each.
             </h2>

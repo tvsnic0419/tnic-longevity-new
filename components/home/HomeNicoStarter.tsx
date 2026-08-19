@@ -100,7 +100,7 @@ export function HomeNicoStarter() {
       <CellularDivider hue="var(--accent-violet)" index="06" label="Personalize" />
       <div className="container-page">
         <RevealItem className="mx-auto mb-10 max-w-2xl text-center">
-          <p className="text-label mb-3 text-accent-violet">NICO Starter Questionnaire</p>
+          <p className="text-label mb-3 text-accent-violet">06 / Personalize</p>
           <h2 id="home-nico-heading" className="heading-section mb-3">
             Your first move — computed for you.
           </h2>
