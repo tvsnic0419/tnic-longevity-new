@@ -20,15 +20,8 @@ function buildToolsSchemas() {
     operatingSystem: 'Web',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     description:
-      'Six evidence-graded longevity tools: healthspan defense scan, intervention impact ranker, stack synergy map, biomarker risk scorer, protocol timeline builder, and compound interaction checker.',
-    featureList: [
-      'Healthspan defense scan',
-      'Intervention impact ranker',
-      'Stack synergy map',
-      'Biomarker risk scorer',
-      'Protocol timeline builder',
-      'Compound interaction checker',
-    ],
+      `${toolsRegistry.length} evidence-graded longevity tools: ${toolsRegistry.map((t) => t.label).join(', ')}.`,
+    featureList: toolsRegistry.map((t) => t.label),
     isAccessibleForFree: true,
   };
   return [webApp, buildBreadcrumbSchema([

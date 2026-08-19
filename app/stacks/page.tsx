@@ -7,6 +7,7 @@ import { buildHowToSchema, buildBreadcrumbSchema } from '@/lib/seo';
 import { compounds } from '@/lib/data';
 import { COMPOUND_COUNT } from '@/lib/library-modules';
 import { eliteInterventions } from '@/lib/elite-interventions';
+import { stackPresets } from '@/lib/presets';
 
 // Honest stats for the hero — unique undirected synergy edges in the dataset.
 const synergyPairs = new Set<string>();
@@ -14,7 +15,7 @@ for (const c of compounds) {
   for (const s of c.synergies) synergyPairs.add([c.id, s].sort().join('|'));
 }
 const stackStats = [
-  { value: '6', label: 'Graded presets' },
+  { value: String(Object.keys(stackPresets).length), label: 'Graded presets' },
   { value: String(COMPOUND_COUNT), label: 'Compounds' },
   { value: String(synergyPairs.size), label: 'Synergy pairs' },
   { value: String(eliteInterventions.length), label: 'Elite interventions' },
@@ -28,7 +29,7 @@ const stackHowTo = buildHowToSchema({
   path: '/stacks',
   totalTime: 'PT15M',
   steps: [
-    { name: 'Choose a stack preset or start custom', text: 'Select one of 6 evidence-graded presets (NRF2 Defense, NAD+ Restoration, Mitochondrial Health, Senolytic Protocol, Foundation Tier, Elite Protocol) or add individual compounds.' },
+    { name: 'Choose a stack preset or start custom', text: `Select one of ${Object.keys(stackPresets).length} evidence-graded presets (${Object.values(stackPresets).map((p) => p.label).join(', ')}) or add individual compounds.` },
     { name: 'Review synergy connections', text: 'The Stack Architect visualizes compound synergy edges — NMN + Resveratrol (SIRT1 dual activation), GlyNAC + Sulforaphane + R-ALA (NRF2 triad), and 21 other mechanistic pairs.' },
     { name: 'Check for contraindications', text: 'The tool flags known negative interactions (e.g. high-dose NMN + NR simultaneously, Rapamycin + immunosuppressants) and Rx-only compounds requiring physician sign-off.' },
     { name: 'Set dosing and timing schedule', text: 'Each compound has a protocol-matched timing recommendation (AM fasted, with food, PM) based on the clinical trials that established efficacy.' },

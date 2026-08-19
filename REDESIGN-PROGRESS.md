@@ -6,12 +6,80 @@ master prompt — its durable operating rules are already merged into
 
 ## Current phase
 
-**Phase 4 complete** — a coherence/UI-consistency pass on top of Phases 1–3
-(below). Everything across all four phases is done, verified, and pushed.
-Next session should start a fresh pass rather than resuming this one — see
-"Explicitly deferred" for what's next, and **read the flagged finding below
-first** — it's a real content/taxonomy issue that needs Thomas's decision,
-found during this pass, not fixed.
+**Phase 5 complete** — homepage structure fixes + tool-surface elevation
+(stack analyzer family), on branch `redesign/phase-5-ui-elevation` with a PR
+open (not merged — Thomas merges). The Phase 4 flagship finding below is
+**still open and still Thomas's call** — Phase 5 deliberately did not touch
+the disabled-autophagy/macroautophagy taxonomy question.
+
+## Phase 5 — homepage structure + tool-surface elevation
+
+**Homepage structure (3 confirmed production bugs fixed):**
+- `HomeHero.tsx` — the stacked-hero problem: HomeDescent Act 0 already opens
+  with a display h1 + the NICO/Explore CTA pair, and HomeHero immediately
+  re-stated a second display headline with the *identical* CTA pair. Demoted
+  the hero's h2 from `.headline-editorial` to `.heading-section` (kept
+  `!text-white` + the `.gradient-sweep-text` span; the comment now describes
+  the shared heading scale's theme-aware color, since `.heading-section`'s
+  color lives in `@layer components`) and **deleted the duplicated CTA row**
+  — the NICO card's "Begin" is now the band's single action. Unused `Library`
+  lucide import removed.
+- `HomeDescent.tsx` Act 3 — the milestone-label collision on production:
+  "NAD⁺ decline steepens" (x=40) overlapped the "function preserved →" axis
+  label and crowded "Senescent-cell window" (x=50). `MILESTONES` entries now
+  accept `below?: boolean`; the NAD⁺ label renders below its marker
+  (`+24` instead of `-10` on y). Verified visually: labels fully separated.
+- `HomeDescent.tsx` Act 4 — capstone: a decorative `aria-hidden` SVG reuses
+  the already-computed `goalPath`, mirrored via `translate(1000,0)
+  scale(-1,1)` so the descent becomes an ascent behind the closing section
+  (faint gold stroke at 0.38 + gradient area fill, `.tnic-act4-sky` at
+  `z-index:-1` inside the act's stacking context).
+- `Footer.tsx` — column imbalance: outer grid `lg:grid-cols-5` →
+  `lg:grid-cols-6`; Popular Guides (27 links vs 11–16 in siblings) takes
+  `lg:col-span-2` and flows into an inner 2-column grid. No more towering tail.
+
+**Tool surfaces (the user's priority target — the stack analyzer family):**
+- `StackNetworkGraph` was the weakest surface on the site: all ~81
+  catalogued compounds were laid out on a single r=150 ring in a 400-unit
+  viewBox — an illegible overlapping label band. Rebuilt the layout in
+  `lib/tools/stack-network.ts`: only compounds with ≥1 documented
+  interaction (or staged in the user's stack) earn a node — measured 68 of
+  ~95 had *zero* edges and contributed nothing but clutter; nodes are
+  grouped by physiological pathway (largest clusters first) so related
+  compounds sit adjacent; node size now scales with interaction degree; the
+  tier letter sits inside each node with the canonical A/B/C tier color on
+  the ring; labels render radially *outside* the ring, rotated with the
+  orbit and flipped on the left half so nothing reads upside-down. The
+  omitted-node count is surfaced honestly under the legend ("N catalogued
+  compounds have no documented pair interaction yet and are omitted from
+  the map") via a new derived `stats.isolatedCount` — never silently
+  dropped. The always-visible fallback table (Phase 4 guardrail) is
+  untouched. Design method: musepool references for dense dark-network UIs
+  (radial label placement, edge-dimming focus pattern, legend-at-edge).
+- **Stale hardcoded stats eliminated (CLAUDE.md: derived, never literal):**
+  `/stacks` hero "6 Graded presets" → `Object.keys(stackPresets).length`
+  (actually 7 — production was wrong); the HowTo schema's preset list named
+  presets that don't exist ("Foundation Tier", "Elite Protocol") → now
+  generated from the real registry; `StacksLibrary` meta "6 evidence-graded
+  compounds" → `${compounds.length} stack-buildable compounds`; `/tools`
+  hub copy + JSON-LD said "Six" tools → derived from `toolsRegistry`
+  (actually 7); `/compound-engine` hero + schema "12 hallmarks" →
+  `HALLMARKS.length` from the engine's own registry (this is the engine's
+  private hallmark list — unrelated to the flagged taxonomy issue, which
+  was not touched).
+
+**Verification**: `npm run lint`/`typecheck`/`test` clean at every step
+(41 files / 571 tests). Full clean rebuild (`rm -rf .next && npm run build`)
+succeeded — 426 routes, no new warnings (the one edge-runtime notice is
+pre-existing on baseline). SSR HTML spot-checks: exactly one `<h1>` on `/`,
+`/stacks`, `/tools`, `/compound-engine` (checked post-hydration via
+Playwright — the last three keep their h1 inside a client Suspense boundary
+by design, unchanged from baseline); `heading-section` + `tnic-act4-sky`
+confirmed in the homepage's server HTML; the derived "7" presets stat
+confirmed in `/stacks` SSR output. Visual QA against the production build
+(Playwright + Chromium): network graph legible in all three filter states
+plus preset-selected state; Act 3 labels separated; Act 4 ascent backdrop
+renders; footer columns balanced.
 
 ## ⚠ Flagged for Thomas — hallmark taxonomy conflict (found, not fixed)
 

@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { Cpu, Layers, Wrench, Table2, BookOpen, ShoppingBag } from 'lucide-react';
 import { eliteStacks } from '@/lib/stacks-library';
+import { compounds } from '@/lib/data';
 import { usePlatform } from '@/context/PlatformContext';
 import { buildEngineStackUrl, buildShopStackUrl } from '@/lib/stack-url';
 import { PageShell } from '@/components/ui/PageShell';
@@ -58,7 +59,7 @@ export function StacksLibrary() {
         eyebrow="Stacks & Protocols"
         title="Stack Architect"
         description="Pre-built evidence-graded protocols with dosing, monitoring, and cost breakdowns. Build custom stacks with real-time synergy and contraindication analysis."
-        meta={`${eliteStacks.length} elite stacks · 6 evidence-graded compounds · Educational only`}
+        meta={`${eliteStacks.length} elite stacks · ${compounds.length} stack-buildable compounds · Educational only`}
         theme="violet"
         context={getHubContext('stacks')}
       />

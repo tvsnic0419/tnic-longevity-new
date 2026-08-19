@@ -3,7 +3,7 @@ import { CompoundIntelligenceEngine } from '@/components/engine/CompoundIntellig
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildBreadcrumbSchema, buildArticleSchema } from '@/lib/seo';
 import { seoRoutes } from '@/lib/seo-routes';
-import { COMPOUND_DB, DEFAULT_WEIGHTS } from '@/lib/compound-engine-data';
+import { COMPOUND_DB, DEFAULT_WEIGHTS, HALLMARKS } from '@/lib/compound-engine-data';
 import { SITE } from '@/lib/site';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 
@@ -32,7 +32,7 @@ function buildEngineSchemas() {
     about: {
       '@type': 'Thing',
       name: 'Hallmarks of Aging',
-      description: `Coverage mapped across 12 hallmarks over ${COMPOUND_DB.length} curated compounds.`,
+      description: `Coverage mapped across ${HALLMARKS.length} hallmarks over ${COMPOUND_DB.length} curated compounds.`,
     },
   };
   return [
@@ -71,7 +71,7 @@ export default function CompoundEnginePage() {
         stats={[
           { value: String(COMPOUND_DB.length), label: 'Curated compounds' },
           { value: String(Object.keys(DEFAULT_WEIGHTS).length), label: 'Scoring dimensions' },
-          { value: '12', label: 'Hallmarks mapped' },
+          { value: String(HALLMARKS.length), label: 'Hallmarks mapped' },
         ]}
         primary={{ href: '/library', label: 'Browse the compound library' }}
         secondary={{ href: '/tools', label: 'All interactive tools' }}
