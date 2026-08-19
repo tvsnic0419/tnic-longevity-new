@@ -30,7 +30,7 @@ export function HomeEliteInterventions() {
       <CellularDivider hue="var(--accent-emerald)" index="03" label="Interventions" />
       <div className="container-page">
         <RevealItem className="mb-10 max-w-3xl md:mb-14">
-          <p className="text-label mb-3 text-accent-emerald">Elite interventions</p>
+          <p className="text-label mb-3 text-accent-emerald">03 / Interventions</p>
           <h2 id="home-elite-heading" className="heading-section mb-3">
             The compounds with the strongest human evidence — and where to buy them well.
           </h2>

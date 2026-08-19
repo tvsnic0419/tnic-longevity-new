@@ -55,7 +55,7 @@ export function HomeSteps() {
       <CellularDivider hue="var(--accent-emerald)" index="05" label="Protocol" />
       <div className="container-page">
         <RevealItem className="mx-auto mb-12 max-w-2xl text-center">
-          <p className="text-label mb-3 text-accent-emerald">Get started in 3 steps</p>
+          <p className="text-label mb-3 text-accent-emerald">05 / Protocol</p>
           <h2 id="home-steps-heading" className="heading-section mb-3">
             From curious to confident — no account needed.
           </h2>

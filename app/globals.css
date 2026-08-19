@@ -258,6 +258,14 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Any anchor / deep-link target clears the fixed nav (~64px tall) instead of
+   landing with its heading tucked beneath it. 6rem matches the scroll-mt-24
+   already used on #elite-interventions. :where() keeps specificity at 0 so any
+   component can still override with a plain scroll-mt-* utility. */
+:where([id]) {
+  scroll-margin-top: 6rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {
