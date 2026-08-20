@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import Link from 'next/link';
 import { StacksLibrary } from '@/components/stacks/StacksLibrary';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
@@ -56,6 +57,19 @@ export default function StacksPage() {
         primary={{ href: '/nico', label: 'Find your personalized stack' }}
         secondary={{ href: '/library', label: 'Browse compounds' }}
       />
+      <div className="container-page mt-8">
+        <Link
+          href="/stacks/lab"
+          className="focus-ring interactive block rounded-xl border border-border bg-card/50 px-5 py-4 text-body-sm hover:border-accent-violet/40"
+        >
+          <span className="text-label mr-2 text-accent-violet">NEW</span>
+          <span className="text-foreground">
+            Combination Lab — progressive relationship analysis, marginal contribution, and
+            explainable scoring for your stack
+          </span>
+          <span className="ml-1 text-accent-violet" aria-hidden="true">→</span>
+        </Link>
+      </div>
       <Suspense fallback={<div className="container-page py-20 text-muted-foreground">Loading stacks…</div>}>
         <StacksLibrary />
       </Suspense>
