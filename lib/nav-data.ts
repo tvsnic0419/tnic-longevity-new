@@ -41,6 +41,9 @@ export const navGroups = [
     label: 'Build',
     links: [
       { href: '/stacks', label: 'Stacks' },
+      // Combination Lab lives under /stacks/lab — grouped here, but kept out
+      // of the flat `navLinks` row above so the top bar doesn't wrap at lg.
+      { href: '/stacks/lab', label: 'Lab' },
       { href: '/protocols', label: 'Protocols' },
       { href: '/tools', label: 'Tools' },
       { href: '/compound-engine', label: 'Engine' },

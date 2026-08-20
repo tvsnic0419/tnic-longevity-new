@@ -162,6 +162,15 @@ export const seoRoutes = {
       keywords: ['longevity stack', 'GlyNAC protocol', 'NRF2 stack', 'supplement synergy', 'mitochondrial stack', 'NMN stack'],
     }),
 
+  stacksLab: () =>
+    buildPageMetadata({
+      title: 'Combination Lab — Progressive Stack Analysis',
+      description:
+        'An interactive combination-analysis engine for supplement stacks: pairwise synergy, redundancy, antagonism, and interaction classification, marginal contribution per compound, an explainable itemized score, and a removal-simulation optimizer — all on the curated TNiC dataset.',
+      path: '/stacks/lab',
+      keywords: ['supplement synergy analysis', 'stack interaction checker', 'longevity stack optimizer', 'compound combination analysis'],
+    }),
+
   labs: () =>
     buildPageMetadata({
       title: 'Lab Hub — Local Biomarker Tracking',
