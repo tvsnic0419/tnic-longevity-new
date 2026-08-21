@@ -193,7 +193,9 @@ export function TrustHub() {
                 <RevealCard key={item.title} index={i} className="rounded-xl p-5 flex gap-4">
                   <Eye className="w-5 h-5 text-accent-emerald shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
-                    <h3 className="heading-card mb-1">{item.title}</h3>
+                    {/* h2: this is the first heading after the page h1, so an
+                        h3 skipped a level. `.heading-card` carries the size. */}
+                    <h2 className="heading-card mb-1">{item.title}</h2>
                     <p className="text-body-sm">{item.desc}</p>
                   </div>
                 </RevealCard>

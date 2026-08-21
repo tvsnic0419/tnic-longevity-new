@@ -12,7 +12,7 @@ export const DeregulatedNutrientSensingVisual: React.FC<{ className?: string; sh
       <div className="flex items-start justify-between mb-3">
         <div>
           <div className="text-label text-[var(--accent-amber)] mb-0.5">HALLMARK 12</div>
-          <h4 className="heading-card text-lg">Deregulated Nutrient Sensing</h4>
+          <h3 className="heading-card text-lg">Deregulated Nutrient Sensing</h3>
         </div>
       </div>
 

@@ -203,14 +203,19 @@ export function LearnCenter({ defaultTab }: { defaultTab?: TabId }) {
                     </span>
                   </label>
                   <a href={step.link} className="flex-1 block">
-                    <h3 className={`font-bold group-hover:text-accent-cyan transition-colors ${done ? 'line-through text-muted-foreground' : ''}`}>
+                    {/* h2: these steps sit directly under the page h1. */}
+                    <h2 className={`font-bold group-hover:text-accent-cyan transition-colors ${done ? 'line-through text-muted-foreground' : ''}`}>
                       {step.title}
-                    </h3>
+                    </h2>
                     <p className="text-sm text-muted-foreground mt-1">{step.desc}</p>
                   </a>
-                  <a href={step.link} className="shrink-0 mt-1">
+                  {/* Decorative affordance, not a second link: it pointed at
+                      the same href as the title link above with no text of its
+                      own, so it was an unnamed duplicate for screen readers
+                      and crawlers alike. */}
+                  <span className="shrink-0 mt-1" aria-hidden="true">
                     <ArrowRight className="w-5 h-5 text-caption group-hover:text-accent-cyan transition-colors" />
-                  </a>
+                  </span>
                 </div>
               );
             })}

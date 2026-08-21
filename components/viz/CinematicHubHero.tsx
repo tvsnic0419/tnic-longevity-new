@@ -27,11 +27,20 @@ export function CinematicHubHero({
   stats,
   primary,
   secondary,
+  titleAsHeading = false,
 }: {
   hue?: keyof typeof HUES;
   kicker: string;
   /** Headline; wrap the accent fragment in <em> for the hue-colored italic. */
   title: React.ReactNode;
+  /**
+   * Render the cover headline as the page's real `<h1>` instead of a
+   * decorative `<p>`. Default false, because most hubs put their semantic
+   * `<h1>` in a PageHeader below this and two would collide. Set true on hubs
+   * that have no PageHeader — without it those pages ship with no `<h1>` at
+   * all (was the case on /protocols and /insights).
+   */
+  titleAsHeading?: boolean;
   /** Supporting line; a string, or rich content with inline CountLinks. */
   lead: React.ReactNode;
   stats: HubStat[];
@@ -53,10 +62,15 @@ export function CinematicHubHero({
 
       <div className="hh-inner">
         <p className="hh-kicker">{kicker}</p>
-        {/* Decorative cover headline — the page's semantic <h1> lives in the
-            hub's own PageHeader below, so this stays a non-heading to avoid a
-            duplicate top-level heading. */}
-        <p className="hh-title">{title}</p>
+        {/* Decorative cover headline by default — the page's semantic <h1>
+            usually lives in the hub's own PageHeader below, so this stays a
+            non-heading to avoid a duplicate top-level heading. Hubs with no
+            PageHeader opt in via `titleAsHeading` so the page still has one. */}
+        {titleAsHeading ? (
+          <h1 className="hh-title">{title}</h1>
+        ) : (
+          <p className="hh-title">{title}</p>
+        )}
         <p className="hh-lead">{lead}</p>
 
         {stats.length > 0 && (

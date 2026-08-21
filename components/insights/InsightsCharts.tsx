@@ -121,31 +121,38 @@ function ProportionBar({
           />
         ))}
       </div>
-      <dl className="grid grid-cols-3 gap-2">
+      {/* A list, not a <dl>: each tile is a link, and <dl> may only contain
+          <dt>/<dd> (optionally wrapped in a single <div>) — an <a> between the
+          list and its terms is invalid and left the terms orphaned from it. */}
+      <ul className="grid grid-cols-3 gap-2">
         {slices.map((s) => {
           const inner = (
             <div className="rounded-lg border border-border/60 px-2.5 py-2">
-              <dt className="flex items-center gap-1.5 text-micro font-mono uppercase tracking-wide text-muted-foreground">
+              <span className="flex items-center gap-1.5 text-micro font-mono uppercase tracking-wide text-muted-foreground">
                 <span className="h-2 w-2 rounded-full" style={{ background: s.color }} aria-hidden="true" />
                 {s.label}
-              </dt>
-              <dd className="mt-1 font-mono text-lg font-bold tabular-nums text-foreground">
+              </span>
+              <span className="mt-1 block font-mono text-lg font-bold tabular-nums text-foreground">
                 {s.count}
                 <span className="ml-1 text-caption font-normal text-muted-foreground">
                   {Math.round((s.count / total) * 100)}%
                 </span>
-              </dd>
+              </span>
             </div>
           );
-          return s.href ? (
-            <Link key={s.key} href={s.href} className="focus-ring interactive hover:border-accent-cyan/40 rounded-lg [&>div]:hover:border-transparent">
-              {inner}
-            </Link>
-          ) : (
-            <div key={s.key}>{inner}</div>
+          return (
+            <li key={s.key}>
+              {s.href ? (
+                <Link href={s.href} className="focus-ring interactive hover:border-accent-cyan/40 block rounded-lg [&>div]:hover:border-transparent">
+                  {inner}
+                </Link>
+              ) : (
+                inner
+              )}
+            </li>
           );
         })}
-      </dl>
+      </ul>
     </div>
   );
 }

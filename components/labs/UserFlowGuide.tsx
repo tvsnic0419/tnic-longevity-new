@@ -131,12 +131,13 @@ export function UserFlowGuide({ currentStep = 1 }: UserFlowGuideProps) {
                   style={{ color: isCurrent ? 'var(--accent-rose)' : isDone ? 'var(--accent-emerald)' : 'var(--muted-foreground)', opacity: isCurrent || isDone ? 1 : 0.4 }}
                 />
               </div>
-              <h4
+              {/* h3: the nearest preceding heading is an h2, so h4 skipped a level. */}
+              <h3
                 className="font-semibold text-xs mb-1"
                 style={{ opacity: isCurrent || isDone ? 1 : 0.5 }}
               >
                 {s.title}
-              </h4>
+              </h3>
               <p
                 className="text-micro leading-relaxed"
                 style={{ color: 'var(--muted-foreground)', opacity: isCurrent ? 0.85 : isDone ? 0.6 : 0.35 }}

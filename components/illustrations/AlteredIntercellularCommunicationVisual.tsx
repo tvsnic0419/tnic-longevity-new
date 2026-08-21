@@ -12,7 +12,7 @@ export const AlteredIntercellularCommunicationVisual: React.FC<{ className?: str
       <div className="flex items-start justify-between mb-3">
         <div>
           <div className="text-label text-[var(--accent-violet)] mb-0.5">HALLMARK 09</div>
-          <h4 className="heading-card text-lg">Altered Intercellular Communication</h4>
+          <h3 className="heading-card text-lg">Altered Intercellular Communication</h3>
         </div>
       </div>
 

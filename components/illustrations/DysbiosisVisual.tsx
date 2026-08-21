@@ -23,7 +23,7 @@ export const DysbiosisVisual: React.FC<DysbiosisVisualProps> = ({
       <div className="flex items-start justify-between mb-3">
         <div>
           <div className="text-label text-[var(--accent-amber)] mb-0.5">HALLMARK 11</div>
-          <h4 className="heading-card text-lg">Dysbiosis</h4>
+          <h3 className="heading-card text-lg">Dysbiosis</h3>
         </div>
         {showLabels && <div className="text-right text-micro text-[var(--color-text-muted)]">Microbiome · Leaky Gut · Immunity</div>}
       </div>
