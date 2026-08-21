@@ -41,9 +41,11 @@ export const navGroups = [
     label: 'Build',
     links: [
       { href: '/stacks', label: 'Stacks' },
-      // Combination Lab lives under /stacks/lab — grouped here, but kept out
-      // of the flat `navLinks` row above so the top bar doesn't wrap at lg.
-      { href: '/stacks/lab', label: 'Lab' },
+      // Combination Lab (/stacks/lab) is deliberately NOT here. It rendered as
+      // "Lab" four items away from "Labs" (/labs, biomarker tracking) in the
+      // same bar — two near-identical labels for unrelated things. It is a
+      // sub-page of Stacks, promoted at the top of the /stacks hub and in the
+      // sitemap, so it loses nothing by staying out of the top-level row.
       { href: '/protocols', label: 'Protocols' },
       { href: '/tools', label: 'Tools' },
       { href: '/compound-engine', label: 'Engine' },

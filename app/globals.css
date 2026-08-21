@@ -1566,7 +1566,15 @@ p,
 }
 
 .nav-glass-scrolled {
-  position: relative;
+  /* No `position` declaration here on purpose. This class is applied to a
+     `.absolute.inset-0` backdrop layer, and unlayered CSS beats Tailwind's
+     @layer utilities — so declaring `position: relative` here silently
+     overrode that `absolute`, which collapsed the layer from the nav's full
+     76px height to 1px the instant the page scrolled past 24px. The nav then
+     had no opaque backing exactly when it needed one, and scrolled content
+     read straight through the bar on every page. The ::before specular edge
+     below still positions correctly: an absolutely-positioned parent is just
+     as valid a containing block as a relative one. */
   background: color-mix(in srgb, var(--color-bg-base) 97%, transparent);
   backdrop-filter: blur(var(--glass-blur-mid)) saturate(1.4);
   border-bottom-color: color-mix(in srgb, var(--accent-cyan) 18%, var(--color-border-subtle));
