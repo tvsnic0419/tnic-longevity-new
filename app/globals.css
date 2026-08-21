@@ -651,18 +651,23 @@ p,
 }
 
 /* ── Hero & ambient ── */
+/* Consumes the per-theme --hero-mesh-* tokens defined at :root instead of
+   hardcoded dark-only rgba values — the tokens existed for both themes but
+   were dead code, so the light theme was being washed in full-strength
+   dark-mode cyan. The violet sweep has no token; color-mix off the accent
+   keeps it theme-correct too (identical value in dark). */
 .hero-mesh {
   background:
-    radial-gradient(ellipse 90% 60% at 50% -10%, rgba(0, 224, 255, 0.22), transparent),
-    radial-gradient(ellipse 70% 50% at 85% 50%, rgba(52, 211, 153, 0.14), transparent),
-    radial-gradient(ellipse 60% 40% at 15% 80%, rgba(192, 132, 252, 0.10), transparent),
+    radial-gradient(ellipse 90% 60% at 50% -10%, var(--hero-mesh-1), transparent),
+    radial-gradient(ellipse 70% 50% at 85% 50%, var(--hero-mesh-2), transparent),
+    radial-gradient(ellipse 60% 40% at 15% 80%, color-mix(in srgb, var(--accent-violet) 10%, transparent), transparent),
     linear-gradient(180deg, var(--color-bg-base) 0%, var(--color-bg-elevated) 50%, var(--color-bg-base) 100%);
 }
 
 .grid-overlay {
   background-image:
-    linear-gradient(rgba(0, 224, 255, 0.055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 224, 255, 0.055) 1px, transparent 1px);
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 64px 64px;
   mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 10%, transparent 75%);
 }
@@ -1021,10 +1026,12 @@ p,
     var(--color-bg-elevated);
   backdrop-filter: blur(16px);
   border: 1px solid color-mix(in srgb, var(--accent-cyan) 12%, var(--color-border-subtle));
+  /* Deep Glass mid-plane shadow (Design System v8/v9) — the previous
+     hardcoded black rgba stack read as heavy grey smudges on the light
+     base; the token is theme-aware (navy-tinted in light mode). */
   box-shadow:
     inset 0 1px 0 0 color-mix(in srgb, #ffffff 9%, transparent),
-    0 2px 4px -2px rgba(0, 0, 0, 0.35),
-    0 16px 36px -24px rgba(0, 0, 0, 0.6);
+    var(--glass-shadow-mid);
   overflow: hidden;
   transition: border-color 0.25s, background 0.25s, transform 0.25s, box-shadow 0.25s;
 }
@@ -1649,10 +1656,12 @@ p,
   padding: 1.25rem 1rem;
   text-align: center;
   overflow: hidden;
+  /* Deep Glass mid-plane shadow (Design System v8/v9) — the previous
+     hardcoded black rgba stack read as grey smudges on the light base;
+     the token is theme-aware (navy-tinted in light mode). */
   box-shadow:
     inset 0 1px 0 0 color-mix(in srgb, #ffffff 12%, transparent),
-    0 2px 4px -2px rgba(0, 0, 0, 0.35),
-    0 18px 40px -24px rgba(0, 0, 0, 0.6);
+    var(--glass-shadow-mid);
 }
 
 .stat-card-hero::before {
@@ -1909,9 +1918,12 @@ p,
 /* ── Tools dock premium ── */
 .tools-dock-shell {
   border-radius: 1.25rem;
+  /* Deep Glass content-plane shadow (v8/v9) instead of the hardcoded dark-only
+     rgba layer that sat too heavy on the light base; the accent ring + cyan
+     halo stay as the dock's signature. */
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--accent-emerald) 15%, transparent),
-    0 16px 48px -8px rgba(0, 0, 0, 0.4),
+    var(--glass-shadow-content),
     0 0 60px -12px color-mix(in srgb, var(--accent-cyan) 25%, transparent);
 }
 
@@ -1943,6 +1955,14 @@ p,
   letter-spacing: -0.04em;
   line-height: 1.0;
   text-shadow: 0 0 80px rgba(0, 224, 255, 0.28), 0 0 160px rgba(0, 224, 255, 0.10), 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+/* Light-theme parity — the dark-tuned glow stack ends in a hardcoded black
+   drop shadow (0 2px 8px rgba(0,0,0,0.6)) that reads as a muddy grey smudge
+   under every editorial headline on the light base. Keep a soft cyan halo
+   for the glow identity, drop the black shadow entirely. */
+[data-theme="light"] .headline-editorial {
+  text-shadow: 0 0 60px color-mix(in srgb, var(--accent-cyan) 22%, transparent);
 }
 
 /* ── Live status badge ── */
@@ -2019,9 +2039,11 @@ p,
   border-radius: var(--radius-xl);
   overflow: hidden;
   border: 1px solid var(--color-border-subtle);
+  /* Deep Glass mid-plane shadow (v8/v9) — replaces the hardcoded dark-only
+     rgba drop that sat too heavy on the light base. */
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--accent-cyan) 8%, transparent),
-    0 8px 32px -8px rgba(0,0,0,0.3);
+    var(--glass-shadow-mid);
 }
 
 .platform-hud-cell {
@@ -2737,9 +2759,11 @@ p,
   content: '';
   position: absolute;
   inset: 0;
+  /* Shared --grid-line token (per-theme) instead of a hardcoded neon-cyan
+     rgba — the token was dead code while this stayed dark-tuned in light. */
   background-image:
-    linear-gradient(rgba(0, 224, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 224, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 80px 80px;
   mask-image: radial-gradient(ellipse 95% 80% at 50% 40%, black 5%, transparent 80%);
   pointer-events: none;
@@ -3508,6 +3532,27 @@ p,
   color: var(--color-text-primary);
   border-color: var(--color-border-strong);
 }
+/* The veil's bottom scrim is a hardcoded near-black rgba(5,7,16,0.5) —
+   invisible in the dark theme it was tuned for, but in light mode it paints
+   a murky grey slab across the lower half of every hub hero (verified live
+   on /products, /library, /stacks). Fade to the page base instead so the
+   hero dissolves cleanly into the section below. */
+[data-theme="light"] .hh-veil {
+  background:
+    radial-gradient(90% 60% at 50% 0%, color-mix(in srgb, var(--hue) 10%, transparent), transparent 60%),
+    linear-gradient(180deg, transparent 55%, var(--color-bg-base) 100%);
+}
+/* The hue-driven accents (kicker, stat values) come from the dark-tuned VIZ
+   palette (e.g. emerald #34d399), which washes out on the light field —
+   deepen them toward the light text color while keeping each hub's
+   signature hue, and drop the dark-mode glow shadow. */
+[data-theme="light"] .hh-kicker,
+[data-theme="light"] .hh-stat .v {
+  color: color-mix(in srgb, var(--hue) 72%, var(--color-text-primary));
+}
+[data-theme="light"] .hh-stat .v {
+  text-shadow: none;
+}
 
 .hub-hero-field::before,
 .hub-hero-field::after {
@@ -3564,4 +3609,22 @@ p,
 .number-glow {
   font-variant-numeric: tabular-nums;
   text-shadow: 0 0 18px color-mix(in srgb, var(--flair-accent, var(--accent-cyan)) 35%, transparent);
+}
+
+/* ============================================================================
+   Product packshot stage (Recommended Products)
+   ----------------------------------------------------------------------------
+   The verified-pick cards (components/shop/ProductsHub.tsx) show manufacturer
+   packshots photographed on white. A 3%-white tint on the dark glass card
+   made them read as floating white rectangles; give them a real "shelf" —
+   an ivory studio sweep that matches the photo backgrounds, so the packshot
+   blends in like e-commerce photography instead of fighting the card. The
+   soft inset floor shadow grounds the product. Deliberately identical in
+   both themes (the photography is white regardless), reading as a media
+   window cut into the glass card.
+   ========================================================================== */
+.product-stage {
+  background:
+    radial-gradient(120% 90% at 50% 0%, #ffffff 0%, #f1f5f9 58%, #e2e8f0 100%);
+  box-shadow: inset 0 -14px 28px -20px rgba(15, 23, 42, 0.28);
 }
