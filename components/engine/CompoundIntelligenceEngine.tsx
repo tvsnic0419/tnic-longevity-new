@@ -614,15 +614,20 @@ export function CompoundIntelligenceEngine() {
             {/* STAGE */}
             <div style={{ minWidth: 0 }}>
               {/* tabs */}
-              <div className="sie-scroll" role="tablist" aria-label="Engine views" style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 4, marginBottom: 14 }}>
-                {TABS.map((t) => (
-                  <button type="button" key={t.id} role="tab" aria-selected={tab === t.id} className={`sie-tab ${tab === t.id ? 'sie-tab-active' : ''}`} onClick={() => setTab(t.id)}>
-                    <t.icon size={15} aria-hidden /> {t.label}
-                  </button>
-                ))}
-                <div style={{ flex: 1 }} />
+              {/* The "Model" toggle and the flex spacer used to live inside
+                  role="tablist", which may only contain role="tab" children.
+                  The tablist is now scoped to the tabs themselves; the toggle
+                  is a sibling, so it also stays put while the tabs scroll. */}
+              <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 14 }}>
+                <div className="sie-scroll" role="tablist" aria-label="Engine views" style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 4, flex: 1, minWidth: 0 }}>
+                  {TABS.map((t) => (
+                    <button type="button" key={t.id} role="tab" aria-selected={tab === t.id} className={`sie-tab ${tab === t.id ? 'sie-tab-active' : ''}`} onClick={() => setTab(t.id)}>
+                      <t.icon size={15} aria-hidden /> {t.label}
+                    </button>
+                  ))}
+                </div>
                 {tab === 'compounds' && (
-                  <button type="button" className="sie-tab" aria-pressed={showWeights} onClick={() => setShowWeights((v) => !v)} style={{ color: showWeights ? COLORS.jadeInk : COLORS.muted }}>
+                  <button type="button" className="sie-tab" aria-pressed={showWeights} onClick={() => setShowWeights((v) => !v)} style={{ flexShrink: 0, color: showWeights ? COLORS.jadeInk : COLORS.muted }}>
                     <SlidersHorizontal size={15} aria-hidden /> Model
                   </button>
                 )}

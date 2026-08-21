@@ -92,9 +92,11 @@ export function WhyPanel({
       <div className="flex items-start justify-between gap-3 mb-3">
         <div>
           <p className="text-label text-accent-violet mb-1">Why this connection exists</p>
-          <h3 className="heading-card">
+          {/* h2, not h3: the page's only other heading is the PageHeader h1,
+              so an h3 here skips a level. `.heading-card` carries the size. */}
+          <h2 className="heading-card">
             {compoundName(a)} <span className="text-muted-foreground">+</span> {compoundName(b)}
-          </h3>
+          </h2>
         </div>
         <button
           type="button"
@@ -504,7 +506,8 @@ export function MarginalPanel({
         <div className="flex items-start justify-between gap-3 mb-3">
           <div>
             <p className="text-label text-accent-violet mb-1">Marginal contribution</p>
-            <h3 className="heading-card">{marginal.name}</h3>
+            {/* h2 for the same reason as WhyPanel above — no h2 precedes it. */}
+            <h2 className="heading-card">{marginal.name}</h2>
           </div>
           <span
             className={cn(

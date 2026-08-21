@@ -12,7 +12,7 @@ export const TelomereAttritionVisual: React.FC<{ className?: string; showLabels?
       <div className="flex items-start justify-between mb-3">
         <div>
           <div className="text-label text-[var(--accent-emerald)] mb-0.5">HALLMARK 02</div>
-          <h4 className="heading-card text-lg">Telomere Attrition</h4>
+          <h3 className="heading-card text-lg">Telomere Attrition</h3>
         </div>
       </div>
 

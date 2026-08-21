@@ -28,6 +28,8 @@ export default function ProtocolsPage() {
       <CinematicHubHero
         hue="violet"
         kicker="The Protocol Library"
+        // No PageHeader on this hub, so the cover headline is the page's h1.
+        titleAsHeading
         title={<>Stacks that <em>make sense</em>.</>}
         lead="Not a pile of pills — a set of curated, evidence-based protocols where each compound has a job and a time. Every stack targets a specific system, layers compounds that cover each other's gaps, and links to the evidence behind every choice."
         stats={[

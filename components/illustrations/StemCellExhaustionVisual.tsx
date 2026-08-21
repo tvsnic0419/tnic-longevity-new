@@ -12,7 +12,7 @@ export const StemCellExhaustionVisual: React.FC<{ className?: string; showLabels
       <div className="flex items-start justify-between mb-3">
         <div>
           <div className="text-label text-[var(--accent-emerald)] mb-0.5">HALLMARK 08</div>
-          <h4 className="heading-card text-lg">Stem Cell Exhaustion</h4>
+          <h3 className="heading-card text-lg">Stem Cell Exhaustion</h3>
         </div>
       </div>
 

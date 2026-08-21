@@ -29,8 +29,21 @@ export function CardHeader({ children, className = '' }: { children: ReactNode; 
   return <div className={cn('mb-4', className)}>{children}</div>;
 }
 
-export function CardTitle({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <h3 className={cn('heading-card text-lg', className)}>{children}</h3>;
+/**
+ * `as` lets a caller pick the heading level that fits its page outline —
+ * a card sitting directly under the page `<h1>` needs an `<h2>`, not the
+ * default `<h3>`. Styling is identical either way; only the level changes.
+ */
+export function CardTitle({
+  children,
+  className = '',
+  as: Tag = 'h3',
+}: {
+  children: ReactNode;
+  className?: string;
+  as?: 'h2' | 'h3' | 'h4';
+}) {
+  return <Tag className={cn('heading-card text-lg', className)}>{children}</Tag>;
 }
 
 export function CardDescription({ children, className = '' }: { children: ReactNode; className?: string }) {

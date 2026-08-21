@@ -185,11 +185,11 @@ export default function HallmarksIndexPage() {
             <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-3">Scientific Foundation</p>
             <p className="text-sm text-muted-foreground leading-relaxed mb-4">
               The hallmarks framework was first published in{' '}
-              <a href="https://pubmed.ncbi.nlm.nih.gov/22768836/" target="_blank" rel="noopener noreferrer" className="text-accent-emerald hover:underline">
+              <a href="https://pubmed.ncbi.nlm.nih.gov/22768836/" target="_blank" rel="noopener noreferrer" className="text-accent-emerald underline underline-offset-2 decoration-accent-emerald/50 hover:decoration-accent-emerald">
                 Cell 2013 (PMID: 22768836)
               </a>{' '}
               by López-Otín et al. and expanded to 12 hallmarks in the{' '}
-              <a href="https://pubmed.ncbi.nlm.nih.gov/36599349/" target="_blank" rel="noopener noreferrer" className="text-accent-emerald hover:underline">
+              <a href="https://pubmed.ncbi.nlm.nih.gov/36599349/" target="_blank" rel="noopener noreferrer" className="text-accent-emerald underline underline-offset-2 decoration-accent-emerald/50 hover:decoration-accent-emerald">
                 2023 update (PMID: 36599349)
               </a>.{' '}
               TNiC maps interventions to this framework using Tier A/B/C evidence grading. The hallmarks are a descriptive

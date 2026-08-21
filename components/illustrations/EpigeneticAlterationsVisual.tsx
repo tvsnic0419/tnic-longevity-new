@@ -23,7 +23,7 @@ export const EpigeneticAlterationsVisual: React.FC<EpigeneticAlterationsVisualPr
       <div className="flex items-start justify-between mb-3">
         <div>
           <div className="text-label text-[var(--accent-violet)] mb-0.5">HALLMARK 03</div>
-          <h4 className="heading-card text-lg">Epigenetic Alterations</h4>
+          <h3 className="heading-card text-lg">Epigenetic Alterations</h3>
         </div>
         {showLabels && <div className="text-right text-micro text-[var(--color-text-muted)]">Methylation · Histones · Gene Expression</div>}
       </div>

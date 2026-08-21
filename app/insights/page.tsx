@@ -53,6 +53,8 @@ export default function InsightsPage() {
       <CinematicHubHero
         hue="cyan"
         kicker="Longevity by the Numbers"
+        // No PageHeader on this hub, so the cover headline is the page's h1.
+        titleAsHeading
         title={<>The library, <em>as data</em>.</>}
         lead={`Every figure on this page is counted from the library itself. Evidence tiers and hallmark coverage span all ${LIBRARY_COMPOUND_COUNT} compound deep-dives; absorption, dosing rhythm, citation depth and the connection map describe the ${INSIGHTS_TOTALS.compounds} fully-graded compounds that carry those fields. Nothing here is a marketing number.`}
         stats={[

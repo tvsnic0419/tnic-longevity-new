@@ -3,6 +3,7 @@ import type { Compound, EvidenceTier } from '@/lib/types';
 import { emergentEffects } from '@/lib/relations';
 import { stackInteractions, hallmarkDisplayNames } from '@/lib/stack-analysis';
 import { getSynergyMechanism } from '@/lib/synergy-mechanisms';
+import { tierColor } from '@/components/viz/tokens';
 
 /**
  * Shared node/edge/layout data for the homepage hero's 3D visual and its SVG
@@ -53,10 +54,17 @@ export const HERO_NETWORK_NODES: HeroNetworkNode[] = compounds.map((c) => ({
   degree: HERO_NETWORK_EDGES.filter((e) => e.a === c.id || e.b === c.id).length,
 }));
 
+/**
+ * Sourced from the canonical `tierColor()` (components/viz/tokens.ts) rather
+ * than a local literal map. The old literals had drifted: Tier B rendered
+ * amber — the color that means Tier C everywhere else on the site — and Tier C
+ * rendered a slate that is not a tier color at all. Same class of drift already
+ * corrected in EvidenceBadge.tsx and HomeDescent.tsx; this file was missed.
+ */
 export const HERO_NETWORK_TIER_COLOR: Record<EvidenceTier, string> = {
-  A: '#34d399',
-  B: '#fbbf24',
-  C: '#94a3b8',
+  A: tierColor('A'),
+  B: tierColor('B'),
+  C: tierColor('C'),
 };
 
 export const HERO_NETWORK_TIER_LABEL: Record<EvidenceTier, string> = {

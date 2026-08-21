@@ -129,7 +129,9 @@ export function Dashboard() {
         <div id="dashboard-status" className="lg:col-span-1">
         <Card variant="elevated" className="h-full">
           <CardHeader>
-            <CardTitle>Current status</CardTitle>
+            {/* First heading under the page h1 — h2 so the outline doesn't
+                skip a level; the h3s that follow then nest correctly. */}
+            <CardTitle as="h2">Current status</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <div>
