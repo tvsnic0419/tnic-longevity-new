@@ -83,6 +83,9 @@ export default function RootLayout({
         <BackToTop />
         <Toaster
           position="bottom-right"
+          // Lift toasts above the fixed Back-to-top control so the two never
+          // collide in the bottom-right corner.
+          offset={{ bottom: '5rem' }}
           theme="dark"
           toastOptions={{
             style: {
