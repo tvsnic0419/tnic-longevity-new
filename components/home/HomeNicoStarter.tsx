@@ -175,11 +175,14 @@ export function HomeNicoStarter() {
                         key={f.id}
                         type="button"
                         aria-pressed={on}
-                        disabled={atLimit}
+                        // aria-disabled (not `disabled`) so the chip stays
+                        // focusable and announced at the limit; toggleFocus
+                        // already no-ops once three are selected.
+                        aria-disabled={atLimit}
                         onClick={() => toggleFocus(f.id)}
                         className={[
                           singleClass(on),
-                          atLimit ? 'opacity-40 pointer-events-none' : '',
+                          atLimit ? 'opacity-40 cursor-not-allowed' : '',
                         ].join(' ')}
                       >
                         {f.label}
@@ -203,7 +206,7 @@ export function HomeNicoStarter() {
               </button>
             </div>
           ) : (
-            <div aria-live="polite">
+            <div>
               <p className="mb-1 font-mono text-micro uppercase tracking-widest text-accent-violet">
                 Your starting stack
               </p>
@@ -257,7 +260,7 @@ export function HomeNicoStarter() {
                 </div>
               )}
 
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap items-center gap-3">
                 <Link href={stackHref} className="btn-gradient focus-ring text-sm">
                   <FlaskConical className="h-4 w-4" aria-hidden="true" /> Load in Stack Builder
                 </Link>

@@ -842,7 +842,7 @@ export function HomeDescent() {
 
       <div className="tnic-rail-track">
         <nav className="tnic-rail" aria-label="Descent sections">
-          {["Arrive", "Molecule", "Synergies", "Healthspan", "Your path"].map((l, i) => (
+          {["Arrive", "Molecule", "System", "Goal", "Your path"].map((l, i) => (
             <button key={l} className={active === i ? "on" : ""} onClick={() => goTo(i)}>
               <span className="lbl">{l}</span><span className="tick" />
             </button>
