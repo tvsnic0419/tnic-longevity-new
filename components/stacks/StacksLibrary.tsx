@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { Cpu, Layers, Wrench, Table2, BookOpen, ShoppingBag } from 'lucide-react';
+import { Cpu, Layers, Wrench, Table2, BookOpen, ShoppingBag, Sparkles } from 'lucide-react';
 import { eliteStacks } from '@/lib/stacks-library';
 import { compounds } from '@/lib/data';
 import { usePlatform } from '@/context/PlatformContext';
@@ -63,6 +63,17 @@ export function StacksLibrary() {
         theme="violet"
         context={getHubContext('stacks')}
       />
+
+      {fromNico && (
+        <div className="mb-6 flex flex-wrap items-center gap-3 rounded-xl border border-accent-violet/25 bg-accent-violet/5 px-4 py-3">
+          <Sparkles className="h-4 w-4 shrink-0 text-accent-violet" aria-hidden="true" />
+          <p className="text-sm text-[var(--color-text-secondary)]">
+            <span className="font-semibold text-foreground">Loaded from your NICO questionnaire</span>
+            {selected.length > 0 ? ` · ${selected.length} compound${selected.length === 1 ? '' : 's'}` : ''} — review
+            and adjust below, then verify &amp; shop your stack.
+          </p>
+        </div>
+      )}
 
       <div className="flex flex-wrap gap-3 mb-6">
         <Link

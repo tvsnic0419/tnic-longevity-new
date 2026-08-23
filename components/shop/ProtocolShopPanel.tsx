@@ -209,7 +209,7 @@ function ProtocolShopPanelInner() {
         </Link>
       </div>
 
-      {items.length === 0 ? (
+      {items.length === 0 && selected.length === 0 ? (
         <div className="rounded-2xl border border-accent-amber/20 bg-accent-amber/5 p-6 md:p-8">
           <div className="max-w-2xl">
             <p className="text-label text-accent-amber mb-2">No stack loaded yet</p>
@@ -254,6 +254,55 @@ function ProtocolShopPanelInner() {
                 </span>
               </Link>
             ))}
+          </div>
+        </div>
+      ) : items.length === 0 ? (
+        <div className="rounded-2xl border border-accent-amber/20 bg-accent-amber/5 p-6 md:p-8">
+          <div className="max-w-2xl">
+            <p className="text-label text-accent-amber mb-2">Stack loaded · no verified picks yet</p>
+            <h2 className="text-2xl font-bold text-foreground mb-3">
+              Your {selected.length}-compound stack is here — TNiC just hasn&apos;t verified a product for these yet.
+            </h2>
+            <p className="text-body-sm text-muted-foreground leading-relaxed">
+              We add a manufacturer pick only after dose-matched COA verification, so none of these carry a
+              verified card yet. Their evidence, dosing, and buyer cautions still live on each module.
+            </p>
+          </div>
+
+          {unmatched.length > 0 && (
+            <ul className="mt-5 flex flex-wrap gap-2">
+              {unmatched.map((c) => (
+                <li key={c.compoundId}>
+                  {c.moduleHref ? (
+                    <Link
+                      href={c.moduleHref}
+                      className="focus-ring inline-flex items-center rounded-lg glass px-3 py-1.5 text-xs font-semibold text-accent-cyan hover:border-accent-cyan/30"
+                    >
+                      {c.compoundName}
+                    </Link>
+                  ) : (
+                    <span className="inline-flex rounded-lg glass px-3 py-1.5 text-xs font-semibold text-muted-foreground">
+                      {c.compoundName}
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link
+              href="/products"
+              className="focus-ring inline-flex items-center gap-2 rounded-xl border border-accent-amber/30 bg-accent-amber/20 px-5 py-2.5 text-sm font-semibold text-accent-amber transition hover:bg-accent-amber/30"
+            >
+              See what is verified <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              href="/stacks"
+              className="focus-ring inline-flex items-center gap-2 rounded-xl border border-border px-5 py-2.5 text-sm font-semibold text-[var(--color-text-secondary)] transition hover:border-foreground/40 hover:text-foreground"
+            >
+              Adjust the stack in Architect
+            </Link>
           </div>
         </div>
       ) : (
