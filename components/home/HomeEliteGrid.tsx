@@ -210,12 +210,33 @@ export function HomeEliteGrid() {
         ))}
       </div>
 
+      {/* Live count of the visible set, announced politely on filter change. */}
+      <p
+        aria-live="polite"
+        className="mb-4 font-mono text-micro font-semibold uppercase tracking-[0.12em] text-muted-foreground"
+      >
+        {active === 'all'
+          ? `${eliteInterventions.length} elite interventions`
+          : `Showing ${filtered.length} of ${eliteInterventions.length}`}
+      </p>
+
+      {/* Every card is always rendered (so the server HTML carries the full set
+          and every internal link); the filter only toggles `hidden`. Nothing
+          unmounts, so the one-time entrance reveal never re-fires when the
+          visitor clicks between hallmark chips. */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((intervention, i) => (
-          <RevealItem key={intervention.compoundId} index={i} className="h-full">
-            <EliteCard intervention={intervention} />
-          </RevealItem>
-        ))}
+        {eliteInterventions.map((intervention, i) => {
+          const match = active === 'all' || intervention.hallmarks.includes(active);
+          return (
+            <RevealItem
+              key={intervention.compoundId}
+              index={i}
+              className={`h-full ${match ? '' : 'hidden'}`}
+            >
+              <EliteCard intervention={intervention} />
+            </RevealItem>
+          );
+        })}
       </div>
 
       {filtered.length === 0 && (

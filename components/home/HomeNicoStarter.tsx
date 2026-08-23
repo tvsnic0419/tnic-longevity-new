@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type CSSProperties } from 'react';
+import { useState, useEffect, useRef, type CSSProperties } from 'react';
 import Link from 'next/link';
 import { ArrowRight, FlaskConical, ClipboardList, Sparkles, RotateCcw } from 'lucide-react';
 import {
@@ -63,6 +63,13 @@ export function HomeNicoStarter() {
   const [actId, setActId] = useState('moderate');
   const [focus, setFocus] = useState<NicoGoal[]>([]);
   const [result, setResult] = useState<NicoResult | null>(null);
+
+  // When the stack is computed, move focus (and scroll) to the result heading
+  // so the outcome isn't stranded below the fold with focus left on the button.
+  const resultRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    if (result) resultRef.current?.focus();
+  }, [result]);
 
   const toggleFocus = (id: NicoGoal) =>
     setFocus((f) =>
@@ -154,7 +161,10 @@ export function HomeNicoStarter() {
 
               <fieldset>
                 <legend className="text-label mb-3 text-muted-foreground">
-                  Focus areas — select up to three
+                  Focus areas — up to three{' '}
+                  <span aria-live="polite" className="text-accent-violet">
+                    ({focus.length}/{MAX_FOCUS})
+                  </span>
                 </legend>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-3" role="group" aria-label="Focus areas">
                   {FOCUS.map((f) => {
@@ -197,7 +207,13 @@ export function HomeNicoStarter() {
               <p className="mb-1 font-mono text-micro uppercase tracking-widest text-accent-violet">
                 Your starting stack
               </p>
-              <h3 className="mb-2 text-2xl font-bold text-foreground">{result.protocolName}</h3>
+              <h3
+                ref={resultRef}
+                tabIndex={-1}
+                className="mb-2 text-2xl font-bold text-foreground outline-none"
+              >
+                {result.protocolName}
+              </h3>
               <p className="mb-5 text-sm text-[var(--color-text-secondary)]">{result.summary}</p>
 
               <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -242,10 +258,7 @@ export function HomeNicoStarter() {
               )}
 
               <div className="flex flex-wrap gap-3">
-                <Link
-                  href={stackHref}
-                  className="focus-ring inline-flex items-center gap-2 rounded-xl bg-accent-violet px-5 py-3 text-sm font-bold text-black transition-colors hover:bg-accent-violet/90"
-                >
+                <Link href={stackHref} className="btn-gradient focus-ring text-sm">
                   <FlaskConical className="h-4 w-4" aria-hidden="true" /> Load in Stack Builder
                 </Link>
                 <Link
