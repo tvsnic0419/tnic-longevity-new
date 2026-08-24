@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -11,11 +11,31 @@ import { SiteSearch } from '@/components/SiteSearch';
 import { COMMAND_PALETTE_EVENT } from '@/components/os/os-events';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { GlassPanel } from '@/components/ui/GlassPanel';
+import { cn } from '@/lib/utils';
+
+// useLayoutEffect warns during SSR; fall back to useEffect on the server so the
+// adaptive measurement still runs before first paint on the client.
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 export function Nav() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  // Adaptive fit: render the full desktop bar whenever it actually fits the
+  // available width, collapsing to the compact/hamburger chrome only when it
+  // genuinely does not — measured, at any width, instead of flipping at one
+  // hardcoded breakpoint. The old fixed `nav:` breakpoint left the full row
+  // rendering at widths where its content needed ~1579px inside a 1280px
+  // container, so the trailing actions were clipped past the viewport edge.
+  const [compact, setCompact] = useState(false);
+  const compactRef = useRef(false);
+  const requiredRef = useRef(0);
+  const rowRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
+  const linksRef = useRef<HTMLDivElement>(null);
+  const actionsRef = useRef<HTMLDivElement>(null);
+
   const menuRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -33,8 +53,47 @@ export function Nav() {
     };
   }, []);
 
+  useIsomorphicLayoutEffect(() => {
+    const row = rowRef.current;
+    if (!row) return;
+    const evaluate = () => {
+      const logo = logoRef.current;
+      const links = linksRef.current;
+      const actions = actionsRef.current;
+      // Cache the natural desktop width only while the clusters are in flow and
+      // measurable (they are shrink-0 + nowrap, so scrollWidth is the true
+      // content width, not a flex-compressed one). When compact they are
+      // display:none and unmeasurable, so reuse the cached value — that is what
+      // prevents a measure-while-hidden flip loop.
+      if (logo && links && actions && !compactRef.current) {
+        requiredRef.current = logo.offsetWidth + links.scrollWidth + actions.scrollWidth + 40;
+      }
+      const cs = getComputedStyle(row);
+      const pad = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+      const available = row.clientWidth - pad;
+      const required = requiredRef.current;
+      if (required <= 0) return;
+      const next = required > available;
+      if (next !== compactRef.current) {
+        compactRef.current = next;
+        setCompact(next);
+      }
+    };
+    evaluate();
+    const ro = new ResizeObserver(evaluate);
+    ro.observe(row);
+    // Re-measure once web fonts settle — glyph widths shift the natural width.
+    document.fonts?.ready.then(evaluate).catch(() => {});
+    return () => ro.disconnect();
+  }, []);
+
+  // The drawer only exists in compact chrome, so derive its visibility rather
+  // than syncing state in an effect: expanding back to the full desktop bar
+  // implicitly closes it, with no extra render and no set-state-in-effect.
+  const drawerOpen = compact && mobileOpen;
+
   useEffect(() => {
-    if (!mobileOpen) return;
+    if (!drawerOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setMobileOpen(false);
@@ -67,7 +126,7 @@ export function Nav() {
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = '';
     };
-  }, [mobileOpen]);
+  }, [drawerOpen]);
 
   useEffect(() => {
     // Close the mobile menu on route change, including back/forward navigation.
@@ -92,13 +151,20 @@ export function Nav() {
       <div
         className={`absolute inset-0 nav-glass ${scrolled ? 'nav-glass-scrolled' : ''}`}
       />
-      <div className="relative container-page py-3 md:py-4 flex justify-between items-center gap-4">
+      {/* Full-bleed row (container-page's 1280px cap removed via !max-w-none):
+          the bar spans the viewport rather than the article column, so the
+          adaptive measurement compares content against real available width.
+          Horizontal padding is still inherited from container-page. */}
+      <div
+        ref={rowRef}
+        className="relative container-page !max-w-none py-3 md:py-4 flex justify-between items-center gap-4"
+      >
         {/* No aria-label here: it would duplicate/conflict with the Logo's
             own role="img" + aria-label below, which Lighthouse's
             label-content-name-mismatch audit flags as visible text not
             reflected in the accessible name. Let the link's name derive
             from that single nested image role instead. */}
-        <div className="flex items-center gap-2.5 shrink-0">
+        <div ref={logoRef} className="flex items-center gap-2.5 shrink-0">
           <Link
             href="/"
             className="focus-ring interactive flex items-center rounded-xl group transition-transform hover:scale-[1.02]"
@@ -122,7 +188,7 @@ export function Nav() {
         {/* Grouped by intent (Learn / Build / Track / Shop) with a hairline
             divider between clusters, so the row reads as labeled families
             rather than nine flat links. */}
-        <div className="hidden nav:flex items-center gap-1">
+        <div ref={linksRef} className={cn('items-center gap-1 shrink-0', compact ? 'hidden' : 'flex')}>
           {navGroups.map((group, gi) => (
             <div key={group.label} className="flex items-center gap-0.5" role="group" aria-label={group.label}>
               {gi > 0 && <span className="mx-1 h-4 w-px bg-border/60" aria-hidden="true" />}
@@ -140,7 +206,7 @@ export function Nav() {
           ))}
         </div>
 
-        <div className="hidden nav:flex items-center gap-2.5 shrink-0">
+        <div ref={actionsRef} className={cn('items-center gap-2.5 shrink-0', compact ? 'hidden' : 'flex')}>
           <ThemeToggle compact />
           <SiteSearch />
           {/* NICO (questionnaire) is the secondary action; Dashboard is the
@@ -155,7 +221,7 @@ export function Nav() {
               className="focus-ring inline-flex items-center gap-1.5 rounded-full py-2 px-4 text-sm font-semibold text-muted-foreground hover:text-foreground"
             >
               <ClipboardList className="w-4 h-4 text-accent-violet" aria-hidden="true" />
-              Begin NICO
+              NICO
             </Link>
           </GlassPanel>
           <Link href="/dashboard" className="focus-ring btn-gradient text-sm !py-2.5 !px-5 !min-h-0 rounded-full">
@@ -164,7 +230,8 @@ export function Nav() {
           </Link>
         </div>
 
-        <div className="flex items-center gap-1 nav:hidden">
+        {/* Compact chrome — shown only when the full bar above does not fit. */}
+        <div className={cn('items-center gap-1', compact ? 'flex' : 'hidden')}>
           <ThemeToggle compact />
           <button
             onClick={() => window.dispatchEvent(new Event(COMMAND_PALETTE_EVENT))}
@@ -187,7 +254,7 @@ export function Nav() {
       </div>
 
       <AnimatePresence>
-        {mobileOpen && (
+        {drawerOpen && (
           <motion.div
             ref={menuRef}
             id="mobile-menu"
@@ -197,7 +264,13 @@ export function Nav() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="nav:hidden relative nav-glass nav-glass-scrolled border-b border-border"
+            // Keyed off the measured `compact` state, not the old fixed
+            // breakpoint — otherwise a width could exist where neither the
+            // desktop row nor this drawer is reachable.
+            className={cn(
+              'relative nav-glass nav-glass-scrolled border-b border-border',
+              compact ? 'block' : 'hidden',
+            )}
           >
             <div className="container-page py-4 flex flex-col gap-1">
               {navGroups.map((group) => (
