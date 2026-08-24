@@ -54,9 +54,12 @@
      hierarchy still reads even as the gap narrows. */
   --color-text-secondary: #edeef1;
   --color-text-muted: #ced0d7;
-  /* Faint tier — small labels/captions sitewide; brightest it's been while
-     staying a clear step under muted. */
-  --color-text-faint: #c1c2ca;
+  /* Faint tier — small labels/captions sitewide. Nudged a step down from the
+     last brightening pass (#c1c2ca had drifted to near-identical with muted
+     #ced0d7) so captions/labels read as their own distinct tier again. Still
+     ~9.5:1 on the base (AAA) — bright, just no longer merged with muted. Body
+     tiers (secondary/muted) keep their brightened values untouched. */
+  --color-text-faint: #adaeb9;
 
   /* Hub accents — v2.1 sharp pop */
   --accent-cyan: #00e0ff;
@@ -318,12 +321,16 @@ body::after {
   line-height: 1.08;
 }
 
-/* Editorial display utility — Fraunces, for headline moments site-wide. */
+/* Editorial display utility — Fraunces, for headline moments site-wide. One
+   canonical definition (a duplicate below in the v3 sprint layer set an
+   unloaded weight 800 — Fraunces only ships 300–600, so it rendered as
+   faux-bold/serif-fallback; merged here at the cinematic weight 400). */
 .font-display { font-family: var(--font-display); }
 .text-display {
   font-family: var(--font-display);
+  font-size: var(--type-6xl);
   font-weight: 400;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.03em;
   line-height: 0.98;
 }
 

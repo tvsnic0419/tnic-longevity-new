@@ -142,8 +142,14 @@ const HUBHERO_CSS = `
   display: inline-flex; align-items: center; gap: 10px;
   padding: 13px 24px; border-radius: 999px; text-decoration: none;
   font-weight: 600; font-size: 15px;
-  background: linear-gradient(135deg, var(--hue), color-mix(in srgb, var(--hue) 55%, #6ee7b7));
-  color: #030712; box-shadow: 0 0 30px color-mix(in srgb, var(--hue) 35%, transparent);
+  /* Hue-internal sheen (light tint → hue → deeper hue) — a dimensional gradient
+     that stays entirely inside the hub's own accent. The prior recipe mixed
+     every hue toward mint #6ee7b7, dragging violet/rose/amber CTAs green. */
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--hue) 75%, #ffffff) 0%,
+    var(--hue) 50%,
+    color-mix(in srgb, var(--hue) 82%, #071019) 100%);
+  color: #050a12; box-shadow: 0 0 30px color-mix(in srgb, var(--hue) 35%, transparent);
   transition: transform .2s ease, box-shadow .2s ease;
 }
 .hh-cta:hover { transform: translateY(-1px); box-shadow: 0 0 42px color-mix(in srgb, var(--hue) 50%, transparent); }
