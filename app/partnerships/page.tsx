@@ -3,6 +3,7 @@ import { ArrowRight, Building2, CheckCircle2, Handshake, ShieldCheck, Sparkles }
 import { PageShell } from '@/components/ui/PageShell';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { SponsorSlot } from '@/components/sponsors/SponsorSlot';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildArticleSchema, buildBreadcrumbSchema } from '@/lib/seo';
 import { seoRoutes } from '@/lib/seo-routes';
@@ -155,6 +156,9 @@ export default function PartnershipsPage() {
           </a>
         </div>
       </section>
+
+      {/* Live sponsor placement — renders only when inventory is sold. */}
+      <SponsorSlot slot="partnerships" className="mt-8" />
       </PageShell>
     </SubPageLayout>
   );
