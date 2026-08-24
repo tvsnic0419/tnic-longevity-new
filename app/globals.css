@@ -1903,11 +1903,16 @@ p,
    workhorse section/hero headline. Removed .headline-display and
    .feature-headline — both were defined but unused. */
 .headline-editorial {
+  /* Cinematic display voice — Fraunces 400, matching the hub heroes (.hh-title)
+     and HomeDescent. Was a weight-800 heavy sans (no font-family set → Inter),
+     which read as a different brand than the rest of the site's headlines. The
+     cyan halo is kept but softened so the finer serif strokes stay crisp. */
+  font-family: var(--font-display);
   font-size: var(--type-5xl);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1.0;
-  text-shadow: 0 0 80px rgba(0, 224, 255, 0.28), 0 0 160px rgba(0, 224, 255, 0.10), 0 2px 8px rgba(0, 0, 0, 0.6);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+  text-shadow: 0 0 60px rgba(0, 224, 255, 0.18), 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 /* ── Live status badge ── */

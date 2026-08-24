@@ -36,12 +36,21 @@ export function HomeHero() {
       {/* Backdrop — pure CSS so it renders on the server and stays lightweight */}
       <div aria-hidden="true" className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[radial-gradient(#12203c_0.8px,transparent_1px)] [background-size:22px_22px] opacity-50" />
-        <div className="absolute -left-32 -top-40 h-[38rem] w-[38rem] rounded-full bg-[radial-gradient(circle,rgba(0,224,255,0.16),transparent_60%)] blur-2xl" />
-        {/* Violet, not emerald — the compound-synergy network below already
-            carries its own emerald/amber tier-color signal in its own band;
-            a second emerald wash up here would compete with it instead of
-            grounding this half of the hero. */}
-        <div className="absolute -right-40 top-1/3 h-[34rem] w-[34rem] rounded-full bg-[radial-gradient(circle,rgba(192,132,252,0.10),transparent_60%)] blur-2xl" />
+        {/* Live ambient field — the same slow-drifting accent orbs the hub
+            heroes use (.hub-hero-field), replacing the two hand-rolled static
+            blurred blobs so this half of the hero doesn't flatline below the
+            Descent's animated canvas directly above it. Cyan + violet (not
+            emerald — the synergy network below owns the emerald/amber tier
+            signal in its own band). Reduced-motion safe (see globals.css). */}
+        <div
+          className="hub-hero-field"
+          style={
+            {
+              '--flair-accent': 'var(--accent-cyan)',
+              '--flair-accent-2': 'var(--accent-violet)',
+            } as CSSProperties
+          }
+        />
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-background" />
       </div>
 
@@ -69,7 +78,11 @@ export function HomeHero() {
             <h2 id="home-hero-heading" className="headline-editorial mb-5 !text-white">
               Transformative nutrition{' '}
               <br />
-              <span className="gradient-sweep-text">for cell-health.</span>
+              {/* Italic Fraunces accent fragment, mirroring the hub heroes'
+                  <em> hue-accent idiom — but keeping the signature animated
+                  cyan→emerald sweep as the fill, so the serif voice leads and
+                  the sweep stays subordinate. */}
+              <em className="gradient-sweep-text">for cell-health.</em>
             </h2>
 
             <p className="mx-auto mb-8 max-w-xl text-lg leading-relaxed text-white/90 md:text-xl lg:mx-0">
@@ -204,11 +217,30 @@ export function HomeHero() {
               Click a compound to see what it pairs with — and why.
             </p>
           </div>
-          {/* Wide and tall: the network centers itself, which leaves the left
-              third genuinely empty — exactly where the selection panel docks,
-              so the panel never occludes the graph it's describing. */}
-          <div className="h-[440px] overflow-hidden rounded-3xl border border-white/10 bg-white/[0.02] md:h-[540px]">
-            <HeroSceneMount />
+          {/* Instrument viewport — a HUD caption rail + bracket-corner
+              ornaments frame the hero's one interactive WebGL asset as a
+              readout rather than a plain framed div. Bracket corners reuse the
+              shared SectionShell treatment (globals.css .bracket-corner-*). */}
+          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.02]">
+            <div className="flex items-center justify-between gap-3 border-b border-white/10 bg-white/[0.015] px-4 py-2.5">
+              <span className="flex items-center gap-2 font-mono text-micro uppercase tracking-[0.18em] text-white/70">
+                <span className="badge-live-dot" aria-hidden="true" />
+                Live synergy network
+              </span>
+              <span className="font-mono text-micro uppercase tracking-[0.18em] text-white/45">
+                Drag · click a node
+              </span>
+            </div>
+            {/* Wide and tall: the network centers itself, which leaves the left
+                third genuinely empty — exactly where the selection panel docks,
+                so the panel never occludes the graph it's describing. */}
+            <div className="relative h-[440px] md:h-[540px]">
+              <HeroSceneMount />
+              <span className="bracket-corner bracket-corner-tl z-20" aria-hidden="true" />
+              <span className="bracket-corner bracket-corner-tr z-20" aria-hidden="true" />
+              <span className="bracket-corner bracket-corner-bl z-20" aria-hidden="true" />
+              <span className="bracket-corner bracket-corner-br z-20" aria-hidden="true" />
+            </div>
           </div>
         </div>
       </div>
