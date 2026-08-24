@@ -6,11 +6,122 @@ master prompt — its durable operating rules are already merged into
 
 ## Current phase
 
-**Phase 6 complete** — hallmark taxonomy correction (the Phase 4 flagship
-finding), decided and shipped under Thomas's blanket delegation of 2026-08-19
-("make the decisions for me on all these matters that best serves the site's
-interest"). Phase 5 was merged as PR #117 (squash, `c02e144`); Phase 6 rides
-branch `redesign/phase-6-hallmark-taxonomy`.
+**Phase 6 complete**, and — undocumented here until now — six more PRs from
+other concurrent sessions shipped on top of it between 2026-08-19 and
+2026-08-23 (six-chapter homepage restructure, Combination Lab, a 28-page
+a11y sweep, TNiC Score/Match foundation, and three funnel/polish passes),
+plus one PR (#125) found genuinely still open and merged during a
+**2026-08-24 reconciliation sweep**. See "Unnumbered work" and "PR #125"
+directly below for what each one actually did — this is the same
+concurrent-sessions pattern already noted in the Decisions log (PR #113,
+PR #109); nothing here contradicts or duplicates Phase 5/6.
+
+**2026-08-24 sweep**: checked all open/recently-merged PRs and all ~90
+remote branches for anything unmerged. Found exactly one live item — PR
+#125 (nav scroll-backdrop bug, desktop overflow, packshot scale) — verified
+with a clean local dry-run merge against current `main` (zero conflicts),
+merged via the GitHub API (`a6c20f77`), Vercel Production Deploy green.
+Everything else recent was already merged. ~90 older branches (44–190
+commits behind `main`, mostly July dates, pre-dating this initiative) are
+dead — not evaluated individually, not touched.
+
+## PR #125 — nav scroll bug + overflow fix + packshot normalization (merged 2026-08-24)
+
+1. **Nav lost its backdrop on scroll, sitewide.** `.nav-glass-scrolled`
+   declared `position: relative`, overriding the Tailwind `absolute` on the
+   backdrop layer beneath it — the same unlayered-CSS-beats-`@layer` trap
+   already documented for `.premium-card` in this file. Measured 76px→1px
+   effective backdrop height on scroll; nav content read through onto page
+   content underneath. Rule no longer sets `position`.
+2. **Desktop nav overflowed from 1440px up** (content needs ~1490px inside a
+   1280px-capped container, clipping 5–7 trailing elements). Row is now
+   full-bleed; `Nav.tsx` measures its own content via `ResizeObserver` and
+   shows the full bar whenever it actually fits, rather than at one
+   hardcoded breakpoint — full bar now from 1512px (was 1600px); zero
+   overflow measured 390px→2560px.
+3. Removed `/stacks/lab` from the top-level nav — read as "Lab" four items
+   from "Labs" (`/labs`). Already promoted at the top of `/stacks` and in
+   the sitemap.
+4. **Product packshots normalized** — manufacturer photos carried wildly
+   different built-in whitespace (28%–100% measured fill ratio); re-padded 8
+   images to a consistent ~4%-of-longest-edge margin, 5 already-tight assets
+   left untouched. Image-only change.
+
+Verified per PR body: 607/607 tests, clean build (427 routes), nav measured
+at 11 widths, axe sweep across 7 pages at 1440px (0 violations).
+
+## Unnumbered work merged between Phase 6 and this update (2026-08-19 – 2026-08-23)
+
+Six PRs from other sessions, all merged before this sweep found them
+undocumented here, each green on this repo's standard gates
+(lint/typecheck/test/build, guardrail suites intact) per its own PR body:
+
+- **PR #122 — Combination Lab** (`/stacks/lab`, new tool): progressive
+  stack-relationship analyzer — per-pair classification (synergy /
+  complementary / additive / redundancy / interaction-caution / antagonism /
+  honestly-labeled uncertain), an itemized 0–100 score, a marginal-
+  contribution view, a removal-simulation optimizer. Pure-TS engine
+  (`lib/combination-lab.ts`) with an honesty contract enforced in code —
+  ontology-derived edges are always `demonstrated: false` with a disclosed
+  hypothesis; curated edges are `demonstrated: true`; antagonism is never
+  discounted. Distinct from the existing `/tools` interaction browser and
+  `/stacks` Architect — neither does marginal analysis scoped to a user's
+  own selected stack. Ships with the always-visible fallback `<table>`.
+- **PR #124 — TNiC Score + TNiC Match, salvaged from #106**: rescued the two
+  genuinely net-new modules from the otherwise-superseded PR #106 (below) —
+  `lib/tnic-score.ts` (deterministic 0–100 composite per compound; layers
+  the three *existing* evidence sources — Elite-8 LQ model, Compound Engine,
+  canonical `lib/data.ts` — by richness rather than adding a fourth dataset;
+  unsupported dimensions return `null`; `confidence` reports data
+  completeness, not clinical certainty, per `NOTES-COMPOUND-LIBRARY.md`) and
+  `lib/tnic-match.ts` (transparent product-pick criteria checklist — not a
+  purity/lab-testing claim). Added with no UI consumers yet — foundation
+  only, nothing else modified.
+- **PR #123 — UI/a11y pass**: axe-core sweep across 28 production pages
+  found 56 violation nodes, taken to 0. Fixed ~20 routes double-rendering
+  site chrome (`/tools/pathway-architect` + all 19 `/pathways/*` wrapped
+  themselves in `SubPageLayout` while their segment layout already did);
+  `/protocols` and `/insights` had no `<h1>` at all (new opt-in
+  `titleAsHeading` prop on `CinematicHubHero`, default `false`); a
+  tier-color drift in `lib/hero-network.ts` (Tier B rendered amber — the
+  Tier C color — feeding the homepage hero panel); plus list-semantics,
+  duplicate-link-name, color-only-distinction, and heading-order fixes.
+- **PR #126, #127 — Polish batches 2–3**: homepage interactive-component
+  hardening — elite-interventions filter no longer unmounts cards on chip
+  click, gained a live result count; NICO starter's primary button fixed
+  from ~2.4:1 contrast to the canonical `.btn-gradient`, added a live
+  focus-area counter and result-focus management. Batch 3: toast/back-to-top
+  overlap, NICO's redundant double `aria-live` announcement, focus-limit
+  chips staying perceivable at the 3-selection cap, descent rail vocabulary
+  (`Synergies`/`Healthspan` → `System`/`Goal`, matching the numbered spine).
+- **PR #128 — NICO → Stack Builder → Shop funnel tightening**: fixed a real
+  Protocol Shop dead-end — a stack whose compounds *all* lack a verified
+  pick fell through to the generic "No stack loaded yet" state instead of
+  showing what it actually had. Now shows a dedicated "Stack loaded · no
+  verified picks yet" panel. Added a "Loaded from your NICO questionnaire"
+  banner on handoff, and a "Verify & shop this stack" exit CTA at the end of
+  the Stack Builder.
+- **PR #120 — Polish batch 1**: sitewide anchor `scroll-margin-top` (deep
+  links were landing under the fixed nav), visible 01–06 numbers on the
+  homepage's chapter eyebrows, a reduced-motion-aware `BackToTop` control,
+  and a dead `ScrollProgress` right-rail fixed (was scroll-spying for
+  element ids that exist on no page — switched to route-based active state).
+- **PR #119 — six-chapter homepage restructure**: reorganized the homepage
+  into the numbered spine hero → 01 System → 02 Goal → 03 Interventions →
+  04 Mechanisms → 05 Protocol → 06 Personalize, reusing existing cinematic
+  components. New `HomeEliteGrid` hallmark filter (chips derived from
+  hallmarks actually present on the elite set; default `all`, server HTML
+  ships every card unfiltered). New `HomeNicoStarter` — a compact on-page
+  NICO flow using the same deterministic engine (`computeNicoStack`) as the
+  full `/nico` page. Dropped `HomeGuides`/`HomeExplore`/the old `HomeCTA`
+  from `app/page.tsx` (files retained, unused).
+- **PR #106 — superseded, closed without merging (2026-08-19)**: an earlier,
+  larger "TNiC Score + TNiC Verified + hero rework + intent-based nav"
+  attempt. Closed because its homepage/hero rework would have regressed what
+  Phases 5–6 and the six-chapter restructure had since landed on `main`. Its
+  two genuinely net-new library modules were salvaged cleanly into PR #124
+  (above); nothing else from it was carried forward. `mergeable_state` is
+  now `dirty` against current `main`, confirming it's correctly dead.
 
 ## Phase 6 — hallmark taxonomy correction (the Phase 4 flag, resolved)
 
