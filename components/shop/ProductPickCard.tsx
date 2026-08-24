@@ -43,7 +43,7 @@ function ProductImage({
 export function ProductPickCard({ pick, compact, className }: ProductPickCardProps) {
   return (
     <div
-      className={`rounded-xl border border-border/60 bg-card/50 overflow-hidden ${
+      className={`premium-card overflow-hidden ${
         compact ? 'p-3' : 'p-4'
       } ${className ?? ''}`}
     >

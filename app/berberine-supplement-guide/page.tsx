@@ -508,13 +508,15 @@ export default function BerberineGuidePage() {
                 body: "If you started with elevated fasting glucose or HbA1c, re-test at 3 months. The RCT data shows the primary metabolic effect plateaus around 12 weeks. If you haven't seen a response by then, reassess the dose or form.",
               },
             ].map((step) => (
-              <div key={step.n} className="flex gap-4 rounded-xl border border-border/50 bg-card/50 p-5">
-                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-accent-violet/10 border border-accent-violet/20 flex items-center justify-center">
-                  <span className="text-xs font-mono text-accent-violet">{step.n}</span>
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1">{step.title}</h3>
-                  <p className="text-sm text-muted-foreground">{step.body}</p>
+              <div key={step.n} className="premium-card p-5">
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-accent-violet/10 border border-accent-violet/20 flex items-center justify-center">
+                    <span className="text-xs font-mono text-accent-violet">{step.n}</span>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-1">{step.title}</h3>
+                    <p className="text-sm text-muted-foreground">{step.body}</p>
+                  </div>
                 </div>
               </div>
             ))}

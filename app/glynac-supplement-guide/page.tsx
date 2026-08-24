@@ -305,13 +305,15 @@ export default function GlyNACGuidePage() {
           <h3 className="font-semibold text-lg mb-4">Hallmarks Addressed</h3>
           <div className="grid md:grid-cols-2 gap-3 mb-8">
             {HALLMARKS_REVERSED.map((h, i) => (
-              <div key={h.name} className="flex gap-3 items-start rounded-xl border border-border/50 bg-card/50 p-4">
-                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-accent-cyan/10 border border-accent-cyan/20 flex items-center justify-center mt-0.5">
-                  <span className="text-xs font-mono text-accent-cyan">{i + 1}</span>
-                </div>
-                <div>
-                  <p className="font-medium text-sm">{h.name}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">{h.detail}</p>
+              <div key={h.name} className="premium-card p-4">
+                <div className="flex gap-3 items-start">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-accent-cyan/10 border border-accent-cyan/20 flex items-center justify-center mt-0.5">
+                    <span className="text-xs font-mono text-accent-cyan">{i + 1}</span>
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">{h.name}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{h.detail}</p>
+                  </div>
                 </div>
               </div>
             ))}
@@ -426,13 +428,15 @@ export default function GlyNACGuidePage() {
                 body: 'The Sekhar trial showed measurable changes by week 8 and plateaued around week 24. Repeat baseline tests at 12 weeks. If RBC glutathione hasn\'t improved, consider dose adjustment or checking for malabsorption.',
               },
             ].map((step) => (
-              <div key={step.n} className="flex gap-4 rounded-xl border border-border/50 bg-card/50 p-5">
-                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-accent-cyan/10 border border-accent-cyan/20 flex items-center justify-center">
-                  <span className="text-xs font-mono text-accent-cyan">{step.n}</span>
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1">{step.title}</h3>
-                  <p className="text-sm text-muted-foreground">{step.body}</p>
+              <div key={step.n} className="premium-card p-5">
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-accent-cyan/10 border border-accent-cyan/20 flex items-center justify-center">
+                    <span className="text-xs font-mono text-accent-cyan">{step.n}</span>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-1">{step.title}</h3>
+                    <p className="text-sm text-muted-foreground">{step.body}</p>
+                  </div>
                 </div>
               </div>
             ))}

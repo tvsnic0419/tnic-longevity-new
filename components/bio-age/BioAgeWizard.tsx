@@ -677,7 +677,7 @@ function Results({
       </div>
 
       {/* Domain breakdown */}
-      <div className="rounded-xl border border-border/60 bg-card/40 p-5 space-y-4">
+      <div className="premium-card p-5 space-y-4">
         <p className="text-xs text-muted-foreground uppercase tracking-widest font-medium">Domain breakdown</p>
         <DomainBar {...result.domains.metabolic} />
         <DomainBar {...result.domains.inflammatory} />
@@ -708,7 +708,7 @@ function Results({
       })()}
 
       {/* Protocol */}
-      <div className="rounded-xl border border-border/60 bg-card/40 p-5">
+      <div className="premium-card p-5">
         <p className="text-xs text-muted-foreground uppercase tracking-widest font-medium mb-4">
           Personalized Protocol
         </p>

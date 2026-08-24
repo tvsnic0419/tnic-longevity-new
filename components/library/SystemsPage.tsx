@@ -125,7 +125,7 @@ export function SystemsPage() {
             })}
 
             {/* Leverage legend */}
-            <div className="mt-4 p-3 rounded-xl border border-border/40 bg-card/20">
+            <div className="mt-4 card-elevated p-3">
               <p className="text-micro font-mono text-muted-foreground uppercase mb-2">Leverage Score Legend</p>
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
@@ -155,7 +155,7 @@ export function SystemsPage() {
                 className="space-y-6"
               >
                 {/* Hallmark header */}
-                <div className="rounded-2xl border border-border/60 bg-card/40 p-6">
+                <div className="premium-card p-6">
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
