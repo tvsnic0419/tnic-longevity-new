@@ -33,7 +33,7 @@ export function InterventionCards({ interventions }: { interventions: HallmarkIn
       {sorted.map((iv) => {
         const compound = iv.compoundId ? compounds.find((c) => c.id === iv.compoundId) : undefined;
         return (
-          <div key={iv.id} className="rounded-2xl border border-border/60 bg-card/40 p-6">
+          <div key={iv.id} className="premium-card p-6">
             <div className="flex items-start justify-between gap-4 mb-3">
               <h3 className="font-bold text-foreground text-lg">{iv.name}</h3>
               <span className={`shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold ${TIER_CLASSES[iv.evidence]}`}>

@@ -148,7 +148,7 @@ export function CompoundExplorer() {
       </p>
 
       {filtered.length === 0 ? (
-        <p className="mt-8 rounded-2xl border border-border/60 bg-card/40 p-8 text-center text-body-sm text-muted-foreground">
+        <p className="mt-8 premium-card p-8 text-center text-body-sm text-muted-foreground">
           No compounds match this filter yet.{' '}
           <Link href="/library" scroll={false} className="focus-ring text-accent-cyan hover:underline">
             Clear the filter

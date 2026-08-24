@@ -232,7 +232,7 @@ export default function SulforaphaneGuidePage() {
           <h3 className="font-semibold text-lg mb-4">Key NRF2 Target Genes Induced by Sulforaphane</h3>
           <div className="grid md:grid-cols-2 gap-3 mb-8">
             {NRF2_TARGETS.map((t) => (
-              <div key={t.gene} className="rounded-xl border border-border/50 bg-card/50 p-4">
+              <div key={t.gene} className="premium-card p-4">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="font-mono text-sm font-bold text-accent-emerald">{t.gene}</span>
                   <span className="text-micro font-mono text-muted-foreground px-2 py-0.5 rounded-full border border-border/60">{t.context}</span>
@@ -355,13 +355,15 @@ export default function SulforaphaneGuidePage() {
                 body: 'Sulforaphane upregulates GCLC (rate-limiting glutathione enzyme). GlyNAC provides the glycine + cysteine substrate. R-ALA activates NRF2 via a separate cysteine alkylation pathway. Together: sulforaphane turns on the glutathione factory genes; GlyNAC provides the raw materials; R-ALA adds another NRF2 input. This is the mechanistic basis for the NRF2 Defense Triad.',
               },
             ].map((step) => (
-              <div key={step.n} className="flex gap-4 rounded-xl border border-border/50 bg-card/50 p-5">
-                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-accent-emerald/10 border border-accent-emerald/20 flex items-center justify-center">
-                  <span className="text-xs font-mono text-accent-emerald">{step.n}</span>
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1">{step.title}</h3>
-                  <p className="text-sm text-muted-foreground">{step.body}</p>
+              <div key={step.n} className="premium-card p-5">
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-accent-emerald/10 border border-accent-emerald/20 flex items-center justify-center">
+                    <span className="text-xs font-mono text-accent-emerald">{step.n}</span>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-1">{step.title}</h3>
+                    <p className="text-sm text-muted-foreground">{step.body}</p>
+                  </div>
                 </div>
               </div>
             ))}

@@ -503,11 +503,13 @@ export default function SpermidineSupplementGuidePage() {
                 body: "For comprehensive autophagy support, combine spermidine (EP300 inhibition / eIF5A hypusination) with urolithin A (mitophagy via AMPK/Pink1-Parkin, independent of mTOR), and a 14–16 hour daily fast (mTOR-suppression pathway). Together, these three approaches activate autophagy through three distinct mechanisms — covering the full spectrum of cellular recycling the body's aging program fails to maintain.",
               },
             ].map((step) => (
-              <div key={step.n} className="flex gap-4 rounded-xl border border-border/50 bg-card/50 p-5">
-                <span className="text-2xl font-bold font-mono text-accent-emerald opacity-40 shrink-0 w-9">{step.n}</span>
-                <div>
-                  <h3 className="font-semibold text-foreground mb-1">{step.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{step.body}</p>
+              <div key={step.n} className="premium-card p-5">
+                <div className="flex gap-4">
+                  <span className="text-2xl font-bold font-mono text-accent-emerald opacity-40 shrink-0 w-9">{step.n}</span>
+                  <div>
+                    <h3 className="font-semibold text-foreground mb-1">{step.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{step.body}</p>
+                  </div>
                 </div>
               </div>
             ))}

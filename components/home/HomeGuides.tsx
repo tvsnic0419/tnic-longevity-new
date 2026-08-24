@@ -115,7 +115,8 @@ export function HomeGuides() {
               <RevealItem key={href} index={i + 1}>
                 <Link
                   href={href}
-                  className="focus-ring interactive group flex h-full flex-col justify-between gap-4 rounded-xl border border-border/60 bg-card/40 p-4 hover:border-accent-violet/30"
+                  className="focus-ring interactive group premium-card flex h-full flex-col justify-between gap-4 p-4 hover:border-accent-violet/30"
+                  style={{ ['--card-accent' as string]: 'var(--accent-violet)' }}
                 >
                   <ArrowUpRight
                     className="h-3.5 w-3.5 self-end text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent-violet"

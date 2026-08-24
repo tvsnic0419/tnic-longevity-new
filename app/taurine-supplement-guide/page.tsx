@@ -421,13 +421,15 @@ export default function TaurineGuidePage() {
                 body: "Unlike berberine (check HbA1c) or GlyNAC (check glutathione), taurine doesn't have a simple single biomarker to track. Instead, monitor exercise recovery speed, subjective energy levels, muscle soreness duration, and sleep quality. The Singh 2023 monkeys showed measurable physical improvements within 6 months.",
               },
             ].map((step) => (
-              <div key={step.n} className="flex gap-4 rounded-xl border border-border/50 bg-card/50 p-5">
-                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-accent-emerald/10 border border-accent-emerald/20 flex items-center justify-center">
-                  <span className="text-xs font-mono text-accent-emerald">{step.n}</span>
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1">{step.title}</h3>
-                  <p className="text-sm text-muted-foreground">{step.body}</p>
+              <div key={step.n} className="premium-card p-5">
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-accent-emerald/10 border border-accent-emerald/20 flex items-center justify-center">
+                    <span className="text-xs font-mono text-accent-emerald">{step.n}</span>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-1">{step.title}</h3>
+                    <p className="text-sm text-muted-foreground">{step.body}</p>
+                  </div>
                 </div>
               </div>
             ))}

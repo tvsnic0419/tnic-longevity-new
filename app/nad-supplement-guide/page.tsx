@@ -316,8 +316,8 @@ export default function NadSupplementGuidePage() {
             {NAD_PRECURSORS.map((p, i) => (
               <div
                 key={p.name}
-                className="rounded-2xl border border-border/60 bg-card/20 overflow-hidden"
-                style={{ borderColor: i === 0 ? `${p.color}33` : undefined }}
+                className="premium-card overflow-hidden"
+                style={{ ['--card-accent' as string]: p.color }}
               >
                 <div className="p-5 md:p-6">
                   <div className="flex flex-wrap items-start justify-between gap-3 mb-4">

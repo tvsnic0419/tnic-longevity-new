@@ -51,7 +51,7 @@ const MAX_FOCUS = 3;
 
 function Stat({ value, label }: { value: string; label: string }) {
   return (
-    <div className="rounded-xl border border-border/60 bg-card/40 p-3 text-center">
+    <div className="card-elevated p-3 text-center">
       <p className="mb-0.5 font-mono text-xl font-bold text-accent-violet">{value}</p>
       <p className="text-micro uppercase tracking-wide text-muted-foreground">{label}</p>
     </div>
@@ -228,18 +228,17 @@ export function HomeNicoStarter() {
 
               <ul className="mb-6 space-y-2">
                 {result.compounds.map((c) => (
-                  <li
-                    key={c.id}
-                    className="flex items-start justify-between gap-3 rounded-xl border border-border/60 bg-card/40 p-3.5"
-                  >
-                    <div className="min-w-0">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-sm font-bold text-foreground">{c.name}</span>
-                        <EvidenceTag tier={c.evidence} size="sm" />
+                  <li key={c.id} className="premium-card p-3.5">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-sm font-bold text-foreground">{c.name}</span>
+                          <EvidenceTag tier={c.evidence} size="sm" />
+                        </div>
+                        <p className="mt-0.5 font-mono text-micro text-muted-foreground">
+                          {c.dose} · {c.timing}
+                        </p>
                       </div>
-                      <p className="mt-0.5 font-mono text-micro text-muted-foreground">
-                        {c.dose} · {c.timing}
-                      </p>
                     </div>
                   </li>
                 ))}

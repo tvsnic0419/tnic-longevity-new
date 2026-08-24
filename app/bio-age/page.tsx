@@ -53,7 +53,7 @@ export default function BioAgePage() {
               { label: 'Domains scored', value: '5 biomarker clusters', sub: 'Metabolic · Inflammatory · Hormonal · Mito · Lifestyle' },
               { label: 'Data storage', value: 'Browser only', sub: 'Nothing leaves your device' },
             ].map((item) => (
-              <div key={item.label} className="rounded-xl border border-border/50 bg-card/30 p-4">
+              <div key={item.label} className="card-elevated p-4">
                 <p className="text-xs text-muted-foreground mb-1">{item.label}</p>
                 <p className="text-sm font-semibold text-foreground">{item.value}</p>
                 <p className="text-xs text-muted-foreground mt-1">{item.sub}</p>
