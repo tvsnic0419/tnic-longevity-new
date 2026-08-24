@@ -56,7 +56,7 @@ export function CinematicHubHero({
         {stats.length > 0 && (
           <div className="hh-stats">
             {stats.map((s) => (
-              <div className="hh-stat" key={s.label}>
+              <div className="hh-stat stat-instrument" key={s.label}>
                 <span className="v">{s.value}</span>
                 <span className="k">{s.label}</span>
               </div>
@@ -125,16 +125,27 @@ const HUBHERO_CSS = `
   max-width: 56ch; margin: 22px 0 0;
 }
 .hh-stats {
-  display: flex; flex-wrap: wrap; gap: clamp(20px, 4vw, 48px); margin-top: 34px;
+  display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px;
 }
-.hh-stat { display: flex; flex-direction: column; gap: 4px; }
+/* Each stat is now an instrument cell — the shared .stat-instrument treatment
+   (accent floor bloom + top hairline light-catch, keyed to the hub hue) with
+   mono tabular figures — the same instrument-readout language the homepage
+   hero uses, in place of the old flat text rail. */
+.hh-stat {
+  --flair-accent: var(--hue);
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 13px 18px 15px; border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--hue) 16%, rgba(255,255,255,0.05));
+  min-width: 116px;
+}
 .hh-stat .v {
-  font-family: ${FONT.display}; font-size: clamp(28px, 4vw, 42px); font-weight: 500;
-  line-height: 1; letter-spacing: -0.02em; color: var(--hue);
-  text-shadow: 0 0 26px color-mix(in srgb, var(--hue) 28%, transparent);
+  font-family: ${FONT.mono}; font-size: clamp(24px, 3vw, 34px); font-weight: 700;
+  line-height: 1; letter-spacing: -0.01em; font-variant-numeric: tabular-nums;
+  color: var(--hue);
+  text-shadow: 0 0 24px color-mix(in srgb, var(--hue) 30%, transparent);
 }
 .hh-stat .k {
-  font-family: ${FONT.mono}; font-size: 10.5px; letter-spacing: 0.16em;
+  font-family: ${FONT.mono}; font-size: 10px; letter-spacing: 0.16em;
   text-transform: uppercase; color: ${VIZ.faint};
 }
 .hh-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }

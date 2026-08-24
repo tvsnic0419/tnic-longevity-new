@@ -3236,28 +3236,32 @@ p,
   overflow: hidden;
   border-radius: var(--radius-2xl);
   border: 1px solid var(--color-border-subtle);
+  /* Fill + the accent top light-catch hairline as a 1px background layer. The
+     hairline moved off the ::before pseudo (now the elite-card shine sweep)
+     into the background so one card keeps both signature tells. */
   background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--card-accent) 55%, transparent), transparent) 0 0 / 100% 1px no-repeat,
     linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.006));
   transition:
     transform 0.32s var(--ease-glass),
     border-color 0.32s ease,
     box-shadow 0.32s ease;
 }
-/* Top light-catch hairline — the signature "elite card" tell, now accent-aware. */
+/* Diagonal shine sweep on hover — the elite-interventions card's signature
+   tell (a skewed translucent bar that travels across), now shared by every
+   content card. Sits above content (z-3) as a glossy sheen; runs only on
+   hover-capable pointers with motion allowed. */
 .premium-card::before {
   content: "";
   position: absolute;
-  inset-inline: 0;
   top: 0;
-  height: 1px;
+  bottom: 0;
+  left: -60%;
+  width: 42%;
   z-index: 3;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    color-mix(in srgb, var(--card-accent) 60%, transparent),
-    transparent
-  );
-  opacity: 0.75;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.10), transparent);
+  transform: skewX(-14deg);
+  opacity: 0;
   pointer-events: none;
 }
 /* Accent bloom that warms up on hover — kept behind content (z-0). */
@@ -3289,6 +3293,16 @@ p,
 .premium-card:hover::after {
   opacity: 1;
 }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .premium-card:hover::before {
+    animation: premium-shine 0.9s var(--ease-glass);
+  }
+}
+@keyframes premium-shine {
+  0%   { left: -60%; opacity: 0; }
+  12%  { opacity: 0.9; }
+  100% { left: 130%; opacity: 0; }
+}
 .premium-card:focus-within {
   border-color: color-mix(in srgb, var(--card-accent) 42%, transparent);
 }
@@ -3315,8 +3329,15 @@ p,
    surface + the v8 shadow (same approach as .card-elevated), and soften the
    accent bloom, so the cards read in both themes. */
 [data-theme="light"] .premium-card {
-  background: var(--color-bg-elevated);
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--card-accent) 42%, transparent), transparent) 0 0 / 100% 1px no-repeat,
+    var(--color-bg-elevated);
   box-shadow: var(--glass-shadow-mid);
+}
+/* A white sheen is invisible on the light base — the shine uses a faint accent
+   tint there instead. */
+[data-theme="light"] .premium-card::before {
+  background: linear-gradient(100deg, transparent, color-mix(in srgb, var(--card-accent) 14%, transparent), transparent);
 }
 [data-theme="light"] .premium-card::after {
   background: radial-gradient(
