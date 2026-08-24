@@ -1,5 +1,7 @@
 'use client';
 
+import { Suspense } from 'react';
+
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { StarterQuiz } from '@/components/sections/StarterQuiz';
@@ -23,7 +25,12 @@ export function QuizPageContent() {
       </Link>
 
       <div className="max-w-2xl mx-auto">
-        <StarterQuiz variant="page" />
+        {/* StarterQuiz reads search params to restore a shared result. Without a
+            boundary that opts the whole /quiz route out of server rendering,
+            so the page shipped empty. */}
+        <Suspense fallback={<div className="py-16 text-center text-sm text-muted-foreground">Loading the questionnaire…</div>}>
+          <StarterQuiz variant="page" />
+        </Suspense>
       </div>
     </div>
   );

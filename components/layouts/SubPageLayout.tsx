@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { ScrollProgress } from '@/components/ScrollProgress';
@@ -23,8 +24,19 @@ export function SubPageLayout({ children, hideContextBar = false }: SubPageLayou
       <Nav />
       <div className="pt-14 md:pt-16">
         {!hideContextBar && (
+          /* ContextBar calls useSearchParams(). Unwrapped, that opts the
+             ENTIRE route out of server rendering — every page rendering this
+             bar shipped an empty document with no <main>, <h1>, or <footer>,
+             and painted nothing until JS hydrated. Measured across the site:
+             every page passing `hideContextBar` server-rendered correctly and
+             every page without it rendered blank. The Suspense boundary keeps
+             the bailout scoped to this bar, so the rest of the page — nav,
+             header, content, footer — is server-rendered again. Never render a
+             useSearchParams consumer here without one. */
           <aside aria-label="Your saved workspace">
-            <ContextBar />
+            <Suspense fallback={null}>
+              <ContextBar />
+            </Suspense>
           </aside>
         )}
         <main id="main-content" tabIndex={-1}>

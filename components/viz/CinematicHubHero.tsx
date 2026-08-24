@@ -22,6 +22,7 @@ export function CinematicHubHero({
   stats,
   primary,
   secondary,
+  titleAs = 'p',
 }: {
   hue?: keyof typeof HUES;
   kicker: string;
@@ -31,6 +32,13 @@ export function CinematicHubHero({
   stats: HubStat[];
   primary?: { href: string; label: string };
   secondary?: { href: string; label: string };
+  /**
+   * Defaults to a non-heading because most hubs carry their real <h1> in the
+   * PageHeader below. Pass 'h1' on a hub that has none, so the page still has
+   * exactly one top-level heading — and one that server-renders, rather than
+   * sitting in a Suspense-deferred subtree.
+   */
+  titleAs?: 'p' | 'h1';
 }) {
   const rgb: RGB = HUES[hue] ?? HUES.violet;
   const hueCss = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
@@ -47,10 +55,12 @@ export function CinematicHubHero({
 
       <div className="hh-inner">
         <p className="hh-kicker">{kicker}</p>
-        {/* Decorative cover headline — the page's semantic <h1> lives in the
-            hub's own PageHeader below, so this stays a non-heading to avoid a
-            duplicate top-level heading. */}
-        <p className="hh-title">{title}</p>
+        {/* Decorative cover headline by default — the page's semantic <h1>
+            usually lives in the hub's own PageHeader below, so this stays a
+            non-heading to avoid a duplicate top-level heading. */}
+        {titleAs === 'h1'
+          ? <h1 className="hh-title">{title}</h1>
+          : <p className="hh-title">{title}</p>}
         <p className="hh-lead">{lead}</p>
 
         {stats.length > 0 && (

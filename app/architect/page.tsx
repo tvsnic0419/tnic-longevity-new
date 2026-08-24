@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { ProtocolConstellation } from '@/components/architect/ProtocolConstellation';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { StructuredData } from '@/components/seo/StructuredData';
@@ -22,7 +23,10 @@ const architectStats = [
 
 export default function ArchitectPage() {
   return (
-    <>
+    /* Every other section route gets its shell from SubPageLayout, either
+       directly or via a section layout.tsx. This route shipped without one,
+       so it had no nav, no footer, and no <main> landmark at all. */
+    <SubPageLayout>
       <StructuredData
         schemas={[
           buildBreadcrumbSchema([
@@ -33,6 +37,9 @@ export default function ArchitectPage() {
       />
       <CinematicHubHero
         hue="cyan"
+        /* This hub has no PageHeader below, so the cover headline carries
+           the page heading. */
+        titleAs="h1"
         kicker="The Protocol Constellation"
         title={<>Every compound, mapped to the <em>hallmark</em> it targets.</>}
         lead="Twelve hallmarks of aging anchor the map. Every evidence-graded compound threads to the ones it addresses — select compounds to build a protocol, and watch synergy connections light up between them in real time."
@@ -45,6 +52,6 @@ export default function ArchitectPage() {
           <ProtocolConstellation />
         </Suspense>
       </div>
-    </>
+    </SubPageLayout>
   );
 }
