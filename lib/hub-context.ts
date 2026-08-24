@@ -4,6 +4,7 @@ import type { LibraryModule, LibraryModuleCategory } from './library-modules';
 import type { HallmarkLibraryEntry, Peptide } from './types';
 import type { EvidenceComparison } from './comparisons';
 import { consumerFAQ } from './data';
+import { DASHBOARD, STACK_ARCHITECT } from './product-names';
 
 export interface HubContext {
   what: string;
@@ -68,7 +69,7 @@ export const hubContexts: Record<
   },
   tools: {
     theme: 'violet',
-    what: 'Six rule-based calculators plus Elite 8 Longevity Quotient ranking — simulator, network graph, protocol engine, biomarker forecasts, impact ranking, and defense scan.',
+    what: 'Rule-based calculators plus advanced hubs (Elite 8, Compound Intelligence Engine, Pathway Architect) — simulator, network graph, protocol engine, biomarker forecasts, impact ranking, healthspan estimator, and inventory forecast.',
     why: 'Library knowledge stays abstract until you model it. These tools turn evidence into dose schedules, composite rankings, and projected outcomes — locally, no AI black box.',
     next: 'Run the Stack Simulator on your current compounds, or open Elite 8 LQ to compare interventions head-to-head.',
   },
@@ -105,8 +106,8 @@ export const hubContexts: Record<
   nico: {
     theme: 'emerald',
     what: 'The NICO Starter Questionnaire — an intake that maps your goals, lifestyle, focus areas, and safety profile to a personalized, evidence-graded stack.',
-    why: 'One-size-fits-all stacks fail. The NICO Starter Questionnaire computes a stack from your own answers, then hands it to Stack Builder.',
-    next: 'Answer a few questions, load your personalized stack in Stack Builder, and open your OS dashboard to track progress.',
+    why: `One-size-fits-all stacks fail. The NICO Starter Questionnaire computes a stack from your own answers, then hands it to ${STACK_ARCHITECT}.`,
+    next: `Answer a few questions, load your personalized stack in ${STACK_ARCHITECT}, and open your ${DASHBOARD} to track progress.`,
   },
   library: {
     theme: 'emerald',
@@ -243,7 +244,7 @@ const toolContexts: Record<ToolId, HubContext> = {
   protocol: {
     what: 'Rule-based multi-phase protocol planner from goals, labs, and lifestyle inputs.',
     why: 'Phased ramp-in prevents overwhelm and catches interactions early. Full reasoning trace — not generative AI.',
-    next: 'Enter your goals and lab snapshot, review phase 1 compounds, then load into Stack Builder.',
+    next: `Enter your goals and lab snapshot, review phase 1 compounds, then load into ${STACK_ARCHITECT}.`,
   },
   biomarker: {
     what: 'Lab trend visualization with intervention impact forecasts and ranked scenarios.',

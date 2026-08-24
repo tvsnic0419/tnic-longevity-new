@@ -5,7 +5,7 @@ import { StructuredData } from '@/components/seo/StructuredData';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { seoRoutes } from '@/lib/seo-routes';
 import { buildBreadcrumbSchema } from '@/lib/seo';
-import { toolsRegistry } from '@/lib/registry';
+import { toolsRegistry, featuredAdvancedTools, totalToolCount } from '@/lib/registry';
 import { SITE } from '@/lib/site';
 
 export const metadata = seoRoutes.tools();
@@ -19,15 +19,10 @@ function buildToolsSchemas() {
     applicationCategory: 'HealthApplication',
     operatingSystem: 'Web',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-    description:
-      'Six evidence-graded longevity tools: healthspan defense scan, intervention impact ranker, stack synergy map, biomarker risk scorer, protocol timeline builder, and compound interaction checker.',
+    description: `${totalToolCount} evidence-graded longevity tools: ${[...toolsRegistry.map((t) => t.label), ...featuredAdvancedTools.map((t) => t.label)].join(', ')}.`,
     featureList: [
-      'Healthspan defense scan',
-      'Intervention impact ranker',
-      'Stack synergy map',
-      'Biomarker risk scorer',
-      'Protocol timeline builder',
-      'Compound interaction checker',
+      ...toolsRegistry.map((t) => t.label),
+      ...featuredAdvancedTools.map((t) => t.label),
     ],
     isAccessibleForFree: true,
   };
@@ -47,7 +42,7 @@ export default function ToolsPage() {
         title={<>Knowledge, made <em>actionable</em>.</>}
         lead="Evidence-graded calculators that turn the library into practical models — rule-based, transparent reasoning you can inspect, not a generative black box."
         stats={[
-          { value: String(toolsRegistry.length), label: 'Interactive tools' },
+          { value: String(totalToolCount), label: 'Interactive tools' },
           { value: 'Free', label: 'No account needed' },
           { value: 'Local-first', label: 'Private by default' },
         ]}

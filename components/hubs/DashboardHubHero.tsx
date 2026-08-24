@@ -8,6 +8,7 @@ import { HallmarkCoverageRing } from '@/components/os/HallmarkCoverageRing';
 import { usePlatform } from '@/context/PlatformContext';
 import { analyzeStack } from '@/lib/stack-analysis';
 import { CountUp } from '@/components/ui/CountUp';
+import { MY_DASHBOARD } from '@/lib/product-names';
 
 const goalLabels: Record<string, string> = {
   learn: 'Learning the science',
@@ -64,7 +65,7 @@ export function DashboardHubHero() {
               <span>Personal command center</span>
             </div>
 
-            <h1 className="heading-page mb-3">My Longevity OS</h1>
+            <h1 className="heading-page mb-3">{MY_DASHBOARD}</h1>
             <p className="text-body max-w-xl mb-6">
               {quizResult
                 ? `Goal: ${goalLabels[quizResult.goal] ?? quizResult.goal} — stack, labs, and journey unified.`

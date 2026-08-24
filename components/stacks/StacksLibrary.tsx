@@ -17,6 +17,7 @@ import { DynamicStackBuilder } from './DynamicStackBuilder';
 import { EliteStackCard } from './EliteStackCard';
 import { ToolsPromoStrip } from '@/components/tools/ToolsPromoStrip';
 import { getHubContext } from '@/lib/hub-context';
+import { STACK_ARCHITECT } from '@/lib/product-names';
 
 // Only ever rendered behind the "Compare" tab — lazy so its compound-data
 // and DataTable weight doesn't ship on first load for the (default) Catalog tab.
@@ -132,7 +133,7 @@ export function StacksLibrary() {
 
       {tab !== 'builder' && (
         <section className="mt-16 pt-10 border-t border-border" aria-label="Quick stack builder">
-          <p className="text-label text-accent-violet mb-6 text-center">Quick Stack Builder</p>
+          <p className="text-label text-accent-violet mb-6 text-center">Live {STACK_ARCHITECT}</p>
           <div id="stack-builder">
             <DynamicStackBuilder />
           </div>

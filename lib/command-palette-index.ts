@@ -4,6 +4,7 @@ import { libraryModules, getModulePath } from './library-modules';
 import { evidenceComparisons } from './comparisons';
 import { toolsRegistry } from './registry';
 import { peptideLibrary } from './peptides-library';
+import { MY_DASHBOARD } from './product-names';
 
 export type PaletteItemKind =
   | 'page'
@@ -39,7 +40,7 @@ const hubPages: PaletteItem[] = [
   {
     id: 'page-dashboard',
     kind: 'page',
-    title: 'My Longevity OS',
+    title: MY_DASHBOARD,
     subtitle: 'Personal command center',
     href: '/dashboard',
     keywords: ['dashboard', 'os', 'command center', 'status'],

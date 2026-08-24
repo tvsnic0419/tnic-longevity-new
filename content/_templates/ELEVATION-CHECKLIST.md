@@ -66,7 +66,7 @@ Use this when rewriting any MDX module to Examine.com-tier quality with TNiC OS 
 | `hallmarks/telomere-attrition.mdx` | ✅ Elevated |
 | `hallmarks/epigenetic-alterations.mdx` | ✅ Elevated |
 | `hallmarks/disabled-autophagy.mdx` | ✅ Elevated (cross-links H12) |
-| `hallmarks/disabled-macroautophagy.mdx` | ✅ Elevated (cross-links H5) |
+| `hallmarks/deregulated-nutrient-sensing.mdx` | ✅ Elevated (cross-links H5) |
 | `hallmarks/stem-cell-exhaustion.mdx` | ✅ Elevated |
 | `hallmarks/altered-intercellular-communication.mdx` | ✅ Elevated |
 | `hallmarks/dysbiosis.mdx` | ✅ Elevated |

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { CheckCircle2, Circle, ChevronRight } from 'lucide-react';
 import { usePlatform } from '@/context/PlatformContext';
+import { DASHBOARD } from '@/lib/product-names';
 
 export function OnboardingStrip() {
   const { quizResult, selected, labs, profile } = usePlatform();
@@ -51,7 +52,7 @@ export function OnboardingStrip() {
           <p className="text-label text-accent-cyan">GET STARTED</p>
           <p className="text-sm font-semibold mt-0.5">
             {completedCount === 0
-              ? 'Set up your Longevity OS in 4 steps'
+              ? `Set up your ${DASHBOARD} in 4 steps`
               : `${completedCount} of ${steps.length} setup steps complete`}
           </p>
         </div>

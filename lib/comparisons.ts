@@ -775,7 +775,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
       { label: 'NMN in Library', href: '/library/compounds/nmn' },
       { label: 'Spermidine in Library', href: '/library/compounds/spermidine' },
       { label: 'NMN vs NR', href: '/library/compare/nmn-vs-nr' },
-      { label: 'Disabled Autophagy hallmark', href: '/library/disabled-macroautophagy' },
+      { label: 'Deregulated Nutrient-sensing hallmark', href: '/library/deregulated-nutrient-sensing' },
       { label: 'NAD⁺ Mito Stack synergy', href: '/library/nad-mito-stack' },
     ],
     keywords: ['nmn', 'spermidine', 'autophagy', 'nad+', 'ep300', 'sirt1', 'longevity', 'immune aging', 'polyamine'],

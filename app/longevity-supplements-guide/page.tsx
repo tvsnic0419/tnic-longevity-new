@@ -6,6 +6,7 @@ import { StructuredData } from '@/components/seo/StructuredData';
 import { seoRoutes } from '@/lib/seo-routes';
 import { buildHowToSchema, buildGuidePageSchema, buildBreadcrumbSchema } from '@/lib/seo';
 import { getScoredCompounds } from '@/lib/elite-8-data';
+import { STACK_ARCHITECT } from '@/lib/product-names';
 
 export const metadata = seoRoutes.longevityGuide();
 
@@ -50,7 +51,7 @@ const GUIDE_FAQS = [
 const HOW_TO_STEPS = [
   {
     name: 'Take the NICO Starter Questionnaire',
-    text: 'Answer a few questions — your goals, lifestyle signals (sleep, energy, stress, movement, diet, age), the hallmarks you want to prioritize, and a safety screen. The NICO Starter Questionnaire computes a personalized, evidence-graded stack from your answers and hands it to Stack Builder.',
+    text: `Answer a few questions — your goals, lifestyle signals (sleep, energy, stress, movement, diet, age), the hallmarks you want to prioritize, and a safety screen. The NICO Starter Questionnaire computes a personalized, evidence-graded stack from your answers and hands it to ${STACK_ARCHITECT}.`,
   },
   {
     name: 'Choose your first compound based on hallmark targeting',

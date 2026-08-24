@@ -9,12 +9,12 @@ import { HallmarkHeroVisual } from '@/components/hallmarks/HallmarkHeroVisual';
 import { EvidenceTagLegend } from '@/components/trust/EvidenceTag';
 
 export const metadata: Metadata = {
-  alternates: { canonical: '/library/disabled-macroautophagy' },
-  title: 'Disabled Macroautophagy / Nutrient Sensing | Hallmarks of Aging | TNiC',
+  alternates: { canonical: '/library/deregulated-nutrient-sensing' },
+  title: 'Deregulated Nutrient-sensing | Hallmarks of Aging | TNiC',
   description:
-    'Deep-dive into nutrient sensing dysregulation and disabled macroautophagy — the mTOR/AMPK axis that controls whether cells grow or clean. Rapamycin, resveratrol, NMN, metformin, and clinical evidence.',
+    'Deep-dive into deregulated nutrient sensing — the mTOR/AMPK axis that controls whether cells grow or clean. Rapamycin, resveratrol, NMN, metformin, and clinical evidence.',
   openGraph: {
-    title: 'Disabled Macroautophagy — Hallmark #12 of Aging | TNiC',
+    title: 'Deregulated Nutrient-sensing — Hallmark #12 of Aging | TNiC',
     description: 'How mTOR overactivation and AMPK decline disable cellular cleanup — and what the clinical evidence says about restoring nutrient sensing.',
   },
 };
@@ -27,8 +27,8 @@ const BIOMARKERS = [
   { name: 'Triglycerides', normal: '< 100 mg/dL', note: 'Elevated triglycerides = chronic insulin/mTOR overactivation; very sensitive to dietary change' },
 ];
 
-export default function DisabledMacroautophagyPage() {
-  const hallmark = getHallmarkBySlug('disabled-macroautophagy')!;
+export default function DeregulatedNutrientSensingPage() {
+  const hallmark = getHallmarkBySlug('deregulated-nutrient-sensing')!;
 
   return (
     <div className="min-h-screen canvas-scrim text-foreground">
@@ -42,14 +42,14 @@ export default function DisabledMacroautophagyPage() {
             <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
               <Link href="/hallmarks" className="hover:text-foreground transition-colors">Hallmarks</Link>
               <span>/</span>
-              <span className="text-amber-400">Disabled Macroautophagy</span>
+              <span className="text-amber-400">Deregulated Nutrient-sensing</span>
             </div>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 mb-6">
               <Scale className="w-3.5 h-3.5 text-amber-400" />
               <span className="text-xs font-medium text-amber-400 tracking-widest uppercase">Hallmark #12 of 12</span>
             </div>
             <h1 className="text-4xl md:text-6xl font-black tracking-tight text-foreground mb-6 leading-[1.05]">
-              Disabled<br /><span className="text-amber-400">Macroautophagy</span>
+              Deregulated<br /><span className="text-amber-400">Nutrient-sensing</span>
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mb-8">
               mTOR — the master growth switch — stays on chronically in aging, suppressing the cellular cleanup

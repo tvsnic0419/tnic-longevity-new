@@ -46,7 +46,7 @@ const visuals = [
   { Component: AlteredIntercellularCommunicationVisual, title: 'Altered Intercellular Communication' },
   { Component: ChronicInflammationVisual, title: 'Chronic Inflammation' },
   { Component: DysbiosisVisual, title: 'Dysbiosis' },
-  { Component: DisabledMacroautophagyVisual, title: 'Disabled Macroautophagy' },
+  { Component: DisabledMacroautophagyVisual, title: 'Deregulated Nutrient-sensing' },
 ];
 
 export default function LibraryPage() {

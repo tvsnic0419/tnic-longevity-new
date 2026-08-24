@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { STACK_ARCHITECT, DASHBOARD } from '@/lib/product-names';
 import {
   computeNicoStack,
   NICO_DEFAULT_ANSWERS,
@@ -216,7 +217,7 @@ export function NicoQuestionnaire() {
           icon={Sparkles}
           eyebrow="Personalized"
           title="NICO Starter Questionnaire"
-          description={`${QUESTION_COUNT} quick questions — the NICO Starter Questionnaire builds your personalized stack from your own answers, loads it into Stack Builder, and tracks it in your OS dashboard. No account required.`}
+          description={`${QUESTION_COUNT} quick questions — the NICO Starter Questionnaire builds your personalized stack from your own answers, loads it into ${STACK_ARCHITECT}, and tracks it in your ${DASHBOARD}. No account required.`}
           theme="emerald"
         />
 
@@ -445,13 +446,13 @@ export function NicoQuestionnaire() {
                   href={stackHref}
                   className="focus-ring inline-flex items-center gap-2 bg-accent-emerald text-black px-5 py-3 rounded-xl text-sm font-bold hover:bg-accent-emerald/90 transition-colors"
                 >
-                  <FlaskConical className="w-4 h-4" /> Load in Stack Builder
+                  <FlaskConical className="w-4 h-4" /> Load in {STACK_ARCHITECT}
                 </Link>
                 <Link
                   href="/dashboard"
                   className="focus-ring inline-flex items-center gap-2 border border-border px-5 py-3 rounded-xl text-sm font-medium text-foreground/80 hover:text-foreground hover:border-foreground/40 transition-colors"
                 >
-                  <LayoutDashboard className="w-4 h-4" /> Track in OS dashboard
+                  <LayoutDashboard className="w-4 h-4" /> Track in {DASHBOARD}
                 </Link>
                 <button
                   type="button"

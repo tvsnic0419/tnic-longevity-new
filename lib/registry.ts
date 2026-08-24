@@ -116,6 +116,55 @@ export function getToolById(id: ToolId): ToolRegistryEntry | undefined {
   return toolsRegistry.find((t) => t.id === id);
 }
 
+/**
+ * Standalone advanced-tool hubs featured from `/tools`. Not tabs of the tools
+ * hub — each is its own top-level route — but rendered as "Featured tool"
+ * cards on the hub. Listed here so `toolsRegistry.length + featuredAdvancedTools.length`
+ * gives a single-source-of-truth count that never drifts from what a visitor
+ * actually sees on the page.
+ */
+export interface FeaturedAdvancedTool {
+  id: 'elite-8' | 'compound-engine' | 'pathway-architect';
+  href: string;
+  label: string;
+  description: string;
+  accent: 'amber' | 'cyan' | 'violet';
+  cta: string;
+}
+
+export const featuredAdvancedTools: FeaturedAdvancedTool[] = [
+  {
+    id: 'elite-8',
+    href: '/elite-8',
+    label: 'Elite 8 Longevity Quotient',
+    description:
+      'Eight interventions ranked by modeled LQ score — head-to-head compare, weight tuner, Rx disclaimers, and links to evidence modules.',
+    accent: 'amber',
+    cta: 'Open ranking',
+  },
+  {
+    id: 'compound-engine',
+    href: '/compound-engine',
+    label: 'Compound Intelligence Engine',
+    description:
+      'Score any compound on evidence, effect, breadth, bioavailability and safety — then resolve stack synergy, interaction cautions, and coverage across all 12 hallmarks of aging.',
+    accent: 'cyan',
+    cta: 'Open engine',
+  },
+  {
+    id: 'pathway-architect',
+    href: '/tools/pathway-architect',
+    label: 'Pathway Architect',
+    description:
+      'Build a protocol from curated compounds mapped to molecular pathways — live synergy, redundancy, and interaction cautions, hallmark coverage, and a shareable link.',
+    accent: 'violet',
+    cta: 'Open builder',
+  },
+];
+
+/** Total tool count as a visitor experiences it: hub tabs + featured hubs. */
+export const totalToolCount = toolsRegistry.length + featuredAdvancedTools.length;
+
 export function getLibraryCatalog() {
   return {
     categories: libraryCategoryMeta,

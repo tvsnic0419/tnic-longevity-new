@@ -86,7 +86,7 @@ function LiveSynergyPanel({
 }
 
 export function StackBuilder({
-  title = 'Dynamic Stack Builder',
+  title = 'Live Stack Analysis',
   className,
   compact = false,
 }: StackBuilderProps) {

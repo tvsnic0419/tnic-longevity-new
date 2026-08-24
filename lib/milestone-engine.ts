@@ -2,6 +2,7 @@ import { analyzeStack } from './stack-analysis';
 import type { LabEntry } from './labs';
 import type { Profile } from '@/context/PlatformContext';
 import type { EvidenceLevel } from './types';
+import { TNIC_DASHBOARD } from './product-names';
 
 export type UserMilestoneKind =
   | 'first-compound'
@@ -70,7 +71,7 @@ const CATALOG: Record<
     evidence: 'Personal',
   },
   'onboarding-complete': {
-    title: 'Longevity OS initialized',
+    title: `${TNIC_DASHBOARD} initialized`,
     desc: 'Onboarding complete — preset stack and dashboard ready.',
     evidence: 'Personal',
   },

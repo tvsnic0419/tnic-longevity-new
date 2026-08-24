@@ -11,6 +11,8 @@
 
 import { buildPageMetadata } from './seo';
 import { glossary, consumerFAQ } from './data';
+import { MY_DASHBOARD, STACK_ARCHITECT, TNIC_DASHBOARD, COMPOUND_ENGINE_FULL } from './product-names';
+import { toolsRegistry, totalToolCount } from './registry';
 
 export const seoRoutes = {
   home: () =>
@@ -24,7 +26,7 @@ export const seoRoutes = {
 
   dashboard: () =>
     buildPageMetadata({
-      title: 'My Longevity OS — Personal Dashboard',
+      title: `${MY_DASHBOARD} — Personal Command Center`,
       description:
         'Your anti-aging command center: active stack with synergy scores, lab status, hallmark coverage map, outcome milestones, and export kit. Local-first — data never leaves your browser.',
       path: '/dashboard',
@@ -35,7 +37,7 @@ export const seoRoutes = {
     buildPageMetadata({
       title: 'NICO Starter Questionnaire — Your Personalized Longevity Stack',
       description:
-        'Answer a few questions about your goals, lifestyle, and safety profile. The NICO Starter Questionnaire builds a personalized, evidence-graded compound stack from your answers, loads it into Stack Builder, and tracks it in the TNiC Longevity OS.',
+        `Answer a few questions about your goals, lifestyle, and safety profile. The NICO Starter Questionnaire builds a personalized, evidence-graded compound stack from your answers, loads it into ${STACK_ARCHITECT}, and tracks it in your ${TNIC_DASHBOARD}.`,
       path: '/nico',
       keywords: [
         'NICO Starter Questionnaire',
@@ -165,9 +167,8 @@ export const seoRoutes = {
 
   tools: () =>
     buildPageMetadata({
-      title: 'Longevity Tools — Six Interactive Calculators',
-      description:
-        'Six free longevity tools: stack simulator, compound interaction network, protocol engine, biomarker trend visualizer, intervention impact ranking, and healthspan estimator. All local — no paywall, no account.',
+      title: `Longevity Tools — ${totalToolCount} Interactive Calculators`,
+      description: `${totalToolCount} free longevity tools: ${toolsRegistry.map((t) => t.label.toLowerCase()).join(', ')}, plus the Elite 8 ranker, ${COMPOUND_ENGINE_FULL}, and Pathway Architect. All local — no paywall, no account.`,
       path: '/tools',
       keywords: ['longevity calculator', 'supplement interaction graph', 'healthspan estimator', 'biological age calculator'],
     }),

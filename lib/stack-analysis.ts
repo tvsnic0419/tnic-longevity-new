@@ -115,7 +115,7 @@ function getPairSynergyScore(aId: string, bId: string): number {
   return DEFAULT_PAIR_SCORE;
 }
 
-/** Dynamic pairwise synergy scoring — powers Stack Builder live analysis panel */
+/** Dynamic pairwise synergy scoring — powers Stack Architect live analysis panel */
 export function computeLiveStackAnalysis(selectedIds: string[]): LiveStackAnalysis {
   if (selectedIds.length === 0) {
     return { totalScore: 0, synergies: [], warnings: [], coverage: 0, hallmarkLabels: [] };

@@ -4,6 +4,7 @@ import { StructuredData } from '@/components/seo/StructuredData';
 import { buildBreadcrumbSchema } from '@/lib/seo';
 import { seoRoutes } from '@/lib/seo-routes';
 import { SITE } from '@/lib/site';
+import { STACK_ARCHITECT } from '@/lib/product-names';
 
 export const metadata = seoRoutes.nico();
 
@@ -22,7 +23,7 @@ function buildNicoSchemas() {
       'Personalized stack computed from your answers',
       'Evidence-graded Tier A/B/C compounds',
       'Built-in safety screen and interaction holds',
-      'One-click hand-off into Stack Builder',
+      `One-click hand-off into ${STACK_ARCHITECT}`,
       'Privacy-first — no account required',
     ],
   };

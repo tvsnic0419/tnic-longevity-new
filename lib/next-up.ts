@@ -1,4 +1,5 @@
 import type { NextUpItem } from './types';
+import { STACK_ARCHITECT, TNIC_DASHBOARD } from './product-names';
 
 /** Near-term functional improvements — distinct from long-horizon `roadmap` in data.ts */
 export const nextUpImprovements: NextUpItem[] = [
@@ -14,7 +15,7 @@ export const nextUpImprovements: NextUpItem[] = [
   },
   {
     id: 'nico-questionnaire',
-    title: 'NICO Starter Questionnaire → Stack Builder handoff',
+    title: `NICO Starter Questionnaire → ${STACK_ARCHITECT} handoff`,
     desc: 'Dedicated /nico, answer-driven personalized stack, Builder tab auto-open.',
     status: 'shipped',
     sprint: 'Sprint 5',
@@ -159,7 +160,7 @@ export const nextUpImprovements: NextUpItem[] = [
   {
     id: 'dashboard-status-export',
     title: 'Dashboard status card export',
-    desc: 'Copy/download markdown + canvas PNG snapshot of Longevity OS status for N=1 journaling.',
+    desc: `Copy/download markdown + canvas PNG snapshot of ${TNIC_DASHBOARD} status for N=1 journaling.`,
     status: 'shipped',
     sprint: 'Sprint 14',
     href: '/dashboard#dashboard-status',

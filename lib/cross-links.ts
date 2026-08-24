@@ -106,7 +106,7 @@ const HALLMARKS: Array<{ name: string; slug: string }> = [
   { name: 'Altered Intercellular Communication', slug: 'altered-intercellular-communication' },
   { name: 'Chronic Inflammation', slug: 'chronic-inflammation' },
   { name: 'Dysbiosis', slug: 'dysbiosis' },
-  { name: 'Disabled Macroautophagy', slug: 'disabled-macroautophagy' },
+  { name: 'Deregulated Nutrient-sensing', slug: 'deregulated-nutrient-sensing' },
 ];
 
 function titleCase(slug: string): string {

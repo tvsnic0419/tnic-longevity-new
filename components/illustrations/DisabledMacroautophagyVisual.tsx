@@ -12,7 +12,7 @@ export const DisabledMacroautophagyVisual: React.FC<{ className?: string; showLa
       <div className="flex items-start justify-between mb-3">
         <div>
           <div className="text-label text-[var(--accent-emerald)] mb-0.5">HALLMARK 12</div>
-          <h4 className="heading-card text-lg">Disabled Macroautophagy</h4>
+          <h4 className="heading-card text-lg">Deregulated Nutrient-sensing</h4>
         </div>
       </div>
 

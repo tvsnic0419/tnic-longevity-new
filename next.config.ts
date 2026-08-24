@@ -48,6 +48,24 @@ const nextConfig: NextConfig = {
         destination: '/library/compare/urolithin-a-vs-coq10',
         permanent: true,
       },
+      // The unlisted "back page" (`/sheepeople`) tonal-alien route was
+      // retired in the Phase 1 canonical-names pass. Anyone with the
+      // bookmark lands on the homepage instead.
+      { source: '/sheepeople', destination: '/', permanent: true },
+      // Hallmark #12 was mislabeled "Disabled Macroautophagy" in earlier
+      // shipping — its content is nutrient sensing (mTOR/AMPK). Aligned to
+      // López-Otín 2023 canonical "Deregulated Nutrient-sensing" and the
+      // old slug redirects to the corrected route.
+      {
+        source: '/hallmarks/disabled-macroautophagy',
+        destination: '/hallmarks/deregulated-nutrient-sensing',
+        permanent: true,
+      },
+      {
+        source: '/library/disabled-macroautophagy',
+        destination: '/library/deregulated-nutrient-sensing',
+        permanent: true,
+      },
     ];
   },
 

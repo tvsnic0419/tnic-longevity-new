@@ -20,7 +20,7 @@ const HALLMARKS = [
   { num: 9, label: 'Altered Intercellular Communication' },
   { num: 10, label: 'Chronic Inflammation' },
   { num: 11, label: 'Dysbiosis' },
-  { num: 12, label: 'Disabled Macroautophagy' },
+  { num: 12, label: 'Deregulated Nutrient-sensing' },
 ];
 
 const TIERS = ['A', 'B', 'C'] as const;

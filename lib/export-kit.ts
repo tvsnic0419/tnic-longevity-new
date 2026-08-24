@@ -1,6 +1,7 @@
 import { biomarkers, compounds } from './data';
 import { exportLabsCsv, type LabEntry } from './labs';
 import { analyzeStack, hallmarkDisplayNames } from './stack-analysis';
+import { TNIC_DASHBOARD } from './product-names';
 import type { Profile } from '@/context/PlatformContext';
 import type { HallmarkNotesMap } from './hallmark-notes';
 import type { UserMilestone } from './milestone-engine';
@@ -44,7 +45,7 @@ export function buildStackTextExport(payload: ExportKitPayload): string {
   const analysis = analyzeStack(payload.stack);
   const selected = compounds.filter((c) => payload.stack.includes(c.id));
   const lines: string[] = [
-    'TNiC Longevity OS — Stack Summary',
+    `${TNIC_DASHBOARD} — Stack Summary`,
     `Generated: ${new Date().toLocaleString()}`,
     '',
     `Synergy score: ${analysis.score}`,

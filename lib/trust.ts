@@ -6,6 +6,7 @@ import type {
   UpdateHistoryEntry,
 } from './types';
 import { researchFeed } from './data';
+import { STACK_ARCHITECT } from './product-names';
 
 /** Evidence tier definitions for tagging system */
 export const evidenceTagDefinitions: Record<
@@ -823,7 +824,7 @@ export const updateHistory: UpdateHistoryEntry[] = [
     title: 'Conversion Sprint & Next Up Roadmap',
     category: 'feature',
     changes: [
-      'Dedicated /nico NICO Starter Questionnaire with labeled result actions and Stack Builder handoff (Builder tab)',
+      `Dedicated /nico NICO Starter Questionnaire with labeled result actions and ${STACK_ARCHITECT} handoff (Architect tab)`,
       'Learn hub (/learn) and FAQ (/faq) with full schema; honest indexed PMID counts on trust strip',
       'Next up panel — shipped, in-progress, and planned functional improvements on home, dashboard, and /trust/updates',
       'OG preview cards for home, learn, faq, and library routes',

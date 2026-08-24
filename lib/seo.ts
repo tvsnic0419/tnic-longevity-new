@@ -4,6 +4,7 @@ import { PRIORITY_INDEX_PATHS } from './index-priority';
 import { SITE, LONGEVITY_KEYWORDS, SOCIAL_PROFILES, EDITORIAL_AUTHOR } from './site';
 import type { SourceCitation } from './types';
 import { citationRegistry } from './trust';
+import { STACK_ARCHITECT, TNIC_DASHBOARD } from './product-names';
 
 /**
  * Route segments that ship their own `opengraph-image` file (see
@@ -445,8 +446,8 @@ export function buildHowToSchema({
       text: s.text,
     })),
     tool: [
-      { '@type': 'HowToTool', name: 'Stack Architect (TNiC)' },
-      { '@type': 'HowToTool', name: 'Longevity OS Dashboard' },
+      { '@type': 'HowToTool', name: `${STACK_ARCHITECT} (TNiC)` },
+      { '@type': 'HowToTool', name: TNIC_DASHBOARD },
     ],
     supply: [
       { '@type': 'HowToSupply', name: 'PubMed account (free)' },

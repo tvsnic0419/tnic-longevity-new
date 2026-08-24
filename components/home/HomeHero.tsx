@@ -6,6 +6,7 @@ import { TiltGlassPanel } from '@/components/ui/TiltGlassPanel';
 import { COMPOUND_COUNT } from '@/lib/library-modules';
 import { eliteInterventions } from '@/lib/elite-interventions';
 import { HeroSceneMount } from '@/components/home/HeroSceneMount';
+import { STACK_ARCHITECT, DASHBOARD } from '@/lib/product-names';
 
 /**
  * Server-rendered homepage hero.
@@ -158,7 +159,7 @@ export function HomeHero() {
                 <h3 className="text-xl font-bold text-white mb-2">NICO Starter Questionnaire</h3>
                 <p className="text-sm text-white/90 mb-5">
                   Answer a few questions — the NICO Starter Questionnaire builds your personalized, evidence-graded stack, loads it
-                  into Stack Builder, and tracks it in your OS dashboard.
+                  into {STACK_ARCHITECT}, and tracks it in your {DASHBOARD}.
                 </p>
                 <ul className="space-y-2.5 mb-6">
                   {[

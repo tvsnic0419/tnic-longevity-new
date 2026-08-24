@@ -31,7 +31,7 @@ const EDITORIAL_SLUGS = new Set([
   'altered-intercellular-communication',
   'chronic-inflammation',
   'dysbiosis',
-  'disabled-macroautophagy',
+  'deregulated-nutrient-sensing',
 ]);
 
 // Coverage keeps its semantic green→amber→rose signal (how well TNiC covers the

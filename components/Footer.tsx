@@ -174,17 +174,6 @@ export function Footer() {
           ))}
         </nav>
 
-        {/* The back page — a quiet, unlisted harm-reduction cheat sheet. Kept
-            deliberately understated (muted, no icon) so it reads as an aside,
-            not a promoted feature, but it's real focusable text so anyone
-            navigating by keyboard or screen reader can still find it. */}
-        <Link
-          href="/sheepeople"
-          className="focus-ring link-underline mb-4 inline-block rounded text-caption text-muted-foreground/45 transition-colors hover:text-accent-cyan"
-        >
-          the back page
-        </Link>
-
         <div className="relative pt-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent-emerald/25 to-transparent" />
           <p className="text-caption font-mono">

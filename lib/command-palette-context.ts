@@ -9,6 +9,7 @@ import {
   type PaletteItemKind,
 } from './command-palette-index';
 import type { RecentModuleEntry } from './recent-modules';
+import { DASHBOARD, MY_DASHBOARD } from './product-names';
 
 export interface PaletteGroup {
   label: string;
@@ -126,12 +127,12 @@ function getPageContextItems(pathname: string): PaletteItem[] {
     return [
       item('ctx-home-quiz', 'Take NICO Starter Questionnaire', { href: '/nico', kind: 'page' }),
       item('ctx-home-products', 'Verified product catalog', { href: '/products', kind: 'page' }),
-      item('ctx-home-dashboard', 'Open your OS dashboard', { href: '/dashboard', kind: 'page' }),
+      item('ctx-home-dashboard', `Open your ${DASHBOARD}`, { href: '/dashboard', kind: 'page' }),
       item('ctx-home-research', 'Research Intel feed', { href: '/#research', kind: 'page' }),
     ];
   }
   return [
-    item('ctx-default-dashboard', 'My Longevity OS', { href: '/dashboard', kind: 'page' }),
+    item('ctx-default-dashboard', MY_DASHBOARD, { href: '/dashboard', kind: 'page' }),
     item('ctx-default-library', 'Anti-Aging Library', { href: '/library', kind: 'page' }),
     item('ctx-default-quiz', 'NICO Starter Questionnaire', { href: '/nico', kind: 'page' }),
   ];

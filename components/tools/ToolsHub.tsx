@@ -28,7 +28,7 @@ import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { RevealCard } from '@/components/ui/RevealCard';
 import { EvidenceTagLegend } from '@/components/trust/EvidenceTag';
-import { toolsRegistry, type ToolId } from '@/lib/registry';
+import { toolsRegistry, totalToolCount, type ToolId } from '@/lib/registry';
 import { ToolDisclaimer } from './ToolDisclaimer';
 import { ContextRail } from '@/components/ui/ContextRail';
 import { getToolContext } from '@/lib/hub-context';
@@ -118,7 +118,7 @@ export function ToolsHub() {
           icon={Calculator}
           eyebrow="Interactive Tools"
           title="Longevity Tools"
-          description="Six evidence-graded calculators that turn library knowledge into practical models. Rule-based, transparent reasoning — not generative AI."
+          description={`${totalToolCount} evidence-graded calculators that turn library knowledge into practical models. Rule-based, transparent reasoning — not generative AI.`}
           theme="violet"
           cinematic
           as="h1"

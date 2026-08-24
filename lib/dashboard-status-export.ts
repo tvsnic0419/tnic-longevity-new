@@ -1,4 +1,5 @@
 import { SITE } from './site';
+import { TNIC_DASHBOARD } from './product-names';
 
 export interface DashboardStatusSnapshot {
   activeProtocol: string;
@@ -15,7 +16,7 @@ export interface DashboardStatusSnapshot {
 }
 
 export function buildDashboardStatusMarkdown(s: DashboardStatusSnapshot): string {
-  return `# TNiC Longevity OS — Status Snapshot
+  return `# ${TNIC_DASHBOARD} — Status Snapshot
 
 *Exported ${s.exportedAt.slice(0, 10)} · N=1 journaling*
 

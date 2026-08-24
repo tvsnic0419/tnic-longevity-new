@@ -8,6 +8,7 @@ import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema, buildFaqPageSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
+import { STACK_ARCHITECT } from '@/lib/product-names';
 import {
   bestForGoals,
   getBestForGoal,
@@ -172,7 +173,7 @@ export default async function BestForGoalPage({
             <h2 className="text-lg font-bold text-foreground mb-2">Want a stack built for you, not a list?</h2>
             <p className="text-sm text-muted-foreground mb-5 max-w-md mx-auto">
               The NICO Starter Questionnaire turns your goals, lifestyle, and safety profile into a personalized,
-              evidence-graded stack — and loads it straight into Stack Builder.
+              evidence-graded stack — and loads it straight into {STACK_ARCHITECT}.
             </p>
             <Link
               href="/nico"
