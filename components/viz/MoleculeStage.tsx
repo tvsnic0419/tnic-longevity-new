@@ -61,8 +61,10 @@ export function MoleculeStage({
     let w = 0, h = 0;
     const dpr = cappedDpr();
 
-    // field-mode particles (only used when there is no geometry)
-    const N = 64;
+    // field-mode particles (only used when there is no geometry). Denser than
+    // the original 64 — read sparse on the wide hub-hero bands — and drawn with
+    // additive blending below so overlaps bloom instead of flatly compositing.
+    const N = 100;
     const field = Array.from({ length: N }, () => ({
       a: Math.random() * Math.PI * 2,
       r: 0.2 + Math.random() * 0.8,
@@ -171,14 +173,18 @@ export function MoleculeStage({
       const R = Math.min(w, h) * 0.34;
       ctx.clearRect(0, 0, w, h);
       const back = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(w, h) * 0.7);
-      back.addColorStop(0, `rgba(${cr},${cg},${cb},0.08)`);
+      back.addColorStop(0, `rgba(${cr},${cg},${cb},0.10)`);
       back.addColorStop(1, "rgba(5,7,16,0)");
       ctx.fillStyle = back;
       ctx.beginPath(); ctx.arc(cx, cy, Math.max(w, h) * 0.7, 0, Math.PI * 2); ctx.fill();
+      // Everything emissive from here composites additively, so overlapping
+      // glows accumulate into real bloom (the fidelity tell the WebGL scene
+      // gets from UnrealBloomPass) instead of flatly alpha-blending.
+      ctx.globalCompositeOperation = "lighter";
       // three orbital rings
       for (let ring = 0; ring < 3; ring++) {
         const tilt = 0.5 + ring * 0.6;
-        ctx.strokeStyle = `rgba(${cr},${cg},${cb},${0.1 - ring * 0.02})`;
+        ctx.strokeStyle = `rgba(${cr},${cg},${cb},${0.12 - ring * 0.025})`;
         ctx.lineWidth = 1;
         ctx.beginPath();
         for (let k = 0; k <= 60; k++) {
@@ -202,22 +208,30 @@ export function MoleculeStage({
       }).sort((a, b) => a.z - b.z);
       for (const p of proj) {
         const tw = 0.55 + Math.sin(t * 2 + p.ph) * 0.45;
-        const rad = p.rad * 3 * p.persp;
+        // Wider, softer glow (bloom spread); per-particle alpha eased down since
+        // additive blending + the denser field now accumulate the brightness.
+        const rad = p.rad * 3.6 * p.persp;
         const g = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, rad);
-        g.addColorStop(0, `rgba(${cr},${cg},${cb},${0.85 * tw})`);
+        g.addColorStop(0, `rgba(${cr},${cg},${cb},${0.5 * tw})`);
         g.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
         ctx.fillStyle = g;
         ctx.beginPath(); ctx.arc(p.sx, p.sy, rad, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = `rgba(240,248,255,${0.7 * tw})`;
+        ctx.fillStyle = `rgba(240,248,255,${0.6 * tw})`;
         ctx.beginPath(); ctx.arc(p.sx, p.sy, p.rad * 0.7 * p.persp, 0, Math.PI * 2); ctx.fill();
       }
-      // nucleus
+      // nucleus — a soft outer bloom halo under a hot white core
+      const halo = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 0.72);
+      halo.addColorStop(0, `rgba(${cr},${cg},${cb},0.45)`);
+      halo.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
+      ctx.fillStyle = halo;
+      ctx.beginPath(); ctx.arc(cx, cy, R * 0.72, 0, Math.PI * 2); ctx.fill();
       const core = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 0.32);
       core.addColorStop(0, "rgba(255,255,255,0.9)");
       core.addColorStop(0.4, `rgba(${cr},${cg},${cb},0.8)`);
       core.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
       ctx.fillStyle = core;
       ctx.beginPath(); ctx.arc(cx, cy, R * 0.32, 0, Math.PI * 2); ctx.fill();
+      ctx.globalCompositeOperation = "source-over";
     }
 
     const draw = () => {
