@@ -1,19 +1,24 @@
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, FlaskConical } from 'lucide-react';
+import { ArrowLeft, FlaskConical } from 'lucide-react';
 import {
   getModulesByCategory,
-  getModulePath,
   libraryCategoryMeta,
   type LibraryModuleCategory,
 } from '@/lib/library-modules';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { CompoundLibraryGrid } from '@/components/library/CompoundLibraryGrid';
 
 /**
  * Dedicated landing page for a single library category (compounds, synergies,
  * lifestyle, guides). Gives every category a real, crawlable index URL instead
  * of a soft-404, and — for /library/compounds — a permanent home listing all of
  * the compound deep-dives so none of them can quietly fall off the site.
+ *
+ * The module list itself is server-rendered (crawlable, no client JS needed to
+ * see all 55 titles); CompoundLibraryGrid layers search/filter/molecule-thumbnail
+ * browsing on top as a client island that reads plain useState, not
+ * useSearchParams, so it never forces this route out of server rendering.
  */
 export function LibraryCategoryIndex({ category }: { category: LibraryModuleCategory }) {
   const meta = libraryCategoryMeta[category];
@@ -54,30 +59,7 @@ export function LibraryCategoryIndex({ category }: { category: LibraryModuleCate
           )}
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {modules.map((mod) => (
-            <Link
-              key={mod.slug}
-              href={getModulePath(mod)}
-              className="focus-ring interactive card-elevated p-5 flex flex-col h-full group"
-            >
-              <div className="flex items-center justify-between gap-2 mb-3">
-                <EvidenceTag tier={mod.evidenceTier} size="sm" />
-                {mod.requiresDisclaimer && (
-                  <span className="text-[10px] font-mono text-accent-amber">Rx</span>
-                )}
-              </div>
-              <h2 className="heading-card mb-1 group-hover:text-accent-cyan transition-colors">
-                {mod.title}
-              </h2>
-              <p className="text-xs text-muted-foreground mb-3">{mod.tagline}</p>
-              <p className="text-body-sm flex-1">{mod.summary.slice(0, 120)}…</p>
-              <span className="inline-flex items-center gap-1 mt-4 text-sm font-semibold text-accent-cyan group-hover:text-accent-emerald">
-                Deep dive <ArrowRight className="w-4 h-4" />
-              </span>
-            </Link>
-          ))}
-        </div>
+        <CompoundLibraryGrid modules={modules} />
       </div>
     </div>
   );
