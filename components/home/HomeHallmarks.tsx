@@ -90,7 +90,7 @@ export function HomeHallmarks() {
                     <ul className="mt-auto space-y-1.5">
                       {topInterventions.map((iv) => (
                         <li key={iv.id} className="text-body-sm flex items-baseline gap-1.5 leading-snug">
-                          <span className={`shrink-0 font-mono text-[10px] font-bold ${TIER_TEXT[iv.evidence]}`}>
+                          <span className={`shrink-0 font-mono text-micro font-bold ${TIER_TEXT[iv.evidence]}`}>
                             {iv.evidence}
                           </span>
                           <span className="line-clamp-1">{iv.name}</span>

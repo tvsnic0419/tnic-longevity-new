@@ -190,12 +190,12 @@ export function BiomarkerInput() {
             return (
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] text-caption">
+                  <span className="text-micro text-caption">
                     Optimal: <span className="font-mono">{bm?.optimal} {bm?.unit}</span>
                   </span>
                   {status && (
                     <span
-                      className="text-[9px] font-bold font-mono px-2 py-0.5 rounded-full"
+                      className="text-micro font-bold font-mono px-2 py-0.5 rounded-full"
                       style={{
                         color: statusColor,
                         background: `color-mix(in srgb, ${statusColor} 12%, transparent)`,
@@ -215,7 +215,7 @@ export function BiomarkerInput() {
                   </div>
                 )}
                 {bm?.critical && (
-                  <p className="text-[9px] text-caption/60">Critical threshold: {bm.critical} {bm.unit}</p>
+                  <p className="text-micro text-caption/60">Critical threshold: {bm.critical} {bm.unit}</p>
                 )}
               </div>
             );
@@ -241,7 +241,7 @@ export function BiomarkerInput() {
               className="input-base"
             />
           </div>
-          <p className="text-[10px] font-mono text-accent-rose uppercase">Enter values from your blood panel (leave blank to skip)</p>
+          <p className="text-micro font-mono text-accent-rose uppercase">Enter values from your blood panel (leave blank to skip)</p>
           <div className="grid sm:grid-cols-2 gap-3 max-h-[320px] overflow-y-auto pr-1">
             {biomarkers.map((b) => (
               <div key={b.id} className="glass-deep glass-plane-mid rounded-xl p-3">
@@ -256,7 +256,7 @@ export function BiomarkerInput() {
                     placeholder={b.optimal}
                     className="input-base flex-1 !min-h-10"
                   />
-                  <span className="text-[10px] text-caption shrink-0">{b.unit}</span>
+                  <span className="text-micro text-caption shrink-0">{b.unit}</span>
                 </div>
               </div>
             ))}
@@ -322,7 +322,7 @@ export function BiomarkerInput() {
             <summary className="text-xs font-semibold text-muted-foreground cursor-pointer flex items-center gap-2">
               <FileText className="w-3.5 h-3.5" /> CSV Template Format
             </summary>
-            <pre className="mt-3 text-[10px] font-mono text-caption overflow-x-auto whitespace-pre">
+            <pre className="mt-3 text-micro font-mono text-caption overflow-x-auto whitespace-pre">
               {LABS_CSV_TEMPLATE}
             </pre>
           </details>

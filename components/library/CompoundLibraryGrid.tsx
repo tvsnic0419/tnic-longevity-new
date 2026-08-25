@@ -135,7 +135,7 @@ export function CompoundLibraryGrid({ modules }: { modules: LibraryModule[] }) {
               key={h.id}
               type="button"
               onClick={() => setHallmark(hallmark === h.id ? null : h.id)}
-              className={`focus-ring rounded-full border px-2.5 py-1 text-[11px] font-medium transition ${
+              className={`focus-ring rounded-full border px-2.5 py-1 text-caption font-medium transition ${
                 hallmark === h.id
                   ? 'border-accent-emerald bg-accent-emerald/15 text-accent-emerald'
                   : 'border-border text-muted-foreground hover:border-accent-emerald/40 hover:text-foreground'
@@ -179,9 +179,9 @@ export function CompoundLibraryGrid({ modules }: { modules: LibraryModule[] }) {
                   <div className="mb-3 flex items-center justify-between gap-2">
                     <EvidenceTag tier={mod.evidenceTier} size="sm" />
                     {mod.requiresDisclaimer ? (
-                      <span className="text-[10px] font-mono text-accent-amber">Rx</span>
+                      <span className="text-micro font-mono text-accent-amber">Rx</span>
                     ) : mod.compoundId ? (
-                      <span className="text-[10px] font-mono text-accent-cyan">Stack-buildable</span>
+                      <span className="text-micro font-mono text-accent-cyan">Stack-buildable</span>
                     ) : null}
                   </div>
                   <h2 className="heading-card mb-1 group-hover:text-accent-cyan transition-colors">

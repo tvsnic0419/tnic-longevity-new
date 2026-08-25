@@ -51,7 +51,7 @@ export function LifestyleDecisionTree({ title, nodes }: LifestyleDecisionTreePro
                 {node.kind === 'branch' && branchMatch && (
                   <span
                     className={[
-                      'text-[10px] font-mono font-bold px-2 py-0.5 rounded-md shrink-0',
+                      'text-micro font-mono font-bold px-2 py-0.5 rounded-md shrink-0',
                       branchMatch[1].toUpperCase() === 'YES'
                         ? 'bg-accent-emerald/15 text-accent-emerald border border-accent-emerald/25'
                         : branchMatch[1].toUpperCase() === 'NO'

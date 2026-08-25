@@ -62,7 +62,7 @@ export function StackPresetsBar({ selected, onApply, className = '' }: StackPres
               </span>
               <span
                 className={cn(
-                  'block text-[10px] font-normal',
+                  'block text-micro font-normal',
                   isActive ? 'text-primary-foreground/70' : 'text-caption',
                 )}
               >
@@ -70,7 +70,7 @@ export function StackPresetsBar({ selected, onApply, className = '' }: StackPres
               </span>
               <div className="flex items-center gap-2 mt-1.5">
                 <span
-                  className="text-[9px] font-mono font-bold px-1 py-0.5 rounded"
+                  className="text-micro font-mono font-bold px-1 py-0.5 rounded"
                   style={
                     isActive
                       ? { color: 'black', background: 'rgba(0,0,0,0.2)' }
@@ -81,7 +81,7 @@ export function StackPresetsBar({ selected, onApply, className = '' }: StackPres
                 </span>
                 {hallmarkCount > 0 && (
                   <span
-                    className="text-[9px] font-mono px-1 py-0.5 rounded"
+                    className="text-micro font-mono px-1 py-0.5 rounded"
                     style={
                       isActive
                         ? { color: 'black', background: 'rgba(0,0,0,0.15)' }

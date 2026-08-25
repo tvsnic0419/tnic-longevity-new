@@ -65,10 +65,10 @@ function EmergentCard({ effect, index }: { effect: EmergentEffect; index: number
           <p className="text-xs text-muted-foreground leading-snug">{effect.tagline}</p>
         </div>
         <div className="flex flex-col items-end gap-1.5 shrink-0">
-          <span className={cn('text-[10px] font-semibold px-2 py-0.5 rounded-full border', evidenceColors[effect.evidence])}>
+          <span className={cn('text-micro font-semibold px-2 py-0.5 rounded-full border', evidenceColors[effect.evidence])}>
             {evidenceLabels[effect.evidence]}
           </span>
-          <span className="text-[10px] font-mono text-accent-violet bg-accent-violet/10 border border-accent-violet/25 px-2 py-0.5 rounded-full">
+          <span className="text-micro font-mono text-accent-violet bg-accent-violet/10 border border-accent-violet/25 px-2 py-0.5 rounded-full">
             {multiplierLabel(effect.synergyMultiplier)}
           </span>
         </div>
@@ -76,13 +76,13 @@ function EmergentCard({ effect, index }: { effect: EmergentEffect; index: number
 
       {/* Mechanism */}
       <div className="rounded-lg bg-card/60 border border-border/40 p-3">
-        <p className="text-[9px] font-mono text-muted-foreground uppercase mb-1.5">Mechanism</p>
+        <p className="text-micro font-mono text-muted-foreground uppercase mb-1.5">Mechanism</p>
         <p className="text-xs text-muted-foreground leading-relaxed">{effect.mechanism}</p>
       </div>
 
       {/* Emergent benefit */}
       <div className="rounded-lg bg-accent-emerald/[0.07] border border-accent-emerald/20 p-3">
-        <p className="text-[9px] font-mono text-accent-emerald uppercase mb-1.5">Emergent Benefit</p>
+        <p className="text-micro font-mono text-accent-emerald uppercase mb-1.5">Emergent Benefit</p>
         <p className="text-xs text-foreground/80 leading-relaxed">{effect.emergentBenefit}</p>
       </div>
 
@@ -132,7 +132,7 @@ export function EmergentEffectsView({ hallmarkId, compoundId, showAll = false, c
       <div className="flex flex-col items-center gap-2 py-8 text-muted-foreground">
         <Sparkles className="w-8 h-8 opacity-25" />
         <p className="text-xs">No emergent effects mapped for this selection.</p>
-        <p className="text-[10px] text-muted-foreground/60">Try targeting multiple related hallmarks for compound synergies.</p>
+        <p className="text-micro text-muted-foreground/60">Try targeting multiple related hallmarks for compound synergies.</p>
       </div>
     );
   }
@@ -144,7 +144,7 @@ export function EmergentEffectsView({ hallmarkId, compoundId, showAll = false, c
       </p>
       {showAll && (
         <div className="rounded-2xl border border-border/50 bg-card/30 p-4 overflow-x-auto">
-          <p className="text-[9px] font-mono text-muted-foreground uppercase mb-3">Compound Synergy Network</p>
+          <p className="text-micro font-mono text-muted-foreground uppercase mb-3">Compound Synergy Network</p>
           <SynergyNetworkVisual className="w-full max-w-[540px] mx-auto" />
         </div>
       )}

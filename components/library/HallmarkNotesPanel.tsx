@@ -16,7 +16,7 @@ export function HallmarkNotesPanel({ hallmark }: { hallmark: HallmarkLibraryEntr
     <div className="gradient-border p-6">
       <div className="flex items-center gap-2 mb-5">
         <NotebookPen className="w-4 h-4 text-accent-emerald" />
-        <p className="text-[10px] font-mono text-accent-emerald uppercase tracking-wider">
+        <p className="text-micro font-mono text-accent-emerald uppercase tracking-wider">
           My Results & Notes
         </p>
       </div>
@@ -37,7 +37,7 @@ export function HallmarkNotesPanel({ hallmark }: { hallmark: HallmarkLibraryEntr
           onChange={(e) => setHallmarkNote(hallmark.id, { status: Number(e.target.value) })}
           className="w-full age-slider"
         />
-        <div className="flex justify-between text-[10px] text-caption font-mono mt-1">
+        <div className="flex justify-between text-micro text-caption font-mono mt-1">
           <span>Critical</span>
           <span>Optimal</span>
         </div>
@@ -56,12 +56,12 @@ export function HallmarkNotesPanel({ hallmark }: { hallmark: HallmarkLibraryEntr
           className="w-full bg-muted/50 border border-border rounded-xl px-4 py-3 text-sm outline-none focus:border-accent-emerald/50 resize-y min-h-[100px]"
         />
         {entry.updatedAt && (
-          <p className="text-[10px] text-caption mt-1">Last updated: {entry.updatedAt.slice(0, 10)}</p>
+          <p className="text-micro text-caption mt-1">Last updated: {entry.updatedAt.slice(0, 10)}</p>
         )}
       </div>
 
       <GlassPanel depth="mid" className="rounded-xl p-4 mb-4">
-        <p className="text-[10px] font-mono text-muted-foreground uppercase mb-2">Tracking prompts</p>
+        <p className="text-micro font-mono text-muted-foreground uppercase mb-2">Tracking prompts</p>
         <ul className="space-y-1">
           {hallmark.personalPrompts.map((p) => (
             <li key={p} className="text-xs text-muted-foreground flex items-start gap-2">
@@ -73,7 +73,7 @@ export function HallmarkNotesPanel({ hallmark }: { hallmark: HallmarkLibraryEntr
       </GlassPanel>
 
       <GlassPanel depth="mid" className="rounded-xl p-4">
-        <p className="text-[10px] font-mono text-muted-foreground uppercase mb-2">Your stack coverage</p>
+        <p className="text-micro font-mono text-muted-foreground uppercase mb-2">Your stack coverage</p>
         {activeCompounds.length > 0 ? (
           <p className="text-xs text-accent-emerald">
             {activeCompounds.length} of {hallmark.relatedCompoundIds.length} targeting compounds active in your stack
@@ -84,7 +84,7 @@ export function HallmarkNotesPanel({ hallmark }: { hallmark: HallmarkLibraryEntr
             <Link href="/#stacks" className="text-accent-cyan hover:underline">Build stack →</Link>
           </p>
         )}
-        <p className="text-[10px] text-caption mt-2">
+        <p className="text-micro text-caption mt-2">
           Biomarkers: {hallmark.biomarkers.join(' · ')}
           {' — '}
           <Link href="/labs" className="text-accent-rose hover:underline">Log in Lab Hub</Link>

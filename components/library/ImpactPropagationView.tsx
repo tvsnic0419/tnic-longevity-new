@@ -104,7 +104,7 @@ export function ImpactPropagationView({ hallmarkId, className }: ImpactPropagati
 
       {/* Direct Effects */}
       <div>
-        <p className="text-[10px] font-mono text-accent-cyan uppercase tracking-wider mb-3">
+        <p className="text-micro font-mono text-accent-cyan uppercase tracking-wider mb-3">
           Direct Effects — Tier 1 Cascade
         </p>
         <div className="space-y-2">
@@ -136,7 +136,7 @@ export function ImpactPropagationView({ hallmarkId, className }: ImpactPropagati
         <div>
           <div className="flex items-center gap-2 mb-3">
             <ArrowDown className="w-3.5 h-3.5 text-muted-foreground" />
-            <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">
+            <p className="text-micro font-mono text-muted-foreground uppercase tracking-wider">
               Secondary Cascade — via Intermediaries
             </p>
           </div>
@@ -155,11 +155,11 @@ export function ImpactPropagationView({ hallmarkId, className }: ImpactPropagati
                     <span className={cn('text-xs font-semibold', accentText[accent])}>
                       {hallmarkNames[effect.hallmarkId] ?? effect.hallmarkId}
                     </span>
-                    <span className="text-[9px] font-mono text-muted-foreground">
+                    <span className="text-micro font-mono text-muted-foreground">
                       via {hallmarkNames[effect.via] ?? effect.via}
                     </span>
                   </div>
-                  <p className="text-[11px] text-muted-foreground leading-relaxed">{effect.mechanism}</p>
+                  <p className="text-caption text-muted-foreground leading-relaxed">{effect.mechanism}</p>
                 </motion.div>
               );
             })}

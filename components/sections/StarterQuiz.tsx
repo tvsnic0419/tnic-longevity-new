@@ -93,7 +93,7 @@ function LiveStackPreview({ answers }: { answers: QuizAnswers }) {
       }}
     >
       <p
-        className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-widest mb-2"
+        className="flex items-center gap-1.5 text-micro font-mono uppercase tracking-widest mb-2"
         style={{ color: accent }}
       >
         <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
@@ -106,7 +106,7 @@ function LiveStackPreview({ answers }: { answers: QuizAnswers }) {
             initial={{ opacity: 0, scale: 0.8, y: 4 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ delay: i * 0.05, duration: 0.3, type: 'spring', stiffness: 300, damping: 22 }}
-            className="text-[10px] font-semibold px-2 py-1 rounded-lg"
+            className="text-micro font-semibold px-2 py-1 rounded-lg"
             style={{
               background: `color-mix(in srgb, ${accent} 16%, transparent)`,
               color: accent,
@@ -302,7 +302,7 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
 
       <div className="flex items-center justify-between mb-5">
         <div>
-          <p className="flex items-center gap-1.5 font-mono text-[10px] text-accent-cyan tracking-widest mb-1.5">
+          <p className="flex items-center gap-1.5 font-mono text-micro text-accent-cyan tracking-widest mb-1.5">
             <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent-cyan animate-pulse-glow" aria-hidden="true" />
             THE NICO QUESTIONNAIRE
           </p>
@@ -314,7 +314,7 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
           {variant === 'embedded' && (
             <Link
               href="/quiz"
-              className="focus-ring text-[10px] font-mono text-accent-cyan hover:underline rounded"
+              className="focus-ring text-micro font-mono text-accent-cyan hover:underline rounded"
             >
               Full screen
             </Link>
@@ -348,7 +348,7 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
                 aria-hidden="true"
               />
               {current.multi && (
-                <p className="text-[11px] text-muted-foreground mt-2.5">
+                <p className="text-caption text-muted-foreground mt-2.5">
                   Select any that apply, then continue — helps flag interactions before you start.
                 </p>
               )}
@@ -391,7 +391,7 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
 
                 <div className="flex items-center gap-3 my-3" aria-hidden="true">
                   <div className="h-px flex-1 bg-border" />
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">or</span>
+                  <span className="text-micro font-mono uppercase tracking-wider text-muted-foreground">or</span>
                   <div className="h-px flex-1 bg-border" />
                 </div>
 
@@ -456,15 +456,15 @@ export function StarterQuiz({ variant = 'embedded' }: { variant?: 'embedded' | '
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className={`font-semibold group-hover:text-foreground transition-colors ${isPage ? 'text-[15px]' : 'text-sm'}`}
+                        <p className={`font-semibold group-hover:text-foreground transition-colors ${isPage ? 'text-base' : 'text-sm'}`}
                           style={{ color: 'inherit' }}>
                           {opt.label}
                         </p>
-                        {'desc' in opt && <p className="text-[11px] text-muted-foreground mt-0.5">{opt.desc}</p>}
+                        {'desc' in opt && <p className="text-caption text-muted-foreground mt-0.5">{opt.desc}</p>}
                       </div>
                       {step === 0 && !locked && (
                         <span
-                          className="shrink-0 text-[9px] font-semibold font-mono opacity-0 group-hover:opacity-100 transition-opacity"
+                          className="shrink-0 text-micro font-semibold font-mono opacity-0 group-hover:opacity-100 transition-opacity"
                           style={{ color: optAccent }}
                         >
                           {stackPresets[getQuizPreset({ goal: opt.id })].label}

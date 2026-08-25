@@ -114,7 +114,7 @@ export default function LongevitySupplementsGuidePage() {
           </nav>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.2em] text-accent-cyan border border-accent-cyan/20 bg-accent-cyan/[0.06] px-4 py-2 rounded-full mb-6">
+            <div className="inline-flex items-center gap-2 text-micro font-mono uppercase tracking-[0.2em] text-accent-cyan border border-accent-cyan/20 bg-accent-cyan/[0.06] px-4 py-2 rounded-full mb-6">
               <FlaskConical className="w-3 h-3" />
               Evidence-Ranked · 2026 Edition
             </div>
@@ -204,9 +204,9 @@ export default function LongevitySupplementsGuidePage() {
                         <div className="flex flex-wrap items-center gap-2 mb-1">
                           <h3 className="font-bold text-foreground">{c.name}</h3>
                           {c.isRx && (
-                            <span className="text-[9px] font-mono font-bold text-accent-rose bg-accent-rose/10 border border-accent-rose/25 px-1.5 py-0.5 rounded">Rx</span>
+                            <span className="text-micro font-mono font-bold text-accent-rose bg-accent-rose/10 border border-accent-rose/25 px-1.5 py-0.5 rounded">Rx</span>
                           )}
-                          <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border ${tierColor} ${tierBg}`}>
+                          <span className={`text-micro font-mono font-bold px-1.5 py-0.5 rounded border ${tierColor} ${tierBg}`}>
                             Tier {tier}
                           </span>
                         </div>
@@ -217,7 +217,7 @@ export default function LongevitySupplementsGuidePage() {
 
                     {/* LQ Score */}
                     <div className="sm:col-span-2 flex sm:flex-col items-center sm:items-start gap-3 sm:gap-1">
-                      <span className="text-[10px] font-mono text-muted-foreground sm:mb-1 hidden sm:block">LQ Score</span>
+                      <span className="text-micro font-mono text-muted-foreground sm:mb-1 hidden sm:block">LQ Score</span>
                       <div className="text-2xl font-black tabular-nums" style={{ color: scoreColor }}>{score.toFixed(1)}</div>
                       <div className="flex-1 sm:w-full">
                         <div className="h-1.5 bg-white/5 rounded-full overflow-hidden sm:w-full w-24">
@@ -228,9 +228,9 @@ export default function LongevitySupplementsGuidePage() {
 
                     {/* Clock estimate */}
                     <div className="sm:col-span-3">
-                      <p className="text-[10px] font-mono text-muted-foreground mb-1 hidden sm:block">Clock estimate</p>
+                      <p className="text-micro font-mono text-muted-foreground mb-1 hidden sm:block">Clock estimate</p>
                       <p className="text-xs text-white/60 font-mono leading-relaxed">{c.clock}</p>
-                      <p className="text-[9px] text-white/30 mt-1">{c.clockConfidence} confidence</p>
+                      <p className="text-micro text-white/30 mt-1">{c.clockConfidence} confidence</p>
                     </div>
 
                     {/* CTA */}
@@ -244,7 +244,7 @@ export default function LongevitySupplementsGuidePage() {
                           Deep-dive <ExternalLink className="w-3 h-3" />
                         </Link>
                       ) : (
-                        <span className="text-[10px] font-mono text-muted-foreground px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.06]">
+                        <span className="text-micro font-mono text-muted-foreground px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.06]">
                           Library soon
                         </span>
                       )}
@@ -253,7 +253,7 @@ export default function LongevitySupplementsGuidePage() {
 
                   {/* Top study */}
                   <div className="mt-4 pt-4 border-t border-border/40">
-                    <p className="text-[10px] text-muted-foreground font-mono">
+                    <p className="text-micro text-muted-foreground font-mono">
                       <span className="text-accent-amber font-bold">Key study:</span>{' '}
                       {c.topStudy}
                     </p>
@@ -269,7 +269,7 @@ export default function LongevitySupplementsGuidePage() {
       <section className="py-16 md:py-20 border-b border-border" style={{ background: 'linear-gradient(to bottom, #020811, #060d1a)' }}>
         <div className="container-page max-w-4xl">
           <div className="mb-10">
-            <div className="inline-flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.2em] text-accent-violet border border-accent-violet/20 bg-accent-violet/[0.06] px-4 py-2 rounded-full mb-5">
+            <div className="inline-flex items-center gap-2 text-micro font-mono uppercase tracking-[0.2em] text-accent-violet border border-accent-violet/20 bg-accent-violet/[0.06] px-4 py-2 rounded-full mb-5">
               Step-by-Step Protocol
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-white mb-3">

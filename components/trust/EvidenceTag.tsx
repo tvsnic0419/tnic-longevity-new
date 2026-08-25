@@ -34,7 +34,7 @@ interface SizeSpec {
 }
 
 const sizeSpec: Record<'sm' | 'md' | 'lg', SizeSpec> = {
-  sm: { chip: 'gap-1.5 text-[10px] px-1.5 py-0.5', barW: 2.5, barGap: 1.5, barH: [5, 7, 9], label: 'text-[10px]' },
+  sm: { chip: 'gap-1.5 text-micro px-1.5 py-0.5', barW: 2.5, barGap: 1.5, barH: [5, 7, 9], label: 'text-micro' },
   md: { chip: 'gap-2 text-xs px-2 py-1', barW: 3, barGap: 2, barH: [6, 9, 12], label: 'text-xs' },
   lg: { chip: 'gap-2 text-sm px-2.5 py-1.5', barW: 3.5, barGap: 2.5, barH: [7, 11, 15], label: 'text-sm' },
 };

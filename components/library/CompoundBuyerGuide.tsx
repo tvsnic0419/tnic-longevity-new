@@ -40,7 +40,7 @@ export function CompoundBuyerGuidePanel({
         <div>
           <div className="flex items-center gap-2 mb-1">
             <ShieldCheck className="w-4 h-4 text-accent-amber" aria-hidden="true" />
-            <p className="text-[10px] font-mono text-accent-amber uppercase tracking-widest">
+            <p className="text-micro font-mono text-accent-amber uppercase tracking-widest">
               Brand-agnostic buyer guide
             </p>
           </div>
@@ -118,7 +118,7 @@ export function CompoundBuyerGuidePanel({
                       href={`https://pubmed.ncbi.nlm.nih.gov/${anchor.pmid}/`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="ml-1.5 text-[10px] font-mono text-muted-foreground hover:text-accent-cyan"
+                      className="ml-1.5 text-micro font-mono text-muted-foreground hover:text-accent-cyan"
                     >
                       PMID {anchor.pmid}
                     </a>

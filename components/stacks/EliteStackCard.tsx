@@ -55,10 +55,10 @@ export function EliteStackCard({ stack, expanded: defaultExpanded = false }: Eli
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1 min-w-0">
               <div className="flex flex-wrap items-center gap-2 mb-2">
-                <span className="text-[10px] font-mono text-accent-violet">{goalLabels[stack.goal]}</span>
+                <span className="text-micro font-mono text-accent-violet">{goalLabels[stack.goal]}</span>
                 <EvidenceTag tier={stack.evidenceTier} size="sm" />
                 {stack.rxCompounds && (
-                  <span className="text-[10px] font-mono text-accent-rose bg-accent-rose/10 px-2 py-0.5 rounded-full">
+                  <span className="text-micro font-mono text-accent-rose bg-accent-rose/10 px-2 py-0.5 rounded-full">
                     Rx Component
                   </span>
                 )}
@@ -77,7 +77,7 @@ export function EliteStackCard({ stack, expanded: defaultExpanded = false }: Eli
 
           <div className="flex flex-wrap gap-2 mt-3">
             {compoundNames.map((name) => (
-              <span key={name} className="text-[10px] font-mono bg-accent-violet/10 text-accent-violet px-2 py-0.5 rounded-full">
+              <span key={name} className="text-micro font-mono bg-accent-violet/10 text-accent-violet px-2 py-0.5 rounded-full">
                 {name}
               </span>
             ))}
@@ -86,15 +86,15 @@ export function EliteStackCard({ stack, expanded: defaultExpanded = false }: Eli
           <div className="grid grid-cols-3 gap-3 mt-4">
             <div className="text-center">
               <p className={`text-xs font-bold ${costColor[stack.costTier]}`}>{costLabels[stack.costTier]}</p>
-              <p className="text-[9px] font-mono text-caption">${stack.costMonthlyUsd.low}–{stack.costMonthlyUsd.high}/mo</p>
+              <p className="text-micro font-mono text-caption">${stack.costMonthlyUsd.low}–{stack.costMonthlyUsd.high}/mo</p>
             </div>
             <div className="text-center">
               <p className="text-xs font-bold text-accent-cyan">{simplicityLabels[stack.simplicity]}</p>
-              <p className="text-[9px] font-mono text-caption">{stack.compoundIds.length} OTC compounds</p>
+              <p className="text-micro font-mono text-caption">{stack.compoundIds.length} OTC compounds</p>
             </div>
             <div className="text-center">
               <p className="text-xs font-bold text-accent-amber">{stack.hallmarkCoverage.length} hallmarks</p>
-              <p className="text-[9px] font-mono text-caption">{stack.durationWeeks}</p>
+              <p className="text-micro font-mono text-caption">{stack.durationWeeks}</p>
             </div>
           </div>
         </button>
@@ -113,7 +113,7 @@ export function EliteStackCard({ stack, expanded: defaultExpanded = false }: Eli
 
                 {/* Breakdown */}
                 <div>
-                  <p className="text-[10px] font-mono text-accent-violet uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <p className="text-micro font-mono text-accent-violet uppercase tracking-wider mb-3 flex items-center gap-2">
                     <FlaskConical className="w-3.5 h-3.5" /> Compound Breakdown
                   </p>
                   <div className="space-y-3">
@@ -123,7 +123,7 @@ export function EliteStackCard({ stack, expanded: defaultExpanded = false }: Eli
                         <RevealCard key={b.compoundId} index={i} depth="mid" className="rounded-xl p-4">
                           <div className="flex justify-between items-start mb-1">
                             <h4 className="font-semibold text-sm">{compound?.name ?? b.compoundId}</h4>
-                            <span className="text-[10px] font-mono text-muted-foreground">{compound?.dose}</span>
+                            <span className="text-micro font-mono text-muted-foreground">{compound?.dose}</span>
                           </div>
                           <p className="text-xs text-accent-violet mb-1">{b.role}</p>
                           <p className="text-xs text-muted-foreground">{b.mechanism}</p>
@@ -136,7 +136,7 @@ export function EliteStackCard({ stack, expanded: defaultExpanded = false }: Eli
                 {/* Rx compounds */}
                 {stack.rxCompounds && (
                   <div>
-                    <p className="text-[10px] font-mono text-accent-rose uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <p className="text-micro font-mono text-accent-rose uppercase tracking-wider mb-3 flex items-center gap-2">
                       <Pill className="w-3.5 h-3.5" /> Prescription Components (Educational)
                     </p>
                     {stack.rxCompounds.map((rx, i) => (
@@ -151,7 +151,7 @@ export function EliteStackCard({ stack, expanded: defaultExpanded = false }: Eli
 
                 {/* Dosing schedule */}
                 <div>
-                  <p className="text-[10px] font-mono text-accent-amber uppercase tracking-wider mb-3">Dosing Schedule</p>
+                  <p className="text-micro font-mono text-accent-amber uppercase tracking-wider mb-3">Dosing Schedule</p>
                   {stack.dosingSchedule.map((block, i) => (
                     <div key={i} className="mb-3 last:mb-0">
                       <p className="text-xs font-semibold text-foreground/80 mb-1">
@@ -169,14 +169,14 @@ export function EliteStackCard({ stack, expanded: defaultExpanded = false }: Eli
                           </div>
                         );
                       })}
-                      <p className="text-[10px] text-caption mt-1">{block.rationale}</p>
+                      <p className="text-micro text-caption mt-1">{block.rationale}</p>
                     </div>
                   ))}
                 </div>
 
                 {/* Monitoring */}
                 <div>
-                  <p className="text-[10px] font-mono text-accent-cyan uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <p className="text-micro font-mono text-accent-cyan uppercase tracking-wider mb-3 flex items-center gap-2">
                     <Activity className="w-3.5 h-3.5" /> Monitoring Recommendations
                   </p>
                   <ul className="space-y-1">
@@ -190,7 +190,7 @@ export function EliteStackCard({ stack, expanded: defaultExpanded = false }: Eli
 
                 {/* Studies */}
                 <div>
-                  <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-2">Key Evidence</p>
+                  <p className="text-micro font-mono text-muted-foreground uppercase tracking-wider mb-2">Key Evidence</p>
                   {stack.studies.map((s) => (
                     <div key={s.pmid} className="py-1">
                       <p className="text-body-sm mb-0.5">{s.title} ({s.journal}, {s.year})</p>
@@ -202,7 +202,7 @@ export function EliteStackCard({ stack, expanded: defaultExpanded = false }: Eli
                 {/* Warnings */}
                 {stack.warnings.length > 0 && (
                   <GlassPanel depth="mid" className="rounded-xl p-4 border border-accent-amber/20">
-                    <p className="text-[10px] font-mono text-accent-amber uppercase tracking-wider mb-2 flex items-center gap-2">
+                    <p className="text-micro font-mono text-accent-amber uppercase tracking-wider mb-2 flex items-center gap-2">
                       <AlertTriangle className="w-3.5 h-3.5" /> Warnings
                     </p>
                     <ul className="space-y-1">

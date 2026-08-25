@@ -131,7 +131,7 @@ export const LibraryFacetFilters: React.FC<LibraryFacetFiltersProps> = ({ classN
       </div>
 
       {hasActiveFilters && (
-        <div className="text-[10px] text-[var(--color-text-faint)]">
+        <div className="text-micro text-[var(--color-text-faint)]">
           Active filters applied to search results. Combine with text search for precise discovery.
         </div>
       )}

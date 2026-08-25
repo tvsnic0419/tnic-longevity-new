@@ -15,7 +15,7 @@ export const ChronicInflammationVisual: React.FC<{ className?: string; showLabel
           <div className="text-label text-[var(--accent-rose)] mb-0.5">HALLMARK 10</div>
           <h4 className="heading-card text-lg">Chronic Inflammation</h4>
         </div>
-        {showLabels && <div className="text-right text-[10px] text-[var(--color-text-muted)]">NF-κB · Cytokines · Resolution</div>}
+        {showLabels && <div className="text-right text-micro text-[var(--color-text-muted)]">NF-κB · Cytokines · Resolution</div>}
       </div>
 
       <motion.div whileInView={{ opacity: 1 }} initial={{ opacity: 0.7 }} viewport={{ once: true, margin: "-30px" }}>
@@ -53,7 +53,7 @@ export const ChronicInflammationVisual: React.FC<{ className?: string; showLabel
       </motion.div>
 
       {showLabels && (
-        <div className="mt-3 text-[10px] text-[var(--color-text-muted)] leading-snug">
+        <div className="mt-3 text-micro text-[var(--color-text-muted)] leading-snug">
           Persistent low-grade inflammation drives aging. NF-κB activation sustains cytokine release. Omega-3s and specialized pro-resolving mediators (SPMs) help resolve it.
         </div>
       )}

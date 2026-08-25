@@ -38,7 +38,7 @@ export function EvidenceBadge({
       className={cn(
         'normal-case tracking-normal font-sans font-medium',
         levelStyles[level],
-        size === 'sm' ? 'text-[10px] px-2 py-0.5' : 'text-xs px-2.5 py-1',
+        size === 'sm' ? 'text-micro px-2 py-0.5' : 'text-xs px-2.5 py-1',
         className,
       )}
       title={showTooltip ? def.description : undefined}

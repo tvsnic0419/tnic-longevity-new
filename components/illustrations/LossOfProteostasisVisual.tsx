@@ -15,7 +15,7 @@ export const LossOfProteostasisVisual: React.FC<{ className?: string; showLabels
           <div className="text-label text-[var(--accent-cyan)] mb-0.5">HALLMARK 04</div>
           <h4 className="heading-card text-lg">Loss of Proteostasis</h4>
         </div>
-        {showLabels && <div className="text-right text-[10px] text-[var(--color-text-muted)]">Proteasome · Autophagy · Aggregates</div>}
+        {showLabels && <div className="text-right text-micro text-[var(--color-text-muted)]">Proteasome · Autophagy · Aggregates</div>}
       </div>
 
       <motion.div whileInView={{ opacity: 1 }} initial={{ opacity: 0.7 }} viewport={{ once: true, margin: "-30px" }}>
@@ -43,7 +43,7 @@ export const LossOfProteostasisVisual: React.FC<{ className?: string; showLabels
       </motion.div>
 
       {showLabels && (
-        <div className="mt-3 text-[10px] text-[var(--color-text-muted)] leading-snug">
+        <div className="mt-3 text-micro text-[var(--color-text-muted)] leading-snug">
           Accumulation of misfolded proteins due to declining proteasome and autophagy function. Interventions that upregulate NRF2 or support autophagy help restore proteostasis.
         </div>
       )}

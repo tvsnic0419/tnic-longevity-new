@@ -225,7 +225,7 @@ export default function SulforaphaneGuidePage() {
               <div key={t.gene} className="rounded-xl border border-border/50 bg-card/50 p-4">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="font-mono text-sm font-bold text-accent-emerald">{t.gene}</span>
-                  <span className="text-[10px] font-mono text-muted-foreground px-2 py-0.5 rounded-full border border-border/60">{t.context}</span>
+                  <span className="text-micro font-mono text-muted-foreground px-2 py-0.5 rounded-full border border-border/60">{t.context}</span>
                 </div>
                 <p className="text-xs text-muted-foreground">{t.function}</p>
               </div>
@@ -276,7 +276,7 @@ export default function SulforaphaneGuidePage() {
                 <h3 className="font-semibold mb-1">{f.form}</h3>
                 <p className={`font-mono text-sm mb-3 ${f.ratingColor}`}>{f.rating}</p>
                 <div className="mb-3">
-                  <p className="text-[10px] font-mono text-muted-foreground mb-1">PROS</p>
+                  <p className="text-micro font-mono text-muted-foreground mb-1">PROS</p>
                   <ul className="space-y-1">
                     {f.pros.map((p) => (
                       <li key={p} className="text-xs text-muted-foreground flex gap-1.5">
@@ -287,7 +287,7 @@ export default function SulforaphaneGuidePage() {
                   </ul>
                 </div>
                 <div className="mb-3">
-                  <p className="text-[10px] font-mono text-muted-foreground mb-1">CONS</p>
+                  <p className="text-micro font-mono text-muted-foreground mb-1">CONS</p>
                   <ul className="space-y-1">
                     {f.cons.map((c) => (
                       <li key={c} className="text-xs text-muted-foreground flex gap-1.5">
@@ -297,7 +297,7 @@ export default function SulforaphaneGuidePage() {
                     ))}
                   </ul>
                 </div>
-                <p className="text-[10px] font-mono text-muted-foreground mt-3 border-t border-border/40 pt-2">
+                <p className="text-micro font-mono text-muted-foreground mt-3 border-t border-border/40 pt-2">
                   {f.dose}
                 </p>
               </div>
@@ -395,7 +395,7 @@ export default function SulforaphaneGuidePage() {
                 <h3 className="font-semibold text-sm mb-2">{trial.title}</h3>
                 <p className="text-xs text-muted-foreground mb-3">{trial.result}</p>
                 <div className="flex items-center justify-between">
-                  <p className="text-[10px] font-mono text-muted-foreground">{trial.authors}</p>
+                  <p className="text-micro font-mono text-muted-foreground">{trial.authors}</p>
                   <a
                     href={`https://pubmed.ncbi.nlm.nih.gov/${trial.pmid}/`}
                     target="_blank"

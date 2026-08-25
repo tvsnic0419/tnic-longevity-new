@@ -20,7 +20,7 @@ function ImpactMeter({ value }: { value: number }) {
   const pct = Math.max(0, Math.min(10, value)) / 10;
   return (
     <span className="inline-flex items-center gap-1.5" title={`Impact ${value} of 10`}>
-      <span className="text-label text-[10px] text-[var(--color-text-faint)]">Impact</span>
+      <span className="text-label text-micro text-[var(--color-text-faint)]">Impact</span>
       <span
         aria-hidden="true"
         className="relative h-1.5 w-16 overflow-hidden rounded-full bg-[var(--color-bg-muted)]"
@@ -33,7 +33,7 @@ function ImpactMeter({ value }: { value: number }) {
           }}
         />
       </span>
-      <span className="font-mono text-[11px] font-semibold tabular-nums text-[var(--color-text-secondary)]">
+      <span className="font-mono text-caption font-semibold tabular-nums text-[var(--color-text-secondary)]">
         {value}
         <span className="text-[var(--color-text-faint)]">/10</span>
       </span>
@@ -136,11 +136,11 @@ export function InterventionExplorer({
                       {item.name}
                     </h4>
                     <EvidenceTag tier={item.evidence} size="sm" />
-                    <span className="text-label text-[10px] text-[var(--color-text-faint)]">
+                    <span className="text-label text-micro text-[var(--color-text-faint)]">
                       {categoryLabels[item.category]}
                     </span>
                     {item.tnicAvailable && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-accent-cyan/10 px-2 py-0.5 text-[10px] font-semibold text-accent-cyan">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-accent-cyan/10 px-2 py-0.5 text-micro font-semibold text-accent-cyan">
                         <Sparkles className="h-3 w-3" aria-hidden="true" />
                         Verified pick
                       </span>

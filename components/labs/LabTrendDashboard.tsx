@@ -41,7 +41,7 @@ export function LabTrendDashboard({ snapshots }: LabTrendDashboardProps) {
     <div className="space-y-6">
       {/* Overview sparkline grid */}
       <div>
-        <p className="text-[10px] font-mono text-accent-rose uppercase tracking-wider mb-3 flex items-center gap-2">
+        <p className="text-micro font-mono text-accent-rose uppercase tracking-wider mb-3 flex items-center gap-2">
           <BarChart3 className="w-3.5 h-3.5" /> Marker Overview
         </p>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -59,14 +59,14 @@ export function LabTrendDashboard({ snapshots }: LabTrendDashboardProps) {
               >
                 <div className="flex justify-between items-start mb-2">
                   <h4 className="text-xs font-semibold truncate pr-2">{snap.name}</h4>
-                  <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-full shrink-0 ${statusColor[snap.status]}`}>
+                  <span className={`text-micro font-semibold px-1.5 py-0.5 rounded-full shrink-0 ${statusColor[snap.status]}`}>
                     {snap.status}
                   </span>
                 </div>
                 <div className="flex items-end justify-between">
                   <div>
                     <p className="text-2xl font-bold font-mono">{snap.value}</p>
-                    <p className="text-[9px] text-caption">{snap.date}</p>
+                    <p className="text-micro text-caption">{snap.date}</p>
                   </div>
                   <TrendIco className={`w-4 h-4 ${trendIcon[snap.trend].color}`} />
                 </div>
@@ -105,7 +105,7 @@ export function LabTrendDashboard({ snapshots }: LabTrendDashboardProps) {
                   <div className="flex items-center gap-2 justify-end mb-1">
                     <p className="text-3xl font-bold font-mono">{activeSnapshot.value}</p>
                     <span
-                      className="text-[10px] font-bold font-mono px-2 py-0.5 rounded-full"
+                      className="text-micro font-bold font-mono px-2 py-0.5 rounded-full"
                       style={{
                         color: statusColorVar,
                         background: `color-mix(in srgb, ${statusColorVar} 12%, transparent)`,
@@ -116,10 +116,10 @@ export function LabTrendDashboard({ snapshots }: LabTrendDashboardProps) {
                     </span>
                   </div>
                   <div className="flex items-center gap-2 justify-end">
-                    <p className="text-[10px] text-caption">{activeSnapshot.readingCount} readings</p>
+                    <p className="text-micro text-caption">{activeSnapshot.readingCount} readings</p>
                     {delta !== null && (
                       <p
-                        className="text-[10px] font-mono font-semibold"
+                        className="text-micro font-mono font-semibold"
                         style={{ color: delta === 0 ? 'var(--muted-foreground)' : delta > 0 ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}
                       >
                         {deltaSign}{delta.toFixed(1)} vs prev
@@ -139,9 +139,9 @@ export function LabTrendDashboard({ snapshots }: LabTrendDashboardProps) {
                   .sort((a, b) => a.date.localeCompare(b.date))
                   .map((e: LabEntry) => (
                     <div key={e.id} className="glass-deep glass-plane-mid rounded-lg py-2 px-1">
-                      <p className="text-[9px] text-caption">{e.date}</p>
+                      <p className="text-micro text-caption">{e.date}</p>
                       <p className="text-sm font-mono font-bold">{e.value}</p>
-                      <p className={`text-[9px] ${statusColor[getLabStatus(e.markerId, e.value)].split(' ')[0]}`}>
+                      <p className={`text-micro ${statusColor[getLabStatus(e.markerId, e.value)].split(' ')[0]}`}>
                         {getLabStatus(e.markerId, e.value)}
                       </p>
                     </div>

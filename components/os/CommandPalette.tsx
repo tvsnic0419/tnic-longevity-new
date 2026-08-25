@@ -162,7 +162,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
             onChange={(e) => setQuery(e.target.value)}
             className="flex-1 bg-transparent text-sm outline-none placeholder:text-caption"
           />
-          <kbd className="hidden sm:inline text-[10px] font-mono text-caption border border-border px-1.5 py-0.5 rounded">
+          <kbd className="hidden sm:inline text-micro font-mono text-caption border border-border px-1.5 py-0.5 rounded">
             esc
           </kbd>
         </div>
@@ -170,7 +170,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
         {!hasQuery && hubHint?.next && (
           <div className="px-4 py-2.5 border-b border-border/60 flex items-start gap-2 bg-accent-cyan/5">
             <Lightbulb className="w-3.5 h-3.5 text-accent-cyan shrink-0 mt-0.5" aria-hidden="true" />
-            <p className="text-[11px] text-muted-foreground leading-relaxed">
+            <p className="text-caption text-muted-foreground leading-relaxed">
               <span className="text-accent-cyan font-semibold">Next on this hub: </span>
               {hubHint.next}
             </p>
@@ -209,7 +209,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
               if (groupItems.length === 0) return null;
               return (
                 <li key={group.label} role="presentation">
-                  <p className="px-4 pt-2 pb-1 text-[10px] font-mono uppercase tracking-wider text-caption">
+                  <p className="px-4 pt-2 pb-1 text-micro font-mono uppercase tracking-wider text-caption">
                     {group.label}
                   </p>
                   <ul role="group" aria-label={group.label}>
@@ -238,7 +238,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
           )}
         </ul>
 
-        <div className="border-t border-border px-4 py-2 flex flex-wrap gap-3 text-[10px] font-mono text-caption">
+        <div className="border-t border-border px-4 py-2 flex flex-wrap gap-3 text-micro font-mono text-caption">
           <span className="inline-flex items-center gap-1">
             <Command className="w-3 h-3" aria-hidden="true" />K open
           </span>
@@ -272,7 +272,7 @@ function PaletteRow({
         active ? 'bg-accent-cyan/10' : 'hover:bg-muted/40',
       )}
     >
-      <span className="text-[10px] font-mono uppercase text-accent-cyan w-16 shrink-0">
+      <span className="text-micro font-mono uppercase text-accent-cyan w-16 shrink-0">
         {paletteKindLabels[item.kind]}
       </span>
       <div className="min-w-0 flex-1">

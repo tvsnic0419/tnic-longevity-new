@@ -337,6 +337,18 @@ p,
   text-transform: uppercase;
 }
 
+/* The scale's floor, for dense mono microcopy — badge text, unit annotations,
+   axis labels. It exists because the scale previously stopped at .text-label
+   (11px), so every smaller piece of type reached for an arbitrary
+   `text-[8px]`/`text-[9px]`/`text-[10px]`: 296 of them, with 8–9px sitting
+   below a legible floor. Deliberately size-only, like .text-caption, so the
+   `font-mono` and color utilities already sitting alongside these usages keep
+   applying unchanged. Nothing should render smaller than this. */
+.text-micro {
+  font-size: 0.625rem;
+  line-height: 1.4;
+}
+
 /* Default colors for the typography scale above, deliberately placed in
    Tailwind's `components` layer instead of left unlayered. Unlayered CSS
    always beats anything in `@layer utilities` regardless of source order or

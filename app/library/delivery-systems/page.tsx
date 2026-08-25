@@ -101,7 +101,7 @@ export default function DeliverySystemsPage() {
                 <h2 className="font-bold text-base">{s.name}</h2>
                 {s.subtitle && <p className="text-xs text-muted-foreground">{s.subtitle}</p>}
               </div>
-              <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full shrink-0 ${s.tagColor}`}>
+              <span className={`text-micro font-mono px-2 py-0.5 rounded-full shrink-0 ${s.tagColor}`}>
                 {s.tag}
               </span>
             </div>
@@ -162,7 +162,7 @@ export default function DeliverySystemsPage() {
                 <td className="py-5 pr-6">
                   <p className="font-semibold">{s.name}</p>
                   {s.subtitle && <p className="text-xs text-muted-foreground mt-0.5">{s.subtitle}</p>}
-                  <span className={`inline-block text-[10px] font-mono px-2 py-0.5 rounded-full mt-2 ${s.tagColor}`}>
+                  <span className={`inline-block text-micro font-mono px-2 py-0.5 rounded-full mt-2 ${s.tagColor}`}>
                     {s.tag}
                   </span>
                 </td>

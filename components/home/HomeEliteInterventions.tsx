@@ -89,7 +89,7 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
             {hallmarks.slice(0, 3).map((h) => (
               <span
                 key={h}
-                className="rounded border border-accent-cyan/20 bg-accent-cyan/[0.08] px-1.5 py-0.5 text-[10px] font-semibold text-accent-cyan"
+                className="rounded border border-accent-cyan/20 bg-accent-cyan/[0.08] px-1.5 py-0.5 text-micro font-semibold text-accent-cyan"
               >
                 {hallmarkLabels[h] ?? h}
               </span>

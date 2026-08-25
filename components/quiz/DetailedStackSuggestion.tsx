@@ -28,7 +28,7 @@ function Metric({ label, value }: { label: string; value: string | number }) {
   return (
     <div className="rounded-lg bg-background/40 border border-border/50 px-2.5 py-2 text-center">
       <p className="text-sm font-bold font-mono text-foreground tabular-nums leading-none">{value}</p>
-      <p className="text-[9px] font-mono uppercase tracking-wider text-muted-foreground mt-1">{label}</p>
+      <p className="text-micro font-mono uppercase tracking-wider text-muted-foreground mt-1">{label}</p>
     </div>
   );
 }
@@ -54,13 +54,13 @@ export function DetailedStackSuggestion({ preset }: { preset: PresetKey }) {
       <div className="glass-deep glass-plane-mid rounded-xl p-4 mb-3">
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="min-w-0">
-            <p className="text-[10px] font-mono text-accent-violet uppercase tracking-wider mb-1">
+            <p className="text-micro font-mono text-accent-violet uppercase tracking-wider mb-1">
               Your recommended protocol
             </p>
             <h4 className="text-base font-bold leading-tight">{stack.label}</h4>
-            <p className="text-[11px] text-muted-foreground mt-0.5">{stack.desc}</p>
+            <p className="text-caption text-muted-foreground mt-0.5">{stack.desc}</p>
           </div>
-          <span className={`shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded ${tier.cls}`}>
+          <span className={`shrink-0 text-micro font-semibold px-2 py-0.5 rounded ${tier.cls}`}>
             {tier.label} avg
           </span>
         </div>
@@ -77,7 +77,7 @@ export function DetailedStackSuggestion({ preset }: { preset: PresetKey }) {
             {analysis.hallmarkCoverage.map((h) => (
               <span
                 key={h}
-                className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-accent-cyan/10 text-accent-cyan"
+                className="text-micro font-medium px-1.5 py-0.5 rounded bg-accent-cyan/10 text-accent-cyan"
               >
                 {hallmarkLabel(h)}
               </span>
@@ -94,21 +94,21 @@ export function DetailedStackSuggestion({ preset }: { preset: PresetKey }) {
           return (
             <li key={c.id} className="glass-deep glass-plane-mid rounded-xl p-3">
               <div className="flex items-start gap-3">
-                <span className="shrink-0 mt-0.5 w-5 h-5 rounded-md bg-accent-violet/15 text-accent-violet text-[10px] font-bold font-mono flex items-center justify-center">
+                <span className="shrink-0 mt-0.5 w-5 h-5 rounded-md bg-accent-violet/15 text-accent-violet text-micro font-bold font-mono flex items-center justify-center">
                   {i + 1}
                 </span>
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-1.5">
                     <p className="text-sm font-semibold">{c.name}</p>
-                    <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded ${t.cls}`}>{t.label}</span>
-                    <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
+                    <span className={`text-micro font-semibold px-1.5 py-0.5 rounded ${t.cls}`}>{t.label}</span>
+                    <span className="text-micro font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
                       {c.timing}
                     </span>
                   </div>
-                  <p className="text-[10px] font-mono text-muted-foreground mt-0.5">
+                  <p className="text-micro font-mono text-muted-foreground mt-0.5">
                     {c.pathway} · {c.dose}
                   </p>
-                  <p className="text-[11px] text-muted-foreground leading-relaxed mt-1.5">
+                  <p className="text-caption text-muted-foreground leading-relaxed mt-1.5">
                     {firstSentence(c.mechanism)}
                   </p>
 
@@ -116,7 +116,7 @@ export function DetailedStackSuggestion({ preset }: { preset: PresetKey }) {
                     {c.hallmarks.slice(0, 4).map((h) => (
                       <span
                         key={h}
-                        className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-accent-emerald/10 text-accent-emerald"
+                        className="text-micro font-medium px-1.5 py-0.5 rounded bg-accent-emerald/10 text-accent-emerald"
                       >
                         {hallmarkLabel(h)}
                       </span>
@@ -128,7 +128,7 @@ export function DetailedStackSuggestion({ preset }: { preset: PresetKey }) {
                       href={`https://pubmed.ncbi.nlm.nih.gov/${study.pmid}/`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="focus-ring inline-flex items-center gap-1 text-[10px] text-accent-cyan hover:underline mt-1.5 rounded"
+                      className="focus-ring inline-flex items-center gap-1 text-micro text-accent-cyan hover:underline mt-1.5 rounded"
                     >
                       PMID {study.pmid} · {study.journal} {study.year}
                       <ExternalLink className="w-2.5 h-2.5" aria-hidden="true" />
@@ -144,7 +144,7 @@ export function DetailedStackSuggestion({ preset }: { preset: PresetKey }) {
       {/* Synergy pairs inside the stack */}
       {analysis.synergies.length > 0 && (
         <div className="glass-deep glass-plane-mid rounded-xl p-3 mt-2">
-          <p className="flex items-center gap-1.5 text-[10px] font-mono text-accent-violet uppercase tracking-wider mb-2">
+          <p className="flex items-center gap-1.5 text-micro font-mono text-accent-violet uppercase tracking-wider mb-2">
             <Sparkles className="w-3 h-3" aria-hidden="true" />
             Synergy pairs in this stack
           </p>
@@ -152,7 +152,7 @@ export function DetailedStackSuggestion({ preset }: { preset: PresetKey }) {
             {analysis.synergies.map((s) => (
               <span
                 key={`${s.from}-${s.to}`}
-                className="text-[10px] font-medium px-2 py-0.5 rounded bg-accent-violet/10 text-accent-violet"
+                className="text-micro font-medium px-2 py-0.5 rounded bg-accent-violet/10 text-accent-violet"
               >
                 {s.label}
               </span>
@@ -164,13 +164,13 @@ export function DetailedStackSuggestion({ preset }: { preset: PresetKey }) {
       {/* Safety-first cautions */}
       {analysis.cautions.length > 0 && (
         <div className="rounded-xl border border-accent-amber/25 bg-accent-amber/5 p-3 mt-2">
-          <p className="flex items-center gap-1.5 text-[10px] font-mono text-accent-amber uppercase tracking-wider mb-1.5">
+          <p className="flex items-center gap-1.5 text-micro font-mono text-accent-amber uppercase tracking-wider mb-1.5">
             <ShieldAlert className="w-3 h-3" aria-hidden="true" />
             Before you start
           </p>
           <ul className="space-y-1">
             {analysis.cautions.slice(0, 3).map((c) => (
-              <li key={c} className="text-[10px] text-muted-foreground leading-relaxed">
+              <li key={c} className="text-micro text-muted-foreground leading-relaxed">
                 {c}
               </li>
             ))}

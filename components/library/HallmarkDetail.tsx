@@ -60,7 +60,7 @@ export function HallmarkDetail({
             />
             {MechanismVisual && (
               <GlassPanel depth="mid" className="overflow-hidden rounded-xl">
-                <p className="text-[9px] font-mono text-muted-foreground uppercase tracking-wider px-4 pt-3 pb-1">
+                <p className="text-micro font-mono text-muted-foreground uppercase tracking-wider px-4 pt-3 pb-1">
                   Mechanism Diagram
                 </p>
                 <MechanismVisual className="w-full" />
@@ -71,7 +71,7 @@ export function HallmarkDetail({
 
           <div className="order-1 lg:order-2 min-w-0 lg:col-span-8 space-y-10">
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-              <p className="font-mono text-[10px] text-accent-cyan tracking-widest mb-2">
+              <p className="font-mono text-micro text-accent-cyan tracking-widest mb-2">
                 HALLMARK {hallmark.number} OF 12
               </p>
               <div className="flex items-start gap-4 mb-2">
@@ -83,15 +83,15 @@ export function HallmarkDetail({
               <p className="text-lg text-muted-foreground mb-6">{hallmark.tagline}</p>
               <p className="text-sm text-muted-foreground leading-relaxed mb-4">{hallmark.summary}</p>
               <GlassPanel depth="mid" className="rounded-xl p-5 mb-4">
-                <p className="text-[10px] font-mono text-accent-violet uppercase mb-2">Mechanism</p>
+                <p className="text-micro font-mono text-accent-violet uppercase mb-2">Mechanism</p>
                 <p className="text-sm text-foreground/80 leading-relaxed">{hallmark.mechanism}</p>
                 {hallmark.keyMolecules && hallmark.keyMolecules.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-border/30">
-                    <span className="text-[9px] font-mono text-muted-foreground uppercase tracking-wider self-center mr-1">Key targets:</span>
+                    <span className="text-micro font-mono text-muted-foreground uppercase tracking-wider self-center mr-1">Key targets:</span>
                     {hallmark.keyMolecules.map((mol) => (
                       <span
                         key={mol}
-                        className="font-mono text-[10px] px-2 py-0.5 rounded-md bg-accent-violet/10 text-accent-violet border border-accent-violet/25 select-all"
+                        className="font-mono text-micro px-2 py-0.5 rounded-md bg-accent-violet/10 text-accent-violet border border-accent-violet/25 select-all"
                       >
                         {mol}
                       </span>
@@ -100,7 +100,7 @@ export function HallmarkDetail({
                 )}
               </GlassPanel>
               <GlassPanel depth="mid" className="rounded-xl p-5">
-                <p className="text-[10px] font-mono text-accent-amber uppercase mb-2">Why it matters</p>
+                <p className="text-micro font-mono text-accent-amber uppercase mb-2">Why it matters</p>
                 <p className="text-sm text-foreground/80 leading-relaxed">{hallmark.whyItMatters}</p>
               </GlassPanel>
             </motion.div>
@@ -111,7 +111,7 @@ export function HallmarkDetail({
               <div className="gradient-border p-6 md:p-8">
                 <div className="flex items-center gap-2 mb-4">
                   <BookOpen className="w-4 h-4 text-accent-cyan" />
-                  <p className="text-[10px] font-mono text-accent-cyan uppercase">Deep dive (MDX)</p>
+                  <p className="text-micro font-mono text-accent-cyan uppercase">Deep dive (MDX)</p>
                 </div>
                 <MdxRenderer content={mdxBody} currentHallmarkId={hallmark.id} />
               </div>
@@ -122,7 +122,7 @@ export function HallmarkDetail({
                 <div className="flex items-center justify-between gap-3 mb-4">
                   <div className="flex items-center gap-2">
                     <Pill className="w-4 h-4 text-accent-cyan" />
-                    <p className="text-[10px] font-mono text-accent-cyan uppercase tracking-wider">
+                    <p className="text-micro font-mono text-accent-cyan uppercase tracking-wider">
                       Compounds targeting {hallmark.title}
                     </p>
                   </div>
@@ -166,7 +166,7 @@ export function HallmarkDetail({
             )}
 
             <div>
-              <p className="text-[10px] font-mono text-accent-emerald uppercase tracking-wider mb-4">
+              <p className="text-micro font-mono text-accent-emerald uppercase tracking-wider mb-4">
                 Intervention Explorer — ranked by evidence
               </p>
               <InterventionExplorer
@@ -181,7 +181,7 @@ export function HallmarkDetail({
               <div className="flex items-center justify-between gap-3 mb-4">
                 <div className="flex items-center gap-2">
                   <Network className="w-4 h-4 text-accent-violet" />
-                  <p className="text-[10px] font-mono text-accent-violet uppercase tracking-wider">
+                  <p className="text-micro font-mono text-accent-violet uppercase tracking-wider">
                     System Effects — cross-hallmark synthesis
                   </p>
                 </div>

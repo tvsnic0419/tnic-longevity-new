@@ -46,7 +46,7 @@ export function QuizShareCard({ answers, preset, stackLabel }: QuizShareCardProp
       <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
         Copy a referral-style handoff — preset deep links to Stack Architect and Shop included.
       </p>
-      <code className="block text-[10px] font-mono text-muted-foreground truncate mb-3">{shareUrl}</code>
+      <code className="block text-micro font-mono text-muted-foreground truncate mb-3">{shareUrl}</code>
 
       <div className="flex flex-wrap gap-2">
         <button

@@ -38,7 +38,7 @@ export function ToolsPromoStrip({
                 <p className="text-xs font-semibold text-foreground/80 group-hover:text-accent-cyan transition-colors">
                   {t.label}
                 </p>
-                <p className="text-[10px] text-caption mt-0.5">{t.shortLabel}</p>
+                <p className="text-micro text-caption mt-0.5">{t.shortLabel}</p>
               </Link>
             </GlassPanel>
           ))}

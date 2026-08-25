@@ -25,7 +25,7 @@ export const EpigeneticAlterationsVisual: React.FC<EpigeneticAlterationsVisualPr
           <div className="text-label text-[var(--accent-violet)] mb-0.5">HALLMARK 03</div>
           <h4 className="heading-card text-lg">Epigenetic Alterations</h4>
         </div>
-        {showLabels && <div className="text-right text-[10px] text-[var(--color-text-muted)]">Methylation · Histones · Gene Expression</div>}
+        {showLabels && <div className="text-right text-micro text-[var(--color-text-muted)]">Methylation · Histones · Gene Expression</div>}
       </div>
 
       <svg viewBox="0 0 420 200" className="w-full h-auto" aria-label="Epigenetic Alterations: DNA methylation, histone modification and gene expression changes" role="img">
@@ -81,7 +81,7 @@ export const EpigeneticAlterationsVisual: React.FC<EpigeneticAlterationsVisualPr
       </svg>
 
       {showLabels && (
-        <div className="mt-3 text-[10px] text-[var(--color-text-muted)] leading-snug">
+        <div className="mt-3 text-micro text-[var(--color-text-muted)] leading-snug">
           Aging drives harmful methylation patterns and histone changes that silence protective genes. SIRT1 activation and NAD+ support help restore healthier epigenetic regulation.
         </div>
       )}

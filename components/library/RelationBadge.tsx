@@ -28,7 +28,7 @@ export function RelationBadge({ type, strength, className, showStrength = true }
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 text-[10px] font-semibold px-2 py-0.5 rounded-full border',
+        'inline-flex items-center gap-1.5 text-micro font-semibold px-2 py-0.5 rounded-full border',
         cfg.accent, cfg.bg, cfg.border,
         className,
       )}

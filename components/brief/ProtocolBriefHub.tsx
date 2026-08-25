@@ -37,12 +37,12 @@ export function ProtocolBriefHub() {
               <time className="text-caption font-mono">{entry.date}</time>
               <EvidenceTag tier={entry.evidenceTier} size="sm" />
               {i === 0 && (
-                <span className="text-[10px] font-mono text-accent-violet uppercase tracking-wider">
+                <span className="text-micro font-mono text-accent-violet uppercase tracking-wider">
                   Latest
                 </span>
               )}
               {entry.source === 'research-intel' && (
-                <span className="inline-flex items-center gap-1 text-[10px] font-mono text-accent-cyan uppercase tracking-wider">
+                <span className="inline-flex items-center gap-1 text-micro font-mono text-accent-cyan uppercase tracking-wider">
                   <Radio className="w-3 h-3" aria-hidden="true" />
                   Research Intel sync
                 </span>
@@ -64,7 +64,7 @@ export function ProtocolBriefHub() {
                   href={`https://pubmed.ncbi.nlm.nih.gov/${pmid}/`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="focus-ring inline-flex items-center gap-1 text-[10px] font-mono text-muted-foreground hover:text-accent-cyan px-2 py-1 rounded bg-muted/50"
+                  className="focus-ring inline-flex items-center gap-1 text-micro font-mono text-muted-foreground hover:text-accent-cyan px-2 py-1 rounded bg-muted/50"
                 >
                   PMID {pmid} <ExternalLink className="w-3 h-3" aria-hidden="true" />
                 </a>
@@ -87,7 +87,7 @@ export function ProtocolBriefHub() {
               {entry.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="text-[10px] font-mono text-muted-foreground bg-muted/40 px-2 py-0.5 rounded"
+                  className="text-micro font-mono text-muted-foreground bg-muted/40 px-2 py-0.5 rounded"
                 >
                   {tag}
                 </span>

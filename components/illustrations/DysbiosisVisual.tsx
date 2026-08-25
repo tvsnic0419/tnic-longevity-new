@@ -25,7 +25,7 @@ export const DysbiosisVisual: React.FC<DysbiosisVisualProps> = ({
           <div className="text-label text-[var(--accent-amber)] mb-0.5">HALLMARK 11</div>
           <h4 className="heading-card text-lg">Dysbiosis</h4>
         </div>
-        {showLabels && <div className="text-right text-[10px] text-[var(--color-text-muted)]">Microbiome · Leaky Gut · Immunity</div>}
+        {showLabels && <div className="text-right text-micro text-[var(--color-text-muted)]">Microbiome · Leaky Gut · Immunity</div>}
       </div>
 
       <svg viewBox="0 0 420 200" className="w-full h-auto" aria-label="Dysbiosis: gut microbiome imbalance and leaky gut" role="img">
@@ -81,7 +81,7 @@ export const DysbiosisVisual: React.FC<DysbiosisVisualProps> = ({
       </svg>
 
       {showLabels && (
-        <div className="mt-3 text-[10px] text-[var(--color-text-muted)] leading-snug">
+        <div className="mt-3 text-micro text-[var(--color-text-muted)] leading-snug">
           Loss of microbial diversity and leaky gut drive systemic inflammation. Fiber, polyphenols, and targeted probiotics help restore balance.
         </div>
       )}

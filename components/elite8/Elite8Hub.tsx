@@ -113,7 +113,7 @@ function ClockConfidenceBadge({ confidence }: { confidence: ScoredLQCompound['cl
     modeled: 'bg-muted/30 text-muted-foreground border-border/60',
   };
   return (
-    <span className={`px-2 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wider border ${styles[confidence]}`}>
+    <span className={`px-2 py-0.5 rounded-full text-micro font-semibold uppercase tracking-wider border ${styles[confidence]}`}>
       {CLOCK_CONFIDENCE_LABELS[confidence]}
     </span>
   );
@@ -158,13 +158,13 @@ function CompoundCard({
             <div className="flex items-baseline gap-2 flex-wrap">
               <span className="font-semibold text-xl md:text-2xl">{product.name}</span>
               <span
-                className="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wider uppercase border"
+                className="inline-flex px-2.5 py-0.5 rounded-full text-micro font-semibold tracking-wider uppercase border"
                 style={{ borderColor: `${product.color}44`, color: product.color, background: `${product.color}18` }}
               >
                 {product.category}
               </span>
               {product.evidenceTier && (
-                <span className="text-[10px] font-mono text-accent-emerald bg-accent-emerald/10 px-2 py-0.5 rounded-lg border border-accent-emerald/20">
+                <span className="text-micro font-mono text-accent-emerald bg-accent-emerald/10 px-2 py-0.5 rounded-lg border border-accent-emerald/20">
                   Tier {product.evidenceTier}
                 </span>
               )}
@@ -175,7 +175,7 @@ function CompoundCard({
             <div className="font-mono text-2xl md:text-3xl font-black" style={{ color: product.color }}>
               <AnimCounter target={product.score} />
             </div>
-            <p className="text-[10px] tracking-widest text-muted-foreground mt-0.5">LQ SCORE</p>
+            <p className="text-micro tracking-widest text-muted-foreground mt-0.5">LQ SCORE</p>
           </div>
         </div>
         <div className="mt-4">
@@ -188,7 +188,7 @@ function CompoundCard({
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="shrink-0 flex flex-col items-center text-muted-foreground">
               <RadarMini product={product} />
-              <p className="mt-2 text-[10px] tracking-widest">CE · EB · ES · EE · SF · BV</p>
+              <p className="mt-2 text-micro tracking-widest">CE · EB · ES · EE · SF · BV</p>
             </div>
             <div className="flex-1 space-y-3">
               <p className="text-label text-accent-emerald">Dimension scores</p>
@@ -520,7 +520,7 @@ export function Elite8Hub() {
                     #{i + 1}
                   </span>
                   <span
-                    className="inline-flex px-2 py-0.5 rounded-full text-[9px] font-semibold tracking-wider uppercase border"
+                    className="inline-flex px-2 py-0.5 rounded-full text-micro font-semibold tracking-wider uppercase border"
                     style={{ borderColor: `${p.color}44`, color: p.color, background: `${p.color}18` }}
                   >
                     {p.category}

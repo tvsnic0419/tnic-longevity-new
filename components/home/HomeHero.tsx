@@ -133,7 +133,7 @@ export function HomeHero() {
                       <span className="tnic-tabular block font-mono text-2xl font-bold tracking-tight text-white">
                         {stat.value}
                       </span>
-                      <span className="mt-1 block text-[11px] leading-tight text-white/50">
+                      <span className="mt-1 block text-caption leading-tight text-white/50">
                         {stat.label}
                       </span>
                     </dd>
@@ -158,7 +158,7 @@ export function HomeHero() {
                 </Suspense>
               </TiltGlassPanel>
             </div>
-            <p className="mt-4 hidden text-center text-[11px] text-white/70 lg:block lg:text-right">
+            <p className="mt-4 hidden text-center text-caption text-white/70 lg:block lg:text-right">
               Nutrition, down to the cell — evidence you can trace
             </p>
           </div>

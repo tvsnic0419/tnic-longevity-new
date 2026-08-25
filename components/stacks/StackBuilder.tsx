@@ -147,7 +147,7 @@ export function StackBuilder({
             {liveAnalysis.totalScore}
           </div>
           <p className="text-caption text-muted-foreground">Synergy score</p>
-          <p className="text-[10px] font-mono text-caption mt-1">
+          <p className="text-micro font-mono text-caption mt-1">
             Platform score {analysis.score}/100
           </p>
         </div>
@@ -300,7 +300,7 @@ function ActiveStackPanel({
                     {COMPOUND_LIBRARY_HREF[c.id] && (
                       <Link
                         href={COMPOUND_LIBRARY_HREF[c.id]}
-                        className="inline-flex items-center gap-1 text-[10px] font-mono text-accent-cyan hover:text-accent-emerald transition-colors focus-ring rounded"
+                        className="inline-flex items-center gap-1 text-micro font-mono text-accent-cyan hover:text-accent-emerald transition-colors focus-ring rounded"
                       >
                         <BookOpen className="w-3 h-3" />
                         Deep dive

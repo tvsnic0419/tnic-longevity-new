@@ -29,7 +29,7 @@ function Metric({
 }) {
   return (
     <div className="rounded-xl border border-border/60 bg-muted/10 p-4">
-      <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+      <div className="flex items-center gap-1.5 text-micro font-mono uppercase tracking-widest text-muted-foreground">
         <Icon className="h-3.5 w-3.5 text-accent-cyan" aria-hidden="true" />
         {label}
       </div>
@@ -95,7 +95,7 @@ export function CompoundGlancePanel({ compound }: { compound: Compound }) {
 
       {targetHallmarks.length > 0 && (
         <div className="mt-5">
-          <div className="mb-2.5 flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+          <div className="mb-2.5 flex items-center gap-1.5 text-micro font-mono uppercase tracking-widest text-muted-foreground">
             <Target className="h-3.5 w-3.5 text-accent-violet" aria-hidden="true" />
             Targets {targetHallmarks.length} hallmark{targetHallmarks.length === 1 ? '' : 's'} of aging
           </div>
@@ -106,7 +106,7 @@ export function CompoundGlancePanel({ compound }: { compound: Compound }) {
                 href={`/library/${h.slug}`}
                 className="focus-ring interactive inline-flex items-center gap-1.5 rounded-full border border-accent-violet/25 bg-accent-violet/5 px-3 py-1 text-xs text-muted-foreground transition hover:border-accent-violet/50 hover:text-accent-violet"
               >
-                <span className="font-mono text-[10px] text-accent-violet">
+                <span className="font-mono text-micro text-accent-violet">
                   {String(h.number).padStart(2, '0')}
                 </span>
                 {h.title}
@@ -117,7 +117,7 @@ export function CompoundGlancePanel({ compound }: { compound: Compound }) {
       )}
 
       <p className="mt-5 border-t border-border/50 pt-4 text-sm leading-relaxed text-muted-foreground">
-        <span className="font-mono text-[10px] uppercase tracking-widest text-accent-cyan">
+        <span className="font-mono text-micro uppercase tracking-widest text-accent-cyan">
           Primary mechanism
         </span>
         <br />

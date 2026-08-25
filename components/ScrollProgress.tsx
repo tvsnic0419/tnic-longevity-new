@@ -57,7 +57,7 @@ export function ScrollProgress() {
               title={link.label}
             >
               <span
-                className={`text-[10px] font-mono transition-all duration-300 ${
+                className={`text-micro font-mono transition-all duration-300 ${
                   isActive ? 'text-accent-cyan opacity-100' : 'text-caption opacity-0 group-hover:opacity-100'
                 }`}
               >

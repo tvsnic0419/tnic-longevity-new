@@ -71,13 +71,13 @@ function ProductCard({ pick }: { pick: ProductPick }) {
             <EvidenceTag tier={tier} size="sm" />
           </div>
         )}
-        <span className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity inline-flex items-center gap-1 text-[10px] font-semibold bg-accent-emerald/90 text-black px-2 py-1 rounded-full">
+        <span className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity inline-flex items-center gap-1 text-micro font-semibold bg-accent-emerald/90 text-black px-2 py-1 rounded-full">
           Buy on {pick.brand.split(' ')[0]} <ExternalLink className="w-2.5 h-2.5" />
         </span>
       </div>
 
       <div className="relative pointer-events-none p-5 flex flex-col flex-1">
-        <p className="text-[11px] font-semibold text-accent-emerald uppercase tracking-widest mb-1">
+        <p className="text-caption font-semibold text-accent-emerald uppercase tracking-widest mb-1">
           {pick.brand}
         </p>
         <h2 className="font-bold text-foreground group-hover:text-accent-cyan transition-colors leading-snug mb-2">
@@ -89,7 +89,7 @@ function ProductCard({ pick }: { pick: ProductPick }) {
             {hallmarkTargets.map((h) => (
               <span
                 key={h}
-                className="text-[9px] font-semibold px-1.5 py-0.5 rounded border"
+                className="text-micro font-semibold px-1.5 py-0.5 rounded border"
                 style={{
                   color: 'var(--accent-cyan)',
                   background: 'color-mix(in srgb, var(--accent-cyan) 10%, transparent)',
@@ -104,19 +104,19 @@ function ProductCard({ pick }: { pick: ProductPick }) {
 
         <p className="text-xs text-muted-foreground leading-relaxed flex-1 mb-4">{pick.whyThisPick}</p>
         <div className="pt-3 border-t border-border/50 flex items-center justify-between gap-2">
-          <p className="text-[11px] text-muted-foreground/70 leading-snug line-clamp-2">{pick.doseNote}</p>
+          <p className="text-caption text-muted-foreground/70 leading-snug line-clamp-2">{pick.doseNote}</p>
           <span className="shrink-0 inline-flex items-center gap-1 text-xs font-semibold text-accent-emerald">
             Buy <ExternalLink className="w-3 h-3" />
           </span>
         </div>
         {pick.companionPurchase && (
-          <p className="mt-3 text-[11px] text-accent-amber/90 border-t border-border/30 pt-3">
+          <p className="mt-3 text-caption text-accent-amber/90 border-t border-border/30 pt-3">
             + {pick.companionPurchase.label}
           </p>
         )}
         <Link
           href={`/library/compounds/${pick.compoundId}`}
-          className="relative z-10 pointer-events-auto mt-3 inline-block text-[11px] font-semibold text-accent-violet hover:underline"
+          className="relative z-10 pointer-events-auto mt-3 inline-block text-caption font-semibold text-accent-violet hover:underline"
         >
           Read {pick.compoundName} evidence module →
         </Link>
@@ -175,14 +175,14 @@ export function ProductsHub() {
                   href={`/library/compounds/${c.id}`}
                   className="focus-ring block rounded-2xl p-5 hover:border-accent-violet/40 transition group h-full"
                 >
-                  <p className="text-[11px] font-semibold text-accent-cyan uppercase tracking-widest mb-1">
+                  <p className="text-caption font-semibold text-accent-cyan uppercase tracking-widest mb-1">
                     Tier {c.evidence} · Library only
                   </p>
                   <h3 className="font-bold text-foreground group-hover:text-accent-violet transition-colors mb-2">
                     {c.name}
                   </h3>
                   <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3 mb-3">{c.desc}</p>
-                  <p className="text-[11px] text-muted-foreground/80">{c.dose}</p>
+                  <p className="text-caption text-muted-foreground/80">{c.dose}</p>
                   <span className="inline-block mt-3 text-xs font-semibold text-accent-violet group-hover:underline">
                     Read evidence module →
                   </span>

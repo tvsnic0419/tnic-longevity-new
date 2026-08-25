@@ -76,7 +76,7 @@ function PathwayCard({ group, highlight }: { group: PathwayGroup; highlight?: bo
 
         <div className="flex flex-wrap gap-1.5">
           {group.hallmarkIds.map((id) => (
-            <span key={id} className={cn('text-[9px] font-mono px-1.5 py-0.5 rounded-md border', ac.badge)}>
+            <span key={id} className={cn('text-micro font-mono px-1.5 py-0.5 rounded-md border', ac.badge)}>
               {hallmarkNames[id] ?? id}
             </span>
           ))}
@@ -95,10 +95,10 @@ function PathwayCard({ group, highlight }: { group: PathwayGroup; highlight?: bo
             <div className="px-5 pb-5 pt-2 border-t border-border/40 space-y-4">
               {/* Key molecules */}
               <div>
-                <p className="text-[9px] font-mono text-muted-foreground uppercase mb-2">Key Molecules</p>
+                <p className="text-micro font-mono text-muted-foreground uppercase mb-2">Key Molecules</p>
                 <div className="flex flex-wrap gap-1">
                   {group.keyMolecules.map((mol) => (
-                    <span key={mol} className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-card border border-border text-muted-foreground">
+                    <span key={mol} className="text-micro font-mono px-1.5 py-0.5 rounded bg-card border border-border text-muted-foreground">
                       {mol}
                     </span>
                   ))}
@@ -107,7 +107,7 @@ function PathwayCard({ group, highlight }: { group: PathwayGroup; highlight?: bo
 
               {/* Synergy insight */}
               <div className={cn('rounded-lg p-3', ac.bg)}>
-                <p className={cn('text-[9px] font-mono uppercase mb-1.5', ac.text)}>Synergy Mechanism</p>
+                <p className={cn('text-micro font-mono uppercase mb-1.5', ac.text)}>Synergy Mechanism</p>
                 <p className="text-xs text-foreground/80 leading-relaxed">{group.synergy}</p>
               </div>
 
@@ -115,7 +115,7 @@ function PathwayCard({ group, highlight }: { group: PathwayGroup; highlight?: bo
               <div>
                 <div className="flex items-center gap-1.5 mb-2">
                   <FlaskConical className={cn('w-3 h-3', ac.text)} />
-                  <p className="text-[9px] font-mono text-muted-foreground uppercase">TNiC Compounds</p>
+                  <p className="text-micro font-mono text-muted-foreground uppercase">TNiC Compounds</p>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {group.compoundIds.map((id) => (

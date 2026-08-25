@@ -86,7 +86,7 @@ function RelationRow({ relation, perspective }: { relation: HallmarkRelation; pe
           </span>
         </div>
         <RelationBadge type={relation.type} strength={relation.strength} />
-        <span className="text-[10px] font-mono text-muted-foreground shrink-0">
+        <span className="text-micro font-mono text-muted-foreground shrink-0">
           Tier {relation.evidence}
         </span>
         {open ? (
@@ -110,7 +110,7 @@ function RelationRow({ relation, perspective }: { relation: HallmarkRelation; pe
               {relation.keyMolecules.length > 0 && (
                 <div className="flex flex-wrap gap-1">
                   {relation.keyMolecules.map((mol) => (
-                    <span key={mol} className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-card border border-border text-muted-foreground">
+                    <span key={mol} className="text-micro font-mono px-1.5 py-0.5 rounded bg-card border border-border text-muted-foreground">
                       {mol}
                     </span>
                   ))}

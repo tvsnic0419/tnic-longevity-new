@@ -131,19 +131,19 @@ export function BiomarkerDashboardTool() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Card className="p-4 text-center">
           <p className="text-2xl font-bold text-accent-cyan">{dashboard.healthspanScore}</p>
-          <p className="text-[9px] font-mono text-muted-foreground">HEALTHSPAN SCORE</p>
+          <p className="text-micro font-mono text-muted-foreground">HEALTHSPAN SCORE</p>
         </Card>
         <Card className="p-4 text-center">
           <p className="text-2xl font-bold text-accent-emerald">{dashboard.dataCompleteness}%</p>
-          <p className="text-[9px] font-mono text-muted-foreground">PANEL COMPLETE</p>
+          <p className="text-micro font-mono text-muted-foreground">PANEL COMPLETE</p>
         </Card>
         <Card className="p-4 text-center">
           <p className="text-sm font-semibold text-accent-rose truncate">{dashboard.topConcern ?? '—'}</p>
-          <p className="text-[9px] font-mono text-muted-foreground">TOP CONCERN</p>
+          <p className="text-micro font-mono text-muted-foreground">TOP CONCERN</p>
         </Card>
         <Card className="p-4 text-center">
           <p className="text-sm font-semibold text-accent-emerald truncate">{dashboard.topWin ?? '—'}</p>
-          <p className="text-[9px] font-mono text-muted-foreground">TOP WIN</p>
+          <p className="text-micro font-mono text-muted-foreground">TOP WIN</p>
         </Card>
       </div>
 
