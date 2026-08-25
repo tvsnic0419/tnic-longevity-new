@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { STACK_BUILDABLE_COUNT } from '@/lib/stats';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
@@ -63,7 +64,7 @@ export function StacksLibrary() {
         eyebrow="Stacks & Protocols"
         title="Stack Architect"
         description="Pre-built evidence-graded protocols with dosing, monitoring, and cost breakdowns. Build custom stacks with real-time synergy and contraindication analysis."
-        meta={`${eliteStacks.length} elite stacks · 6 evidence-graded compounds · Educational only`}
+        meta={`${eliteStacks.length} elite stacks · ${STACK_BUILDABLE_COUNT} evidence-graded compounds · Educational only`}
         theme="violet"
         context={getHubContext('stacks')}
       />
