@@ -109,10 +109,10 @@ export default function HallmarksIndexPage() {
                 const hasEditorial = EDITORIAL_SLUGS.has(h.slug);
                 const topIntervention = [...h.interventions].sort((a, b) => a.rank - b.rank)[0];
                 return (
-                  <div key={h.id} className="rounded-2xl border border-border/60 bg-card/40 p-5 flex flex-col">
+                  <div key={h.id} className="min-w-0 rounded-2xl border border-border/60 bg-card/40 p-5 flex flex-col">
                     {/* Header */}
                     <div className="flex items-start justify-between gap-2 mb-3">
-                      <div>
+                      <div className="min-w-0">
                         <span className="text-xs font-mono text-muted-foreground/60">#{h.number}</span>
                         <h3 className="font-bold text-foreground mt-0.5">{h.title}</h3>
                       </div>
