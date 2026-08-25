@@ -1,4 +1,5 @@
 import { TrustHub } from '@/components/trust/TrustHub';
+import { HALLMARK_COUNT } from '@/lib/stats';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { seoRoutes } from '@/lib/seo-routes';
@@ -37,7 +38,7 @@ export default function TrustPage() {
           { value: String(COMPOUND_COUNT), label: 'Compounds graded' },
           { value: String(pmidSet.size), label: 'PubMed citations' },
           { value: 'A–C', label: 'Evidence tiers' },
-          { value: '12', label: 'Hallmarks of aging' },
+          { value: String(HALLMARK_COUNT), label: 'Hallmarks of aging' },
         ]}
         primary={{ href: '/trust/methodology', label: 'How we grade the evidence' }}
       />

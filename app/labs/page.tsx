@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { HALLMARK_COUNT } from '@/lib/stats';
 import { LabHub } from '@/components/labs/LabHub';
 import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
 import { StructuredData } from '@/components/seo/StructuredData';
@@ -49,7 +50,7 @@ export default function LabsPage() {
         stats={[
           { value: String(biomarkers.length), label: 'Tracked biomarkers' },
           { value: String(COMPOUND_COUNT), label: 'Graded compounds' },
-          { value: '12', label: 'Hallmarks of aging' },
+          { value: String(HALLMARK_COUNT), label: 'Hallmarks of aging' },
           { value: 'A–C', label: 'Evidence tiers' },
         ]}
         primary={{ href: '/quiz', label: 'Take The Nico Starter Questionnaire' }}

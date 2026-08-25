@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ELITE_COUNT } from '@/lib/stats';
 import { ArrowRight, FlaskConical, ShieldCheck, Clock, ExternalLink, CheckCircle2, AlertTriangle, Zap } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { GuideHeroPanel } from '@/components/guides/GuideHeroPanel';
@@ -547,7 +548,7 @@ export default function NadSupplementGuidePage() {
             >
               <p className="text-xs font-mono text-accent-emerald mb-1">GUIDE</p>
               <p className="font-semibold text-sm group-hover:text-accent-emerald transition">Best Longevity Supplements 2026 →</p>
-              <p className="text-xs text-muted-foreground mt-1">All 8 elite compounds ranked</p>
+              <p className="text-xs text-muted-foreground mt-1">All {ELITE_COUNT} elite compounds ranked</p>
             </Link>
           </div>
 

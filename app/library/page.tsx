@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { HALLMARK_COUNT } from '@/lib/stats';
 import Link from 'next/link';
 import { buildPageMetadata } from '@/lib/seo';
 import { AntiAgingLibrary } from '@/components/library/AntiAgingLibrary';
@@ -59,7 +60,7 @@ export default function LibraryPage() {
         lead="The 12 hallmarks of aging, each paired with PMID-cited interventions and mechanistic visuals — the free, evidence-first reference the whole site is built on."
         stats={[
           { value: String(COMPOUND_COUNT), label: 'Graded compounds' },
-          { value: '12', label: 'Hallmarks of aging' },
+          { value: String(HALLMARK_COUNT), label: 'Hallmarks of aging' },
           { value: 'A–C', label: 'Evidence tiers' },
           { value: String(eliteInterventions.length), label: 'Elite interventions' },
         ]}

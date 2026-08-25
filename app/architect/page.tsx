@@ -6,7 +6,7 @@ import { StructuredData } from '@/components/seo/StructuredData';
 import { seoRoutes } from '@/lib/seo-routes';
 import { buildBreadcrumbSchema } from '@/lib/seo';
 import { compounds } from '@/lib/data/compounds';
-import { hallmarks } from '@/lib/data/hallmarks';
+import { HALLMARK_COUNT } from '@/lib/stats';
 
 export const metadata = seoRoutes.architect();
 
@@ -17,7 +17,7 @@ for (const c of compounds) {
 
 const architectStats = [
   { value: String(compounds.length), label: 'Compounds mapped' },
-  { value: String(hallmarks.length), label: 'Hallmarks of aging' },
+  { value: String(HALLMARK_COUNT), label: 'Hallmarks of aging' },
   { value: String(synergyPairs.size), label: 'Synergy pairs' },
 ];
 

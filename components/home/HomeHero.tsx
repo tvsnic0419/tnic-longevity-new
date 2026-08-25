@@ -4,8 +4,7 @@ import { Pill, Library, ArrowRight, Sparkles } from 'lucide-react';
 import { StarterQuiz } from '@/components/sections/StarterQuiz';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { TiltGlassPanel } from '@/components/ui/TiltGlassPanel';
-import { COMPOUND_COUNT } from '@/lib/library-modules';
-import { eliteInterventions } from '@/lib/elite-interventions';
+import { COMPOUND_COUNT, HALLMARK_COUNT, ELITE_COUNT, EVIDENCE_TIER_RANGE } from '@/lib/stats';
 
 /**
  * Server-rendered homepage hero.
@@ -17,10 +16,10 @@ import { eliteInterventions } from '@/lib/elite-interventions';
  */
 
 const heroStats = [
-  { value: String(eliteInterventions.length), label: 'Elite interventions' },
+  { value: String(ELITE_COUNT), label: 'Elite interventions' },
   { value: String(COMPOUND_COUNT), label: 'Graded compounds' },
-  { value: '12', label: 'Hallmarks of aging' },
-  { value: 'A–C', label: 'Evidence tiers' },
+  { value: String(HALLMARK_COUNT), label: 'Hallmarks of aging' },
+  { value: EVIDENCE_TIER_RANGE, label: 'Evidence tiers' },
 ];
 
 function Dot() {
