@@ -67,7 +67,7 @@ export function InterventionExplorer({
       {/* Filter toolbar */}
       <div className="mb-5 flex flex-wrap items-center gap-x-2 gap-y-3">
         <Filter className="h-4 w-4 text-[var(--color-text-faint)]" aria-hidden="true" />
-        <div className="flex flex-wrap gap-1.5" role="group" aria-label="Filter interventions by category">
+        <div className="chip-row" role="group" aria-label="Filter interventions by category">
           {(['all', 'compound', 'lifestyle', 'clinical', 'emerging'] as const).map((cat) => {
             const isActive = filter === cat;
             return (

@@ -525,9 +525,22 @@ p,
    still be comfortably tappable. Use this instead of .touch-target wherever
    padding the control to 44px would wreck the layout (chip rows, scene rails).
    The pseudo-element is deliberately NOT pointer-events:none — it IS the
-   enlarged target. Only safe on controls with no interactive children. */
-.tap-expand { position: relative; }
-.tap-expand::after {
+   enlarged target. Only safe on controls with no interactive children.
+
+   IMPORTANT: an expanded hit area can overlap a neighbour's, and then the
+   wrong control receives the tap — which is worse than a small target, because
+   it is silently wrong rather than merely fiddly. Measured on the homepage
+   filter row: 28px chips at a 36px row pitch had their expanded areas overlap
+   by 8px, and a tap 6px below one chip landed on the chip in the row beneath.
+   So: use `.tap-expand-y` inside wrapping rows (vertical only — horizontal
+   padding already carries chips past 44px wide), and give the row `.chip-row`,
+   whose 16px row gap makes the pitch exactly 44px with no overlap at all.
+   Reserve the both-axes `.tap-expand` for isolated controls with clear space
+   around them. */
+.tap-expand,
+.tap-expand-y { position: relative; }
+.tap-expand::after,
+.tap-expand-y::after {
   content: "";
   position: absolute;
   top: 50%;
@@ -535,8 +548,18 @@ p,
   transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
-  min-width: var(--space-touch);
   min-height: var(--space-touch);
+}
+.tap-expand::after { min-width: var(--space-touch); }
+
+/* A wrapping row of compact chips. The 16px row gap is load-bearing, not
+   taste: 28px chip + 16px = a 44px pitch, exactly the expanded hit height, so
+   neighbouring rows can never steal each other's taps. */
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.5rem;
+  row-gap: 1rem;
 }
 
 .interactive {

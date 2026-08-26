@@ -78,7 +78,7 @@ export function LibraryCategoryIndex({
                 // a real navigation (it rewrites the `tiers` URL param), so the
                 // selected state is aria-current.
                 aria-current={activeTiers.includes(tier) ? 'true' : undefined}
-                className={`focus-ring tap-expand inline-flex items-center gap-1.5 rounded-full border px-2 py-1 transition-colors ${
+                className={`focus-ring tap-expand-y inline-flex items-center gap-1.5 rounded-full border px-2 py-1 transition-colors ${
                   activeTiers.includes(tier)
                     ? 'border-[var(--surface-selected-border)] bg-[var(--surface-selected)] text-foreground'
                     : 'border-transparent hover:border-[var(--color-border-subtle)]'

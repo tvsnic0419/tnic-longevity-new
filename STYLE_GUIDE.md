@@ -4,8 +4,9 @@
 > Governs typography, spacing, components, accessibility, and page patterns across tnic.help.  
 > v1.1 documents the cinematic viz family (§7, §12) that the premium hubs are built on.  
 > v1.2 corrects the drifted §2 color values, documents the signal roles, the
-> canonical tier scale, and the interaction primitives (`IconButton`,
-> `SelectableChip`, `ExternalAction`).
+> canonical tier scale, the interaction primitives (`IconButton`,
+> `SelectableChip`, `ExternalAction`, `InteractiveSciencePanel`) and the
+> hit-area rules.
 
 ---
 
@@ -116,9 +117,21 @@ the other.
 | Spacing scale | `--space-1…9`: 4, 8, 12, 16, 24, 32, 48, 72, 112px |
 
 **Touch targets.** Use `.touch-target` when the control can afford to be 44px.
-When it cannot — a compact filter chip, a scene-rail step — use `.tap-expand`,
-which grows the *hit area* to 44px via a pseudo-element while leaving the
-control's visual size alone.
+When it cannot — a compact filter chip, a scene-rail step — expand the *hit
+area* instead of the control:
+
+| Class | Use for |
+|---|---|
+| `.touch-target` | Controls that can simply be 44px (icon buttons, nav rows) |
+| `.tap-expand` | An isolated compact control with clear space around it — grows the hit area on **both** axes |
+| `.tap-expand-y` | A compact control inside a row of them — grows **vertically only** |
+| `.chip-row` | The container for a wrapping chip row. Its 16px row gap is load-bearing |
+
+An expanded hit area that overlaps a neighbour's is worse than a small one: the
+wrong control receives the tap, silently. Measured on the homepage filter row —
+28px chips at a 36px row pitch had their expanded areas overlap by 8px, and a
+tap 6px below one chip landed on the chip in the row beneath. `.chip-row`'s
+16px gap makes the pitch exactly 44px, so the areas tile without overlapping.
 
 ---
 
@@ -134,6 +147,7 @@ control's visual size alone.
 | `IconButton` | The canonical icon-only control — 40/44px, `type="button"`, label required (doubles as tooltip) |
 | `SelectableChip` | The canonical selection control — `shape="chip"` for filter rows, `shape="card"` for questionnaire answers. Selected is always emerald |
 | `ExternalAction` | The canonical off-site action — decides `rel` once, always names the destination and warns it opens a new tab |
+| `InteractiveSciencePanel` | The shell every interactive visualization sits in — title bar, legend, Reset/Zoom/Fullscreen, keyboard rotation, first-use cue, always-present text summary |
 | `Accordion` | Expandable detail without page jump |
 | `DataTable` | Scrollable table + `sr-only` caption |
 | Card surfaces | `.premium-card` (canonical), `GlassPanel` / `.glass-deep`, `.card-elevated`, `.glass` |

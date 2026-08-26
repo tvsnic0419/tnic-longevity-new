@@ -105,7 +105,7 @@ export function CompoundExplorer() {
       {/* Clickable tier-count pills — the primary affordance. Each shows how many
           compounds sit at that tier and toggles the shared `tiers` URL param, so
           clicking "8 · Tier A" filters the grid below to exactly those eight. */}
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="chip-row items-center">
         {TIER_ORDER.map((tier) => {
           const isActive = activeTiers.includes(tier);
           return (

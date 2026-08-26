@@ -7,6 +7,8 @@ import {
 import { eliteInterventions } from "@/lib/elite-interventions";
 import { COMPOUND_COUNT } from "@/lib/library-modules";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { InteractiveSciencePanel } from "@/components/viz/InteractiveSciencePanel";
+import type { StageHandle } from "@/components/viz/stage-handle";
 import { MoleculeStage } from "@/components/viz/MoleculeStage";
 import { NetworkStage, type NetworkNode, type NetworkEdge } from "@/components/viz/NetworkStage";
 import { HUES } from "@/components/viz/tokens";
@@ -221,13 +223,8 @@ const CSS = `
 }
 .tnic-stage canvas, .tnic-stage svg { width: 100%; height: 100%; display: block; }
 
-.tnic-molhint {
-  position: absolute; bottom: 12px; right: 14px;
-  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 11px;
-  color: var(--faint); letter-spacing: .06em; pointer-events: none;
-  display: flex; align-items: center; gap: 7px;
-}
-.tnic-molhint .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 10px var(--cyan); animation: tnic-cuepulse 2s infinite; }
+/* .tnic-molhint retired — the always-on "drag · scroll to zoom" line is now
+   InteractiveSciencePanel's first-use cue, which dismisses once used. */
 
 .tnic-molcard {
   background: linear-gradient(180deg, var(--panel2), var(--panel));
@@ -242,7 +239,22 @@ const CSS = `
 .tnic-molcard .fact { display: flex; flex-direction: column; gap: 3px; }
 .tnic-molcard .fact .k { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--faint); }
 .tnic-molcard .fact .v { font-size: 15px; color: var(--ink); }
-.tnic-molcard .why { font-size: 13.5px; color: var(--muted); line-height: 1.55; margin-top: 4px; border-top: 1px solid var(--line); padding-top: 14px; }
+/* The shared science panel, sized inside the Descent's two-column wraps. The
+   old hand-rolled .tnic-stage frame lives on for other callers; these two acts
+   now use the shell so they get the title bar, legend, controls and keyboard
+   path with everything else on the site. */
+.tnic-sci { background: linear-gradient(180deg, var(--panel2), var(--panel)); border-color: var(--line); }
+/* Stage ratios preserved from the .tnic-stage frame these two acts used
+   before — the molecule renderer sizes its geometry to the canvas, so a
+   changed ratio crops it. */
+.tnic-sci > div:nth-child(2) { min-height: 300px; }
+.tnic-molwrap .tnic-sci > div:nth-child(2) { aspect-ratio: 16 / 10; max-height: 62vh; }
+.tnic-netwrap .tnic-sci > div:nth-child(2) { aspect-ratio: 10 / 7; max-height: 62vh; }
+.tnic-sci canvas { width: 100%; height: 100%; display: block; }
+
+/* max-width added: this was the only explanatory paragraph in the Descent with
+   no measure limit — .tnic-lead, .tnic-stage-cap and .tnic-honest all have one. */
+.tnic-molcard .why { font-size: 13.5px; color: var(--muted); line-height: 1.55; margin-top: 4px; border-top: 1px solid var(--line); padding-top: 14px; max-width: 52ch; }
 .tnic-molcard .cite { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; color: var(--faint); letter-spacing: .1em; }
 
 .tnic-netwrap { display: grid; grid-template-columns: 1.5fr 1fr; gap: 28px; align-items: start; margin-top: 10px; }
@@ -352,6 +364,58 @@ const CSS = `
 .tnic-tl-stat .n { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
 .tnic-honest { font-size: 13px; color: var(--faint); font-style: italic; margin-top: 14px; max-width: 60ch; line-height: 1.55; }
 .tnic-tl-toggle { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+
+/* ── Segmented trajectory control ──
+   Was a single unlabelled chip whose only state signal was a CSS class and an
+   inline color: no type attribute, no aria-pressed, no name for what the two
+   states even were. This is a real radiogroup with both options named. */
+.tnic-seg {
+  display: inline-flex; padding: 3px; gap: 3px;
+  background: rgba(14,20,38,0.6); border: 1px solid var(--line); border-radius: 999px;
+}
+.tnic-seg button {
+  display: inline-flex; align-items: center; gap: 7px;
+  min-height: var(--space-touch); padding: 8px 14px;
+  background: none; border: none; border-radius: 999px; cursor: pointer;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--faint); transition: color .2s ease, background-color .2s ease;
+}
+.tnic-seg button:hover { color: var(--muted); }
+.tnic-seg button[aria-checked="true"] { color: var(--ink); background: rgba(255,255,255,0.06); }
+.tnic-seg button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+.tnic-seg .sw { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* Current-age value field, sitting with the slider rather than up by the chart. */
+.tnic-agefield {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.tnic-agefield label {
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint);
+}
+.tnic-agefield output {
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: 15px; font-weight: 600; color: var(--ink);
+  min-width: 3.5ch; text-align: center;
+  padding: 4px 8px; border: 1px solid var(--line); border-radius: 8px;
+  background: rgba(14,20,38,0.6); font-variant-numeric: tabular-nums;
+}
+.tnic-agefield .tnic-range { margin: 0; flex: 1; }
+
+/* Every outcome number carries the same uncertainty marker. The values are
+   computed to one decimal, which reads as precision; the marker keeps the
+   "illustrative, not promised" frame attached to the number itself instead of
+   only to the italic note below the row. */
+.tnic-tl-stat .u {
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--faint); display: inline-flex; align-items: center; gap: 5px;
+}
+.tnic-tl-stat .u::before {
+  content: ""; width: 5px; height: 5px; border-radius: 50%;
+  background: currentColor; opacity: .6;
+}
 
 .tnic-final {
   opacity: 0; transform: translateY(20px);
@@ -563,6 +627,18 @@ const NET_EDGES: NetworkEdge[] = EDGES.map((e) => ({
   dashed: e.tier === "caution",
 }));
 const NET_ELITE_COUNT = NET_NODES.filter((n) => n.elite).length;
+const NET_ELITE_NAMES = NET_NODES.filter((n) => n.elite).map((n) => n.name);
+
+/**
+ * The molecule renderer's atom palette, named. MoleculeStage has coloured atoms
+ * by element since it shipped (ELEMENT_COLOR), but nothing in the UI ever said
+ * what the colours meant — the legend the brief asks for did not exist for this
+ * visualization. Values mirror MoleculeStage's own core hues.
+ */
+const MOLECULE_LEGEND: Array<{ symbol: string; name: string; color: string }> = [
+  { symbol: "C", name: "Carbon", color: "rgb(216,234,255)" },
+  { symbol: "O", name: "Oxygen", color: "rgb(244,142,126)" },
+];
 
 const STAGES = [
   { at: 30, cap: "Peak reserve. Nothing feels at stake yet." },
@@ -588,6 +664,24 @@ const MILESTONES: Array<{ at: number; label: string; c: string; below?: boolean 
   { at: 80, label: "Morbidity horizon", c: "#f08a7a" },
 ];
 
+/**
+ * One outcome number from the goal simulator. Label, the highlighted value, a
+ * two-line interpretation, and — the part that was missing — a consistent
+ * uncertainty marker on every card, so the "illustrative, not promised" frame
+ * travels with the number instead of living only in the italic note below the
+ * whole row.
+ */
+function OutcomeMetric({ label, value, note }: { label: string; value: string; note: string }) {
+  return (
+    <div className="tnic-tl-stat">
+      <span className="k">{label}</span>
+      <b>{value}</b>
+      <span className="n">{note}</span>
+      <span className="u">Illustrative</span>
+    </div>
+  );
+}
+
 function interp(pts: Array<[number, number]>, x: number): number {
   if (x <= pts[0][0]) return pts[0][1];
   if (x >= pts[pts.length - 1][0]) return pts[pts.length - 1][1];
@@ -606,6 +700,10 @@ export function HomeDescent() {
   const [active, setActive] = useState(0);
   const [age, setAge] = useState(50);
   const reduced = useReducedMotion();
+  // Handles onto the two canvases, so the panel shell can drive Reset / Zoom /
+  // keyboard rotation — none of which existed before.
+  const moleculeRef = useRef<StageHandle | null>(null);
+  const networkRef = useRef<StageHandle | null>(null);
   const [showElite, setShowElite] = useState(true);
   const reducedRef = useRef(false);
   const shimmerRef = useRef<HTMLCanvasElement | null>(null);
@@ -747,8 +845,13 @@ export function HomeDescent() {
     root.addEventListener("pointerleave", onLeave);
     function draw() {
       if (!ctx) return;
-      state.x += (state.tx - state.x) * 0.15;
-      state.y += (state.ty - state.y) * 0.15;
+      // The shimmer layer above gates its motion on reduced-motion; this glow
+      // never did — its easing lerp ran unconditionally. Under reduced motion
+      // the glow snaps to the pointer instead of trailing it, so the effect
+      // still reads without the continuous animation.
+      const ease = reducedRef.current ? 1 : 0.15;
+      state.x += (state.tx - state.x) * ease;
+      state.y += (state.ty - state.y) * ease;
       ctx.clearRect(0, 0, w, h);
       if (state.on) {
         const rad = 220;
@@ -885,10 +988,41 @@ export function HomeDescent() {
         </p>
 
         <div className="tnic-molwrap">
-          <div className="tnic-stage">
-            <MoleculeStage geometryId="resveratrol" hue={HUES.cyan} ariaLabel="Rotatable 3D model of the resveratrol molecule. Full details are in the panel beside it." />
-            <div className="tnic-molhint"><span className="dot" />drag · scroll to zoom</div>
-          </div>
+          <InteractiveSciencePanel
+            title="Resveratrol · 3D structure"
+            eyebrow="Rendered live"
+            stageRef={moleculeRef}
+            cue="Drag to rotate"
+            className="tnic-sci"
+            legend={
+              <div className="tnic-legend">
+                {MOLECULE_LEGEND.map((el) => (
+                  <span className="lg" key={el.symbol}>
+                    <span className="sw" style={{ background: el.color }} />
+                    {el.symbol} · {el.name}
+                  </span>
+                ))}
+              </div>
+            }
+            summary={
+              <p>
+                Trans-resveratrol, C₁₄H₁₂O₃ — a stilbenoid polyphenol of 228.24 g/mol
+                with a half-life near 9 hours, studied as a SIRT1 activator and graded
+                Tier B on human evidence. The model shows two carbon rings joined by a
+                trans double bond, with three hydroxyl groups placed for the hydrogen
+                bonds that hold it in the binding site. Atoms are colored by element:{' '}
+                {MOLECULE_LEGEND.map((el) => `${el.symbol} (${el.name})`).join(', ')}.
+                Stylized for legibility — not a crystallographic reproduction.
+              </p>
+            }
+          >
+            <MoleculeStage
+              ref={moleculeRef}
+              geometryId="resveratrol"
+              hue={HUES.cyan}
+              ariaLabel="Rotatable 3D model of the resveratrol molecule. Full details are in the panel beside it."
+            />
+          </InteractiveSciencePanel>
 
           <aside className="tnic-molcard">
             <div>
@@ -932,11 +1066,50 @@ export function HomeDescent() {
         </p>
 
         <div className="tnic-netwrap">
-          <div className="tnic-stage" style={{ aspectRatio: "10/7", maxHeight: "62vh" }}>
-            <NetworkStage nodes={NET_NODES} edges={NET_EDGES}
-              ariaLabel="Rotatable 3D network of TNiC compounds. Cool links are synergies, amber links are clashes, gold-haloed nodes are elite picks. Details and the legend are in the panel beside it." />
-            <div className="tnic-molhint"><span className="dot" />drag · scroll to zoom</div>
-          </div>
+          <InteractiveSciencePanel
+            title="Compound synergy network"
+            eyebrow={`${NODE_DEFS.length} compounds · ${EDGES.length} graded links`}
+            stageRef={networkRef}
+            cue="Drag to rotate"
+            className="tnic-sci"
+            legend={
+              <div className="tnic-legend">
+                {Object.values(TIER).map((t) => (
+                  <span className="lg" key={t.label}>
+                    <span className="sw" style={{ background: t.color }} />{t.label}
+                  </span>
+                ))}
+                <span className="lg" style={{ color: 'var(--gold)' }}>
+                  <svg width="12" height="12" viewBox="-8 -8 16 16" aria-hidden="true">
+                    <path d={STAR_D} fill="currentColor" />
+                  </svg>
+                  Elite pick
+                </span>
+              </div>
+            }
+            summary={
+              <>
+                <p className="mb-2">
+                  {NODE_DEFS.length} graded compounds and {EDGES.length} documented links.
+                  Link color encodes confidence in the pairing —{' '}
+                  {Object.values(TIER).map((t) => t.label).join(', ').toLowerCase()} — and a
+                  gold halo marks a TNiC elite pick.
+                </p>
+                <ul className="space-y-1">
+                  {NET_ELITE_NAMES.map((name) => (
+                    <li key={name}>Elite pick · {name}</li>
+                  ))}
+                </ul>
+              </>
+            }
+          >
+            <NetworkStage
+              ref={networkRef}
+              nodes={NET_NODES}
+              edges={NET_EDGES}
+              ariaLabel="Rotatable 3D network of TNiC compounds. Cool links are synergies, amber links are clashes, gold-haloed nodes are elite picks. Details and the legend are in the panel beside it."
+            />
+          </InteractiveSciencePanel>
 
           <aside className="tnic-molcard">
             <div>
@@ -950,17 +1123,6 @@ export function HomeDescent() {
               only duplicate each other. The graph shows which pairings reinforce
               — and which are redundant.
             </p>
-            <div className="tnic-legend" style={{ marginTop: 4 }}>
-              {Object.values(TIER).map((t) => (
-                <span className="lg" key={t.label}>
-                  <span className="sw" style={{ background: t.color }} />{t.label}
-                </span>
-              ))}
-              <span className="lg" style={{ color: 'var(--gold)' }}>
-                <svg width="12" height="12" viewBox="-8 -8 16 16"><path d={STAR_D} fill="currentColor" /></svg>
-                Elite pick
-              </span>
-            </div>
             <div className="cite">
               <Link href="/library" style={{ color: 'var(--cyan)', textDecoration: 'none' }}>
                 Explore every compound →
@@ -983,12 +1145,32 @@ export function HomeDescent() {
           the ceiling a graded stack aims at.
         </p>
 
-        <div className="tnic-tl-toggle">
-          <button className={`tnic-chip${showElite ? " on" : ""}`}
-            style={showElite ? { color: 'var(--gold)' } : {}}
-            onClick={() => setShowElite(v => !v)}>
-            <span className="sw" style={{ background: 'var(--gold)' }} />Elite protocol
-          </button>
+        <div className="tnic-tl-toggle" role="radiogroup" aria-label="Trajectory shown">
+          <div className="tnic-seg">
+            <button
+              type="button"
+              role="radio"
+              aria-checked={!showElite}
+              onClick={() => setShowElite(false)}
+              title="The goal curve against a typical decline — no protocol applied."
+            >
+              {/* Swatch matches the curve it names. The old single chip showed a
+                  GOLD dot for the elite protocol, whose curve is stroked CYAN —
+                  the legend contradicted the chart. */}
+              <span className="sw" style={{ background: 'var(--gold)' }} />
+              Typical trajectory
+            </button>
+            <button
+              type="button"
+              role="radio"
+              aria-checked={showElite}
+              onClick={() => setShowElite(true)}
+              title="Adds the ceiling a graded stack aims at. Illustrative — no supplement is proven to land you there."
+            >
+              <span className="sw" style={{ background: 'var(--cyan)' }} />
+              Illustrative elite protocol
+            </button>
+          </div>
         </div>
 
         <div className="tnic-tl">
@@ -1069,26 +1251,58 @@ export function HomeDescent() {
             </svg>
           </div>
 
-          <input className="tnic-range" type="range" min="30" max="95" value={age}
-            onChange={(e) => setAge(Number(e.target.value))}
-            aria-label="Age" aria-valuetext={`Age ${age} — ${curStage.cap}`} />
+          {/* The big {age} readout sits above the chart; the slider was below
+              it, so the control and its value were visually detached. This is
+              the stable numeric value field the brief asks for, adjacent to
+              the input. aria-valuetext already carried the age + stage. */}
+          <div className="tnic-agefield">
+            <label htmlFor="tnic-age-range">Age</label>
+            <input
+              id="tnic-age-range"
+              className="tnic-range"
+              type="range"
+              min="30"
+              max="95"
+              value={age}
+              onChange={(e) => setAge(Number(e.target.value))}
+              aria-valuetext={`Age ${age} — ${curStage.cap}`}
+            />
+            <output htmlFor="tnic-age-range">{age}</output>
+          </div>
 
-          <div className="tnic-tl-stats">
-            <div className="tnic-tl-stat">
-              <span className="k">Function preserved</span>
-              <b>{yearsPreserved} yrs</b>
-              <span className="n">Goal-curve gain over the typical trajectory by age {age}.</span>
-            </div>
-            <div className="tnic-tl-stat">
-              <span className="k">Elite ceiling</span>
-              <b>+{eliteExtra} yrs</b>
-              <span className="n">Additional runway the elite protocol reaches for on top of the goal curve.</span>
-            </div>
-            <div className="tnic-tl-stat">
-              <span className="k">Morbidity compressed</span>
-              <b>{morbidityCompressed} yrs</b>
-              <span className="n">Delay to crossing the frailty threshold — the point at which everyday function starts to give.</span>
-            </div>
+          {/* Outcome metrics. Every card carries the same uncertainty marker:
+              the values are computed to one decimal, which reads as precision,
+              and previously the only "illustrative" framing was the italic
+              note below the whole row. aria-live announces the numbers as the
+              slider moves — they used to change silently. */}
+          <div className="tnic-tl-stats" aria-live="polite">
+            <OutcomeMetric
+              label="Function preserved"
+              value={`${yearsPreserved} yrs`}
+              note={`Goal-curve gain over the typical trajectory by age ${age}.`}
+            />
+            {/* Only rendered when the elite trajectory is actually shown. It
+                used to render its number unconditionally, so switching the
+                protocol off left a figure on screen for a curve that was no
+                longer on the chart. */}
+            {showElite ? (
+              <OutcomeMetric
+                label="Elite ceiling"
+                value={`+${eliteExtra} yrs`}
+                note="Additional runway the elite protocol reaches for on top of the goal curve."
+              />
+            ) : (
+              <OutcomeMetric
+                label="Elite ceiling"
+                value="—"
+                note="Switch on the illustrative elite protocol to see the ceiling a graded stack aims at."
+              />
+            )}
+            <OutcomeMetric
+              label="Morbidity compressed"
+              value={`${morbidityCompressed} yrs`}
+              note="Delay to crossing the frailty threshold — the point at which everyday function starts to give."
+            />
           </div>
 
           <p className="tnic-honest">

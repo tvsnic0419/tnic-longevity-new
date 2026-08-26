@@ -103,10 +103,13 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
           className="relative max-h-32 object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.55)] transition-transform duration-500 ease-out group-hover:-translate-y-1 group-hover:scale-[1.07]"
           unoptimized={pick.imageSrc.endsWith('.svg')}
         />
-        <span className="absolute left-3 top-3 z-10">
+        {/* Desktop only. On mobile these live in the header row below, which is
+            always visible — showing them here too would print the rank and the
+            tier twice once the drawer opens. */}
+        <span className="absolute left-3 top-3 z-10 hidden sm:inline-flex">
           <EvidenceTag tier={evidence} size="sm" href="/trust/methodology" />
         </span>
-        <span className="absolute right-4 top-2 z-10 font-display text-3xl leading-none text-[var(--color-text-faint)] tabular-nums">
+        <span className="absolute right-4 top-2 z-10 hidden font-display text-3xl leading-none text-[var(--color-text-faint)] tabular-nums sm:block">
           {String(intervention.rank).padStart(2, '0')}
         </span>
       </div>
@@ -235,7 +238,7 @@ export function HomeEliteGrid() {
       <div
         role="group"
         aria-label="Filter elite interventions by hallmark"
-        className="mb-8 flex flex-wrap gap-2"
+        className="chip-row mb-8"
       >
         <SelectableChip
           selected={active === 'all'}

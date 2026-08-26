@@ -346,7 +346,7 @@ export function RelationsPanel({
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap gap-1.5" role="group" aria-label="Filter relationships by type">
+      <div className="chip-row" role="group" aria-label="Filter relationships by type">
         <SelectableChip
           selected={filter === 'all'}
           onSelect={() => setFilter('all')}

@@ -262,8 +262,10 @@ export function SynergyNetworkGraph() {
               {isActive && mounted && (
                 <>
                   <circle cx={node.x} cy={node.y} r={r + 10} fill="none" stroke={col} strokeWidth={1} strokeOpacity={0.4}
+                    className="synergy-pulse-ring"
                     style={{ animation: 'pulse-ring 1.4s ease-out infinite' }} />
                   <circle cx={node.x} cy={node.y} r={r + 18} fill="none" stroke={col} strokeWidth={0.5} strokeOpacity={0.2}
+                    className="synergy-pulse-ring"
                     style={{ animation: 'pulse-ring 1.4s ease-out infinite', animationDelay: '0.4s' }} />
                 </>
               )}
@@ -471,6 +473,13 @@ export function SynergyNetworkGraph() {
         @keyframes pulse-ring {
           0%   { transform: scale(1);   opacity: 1; }
           100% { transform: scale(1.5); opacity: 0; }
+        }
+        /* The infinite node pulse ran unconditionally. The global
+           prefers-reduced-motion block in globals.css can't reach these rings
+           (their animation is set inline, which wins on specificity), so the
+           guard has to live beside the keyframes. */
+        @media (prefers-reduced-motion: reduce) {
+          .synergy-pulse-ring { animation: none !important; opacity: 0.35; }
         }
       `}</style>
     </div>

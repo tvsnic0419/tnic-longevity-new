@@ -22,7 +22,9 @@ import { cn } from '@/lib/utils';
  *
  * Two shapes:
  *   `chip` — compact pill for filter rows. Stays visually small; the 44px tap
- *            area comes from `.tap-expand`, not from padding it out.
+ *            area comes from `.tap-expand-y`, not from padding it out. Put the
+ *            row in `.chip-row` — its 16px row gap is what stops one row's
+ *            expanded hit area from swallowing taps meant for the next.
  *   `card` — a real selection card with a title, an explanatory line, and a
  *            checkmark. Used by the questionnaire and the selectable grids.
  */
@@ -58,7 +60,7 @@ export interface SelectableChipProps {
 }
 
 const shapeStyles: Record<SelectableChipShape, string> = {
-  chip: 'tap-expand rounded-full border px-3.5 py-1.5 font-mono text-micro font-semibold uppercase tracking-[0.12em]',
+  chip: 'tap-expand-y rounded-full border px-3.5 py-1.5 font-mono text-micro font-semibold uppercase tracking-[0.12em]',
   card: 'min-h-[var(--space-touch)] w-full rounded-xl border px-4 py-3 text-left text-sm font-semibold',
 };
 
