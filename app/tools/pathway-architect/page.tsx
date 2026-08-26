@@ -1,4 +1,3 @@
-import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { PathwayArchitect } from '@/components/tools/PathwayArchitect';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildBreadcrumbSchema, buildArticleSchema } from '@/lib/seo';
@@ -55,9 +54,9 @@ export default function PathwayArchitectPage() {
   // lib/stack-analysis uses, so showing both would put two different
   // coverage numbers for the same stack on one screen.
   return (
-    <SubPageLayout hideStackReadout>
+    <>
       <StructuredData schemas={buildPathwayArchitectSchemas()} />
       <PathwayArchitect />
-    </SubPageLayout>
+    </>
   );
 }

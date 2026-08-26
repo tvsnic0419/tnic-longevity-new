@@ -134,6 +134,48 @@ describe('site data integrity', () => {
     expect(chromeless, `top-level routes missing site chrome: ${chromeless.join(', ')}`).toEqual([]);
   });
 
+  it('no page double-wraps chrome its folder layout already provides', () => {
+    // A folder layout.tsx that renders SubPageLayout already provides Nav +
+    // <main id="main-content"> + Footer. A page beneath it that ALSO renders its
+    // own Nav/Footer/main produces two Navs, two Footers and a duplicate
+    // main-content id (invalid HTML + nested <main> landmark). This regressed on
+    // all 12 hallmark deep-dive pages, /pathways/[slug] and /tools/pathway-architect.
+    const appDir = resolve(process.cwd(), 'app');
+    const chromeLayoutDirs: string[] = [];
+    const collectLayouts = (dir: string) => {
+      for (const e of readdirSync(dir, { withFileTypes: true })) {
+        if (!e.isDirectory() || e.name === 'api') continue;
+        const sub = resolve(dir, e.name);
+        if (readdirSync(sub).includes('layout.tsx')) {
+          if (readFileSync(resolve(sub, 'layout.tsx'), 'utf8').includes('SubPageLayout')) {
+            chromeLayoutDirs.push(sub);
+          }
+        }
+        collectLayouts(sub);
+      }
+    };
+    collectLayouts(appDir);
+
+    const offenders: string[] = [];
+    const checkPages = (dir: string) => {
+      for (const e of readdirSync(dir, { withFileTypes: true })) {
+        if (e.isDirectory()) {
+          if (e.name !== 'api') checkPages(resolve(dir, e.name));
+          continue;
+        }
+        if (e.name !== 'page.tsx') continue;
+        const underChrome = chromeLayoutDirs.some((d) => dir === d || dir.startsWith(`${d}/`));
+        if (!underChrome) continue;
+        const src = readFileSync(resolve(dir, e.name), 'utf8');
+        if (/<Nav\b|<Footer\b|id="main-content"/.test(src)) {
+          offenders.push(`${dir.replace(appDir, '')}/page.tsx`);
+        }
+      }
+    };
+    checkPages(appDir);
+    expect(offenders, `pages double-wrapping chrome:\n${offenders.join('\n')}`).toEqual([]);
+  });
+
   it('the shareable scorecard states the live compound count, not a stale literal', () => {
     // The /scorecard/[code] card is a viral share surface: a hardcoded library
     // size (it once read "14 compounds") silently rots as the library grows and

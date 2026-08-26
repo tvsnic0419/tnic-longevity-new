@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Nav } from '@/components/Nav';
-import { Footer } from '@/components/Footer';
 import { Activity, ArrowRight, FlaskConical, ShieldCheck, BookOpen, Dna } from 'lucide-react';
 import { getHallmarkBySlug } from '@/lib/hallmarks-library';
 import { InterventionCards } from '@/components/hallmarks/InterventionCards';
@@ -31,10 +29,8 @@ export default function EpigeneticAlterationsPage() {
   const hallmark = getHallmarkBySlug('epigenetic-alterations')!;
 
   return (
-    <div className="min-h-screen canvas-scrim text-foreground">
-      <Nav />
-      <main id="main-content" tabIndex={-1}>
-        <section className="pt-28 pb-16 md:pt-36 md:pb-20 relative overflow-hidden">
+    <>
+        <section className="pt-8 pb-16 md:pt-12 md:pb-20 relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,color-mix(in_srgb,var(--accent-cyan)_8%,transparent),transparent)]" />
           <div className="relative container-page max-w-6xl">
             <div className="grid items-center gap-10 lg:grid-cols-12">
@@ -150,8 +146,6 @@ export default function EpigeneticAlterationsPage() {
             </div>
           </div>
         </section>
-      </main>
-      <Footer />
-    </div>
+    </>
   );
 }
