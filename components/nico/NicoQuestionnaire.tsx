@@ -13,6 +13,7 @@ import {
   Minus,
   Plus,
 } from 'lucide-react';
+import { SelectableChip } from '@/components/ui/SelectableChip';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import {
@@ -46,34 +47,6 @@ type StepId = 'goals' | 'age' | (typeof SCALE_ORDER)[number] | 'focus' | 'safety
 const STEP_IDS: StepId[] = ['goals', 'age', ...SCALE_ORDER, 'focus', 'safety', 'result'];
 const QUESTION_COUNT = STEP_IDS.length - 1; // excludes the result screen
 
-function Chip({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={active}
-      className={[
-        'focus-ring interactive text-left rounded-xl border px-4 py-3 text-sm font-semibold transition-all',
-        active
-          ? 'border-accent-emerald bg-accent-emerald/10 text-accent-emerald shadow-[0_0_0_1px_rgba(52,211,153,0.15),0_8px_20px_-12px_rgba(52,211,153,0.4)]'
-          // Label stays bright (text-foreground) even when inactive — only the
-          // border/background communicate selection state, not text contrast.
-          : 'border-border bg-card/60 text-foreground hover:border-foreground/40 hover:bg-card/80',
-      ].join(' ')}
-    >
-      {children}
-    </button>
-  );
-}
-
 /** Renders just the 1–5 buttons + low/high labels. The question itself is the
  * step's own <h2> now that each scale has a full screen — no duplicate text. */
 function ScaleButtons({
@@ -90,20 +63,14 @@ function ScaleButtons({
     <div>
       <div className="grid grid-cols-5 gap-2" role="group" aria-label={meta.question}>
         {[1, 2, 3, 4, 5].map((n) => (
-          <button
+          <SelectableChip
             key={n}
-            type="button"
-            aria-pressed={value === n}
-            onClick={() => onChange(n as Scale)}
-            className={[
-              'focus-ring interactive rounded-lg border py-3 text-base font-mono transition-all',
-              value === n
-                ? 'border-accent-cyan bg-accent-cyan/10 text-accent-cyan'
-                : 'border-border bg-card/40 text-muted-foreground hover:border-foreground/30',
-            ].join(' ')}
-          >
-            {n}
-          </button>
+            shape="card"
+            selected={value === n}
+            onSelect={() => onChange(n as Scale)}
+            label={String(n)}
+            className="justify-center py-3 text-center font-mono text-base"
+          />
         ))}
       </div>
       <div className="flex justify-between text-micro font-mono text-caption mt-2">
@@ -250,16 +217,14 @@ export function NicoQuestionnaire() {
               <QuestionHeading id="nico-goals" question="What do you most want to improve?" helper="Pick one or more. This anchors your stack." />
               <div className="grid sm:grid-cols-2 gap-3">
                 {NICO_GOAL_OPTIONS.map((g) => (
-                  <Chip
+                  <SelectableChip
                     key={g.id}
-                    active={answers.goals.includes(g.id)}
-                    onClick={() => setAnswers((a) => ({ ...a, goals: toggle<NicoGoal>(a.goals, g.id) }))}
-                  >
-                    <span className="block">{g.label}</span>
-                    <span className="block text-micro font-normal text-muted-foreground mt-0.5">
-                      {g.desc}
-                    </span>
-                  </Chip>
+                    shape="card"
+                    selected={answers.goals.includes(g.id)}
+                    onSelect={() => setAnswers((a) => ({ ...a, goals: toggle<NicoGoal>(a.goals, g.id) }))}
+                    label={g.label}
+                    description={g.desc}
+                  />
                 ))}
               </div>
             </section>
@@ -331,16 +296,14 @@ export function NicoQuestionnaire() {
               />
               <div className="grid sm:grid-cols-2 gap-3">
                 {NICO_FOCUS_OPTIONS.map((f) => (
-                  <Chip
+                  <SelectableChip
                     key={f.id}
-                    active={answers.focus.includes(f.id)}
-                    onClick={() => setAnswers((a) => ({ ...a, focus: toggle<NicoFocus>(a.focus, f.id) }))}
-                  >
-                    <span className="block">{f.label}</span>
-                    <span className="block text-micro font-normal text-muted-foreground mt-0.5">
-                      {f.desc}
-                    </span>
-                  </Chip>
+                    shape="card"
+                    selected={answers.focus.includes(f.id)}
+                    onSelect={() => setAnswers((a) => ({ ...a, focus: toggle<NicoFocus>(a.focus, f.id) }))}
+                    label={f.label}
+                    description={f.desc}
+                  />
                 ))}
               </div>
             </section>
@@ -361,15 +324,15 @@ export function NicoQuestionnaire() {
               </p>
               <div className="grid gap-3">
                 {NICO_SAFETY_OPTIONS.map((s) => (
-                  <Chip
+                  <SelectableChip
                     key={s.id}
-                    active={answers.safety.includes(s.id)}
-                    onClick={() =>
+                    shape="card"
+                    selected={answers.safety.includes(s.id)}
+                    onSelect={() =>
                       setAnswers((a) => ({ ...a, safety: toggle<NicoSafetyFlag>(a.safety, s.id) }))
                     }
-                  >
-                    {s.label}
-                  </Chip>
+                    label={s.label}
+                  />
                 ))}
               </div>
             </section>

@@ -3,10 +3,12 @@
 import { useMemo, useState, type CSSProperties } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ExternalLink, BookOpen } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
+import { ExternalAction } from '@/components/ui/ExternalAction';
 import { eliteInterventions } from '@/lib/elite-interventions';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { RevealItem } from '@/components/ui/RevealItem';
+import { SelectableChip } from '@/components/ui/SelectableChip';
 
 /**
  * The elite-interventions grid with a hallmark filter (section 03 of the
@@ -134,16 +136,12 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
             {pick.brand} — <span className="text-[var(--color-text-secondary)]">{pick.productName}</span>
           </p>
           <div className="flex flex-col gap-2">
-            <a
+            <ExternalAction
               href={intervention.goHref}
-              target="_blank"
-              rel="noopener noreferrer sponsored"
-              className="focus-ring group/buy inline-flex items-center justify-center gap-1.5 rounded-xl bg-accent-emerald/12 px-4 py-2.5 text-sm font-semibold text-accent-emerald transition-colors hover:bg-accent-emerald/20"
-              aria-label={`Buy ${pick.productName} from ${pick.brand} — opens manufacturer site`}
+              destination={`${pick.productName} from ${pick.brand}`}
             >
               Buy on {brandShort}
-              <ExternalLink className="h-3.5 w-3.5 transition-transform duration-200 group-hover/buy:-translate-y-0.5 group-hover/buy:translate-x-0.5" aria-hidden="true" />
-            </a>
+            </ExternalAction>
             <Link
               href={intervention.libraryHref}
               className="focus-ring inline-flex items-center justify-center gap-1.5 rounded-xl border border-border/70 px-4 py-2.5 text-sm font-semibold text-[var(--color-text-secondary)] transition-colors hover:border-accent-cyan/40 hover:text-accent-cyan"
@@ -174,14 +172,6 @@ export function HomeEliteGrid() {
       ? eliteInterventions
       : eliteInterventions.filter((e) => e.hallmarks.includes(active));
 
-  const chipClass = (on: boolean) =>
-    [
-      'focus-ring interactive rounded-full border px-3.5 py-1.5 font-mono text-micro font-semibold uppercase tracking-[0.12em] transition-all',
-      on
-        ? 'border-accent-emerald bg-accent-emerald/10 text-accent-emerald'
-        : 'border-border/70 bg-card/40 text-muted-foreground hover:border-foreground/40 hover:text-foreground',
-    ].join(' ');
-
   return (
     <>
       <div
@@ -189,24 +179,18 @@ export function HomeEliteGrid() {
         aria-label="Filter elite interventions by hallmark"
         className="mb-8 flex flex-wrap gap-2"
       >
-        <button
-          type="button"
-          aria-pressed={active === 'all'}
-          onClick={() => setActive('all')}
-          className={chipClass(active === 'all')}
-        >
-          All
-        </button>
+        <SelectableChip
+          selected={active === 'all'}
+          onSelect={() => setActive('all')}
+          label="All"
+        />
         {chips.map((h) => (
-          <button
+          <SelectableChip
             key={h}
-            type="button"
-            aria-pressed={active === h}
-            onClick={() => setActive(h)}
-            className={chipClass(active === h)}
-          >
-            {hallmarkLabels[h] ?? h}
-          </button>
+            selected={active === h}
+            onSelect={() => setActive(h)}
+            label={hallmarkLabels[h] ?? h}
+          />
         ))}
       </div>
 

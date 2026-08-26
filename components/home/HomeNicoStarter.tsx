@@ -6,6 +6,7 @@ import { ArrowRight, FlaskConical, ClipboardList, Sparkles, RotateCcw } from 'lu
 import {
   computeNicoStack,
   NICO_DEFAULT_ANSWERS,
+  NICO_GOAL_OPTIONS,
   type NicoGoal,
   type NicoResult,
   type Scale,
@@ -13,6 +14,7 @@ import {
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { CellularDivider } from '@/components/ui/CellularDivider';
 import { RevealItem } from '@/components/ui/RevealItem';
+import { SelectableChip } from '@/components/ui/SelectableChip';
 
 /**
  * Section 06 — PERSONALIZE. A compact, on-page NICO starter.
@@ -38,6 +40,12 @@ const ACTIVITY: { id: string; label: string; movement: Scale }[] = [
 ];
 
 // Focus areas map straight onto NICO goals — the same ids the full engine scores.
+// The short label stays the compact homepage wording; the explanatory line is
+// DERIVED from `NICO_GOAL_OPTIONS` (the full flow's own already-authored copy)
+// rather than written fresh here, so the two surfaces can never describe the
+// same goal differently.
+const GOAL_DESC = new Map(NICO_GOAL_OPTIONS.map((g) => [g.id, g.desc]));
+
 const FOCUS: { id: NicoGoal; label: string }[] = [
   { id: 'energy', label: 'Energy' },
   { id: 'cognitive', label: 'Cognition' },
@@ -90,14 +98,6 @@ export function HomeNicoStarter() {
       ? `/stacks?stack=${result.compoundIds.join(',')}&from=nico`
       : '/stacks';
 
-  const singleClass = (on: boolean) =>
-    [
-      'focus-ring interactive rounded-xl border px-4 py-3 text-sm font-semibold transition-all',
-      on
-        ? 'border-accent-violet bg-accent-violet/10 text-accent-violet'
-        : 'border-border bg-card/50 text-foreground hover:border-foreground/40 hover:bg-card/80',
-    ].join(' ');
-
   return (
     <section
       id="personalize"
@@ -129,15 +129,13 @@ export function HomeNicoStarter() {
                 <legend className="text-label mb-3 text-muted-foreground">Age range</legend>
                 <div className="grid grid-cols-3 gap-2" role="group" aria-label="Age range">
                   {AGE_RANGES.map((a) => (
-                    <button
+                    <SelectableChip
                       key={a.id}
-                      type="button"
-                      aria-pressed={ageId === a.id}
-                      onClick={() => setAgeId(a.id)}
-                      className={singleClass(ageId === a.id)}
-                    >
-                      {a.label}
-                    </button>
+                      shape="card"
+                      selected={ageId === a.id}
+                      onSelect={() => setAgeId(a.id)}
+                      label={a.label}
+                    />
                   ))}
                 </div>
               </fieldset>
@@ -146,15 +144,13 @@ export function HomeNicoStarter() {
                 <legend className="text-label mb-3 text-muted-foreground">Activity level</legend>
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-3" role="group" aria-label="Activity level">
                   {ACTIVITY.map((a) => (
-                    <button
+                    <SelectableChip
                       key={a.id}
-                      type="button"
-                      aria-pressed={actId === a.id}
-                      onClick={() => setActId(a.id)}
-                      className={singleClass(actId === a.id)}
-                    >
-                      {a.label}
-                    </button>
+                      shape="card"
+                      selected={actId === a.id}
+                      onSelect={() => setActId(a.id)}
+                      label={a.label}
+                    />
                   ))}
                 </div>
               </fieldset>
@@ -162,7 +158,7 @@ export function HomeNicoStarter() {
               <fieldset>
                 <legend className="text-label mb-3 text-muted-foreground">
                   Focus areas — up to three{' '}
-                  <span aria-live="polite" className="text-accent-violet">
+                  <span aria-live="polite" className="text-accent-emerald">
                     ({focus.length}/{MAX_FOCUS})
                   </span>
                 </legend>
@@ -171,22 +167,23 @@ export function HomeNicoStarter() {
                     const on = focus.includes(f.id);
                     const atLimit = !on && focus.length >= MAX_FOCUS;
                     return (
-                      <button
+                      <SelectableChip
                         key={f.id}
-                        type="button"
-                        aria-pressed={on}
-                        // aria-disabled (not `disabled`) so the chip stays
-                        // focusable and announced at the limit; toggleFocus
-                        // already no-ops once three are selected.
-                        aria-disabled={atLimit}
-                        onClick={() => toggleFocus(f.id)}
-                        className={[
-                          singleClass(on),
-                          atLimit ? 'opacity-40 cursor-not-allowed' : '',
-                        ].join(' ')}
-                      >
-                        {f.label}
-                      </button>
+                        shape="card"
+                        selected={on}
+                        onSelect={() => toggleFocus(f.id)}
+                        label={f.label}
+                        description={GOAL_DESC.get(f.id)}
+                        // The cap used to communicate itself with opacity alone.
+                        // SelectableChip keeps the chip focusable (aria-disabled,
+                        // not `disabled`) AND names the reason via
+                        // aria-describedby, so the limit is discoverable.
+                        disabledReason={
+                          atLimit
+                            ? `You have already chosen ${MAX_FOCUS} focus areas. Deselect one to pick this.`
+                            : undefined
+                        }
+                      />
                     );
                   })}
                 </div>

@@ -7,6 +7,7 @@
  */
 import { useMemo, useState } from 'react';
 import { AlertTriangle, ChevronDown, X } from 'lucide-react';
+import { SelectableChip } from '@/components/ui/SelectableChip';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -346,33 +347,23 @@ export function RelationsPanel({
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-1.5" role="group" aria-label="Filter relationships by type">
-        <button
-          type="button"
-          aria-pressed={filter === 'all'}
-          onClick={() => setFilter('all')}
-          className={cn(
-            'focus-ring interactive rounded-lg border px-2.5 py-1.5 text-caption',
-            filter === 'all' ? 'border-accent-violet/40 text-accent-violet bg-accent-violet/10' : 'border-border text-muted-foreground',
-          )}
-        >
-          All ({relationships.length})
-        </button>
+        <SelectableChip
+          selected={filter === 'all'}
+          onSelect={() => setFilter('all')}
+          label={`All (${relationships.length})`}
+          className="rounded-lg px-2.5 py-1.5 normal-case tracking-normal font-sans text-caption"
+        />
         {RELATIONSHIP_TYPES.map((t) => {
           const n = counts.get(t) ?? 0;
           if (n === 0) return null;
           return (
-            <button
+            <SelectableChip
               key={t}
-              type="button"
-              aria-pressed={filter === t}
-              onClick={() => setFilter(t)}
-              className={cn(
-                'focus-ring interactive rounded-lg border px-2.5 py-1.5 text-caption',
-                filter === t ? 'border-accent-violet/40 text-accent-violet bg-accent-violet/10' : 'border-border text-muted-foreground',
-              )}
-            >
-              {RELATIONSHIP_LABELS[t]} ({n})
-            </button>
+              selected={filter === t}
+              onSelect={() => setFilter(t)}
+              label={`${RELATIONSHIP_LABELS[t]} (${n})`}
+              className="rounded-lg px-2.5 py-1.5 normal-case tracking-normal font-sans text-caption"
+            />
           );
         })}
       </div>

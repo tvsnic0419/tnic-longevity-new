@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { Filter, ArrowUpRight, Sparkles } from 'lucide-react';
+import { SelectableChip } from '@/components/ui/SelectableChip';
 import type { HallmarkIntervention } from '@/lib/types';
 import { compounds } from '@/lib/data';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
@@ -70,19 +71,13 @@ export function InterventionExplorer({
           {(['all', 'compound', 'lifestyle', 'clinical', 'emerging'] as const).map((cat) => {
             const isActive = filter === cat;
             return (
-              <button
+              <SelectableChip
                 key={cat}
-                type="button"
-                aria-pressed={isActive}
-                onClick={() => setFilter(cat)}
-                className={`focus-ring interactive rounded-full border px-3 py-1.5 text-xs font-medium ${
-                  isActive
-                    ? 'border-accent-cyan/40 bg-accent-cyan/12 text-accent-cyan'
-                    : 'border-[var(--color-border-subtle)] text-[var(--color-text-muted)] hover:border-[var(--color-border-strong)] hover:text-[var(--color-text-primary)]'
-                }`}
-              >
-                {cat === 'all' ? 'All' : categoryLabels[cat]}
-              </button>
+                selected={isActive}
+                onSelect={() => setFilter(cat)}
+                label={cat === 'all' ? 'All' : categoryLabels[cat]}
+                className="normal-case tracking-normal font-sans text-xs font-medium"
+              />
             );
           })}
         </div>

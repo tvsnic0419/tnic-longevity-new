@@ -14,6 +14,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { PointerEvent as ReactPointerEvent } from 'react';
 import { ChevronDown, RotateCcw, ZoomIn, ZoomOut } from 'lucide-react';
+import { IconButton } from '@/components/ui/IconButton';
 import { cn } from '@/lib/utils';
 import { tierColor } from '@/components/viz/tokens';
 import {
@@ -489,15 +490,9 @@ export function LabGraph({ nodes, relationships, selectedPairKey, onSelectRelati
 
       {/* zoom controls */}
       <div className="absolute right-3 top-3 flex flex-col gap-1">
-        <button type="button" onClick={() => zoomBy(1.25)} aria-label="Zoom in" className="focus-ring interactive rounded-lg border border-border bg-card/80 p-2 text-muted-foreground hover:text-foreground">
-          <ZoomIn className="h-4 w-4" aria-hidden="true" />
-        </button>
-        <button type="button" onClick={() => zoomBy(1 / 1.25)} aria-label="Zoom out" className="focus-ring interactive rounded-lg border border-border bg-card/80 p-2 text-muted-foreground hover:text-foreground">
-          <ZoomOut className="h-4 w-4" aria-hidden="true" />
-        </button>
-        <button type="button" onClick={resetView} aria-label="Reset view and node positions" className="focus-ring interactive rounded-lg border border-border bg-card/80 p-2 text-muted-foreground hover:text-foreground">
-          <RotateCcw className="h-4 w-4" aria-hidden="true" />
-        </button>
+        <IconButton icon={ZoomIn} label="Zoom in" size="sm" variant="surface" onClick={() => zoomBy(1.25)} />
+        <IconButton icon={ZoomOut} label="Zoom out" size="sm" variant="surface" onClick={() => zoomBy(1 / 1.25)} />
+        <IconButton icon={RotateCcw} label="Reset view and node positions" size="sm" variant="surface" onClick={resetView} />
       </div>
 
       {/* legend + uncertain toggle */}

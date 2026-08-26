@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { ExternalLink } from 'lucide-react';
+import { ExternalAction } from '@/components/ui/ExternalAction';
 import type { ProductPick } from '@/lib/product-picks';
 
 interface ProductPickCardProps {
@@ -76,15 +77,14 @@ export function ProductPickCard({ pick, compact, className }: ProductPickCardPro
       </a>
 
       {pick.companionPurchase && (
-        <a
+        <ExternalAction
           href={`/api/go/${pick.compoundId}?companion=true`}
-          target="_blank"
-          rel="noopener noreferrer sponsored"
-          className="mt-3 flex items-center gap-2 text-xs text-accent-amber hover:text-accent-amber/80 border-t border-border/50 pt-3"
+          destination={`${pick.companionPurchase.label} from ${pick.brand}`}
+          variant="inline"
+          className="mt-3 flex border-t border-border/50 pt-3 text-accent-amber hover:text-accent-amber/80"
         >
-          <ExternalLink className="w-3 h-3 shrink-0" />
           {pick.companionPurchase.label}
-        </a>
+        </ExternalAction>
       )}
 
       {!compact && (

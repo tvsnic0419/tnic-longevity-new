@@ -1,8 +1,11 @@
 # TNiC Design System & Style Guide
 
-> Version 1.1 · August 2026  
+> Version 1.2 · August 2026  
 > Governs typography, spacing, components, accessibility, and page patterns across tnic.help.  
-> v1.1 documents the cinematic viz family (§7, §12) that the premium hubs are built on.
+> v1.1 documents the cinematic viz family (§7, §12) that the premium hubs are built on.  
+> v1.2 corrects the drifted §2 color values, documents the signal roles, the
+> canonical tier scale, and the interaction primitives (`IconButton`,
+> `SelectableChip`, `ExternalAction`).
 
 ---
 
@@ -18,16 +21,50 @@
 
 ## 2. Color System
 
+Values below are the **dark-theme** defaults, verified against
+`app/globals.css`. Every one is redefined under `[data-theme="light"]`.
+
 | Token | Value | Usage |
 |-------|-------|-------|
-| `--color-bg-base` | `#020811` | Page background |
-| `--color-bg-elevated` | `#080f1c` | Gradient-border cards |
+| `--color-bg-base` | `#020811` | Page background (the brief's `surface.canvas`) |
+| `--color-bg-elevated` | `#080f1c` | Raised cards, chart panels (`surface.raised`) |
+| `--color-bg-surface` | `rgba(12,20,40,0.65)` | Translucent panels over the canvas |
+| `--color-bg-muted` | `rgba(255,255,255,0.03)` | Quiet fills, meter tracks |
+| `--surface-selected` | 10% `--selected-accent` | **Chosen** state — selected chips, picked answers, active rail step |
 | `--color-text-primary` | `#fafafa` | Headings, values |
-| `--color-text-secondary` | `#d4d4d8` | Body copy (AA on base) |
-| `--color-text-muted` | `#a1a1aa` | Supporting text |
-| `--color-text-faint` | `#8b8c96` | Labels, captions (bumped from `#71717a` to clear WCAG AA 4.5:1 on the base) |
+| `--color-text-secondary` | `#edeef1` | Body copy |
+| `--color-text-muted` | `#ced0d7` | Supporting text |
+| `--color-text-faint` | `#c1c2ca` | Labels, captions |
 | `--color-border-subtle` | `rgba(255,255,255,0.07)` | Card borders |
 | `--color-border-focus` | `rgba(0,224,255,0.75)` | Focus rings |
+
+### Signal roles
+
+One rule decides which accent a thing gets. Cyan explores, emerald chooses,
+gold ranks.
+
+| Token | Value | Means |
+|-------|-------|-------|
+| `--accent-cyan` | `#00e0ff` | Exploration and interactive data — hover, focus, network links, active scientific visuals |
+| `--accent-emerald` | `#34d399` | Progress and **chosen** state — primary CTA, selected option, completed step |
+| `--signal-elite` | `#d8b25f` | Elite / rank **only**. Deliberately not amber, so a rank accent can never be mistaken for a Tier C badge |
+
+### Evidence tiers
+
+The canonical A/B/C mapping. Lives in `components/trust/EvidenceTag.tsx`
+(`tierMeta`) and is mirrored by `tierColor()` in `components/viz/tokens.ts`.
+A tier must never be communicated by color alone — `EvidenceTag` always ships
+the tier letter, its descriptor, and a three-bar strength meter.
+
+| Tier | Token | Descriptor | Meter |
+|------|-------|-----------|-------|
+| A | `--accent-emerald` | Clinical | 3 bars |
+| B | `--accent-cyan` | Emerging | 2 bars |
+| C | `--accent-amber` | Preclinical | 1 bar |
+
+`--status-optimal` / `-watch` / `-critical` share those hexes but are a
+**different axis** (biomarker status, not evidence grade). Don't read one as
+the other.
 
 ### Theme accents (one per hub/section)
 
@@ -76,6 +113,12 @@
 | Section vertical | `py-16 md:py-24 lg:py-32` |
 | Grid gap | `gap-4 md:gap-6 lg:gap-8` |
 | Touch min | `--space-touch: 2.75rem` (44px) |
+| Spacing scale | `--space-1…9`: 4, 8, 12, 16, 24, 32, 48, 72, 112px |
+
+**Touch targets.** Use `.touch-target` when the control can afford to be 44px.
+When it cannot — a compact filter chip, a scene-rail step — use `.tap-expand`,
+which grows the *hit area* to 44px via a pseudo-element while leaving the
+control's visual size alone.
 
 ---
 
@@ -88,6 +131,9 @@
 | `TabBar` | Accessible tablist with scroll on mobile |
 | `StatStrip` | 2-col mobile → auto-fit desktop summary |
 | `Button` | primary / secondary / ghost / danger / outline (the canonical CTA primitive) |
+| `IconButton` | The canonical icon-only control — 40/44px, `type="button"`, label required (doubles as tooltip) |
+| `SelectableChip` | The canonical selection control — `shape="chip"` for filter rows, `shape="card"` for questionnaire answers. Selected is always emerald |
+| `ExternalAction` | The canonical off-site action — decides `rel` once, always names the destination and warns it opens a new tab |
 | `Accordion` | Expandable detail without page jump |
 | `DataTable` | Scrollable table + `sr-only` caption |
 | Card surfaces | `.premium-card` (canonical), `GlassPanel` / `.glass-deep`, `.card-elevated`, `.glass` |
@@ -118,7 +164,7 @@ primitive or one of these skins.
 | Focus visible | `.focus-ring` on all interactives |
 | Skip link | `SkipLink` → `#main-content` |
 | Touch targets | `min-h-[var(--space-touch)]` on buttons/nav |
-| Color contrast | Body text `#d4d4d8` on `#030712` ≥ 7:1 |
+| Color contrast | Body text `--color-text-secondary` (`#edeef1`) on `--color-bg-base` (`#020811`) |
 | Motion | `prefers-reduced-motion` disables animations |
 | Tables | `scope="col"`, caption, horizontal scroll |
 | Tabs | `role="tablist"`, `aria-selected`, `aria-controls` |

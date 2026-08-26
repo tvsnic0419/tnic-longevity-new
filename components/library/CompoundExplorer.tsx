@@ -7,6 +7,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { compoundModules } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { SelectableChip } from '@/components/ui/SelectableChip';
 import type { EvidenceTier } from '@/lib/types';
 
 /**
@@ -108,23 +109,18 @@ export function CompoundExplorer() {
         {TIER_ORDER.map((tier) => {
           const isActive = activeTiers.includes(tier);
           return (
-            <button
+            <SelectableChip
               key={tier}
-              type="button"
-              onClick={() => toggleTier(tier)}
-              aria-pressed={isActive}
-              className={`focus-ring interactive group inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm ${
-                isActive
-                  ? 'border-accent-cyan/50 bg-accent-cyan/10 text-foreground'
-                  : 'border-border/70 text-muted-foreground hover:border-border hover:text-foreground'
-              }`}
-              title={`${TIER_COUNTS[tier]} compounds · ${TIER_LABEL[tier]}`}
+              selected={isActive}
+              onSelect={() => toggleTier(tier)}
+              label={`${TIER_COUNTS[tier]} compounds · ${TIER_LABEL[tier]}`}
+              className="px-3 py-1.5"
             >
               <span className="tnic-tabular font-mono text-base font-bold tabular-nums text-foreground">
                 {TIER_COUNTS[tier]}
               </span>
               <EvidenceTag tier={tier} size="sm" showTooltip={false} />
-            </button>
+            </SelectableChip>
           );
         })}
         {(activeTiers.length > 0 || activeHallmarkIds.length > 0) && (

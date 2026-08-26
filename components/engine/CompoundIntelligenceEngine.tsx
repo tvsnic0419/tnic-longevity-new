@@ -68,7 +68,7 @@ const css = `
   --sie-cyan: var(--accent-cyan);
   --sie-jade: var(--accent-emerald);
   --sie-indigo: var(--accent-violet);
-  --sie-gold: var(--accent-amber);
+  --sie-gold: var(--signal-elite);
   --sie-rose: var(--accent-rose);
 
   /* ── Accents: text ────────────────────────────────────────────────────── */

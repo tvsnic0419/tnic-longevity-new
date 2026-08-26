@@ -11,6 +11,7 @@ import { SiteSearch } from '@/components/SiteSearch';
 import { COMMAND_PALETTE_EVENT } from '@/components/os/os-events';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { GlassPanel } from '@/components/ui/GlassPanel';
+import { IconButton } from '@/components/ui/IconButton';
 import { cn } from '@/lib/utils';
 
 // useLayoutEffect warns during SSR; fall back to useEffect on the server so the
@@ -224,7 +225,7 @@ export function Nav() {
               NICO
             </Link>
           </GlassPanel>
-          <Link href="/dashboard" className="focus-ring btn-gradient text-sm !py-2.5 !px-5 !min-h-0 rounded-full">
+          <Link href="/dashboard" className="focus-ring btn-gradient text-sm !py-2.5 !px-5 rounded-full">
             Dashboard
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </Link>
@@ -233,23 +234,19 @@ export function Nav() {
         {/* Compact chrome — shown only when the full bar above does not fit. */}
         <div className={cn('items-center gap-1', compact ? 'flex' : 'hidden')}>
           <ThemeToggle compact />
-          <button
+          <IconButton
+            icon={Search}
+            label="Search"
             onClick={() => window.dispatchEvent(new Event(COMMAND_PALETTE_EVENT))}
-            className="focus-ring touch-target flex items-center justify-center text-muted-foreground hover:text-foreground rounded-lg"
-            aria-label="Search"
-          >
-            <Search className="w-5 h-5" />
-          </button>
-          <button
+          />
+          <IconButton
             ref={menuButtonRef}
+            icon={mobileOpen ? X : Menu}
+            label={mobileOpen ? 'Close menu' : 'Open menu'}
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="focus-ring touch-target flex items-center justify-center text-muted-foreground hover:text-foreground rounded-lg"
             aria-expanded={mobileOpen}
             aria-controls="mobile-menu"
-            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-          >
-            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          />
         </div>
       </div>
 

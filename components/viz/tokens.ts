@@ -11,9 +11,11 @@ export type RGB = [number, number, number];
 /**
  * Core cinematic palette — snapped to the site's canonical accent tokens
  * (app/globals.css `--accent-*`, `--color-bg-*`) so the viz family and the rest
- * of the UI read as one system. `indigo`/`gold`/`teal` are kept as named keys
- * for existing consumers but now alias the nearest site accent (violet / amber /
- * emerald) rather than a separate softer hue.
+ * of the UI read as one system. `indigo`/`teal` are kept as named keys for
+ * existing consumers and alias the nearest site accent (violet / emerald).
+ * `gold` used to alias amber — which is Tier C — so the "elite/rank" hue and
+ * the Tier C hue were the same color. It is now the real `--signal-elite`
+ * token: rank and evidence grade can no longer be confused.
  */
 export const VIZ = {
   void: "#020811",
@@ -28,7 +30,7 @@ export const VIZ = {
   cyan: "#00e0ff",
   indigo: "#c084fc",   // alias → violet (the site has no separate indigo accent)
   violet: "#c084fc",
-  gold: "#fbbf24",     // alias → amber
+  gold: "#d8b25f",     // → --signal-elite (elite/rank only, never a tier)
   rose: "#f472b6",
   amber: "#fbbf24",
   teal: "#34d399",     // alias → emerald
@@ -40,7 +42,7 @@ export const HUES: Record<string, RGB> = {
   cyan: [0, 224, 255],
   indigo: [192, 132, 252],
   violet: [192, 132, 252],
-  gold: [251, 191, 36],
+  gold: [216, 178, 95],
   rose: [244, 114, 182],
   amber: [251, 191, 36],
   teal: [52, 211, 153],
