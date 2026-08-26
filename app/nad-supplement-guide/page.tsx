@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import Link from 'next/link';
 import { ArrowRight, FlaskConical, ShieldCheck, Clock, ExternalLink, CheckCircle2, AlertTriangle, Zap } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
@@ -331,12 +332,11 @@ export default function NadSupplementGuidePage() {
                       <div>
                         <div className="flex items-center gap-2">
                           <h3 className="font-bold text-lg">{p.name}</h3>
-                          <span
-                            className="text-micro font-mono font-semibold px-2 py-0.5 rounded-full border"
-                            style={{ color: p.color, background: `${p.color}12`, borderColor: `${p.color}30` }}
-                          >
-                            Tier {p.tier}
-                          </span>
+                          {/* The tier pill used to take `p.color` — the
+                              PRODUCT's brand hue — so two Tier B entries
+                              rendered in amber and violet respectively, both
+                              wrong. Tier color is not a per-product choice. */}
+                          <EvidenceTag tier={p.tier} size="sm" href="/trust/methodology" />
                           {i === 0 && (
                             <span className="text-micro font-semibold text-accent-emerald bg-accent-emerald/10 border border-accent-emerald/20 px-2 py-0.5 rounded-full">
                               TNiC Pick

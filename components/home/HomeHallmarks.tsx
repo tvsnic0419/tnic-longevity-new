@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { TIER_TEXT_CLASS } from '@/lib/trust';
 import { ArrowUpRight } from 'lucide-react';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { getHallmarkVisual } from '@/lib/hallmark-visuals';
@@ -17,11 +18,8 @@ import { HallmarksConstellation } from '@/components/ui/HallmarksConstellation';
 
 // Canonical evidence-tier colors — must match EvidenceTag / trust.ts
 // (A = clinical/emerald, B = emerging/cyan, C = preclinical/amber).
-const TIER_TEXT: Record<'A' | 'B' | 'C', string> = {
-  A: 'text-accent-emerald',
-  B: 'text-accent-cyan',
-  C: 'text-accent-amber',
-};
+/** The canonical map, imported — this was a local copy. */
+const TIER_TEXT = TIER_TEXT_CLASS;
 
 export function HomeHallmarks() {
   return (

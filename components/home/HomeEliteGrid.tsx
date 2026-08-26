@@ -3,10 +3,11 @@
 import { useMemo, useState, type CSSProperties } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { BookOpen } from 'lucide-react';
+import { BookOpen, ChevronDown } from 'lucide-react';
 import { ExternalAction } from '@/components/ui/ExternalAction';
 import { eliteInterventions } from '@/lib/elite-interventions';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { evidenceTagDefinitions } from '@/lib/trust';
 import { RevealItem } from '@/components/ui/RevealItem';
 import { SelectableChip } from '@/components/ui/SelectableChip';
 
@@ -54,13 +55,24 @@ const CHIP_ORDER = [
   'dysbiosis',
 ];
 
+/** "Clinical" / "Emerging" / "Preclinical" — the tier's own authored descriptor. */
+const tierShort = (tier: keyof typeof evidenceTagDefinitions) => evidenceTagDefinitions[tier].short;
+
 function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)[number] }) {
   const { pick, compoundName, pathway, mechanismLine, evidence, studyCount, dose, hallmarks } =
     intervention;
   const brandShort = pick.brand.split(' ')[0];
 
+  // Mobile shows a compact preview: the decision layer (rank, tier, name,
+  // mechanism, the three facts) is always on the surface, and the product
+  // specifics open on one tap. Desktop renders everything, always — `sm:hidden`
+  // / `sm:block` do the switching, so the server HTML still carries the full
+  // card and every internal link for crawlers.
+  const [open, setOpen] = useState(false);
+  const detailId = `elite-detail-${intervention.compoundId}`;
+
   return (
-    <div className="elite-card group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-gradient-to-b from-card/70 to-card/25 transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-accent-emerald/50 hover:shadow-[0_24px_70px_-24px_rgba(16,185,129,0.4)]">
+    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-gradient-to-b from-card/70 to-card/25 transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-accent-emerald/50 hover:shadow-[0_24px_70px_-24px_rgba(16,185,129,0.4)]">
       {/* top-edge light catch */}
       <span
         aria-hidden="true"
@@ -68,7 +80,9 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
       />
 
       {/* Product image band — layered ambience: emerald glow + dot-grid + hover shine */}
-      <div className="relative flex h-44 items-center justify-center overflow-hidden border-b border-border/50">
+      <div
+        className={`relative h-44 items-center justify-center overflow-hidden border-b border-border/50 sm:flex ${open ? 'flex' : 'hidden'}`}
+      >
         <span
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_100%_at_50%_120%,rgba(16,185,129,0.16),transparent_60%)]"
@@ -97,11 +111,23 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
         </span>
       </div>
 
-      {/* Body */}
+      {/* ── Header zone — rank, tier, mechanism label, compound name ──
+          On mobile the rank and tier move up here, since the image band they
+          normally sit on is collapsed. */}
       <div className="flex flex-1 flex-col p-5">
+        <div className="mb-1 flex items-center gap-2 sm:hidden">
+          <span className="font-display text-2xl leading-none text-[var(--color-text-faint)] tabular-nums">
+            {String(intervention.rank).padStart(2, '0')}
+          </span>
+          <EvidenceTag tier={evidence} size="sm" href="/trust/methodology" />
+        </div>
         <p className="text-label mb-1 text-accent-cyan">{pathway}</p>
         <h3 className="font-display mb-1.5 text-2xl font-medium tracking-tight text-foreground">{compoundName}</h3>
-        <p className="mb-4 text-[0.9375rem] leading-relaxed text-[var(--color-text-secondary)] antialiased">{mechanismLine}</p>
+        {/* Clamped: an uneven mechanism line used to stretch the whole grid row,
+            so the fact tables below never lined up card to card. */}
+        <p className="mb-4 line-clamp-2 min-h-[3.2em] text-[0.9375rem] leading-relaxed text-[var(--color-text-secondary)] antialiased">
+          {mechanismLine}
+        </p>
 
         {hallmarks.length > 0 && (
           <div className="mb-4 flex flex-wrap gap-1">
@@ -116,12 +142,21 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
           </div>
         )}
 
-        {/* Evidence + dose micro-facts — framed and high-contrast so the
-            supporting data reads as crisp instrument readout, not fine print. */}
-        <dl className="mb-5 grid grid-cols-2 gap-x-3 gap-y-2 rounded-lg border border-border/60 bg-white/[0.025] px-3.5 py-3">
+        {/* ── Decision zone — the three consistent facts ──
+            Was two (studies, dose). Evidence strength was stranded up on the
+            image band, so it wasn't part of the comparable triple and vanished
+            entirely once the band collapsed on mobile. Three columns now, in
+            the same order on every card. */}
+        <dl className="mb-5 grid grid-cols-3 gap-x-3 rounded-lg border border-border/60 bg-white/[0.025] px-3.5 py-3">
           <div>
-            <dt className="mb-0.5 font-mono text-micro font-semibold uppercase tracking-[0.12em] text-muted-foreground">Human studies cited</dt>
-            <dd className="tnic-tabular font-mono text-base font-semibold text-foreground">{studyCount}</dd>
+            <dt className="mb-0.5 font-mono text-micro font-semibold uppercase tracking-[0.12em] text-muted-foreground">Evidence</dt>
+            <dd className="text-sm font-semibold text-foreground">
+              Tier {evidence} · {tierShort(evidence)}
+            </dd>
+          </div>
+          <div>
+            <dt className="mb-0.5 font-mono text-micro font-semibold uppercase tracking-[0.12em] text-muted-foreground">Studies</dt>
+            <dd className="tnic-tabular font-mono text-sm font-semibold text-foreground">{studyCount}</dd>
           </div>
           <div>
             <dt className="mb-0.5 font-mono text-micro font-semibold uppercase tracking-[0.12em] text-muted-foreground">Studied dose</dt>
@@ -129,11 +164,34 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
           </div>
         </dl>
 
-        {/* Verified pick */}
-        <div className="mt-auto">
+        {/* Mobile-only disclosure for the product specifics. Desktop never sees
+            this control; the zones below are simply always visible there. */}
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          aria-controls={detailId}
+          className="focus-ring interactive mb-3 inline-flex min-h-[var(--space-touch)] items-center justify-between gap-2 rounded-xl border border-border/70 px-4 text-sm font-semibold text-[var(--color-text-secondary)] hover:border-accent-emerald/40 hover:text-accent-emerald sm:hidden"
+        >
+          {open ? 'Hide the verified pick' : 'See the verified pick'}
+          <ChevronDown
+            className={`h-4 w-4 shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
+            aria-hidden="true"
+          />
+        </button>
+
+        {/* ── Recommendation + action zones ── */}
+        <div id={detailId} className={`mt-auto sm:block ${open ? 'block' : 'hidden'}`}>
           <p className="text-label mb-1 text-accent-emerald">Verified pick</p>
-          <p className="mb-3 text-sm font-medium text-foreground">
+          {/* Clamped for the same height reason as the mechanism line. */}
+          <p className="mb-1.5 line-clamp-2 min-h-[2.9em] text-sm font-medium text-foreground">
             {pick.brand} — <span className="text-[var(--color-text-secondary)]">{pick.productName}</span>
+          </p>
+          {/* The "why this form" disclosure the card never showed. `whyThisPick`
+              was already authored in lib/product-picks.ts and rendered only in
+              the page's JSON-LD — nothing here is newly written. */}
+          <p className="mb-3 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
+            {pick.whyThisPick}
           </p>
           <div className="flex flex-col gap-2">
             <ExternalAction
@@ -144,7 +202,7 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
             </ExternalAction>
             <Link
               href={intervention.libraryHref}
-              className="focus-ring inline-flex items-center justify-center gap-1.5 rounded-xl border border-border/70 px-4 py-2.5 text-sm font-semibold text-[var(--color-text-secondary)] transition-colors hover:border-accent-cyan/40 hover:text-accent-cyan"
+              className="focus-ring inline-flex min-h-[var(--space-touch)] items-center justify-center gap-1.5 rounded-xl border border-border/70 px-4 py-2.5 text-sm font-semibold text-[var(--color-text-secondary)] transition-colors hover:border-accent-cyan/40 hover:text-accent-cyan"
             >
               <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
               Read the evidence

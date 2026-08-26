@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { TIER_CHIP_CLASS } from '@/lib/trust';
 import { Sparkles, ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -32,11 +33,8 @@ const compoundHrefs: Record<string, string> = {
   fisetin: '/library/fisetin',
 };
 
-const evidenceColors: Record<string, string> = {
-  A: 'text-accent-emerald bg-accent-emerald/10 border-accent-emerald/25',
-  B: 'text-accent-cyan bg-accent-cyan/10 border-accent-cyan/25',
-  C: 'text-accent-amber bg-accent-amber/10 border-accent-amber/25',
-};
+/** The canonical map, imported — this was a local copy. */
+const evidenceColors: Record<string, string> = TIER_CHIP_CLASS;
 
 const evidenceLabels: Record<string, string> = {
   A: 'Human RCT',

@@ -50,6 +50,58 @@ export const evidenceTagDefinitions: Record<
   },
 };
 
+/**
+ * THE canonical tier→color mapping. Every surface that colors a tier must draw
+ * from here.
+ *
+ * This map used to be copy-pasted into a dozen components, each with a "keep in
+ * sync" comment instead of an import — and they did drift: two panels
+ * hardcoded emerald for every tier (so a Tier C stack rendered green) and one
+ * guide colored its tier pill by the product's brand hue.
+ *
+ * `accentName` is the site accent this tier owns; the other two are the derived
+ * forms components actually consume. Prefer rendering `<EvidenceTag>` over
+ * reaching for a color at all — it carries the letter, the descriptor and the
+ * three-bar strength meter, so the grade never depends on hue alone.
+ */
+export const TIER_ACCENT_NAME: Record<EvidenceTier, 'emerald' | 'cyan' | 'amber'> = {
+  A: 'emerald',
+  B: 'cyan',
+  C: 'amber',
+};
+
+/** CSS custom property per tier — for canvas, SVG and inline styles. */
+export const TIER_COLOR_VAR: Record<EvidenceTier, string> = {
+  A: 'var(--accent-emerald)',
+  B: 'var(--accent-cyan)',
+  C: 'var(--accent-amber)',
+};
+
+/** Tailwind text class per tier. */
+export const TIER_TEXT_CLASS: Record<EvidenceTier, string> = {
+  A: 'text-accent-emerald',
+  B: 'text-accent-cyan',
+  C: 'text-accent-amber',
+};
+
+/**
+ * Full tinted-chip recipe per tier. Written out literally — Tailwind's
+ * compiler scans source text, so these can never be assembled from a template
+ * string at runtime or the classes simply won't be generated.
+ */
+export const TIER_CHIP_CLASS: Record<EvidenceTier, string> = {
+  A: 'text-accent-emerald bg-accent-emerald/10 border-accent-emerald/25',
+  B: 'text-accent-cyan bg-accent-cyan/10 border-accent-cyan/25',
+  C: 'text-accent-amber bg-accent-amber/10 border-accent-amber/25',
+};
+
+/** The heavier bordered variant used on hallmark intervention rows. */
+export const TIER_CHIP_CLASS_STRONG: Record<EvidenceTier, string> = {
+  A: 'bg-accent-emerald/15 text-accent-emerald border border-accent-emerald/30',
+  B: 'bg-accent-cyan/15 text-accent-cyan border border-accent-cyan/30',
+  C: 'bg-accent-amber/15 text-accent-amber border border-accent-amber/30',
+};
+
 /** Content-facing evidence labels — maps to tiers where applicable */
 export const evidenceBadgeDefinitions: Record<
   EvidenceLevel,

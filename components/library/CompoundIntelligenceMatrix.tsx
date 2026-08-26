@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { TIER_COLOR_VAR } from '@/lib/trust';
 import { ExternalLink, ShieldCheck, FlaskConical, AlertTriangle } from 'lucide-react';
 import {
   subscoresOf,
@@ -20,10 +21,10 @@ function perfColor(v: number): string {
   return v >= 78 ? 'var(--accent-emerald)' : v >= 60 ? 'var(--accent-cyan)' : v >= 42 ? 'var(--accent-amber)' : 'var(--accent-rose)';
 }
 // Canonical evidence-tier accent — matches EvidenceTag / lib/trust.ts.
+/* A/B/C come from the canonical map; D is local to this matrix (it grades a
+   fourth bucket the site-wide tier scale doesn't have). */
 const TIER_ACCENT: Record<Tier, string> = {
-  A: 'var(--accent-emerald)',
-  B: 'var(--accent-cyan)',
-  C: 'var(--accent-amber)',
+  ...TIER_COLOR_VAR,
   D: 'var(--accent-rose)',
 };
 

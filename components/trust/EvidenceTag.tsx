@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { EvidenceTier } from '@/lib/types';
-import { evidenceTagDefinitions } from '@/lib/trust';
+import { evidenceTagDefinitions, TIER_COLOR_VAR, TIER_TEXT_CLASS } from '@/lib/trust';
 import { cn } from '@/lib/utils';
 
 /**
@@ -20,9 +20,9 @@ interface TierMeta {
 }
 
 const tierMeta: Record<EvidenceTier, TierMeta> = {
-  A: { level: 3, color: 'var(--accent-emerald)', shell: 'text-accent-emerald border-accent-emerald/25' },
-  B: { level: 2, color: 'var(--accent-cyan)', shell: 'text-accent-cyan border-accent-cyan/25' },
-  C: { level: 1, color: 'var(--accent-amber)', shell: 'text-accent-amber border-accent-amber/25' },
+  A: { level: 3, color: TIER_COLOR_VAR.A, shell: `${TIER_TEXT_CLASS.A} border-accent-emerald/25` },
+  B: { level: 2, color: TIER_COLOR_VAR.B, shell: `${TIER_TEXT_CLASS.B} border-accent-cyan/25` },
+  C: { level: 1, color: TIER_COLOR_VAR.C, shell: `${TIER_TEXT_CLASS.C} border-accent-amber/25` },
 };
 
 interface SizeSpec {

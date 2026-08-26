@@ -6,6 +6,7 @@
    value derivable during render. Reviewed 2026-06-21; safe to keep. */
 
 import { useEffect, useMemo, useState } from 'react';
+import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import Link from 'next/link';
 import { ShieldAlert, Trophy } from 'lucide-react';
 import { LongevityGaugeArc } from '@/components/ui/LongevityGaugeArc';
@@ -163,11 +164,12 @@ function CompoundCard({
               >
                 {product.category}
               </span>
-              {product.evidenceTier && (
-                <span className="text-micro font-mono text-accent-emerald bg-accent-emerald/10 px-2 py-0.5 rounded-lg border border-accent-emerald/20">
-                  Tier {product.evidenceTier}
-                </span>
-              )}
+              {/* Was hardcoded emerald regardless of tier — a Tier B or C
+                  product rendered as if it were Tier A, directly beside a
+                  confidence badge using the very same emerald/cyan/amber
+                  scale. EvidenceTag restores the canonical color and adds the
+                  strength meter. */}
+              {product.evidenceTier && <EvidenceTag tier={product.evidenceTier} size="sm" />}
             </div>
             <p className="text-sm text-muted-foreground mt-0.5">{product.full}</p>
           </div>

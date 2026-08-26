@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { TIER_COLOR_VAR } from '@/lib/trust';
 import type { NetworkEdge, NetworkNode, StackNetworkGraph as Graph } from '@/lib/tools/types';
 import { edgeColors } from '@/lib/tools/stack-network';
 import { cn } from '@/lib/utils';
@@ -69,11 +70,8 @@ export function StackNetworkGraph({
   // Canonical evidence-tier colors (A emerald / B cyan / C amber) — the same
   // mapping EvidenceTag and tierColor() use site-wide, so the letter inside
   // each node reads as the same grade a user sees on the compound module.
-  const tierFill: Record<string, string> = {
-    A: 'var(--accent-emerald)',
-    B: 'var(--accent-cyan)',
-    C: 'var(--accent-amber)',
-  };
+  /** The canonical map, imported — this was a local copy. */
+  const tierFill: Record<string, string> = TIER_COLOR_VAR;
 
   const RING_R = 165;
   const CX = 240;
