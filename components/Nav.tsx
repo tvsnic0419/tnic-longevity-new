@@ -4,7 +4,7 @@ import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ArrowRight, ClipboardList, Menu, Search, X } from 'lucide-react';
+import { ArrowRight, ChevronDown, ClipboardList, Menu, Search, X } from 'lucide-react';
 import { navGroups } from '@/lib/nav-data';
 import { Logo } from '@/components/ui/Logo';
 import { SiteSearch } from '@/components/SiteSearch';
@@ -17,9 +17,39 @@ import { cn } from '@/lib/utils';
 // adaptive measurement still runs before first paint on the client.
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
+// Keep the first five destinations focused on the site’s principal visitor jobs.
+// The remainder stay one click away in the Explore panel, avoiding a crowded
+// desktop header without sending a standard laptop straight to the hamburger.
+const desktopPrimaryLinks = [
+  { href: '/library', label: 'Library' },
+  { href: '/stacks', label: 'Stacks' },
+  { href: '/protocols', label: 'Protocols' },
+  { href: '/labs', label: 'Labs' },
+  { href: '/products', label: 'Products' },
+];
+
+const exploreGroups = [
+  {
+    label: 'Learn',
+    links: [
+      { href: '/peptides', label: 'Peptides' },
+      { href: '/insights', label: 'Insights' },
+      { href: '/learn', label: 'Learning hub' },
+    ],
+  },
+  {
+    label: 'Build',
+    links: [
+      { href: '/tools', label: 'Tools' },
+      { href: '/compound-engine', label: 'Compound engine' },
+    ],
+  },
+] as const;
+
 export function Nav() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [exploreOpen, setExploreOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   // Adaptive fit: render the full desktop bar whenever it actually fits the
@@ -38,6 +68,8 @@ export function Nav() {
 
   const menuRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const exploreRef = useRef<HTMLDivElement>(null);
+  const exploreButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     let rafId: number;
@@ -93,6 +125,29 @@ export function Nav() {
   const drawerOpen = compact && mobileOpen;
 
   useEffect(() => {
+    if (!exploreOpen) return;
+
+    const onPointerDown = (event: PointerEvent) => {
+      if (!exploreRef.current?.contains(event.target as Node)) {
+        setExploreOpen(false);
+      }
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setExploreOpen(false);
+        exploreButtonRef.current?.focus();
+      }
+    };
+
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [exploreOpen]);
+
+  useEffect(() => {
     if (!drawerOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -129,9 +184,10 @@ export function Nav() {
   }, [drawerOpen]);
 
   useEffect(() => {
-    // Close the mobile menu on route change, including back/forward navigation.
+    // Close open navigation surfaces on route change, including back/forward navigation.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMobileOpen(false);
+    setExploreOpen(false);
   }, [pathname]);
 
   const isActive = (href: string) => href === pathname || (href !== '/' && pathname.startsWith(`${href}/`));
@@ -185,25 +241,75 @@ export function Nav() {
           </span>
         </div>
 
-        {/* Grouped by intent (Learn / Build / Track / Shop) with a hairline
-            divider between clusters, so the row reads as labeled families
-            rather than nine flat links. */}
+        {/* The desktop bar prioritizes five core routes. Secondary research and
+            builder destinations live in a structured disclosure so the first
+            screen stays composed instead of becoming a wall of tiny links. */}
         <div ref={linksRef} className={cn('items-center gap-1 shrink-0', compact ? 'hidden' : 'flex')}>
-          {navGroups.map((group, gi) => (
-            <div key={group.label} className="flex items-center gap-0.5" role="group" aria-label={group.label}>
-              {gi > 0 && <span className="mx-1 h-4 w-px bg-border/60" aria-hidden="true" />}
-              {group.links.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  aria-current={isActive(link.href) ? 'page' : undefined}
-                  className={navLinkClass}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
+          {desktopPrimaryLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              aria-current={isActive(link.href) ? 'page' : undefined}
+              className={navLinkClass}
+            >
+              {link.label}
+            </Link>
           ))}
+          <div ref={exploreRef} className="relative ml-1">
+            <button
+              ref={exploreButtonRef}
+              type="button"
+              onClick={() => setExploreOpen((open) => !open)}
+              aria-expanded={exploreOpen}
+              aria-controls="desktop-explore-panel"
+              className={cn(
+                'focus-ring interactive inline-flex items-center gap-1 whitespace-nowrap rounded-xl px-2 py-2 text-sm font-medium transition-all',
+                exploreOpen
+                  ? 'bg-accent-cyan/10 text-foreground'
+                  : 'text-muted-foreground hover:bg-accent-cyan/10 hover:text-foreground',
+              )}
+            >
+              Explore
+              <ChevronDown
+                className={cn('h-3.5 w-3.5 transition-transform duration-200', exploreOpen && 'rotate-180')}
+                aria-hidden="true"
+              />
+            </button>
+            <AnimatePresence>
+              {exploreOpen && (
+                <motion.div
+                  id="desktop-explore-panel"
+                  initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                  transition={{ duration: 0.16, ease: 'easeOut' }}
+                  className="absolute right-0 top-[calc(100%+0.8rem)] grid w-[25rem] grid-cols-2 gap-2 rounded-2xl border border-border/80 bg-[color-mix(in_srgb,var(--color-bg-elevated)_94%,transparent)] p-3 shadow-[0_18px_50px_-18px_rgba(0,0,0,0.7)] backdrop-blur-2xl"
+                  aria-label="Explore more TNiC resources"
+                >
+                  {exploreGroups.map((group) => (
+                    <div key={group.label} className="rounded-xl p-2">
+                      <p className="mb-2 px-2 text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+                        {group.label}
+                      </p>
+                      <div className="flex flex-col gap-0.5">
+                        {group.links.map((link) => (
+                          <Link
+                            key={link.href}
+                            href={link.href}
+                            onClick={() => setExploreOpen(false)}
+                            aria-current={isActive(link.href) ? 'page' : undefined}
+                            className="focus-ring rounded-lg px-2 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent-cyan/10 hover:text-foreground aria-[current=page]:bg-accent-cyan/10 aria-[current=page]:text-foreground"
+                          >
+                            {link.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
 
         <div ref={actionsRef} className={cn('items-center gap-2.5 shrink-0', compact ? 'hidden' : 'flex')}>

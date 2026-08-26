@@ -166,7 +166,7 @@ const CSS = `
 .is-in .tnic-stage,
 .is-in .tnic-molcard,
 .is-in .tnic-hero-badges,
-.is-in .tnic-hero-cta,
+.is-in .tnic-paths,
 .is-in .tnic-final { opacity: 1; transform: none; }
 
 .tnic-hero { align-items: flex-start; text-align: left; }
@@ -187,12 +187,39 @@ const CSS = `
 .tnic-hero-badges a.pill { text-decoration: none; transition: border-color .2s ease, color .2s ease, background .2s ease; }
 .tnic-hero-badges a.pill:hover { border-color: color-mix(in srgb, var(--cyan) 55%, transparent); color: var(--ink); background: rgba(14,20,38,0.8); }
 
-/* Primary action on the very first screen (Act 0) — a new visitor gets a clear
-   CTA above the fold instead of having to scroll the whole descent to act. */
-.tnic-hero-cta {
-  display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px;
+/* The arrival screen now makes the three principal visitor jobs explicit:
+   evaluate the strongest evidence, browse the science, or get a personalised
+   starting point. This replaces competing generic CTAs with a compact choice
+   architecture that stays inside the first viewport. */
+.tnic-paths {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;
+  width: min(100%, 780px); margin-top: 28px;
   opacity: 0; transform: translateY(14px);
   transition: opacity 1s ease .45s, transform 1s ease .45s;
+}
+.tnic-path {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center;
+  gap: 10px; min-height: 68px; padding: 12px 14px; border-radius: 14px;
+  color: var(--ink); text-decoration: none; border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel) 86%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+  transition: transform .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease;
+}
+.tnic-path:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--cyan) 55%, transparent); background: color-mix(in srgb, var(--panel2) 92%, transparent); box-shadow: 0 12px 28px -16px rgba(95,227,224,.55); }
+.tnic-path.primary { color: #030712; border-color: transparent; background: linear-gradient(135deg, #5fe3e0 0%, #68e5c7 52%, #b8f3d8 100%); box-shadow: 0 10px 30px -16px rgba(95,227,224,.85); }
+.tnic-path.primary:hover { border-color: transparent; background: linear-gradient(135deg, #75ebe7 0%, #77ebcf 52%, #c8f7e2 100%); box-shadow: 0 14px 36px -16px rgba(95,227,224,.95); }
+.tnic-path-index { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10px; letter-spacing: .12em; color: var(--faint); }
+.tnic-path.primary .tnic-path-index { color: rgba(3,7,18,.58); }
+.tnic-path-copy { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.tnic-path-label { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 9px; line-height: 1.2; letter-spacing: .11em; text-transform: uppercase; color: var(--faint); }
+.tnic-path.primary .tnic-path-label { color: rgba(3,7,18,.62); }
+.tnic-path-name { font-size: 14px; line-height: 1.2; font-weight: 650; }
+.tnic-path-arr { font-size: 18px; line-height: 1; color: var(--cyan); transition: transform .2s ease; }
+.tnic-path.primary .tnic-path-arr { color: #030712; }
+.tnic-path:hover .tnic-path-arr { transform: translateX(3px); }
+@media (max-width: 720px) {
+  .tnic-paths { grid-template-columns: 1fr; max-width: 440px; }
+  .tnic-path { min-height: 58px; }
 }
 
 .tnic-cue {
@@ -413,18 +440,20 @@ const CSS = `
 .tnic-cta.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); box-shadow: none; margin-left: 12px; }
 .tnic-cta.ghost:hover { border-color: var(--cyan); }
 
-.tnic-rail-track { position: absolute; top: 0; right: clamp(14px,2.5vw,30px); bottom: 0; width: 84px; pointer-events: none; z-index: 6; }
-.tnic-rail { position: sticky; top: 50vh; transform: translateY(-50%); display: flex; flex-direction: column; gap: 4px; pointer-events: auto; }
+/* Journey navigator — persistent labels turn the cinematic sequence into an
+   understandable five-part story instead of an unexplained floating rail. */
+.tnic-rail-track { position: absolute; top: 0; right: clamp(14px,2.5vw,30px); bottom: 0; width: 144px; pointer-events: none; z-index: 6; }
+.tnic-rail { position: sticky; top: 50vh; transform: translateY(-50%); display: flex; flex-direction: column; gap: 1px; padding: 8px 9px; border: 1px solid color-mix(in srgb, var(--line) 85%, transparent); border-radius: 14px; background: color-mix(in srgb, var(--void) 82%, transparent); box-shadow: 0 12px 34px -18px rgba(0,0,0,.6); backdrop-filter: blur(14px); pointer-events: auto; }
 @media (max-width: 720px){ .tnic-rail-track { display: none; } }
 .tnic-rail button {
-  background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 10px;
-  padding: 6px 0; color: var(--faint); justify-content: flex-end;
+  background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 9px;
+  padding: 7px 0; color: var(--faint); justify-content: flex-end;
 }
-.tnic-rail .lbl { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; opacity: 0; transform: translateX(6px); transition: all .3s ease; }
-.tnic-rail button:hover .lbl, .tnic-rail button.on .lbl { opacity: 1; transform: none; color: var(--ink); }
-.tnic-rail .tick { width: 26px; height: 2px; background: currentColor; border-radius: 2px; transition: all .3s ease; }
+.tnic-rail .lbl { width: 78px; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 9.5px; letter-spacing: .13em; text-align: right; text-transform: uppercase; opacity: .54; transform: none; transition: all .25s ease; }
+.tnic-rail button:hover .lbl, .tnic-rail button.on .lbl { opacity: 1; color: var(--ink); }
+.tnic-rail .tick { width: 20px; height: 2px; background: currentColor; border-radius: 2px; transition: all .25s ease; }
 .tnic-rail button.on { color: var(--cyan); }
-.tnic-rail button.on .tick { width: 44px; box-shadow: 0 0 12px var(--cyan); }
+.tnic-rail button.on .tick { width: 30px; box-shadow: 0 0 12px var(--cyan); }
 
 .tnic-descent[data-reduced="true"] .bar,
 .tnic-descent[data-reduced="true"] .edge.flow,
@@ -865,11 +894,31 @@ export function HomeDescent() {
           <Link href="/hallmarks" className="pill"><span className="dot" /><b>12</b>&nbsp;hallmarks of aging</Link>
           <Link href="/trust/methodology" className="pill"><span className="dot" /><b>A–C</b>&nbsp;evidence tiers</Link>
         </div>
-        <div className="tnic-hero-cta">
-          <Link href="/elite-8" className="tnic-cta">
-            Explore the Elite Eight <span className="arr" aria-hidden="true">→</span>
+        <div className="tnic-paths" aria-label="Choose where to begin">
+          <Link href="/elite-8" className="tnic-path primary">
+            <span className="tnic-path-index">01</span>
+            <span className="tnic-path-copy">
+              <span className="tnic-path-label">Start with evidence</span>
+              <span className="tnic-path-name">Elite Eight</span>
+            </span>
+            <span className="tnic-path-arr" aria-hidden="true">→</span>
           </Link>
-          <Link href="#system" className="tnic-cta ghost">View the network</Link>
+          <Link href="/library" className="tnic-path">
+            <span className="tnic-path-index">02</span>
+            <span className="tnic-path-copy">
+              <span className="tnic-path-label">Browse the science</span>
+              <span className="tnic-path-name">Library</span>
+            </span>
+            <span className="tnic-path-arr" aria-hidden="true">→</span>
+          </Link>
+          <Link href="/nico" className="tnic-path">
+            <span className="tnic-path-index">03</span>
+            <span className="tnic-path-copy">
+              <span className="tnic-path-label">Find your starting point</span>
+              <span className="tnic-path-name">NICO Starter</span>
+            </span>
+            <span className="tnic-path-arr" aria-hidden="true">→</span>
+          </Link>
         </div>
         <div className="tnic-cue"><span className="bar" />descend</div>
       </section>
