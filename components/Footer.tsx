@@ -13,6 +13,8 @@ import {
   Rocket,
   Syringe,
   Waypoints,
+  Sparkles,
+  ArrowRight,
 } from 'lucide-react';
 import { POPULAR_GUIDE_LINKS } from '@/lib/index-priority';
 import { citationRegistry } from '@/lib/trust';
@@ -72,6 +74,27 @@ export function Footer() {
             No supplement inventory to move. No user health data sales model.
             Just cell-health research made easier to inspect, question, and apply responsibly.
           </p>
+          {/* Closing conversion beat — the footer's one action moment, so the
+              long scroll ends in a next step rather than a wall of links.
+              Semantic color: emerald primary = advance (the questionnaire),
+              cyan secondary = explore (the library). */}
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+            <Link
+              href="/nico"
+              className="tnic-button-primary focus-ring group inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm"
+            >
+              <Sparkles className="h-4 w-4" aria-hidden="true" />
+              Start the NICO Questionnaire
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+            </Link>
+            <Link
+              href="/library"
+              className="tnic-button-secondary focus-ring inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm"
+            >
+              <Library className="h-4 w-4" aria-hidden="true" />
+              Explore the evidence library
+            </Link>
+          </div>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-10 mb-10">

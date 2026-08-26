@@ -82,7 +82,7 @@ export function Nav() {
   // rather than a second isActive() branch, so the two can never diverge.
   const navLinkClass =
     'focus-ring interactive whitespace-nowrap px-2 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent-cyan/10 transition-all ' +
-    'aria-[current=page]:text-foreground aria-[current=page]:bg-accent-cyan/10';
+    'aria-[current=page]:text-foreground aria-[current=page]:bg-accent-cyan/[0.14] aria-[current=page]:ring-1 aria-[current=page]:ring-inset aria-[current=page]:ring-accent-cyan/40';
   const mobileNavLinkClass =
     'focus-ring interactive flex justify-between items-center text-foreground hover:text-accent-cyan py-3.5 min-h-[var(--space-touch)] text-base font-medium border-b border-border/50 last:border-0 ' +
     'aria-[current=page]:text-accent-cyan';
@@ -92,7 +92,11 @@ export function Nav() {
       <div
         className={`absolute inset-0 nav-glass ${scrolled ? 'nav-glass-scrolled' : ''}`}
       />
-      <div className="relative container-page py-3 md:py-4 flex justify-between items-center gap-4">
+      <div
+        className={`relative container-page flex items-center justify-between gap-4 transition-[padding] duration-300 ${
+          scrolled ? 'py-1.5 md:py-2' : 'py-3 md:py-4'
+        }`}
+      >
         {/* No aria-label here: it would duplicate/conflict with the Logo's
             own role="img" + aria-label below, which Lighthouse's
             label-content-name-mismatch audit flags as visible text not
@@ -100,9 +104,13 @@ export function Nav() {
             from that single nested image role instead. */}
         <Link
           href="/"
-          className="focus-ring interactive flex items-center rounded-xl shrink-0 group transition-transform hover:scale-[1.02]"
+          className={`focus-ring interactive flex items-center rounded-xl shrink-0 group transition-transform ${
+            scrolled ? 'scale-[0.94]' : ''
+          }`}
         >
-          <Logo variant="lockup" size="nav" alt="TNiC – Transformative Nutrition in Cell-Health · Home" />
+          <span className="block transition-transform group-hover:scale-[1.03]">
+            <Logo variant="lockup" size="nav" alt="TNiC – Transformative Nutrition in Cell-Health · Home" />
+          </span>
         </Link>
 
         {/* Grouped by intent (Learn / Build / Track / Shop) with a hairline
