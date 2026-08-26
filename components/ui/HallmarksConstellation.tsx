@@ -93,7 +93,12 @@ export function HallmarksConstellation() {
               transition={reduced ? { duration: 0 } : { delay: i * 0.04, duration: 0.4 }}
             >
               <Link
-                href={`/library/${h.slug}`}
+                // Was /library/{slug} while the grid immediately beside it linked
+                // to /hallmarks/{slug} — two destinations for the same hallmark
+                // on one screen. Both routes are real; the deep dive is the one
+                // this section is about, and the library module is reachable
+                // from the detail panel.
+                href={`/hallmarks/${h.slug}`}
                 className={`constellation-node-btn focus-ring ${isActive ? 'is-active' : ''}`}
                 onMouseEnter={() => setActive(h.id)}
                 onMouseLeave={() => setActive(null)}

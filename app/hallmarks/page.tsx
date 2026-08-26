@@ -100,7 +100,12 @@ export default function HallmarksIndexPage() {
                 return (
                   <RevealItem key={h.id} index={i} className="h-full">
                     <div
-                      className="premium-card h-full p-5"
+                      // `.premium-card` is already `display:flex; flex-direction:column`, but the
+                // Tailwind `flex flex-col` here makes that explicit and, more to the
+                // point, the card previously relied on it implicitly while its
+                // children used `flex-1` / `mt-auto` — which were inert, so the
+                // footer links were never actually bottom-pinned as intended.
+                className="premium-card flex h-full flex-col p-5"
                       style={{ ['--card-accent' as string]: 'var(--accent-emerald)' }}
                     >
                       {/* Header */}

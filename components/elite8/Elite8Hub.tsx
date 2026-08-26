@@ -146,6 +146,11 @@ function CompoundCard({
     <button
       type="button"
       onClick={onToggle}
+      // The card IS the disclosure control, and it carried no state at all for
+      // assistive tech — no aria-expanded, no aria-controls. A screen-reader
+      // user had no way to know the card opened, or that it had.
+      aria-expanded={expanded}
+      aria-controls={`lq-detail-${product.id}`}
       className={`glass-deep glass-plane-mid w-full text-left rounded-2xl border transition-all duration-300 overflow-hidden focus-ring ${
         expanded ? 'border-accent-emerald/40 glow-hover-emerald' : 'border-border/60 glow-hover-emerald'
       }`}
@@ -186,7 +191,7 @@ function CompoundCard({
       </div>
 
       {expanded && (
-        <div className="px-6 md:px-8 pb-8 pt-2 border-t border-border/50">
+        <div id={`lq-detail-${product.id}`} className="px-6 md:px-8 pb-8 pt-2 border-t border-border/50">
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="shrink-0 flex flex-col items-center text-muted-foreground">
               <RadarMini product={product} />

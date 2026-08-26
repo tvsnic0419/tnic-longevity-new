@@ -189,6 +189,38 @@ export function HomeNicoStarter() {
                 </div>
               </fieldset>
 
+              {/* Selected-answer summary. Neither NICO flow showed one before
+                  submit, so the visitor committed without a recap of what they
+                  had actually chosen — and on this screen the form is replaced
+                  by the result, so the answers then disappear entirely.
+                  Everything here is read back from the current selection; the
+                  focus-area default is stated rather than silently applied. */}
+              <div className="rounded-xl border border-border/60 bg-white/[0.02] px-4 py-3">
+                <p className="text-label mb-2 text-muted-foreground">Your answers</p>
+                <dl className="space-y-1.5 text-sm">
+                  <div className="flex flex-wrap gap-x-2">
+                    <dt className="text-muted-foreground">Age range:</dt>
+                    <dd className="font-medium text-foreground">
+                      {AGE_RANGES.find((a) => a.id === ageId)?.label}
+                    </dd>
+                  </div>
+                  <div className="flex flex-wrap gap-x-2">
+                    <dt className="text-muted-foreground">Activity:</dt>
+                    <dd className="font-medium text-foreground">
+                      {ACTIVITY.find((a) => a.id === actId)?.label}
+                    </dd>
+                  </div>
+                  <div className="flex flex-wrap gap-x-2">
+                    <dt className="text-muted-foreground">Focus:</dt>
+                    <dd className="font-medium text-foreground">
+                      {focus.length
+                        ? focus.map((id) => FOCUS.find((f) => f.id === id)?.label).join(' · ')
+                        : 'None picked — defaults to Longevity core'}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+
               <button
                 type="button"
                 onClick={compute}

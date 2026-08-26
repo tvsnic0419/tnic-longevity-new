@@ -428,6 +428,58 @@ export function NicoQuestionnaire() {
           )}
         </div>
 
+        {/* Selected-answer summary, on the last question only. The flow showed
+            every question in isolation and never recapped the answers before
+            computing a stack — so the visitor committed blind. Read back from
+            the current answers; nothing here is stored or invented. */}
+        {!isResult && step === STEP_IDS.length - 2 && (
+          <div className="mt-6 rounded-xl border border-border/60 bg-card/40 px-4 py-3">
+            <p className="text-label mb-2 text-muted-foreground">Your answers</p>
+            <dl className="grid gap-1.5 text-sm sm:grid-cols-2">
+              <div className="flex flex-wrap gap-x-2">
+                <dt className="text-muted-foreground">Goals:</dt>
+                <dd className="font-medium text-foreground">
+                  {answers.goals.length
+                    ? answers.goals
+                        .map((g) => NICO_GOAL_OPTIONS.find((o) => o.id === g)?.label)
+                        .join(' · ')
+                    : '—'}
+                </dd>
+              </div>
+              <div className="flex flex-wrap gap-x-2">
+                <dt className="text-muted-foreground">Age:</dt>
+                <dd className="font-medium text-foreground">{answers.age}</dd>
+              </div>
+              {SCALE_ORDER.map((pillar) => (
+                <div key={pillar} className="flex flex-wrap gap-x-2">
+                  <dt className="capitalize text-muted-foreground">{pillar}:</dt>
+                  <dd className="font-medium text-foreground">{answers[pillar]} / 5</dd>
+                </div>
+              ))}
+              <div className="flex flex-wrap gap-x-2 sm:col-span-2">
+                <dt className="text-muted-foreground">Focus:</dt>
+                <dd className="font-medium text-foreground">
+                  {answers.focus.length
+                    ? answers.focus
+                        .map((f) => NICO_FOCUS_OPTIONS.find((o) => o.id === f)?.label)
+                        .join(' · ')
+                    : 'None picked'}
+                </dd>
+              </div>
+              <div className="flex flex-wrap gap-x-2 sm:col-span-2">
+                <dt className="text-muted-foreground">Safety flags:</dt>
+                <dd className="font-medium text-foreground">
+                  {answers.safety.length
+                    ? answers.safety
+                        .map((f) => NICO_SAFETY_OPTIONS.find((o) => o.id === f)?.label)
+                        .join(' · ')
+                    : 'None selected'}
+                </dd>
+              </div>
+            </dl>
+          </div>
+        )}
+
         {/* Nav buttons */}
         {!isResult && (
           <div className="flex items-center justify-between mt-6">
@@ -439,14 +491,25 @@ export function NicoQuestionnaire() {
             >
               <ArrowLeft className="w-4 h-4" /> Back
             </button>
-            <button
-              type="button"
-              onClick={goNext}
-              disabled={!canAdvance}
-              className="focus-ring inline-flex items-center gap-2 bg-accent-emerald text-black px-6 py-3 rounded-xl text-sm font-bold hover:bg-accent-emerald/90 transition-colors disabled:opacity-40 disabled:pointer-events-none"
-            >
-              {step === STEP_IDS.length - 2 ? 'See my stack' : 'Continue'} <ArrowRight className="w-4 h-4" />
-            </button>
+            <div className="flex flex-col items-end gap-1.5">
+              <button
+                type="button"
+                onClick={goNext}
+                disabled={!canAdvance}
+                // The disabled state used to communicate itself with opacity
+                // alone — and `pointer-events-none` meant hover couldn't
+                // surface an explanation either. Now it names the reason.
+                aria-describedby={!canAdvance ? 'nico-continue-hint' : undefined}
+                className="focus-ring inline-flex min-h-[var(--space-touch)] items-center gap-2 bg-accent-emerald text-black px-6 py-3 rounded-xl text-sm font-bold hover:bg-accent-emerald/90 transition-colors disabled:opacity-40 disabled:pointer-events-none"
+              >
+                {step === STEP_IDS.length - 2 ? 'See my stack' : 'Continue'} <ArrowRight className="w-4 h-4" />
+              </button>
+              {!canAdvance && (
+                <p id="nico-continue-hint" className="text-caption text-muted-foreground">
+                  Pick at least one goal to continue.
+                </p>
+              )}
+            </div>
           </div>
         )}
       </div>
