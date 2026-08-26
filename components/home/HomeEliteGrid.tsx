@@ -3,7 +3,7 @@
 import { useMemo, useState, type CSSProperties } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ExternalLink, BookOpen } from 'lucide-react';
+import { ExternalLink, BookOpen, FlaskConical } from 'lucide-react';
 import { eliteInterventions } from '@/lib/elite-interventions';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { RevealItem } from '@/components/ui/RevealItem';
@@ -134,23 +134,32 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
             {pick.brand} — <span className="text-[var(--color-text-secondary)]">{pick.productName}</span>
           </p>
           <div className="flex flex-col gap-2">
+            <div className="grid grid-cols-2 gap-2">
+              <Link
+                href={`/stacks?stack=${intervention.compoundId}&from=elite-home`}
+                className="focus-ring inline-flex items-center justify-center gap-1.5 rounded-xl bg-accent-emerald/12 px-3 py-2.5 text-sm font-semibold text-accent-emerald transition-colors hover:bg-accent-emerald/20"
+              >
+                <FlaskConical className="h-3.5 w-3.5" aria-hidden="true" />
+                Build a stack
+              </Link>
+              <Link
+                href={intervention.libraryHref}
+                className="focus-ring inline-flex items-center justify-center gap-1.5 rounded-xl border border-border/70 px-3 py-2.5 text-sm font-semibold text-[var(--color-text-secondary)] transition-colors hover:border-accent-cyan/40 hover:text-accent-cyan"
+              >
+                <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
+                Evidence
+              </Link>
+            </div>
             <a
               href={intervention.goHref}
               target="_blank"
               rel="noopener noreferrer sponsored"
-              className="focus-ring group/buy inline-flex items-center justify-center gap-1.5 rounded-xl bg-accent-emerald/12 px-4 py-2.5 text-sm font-semibold text-accent-emerald transition-colors hover:bg-accent-emerald/20"
+              className="focus-ring group/buy inline-flex items-center justify-center gap-1.5 rounded-xl border border-border/70 px-4 py-2.5 text-sm font-semibold text-[var(--color-text-secondary)] transition-colors hover:border-accent-emerald/40 hover:text-accent-emerald"
               aria-label={`Buy ${pick.productName} from ${pick.brand} — opens manufacturer site`}
             >
-              Buy on {brandShort}
+              Verify on {brandShort}
               <ExternalLink className="h-3.5 w-3.5 transition-transform duration-200 group-hover/buy:-translate-y-0.5 group-hover/buy:translate-x-0.5" aria-hidden="true" />
             </a>
-            <Link
-              href={intervention.libraryHref}
-              className="focus-ring inline-flex items-center justify-center gap-1.5 rounded-xl border border-border/70 px-4 py-2.5 text-sm font-semibold text-[var(--color-text-secondary)] transition-colors hover:border-accent-cyan/40 hover:text-accent-cyan"
-            >
-              <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
-              Read the evidence
-            </Link>
           </div>
         </div>
       </div>

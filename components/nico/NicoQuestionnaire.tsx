@@ -46,6 +46,18 @@ type StepId = 'goals' | 'age' | (typeof SCALE_ORDER)[number] | 'focus' | 'safety
 const STEP_IDS: StepId[] = ['goals', 'age', ...SCALE_ORDER, 'focus', 'safety', 'result'];
 const QUESTION_COUNT = STEP_IDS.length - 1; // excludes the result screen
 
+// The questionnaire asks one focused question at a time, but the experience
+// should still read as a coherent path rather than nine anonymous screens.
+// These are presentational waypoints only; the scoring engine remains unchanged.
+const JOURNEY_STAGES = [
+  { label: 'Goals', start: 0, end: 0 },
+  { label: 'Basics', start: 1, end: 1 },
+  { label: 'Lifestyle', start: 2, end: 6 },
+  { label: 'Focus', start: 7, end: 7 },
+  { label: 'Safety', start: 8, end: 8 },
+  { label: 'Stack', start: 9, end: 9 },
+] as const;
+
 function Chip({
   active,
   onClick,
@@ -192,6 +204,8 @@ export function NicoQuestionnaire() {
       ? `/stacks?stack=${result.compoundIds.join(',')}&from=nico`
       : '/stacks';
 
+  const selectedGoalOptions = NICO_GOAL_OPTIONS.filter((goal) => answers.goals.includes(goal.id));
+
   const currentQuestionText = (() => {
     switch (stepId) {
       case 'goals':
@@ -220,17 +234,60 @@ export function NicoQuestionnaire() {
           theme="emerald"
         />
 
-        {/* Progress — "Step X of N" plus a continuous bar. A per-segment tick
-            row (as the old 5-step version used) gets too dense once each
-            question has its own screen, so this mirrors the pacing already
-            verified on real devices for a similarly-sized flow. */}
+        {/* On the first question, move the meaningful assurances out of the
+            explanatory paragraph and into a quick visual promise close to the
+            first decision. This clarifies what the visitor gets before asking
+            for any personal context. */}
+        {step === 0 && (
+          <div className="mb-6 grid grid-cols-3 overflow-hidden rounded-2xl border border-border/70 bg-card/40">
+            <div className="border-r border-border/60 px-3 py-3 text-center">
+              <p className="text-[0.5625rem] font-mono font-semibold uppercase tracking-[0.1em] text-accent-emerald">Goal-led</p>
+              <p className="mt-1 text-xs font-medium text-foreground">Starts with you</p>
+            </div>
+            <div className="border-r border-border/60 px-3 py-3 text-center">
+              <p className="text-[0.5625rem] font-mono font-semibold uppercase tracking-[0.1em] text-accent-emerald">No account</p>
+              <p className="mt-1 text-xs font-medium text-foreground">Begin freely</p>
+            </div>
+            <div className="px-3 py-3 text-center">
+              <p className="text-[0.5625rem] font-mono font-semibold uppercase tracking-[0.1em] text-accent-emerald">Build-ready</p>
+              <p className="mt-1 text-xs font-medium text-foreground">Open your stack</p>
+            </div>
+          </div>
+        )}
+
+        {/* Progress now combines the exact question count with a human-readable
+            map of the personalization journey. The phases reveal what remains
+            without making the one-question flow feel more complex. */}
         {!isResult && (
           <div className="mb-8">
-            <div className="flex items-center justify-between mb-2">
+            <div className="mb-3 flex items-center justify-between gap-3">
               <p className="font-mono text-micro uppercase tracking-widest text-accent-emerald">
                 Question {step + 1} of {QUESTION_COUNT}
               </p>
+              <p className="text-micro font-mono uppercase tracking-wide text-muted-foreground">Your path</p>
             </div>
+            <ol className="mb-3 grid grid-cols-6 gap-1" aria-label="NICO personalization journey">
+              {JOURNEY_STAGES.map((stage) => {
+                const active = step >= stage.start && step <= stage.end;
+                const complete = step > stage.end;
+                return (
+                  <li key={stage.label} aria-current={active ? 'step' : undefined}>
+                    <div
+                      className={[
+                        'rounded-md border px-1 py-1.5 text-center font-mono text-[0.5rem] font-semibold uppercase leading-tight tracking-[0.05em] transition-colors',
+                        active
+                          ? 'border-accent-emerald/60 bg-accent-emerald/12 text-accent-emerald'
+                          : complete
+                            ? 'border-accent-cyan/20 bg-accent-cyan/[0.06] text-accent-cyan'
+                            : 'border-border/60 bg-card/30 text-muted-foreground',
+                      ].join(' ')}
+                    >
+                      {stage.label}
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
             <div className="h-1 rounded-full bg-border/50 overflow-hidden">
               <div
                 className="h-full rounded-full bg-accent-emerald transition-all duration-300"
@@ -262,6 +319,14 @@ export function NicoQuestionnaire() {
                   </Chip>
                 ))}
               </div>
+              {selectedGoalOptions.length > 0 && (
+                <aside className="mt-4 rounded-xl border border-accent-emerald/25 bg-accent-emerald/[0.06] px-4 py-3" aria-live="polite">
+                  <p className="text-micro font-mono font-semibold uppercase tracking-[0.11em] text-accent-emerald">Your stack anchor</p>
+                  <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
+                    NICO will prioritize {selectedGoalOptions.map((goal) => goal.label).join(', ')} as it builds your starting stack.
+                  </p>
+                </aside>
+              )}
             </section>
           )}
 
