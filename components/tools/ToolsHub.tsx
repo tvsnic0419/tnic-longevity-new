@@ -6,7 +6,7 @@
    value derivable during render. Reviewed 2026-06-21; safe to keep. */
 
 import dynamic from 'next/dynamic';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, type CSSProperties } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -25,7 +25,6 @@ import {
 import { PageHeader } from '@/components/ui/PageHeader';
 import { TabBar } from '@/components/ui/TabBar';
 import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
-import { GlassPanel } from '@/components/ui/GlassPanel';
 import { RevealCard } from '@/components/ui/RevealCard';
 import { EvidenceTagLegend } from '@/components/trust/EvidenceTag';
 import { toolsRegistry, type ToolId } from '@/lib/registry';
@@ -131,11 +130,11 @@ export function ToolsHub() {
           className="mb-8 max-w-4xl mx-auto"
         />
 
-        <GlassPanel depth="mid" className="mb-8 rounded-2xl">
-          <Link
-            href="/elite-8"
-            className="focus-ring group block border border-accent-amber/25 bg-gradient-to-br from-accent-amber/8 to-transparent rounded-2xl p-5 md:p-6 hover:border-accent-amber/40 transition"
-          >
+        <Link
+          href="/elite-8"
+          className="premium-card focus-ring group mb-8 block p-5 md:p-6"
+          style={{ ['--card-accent' as string]: 'var(--accent-amber)' } as CSSProperties}
+        >
             <div className="flex flex-col sm:flex-row sm:items-center gap-4">
               <div className="flex items-start gap-3 flex-1">
                 <div className="icon-badge-amber w-10 h-10 rounded-xl flex items-center justify-center shrink-0">
@@ -153,14 +152,13 @@ export function ToolsHub() {
                 Open ranking <ArrowRight className="w-4 h-4" />
               </span>
             </div>
-          </Link>
-        </GlassPanel>
+        </Link>
 
-        <GlassPanel depth="mid" className="mb-8 rounded-2xl">
-          <Link
-            href="/compound-engine"
-            className="focus-ring group block border border-accent-cyan/25 bg-gradient-to-br from-accent-cyan/8 to-transparent rounded-2xl p-5 md:p-6 hover:border-accent-cyan/40 transition"
-          >
+        <Link
+          href="/compound-engine"
+          className="premium-card focus-ring group mb-8 block p-5 md:p-6"
+          style={{ ['--card-accent' as string]: 'var(--accent-cyan)' } as CSSProperties}
+        >
             <div className="flex flex-col sm:flex-row sm:items-center gap-4">
               <div className="flex items-start gap-3 flex-1">
                 <div className="icon-badge-cyan w-10 h-10 rounded-xl flex items-center justify-center shrink-0">
@@ -178,14 +176,13 @@ export function ToolsHub() {
                 Open engine <ArrowRight className="w-4 h-4" />
               </span>
             </div>
-          </Link>
-        </GlassPanel>
+        </Link>
 
-        <GlassPanel depth="mid" className="mb-8 rounded-2xl">
-          <Link
-            href="/tools/pathway-architect"
-            className="focus-ring group block border border-accent-violet/25 bg-gradient-to-br from-accent-violet/8 to-transparent rounded-2xl p-5 md:p-6 hover:border-accent-violet/40 transition"
-          >
+        <Link
+          href="/tools/pathway-architect"
+          className="premium-card focus-ring group mb-8 block p-5 md:p-6"
+          style={{ ['--card-accent' as string]: 'var(--accent-violet)' } as CSSProperties}
+        >
             <div className="flex flex-col sm:flex-row sm:items-center gap-4">
               <div className="flex items-start gap-3 flex-1">
                 <div className="icon-badge-violet w-10 h-10 rounded-xl flex items-center justify-center shrink-0">
@@ -204,8 +201,7 @@ export function ToolsHub() {
                 Open builder <ArrowRight className="w-4 h-4" />
               </span>
             </div>
-          </Link>
-        </GlassPanel>
+        </Link>
 
         {/* Visual tool picker grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
