@@ -13,6 +13,7 @@ import {
   Rocket,
   Syringe,
   Waypoints,
+  Orbit,
   Sparkles,
   ArrowRight,
 } from 'lucide-react';
@@ -29,6 +30,7 @@ const hubLinks = [
   { href: '/library', label: 'Anti-Aging Library', icon: Library },
   { href: '/peptides', label: 'Peptide Library', icon: Syringe },
   { href: '/pathways', label: 'Pathways', icon: Waypoints },
+  { href: '/sirtuin-atlas', label: 'Sirtuin Atlas', icon: Orbit },
   { href: '/learn', label: 'Learn Hub', icon: GraduationCap },
   { href: '/stacks', label: 'Stacks & Protocols', icon: Layers },
   { href: '/labs', label: 'Lab Analysis Hub', icon: FlaskConical },
