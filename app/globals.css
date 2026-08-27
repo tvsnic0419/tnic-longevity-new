@@ -3636,3 +3636,292 @@ p,
     radial-gradient(120% 90% at 50% 0%, #ffffff 0%, #f1f5f9 58%, #e2e8f0 100%);
   box-shadow: inset 0 -14px 28px -20px rgba(15, 23, 42, 0.28);
 }
+
+
+/* ============================================================================
+   Homepage refinement layer — August 2026
+   A focused quality pass that extends the existing TNiC materials, typography,
+   motion and token system. All treatments are intentionally scoped to current
+   homepage classes so other product surfaces remain unchanged.
+   ========================================================================== */
+
+/* Give the fixed navigation a subtle internal spectrum even before scrolling.
+   The decorative wash sits inside the existing backdrop and never competes with
+   content, which preserves the nav's reliable legibility over every section. */
+.nav-glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(48% 180% at 8% -70%, color-mix(in srgb, var(--accent-cyan) 13%, transparent), transparent 72%),
+    radial-gradient(36% 180% at 92% -78%, color-mix(in srgb, var(--accent-emerald) 9%, transparent), transparent 75%);
+  opacity: 0.9;
+}
+
+.nav-glass-scrolled::after {
+  opacity: 0.58;
+}
+
+/* The filter is a lightweight instrument panel: it frames a dense choice set
+   without treating it as a full card or adding unnecessary visual weight. */
+.elite-filter-shell {
+  position: relative;
+  overflow: hidden;
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, var(--accent-emerald) 17%, var(--color-border-subtle));
+  border-radius: 1rem;
+  background:
+    linear-gradient(120deg, color-mix(in srgb, var(--accent-emerald) 6%, transparent), transparent 46%),
+    color-mix(in srgb, var(--color-bg-elevated) 68%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 7%, transparent);
+}
+
+.elite-filter-shell::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 2px;
+  background: linear-gradient(var(--accent-cyan), var(--accent-emerald), transparent);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.elite-filter-signal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--accent-emerald);
+}
+
+.elite-filter-signal::before {
+  content: '';
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 13%, transparent), 0 0 11px color-mix(in srgb, currentColor 65%, transparent);
+}
+
+.elite-filter-count {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.elite-filter-count::before {
+  content: '';
+  width: 1.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent-emerald), transparent);
+}
+
+/* Preserve the grid's information density while giving every intervention a
+   deeper, more product-like media plinth and a calm, usable focus state. */
+.elite-card {
+  min-height: 100%;
+  background:
+    radial-gradient(120% 76% at 100% 0%, color-mix(in srgb, var(--accent-emerald) 6%, transparent), transparent 58%),
+    linear-gradient(180deg, color-mix(in srgb, var(--color-bg-elevated) 78%, transparent), color-mix(in srgb, var(--color-bg-base) 55%, transparent));
+}
+
+.elite-card:focus-within {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--accent-emerald) 50%, transparent),
+    0 20px 60px -30px color-mix(in srgb, var(--accent-emerald) 52%, transparent),
+    var(--glass-shadow-content);
+}
+
+.elite-card-media {
+  background:
+    radial-gradient(80% 120% at 50% 118%, color-mix(in srgb, var(--accent-emerald) 16%, transparent), transparent 62%),
+    linear-gradient(135deg, color-mix(in srgb, var(--accent-cyan) 7%, transparent), transparent 52%);
+}
+
+.elite-card-media::after {
+  content: '';
+  position: absolute;
+  inset: auto 8% 0;
+  height: 28%;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent-emerald) 15%, transparent);
+  filter: blur(22px);
+  pointer-events: none;
+}
+
+.elite-card-media > img {
+  z-index: 1;
+}
+
+.elite-card-action-secondary,
+.elite-card-action-verify {
+  color: var(--color-text-secondary);
+  border: 1px solid color-mix(in srgb, var(--color-border-subtle) 86%, transparent);
+  background: color-mix(in srgb, var(--color-bg-base) 18%, transparent);
+  transition: color 0.24s ease, border-color 0.24s ease, background 0.24s ease, transform 0.24s ease;
+}
+
+@media (hover: hover) {
+  .elite-card-action-secondary:hover {
+    color: var(--accent-cyan);
+    border-color: color-mix(in srgb, var(--accent-cyan) 44%, transparent);
+    background: color-mix(in srgb, var(--accent-cyan) 8%, transparent);
+    transform: translateY(-1px);
+  }
+
+  .elite-card-action-verify:hover {
+    color: var(--accent-emerald);
+    border-color: color-mix(in srgb, var(--accent-emerald) 44%, transparent);
+    background: color-mix(in srgb, var(--accent-emerald) 8%, transparent);
+    transform: translateY(-1px);
+  }
+}
+
+[data-theme="light"] .elite-filter-shell {
+  background:
+    linear-gradient(120deg, color-mix(in srgb, var(--accent-emerald) 7%, transparent), transparent 52%),
+    var(--color-bg-elevated);
+  box-shadow: var(--glass-shadow-mid);
+}
+
+[data-theme="light"] .elite-card {
+  background:
+    radial-gradient(120% 76% at 100% 0%, color-mix(in srgb, var(--accent-emerald) 5%, transparent), transparent 58%),
+    var(--color-bg-elevated);
+}
+
+[data-theme="light"] .elite-card-action-secondary,
+[data-theme="light"] .elite-card-action-verify {
+  background: color-mix(in srgb, var(--color-text-primary) 3%, var(--color-bg-elevated));
+}
+
+@media (max-width: 639px) {
+  .elite-filter-shell { padding: 0.875rem; }
+  .elite-filter-signal { align-self: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elite-card-action-secondary,
+  .elite-card-action-verify { transition: none; }
+}
+
+
+/* Evidence briefing: a compact editorial bridge from the cinematic opening to
+   concrete intervention choices. It is intentionally factual and derives its
+   only numeric value from the current intervention registry. */
+.elite-briefing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--accent-emerald) 20%, var(--color-border-subtle));
+  border-radius: var(--radius-2xl);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--accent-cyan) 5%, transparent), transparent 42%),
+    linear-gradient(315deg, color-mix(in srgb, var(--accent-emerald) 6%, transparent), transparent 48%),
+    color-mix(in srgb, var(--color-bg-elevated) 65%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 7%, transparent);
+}
+
+.elite-briefing-grid > div {
+  position: relative;
+  min-height: 8.5rem;
+  padding: 1.25rem 1.35rem;
+}
+
+.elite-briefing-grid > div + div {
+  border-left: 1px solid color-mix(in srgb, var(--color-border-subtle) 88%, transparent);
+}
+
+.elite-briefing-grid > div::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--accent-emerald) 55%, transparent), transparent);
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+
+.elite-briefing-grid > div:hover::before {
+  opacity: 1;
+}
+
+.elite-briefing-label {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1.25;
+  text-transform: uppercase;
+  color: var(--accent-emerald);
+}
+
+.elite-briefing-grid strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1.15vw + 0.8rem, 1.625rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+}
+
+.elite-briefing-grid p {
+  margin: 0.45rem 0 0;
+  max-width: 29ch;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+.elite-disclosure {
+  background:
+    linear-gradient(105deg, color-mix(in srgb, var(--accent-amber) 7%, transparent), transparent 54%),
+    color-mix(in srgb, var(--color-bg-elevated) 60%, transparent);
+}
+
+.elite-section-secondary-action {
+  color: var(--color-text-secondary);
+  border: 1px solid color-mix(in srgb, var(--color-border-subtle) 86%, transparent);
+  background: color-mix(in srgb, var(--color-bg-base) 18%, transparent);
+  transition: color 0.24s ease, border-color 0.24s ease, background 0.24s ease, transform 0.24s ease;
+}
+
+@media (hover: hover) {
+  .elite-section-secondary-action:hover {
+    color: var(--accent-amber);
+    border-color: color-mix(in srgb, var(--accent-amber) 50%, transparent);
+    background: color-mix(in srgb, var(--accent-amber) 8%, transparent);
+    transform: translateY(-1px);
+  }
+}
+
+[data-theme="light"] .elite-briefing-grid,
+[data-theme="light"] .elite-disclosure {
+  background: var(--color-bg-elevated);
+  box-shadow: var(--glass-shadow-mid);
+}
+
+[data-theme="light"] .elite-section-secondary-action {
+  background: color-mix(in srgb, var(--color-text-primary) 3%, var(--color-bg-elevated));
+}
+
+@media (max-width: 767px) {
+  .elite-briefing-grid { grid-template-columns: 1fr; }
+  .elite-briefing-grid > div { min-height: 0; padding: 1rem 1.1rem; }
+  .elite-briefing-grid > div + div { border-top: 1px solid color-mix(in srgb, var(--color-border-subtle) 88%, transparent); border-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elite-briefing-grid > div::before,
+  .elite-section-secondary-action { transition: none; }
+}

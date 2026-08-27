@@ -169,7 +169,55 @@ const CSS = `
 .is-in .tnic-paths,
 .is-in .tnic-final { opacity: 1; transform: none; }
 
-.tnic-hero { align-items: flex-start; text-align: left; }
+.tnic-hero {
+  align-items: flex-start;
+  text-align: left;
+  isolation: isolate;
+}
+/* The first screen should feel atmospheric but never empty. These low-contrast
+   orbital planes focus the arrival moment without suggesting an actual molecular
+   structure or competing with the real render in Act 1. */
+.tnic-hero::before,
+.tnic-hero::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+}
+.tnic-hero::before {
+  width: min(70vw, 820px);
+  aspect-ratio: 1;
+  right: -10vw;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 1px solid color-mix(in srgb, var(--cyan) 15%, transparent);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 52px color-mix(in srgb, var(--cyan) 5%, transparent),
+    0 0 0 132px color-mix(in srgb, var(--indigo) 3%, transparent),
+    0 0 150px 36px color-mix(in srgb, var(--cyan) 8%, transparent);
+  opacity: .9;
+}
+.tnic-hero::after {
+  inset: 16% 4% 14% 46%;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--cyan) 16%, transparent) 1px, transparent 1px) 0 0 / 72px 72px,
+    linear-gradient(color-mix(in srgb, var(--cyan) 12%, transparent) 1px, transparent 1px) 0 0 / 72px 72px;
+  mask-image: radial-gradient(75% 80% at 70% 50%, #000 0%, transparent 72%);
+  -webkit-mask-image: radial-gradient(75% 80% at 70% 50%, #000 0%, transparent 72%);
+  opacity: .42;
+}
+@media (max-width: 720px) {
+  /* The global nav is fixed; reserve a deliberate arrival margin so the
+     eyebrow never enters beneath its glass edge on narrow screens. */
+  .tnic-hero {
+    justify-content: flex-start;
+    padding-top: calc(5.5rem + env(safe-area-inset-top));
+    padding-bottom: 4rem;
+  }
+  .tnic-hero::before { width: 100vw; right: -38vw; top: 28%; opacity: .56; }
+  .tnic-hero::after { inset: 8% -30% auto 18%; height: 44%; opacity: .24; }
+}
 .tnic-hero-badges {
   display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px;
   opacity: 0; transform: translateY(14px);
@@ -882,7 +930,7 @@ export function HomeDescent() {
       </div>
 
       {/* ACT 0 — ARRIVE */}
-      <section ref={s0} data-idx="0" className="tnic-act tnic-hero">
+      <section ref={s0} data-idx="0" className="tnic-act tnic-hero is-in">
         <p className="tnic-kicker">Evidence-Graded Longevity Library</p>
         <h1 className="tnic-h1">See what{' '}<br />you&apos;re <em>protecting</em>.</h1>
         <p className="tnic-lead">
