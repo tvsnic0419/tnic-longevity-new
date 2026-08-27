@@ -25,6 +25,7 @@ import { ModuleGlancePanel } from './ModuleGlancePanel';
 import { recordModuleVisit } from '@/lib/recent-modules';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { ContentByline } from '@/components/trust/ContentByline';
+import { EvidenceTrace } from '@/components/trust/EvidenceTrace';
 import { AffiliateDisclosure } from '@/components/trust/AffiliateDisclosure';
 import { libraryModuleTitles } from '@/lib/breadcrumb-titles';
 
@@ -116,12 +117,18 @@ export function LibraryModuleDetail({
         >
           <ArrowLeft className="w-4 h-4" /> Back to Library
         </Link>
-        <ContentByline
+          <ContentByline
           author={author}
           lastUpdated={lastUpdated}
           reviewer={reviewer}
           citationCount={citationCount}
-          className="mb-8"
+          className="mb-4"
+        />
+        <EvidenceTrace
+          tier={module.evidenceTier}
+          sourceCount={citationCount}
+          reviewedLabel={lastUpdated ? `Updated ${lastUpdated}` : 'Methodology published'}
+          className="mb-8 max-w-2xl"
         />
 
         <div className="grid lg:grid-cols-12 gap-10">

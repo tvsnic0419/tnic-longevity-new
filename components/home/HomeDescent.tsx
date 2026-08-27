@@ -199,7 +199,7 @@ const CSS = `
 }
 .tnic-path {
   display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center;
-  gap: 10px; min-height: 68px; padding: 12px 14px; border-radius: 14px;
+  gap: 10px; min-height: 82px; padding: 13px 14px; border-radius: 14px;
   color: var(--ink); text-decoration: none; border: 1px solid var(--line);
   background: color-mix(in srgb, var(--panel) 86%, transparent);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
@@ -210,16 +210,18 @@ const CSS = `
 .tnic-path.primary:hover { border-color: transparent; background: linear-gradient(135deg, #75ebe7 0%, #77ebcf 52%, #c8f7e2 100%); box-shadow: 0 14px 36px -16px rgba(95,227,224,.95); }
 .tnic-path-index { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10px; letter-spacing: .12em; color: var(--faint); }
 .tnic-path.primary .tnic-path-index { color: rgba(3,7,18,.58); }
-.tnic-path-copy { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.tnic-path-copy { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .tnic-path-label { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 9px; line-height: 1.2; letter-spacing: .11em; text-transform: uppercase; color: var(--faint); }
 .tnic-path.primary .tnic-path-label { color: rgba(3,7,18,.62); }
 .tnic-path-name { font-size: 14px; line-height: 1.2; font-weight: 650; }
+.tnic-path-detail { font-size: 11px; line-height: 1.35; color: var(--muted); }
+.tnic-path.primary .tnic-path-detail { color: rgba(3,7,18,.66); }
 .tnic-path-arr { font-size: 18px; line-height: 1; color: var(--cyan); transition: transform .2s ease; }
 .tnic-path.primary .tnic-path-arr { color: #030712; }
 .tnic-path:hover .tnic-path-arr { transform: translateX(3px); }
 @media (max-width: 720px) {
   .tnic-paths { grid-template-columns: 1fr; max-width: 440px; }
-  .tnic-path { min-height: 58px; }
+  .tnic-path { min-height: 72px; }
 }
 
 .tnic-cue {
@@ -898,24 +900,27 @@ export function HomeDescent() {
           <Link href="/elite-8" className="tnic-path primary">
             <span className="tnic-path-index">01</span>
             <span className="tnic-path-copy">
-              <span className="tnic-path-label">Start with evidence</span>
+              <span className="tnic-path-label">Start with confidence</span>
               <span className="tnic-path-name">Elite Eight</span>
+              <span className="tnic-path-detail">8 dose-matched picks · cited human trials</span>
             </span>
             <span className="tnic-path-arr" aria-hidden="true">→</span>
           </Link>
           <Link href="/library" className="tnic-path">
             <span className="tnic-path-index">02</span>
             <span className="tnic-path-copy">
-              <span className="tnic-path-label">Browse the science</span>
-              <span className="tnic-path-name">Library</span>
+              <span className="tnic-path-label">Explore the science</span>
+              <span className="tnic-path-name">The Library</span>
+              <span className="tnic-path-detail">100 graded compounds · 12 hallmarks</span>
             </span>
             <span className="tnic-path-arr" aria-hidden="true">→</span>
           </Link>
           <Link href="/nico" className="tnic-path">
             <span className="tnic-path-index">03</span>
             <span className="tnic-path-copy">
-              <span className="tnic-path-label">Find your starting point</span>
+              <span className="tnic-path-label">Get your starting point</span>
               <span className="tnic-path-name">NICO Starter</span>
+              <span className="tnic-path-detail">Nine questions · adjustable stack plan</span>
             </span>
             <span className="tnic-path-arr" aria-hidden="true">→</span>
           </Link>

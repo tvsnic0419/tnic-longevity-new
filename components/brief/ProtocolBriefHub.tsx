@@ -7,12 +7,14 @@ import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { BriefSubscribePanel } from './BriefSubscribePanel';
+import { BriefSignalCard } from './BriefSignalCard';
 import { SponsorSlot } from '@/components/sponsors/SponsorSlot';
 import { getHubContext } from '@/lib/hub-context';
 
 const allIssues = getAllBriefIssues();
 const researchCount = allIssues.filter((i) => i.source === 'research-intel').length;
 const pmidCount = new Set(allIssues.flatMap((i) => i.pmids)).size;
+const latestIssue = allIssues[0];
 
 export function ProtocolBriefHub() {
   return (
@@ -27,8 +29,8 @@ export function ProtocolBriefHub() {
           { value: String(researchCount), label: 'Research-Intel synced' },
           { value: String(pmidCount), label: 'PMIDs cited' },
         ]}
-        primary={{ href: '/library', label: 'Browse the library' }}
-        secondary={{ href: '/nico', label: 'Personalize your stack' }}
+        primary={{ href: latestIssue ? `/brief#${latestIssue.id}` : '/library', label: 'Read this week’s signal' }}
+        secondary={{ href: '/library', label: 'Browse the library' }}
       />
       <div>
       <PageHeader
@@ -40,6 +42,19 @@ export function ProtocolBriefHub() {
         align="left"
         context={getHubContext('brief')}
       />
+
+      {latestIssue && (
+        <BriefSignalCard
+          id={latestIssue.id}
+          issueNumber={allIssues.length}
+          date={latestIssue.date}
+          headline={latestIssue.headline}
+          summary={latestIssue.summary}
+          takeaway={latestIssue.takeaway}
+          evidenceTier={latestIssue.evidenceTier}
+          pmids={latestIssue.pmids}
+        />
+      )}
 
       <BriefSubscribePanel />
 

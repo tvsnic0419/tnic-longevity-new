@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { ExternalLink, BookOpen, FlaskConical } from 'lucide-react';
 import { eliteInterventions } from '@/lib/elite-interventions';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { EvidenceTrace } from '@/components/trust/EvidenceTrace';
 import { RevealItem } from '@/components/ui/RevealItem';
 
 /**
@@ -126,6 +127,14 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
             <dd className="text-sm font-semibold text-foreground">{dose}</dd>
           </div>
         </dl>
+
+        <EvidenceTrace
+          tier={evidence}
+          sourceCount={studyCount}
+          reviewedLabel="Dose-matched"
+          href={intervention.libraryHref}
+          className="mb-5"
+        />
 
         {/* Verified pick */}
         <div className="mt-auto">
