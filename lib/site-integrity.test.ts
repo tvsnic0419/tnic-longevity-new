@@ -165,6 +165,25 @@ describe('site data integrity', () => {
     expect(src).not.toMatch(/text-4xl font-black/);
   });
 
+  it('the supplement-guides hub preserves its decision and safety reading layer', () => {
+    // This high-intent index previously jumped from its hero straight to cards.
+    // Keep the source-backed reading framework, visible safety checkpoint, and
+    // FAQPage metadata in place so it remains decision support, not a thin list
+    // of affiliate-adjacent links.
+    const src = readFileSync(
+      resolve(process.cwd(), 'app/supplement-guides/page.tsx'),
+      'utf8',
+    );
+
+    expect(src).toContain('Move from a question to a well-framed decision.');
+    expect(src).toContain('Evidence, identity, and personal safety are three different checks.');
+    expect(src).toContain('GUIDE_SELECTION_FAQS');
+    expect(src).toContain('buildFaqPageSchema');
+    expect(src).toContain('https://ods.od.nih.gov/factsheets/WYNTK-Consumer/');
+    expect(src).toContain('https://www.fda.gov/consumers/consumer-updates/mixing-medications-and-dietary-supplements-can-endanger-your-health');
+    expect(src).toContain('https://ods.od.nih.gov/Research/Dietary_Supplement_Label_Database.aspx');
+  });
+
   it('vercel.json enforces HSTS preload and www→apex redirect', () => {
     const vercel = JSON.parse(
       readFileSync(resolve(process.cwd(), 'vercel.json'), 'utf8'),
