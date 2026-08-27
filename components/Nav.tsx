@@ -4,7 +4,7 @@ import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ArrowRight, ChevronDown, ClipboardList, Menu, Search, X } from 'lucide-react';
+import { ArrowRight, BookOpen, ChevronDown, ClipboardList, FlaskConical, Layers, Menu, Search, ShoppingBag, X } from 'lucide-react';
 import { navGroups } from '@/lib/nav-data';
 import { Logo } from '@/components/ui/Logo';
 import { SiteSearch } from '@/components/SiteSearch';
@@ -27,6 +27,44 @@ const desktopPrimaryLinks = [
   { href: '/labs', label: 'Labs' },
   { href: '/products', label: 'Products' },
 ];
+
+const compactPurposePaths = [
+  {
+    href: '/nico',
+    label: 'Find a starting point',
+    detail: 'Nine adjustable questions',
+    icon: ClipboardList,
+    accent: 'text-accent-violet',
+  },
+  {
+    href: '/library',
+    label: 'Explore a compound',
+    detail: 'Evidence and mechanisms',
+    icon: BookOpen,
+    accent: 'text-accent-cyan',
+  },
+  {
+    href: '/stacks?view=builder',
+    label: 'Inspect a stack',
+    detail: 'Coverage and cautions',
+    icon: Layers,
+    accent: 'text-accent-emerald',
+  },
+  {
+    href: '/labs?mode=single',
+    label: 'Log a lab result',
+    detail: 'Private browser tracking',
+    icon: FlaskConical,
+    accent: 'text-accent-rose',
+  },
+  {
+    href: '/shop',
+    label: 'Verify a product',
+    detail: 'COA-first checklist',
+    icon: ShoppingBag,
+    accent: 'text-accent-amber',
+  },
+] as const;
 
 const exploreGroups = [
   {
@@ -104,6 +142,17 @@ export function Nav() {
       const pad = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
       const available = row.clientWidth - pad;
       const required = requiredRef.current;
+      // Measurement keeps mid-size desktop chrome adaptive, while the explicit
+      // narrow-viewport floor prevents a constrained touch layout from briefly
+      // retaining a clipped desktop row before intrinsic widths settle.
+      const mustUseCompactChrome = window.innerWidth < 1024;
+      if (mustUseCompactChrome) {
+        if (!compactRef.current) {
+          compactRef.current = true;
+          setCompact(true);
+        }
+        return;
+      }
       if (required <= 0) return;
       const next = required > available;
       if (next !== compactRef.current) {
@@ -122,7 +171,12 @@ export function Nav() {
   // The drawer only exists in compact chrome, so derive its visibility rather
   // than syncing state in an effect: expanding back to the full desktop bar
   // implicitly closes it, with no extra render and no set-state-in-effect.
-  const drawerOpen = compact && mobileOpen;
+  // At compact widths, CSS also enforces the compact chrome so touch navigation
+  // stays reachable while intrinsic desktop-width measurement settles. The
+  // narrow-viewport check makes an explicit menu activation reliable during
+  // that short measurement window, while a later resize still closes the drawer.
+  const narrowViewport = typeof window !== 'undefined' && window.innerWidth < 1024;
+  const drawerOpen = mobileOpen && (compact || narrowViewport);
 
   useEffect(() => {
     if (!exploreOpen) return;
@@ -244,7 +298,7 @@ export function Nav() {
         {/* The desktop bar prioritizes five core routes. Secondary research and
             builder destinations live in a structured disclosure so the first
             screen stays composed instead of becoming a wall of tiny links. */}
-        <div ref={linksRef} className={cn('items-center gap-1 shrink-0', compact ? 'hidden' : 'flex')}>
+        <div ref={linksRef} className={cn('items-center gap-1 shrink-0 max-[1023px]:!hidden', compact ? 'hidden' : 'flex')}>
           {desktopPrimaryLinks.map((link) => (
             <Link
               key={link.href}
@@ -312,7 +366,7 @@ export function Nav() {
           </div>
         </div>
 
-        <div ref={actionsRef} className={cn('items-center gap-2.5 shrink-0', compact ? 'hidden' : 'flex')}>
+        <div ref={actionsRef} className={cn('items-center gap-2.5 shrink-0 max-[1023px]:!hidden', compact ? 'hidden' : 'flex')}>
           <ThemeToggle compact />
           <SiteSearch />
           {/* NICO (questionnaire) is the secondary action; Dashboard is the
@@ -337,7 +391,7 @@ export function Nav() {
         </div>
 
         {/* Compact chrome — shown only when the full bar above does not fit. */}
-        <div className={cn('items-center gap-1', compact ? 'flex' : 'hidden')}>
+        <div className={cn('items-center gap-1 max-[1023px]:!flex', compact ? 'flex' : 'hidden')}>
           <ThemeToggle compact />
           <button
             onClick={() => window.dispatchEvent(new Event(COMMAND_PALETTE_EVENT))}
@@ -374,11 +428,35 @@ export function Nav() {
             // breakpoint — otherwise a width could exist where neither the
             // desktop row nor this drawer is reachable.
             className={cn(
-              'relative nav-glass nav-glass-scrolled border-b border-border',
-              compact ? 'block' : 'hidden',
+              'relative nav-glass nav-glass-scrolled max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-b border-border',
+              drawerOpen ? 'block' : 'hidden',
             )}
           >
             <div className="container-page py-4 flex flex-col gap-1">
+              <section className="mb-3 rounded-2xl border border-border/70 bg-background/20 p-3" aria-labelledby="quick-purpose-title">
+                <div className="mb-2 flex items-center justify-between gap-3 px-1">
+                  <p id="quick-purpose-title" className="text-label text-accent-cyan">START WITH A PURPOSE</p>
+                  <span className="text-micro font-mono uppercase tracking-[0.1em] text-muted-foreground">Choose a task</span>
+                </div>
+                <div className="grid grid-cols-2 gap-1.5">
+                  {compactPurposePaths.map((path) => {
+                    const Icon = path.icon;
+                    return (
+                      <Link
+                        key={path.href}
+                        href={path.href}
+                        onClick={() => setMobileOpen(false)}
+                        className="focus-ring group rounded-xl border border-border/60 bg-background/20 p-3 transition-colors hover:border-accent-cyan/35 hover:bg-accent-cyan/[0.045] last:col-span-2"
+                      >
+                        <Icon className={cn('h-3.5 w-3.5', path.accent)} aria-hidden="true" />
+                        <p className="mt-2 text-xs font-semibold leading-snug text-foreground group-hover:text-accent-cyan">{path.label}</p>
+                        <p className="mt-1 text-micro leading-snug text-muted-foreground">{path.detail}</p>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </section>
+
               {navGroups.map((group) => (
                 <div
                   key={group.label}

@@ -1,10 +1,11 @@
 'use client';
 
-import { useMemo, useSyncExternalStore } from 'react';
+import { useMemo, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { ArrowRight, BookmarkCheck, BookmarkPlus, X } from 'lucide-react';
+import { ArrowLeftRight, ArrowRight, BookmarkCheck, BookmarkPlus, X } from 'lucide-react';
 import type { ResearchQueueEntry } from '@/lib/research-queue';
 import { getResearchQueueSnapshot, removeResearchModule, subscribeToResearchQueue } from '@/lib/research-queue';
+import { evidenceComparisons } from '@/lib/comparisons';
 
 const categoryLabel: Record<ResearchQueueEntry['category'], string> = {
   compounds: 'Compound',
@@ -31,6 +32,23 @@ function parseQueue(raw: string): ResearchQueueEntry[] {
 export function ResearchQueueShelf() {
   const queueRaw = useSyncExternalStore(subscribeToResearchQueue, getResearchQueueSnapshot, getServerSnapshot);
   const queue = useMemo(() => parseQueue(queueRaw), [queueRaw]);
+  const [compareSlugs, setCompareSlugs] = useState<string[]>([]);
+  const selectedEntries = queue.filter((entry) => compareSlugs.includes(entry.slug)).slice(0, 2);
+  const matchedComparison = useMemo(() => {
+    if (selectedEntries.length !== 2) return null;
+    const selectedHrefs = new Set(selectedEntries.map((entry) => entry.href.split('#')[0]));
+    return evidenceComparisons.find((comparison) =>
+      comparison.relatedHrefs.filter((related) => selectedHrefs.has(related.href.split('#')[0])).length >= 2,
+    ) ?? null;
+  }, [selectedEntries]);
+
+  const toggleCompare = (slug: string) => {
+    setCompareSlugs((current) => {
+      const active = current.filter((item) => queue.some((entry) => entry.slug === item));
+      if (active.includes(slug)) return active.filter((item) => item !== slug);
+      return active.length >= 2 ? active : [...active, slug];
+    });
+  };
 
   return (
     <section id="research-queue" className="container-page pb-8" aria-labelledby="research-queue-title">
@@ -58,6 +76,17 @@ export function ResearchQueueShelf() {
                     <p className="mt-2 text-sm font-semibold leading-snug text-foreground group-hover:text-accent-cyan">{entry.title}</p>
                     <p className="mt-2 text-caption text-muted-foreground">Resume deep-dive <ArrowRight className="inline h-3 w-3" aria-hidden="true" /></p>
                   </Link>
+                  <button
+                    type="button"
+                    onClick={() => toggleCompare(entry.slug)}
+                    aria-pressed={compareSlugs.includes(entry.slug)}
+                    className={compareSlugs.includes(entry.slug)
+                      ? 'focus-ring mt-3 inline-flex items-center gap-1.5 rounded-lg border border-accent-violet/40 bg-accent-violet/10 px-2 py-1 text-micro font-semibold text-accent-violet'
+                      : 'focus-ring mt-3 inline-flex items-center gap-1.5 rounded-lg border border-border/70 bg-background/30 px-2 py-1 text-micro font-semibold text-muted-foreground hover:border-accent-violet/35 hover:text-accent-violet'}
+                  >
+                    <ArrowLeftRight className="h-3 w-3" aria-hidden="true" />
+                    {compareSlugs.includes(entry.slug) ? 'Selected' : 'Compare'}
+                  </button>
                   <button
                     type="button"
                     onClick={() => removeResearchModule(entry.slug)}
@@ -91,6 +120,33 @@ export function ResearchQueueShelf() {
                 <p className="mt-2 text-sm font-semibold">Follow a hallmark</p>
                 <p className="mt-1 text-caption text-muted-foreground">Start with the biology before the product.</p>
               </Link>
+            </div>
+          )}
+          {queue.length > 0 && (
+            <div className="mt-4 rounded-xl border border-accent-violet/20 bg-accent-violet/[0.035] p-3" aria-live="polite">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <ArrowLeftRight className="h-3.5 w-3.5 text-accent-violet" aria-hidden="true" />
+                  <p className="text-caption text-muted-foreground">
+                    <span className="font-semibold text-foreground">Research decision tray</span> · choose up to two saved modules to look for an authored comparison.
+                  </p>
+                </div>
+                <span className="text-micro font-mono uppercase tracking-[0.1em] text-accent-violet">{selectedEntries.length}/2 selected</span>
+              </div>
+              {selectedEntries.length === 1 && <p className="mt-2 text-caption text-muted-foreground">Choose one more saved module to inspect an available evidence comparison.</p>}
+              {selectedEntries.length === 2 && (
+                matchedComparison ? (
+                  <Link href={`/library/compare/${matchedComparison.slug}`} className="focus-ring mt-3 flex items-center justify-between gap-3 rounded-lg border border-accent-violet/30 bg-background/20 px-3 py-2.5 text-sm font-semibold text-foreground hover:border-accent-violet/50 hover:text-accent-violet">
+                    <span>Open authored comparison: {matchedComparison.title}</span>
+                    <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+                  </Link>
+                ) : (
+                  <div className="mt-3 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border/70 bg-background/20 px-3 py-2.5">
+                    <p className="text-caption text-muted-foreground">No authored head-to-head exists for this pair yet. Browse the neutral comparison library instead.</p>
+                    <Link href="/library/compare" className="focus-ring shrink-0 text-xs font-semibold text-accent-violet hover:text-foreground">Browse comparisons <ArrowRight className="inline h-3.5 w-3.5" aria-hidden="true" /></Link>
+                  </div>
+                )
+              )}
             </div>
           )}
           <div className="mt-4 flex items-center gap-2 text-caption text-muted-foreground"><BookmarkPlus className="h-3.5 w-3.5 text-accent-cyan" aria-hidden="true" /> Save any deep-dive from its Evidence Trace to add it here.</div>
