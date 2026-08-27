@@ -7,8 +7,8 @@ import {
 import { eliteInterventions } from "@/lib/elite-interventions";
 import { COMPOUND_COUNT } from "@/lib/library-modules";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { MoleculeStage } from "@/components/viz/MoleculeStage";
-import { NetworkStage, type NetworkNode, type NetworkEdge } from "@/components/viz/NetworkStage";
+import { DeferredMoleculeStage, DeferredNetworkStage } from "@/components/home/DeferredCinematicStage";
+import type { NetworkNode, NetworkEdge } from "@/components/viz/NetworkStage";
 import { HUES } from "@/components/viz/tokens";
 import { runWhenVisible, cappedDpr } from "@/lib/raf-visibility";
 import { createGlowCache, blitGlow } from "@/lib/canvas-glow";
@@ -89,8 +89,8 @@ const CSS = `
   position: absolute; inset: 0; width: 100%; height: 100%;
   pointer-events: none; display: block;
 }
-.tnic-shimmer { z-index: 0; }
-.tnic-cursor  { z-index: 1; mix-blend-mode: screen; opacity: .85; }
+.tnic-shimmer { z-index: 0; height: 100svh; }
+.tnic-cursor  { z-index: 1; height: 100svh; mix-blend-mode: screen; opacity: .85; }
 .tnic-vignette {
   z-index: 2;
   background:
@@ -297,6 +297,20 @@ const CSS = `
   border: 1px solid var(--line);
 }
 .tnic-stage canvas, .tnic-stage svg { width: 100%; height: 100%; display: block; }
+.tnic-stage-mount { width: 100%; height: 100%; }
+.tnic-stage-placeholder {
+  position: relative; width: 100%; height: 100%; overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(95,227,224,0.12), transparent 18%),
+    radial-gradient(circle at 50% 50%, rgba(140,140,245,0.08), transparent 42%);
+}
+.tnic-stage-placeholder::before,
+.tnic-stage-placeholder::after {
+  content: ''; position: absolute; border-radius: 50%; border: 1px solid rgba(95,227,224,0.18);
+  left: 50%; top: 50%; transform: translate(-50%, -50%);
+}
+.tnic-stage-placeholder::before { width: 28%; aspect-ratio: 1; box-shadow: 0 0 0 36px rgba(95,227,224,0.025), 0 0 52px rgba(95,227,224,0.12); }
+.tnic-stage-placeholder::after { width: 58%; aspect-ratio: 1; border-color: rgba(140,140,245,0.12); }
 
 .tnic-molhint {
   position: absolute; bottom: 12px; right: 14px;
@@ -988,7 +1002,7 @@ export function HomeDescent() {
 
         <div className="tnic-molwrap">
           <div className="tnic-stage">
-            <MoleculeStage geometryId="resveratrol" hue={HUES.cyan} ariaLabel="Rotatable 3D model of the resveratrol molecule. Full details are in the panel beside it." />
+            <DeferredMoleculeStage geometryId="resveratrol" hue={HUES.cyan} ariaLabel="Rotatable 3D model of the resveratrol molecule. Full details are in the panel beside it." />
             <div className="tnic-molhint"><span className="dot" />drag · scroll to zoom</div>
           </div>
 
@@ -1035,7 +1049,7 @@ export function HomeDescent() {
 
         <div className="tnic-netwrap">
           <div className="tnic-stage" style={{ aspectRatio: "10/7", maxHeight: "62vh" }}>
-            <NetworkStage nodes={NET_NODES} edges={NET_EDGES}
+            <DeferredNetworkStage nodes={NET_NODES} edges={NET_EDGES}
               ariaLabel="Rotatable 3D network of TNiC compounds. Cool links are synergies, amber links are clashes, gold-haloed nodes are elite picks. Details and the legend are in the panel beside it." />
             <div className="tnic-molhint"><span className="dot" />drag · scroll to zoom</div>
           </div>
