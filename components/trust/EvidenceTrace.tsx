@@ -14,7 +14,7 @@ const tierCopy: Record<EvidenceTier, { label: string; tone: string }> = {
 
 interface EvidenceTraceProps {
   tier: EvidenceTier;
-  /** Number of named sources or human studies represented by this surface. */
+  /** Number of distinct PubMed identifiers explicitly present on this surface. */
   sourceCount?: number;
   /** A compact transparency cue, such as a review date or methodology status. */
   reviewedLabel?: string;
@@ -27,7 +27,9 @@ interface EvidenceTraceProps {
 
 /**
  * A small, reusable provenance rail. It deliberately describes what can be
- * inspected rather than implying that a tier alone is a recommendation.
+ * inspected rather than implying that a tier alone is a recommendation. A
+ * PubMed-identifier count is a traceability signal, not a verdict on every
+ * nearby claim or a substitute for independent clinical review.
  */
 export function EvidenceTrace({
   tier,
@@ -40,7 +42,9 @@ export function EvidenceTrace({
   const meta = tierCopy[tier];
   const sourceLabel = sourceCount === undefined
     ? 'Evidence traceable'
-    : `${sourceCount} ${sourceCount === 1 ? 'source' : 'sources'} cited`;
+    : sourceCount === 0
+      ? 'Source IDs not tagged'
+      : `${sourceCount} ${sourceCount === 1 ? 'PMID-linked source' : 'PMID-linked sources'}`;
 
   return (
     <div
