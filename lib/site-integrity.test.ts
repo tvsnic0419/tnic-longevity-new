@@ -303,6 +303,25 @@ describe('site data integrity', () => {
     expect(systemsRoute).toContain('<Suspense');
   });
 
+  it('keeps every Library visual card as a direct canonical hallmark link and defers only its artwork', () => {
+    // All twelve visual cards once looped readers back to /library. The card
+    // title and its actual deep-dive are a single navigation contract; rich SVG
+    // artwork stays a below-fold enhancement rather than initial page weight.
+    const libraryPage = readFileSync(resolve(process.cwd(), 'app/library/page.tsx'), 'utf8');
+    const gallery = readFileSync(resolve(process.cwd(), 'components/library/DeferredHallmarkVisualGallery.tsx'), 'utf8');
+
+    expect(hallmarkLibrary).toHaveLength(12);
+    expect(libraryPage).toContain('DeferredHallmarkVisualGallery cards={visualCards}');
+    expect(libraryPage).toContain('href: `/library/${slug}`');
+    expect(libraryPage).not.toContain('href="/library"\n                className="group block transition-transform hover:scale-[1.01]"');
+    expect(gallery).toContain('IntersectionObserver');
+    expect(gallery).toContain("ssr: false");
+    expect(gallery).toContain('Open the evidence deep-dive');
+    for (const hallmark of hallmarkLibrary) {
+      expect(buildSitemapEntries().some((entry) => new URL(entry.url).pathname === `/library/${hallmark.slug}`)).toBe(true);
+    }
+  });
+
   it('records the verified production source without relying on a legacy repository name', () => {
     // This checked-in record is operational provenance, not a claim about the
     // Vercel project's display name. It prevents deploy instructions from
