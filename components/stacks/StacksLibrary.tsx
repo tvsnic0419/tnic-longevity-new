@@ -37,20 +37,28 @@ const tabs = [
 export function StacksLibrary() {
   const { selected } = usePlatform();
   const searchParams = useSearchParams();
-  // The NICO Starter Questionnaire hands off its computed stack via
-  // `?stack=<ids>&from=nico`; PlatformContext seeds the builder from `?stack=`,
-  // and this opens the builder tab so the recommendation is visible immediately.
-  const fromNico = searchParams.get('from') === 'nico';
+  // NICO and the elite intervention cards both hand off stacks through
+  // `?stack=<ids>&from=<source>`. PlatformContext seeds the selected compounds;
+  // the source then opens Builder and makes the arrival explicit instead of
+  // stranding a preloaded stack behind the default catalog tab.
+  const stackSource = searchParams.get('from');
+  const sourceLabel =
+    stackSource === 'nico'
+      ? 'your NICO questionnaire'
+      : stackSource === 'elite-home'
+        ? 'an elite intervention'
+        : null;
+  const hasIncomingStack = sourceLabel !== null;
 
-  const [tab, setTab] = useState<Tab>(fromNico ? 'builder' : 'catalog');
+  const [tab, setTab] = useState<Tab>(hasIncomingStack ? 'builder' : 'catalog');
 
   useEffect(() => {
-    if (fromNico) {
+    if (hasIncomingStack) {
       requestAnimationFrame(() => {
         document.getElementById('stack-builder')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     }
-  }, [fromNico]);
+  }, [hasIncomingStack]);
 
   return (
     <PageShell>
@@ -64,13 +72,14 @@ export function StacksLibrary() {
         context={getHubContext('stacks')}
       />
 
-      {fromNico && (
+      {sourceLabel && (
         <div className="mb-6 flex flex-wrap items-center gap-3 rounded-xl border border-accent-violet/25 bg-accent-violet/5 px-4 py-3">
           <Sparkles className="h-4 w-4 shrink-0 text-accent-violet" aria-hidden="true" />
           <p className="text-sm text-[var(--color-text-secondary)]">
-            <span className="font-semibold text-foreground">Loaded from your NICO questionnaire</span>
-            {selected.length > 0 ? ` · ${selected.length} compound${selected.length === 1 ? '' : 's'}` : ''} — review
-            and adjust below, then verify &amp; shop your stack.
+            <span className="font-semibold text-foreground">
+              {stackSource === 'nico' ? 'Loaded from your NICO questionnaire' : 'Added from an elite intervention'}
+            </span>
+            {selected.length > 0 ? ` · ${selected.length} compound${selected.length === 1 ? '' : 's'}` : ''} — build from this evidence-led starting point, then review and verify your stack.
           </p>
         </div>
       )}
