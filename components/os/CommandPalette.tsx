@@ -67,11 +67,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
         return;
       }
       if (item.href) {
-        if (item.href.startsWith('/#')) {
-          window.location.href = item.href;
-        } else {
-          router.push(item.href);
-        }
+        router.push(item.href);
       }
     },
     [close, exportAll, router],

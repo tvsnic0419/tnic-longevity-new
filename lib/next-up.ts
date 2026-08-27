@@ -182,7 +182,7 @@ export const nextUpImprovements: NextUpItem[] = [
     desc: 'Every intel feed study links to hallmark modules, compound deep-dives, and stack presets.',
     status: 'shipped',
     sprint: 'Sprint 16',
-    href: '/#research',
+    href: '/brief',
     tags: ['content', 'conversion'],
   },
   {
@@ -308,7 +308,7 @@ export const nextUpImprovements: NextUpItem[] = [
     desc: 'Per-category what/why/next on Research Intel with hallmark and compound filter chips.',
     status: 'shipped',
     sprint: 'Sprint 23',
-    href: '/#research',
+    href: '/brief',
     tags: ['content', 'research'],
   },
   {
@@ -371,7 +371,7 @@ export const nextUpImprovements: NextUpItem[] = [
     desc: 'Ca-AKG/resveratrol/fisetin PMIDs, Examine/NOVOS/FoundMyFitness intel, IL-6 + Homocysteine markers, Clinical Studies pulse.',
     status: 'shipped',
     sprint: 'Sprint 31',
-    href: '/#research',
+    href: '/brief',
     tags: ['content', 'research'],
   },
   {

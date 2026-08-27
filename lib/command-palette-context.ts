@@ -110,7 +110,7 @@ function getPageContextItems(pathname: string): PaletteItem[] {
   }
   if (pathname.startsWith('/brief')) {
     return [
-      item('ctx-brief-research', 'Research Intel feed', { href: '/#research', kind: 'page' }),
+      item('ctx-brief-research', 'Research Intel feed', { href: '/brief', kind: 'page' }),
       item('ctx-brief-library', 'Open linked modules', { href: '/library', kind: 'page' }),
       item('ctx-brief-rss', 'Subscribe RSS feed', { href: '/brief/feed.xml', kind: 'page' }),
     ];
@@ -127,7 +127,7 @@ function getPageContextItems(pathname: string): PaletteItem[] {
       item('ctx-home-quiz', 'Take NICO Starter Questionnaire', { href: '/nico', kind: 'page' }),
       item('ctx-home-products', 'Verified product catalog', { href: '/products', kind: 'page' }),
       item('ctx-home-dashboard', 'Open your OS dashboard', { href: '/dashboard', kind: 'page' }),
-      item('ctx-home-research', 'Research Intel feed', { href: '/#research', kind: 'page' }),
+      item('ctx-home-research', 'Research Intel feed', { href: '/brief', kind: 'page' }),
     ];
   }
   return [

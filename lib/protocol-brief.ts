@@ -103,7 +103,7 @@ export const protocolBriefIssues: ProtocolBriefEntry[] = [
     evidenceTier: 'A',
     pmids: ['23746838'],
     libraryHrefs: [
-      { label: 'Hallmark targets (home)', href: '/#hallmark-targets' },
+      { label: 'Hallmark targets (Library)', href: '/library#hallmark-atlas' },
       { label: 'Full library', href: '/library' },
       { label: 'NICO Starter Questionnaire', href: '/nico' },
     ],
