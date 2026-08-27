@@ -205,6 +205,23 @@ describe('site data integrity', () => {
     expect(shop).toContain('ANALYTICS_EVENTS.shopChecklistProgress');
   });
 
+  it('defers optional homepage canvases until the cinematic stages are near the viewport', () => {
+    // The homepage stays semantically complete through server-rendered narrative
+    // and supporting panels, while optional canvas artwork is loaded only when it
+    // approaches the reader. Guard that seam: eager imports would restore the
+    // mobile execution cost found in the production performance audit.
+    const descent = readFileSync(resolve(process.cwd(), 'components/home/HomeDescent.tsx'), 'utf8');
+    const deferredStage = readFileSync(resolve(process.cwd(), 'components/home/DeferredCinematicStage.tsx'), 'utf8');
+
+    expect(descent).toContain('DeferredMoleculeStage');
+    expect(descent).toContain('DeferredNetworkStage');
+    expect(descent).not.toContain('import { MoleculeStage }');
+    expect(descent).not.toContain('import { NetworkStage');
+    expect(deferredStage).toContain("ssr: false");
+    expect(deferredStage).toContain('IntersectionObserver');
+    expect(deferredStage).toContain('tnic-stage-placeholder');
+  });
+
   it('preserves the evidence-in-flow research, lab, NICO, and systems-map experience layers', () => {
     // This release is intentionally cross-surface: the value comes from linking
     // evidence, research continuity, local review context, and the systems map
