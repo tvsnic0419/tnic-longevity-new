@@ -27,6 +27,7 @@ import { GlassPanel } from '@/components/ui/GlassPanel';
 import { ContentByline } from '@/components/trust/ContentByline';
 import { EvidenceTrace } from '@/components/trust/EvidenceTrace';
 import { AffiliateDisclosure } from '@/components/trust/AffiliateDisclosure';
+import { ResearchQueueButton } from './ResearchQueueButton';
 import { libraryModuleTitles } from '@/lib/breadcrumb-titles';
 
 /**
@@ -128,8 +129,12 @@ export function LibraryModuleDetail({
           tier={module.evidenceTier}
           sourceCount={citationCount}
           reviewedLabel={lastUpdated ? `Updated ${lastUpdated}` : 'Methodology published'}
-          className="mb-8 max-w-2xl"
+          className="max-w-2xl"
         />
+        <div className="mb-8 mt-3 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border/60 bg-background/20 p-3.5 max-w-2xl">
+          <p className="text-caption text-muted-foreground">Keep this evidence module in your private research queue.</p>
+          <ResearchQueueButton module={module} href={getModulePath(module)} />
+        </div>
 
         <div className="grid lg:grid-cols-12 gap-10">
           <aside className="order-2 lg:order-1 lg:col-span-4 space-y-6">

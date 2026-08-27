@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { BookmarkPlus, Compass, Layers3 } from 'lucide-react';
 import Link from 'next/link';
 import { buildPageMetadata } from '@/lib/seo';
 import { AntiAgingLibrary } from '@/components/library/AntiAgingLibrary';
@@ -9,6 +10,8 @@ import { ToolsPromoStrip } from '@/components/tools/ToolsPromoStrip';
 import { LibraryFacetFilters } from '@/components/library/LibraryFacetFilters';
 import { CompoundExplorer } from '@/components/library/CompoundExplorer';
 import { RecommendedNextSteps } from '@/components/ui/RecommendedNextSteps';
+import { ResearchQueueShelf } from '@/components/library/ResearchQueueShelf';
+import { DecisionSteps } from '@/components/ui/DecisionSteps';
 
 // All 12 visuals
 import { GenomicInstabilityVisual } from '@/components/illustrations/GenomicInstabilityVisual';
@@ -67,8 +70,23 @@ export default function LibraryPage() {
         primary={{ href: '/nico', label: 'Find your personalized stack' }}
         secondary={{ href: '/stacks', label: 'Open the Stack Architect' }}
       />
+      <div className="container-page pt-8">
+        <DecisionSteps
+          className="mb-6"
+          eyebrow="A deliberate research path"
+          title="Map the biology before you change a stack."
+          detail="Choose a hallmark or evidence question, keep the deep-dives that matter in your private queue, then move into Stack Architect only when you are ready to inspect a configuration."
+          theme="cyan"
+          steps={[
+            { title: 'Follow a hallmark', detail: 'Begin with the biology and the evidence that supports it.', href: '#hallmark-atlas', icon: Compass },
+            { title: 'Keep a research queue', detail: 'Save deep-dives worth returning to, locally in this browser.', href: '#research-queue', icon: BookmarkPlus },
+            { title: 'Inspect a configuration', detail: 'Use Stack Architect for coverage and interaction checks.', href: '/stacks', icon: Layers3 },
+          ]}
+        />
+      </div>
+      <ResearchQueueShelf />
       {/* Lead with the page title and context, then the tools to act on it */}
-      <AntiAgingLibrary asPageTitle />
+      <div id="hallmark-atlas"><AntiAgingLibrary asPageTitle /></div>
 
       <Suspense fallback={<div className="h-12 animate-pulse bg-white/5" />}>
         <LibrarySearch />
