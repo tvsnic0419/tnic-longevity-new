@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils';
 import { EXPORT_KIT_EVENT } from '@/components/os/os-events';
 import { NextUpPanel } from '@/components/os/NextUpPanel';
 import { DashboardStatusExport } from '@/components/dashboard/DashboardStatusExport';
-import { OnboardingStrip } from '@/components/dashboard/OnboardingStrip';
+import { DashboardFocusDeck } from '@/components/dashboard/DashboardFocusDeck';
 import { UserNextStepsPanel } from '@/components/dashboard/UserNextStepsPanel';
 import { ContextRail } from '@/components/ui/ContextRail';
 import { ResearchPassport } from '@/components/dashboard/ResearchPassport';
@@ -122,7 +122,7 @@ export function Dashboard() {
         <ContextRail {...getHubContext('dashboard')} theme="emerald" className="mb-8" />
       )}
 
-      <OnboardingStrip />
+      <DashboardFocusDeck />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         <div id="dashboard-status" className="lg:col-span-1">

@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 export const LABS_PARTNER_TAB_EVENT = 'tnic:labs-partner-tab';
-import { Plus, Upload, FileText, ClipboardPaste, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Plus, Upload, FileText, ClipboardPaste, CheckCircle2, AlertCircle, FlaskConical, Link2 } from 'lucide-react';
 import { biomarkers } from '@/lib/data';
 import { LABS_CSV_TEMPLATE, parseLabsCsv, getLabStatus, parseOptimalRange } from '@/lib/labs';
 import { usePlatform } from '@/context/PlatformContext';
@@ -17,14 +17,50 @@ import { PartnerImportPanel } from './PartnerImportPanel';
 
 type InputMode = 'single' | 'panel' | 'upload' | 'partner';
 
+const inputModes: { id: InputMode; label: string; description: string; icon: typeof FlaskConical; accent: string }[] = [
+  {
+    id: 'single',
+    label: 'One result',
+    description: 'Log one marker from a report you already have.',
+    icon: FlaskConical,
+    accent: 'text-accent-rose',
+  },
+  {
+    id: 'panel',
+    label: 'A full panel',
+    description: 'Enter the values you want to keep as a dated local baseline.',
+    icon: FileText,
+    accent: 'text-accent-violet',
+  },
+  {
+    id: 'upload',
+    label: 'A CSV file',
+    description: 'Import a structured file without sending it anywhere.',
+    icon: Upload,
+    accent: 'text-accent-cyan',
+  },
+  {
+    id: 'partner',
+    label: 'Partner import',
+    description: 'Explore the clearly labelled partner beta path.',
+    icon: Link2,
+    accent: 'text-accent-amber',
+  },
+];
+
+function isInputMode(value: string | null): value is InputMode {
+  return Boolean(value && inputModes.some((mode) => mode.id === value));
+}
+
 export function BiomarkerInput() {
   const { addLab, importLabs } = usePlatform();
   const searchParams = useSearchParams();
   const markerParam = searchParams.get('marker');
+  const modeParam = searchParams.get('mode');
   const validMarker =
     markerParam && biomarkers.some((b) => b.id === markerParam) ? markerParam : biomarkers[0].id;
 
-  const [mode, setMode] = useState<InputMode>('single');
+  const [mode, setMode] = useState<InputMode>(isInputMode(modeParam) ? modeParam : 'single');
   const [markerId, setMarkerId] = useState(validMarker);
   const [value, setValue] = useState('');
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
@@ -40,6 +76,10 @@ export function BiomarkerInput() {
       setMode('single');
     }
   }, [markerParam]);
+
+  useEffect(() => {
+    if (isInputMode(modeParam)) setMode(modeParam);
+  }, [modeParam]);
 
   useEffect(() => {
     const openPartner = () => setMode('partner');
@@ -91,29 +131,41 @@ export function BiomarkerInput() {
     reader.readAsText(file);
   };
 
-  const modes: { id: InputMode; label: string }[] = [
-    { id: 'single', label: 'Single Marker' },
-    { id: 'panel', label: 'Full Panel' },
-    { id: 'upload', label: 'Upload CSV' },
-    { id: 'partner', label: 'Partner Beta' },
-  ];
-
   return (
     <div className="gradient-border p-6">
-      <div className="flex flex-wrap gap-2 mb-5">
-        {modes.map((m) => (
-          <button
-            key={m.id}
-            onClick={() => setMode(m.id)}
-            className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
-              mode === m.id
-                ? 'bg-accent-rose text-black'
-                : 'glass text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            {m.label}
-          </button>
-        ))}
+      <div className="mb-6" role="group" aria-labelledby="lab-input-choice-title">
+        <div className="mb-3 flex flex-wrap items-end justify-between gap-2">
+          <div>
+            <p className="text-label text-accent-rose">START WITH WHAT YOU HAVE</p>
+            <p id="lab-input-choice-title" className="mt-1 text-sm font-semibold">Choose an input, not an interpretation.</p>
+          </div>
+          <p className="text-micro font-mono uppercase tracking-[0.1em] text-muted-foreground">Stored locally</p>
+        </div>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {inputModes.map((choice) => {
+            const Icon = choice.icon;
+            const selected = mode === choice.id;
+            return (
+              <button
+                key={choice.id}
+                type="button"
+                onClick={() => setMode(choice.id)}
+                aria-pressed={selected}
+                className={`focus-ring flex min-h-24 items-start gap-3 rounded-xl border p-3 text-left transition-colors ${
+                  selected
+                    ? 'border-accent-rose/40 bg-accent-rose/[0.08]'
+                    : 'border-border/70 bg-background/20 hover:border-accent-rose/30 hover:bg-accent-rose/[0.035]'
+                }`}
+              >
+                <Icon className={`mt-0.5 h-4 w-4 shrink-0 ${choice.accent}`} aria-hidden="true" />
+                <span>
+                  <span className="block text-xs font-semibold text-foreground">{choice.label}</span>
+                  <span className="mt-1 block text-caption leading-relaxed text-muted-foreground">{choice.description}</span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {uploadMsg && (

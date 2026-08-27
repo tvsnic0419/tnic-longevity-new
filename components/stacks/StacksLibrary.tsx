@@ -18,6 +18,7 @@ import { DynamicStackBuilder } from './DynamicStackBuilder';
 import { EliteStackCard } from './EliteStackCard';
 import { ToolsPromoStrip } from '@/components/tools/ToolsPromoStrip';
 import { getHubContext } from '@/lib/hub-context';
+import { StackStartCompass } from './StackStartCompass';
 
 // Only ever rendered behind the "Compare" tab — lazy so its compound-data
 // and DataTable weight doesn't ship on first load for the (default) Catalog tab.
@@ -49,8 +50,11 @@ export function StacksLibrary() {
         ? 'an elite intervention'
         : null;
   const hasIncomingStack = sourceLabel !== null;
+  const viewParam = searchParams.get('view');
+  const requestedTab = tabs.some((tab) => tab.id === viewParam) ? (viewParam as Tab) : 'catalog';
 
-  const [tab, setTab] = useState<Tab>(hasIncomingStack ? 'builder' : 'catalog');
+  const [selectedTab, setSelectedTab] = useState<Tab | null>(null);
+  const tab = hasIncomingStack ? 'builder' : selectedTab ?? requestedTab;
 
   useEffect(() => {
     if (hasIncomingStack) {
@@ -84,6 +88,8 @@ export function StacksLibrary() {
         </div>
       )}
 
+      <StackStartCompass />
+
       <div className="flex flex-wrap gap-3 mb-6">
         <Link
           href={selected.length > 0 ? buildShopStackUrl(selected) : '/shop'}
@@ -109,7 +115,7 @@ export function StacksLibrary() {
         tabs={tabs}
         active={tab}
         onChange={(id) => {
-          setTab(id);
+          setSelectedTab(id);
           if (id === 'builder') {
             setTimeout(() => document.getElementById('stack-builder')?.scrollIntoView({ behavior: 'smooth' }), 100);
           }
