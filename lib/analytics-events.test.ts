@@ -11,6 +11,9 @@ describe('analytics-events', () => {
       stackExported: 'stack_exported',
       affiliateClick: 'affiliate_click',
       sponsorClick: 'sponsor_click',
+      stackShopOpened: 'stack_shop_opened',
+      shopPresetLoaded: 'shop_preset_loaded',
+      shopChecklistProgress: 'shop_checklist_progress',
     });
   });
 

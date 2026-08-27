@@ -16,6 +16,12 @@ export const ANALYTICS_EVENTS = {
   affiliateClick: 'affiliate_click',
   /** A visitor clicked a clearly-labeled sponsor placement (revenue signal). */
   sponsorClick: 'sponsor_click',
+  /** A visitor moved from an active stack to its buyer-verification flow. */
+  stackShopOpened: 'stack_shop_opened',
+  /** A visitor chose a curated stack preset in Protocol Shop. */
+  shopPresetLoaded: 'shop_preset_loaded',
+  /** A visitor reviewed or cleared a buyer-checklist item in Protocol Shop. */
+  shopChecklistProgress: 'shop_checklist_progress',
 } as const;
 
 export type AnalyticsEventName =
