@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ExternalLink, Package, ShieldCheck } from 'lucide-react';
+import { BookOpen, ClipboardCheck, ExternalLink, FileCheck2, Package, ShieldCheck, ShoppingBag } from 'lucide-react';
 import { PRODUCT_PICKS, type ProductPick } from '@/lib/product-picks';
 import { compounds } from '@/lib/data';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -12,6 +12,7 @@ import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { RevealCard } from '@/components/ui/RevealCard';
 import type { EvidenceTier } from '@/lib/types';
+import { DecisionSteps } from '@/components/ui/DecisionSteps';
 
 const picks = Object.values(PRODUCT_PICKS).filter((p) => p.compoundId !== 'nr');
 
@@ -23,6 +24,13 @@ const hallmarkLabels: Record<string, string> = {
   senescence: 'Senescence', stem: 'Stem Cells', communication: 'Cell Signals',
   inflammation: 'Inflammation', dysbiosis: 'Microbiome', nutrient: 'Nutrient Sensing',
 };
+
+function verifiedDateLabel(value?: string) {
+  if (!value) return 'Review manufacturer details';
+  return new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(
+    new Date(`${value}T00:00:00Z`),
+  );
+}
 
 function ProductCard({ pick }: { pick: ProductPick }) {
   const compound = compounds.find((c) => c.id === pick.compoundId);
@@ -112,6 +120,26 @@ function ProductCard({ pick }: { pick: ProductPick }) {
         )}
 
         <p className="text-xs text-muted-foreground leading-relaxed flex-1 mb-4">{pick.whyThisPick}</p>
+        <div className="mb-4 rounded-xl border border-accent-emerald/20 bg-accent-emerald/[0.045] p-3">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="h-3.5 w-3.5 text-accent-emerald" aria-hidden="true" />
+            <p className="text-micro font-mono uppercase tracking-[0.11em] text-accent-emerald">Decision snapshot</p>
+          </div>
+          <div className="mt-2.5 grid grid-cols-2 gap-2 border-b border-accent-emerald/15 pb-2.5">
+            <div>
+              <p className="text-micro font-mono uppercase tracking-[0.08em] text-muted-foreground">Evidence</p>
+              <p className="mt-0.5 text-caption font-semibold text-foreground">{tier ? `Tier ${tier} context` : 'Read module context'}</p>
+            </div>
+            <div>
+              <p className="text-micro font-mono uppercase tracking-[0.08em] text-muted-foreground">Link checked</p>
+              <p className="mt-0.5 text-caption font-semibold text-foreground">{verifiedDateLabel(pick.linkVerifiedAt)}</p>
+            </div>
+          </div>
+          <p className="mt-2.5 flex gap-1.5 text-micro leading-relaxed text-muted-foreground">
+            <FileCheck2 className="mt-0.5 h-3 w-3 shrink-0 text-accent-emerald" aria-hidden="true" />
+            Confirm the current manufacturer COA and label before checkout.
+          </p>
+        </div>
         <div className="pt-3 border-t border-border/50 flex items-center justify-between gap-2">
           <p className="text-micro text-muted-foreground leading-snug line-clamp-2">{pick.doseNote}</p>
           <span className="shrink-0 inline-flex items-center gap-1 text-xs font-semibold text-accent-emerald">
@@ -159,7 +187,20 @@ export function ProductsHub() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-14">
+      <DecisionSteps
+        className="mb-8"
+        eyebrow="Your product decision"
+        title="Inspect the evidence before you buy."
+        detail="TNiC shows one route through every verified pick: understand the compound, check the quality signals, then open the manufacturer only when the fit is clear."
+        theme="emerald"
+        steps={[
+          { title: 'Read the evidence', detail: 'Inspect the cited compound module and its grading context.', href: '/library', icon: BookOpen },
+          { title: 'Check form and COA', detail: 'Match the label to the dose note and request the latest COA.', href: '/shop', icon: ClipboardCheck },
+          { title: 'Open the manufacturer', detail: 'Use the verified link only after your own due diligence.', href: '#verified-picks', icon: ShoppingBag },
+        ]}
+      />
+
+      <div id="verified-picks" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-14">
         {picks.map((pick) => (
           <ProductCard key={pick.compoundId} pick={pick} />
         ))}

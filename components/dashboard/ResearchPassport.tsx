@@ -2,8 +2,9 @@
 
 import { useMemo, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { ArrowRight, BookMarked, Compass, Map } from 'lucide-react';
+import { ArrowRight, BookmarkCheck, BookMarked, Compass, Map } from 'lucide-react';
 import type { RecentModuleEntry } from '@/lib/recent-modules';
+import { getResearchQueueSnapshot, subscribeToResearchQueue, type ResearchQueueEntry } from '@/lib/research-queue';
 
 const categoryLabel: Record<RecentModuleEntry['category'], string> = {
   compounds: 'Compound',
@@ -50,6 +51,16 @@ export function ResearchPassport() {
       return [];
     }
   }, [recentModulesRaw]);
+  const queueRaw = useSyncExternalStore(subscribeToResearchQueue, getResearchQueueSnapshot, getServerSnapshot);
+  const queue = useMemo<ResearchQueueEntry[]>(() => {
+    if (!queueRaw) return [];
+    try {
+      const parsed = JSON.parse(queueRaw) as ResearchQueueEntry[];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }, [queueRaw]);
   const categories = useMemo(() => new Set(entries.map((entry) => entry.category)).size, [entries]);
   const latest = entries.slice(0, 3);
 
@@ -77,7 +88,7 @@ export function ResearchPassport() {
           </Link>
         </div>
 
-        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+        <div className="mt-6 grid gap-3 sm:grid-cols-3">
           <div className="rounded-xl border border-border/70 bg-background/25 p-4">
             <p className="text-micro font-mono uppercase tracking-[0.12em] text-muted-foreground">Modules explored</p>
             <p className="mt-1 font-display text-3xl text-foreground">{entries.length}</p>
@@ -85,6 +96,10 @@ export function ResearchPassport() {
           <div className="rounded-xl border border-border/70 bg-background/25 p-4">
             <p className="text-micro font-mono uppercase tracking-[0.12em] text-muted-foreground">Research lenses</p>
             <p className="mt-1 font-display text-3xl text-foreground">{categories}</p>
+          </div>
+          <div className="rounded-xl border border-border/70 bg-background/25 p-4">
+            <p className="text-micro font-mono uppercase tracking-[0.12em] text-muted-foreground">Saved for later</p>
+            <p className="mt-1 font-display text-3xl text-foreground">{queue.length}</p>
           </div>
         </div>
 
@@ -116,6 +131,25 @@ export function ResearchPassport() {
                 <p className="text-sm font-semibold">Start a research trail</p>
                 <p className="mt-1 text-body-sm text-muted-foreground">Open a hallmark, compound, or guide in the Library. TNiC will keep the latest pages here so you can continue thoughtfully.</p>
               </div>
+            </div>
+          </div>
+        )}
+
+        {queue.length > 0 && (
+          <div className="mt-5 rounded-xl border border-accent-violet/20 bg-accent-violet/[0.04] p-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <BookmarkCheck className="h-4 w-4 text-accent-violet" aria-hidden="true" />
+                <p className="text-label text-accent-violet">Your saved research</p>
+              </div>
+              <Link href="/library#research-queue" className="focus-ring text-caption font-semibold text-accent-violet hover:underline">Open queue →</Link>
+            </div>
+            <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+              {queue.slice(0, 3).map((entry) => (
+                <Link key={entry.slug} href={entry.href} className="focus-ring rounded-lg border border-accent-violet/15 bg-background/25 p-3 text-sm font-semibold text-foreground transition-colors hover:border-accent-violet/35 hover:text-accent-violet">
+                  {entry.title}
+                </Link>
+              ))}
             </div>
           </div>
         )}
