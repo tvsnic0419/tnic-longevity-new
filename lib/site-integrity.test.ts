@@ -87,6 +87,27 @@ describe('site data integrity', () => {
     }
   });
 
+  it('keeps the promoted master guide resolvable at its canonical URL', () => {
+    // The master guide is a primary discovery destination, linked throughout
+    // the site and intentionally listed in the sitemap. Its direct app route
+    // unexpectedly resolved as a 404 despite building successfully, so the
+    // public path now rewrites to a dedicated internal target. Pin all four
+    // sides of that contract: the public URL, rewrite, page implementation,
+    // and sitemap. This prevents a polished but credibility-damaging dead end.
+    const config = readFileSync(resolve(process.cwd(), 'next.config.ts'), 'utf8');
+    const masterGuide = readFileSync(
+      resolve(process.cwd(), 'app/(internal)/guides/master-longevity-supplements/page.tsx'),
+      'utf8',
+    );
+    const sitemapPaths = new Set(buildSitemapEntries().map((entry) => new URL(entry.url).pathname));
+
+    expect(config).toContain("source: '/longevity-supplements-guide'");
+    expect(config).toContain("destination: '/guides/master-longevity-supplements'");
+    expect(masterGuide).toContain("path: '/longevity-supplements-guide'");
+    expect(masterGuide).toContain('Best Longevity Supplements 2026');
+    expect(sitemapPaths.has('/longevity-supplements-guide')).toBe(true);
+  });
+
   it('Elite 8 OTC compounds link to library routes when available', () => {
     const otcWithLibrary = ELITE_8_COMPOUNDS.filter((c) => !c.isRx && c.libraryHref);
     expect(otcWithLibrary.length).toBeGreaterThanOrEqual(5);
