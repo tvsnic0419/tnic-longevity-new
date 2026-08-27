@@ -275,6 +275,22 @@ describe('site data integrity', () => {
     expect(systemsRoute).toContain('<Suspense');
   });
 
+  it('records the verified production source without relying on a legacy repository name', () => {
+    // This checked-in record is operational provenance, not a claim about the
+    // Vercel project's display name. It prevents deploy instructions from
+    // silently drifting to a deprecated repo or an older application snapshot.
+    const project = JSON.parse(
+      readFileSync(resolve(process.cwd(), 'infra/vercel-project.json'), 'utf8'),
+    ) as {
+      git: { remote: string; productionBranch: string };
+      domains: { canonical: string };
+    };
+
+    expect(project.git.remote).toBe('https://github.com/tvsnic0419/tnic-longevity-new.git');
+    expect(project.git.productionBranch).toBe('main');
+    expect(project.domains.canonical).toBe(new URL(CANONICAL_SITE_URL).host);
+  });
+
   it('vercel.json enforces HSTS preload and www→apex redirect', () => {
     const vercel = JSON.parse(
       readFileSync(resolve(process.cwd(), 'vercel.json'), 'utf8'),
