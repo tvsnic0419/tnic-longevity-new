@@ -243,6 +243,34 @@ describe('site data integrity', () => {
     expect(deferredStage).toContain('tnic-stage-placeholder');
   });
 
+  it('keeps deep-dive provenance labels honest and independently reviewable', () => {
+    // PMID counts are useful source traces, but they do not prove every claim
+    // or establish that every reference is a primary study. Pages without a
+    // real reviewer must disclose that status and link to the current policy.
+    const byline = readFileSync(resolve(process.cwd(), 'components/trust/ContentByline.tsx'), 'utf8');
+    const evidenceTrace = readFileSync(resolve(process.cwd(), 'components/trust/EvidenceTrace.tsx'), 'utf8');
+
+    expect(byline).toContain('PMID-linked sources');
+    expect(byline).not.toContain("'primary sources'");
+    expect(byline).toContain('Not independently clinician-reviewed');
+    expect(byline).toContain('href="/editorial-policy"');
+    expect(evidenceTrace).toContain('Source IDs not tagged');
+    expect(evidenceTrace).toContain('not a verdict on every');
+  });
+
+  it('defers the optional compound molecular canvas until the browser is idle', () => {
+    // The factual compound hero and the semantic deep-dive content must remain
+    // immediately available; only the decorative client canvas is deferred.
+    const compoundHero = readFileSync(resolve(process.cwd(), 'components/viz/CompoundHero.tsx'), 'utf8');
+
+    expect(compoundHero).toContain('dynamic(');
+    expect(compoundHero).toContain('ssr: false');
+    expect(compoundHero).toContain('requestIdleCallback');
+    expect(compoundHero).toContain('chero-stage-placeholder');
+    expect(compoundHero).toContain('DeferredCompoundMoleculeStage');
+    expect(compoundHero).not.toContain('import { MoleculeStage }');
+  });
+
   it('preserves the evidence-in-flow research, lab, NICO, and systems-map experience layers', () => {
     // This release is intentionally cross-surface: the value comes from linking
     // evidence, research continuity, local review context, and the systems map
