@@ -1,6 +1,10 @@
+'use client';
+
 import Link from 'next/link';
 import { ArrowUpRight, FileCheck2 } from 'lucide-react';
 import type { EvidenceTier } from '@/lib/types';
+import { trackEvent } from '@/lib/analytics';
+import { ANALYTICS_EVENTS } from '@/lib/analytics-events';
 
 const tierCopy: Record<EvidenceTier, { label: string; tone: string }> = {
   A: { label: 'Human evidence', tone: 'text-accent-emerald' },
@@ -16,6 +20,8 @@ interface EvidenceTraceProps {
   reviewedLabel?: string;
   /** Internal destination where the visitor can inspect the underlying evidence. */
   href?: string;
+  /** A non-personal surface label used only to measure evidence inspection. */
+  surface?: string;
   className?: string;
 }
 
@@ -28,6 +34,7 @@ export function EvidenceTrace({
   sourceCount,
   reviewedLabel,
   href = '/trust/methodology',
+  surface = 'unspecified',
   className = '',
 }: EvidenceTraceProps) {
   const meta = tierCopy[tier];
@@ -52,6 +59,7 @@ export function EvidenceTrace({
       )}
       <Link
         href={href}
+        onClick={() => trackEvent(ANALYTICS_EVENTS.evidenceTraceOpened, { surface })}
         className="focus-ring ml-auto inline-flex items-center gap-1 rounded text-foreground transition-colors hover:text-accent-cyan"
       >
         Inspect

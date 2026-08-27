@@ -24,6 +24,7 @@ import { UserFlowGuide } from './UserFlowGuide';
 import { BiomarkerInput } from './BiomarkerInput';
 import { ToolsPromoStrip } from '@/components/tools/ToolsPromoStrip';
 import { LabPartnerPanel } from './LabPartnerPanel';
+import { LabReviewContext } from './LabReviewContext';
 import { getHubContext } from '@/lib/hub-context';
 
 // 'input' is the default tab and stays a regular import. The other four are
@@ -115,6 +116,8 @@ export function LabHub() {
           ]}
         />
       )}
+
+      <LabReviewContext labs={labs} selectedCount={selected.length} />
 
       <ToolsPromoStrip headline="Biomarker Impact Calculator — which interventions move your labs most" className="mb-8" />
 

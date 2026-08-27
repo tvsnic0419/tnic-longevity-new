@@ -3,13 +3,16 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { Search, ArrowRight, Library, Network, Trophy } from 'lucide-react';
+import { Search, ArrowRight, Library, Network, Trophy, Waypoints } from 'lucide-react';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { HallmarkVisual } from './HallmarkVisual';
 import { InterventionExplorer } from './InterventionExplorer';
 import { HallmarkNotesPanel } from './HallmarkNotesPanel';
 import { usePlatform } from '@/context/PlatformContext';
+import { EvidenceTrace } from '@/components/trust/EvidenceTrace';
+import { trackEvent } from '@/lib/analytics';
+import { ANALYTICS_EVENTS } from '@/lib/analytics-events';
 
 interface AntiAgingLibraryProps {
   /** Use h1 when rendered as dedicated /library page */
@@ -33,6 +36,12 @@ export function AntiAgingLibrary({ asPageTitle = false }: AntiAgingLibraryProps)
   }, [query]);
 
   const active = hallmarkLibrary.find((h) => h.id === selected)!;
+  const activeCitationCount = new Set(active.interventions.map((intervention) => intervention.pmid).filter(Boolean)).size;
+  const activeEvidenceTier = active.interventions.some((intervention) => intervention.evidence === 'A')
+    ? 'A'
+    : active.interventions.some((intervention) => intervention.evidence === 'B')
+      ? 'B'
+      : 'C';
   const notedCount = Object.keys(hallmarkNotes).filter((k) => hallmarkNotes[k]?.notes).length;
 
   return (
@@ -200,12 +209,30 @@ export function AntiAgingLibrary({ asPageTitle = false }: AntiAgingLibraryProps)
                       </h3>
                       <p className="text-body-sm mb-4">{active.tagline}</p>
                       <p className="text-body-sm text-muted-foreground">{active.summary}</p>
-                      <Link
+                      <EvidenceTrace
+                        tier={activeEvidenceTier}
+                        sourceCount={activeCitationCount}
+                        reviewedLabel="Interventions graded"
                         href={`/library/${active.slug}`}
-                        className="focus-ring interactive inline-flex items-center gap-2 mt-6 text-sm font-semibold text-accent-cyan hover:text-accent-emerald rounded-md"
-                      >
-                        Full deep dive + MDX <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                      </Link>
+                        surface="library_hallmark"
+                        className="mt-5"
+                      />
+                      <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2">
+                        <Link
+                          href={`/library/${active.slug}`}
+                          className="focus-ring interactive inline-flex items-center gap-2 rounded-md text-sm font-semibold text-accent-cyan hover:text-accent-emerald"
+                        >
+                          Full deep dive <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                        </Link>
+                        <Link
+                          href={`/library/systems?hallmark=${active.id}`}
+                          onClick={() => trackEvent(ANALYTICS_EVENTS.hallmarkSystemsOpened, { source: 'library_detail' })}
+                          className="focus-ring interactive inline-flex items-center gap-2 rounded-md text-sm font-semibold text-accent-violet hover:text-accent-cyan"
+                        >
+                          <Waypoints className="h-4 w-4" aria-hidden="true" />
+                          See system connections
+                        </Link>
+                      </div>
                     </div>
                     <HallmarkVisual
                       visual={active.visual}

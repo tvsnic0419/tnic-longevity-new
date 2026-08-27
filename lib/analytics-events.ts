@@ -22,6 +22,16 @@ export const ANALYTICS_EVENTS = {
   shopPresetLoaded: 'shop_preset_loaded',
   /** A visitor reviewed or cleared a buyer-checklist item in Protocol Shop. */
   shopChecklistProgress: 'shop_checklist_progress',
+  /** A visitor saved, updated, or cleared a local research question; question text is never tracked. */
+  researchIntentSet: 'research_intent_set',
+  /** A visitor opened a source-backed evidence trail from a decision surface. */
+  evidenceTraceOpened: 'evidence_trace_opened',
+  /** A visitor opened the bounded local lab review context. */
+  labReviewOpened: 'lab_review_opened',
+  /** A visitor opened a selected hallmark in the connected systems map. */
+  hallmarkSystemsOpened: 'hallmark_systems_opened',
+  /** A visitor expanded the NICO result research route. */
+  nicoResearchRouteOpened: 'nico_research_route_opened',
 } as const;
 
 export type AnalyticsEventName =

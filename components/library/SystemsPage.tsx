@@ -4,7 +4,10 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Network, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { trackEvent } from '@/lib/analytics';
+import { ANALYTICS_EVENTS } from '@/lib/analytics-events';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { impactPropagations } from '@/lib/relations';
 import { SystemsSynthesisView } from './SystemsSynthesisView';
@@ -48,14 +51,30 @@ const leverageByHallmark = new Map(
 );
 
 export function SystemsPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const sorted = [...hallmarkLibrary].sort((a, b) => {
     const la = leverageByHallmark.get(a.id) ?? 0;
     const lb = leverageByHallmark.get(b.id) ?? 0;
     return lb - la;
   });
 
-  const [selected, setSelected] = useState(sorted[0].id);
+  const requestedHallmark = searchParams.get('hallmark');
+  const hasRequestedHallmark = sorted.some((hallmark) => hallmark.id === requestedHallmark);
+  const [manualSelected, setManualSelected] = useState<string | null>(null);
+  const selected = hasRequestedHallmark ? requestedHallmark! : (manualSelected ?? sorted[0].id);
   const [view, setView] = useState<'synthesis' | 'pathways' | 'emergent'>('synthesis');
+
+  // A valid URL parameter is the source of truth for shared links. In-page
+  // choices use local state until the router has committed the canonical query.
+  // This avoids an effect-driven state sync and keeps client transitions safe.
+  const selectHallmark = (hallmarkId: string) => {
+    setManualSelected(hallmarkId);
+    trackEvent(ANALYTICS_EVENTS.hallmarkSystemsOpened, { source: 'systems_map' });
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('hallmark', hallmarkId);
+    router.replace(`/library/systems?${params.toString()}`, { scroll: false });
+  };
 
   const selectedHallmark = hallmarkLibrary.find((h) => h.id === selected)!;
   const leverage = leverageByHallmark.get(selected);
@@ -93,7 +112,7 @@ export function SystemsPage() {
               return (
                 <button
                   key={h.id}
-                  onClick={() => setSelected(h.id)}
+                  onClick={() => selectHallmark(h.id)}
                   className={cn(
                     'w-full flex items-center justify-between gap-3 p-3.5 rounded-xl border text-left transition-all',
                     active
