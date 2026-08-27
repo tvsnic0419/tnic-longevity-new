@@ -338,6 +338,27 @@ describe('site data integrity', () => {
     expect(project.domains.canonical).toBe(new URL(CANONICAL_SITE_URL).host);
   });
 
+  it('keeps public provenance and internal navigation destinations canonical', () => {
+    const site = readFileSync(resolve(process.cwd(), 'lib/site.ts'), 'utf8');
+    const paletteIndex = readFileSync(resolve(process.cwd(), 'lib/command-palette-index.ts'), 'utf8');
+    const paletteContext = readFileSync(resolve(process.cwd(), 'lib/command-palette-context.ts'), 'utf8');
+    const nextUp = readFileSync(resolve(process.cwd(), 'lib/next-up.ts'), 'utf8');
+    const briefSync = readFileSync(resolve(process.cwd(), 'lib/brief-research-sync.ts'), 'utf8');
+    const protocolBrief = readFileSync(resolve(process.cwd(), 'lib/protocol-brief.ts'), 'utf8');
+    const commandPalette = readFileSync(resolve(process.cwd(), 'components/os/CommandPalette.tsx'), 'utf8');
+
+    expect(site).toContain('https://github.com/tvsnic0419/tnic-longevity-new');
+    expect(site).not.toContain('https://github.com/tvsnic0419/tnic-help');
+    expect(paletteIndex).toContain("href: '/library#hallmark-atlas'");
+    expect(paletteIndex).not.toContain("href: '/#hallmark-targets'");
+    expect(protocolBrief).toContain("href: '/library#hallmark-atlas'");
+    expect(protocolBrief).not.toContain("href: '/#hallmark-targets'");
+    expect(paletteContext).not.toContain("href: '/#research'");
+    expect(nextUp).not.toContain("href: '/#research'");
+    expect(briefSync).not.toContain("href: '/#research'");
+    expect(commandPalette).not.toContain('window.location.href = item.href');
+  });
+
   it('vercel.json enforces HSTS preload and www→apex redirect', () => {
     const vercel = JSON.parse(
       readFileSync(resolve(process.cwd(), 'vercel.json'), 'utf8'),
