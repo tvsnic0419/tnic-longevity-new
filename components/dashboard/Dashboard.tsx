@@ -21,6 +21,8 @@ import { DashboardStatusExport } from '@/components/dashboard/DashboardStatusExp
 import { OnboardingStrip } from '@/components/dashboard/OnboardingStrip';
 import { UserNextStepsPanel } from '@/components/dashboard/UserNextStepsPanel';
 import { ContextRail } from '@/components/ui/ContextRail';
+import { ResearchPassport } from '@/components/dashboard/ResearchPassport';
+import { ClubCabinet } from '@/components/dashboard/ClubCabinet';
 import { getHubContext } from '@/lib/hub-context';
 
 function formatDaysAgo(dateStr: string): string {
@@ -223,6 +225,11 @@ export function Dashboard() {
             </CardContent>
           </Card>
         )}
+
+        <div className="lg:col-span-3 grid gap-6 xl:grid-cols-2">
+          <ClubCabinet />
+          <ResearchPassport />
+        </div>
 
         <div className="lg:col-span-3">
           <UserMilestonesPanel />
