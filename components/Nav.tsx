@@ -250,8 +250,9 @@ export function Nav() {
   // a matching visual token so it is not announced-only. Keyed off the attribute
   // rather than a second isActive() branch, so the two can never diverge.
   const navLinkClass =
-    'focus-ring interactive whitespace-nowrap px-2 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent-cyan/10 transition-all ' +
-    'aria-[current=page]:text-foreground aria-[current=page]:bg-accent-cyan/10';
+    'focus-ring interactive relative whitespace-nowrap px-2 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent-cyan/10 transition-all ' +
+    'after:pointer-events-none after:absolute after:inset-x-2 after:bottom-1 after:h-px after:origin-left after:scale-x-0 after:bg-gradient-to-r after:from-accent-cyan after:to-accent-emerald after:transition-transform after:duration-300 ' +
+    'aria-[current=page]:text-foreground aria-[current=page]:bg-accent-cyan/10 aria-[current=page]:after:scale-x-100';
   const mobileNavLinkClass =
     'focus-ring interactive flex justify-between items-center text-foreground hover:text-accent-cyan py-3.5 min-h-[var(--space-touch)] text-base font-medium border-b border-border/50 last:border-0 ' +
     'aria-[current=page]:text-accent-cyan';
