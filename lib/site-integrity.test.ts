@@ -205,6 +205,38 @@ describe('site data integrity', () => {
     expect(shop).toContain('ANALYTICS_EVENTS.shopChecklistProgress');
   });
 
+  it('preserves the evidence-in-flow research, lab, NICO, and systems-map experience layers', () => {
+    // This release is intentionally cross-surface: the value comes from linking
+    // evidence, research continuity, local review context, and the systems map
+    // rather than adding a standalone decorative component. Pin the landmarks.
+    const evidenceTrace = readFileSync(resolve(process.cwd(), 'components/trust/EvidenceTrace.tsx'), 'utf8');
+    const nico = readFileSync(resolve(process.cwd(), 'components/nico/NicoQuestionnaire.tsx'), 'utf8');
+    const labHub = readFileSync(resolve(process.cwd(), 'components/labs/LabHub.tsx'), 'utf8');
+    const labReview = readFileSync(resolve(process.cwd(), 'components/labs/LabReviewContext.tsx'), 'utf8');
+    const dashboard = readFileSync(resolve(process.cwd(), 'components/dashboard/Dashboard.tsx'), 'utf8');
+    const researchIntent = readFileSync(resolve(process.cwd(), 'components/dashboard/ResearchIntentPanel.tsx'), 'utf8');
+    const researchIntentStore = readFileSync(resolve(process.cwd(), 'lib/research-intent.ts'), 'utf8');
+    const library = readFileSync(resolve(process.cwd(), 'components/library/AntiAgingLibrary.tsx'), 'utf8');
+    const systems = readFileSync(resolve(process.cwd(), 'components/library/SystemsPage.tsx'), 'utf8');
+    const systemsRoute = readFileSync(resolve(process.cwd(), 'app/library/systems/page.tsx'), 'utf8');
+
+    expect(evidenceTrace).toContain('ANALYTICS_EVENTS.evidenceTraceOpened');
+    expect(nico).toContain('Evidence route');
+    expect(nico).toContain('ANALYTICS_EVENTS.nicoResearchRouteOpened');
+    expect(nico).toContain('/library/systems?hallmark=');
+    expect(labHub).toContain('<LabReviewContext labs={labs} selectedCount={selected.length} />');
+    expect(labReview).toContain('does not determine personal suitability, diagnose, or prove');
+    expect(dashboard).toContain('<ResearchIntentPanel />');
+    expect(researchIntent).toContain("from '@/lib/research-intent'");
+    expect(researchIntent).toContain('trackEvent(ANALYTICS_EVENTS.researchIntentSet');
+    expect(researchIntentStore).toContain('STORAGE_KEYS.researchIntent');
+    expect(researchIntentStore).toContain('getPrivacyMode()');
+    expect(library).toContain('See system connections');
+    expect(systems).toContain("searchParams.get('hallmark')");
+    expect(systems).toContain("router.replace(`/library/systems?${params.toString()}`");
+    expect(systemsRoute).toContain('<Suspense');
+  });
+
   it('vercel.json enforces HSTS preload and www→apex redirect', () => {
     const vercel = JSON.parse(
       readFileSync(resolve(process.cwd(), 'vercel.json'), 'utf8'),

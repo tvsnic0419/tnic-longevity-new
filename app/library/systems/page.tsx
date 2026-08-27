@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { SystemsPage } from '@/components/library/SystemsPage';
 
@@ -12,5 +13,9 @@ export const metadata: Metadata = {
 };
 
 export default function SystemsRoute() {
-  return <SystemsPage />;
+  return (
+    <Suspense fallback={<div className="min-h-screen canvas-scrim" aria-busy="true" />}>
+      <SystemsPage />
+    </Suspense>
+  );
 }

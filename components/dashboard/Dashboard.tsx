@@ -22,6 +22,7 @@ import { DashboardFocusDeck } from '@/components/dashboard/DashboardFocusDeck';
 import { UserNextStepsPanel } from '@/components/dashboard/UserNextStepsPanel';
 import { ContextRail } from '@/components/ui/ContextRail';
 import { ResearchPassport } from '@/components/dashboard/ResearchPassport';
+import { ResearchIntentPanel } from '@/components/dashboard/ResearchIntentPanel';
 import { ClubCabinet } from '@/components/dashboard/ClubCabinet';
 import { getHubContext } from '@/lib/hub-context';
 
@@ -229,6 +230,10 @@ export function Dashboard() {
         <div className="lg:col-span-3 grid gap-6 xl:grid-cols-2">
           <ClubCabinet />
           <ResearchPassport />
+        </div>
+
+        <div className="lg:col-span-3">
+          <ResearchIntentPanel />
         </div>
 
         <div className="lg:col-span-3">

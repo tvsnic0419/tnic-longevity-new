@@ -15,6 +15,9 @@ import {
 } from 'lucide-react';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { EvidenceTrace } from '@/components/trust/EvidenceTrace';
+import { trackEvent } from '@/lib/analytics';
+import { ANALYTICS_EVENTS } from '@/lib/analytics-events';
 import {
   computeNicoStack,
   NICO_DEFAULT_ANSWERS,
@@ -45,6 +48,12 @@ type StepId = 'goals' | 'age' | (typeof SCALE_ORDER)[number] | 'focus' | 'safety
 
 const STEP_IDS: StepId[] = ['goals', 'age', ...SCALE_ORDER, 'focus', 'safety', 'result'];
 const QUESTION_COUNT = STEP_IDS.length - 1; // excludes the result screen
+
+function primaryEvidenceTier(mix: { A: number; B: number; C: number }): 'A' | 'B' | 'C' {
+  if (mix.A > 0) return 'A';
+  if (mix.B > 0) return 'B';
+  return 'C';
+}
 
 // The questionnaire asks one focused question at a time, but the experience
 // should still read as a coherent path rather than nine anonymous screens.
@@ -157,7 +166,8 @@ function QuestionHeading({
 
 export function NicoQuestionnaire() {
   const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<NicoAnswers>({ ...NICO_DEFAULT_ANSWERS });
+  const [answers, setAnswers] = useState<NicoAnswers>(NICO_DEFAULT_ANSWERS);
+  const [researchRouteOpen, setResearchRouteOpen] = useState(false);
 
   const stepId = STEP_IDS[step];
   const isResult = stepId === 'result';
@@ -175,7 +185,8 @@ export function NicoQuestionnaire() {
   const goNext = () => setStep((s) => Math.min(STEP_IDS.length - 1, s + 1));
   const goBack = () => setStep((s) => Math.max(0, s - 1));
   const restart = () => {
-    setAnswers({ ...NICO_DEFAULT_ANSWERS });
+    setAnswers(NICO_DEFAULT_ANSWERS);
+    setResearchRouteOpen(false);
     setStep(0);
   };
 
@@ -489,6 +500,51 @@ export function NicoQuestionnaire() {
                   </ul>
                 </div>
               )}
+
+              <div className="card-elevated p-4 mb-4">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <p className="text-micro font-mono text-accent-cyan uppercase tracking-wider">Evidence route</p>
+                    <p className="mt-1 text-xs text-muted-foreground">Inspect the biology and source context before treating this as a starting configuration.</p>
+                  </div>
+                  <EvidenceTrace
+                    tier={primaryEvidenceTier(result.evidenceMix)}
+                    reviewedLabel="Methodology visible"
+                    href="/trust/methodology"
+                    surface="nico_result"
+                    className="shrink-0"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const next = !researchRouteOpen;
+                    setResearchRouteOpen(next);
+                    if (next) trackEvent(ANALYTICS_EVENTS.nicoResearchRouteOpened, { compound_count: result.compoundCount });
+                  }}
+                  aria-expanded={researchRouteOpen}
+                  className="focus-ring interactive mt-4 inline-flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs font-semibold text-accent-cyan hover:bg-accent-cyan/[0.08]"
+                >
+                  {researchRouteOpen ? 'Hide research route' : 'See what to inspect next'}
+                  <ArrowRight className={`h-3.5 w-3.5 transition-transform ${researchRouteOpen ? 'rotate-90' : ''}`} aria-hidden="true" />
+                </button>
+                {researchRouteOpen && (
+                  <div className="mt-3 grid gap-2 sm:grid-cols-3">
+                    <Link href={`/library/compounds/${result.compounds[0]?.id ?? ''}`} className="focus-ring rounded-lg border border-border/65 bg-background/25 p-3 text-xs font-semibold text-foreground transition-colors hover:border-accent-cyan/35 hover:text-accent-cyan">
+                      <span className="text-micro font-mono uppercase tracking-[0.1em] text-accent-cyan">Inspect</span>
+                      <span className="mt-1.5 block">Read the lead compound</span>
+                    </Link>
+                    <Link href={`/library/systems?hallmark=${result.compounds[0]?.hallmarks[0] ?? ''}`} className="focus-ring rounded-lg border border-border/65 bg-background/25 p-3 text-xs font-semibold text-foreground transition-colors hover:border-accent-violet/35 hover:text-accent-violet">
+                      <span className="text-micro font-mono uppercase tracking-[0.1em] text-accent-violet">Connect</span>
+                      <span className="mt-1.5 block">Map a hallmark pathway</span>
+                    </Link>
+                    <Link href="/labs?mode=single" className="focus-ring rounded-lg border border-border/65 bg-background/25 p-3 text-xs font-semibold text-foreground transition-colors hover:border-accent-emerald/35 hover:text-accent-emerald">
+                      <span className="text-micro font-mono uppercase tracking-[0.1em] text-accent-emerald">Review</span>
+                      <span className="mt-1.5 block">Log a starting reference</span>
+                    </Link>
+                  </div>
+                )}
+              </div>
 
               {result.safetyNotes.length > 0 && (
                 <div className="rounded-xl border border-accent-rose/30 bg-accent-rose/10 p-4 mb-6">
