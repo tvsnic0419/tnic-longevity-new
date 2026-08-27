@@ -184,6 +184,27 @@ describe('site data integrity', () => {
     expect(src).toContain('https://ods.od.nih.gov/Research/Dietary_Supplement_Label_Database.aspx');
   });
 
+  it('the stack-to-shop journey preserves its readiness, preset, and buyer-review layers', () => {
+    // This is the highest-intent conversion path: an active stack should make
+    // its buyer-grade next step obvious, while product verification remains
+    // transparent and locally private. Pin the source landmarks so a later
+    // visual refactor cannot quietly collapse it back to an unmeasured link row.
+    const stackHub = readFileSync(resolve(process.cwd(), 'components/stacks/StacksLibrary.tsx'), 'utf8');
+    const stackBuilder = readFileSync(resolve(process.cwd(), 'components/stacks/DynamicStackBuilder.tsx'), 'utf8');
+    const shop = readFileSync(resolve(process.cwd(), 'components/shop/ProtocolShopPanel.tsx'), 'utf8');
+
+    expect(stackHub).toContain('parseStackParam');
+    expect(stackHub).toContain('if (!isAlreadyLoaded) setSelected(incomingStack)');
+    expect(stackBuilder).toContain('Stack readiness');
+    expect(stackBuilder).toContain('Verify your active stack');
+    expect(stackBuilder).toContain('ANALYTICS_EVENTS.stackShopOpened');
+    expect(shop).toContain('Choose a stack by the question you want to inspect.');
+    expect(shop).toContain('Keep the checklist with the stack you are evaluating.');
+    expect(shop).toContain('window.localStorage.setItem(checklistKey, JSON.stringify(next))');
+    expect(shop).toContain('ANALYTICS_EVENTS.shopPresetLoaded');
+    expect(shop).toContain('ANALYTICS_EVENTS.shopChecklistProgress');
+  });
+
   it('vercel.json enforces HSTS preload and www→apex redirect', () => {
     const vercel = JSON.parse(
       readFileSync(resolve(process.cwd(), 'vercel.json'), 'utf8'),

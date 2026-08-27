@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
@@ -9,7 +9,7 @@ import { Cpu, Layers, Wrench, Table2, BookOpen, ShoppingBag, Sparkles } from 'lu
 import { eliteStacks } from '@/lib/stacks-library';
 import { compounds } from '@/lib/data';
 import { usePlatform } from '@/context/PlatformContext';
-import { buildEngineStackUrl, buildShopStackUrl } from '@/lib/stack-url';
+import { buildEngineStackUrl, buildShopStackUrl, parseStackParam } from '@/lib/stack-url';
 import { PageShell } from '@/components/ui/PageShell';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { TabBar } from '@/components/ui/TabBar';
@@ -36,12 +36,14 @@ const tabs = [
 ];
 
 export function StacksLibrary() {
-  const { selected } = usePlatform();
+  const { selected, setSelected } = usePlatform();
   const searchParams = useSearchParams();
   // NICO and the elite intervention cards both hand off stacks through
-  // `?stack=<ids>&from=<source>`. PlatformContext seeds the selected compounds;
-  // the source then opens Builder and makes the arrival explicit instead of
-  // stranding a preloaded stack behind the default catalog tab.
+  // `?stack=<ids>&from=<source>`. PlatformContext remains the persistence
+  // owner; this route-level fallback makes the important conversion handoff
+  // reliable even if its provider hydration has not settled before this page.
+  const stackParam = searchParams.get('stack');
+  const incomingStack = useMemo(() => (stackParam ? parseStackParam(stackParam) : null), [stackParam]);
   const stackSource = searchParams.get('from');
   const sourceLabel =
     stackSource === 'nico'
@@ -49,12 +51,19 @@ export function StacksLibrary() {
       : stackSource === 'elite-home'
         ? 'an elite intervention'
         : null;
-  const hasIncomingStack = sourceLabel !== null;
+  const hasIncomingStack = sourceLabel !== null || (incomingStack?.length ?? 0) > 0;
   const viewParam = searchParams.get('view');
   const requestedTab = tabs.some((tab) => tab.id === viewParam) ? (viewParam as Tab) : 'catalog';
 
   const [selectedTab, setSelectedTab] = useState<Tab | null>(null);
   const tab = hasIncomingStack ? 'builder' : selectedTab ?? requestedTab;
+
+  useEffect(() => {
+    if (!incomingStack?.length) return;
+    const isAlreadyLoaded =
+      selected.length === incomingStack.length && selected.every((id, index) => id === incomingStack[index]);
+    if (!isAlreadyLoaded) setSelected(incomingStack);
+  }, [incomingStack, selected, setSelected]);
 
   useEffect(() => {
     if (hasIncomingStack) {
