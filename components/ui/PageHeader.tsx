@@ -5,6 +5,7 @@ import { themes } from '@/lib/design-system';
 import { cn } from '@/lib/utils';
 import { ContextRail } from '@/components/ui/ContextRail';
 import { CellularDivider } from '@/components/ui/CellularDivider';
+import styles from './FlagshipFoundation.module.css';
 
 interface PageHeaderContext {
   what: string;
@@ -104,7 +105,7 @@ export function PageHeader({
     return (
       <header
         className={cn(
-          'section-header-mesh relative isolate overflow-hidden mb-10 md:mb-12',
+          `${styles.foundation} section-header-mesh relative isolate overflow-hidden mb-10 md:mb-12`,
           'rounded-3xl border px-6 py-12 md:px-10 md:py-16',
           t.border,
           alignClass,
@@ -124,7 +125,7 @@ export function PageHeader({
   }
 
   return (
-    <header className={cn('mb-10 md:mb-12 max-w-4xl', alignClass, isHandoff ? 'page-header--handoff' : 'section-header-mesh relative')}>
+    <header className={cn(styles.foundation, 'mb-10 md:mb-12 max-w-4xl', alignClass, isHandoff ? 'page-header--handoff' : 'section-header-mesh relative')}>
       {inner}
     </header>
   );

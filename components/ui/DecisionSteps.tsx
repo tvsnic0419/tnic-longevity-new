@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, type LucideIcon } from 'lucide-react';
 import { themes, type ThemeAccent } from '@/lib/design-system';
+import styles from './FlagshipFoundation.module.css';
 
 export interface DecisionStepItem {
   title: string;
@@ -33,7 +34,7 @@ export function DecisionSteps({
 
   return (
     <section
-      className={`decision-switchboard ${className}`}
+      className={`${styles.foundation} decision-switchboard ${className}`}
       style={{ '--decision-accent': accent } as React.CSSProperties}
       aria-label={title}
     >

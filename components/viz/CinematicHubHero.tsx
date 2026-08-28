@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { MoleculeStage } from './MoleculeStage';
 import { HUES, type RGB } from './tokens';
+import styles from '@/components/ui/FlagshipFoundation.module.css';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CinematicHubHero — shared research-instrument arrival surface for major hubs.
@@ -63,7 +64,7 @@ export function CinematicHubHero({
 
   return (
     <section
-      className="research-hero"
+      className={`${styles.foundation} research-hero`}
       style={{ '--research-hero-accent': hueCss } as React.CSSProperties}
     >
       {/* Decorative molecular field; all content remains readable without it. */}

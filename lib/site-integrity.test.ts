@@ -79,13 +79,21 @@ describe('site data integrity', () => {
     const stacks = readFileSync(resolve(process.cwd(), 'components/stacks/StacksLibrary.tsx'), 'utf8');
     const pageHeader = readFileSync(resolve(process.cwd(), 'components/ui/PageHeader.tsx'), 'utf8');
     const css = readFileSync(resolve(process.cwd(), 'app/globals.css'), 'utf8');
+    const foundationCss = readFileSync(resolve(process.cwd(), 'components/ui/FlagshipFoundation.module.css'), 'utf8');
 
-    expect(hero).toContain('className="research-hero"');
+    expect(hero).toContain('research-hero');
     expect(hero).not.toContain('const HUBHERO_CSS');
     expect(hero).toContain('titleAsHeading');
     expect(hero).toContain('focus-ring');
     expect(css).toContain('.research-hero {');
     expect(css).toContain('var(--color-text-primary)');
+    expect(foundationCss).toContain('.foundation');
+    expect(foundationCss).toContain(':global(.research-hero)');
+    expect(foundationCss).toContain(':global(.decision-switchboard)');
+    expect(hero).toContain('FlagshipFoundation.module.css');
+    expect(contextBar).toContain('FlagshipFoundation.module.css');
+    expect(decisionSteps).toContain('FlagshipFoundation.module.css');
+    expect(pageHeader).toContain('FlagshipFoundation.module.css');
     expect(css).toContain('.context-bar {');
     expect(css).toContain('.page-header--handoff');
     expect(pageHeader).toContain("variant?: 'default' | 'handoff'");

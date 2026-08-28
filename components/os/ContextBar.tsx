@@ -8,6 +8,7 @@ import { usePlatform } from '@/context/PlatformContext';
 import { accentForRoute, getRouteContext } from '@/lib/route-context';
 import { themes } from '@/lib/design-system';
 import { cn } from '@/lib/utils';
+import styles from '@/components/ui/FlagshipFoundation.module.css';
 
 // The stack cluster needs `analyzeStack` (and through it the full compound
 // data layer), but only renders for visitors who have built a stack. The bar
@@ -94,7 +95,7 @@ export function ContextBar({ hideStackReadout = false }: ContextBarProps = {}) {
   const crumbs = route.breadcrumbs;
 
   return (
-    <aside className="context-bar sticky top-14 md:top-16 z-40" aria-label="Hub context and OS status">
+    <aside className={`${styles.foundation} context-bar sticky top-14 md:top-16 z-40`} aria-label="Hub context and OS status">
       <div className="context-bar__inner container-page">
         {crumbs.length > 1 && (
           <nav aria-label="Breadcrumb" className="context-bar__crumbs">
