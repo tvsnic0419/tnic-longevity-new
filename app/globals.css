@@ -3277,6 +3277,11 @@ p,
   border: 1px solid var(--color-border-subtle);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.006));
+  /* Resting depth — the lightest elevation plane so cards read as engineered
+     surfaces sitting on the page rather than flat outlines, plus an inset
+     top-highlight for a crisp lit edge. The hover state lifts to a full accent
+     glow (below). */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045), var(--glass-shadow-field);
   transition:
     transform 0.32s var(--ease-glass),
     border-color 0.32s ease,
@@ -3322,6 +3327,7 @@ p,
   transform: translateY(-4px);
   border-color: color-mix(in srgb, var(--card-accent) 42%, transparent);
   box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
     0 24px 60px -28px color-mix(in srgb, var(--card-accent) 55%, transparent),
     var(--glass-shadow-content);
 }

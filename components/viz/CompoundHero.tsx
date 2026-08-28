@@ -79,6 +79,10 @@ export function CompoundHero(data: CompoundHeroData) {
   const structured = hasGeometry(data.id);
   const geom = structured ? getGeometry(data.id) : null;
   const tint = tierColor(data.evidence);
+  // Canonical evidence signal-strength encoding, shared with EvidenceTag:
+  // A = 3 bars (strongest human evidence) · B = 2 · C = 1. A faithful visual
+  // encoding of the existing ordinal tier — no new claim, same grading spine.
+  const tierLevel = data.evidence === "A" ? 3 : data.evidence === "B" ? 2 : 1;
 
   const facts: Array<{ k: string; v: string; meter?: number }> = [
     { k: "Evidence", v: `Tier ${data.evidence}` },
@@ -121,7 +125,12 @@ export function CompoundHero(data: CompoundHeroData) {
           <p className="chero-kicker">{data.pathway}</p>
           <div className="chero-name" aria-hidden="true">{data.name}</div>
           <div className="chero-medallion" style={{ color: tint, borderColor: tint }}>
-            <span className="ring" /> Evidence Tier {data.evidence}
+            <span className="chero-tiermeter" aria-hidden="true">
+              {[0, 1, 2].map((i) => (
+                <span key={i} className={i < tierLevel ? "on" : ""} />
+              ))}
+            </span>
+            Evidence Tier {data.evidence}
           </div>
           <p className="chero-mech">{firstSentence(data.mechanism)}</p>
 
@@ -172,7 +181,27 @@ const CHERO_CSS = `
   background:
     radial-gradient(100% 100% at 30% 20%, color-mix(in srgb, var(--hue) 14%, transparent), transparent 60%),
     radial-gradient(100% 100% at 80% 90%, rgba(140,140,245,0.06), transparent 60%),
+    linear-gradient(rgba(150,170,220,0.05) 1px, transparent 1px) 0 0/38px 38px,
+    linear-gradient(90deg, rgba(150,170,220,0.05) 1px, transparent 1px) 0 0/38px 38px,
     linear-gradient(180deg, rgba(14,20,38,0.6), rgba(10,14,30,0.9));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05), inset 0 0 60px -20px rgba(0,0,0,.6);
+}
+/* Instrument viewport frame — four corner registration brackets that read the
+   molecule as a measured field, not a stock illustration. Above the canvas,
+   never over the molecule's center. */
+.chero-stage::after {
+  content: ''; position: absolute; inset: 10px; z-index: 4; pointer-events: none;
+  border-radius: 12px;
+  background:
+    linear-gradient(color-mix(in srgb, var(--hue) 40%, transparent), color-mix(in srgb, var(--hue) 40%, transparent)) 0 0/14px 1px no-repeat,
+    linear-gradient(color-mix(in srgb, var(--hue) 40%, transparent), color-mix(in srgb, var(--hue) 40%, transparent)) 0 0/1px 14px no-repeat,
+    linear-gradient(color-mix(in srgb, var(--hue) 40%, transparent), color-mix(in srgb, var(--hue) 40%, transparent)) 100% 0/14px 1px no-repeat,
+    linear-gradient(color-mix(in srgb, var(--hue) 40%, transparent), color-mix(in srgb, var(--hue) 40%, transparent)) 100% 0/1px 14px no-repeat,
+    linear-gradient(color-mix(in srgb, var(--hue) 40%, transparent), color-mix(in srgb, var(--hue) 40%, transparent)) 0 100%/14px 1px no-repeat,
+    linear-gradient(color-mix(in srgb, var(--hue) 40%, transparent), color-mix(in srgb, var(--hue) 40%, transparent)) 0 100%/1px 14px no-repeat,
+    linear-gradient(color-mix(in srgb, var(--hue) 40%, transparent), color-mix(in srgb, var(--hue) 40%, transparent)) 100% 100%/14px 1px no-repeat,
+    linear-gradient(color-mix(in srgb, var(--hue) 40%, transparent), color-mix(in srgb, var(--hue) 40%, transparent)) 100% 100%/1px 14px no-repeat;
+  opacity: .6;
 }
 .chero-stage-placeholder {
   width: 100%; height: 100%;
@@ -200,19 +229,46 @@ const CHERO_CSS = `
   max-width: 100%; overflow-wrap: break-word; word-break: break-word; hyphens: auto; text-wrap: balance;
 }
 .chero-medallion {
-  display: inline-flex; align-items: center; gap: 9px; align-self: flex-start;
+  display: inline-flex; align-items: center; gap: 10px; align-self: flex-start;
   font-family: ${FONT.mono}; font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
   padding: 7px 14px; border: 1px solid; border-radius: 999px;
+  background: color-mix(in srgb, currentColor 8%, transparent);
 }
-.chero-medallion .ring { width: 8px; height: 8px; border-radius: 50%; background: currentColor; box-shadow: 0 0 10px currentColor; }
+/* Signal-strength meter — three ascending bars filled to the tier level, the
+   site's canonical evidence mark (matches EvidenceTag). */
+.chero-medallion .chero-tiermeter { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
+.chero-medallion .chero-tiermeter span { width: 3px; border-radius: 1px; background: currentColor; opacity: .22; }
+.chero-medallion .chero-tiermeter span:nth-child(1) { height: 6px; }
+.chero-medallion .chero-tiermeter span:nth-child(2) { height: 9px; }
+.chero-medallion .chero-tiermeter span:nth-child(3) { height: 12px; }
+.chero-medallion .chero-tiermeter span.on { opacity: 1; box-shadow: 0 0 8px -1px currentColor; }
 .chero-mech { font-size: clamp(15px, 1.9vw, 18px); line-height: 1.6; color: ${VIZ.muted}; margin: 4px 0 0; max-width: 52ch; }
 
 .chero-facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 8px; }
 @media (max-width: 520px) { .chero-facts { grid-template-columns: repeat(2, 1fr); } }
 .chero-fact {
-  display: flex; flex-direction: column; gap: 4px; padding: 12px 14px;
-  background: linear-gradient(180deg, rgba(19,26,48,0.7), rgba(14,20,38,0.7));
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; gap: 4px; padding: 13px 15px;
+  background: linear-gradient(180deg, rgba(19,26,48,0.72), rgba(14,20,38,0.72));
   border: 1px solid ${VIZ.line}; border-radius: 12px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 6px 18px -14px rgba(0,0,0,.7);
+  transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease;
+}
+/* Engineered instrument tells — a hue top light-catch and a corner
+   registration tick that reward close inspection without adding noise. */
+.chero-fact::before {
+  content: ''; position: absolute; inset-inline: 0; top: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--hue) 42%, transparent), transparent);
+  opacity: .55; pointer-events: none;
+}
+.chero-fact::after {
+  content: ''; position: absolute; top: 8px; right: 8px; width: 5px; height: 5px;
+  border-top: 1px solid color-mix(in srgb, var(--hue) 55%, transparent);
+  border-right: 1px solid color-mix(in srgb, var(--hue) 55%, transparent);
+  opacity: .5; pointer-events: none;
+}
+@media (hover: hover) {
+  .chero-fact:hover { border-color: color-mix(in srgb, var(--hue) 32%, ${VIZ.line}); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 12px 26px -16px color-mix(in srgb, var(--hue) 50%, transparent); }
 }
 .chero-fact .k { font-family: ${FONT.mono}; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: ${VIZ.faint}; }
 .chero-fact .v { font-size: 14px; color: ${VIZ.ink}; font-weight: 500; font-variant-numeric: tabular-nums; }

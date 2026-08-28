@@ -106,6 +106,36 @@ const CSS = `
   mask-image: radial-gradient(90% 70% at 50% 40%, #000 40%, transparent 100%);
   -webkit-mask-image: radial-gradient(90% 70% at 50% 40%, #000 40%, transparent 100%);
 }
+/* ── Volumetric arrival light ──
+   A single restrained light source high on the arrival screen: a soft cyan
+   "sun" that lifts the headline off the void, plus two faint, near-vertical
+   god-ray beams for depth. Sits at the very back (z:0, first layer) so the
+   particle shimmer and grid composite over it — it deepens the background,
+   never washes the foreground. Height is capped to the first screen so it
+   reads as the atmosphere of the arrival, not the whole descent. The drift is
+   a 34s barely-perceptible breath, disabled under reduced-motion. */
+.tnic-aurora {
+  z-index: 0; height: 118svh; opacity: .9;
+  background:
+    radial-gradient(52% 42% at 30% 8%, color-mix(in srgb, var(--cyan) 24%, transparent) 0%, transparent 58%),
+    radial-gradient(40% 40% at 82% 4%, color-mix(in srgb, var(--emerald) 12%, transparent) 0%, transparent 62%),
+    conic-gradient(from 180deg at 34% -14%,
+      transparent 0deg,
+      color-mix(in srgb, var(--cyan) 9%, transparent) 12deg,
+      transparent 26deg,
+      transparent 150deg,
+      color-mix(in srgb, var(--emerald) 7%, transparent) 172deg,
+      transparent 192deg);
+  mask-image: linear-gradient(180deg, #000 0%, #000 44%, transparent 82%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 44%, transparent 82%);
+  transform-origin: 40% 0%;
+  animation: tnic-aurora-drift 34s ease-in-out infinite;
+}
+:root[data-theme="light"] .tnic-aurora { opacity: .5; }
+@keyframes tnic-aurora-drift {
+  0%, 100% { transform: translate3d(-1.5%, 0, 0) scale(1.02); opacity: .82; }
+  50%      { transform: translate3d(2.5%, 0, 0) scale(1.06); opacity: 1; }
+}
 
 .tnic-act {
   position: relative; z-index: 3;
@@ -257,14 +287,36 @@ const CSS = `
   transition: opacity .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .26s, transform .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .26s;
 }
 .tnic-path {
+  position: relative; overflow: hidden;
   display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center;
   gap: 10px; min-height: 82px; padding: 13px 14px; border-radius: 14px;
   color: var(--ink); text-decoration: none; border: 1px solid var(--line);
   background: color-mix(in srgb, var(--panel) 86%, transparent);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 8px 22px -18px rgba(0,0,0,.7);
   transition: transform .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease;
 }
-.tnic-path:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--cyan) 55%, transparent); background: color-mix(in srgb, var(--panel2) 92%, transparent); box-shadow: 0 12px 28px -16px rgba(95,227,224,.55); }
+/* Engineered top light-catch + hover accent bloom on the two secondary paths —
+   brings them up to the "elite card" tell without touching the primary gradient. */
+.tnic-path:not(.primary)::before {
+  content: ''; position: absolute; inset-inline: 0; top: 0; height: 1px; z-index: 2;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--cyan) 52%, transparent), transparent);
+  opacity: .55; pointer-events: none;
+}
+.tnic-path:not(.primary)::after {
+  content: ''; position: absolute; inset: 0; z-index: 0;
+  background: radial-gradient(130% 90% at 50% -20%, color-mix(in srgb, var(--cyan) 14%, transparent), transparent 60%);
+  opacity: 0; transition: opacity .25s ease; pointer-events: none;
+}
+.tnic-path:not(.primary) > * { position: relative; z-index: 1; }
+.tnic-path:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--cyan) 55%, transparent); background: color-mix(in srgb, var(--panel2) 92%, transparent); box-shadow: 0 14px 30px -16px rgba(95,227,224,.5), inset 0 1px 0 rgba(255,255,255,.08); }
+.tnic-path:not(.primary):hover::before { opacity: .95; }
+.tnic-path:not(.primary):hover::after { opacity: 1; }
+/* Tactile press — the card acknowledges the tap, matching the sitewide
+   press vocabulary in globals.css. Gated so reduced-motion users get none. */
+@media (prefers-reduced-motion: no-preference) {
+  .tnic-path:active { transform: translateY(0) scale(.988); transition-duration: .09s; }
+  .tnic-hero-badges a.pill:active { transform: scale(.96); }
+}
 .tnic-path.primary { color: #030712; border-color: transparent; background: linear-gradient(135deg, #5fe3e0 0%, #68e5c7 52%, #b8f3d8 100%); box-shadow: 0 10px 30px -16px rgba(95,227,224,.85); }
 .tnic-path.primary:hover { border-color: transparent; background: linear-gradient(135deg, #75ebe7 0%, #77ebcf 52%, #c8f7e2 100%); box-shadow: 0 14px 36px -16px rgba(95,227,224,.95); }
 .tnic-path-index { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10px; letter-spacing: .12em; color: var(--faint); }
@@ -579,6 +631,7 @@ const CSS = `
 .tnic-descent[data-reduced="true"] .bar,
 .tnic-descent[data-reduced="true"] .edge.flow,
 .tnic-descent[data-reduced="true"] .node-pulse,
+.tnic-descent[data-reduced="true"] .tnic-aurora,
 .tnic-descent[data-reduced="true"] .tnic-stage-fallback__orbit { animation: none !important; }
 
 /* Act 4 capstone backdrop — the goal curve from Act 3, mirrored into an
@@ -609,6 +662,7 @@ const CSS = `
     transition: none !important;
   }
   .tnic-descent .tnic-stage-fallback__orbit { animation: none !important; }
+  .tnic-descent .tnic-aurora { animation: none !important; }
 }
 `;
 
@@ -987,6 +1041,7 @@ export function HomeDescent() {
   return (
     <div className="tnic-descent" data-reduced={reduced} ref={rootRef}>
       <style>{CSS}</style>
+      <div className="tnic-layer tnic-aurora" aria-hidden="true" />
       <canvas ref={shimmerRef} className="tnic-layer tnic-shimmer" aria-hidden="true" />
       <div className="tnic-layer tnic-grid" aria-hidden="true" />
       <canvas ref={cursorRef} className="tnic-layer tnic-cursor" aria-hidden="true" />
