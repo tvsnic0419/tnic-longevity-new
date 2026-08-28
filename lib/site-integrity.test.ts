@@ -68,6 +68,38 @@ describe('site data integrity', () => {
     expect(guideHub).toContain("title: 'Longevity Supplement Guides 2026 — Evidence-Based Deep Dives'");
   });
 
+  it('keeps the flagship research-instrument foundation shared, theme-aware, and task-forward', () => {
+    // High-visibility hub surfaces must share a token-driven component contract,
+    // not regress into component-local, dark-only hero CSS or one-off task cards.
+    const hero = readFileSync(resolve(process.cwd(), 'components/viz/CinematicHubHero.tsx'), 'utf8');
+    const contextBar = readFileSync(resolve(process.cwd(), 'components/os/ContextBar.tsx'), 'utf8');
+    const decisionSteps = readFileSync(resolve(process.cwd(), 'components/ui/DecisionSteps.tsx'), 'utf8');
+    const home = readFileSync(resolve(process.cwd(), 'components/home/HomeDescent.tsx'), 'utf8');
+    const labs = readFileSync(resolve(process.cwd(), 'components/labs/LabHub.tsx'), 'utf8');
+    const stacks = readFileSync(resolve(process.cwd(), 'components/stacks/StacksLibrary.tsx'), 'utf8');
+    const pageHeader = readFileSync(resolve(process.cwd(), 'components/ui/PageHeader.tsx'), 'utf8');
+    const css = readFileSync(resolve(process.cwd(), 'app/globals.css'), 'utf8');
+
+    expect(hero).toContain('className="research-hero"');
+    expect(hero).not.toContain('const HUBHERO_CSS');
+    expect(hero).toContain('titleAsHeading');
+    expect(hero).toContain('focus-ring');
+    expect(css).toContain('.research-hero {');
+    expect(css).toContain('var(--color-text-primary)');
+    expect(css).toContain('.context-bar {');
+    expect(css).toContain('.page-header--handoff');
+    expect(pageHeader).toContain("variant?: 'default' | 'handoff'");
+    expect(labs).toContain('variant="handoff"');
+    expect(stacks).toContain('variant="handoff"');
+    expect(contextBar).toContain('context-bar__status');
+    expect(contextBar).toContain('next.message');
+    expect(decisionSteps).toContain('decision-switchboard');
+    expect(decisionSteps).toContain('Choose a starting point');
+    expect(home).toContain('grid-template-columns: repeat(2, minmax(0, 1fr));');
+    expect(home).toContain('tnic-path primary focus-ring');
+    expect(home).toContain('.tnic-descent .tnic-paths');
+  });
+
   it('every statically-routable app page is present in the sitemap', () => {
     // Walks app/ for directories with a page.tsx, skipping api routes and any
     // dynamic ([slug]) or route-group ((group)) segment — those are either

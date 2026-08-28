@@ -82,6 +82,7 @@ export function StacksLibrary() {
         description="Pre-built evidence-graded protocols with dosing, monitoring, and cost breakdowns. Build custom stacks with real-time synergy and contraindication analysis."
         meta={`${eliteStacks.length} elite stacks · ${compounds.length} stack-buildable compounds · Educational only`}
         theme="violet"
+        variant="handoff"
         context={getHubContext('stacks')}
       />
 
