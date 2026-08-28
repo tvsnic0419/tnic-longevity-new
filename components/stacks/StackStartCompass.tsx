@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
-import { ArrowRight, BookOpen, ClipboardList, Layers, Wrench } from 'lucide-react';
+import { BookOpen, ClipboardList, Layers, Wrench } from 'lucide-react';
 import { usePlatform } from '@/context/PlatformContext';
 import { cn } from '@/lib/utils';
+import { ActionCard } from '@/components/ui/ActionCard';
 
 type CompassPath = {
   eyebrow: string;
@@ -13,6 +13,7 @@ type CompassPath = {
   icon: typeof ClipboardList;
   accent: 'cyan' | 'violet' | 'emerald' | 'amber';
   meta?: string;
+  featured?: boolean;
 };
 
 /**
@@ -33,6 +34,7 @@ export function StackStartCompass() {
           icon: Layers,
           accent: 'violet' as const,
           meta: `${selected.length} active ${selected.length === 1 ? 'compound' : 'compounds'}`,
+          featured: true,
         }]
       : []),
     {
@@ -45,6 +47,7 @@ export function StackStartCompass() {
       icon: ClipboardList,
       accent: 'cyan',
       meta: quizResult ? 'Goal already saved locally' : 'Goal-led entry',
+      featured: selected.length === 0,
     },
     {
       eyebrow: 'Inspect',
@@ -80,42 +83,19 @@ export function StackStartCompass() {
         </div>
 
         <div className={cn('mt-5 grid gap-2', paths.length === 4 ? 'md:grid-cols-2 xl:grid-cols-4' : 'md:grid-cols-3')}>
-          {paths.map((path) => {
-            const Icon = path.icon;
-            return (
-              <Link
-                key={path.title}
-                href={path.href}
-                className={cn(
-                  'focus-ring group min-h-40 rounded-xl border p-4 transition-colors',
-                  path.accent === 'cyan' && 'border-accent-cyan/25 bg-accent-cyan/[0.035] hover:bg-accent-cyan/[0.08]',
-                  path.accent === 'violet' && 'border-accent-violet/25 bg-accent-violet/[0.035] hover:bg-accent-violet/[0.08]',
-                  path.accent === 'emerald' && 'border-accent-emerald/25 bg-accent-emerald/[0.035] hover:bg-accent-emerald/[0.08]',
-                  path.accent === 'amber' && 'border-accent-amber/25 bg-accent-amber/[0.035] hover:bg-accent-amber/[0.08]',
-                )}
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <Icon
-                    className={cn(
-                      'h-4 w-4',
-                      path.accent === 'cyan' && 'text-accent-cyan',
-                      path.accent === 'violet' && 'text-accent-violet',
-                      path.accent === 'emerald' && 'text-accent-emerald',
-                      path.accent === 'amber' && 'text-accent-amber',
-                    )}
-                    aria-hidden="true"
-                  />
-                  <span className="text-micro font-mono uppercase tracking-[0.1em] text-muted-foreground">{path.eyebrow}</span>
-                </div>
-                <p className="mt-4 text-sm font-semibold leading-snug text-foreground group-hover:text-accent-cyan">{path.title}</p>
-                <p className="mt-2 text-caption leading-relaxed text-muted-foreground">{path.description}</p>
-                <div className="mt-3 flex items-center justify-between gap-2 text-micro font-mono uppercase tracking-[0.08em] text-muted-foreground">
-                  <span>{path.meta}</span>
-                  <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:text-accent-cyan" aria-hidden="true" />
-                </div>
-              </Link>
-            );
-          })}
+          {paths.map((path) => (
+            <ActionCard
+              key={path.title}
+              eyebrow={path.eyebrow}
+              title={path.title}
+              description={path.description}
+              href={path.href}
+              icon={path.icon}
+              accent={path.accent}
+              meta={path.meta}
+              featured={path.featured}
+            />
+          ))}
         </div>
       </div>
     </section>

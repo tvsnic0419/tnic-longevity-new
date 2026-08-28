@@ -54,16 +54,23 @@ export default function LibraryPage() {
         primary={{ href: '/nico', label: 'Find your personalized stack' }}
         secondary={{ href: '/stacks', label: 'Open the Stack Architect' }}
       />
+      {/* Search is the highest-intent action on a research hub, so it appears
+          immediately after the overview instead of after the hallmark atlas. */}
+      <Suspense fallback={<div className="h-36 animate-pulse bg-white/5" />}>
+        <LibrarySearch />
+      </Suspense>
+
       <div className="container-page pt-8">
         <DecisionSteps
           className="mb-6"
           eyebrow="A deliberate research path"
-          title="Map the biology before you change a stack."
-          detail="Choose a hallmark or evidence question, keep the deep-dives that matter in your private queue, then move into Stack Architect only when you are ready to inspect a configuration."
+          title="Start with the evidence you need."
+          detail="Search a compound or comparison, follow the biology behind it, then inspect a configuration only when you are ready to build."
           theme="cyan"
+          recommendedIndex={0}
           steps={[
+            { title: 'Search the library', detail: 'Find a compound, pathway, comparison, or research brief.', href: '#library-search', icon: BookmarkPlus },
             { title: 'Follow a hallmark', detail: 'Begin with the biology and the evidence that supports it.', href: '#hallmark-atlas', icon: Compass },
-            { title: 'Keep a research queue', detail: 'Save deep-dives worth returning to, locally in this browser.', href: '#research-queue', icon: BookmarkPlus },
             { title: 'Inspect a configuration', detail: 'Use Stack Architect for coverage and interaction checks.', href: '/stacks', icon: Layers3 },
           ]}
         />
@@ -71,10 +78,6 @@ export default function LibraryPage() {
       <ResearchQueueShelf />
       {/* Lead with the page title and context, then the tools to act on it */}
       <div id="hallmark-atlas"><AntiAgingLibrary asPageTitle /></div>
-
-      <Suspense fallback={<div className="h-12 animate-pulse bg-white/5" />}>
-        <LibrarySearch />
-      </Suspense>
 
       <div className="container-page pb-6">
         <Suspense fallback={<div className="h-20 animate-pulse bg-white/5 rounded-xl" />}>

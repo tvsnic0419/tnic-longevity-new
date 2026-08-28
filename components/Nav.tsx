@@ -4,7 +4,7 @@ import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ArrowRight, BookOpen, ChevronDown, ClipboardList, FlaskConical, Layers, Menu, Search, ShoppingBag, X } from 'lucide-react';
+import { ArrowRight, BookOpen, ChevronDown, ClipboardList, FlaskConical, Layers, LayoutDashboard, Menu, Search, ShoppingBag, X } from 'lucide-react';
 import { navGroups } from '@/lib/nav-data';
 import { Logo } from '@/components/ui/Logo';
 import { SiteSearch } from '@/components/SiteSearch';
@@ -12,6 +12,7 @@ import { COMMAND_PALETTE_EVENT } from '@/components/os/os-events';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { cn } from '@/lib/utils';
+import { usePlatform } from '@/context/PlatformContext';
 
 // useLayoutEffect warns during SSR; fall back to useEffect on the server so the
 // adaptive measurement still runs before first paint on the client.
@@ -23,7 +24,6 @@ const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffec
 const desktopPrimaryLinks = [
   { href: '/library', label: 'Library' },
   { href: '/stacks', label: 'Stacks' },
-  { href: '/protocols', label: 'Protocols' },
   { href: '/labs', label: 'Labs' },
   { href: '/products', label: 'Products' },
 ];
@@ -78,6 +78,7 @@ const exploreGroups = [
   {
     label: 'Build',
     links: [
+      { href: '/protocols', label: 'Protocols' },
       { href: '/tools', label: 'Tools' },
       { href: '/compound-engine', label: 'Compound engine' },
     ],
@@ -86,6 +87,7 @@ const exploreGroups = [
 
 export function Nav() {
   const pathname = usePathname();
+  const { selected } = usePlatform();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [exploreOpen, setExploreOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -245,6 +247,14 @@ export function Nav() {
   }, [pathname]);
 
   const isActive = (href: string) => href === pathname || (href !== '/' && pathname.startsWith(`${href}/`));
+  const hasActiveStack = selected.length > 0;
+  const primaryAction = hasActiveStack
+    ? { href: '/dashboard', label: 'Dashboard', ariaLabel: 'Open my dashboard' }
+    : { href: '/nico', label: 'Start your stack', ariaLabel: 'Start the NICO Starter Questionnaire' };
+  const secondaryAction = hasActiveStack
+    ? { href: '/nico', label: 'Refine with NICO', icon: ClipboardList }
+    : { href: '/dashboard', label: 'My dashboard', icon: LayoutDashboard };
+  const SecondaryActionIcon = secondaryAction.icon;
 
   // The current route already carries aria-current="page"; these give that state
   // a matching visual token so it is not announced-only. Keyed off the attribute
@@ -370,23 +380,21 @@ export function Nav() {
         <div ref={actionsRef} className={cn('items-center gap-2.5 shrink-0 max-[1023px]:!hidden', compact ? 'hidden' : 'flex')}>
           <ThemeToggle compact />
           <SiteSearch />
-          {/* NICO (questionnaire) is the secondary action; Dashboard is the
-              single filled primary. The former "Verify" shortcut lives in the
-              mobile menu, the footer, and the on-page Protocol Shop CTAs —
-              keeping the desktop bar narrow enough to appear on standard
-              laptops (≥1440px) instead of only ultra-wide displays. */}
+          {/* The filled action changes with local stack state: newcomers receive
+              a guided start, while returning visitors resume the work they
+              already began. The quieter companion keeps the alternate path one
+              click away without presenting two competing primary CTAs. */}
           <GlassPanel depth="float" className="glass-hover flex items-center rounded-full">
             <Link
-              href="/nico"
-              aria-label="NICO Starter Questionnaire"
+              href={secondaryAction.href}
               className="focus-ring inline-flex items-center gap-1.5 rounded-full py-2 px-4 text-sm font-semibold text-muted-foreground hover:text-foreground"
             >
-              <ClipboardList className="w-4 h-4 text-accent-violet" aria-hidden="true" />
-              NICO
+              <SecondaryActionIcon className="w-4 h-4 text-accent-violet" aria-hidden="true" />
+              {secondaryAction.label}
             </Link>
           </GlassPanel>
-          <Link href="/dashboard" className="focus-ring btn-gradient text-sm !py-2.5 !px-5 !min-h-0 rounded-full">
-            Dashboard
+          <Link href={primaryAction.href} aria-label={primaryAction.ariaLabel} className="focus-ring btn-gradient text-sm !py-2.5 !px-5 !min-h-0 rounded-full">
+            {primaryAction.label}
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </Link>
         </div>
@@ -486,11 +494,12 @@ export function Nav() {
               <div className="flex flex-col gap-2 mt-3">
                 <GlassPanel depth="float" className="glass-hover rounded-xl">
                   <Link
-                    href="/nico"
+                    href={secondaryAction.href}
                     onClick={() => setMobileOpen(false)}
-                    className="focus-ring block rounded-xl py-3 text-center text-sm font-semibold"
+                    className="focus-ring flex items-center justify-center gap-2 rounded-xl py-3 text-center text-sm font-semibold"
                   >
-                    NICO Starter Questionnaire
+                    <SecondaryActionIcon className="h-4 w-4 text-accent-violet" aria-hidden="true" />
+                    {secondaryAction.label}
                   </Link>
                 </GlassPanel>
                 <GlassPanel depth="float" className="glass-hover rounded-xl">
@@ -503,11 +512,13 @@ export function Nav() {
                   </Link>
                 </GlassPanel>
                 <Link
-                  href="/dashboard"
+                  href={primaryAction.href}
                   onClick={() => setMobileOpen(false)}
+                  aria-label={primaryAction.ariaLabel}
                   className="focus-ring btn-gradient text-sm text-center justify-center"
                 >
-                  Open Dashboard
+                  {primaryAction.label}
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
               </div>
             </div>

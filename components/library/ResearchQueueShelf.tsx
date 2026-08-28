@@ -104,22 +104,9 @@ export function ResearchQueueShelf() {
               )}
             </div>
           ) : (
-            <div className="mt-5 grid gap-2 md:grid-cols-3">
-              <Link href="/library/compare" className="focus-ring group rounded-xl border border-border/70 bg-background/20 p-4 hover:border-accent-violet/35 hover:bg-accent-violet/[0.04]">
-                <p className="text-micro font-mono uppercase tracking-[0.1em] text-accent-violet">Compare</p>
-                <p className="mt-2 text-sm font-semibold">Start with a decision</p>
-                <p className="mt-1 text-caption text-muted-foreground">Inspect two evidence paths side by side.</p>
-              </Link>
-              <Link href="/elite-8" className="focus-ring group rounded-xl border border-border/70 bg-background/20 p-4 hover:border-accent-amber/35 hover:bg-accent-amber/[0.04]">
-                <p className="text-micro font-mono uppercase tracking-[0.1em] text-accent-amber">Prioritize</p>
-                <p className="mt-2 text-sm font-semibold">Review the Elite Eight</p>
-                <p className="mt-1 text-caption text-muted-foreground">See the highest-ranked interventions first.</p>
-              </Link>
-              <Link href="/hallmarks" className="focus-ring group rounded-xl border border-border/70 bg-background/20 p-4 hover:border-accent-cyan/35 hover:bg-accent-cyan/[0.04]">
-                <p className="text-micro font-mono uppercase tracking-[0.1em] text-accent-cyan">Map</p>
-                <p className="mt-2 text-sm font-semibold">Follow a hallmark</p>
-                <p className="mt-1 text-caption text-muted-foreground">Start with the biology before the product.</p>
-              </Link>
+            <div className="mt-5 flex items-center gap-2 rounded-xl border border-dashed border-border/70 bg-background/15 px-4 py-3 text-caption text-muted-foreground">
+              <BookmarkPlus className="h-3.5 w-3.5 shrink-0 text-accent-cyan" aria-hidden="true" />
+              <p>Save any deep-dive from its Evidence Trace and your private research queue will appear here.</p>
             </div>
           )}
           {queue.length > 0 && (
@@ -149,7 +136,12 @@ export function ResearchQueueShelf() {
               )}
             </div>
           )}
-          <div className="mt-4 flex items-center gap-2 text-caption text-muted-foreground"><BookmarkPlus className="h-3.5 w-3.5 text-accent-cyan" aria-hidden="true" /> Save any deep-dive from its Evidence Trace to add it here.</div>
+          {queue.length > 0 && (
+            <div className="mt-4 flex items-center gap-2 text-caption text-muted-foreground">
+              <BookmarkPlus className="h-3.5 w-3.5 text-accent-cyan" aria-hidden="true" />
+              Save any deep-dive from its Evidence Trace to add it here.
+            </div>
+          )}
         </div>
       </div>
     </section>

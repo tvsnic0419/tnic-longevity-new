@@ -22,6 +22,7 @@ export function DecisionSteps({
   steps,
   theme = 'cyan',
   className = '',
+  recommendedIndex,
 }: {
   eyebrow?: string;
   title: string;
@@ -29,6 +30,8 @@ export function DecisionSteps({
   steps: DecisionStepItem[];
   theme?: ThemeAccent;
   className?: string;
+  /** Index of the lowest-friction route for this page’s primary visitor intent. */
+  recommendedIndex?: number;
 }) {
   const accent = themes[theme].cssVar;
 
@@ -50,24 +53,33 @@ export function DecisionSteps({
       <ol className="decision-switchboard__steps">
         {steps.map((step, index) => {
           const Icon = step.icon;
+          const recommended = index === recommendedIndex;
           const content = (
             <>
-              <span className="decision-switchboard__number" aria-hidden="true">
-                {String(index + 1).padStart(2, '0')}
-              </span>
-              <span className="decision-switchboard__icon" aria-hidden="true">
-                <Icon className="h-4 w-4" />
+              <span className="decision-switchboard__step-head">
+                <span className="decision-switchboard__number" aria-hidden="true">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <span className="decision-switchboard__icon" aria-hidden="true">
+                  <Icon className="h-4 w-4" />
+                </span>
+                {recommended && <span className="decision-switchboard__recommended">Recommended</span>}
               </span>
               <span className="decision-switchboard__copy">
                 <span className="decision-switchboard__step-title">{step.title}</span>
                 <span className="decision-switchboard__step-detail">{step.detail}</span>
               </span>
-              {step.href && <ArrowRight className="decision-switchboard__arrow" aria-hidden="true" />}
+              {step.href && (
+                <span className="decision-switchboard__action">
+                  {recommended ? 'Start here' : 'Explore'}
+                  <ArrowRight className="decision-switchboard__arrow" aria-hidden="true" />
+                </span>
+              )}
             </>
           );
 
           return (
-            <li key={step.title}>
+            <li key={step.title} className={recommended ? 'decision-switchboard__item--recommended' : undefined}>
               {step.href ? (
                 <Link href={step.href} className="decision-switchboard__step decision-switchboard__step--link focus-ring">
                   {content}
