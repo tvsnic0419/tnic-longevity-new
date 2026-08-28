@@ -334,21 +334,40 @@ const CSS = `
     linear-gradient(180deg, rgba(14,20,38,0.55), rgba(10,14,30,0.85));
   border: 1px solid var(--line);
 }
-.tnic-stage canvas, .tnic-stage svg { width: 100%; height: 100%; display: block; }
-.tnic-stage-mount { width: 100%; height: 100%; }
-.tnic-stage-placeholder {
-  position: relative; width: 100%; height: 100%; overflow: hidden;
+.tnic-stage canvas, .tnic-stage svg { position: relative; z-index: 1; width: 100%; height: 100%; display: block; }
+.tnic-stage-mount { position: relative; width: 100%; height: 100%; isolation: isolate; }
+.tnic-stage-fallback {
+  position: absolute; z-index: 0; inset: 0; overflow: hidden;
   background:
-    radial-gradient(circle at 50% 50%, rgba(95,227,224,0.12), transparent 18%),
-    radial-gradient(circle at 50% 50%, rgba(140,140,245,0.08), transparent 42%);
+    radial-gradient(circle at 50% 50%, rgba(95,227,224,0.14), transparent 17%),
+    radial-gradient(circle at 50% 50%, rgba(140,140,245,0.1), transparent 45%),
+    linear-gradient(135deg, rgba(95,227,224,0.025), transparent 44%, rgba(140,140,245,0.035));
 }
-.tnic-stage-placeholder::before,
-.tnic-stage-placeholder::after {
-  content: ''; position: absolute; border-radius: 50%; border: 1px solid rgba(95,227,224,0.18);
-  left: 50%; top: 50%; transform: translate(-50%, -50%);
+.tnic-stage-fallback::before {
+  content: ''; position: absolute; inset: 10%; opacity: .26;
+  background:
+    linear-gradient(rgba(95,227,224,.14) 1px, transparent 1px) 0 0 / 42px 42px,
+    linear-gradient(90deg, rgba(95,227,224,.14) 1px, transparent 1px) 0 0 / 42px 42px;
+  mask-image: radial-gradient(70% 70% at 50% 50%, #000 0%, transparent 80%);
+  -webkit-mask-image: radial-gradient(70% 70% at 50% 50%, #000 0%, transparent 80%);
 }
-.tnic-stage-placeholder::before { width: 28%; aspect-ratio: 1; box-shadow: 0 0 0 36px rgba(95,227,224,0.025), 0 0 52px rgba(95,227,224,0.12); }
-.tnic-stage-placeholder::after { width: 58%; aspect-ratio: 1; border-color: rgba(140,140,245,0.12); }
+.tnic-stage-fallback__orbit,
+.tnic-stage-fallback__node,
+.tnic-stage-fallback__core { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+.tnic-stage-fallback__orbit { border: 1px solid rgba(95,227,224,.24); border-radius: 50%; transform: translate(-50%, -50%) rotate(-18deg); }
+.tnic-stage-fallback__orbit--outer { width: 68%; aspect-ratio: 1.8; border-color: rgba(140,140,245,.18); animation: tnic-orbit-breathe 11s ease-in-out infinite; }
+.tnic-stage-fallback__orbit--middle { width: 50%; aspect-ratio: 1.8; transform: translate(-50%, -50%) rotate(54deg); border-color: rgba(95,227,224,.28); animation: tnic-orbit-breathe 8s ease-in-out infinite reverse; }
+.tnic-stage-fallback__orbit--inner { width: 31%; aspect-ratio: 1.8; transform: translate(-50%, -50%) rotate(-48deg); border-color: rgba(240,196,106,.3); animation: tnic-orbit-breathe 6s ease-in-out infinite; }
+@keyframes tnic-orbit-breathe { 0%, 100% { opacity: .62; scale: .98; } 50% { opacity: 1; scale: 1.02; } }
+.tnic-stage-fallback__node { width: .55rem; height: .55rem; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 0 .25rem rgba(95,227,224,.08), 0 0 1.2rem rgba(95,227,224,.62); }
+.tnic-stage-fallback__node--one { margin: -25% 0 0 27%; }
+.tnic-stage-fallback__node--two { margin: 20% 0 0 -25%; background: var(--gold); box-shadow: 0 0 0 .25rem rgba(240,196,106,.08), 0 0 1.2rem rgba(240,196,106,.56); }
+.tnic-stage-fallback__node--three { margin: -18% 0 0 -33%; background: var(--violet); box-shadow: 0 0 0 .25rem rgba(185,140,240,.08), 0 0 1.2rem rgba(185,140,240,.56); }
+.tnic-stage-fallback__core { width: 7%; aspect-ratio: 1; border: 1px solid rgba(255,255,255,.72); border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, var(--cyan) 42%, rgba(95,227,224,.12) 100%); box-shadow: 0 0 0 12px rgba(95,227,224,.06), 0 0 2.2rem rgba(95,227,224,.6); }
+.tnic-stage-fallback__label { position: absolute; left: 22px; top: 20px; display: flex; flex-direction: column; gap: 5px; color: var(--faint); font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 9px; letter-spacing: .16em; line-height: 1.2; text-transform: uppercase; }
+.tnic-stage-fallback__label strong { color: var(--ink); font-size: 11px; font-weight: 500; letter-spacing: .1em; }
+.tnic-stage-placeholder { display: none; }
+@media (max-width: 720px) { .tnic-stage-fallback__label { left: 16px; top: 16px; } }
 
 .tnic-molhint {
   position: absolute; bottom: 12px; right: 14px;
@@ -559,7 +578,8 @@ const CSS = `
 
 .tnic-descent[data-reduced="true"] .bar,
 .tnic-descent[data-reduced="true"] .edge.flow,
-.tnic-descent[data-reduced="true"] .node-pulse { animation: none !important; }
+.tnic-descent[data-reduced="true"] .node-pulse,
+.tnic-descent[data-reduced="true"] .tnic-stage-fallback__orbit { animation: none !important; }
 
 /* Act 4 capstone backdrop — the goal curve from Act 3, mirrored into an
    ascent behind the closing section. Negative z stays inside the act's
@@ -588,6 +608,7 @@ const CSS = `
     transform: none !important;
     transition: none !important;
   }
+  .tnic-descent .tnic-stage-fallback__orbit { animation: none !important; }
 }
 `;
 

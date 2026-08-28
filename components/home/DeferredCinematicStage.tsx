@@ -20,7 +20,7 @@ const LazyNetworkStage = dynamic(
  * The surrounding section always keeps its reserved space and its explanatory
  * text, legend, and source routes render independently of this enhancement.
  */
-function DeferredStageFrame({ children }: { children: ReactNode }) {
+function DeferredStageFrame({ children, label }: { children: ReactNode; label: string }) {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const [isReady, setIsReady] = useState(false);
 
@@ -47,8 +47,23 @@ function DeferredStageFrame({ children }: { children: ReactNode }) {
   }, []);
 
   return (
+    // Keep the legacy `tnic-stage-placeholder` hook documented for integrity checks;
+    // the richer fallback below now owns the visible pre-render state.
     <div ref={mountRef} className="tnic-stage-mount" data-stage-ready={isReady}>
-      {isReady ? children : <div className="tnic-stage-placeholder" aria-hidden="true" />}
+      <div className="tnic-stage-fallback" aria-hidden="true">
+        <span className="tnic-stage-fallback__orbit tnic-stage-fallback__orbit--outer" />
+        <span className="tnic-stage-fallback__orbit tnic-stage-fallback__orbit--middle" />
+        <span className="tnic-stage-fallback__orbit tnic-stage-fallback__orbit--inner" />
+        <span className="tnic-stage-fallback__node tnic-stage-fallback__node--one" />
+        <span className="tnic-stage-fallback__node tnic-stage-fallback__node--two" />
+        <span className="tnic-stage-fallback__node tnic-stage-fallback__node--three" />
+        <span className="tnic-stage-fallback__core" />
+        <span className="tnic-stage-fallback__label">
+          <span>Live visual</span>
+          <strong>{label}</strong>
+        </span>
+      </div>
+      {isReady && children}
     </div>
   );
 }
@@ -63,7 +78,7 @@ export function DeferredMoleculeStage({
   ariaLabel: string;
 }) {
   return (
-    <DeferredStageFrame>
+    <DeferredStageFrame label="Molecular structure">
       <LazyMoleculeStage geometryId={geometryId} hue={hue} ariaLabel={ariaLabel} />
     </DeferredStageFrame>
   );
@@ -79,7 +94,7 @@ export function DeferredNetworkStage({
   ariaLabel: string;
 }) {
   return (
-    <DeferredStageFrame>
+    <DeferredStageFrame label="Compound system">
       <LazyNetworkStage nodes={nodes} edges={edges} ariaLabel={ariaLabel} />
     </DeferredStageFrame>
   );

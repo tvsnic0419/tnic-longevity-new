@@ -50,3 +50,11 @@ The final production build correctly parses the representative NICO handoff (`gl
 The final Stack Architect view confirms that the new `ActionCard` component provides a materially stronger entry experience: the recommended NICO path uses a focused accent treatment, clear purpose label, outcome text, and directional action marker, while the curated and build paths remain calm supporting options. The component is responsive in a three-column desktop grid and retains strong visual differentiation from the surrounding workbench surface. The upgraded shared decision rail now provides an explicit `Recommended` state and action labels such as `Start here` and `Explore`, which makes the first action more legible without removing alternate routes.
 
 The final library visual review confirms that the upgraded decision rail remains compact and balanced beneath the dedicated evidence-search surface. The recommended search path has a distinct but restrained accent rule and badge, while the two secondary routes preserve equal readability and clear `Explore` calls to action. The shared styling is consistent with the new Stack Architect action cards and retains the product’s evidence-first visual language.
+
+## Live quality audit — homepage stage
+
+The live homepage has strong editorial hierarchy and a polished arrival sequence, but the first scroll into the molecule act currently exposes a large dark stage that can read as empty before or without the canvas render. The explanatory copy remains low-contrast during that state. This is the highest-leverage remaining quality opportunity: the visual stage needs a deterministic, attractive fallback that communicates the molecule/system concept even when the optional canvas is delayed, unsupported, or still initializing.
+
+## Local production QA — homepage stage fallback
+
+The rebuilt local homepage now shows the molecule act as a composed instrument even while the optional renderer initializes. The stage has a visible `Live visual / Molecular structure` label, orbital rings, illuminated nodes, a central core, and a restrained grid, while the live resveratrol canvas renders over the same surface when available. The adjacent data card remains legible and the visual no longer reads as an empty dark rectangle.
