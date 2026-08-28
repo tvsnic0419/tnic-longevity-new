@@ -80,6 +80,32 @@ export function Footer() {
 
         <FooterBriefSubscribe />
 
+        <section className="mb-12 rounded-3xl border border-accent-cyan/20 bg-accent-cyan/[0.045] p-5 md:p-6" aria-labelledby="footer-start-heading">
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-xl">
+              <p className="text-label mb-2 text-accent-cyan">Choose your next step</p>
+              <h2 id="footer-start-heading" className="font-display text-2xl tracking-tight text-foreground md:text-3xl">Start with the question you actually have.</h2>
+              <p className="mt-2 text-body-sm">Use the shortest path to the evidence, comparison, or starting point you need.</p>
+            </div>
+            <Link href="/site-map" className="focus-ring inline-flex shrink-0 items-center gap-2 rounded-xl border border-border/70 px-4 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-accent-cyan/50 hover:text-accent-cyan">
+              View the full map <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+          <div className="mt-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { href: '/supplement-guides', label: 'Understand a supplement', detail: 'Mechanism, human evidence, and cautions' },
+              { href: '/best', label: 'Find by goal', detail: 'Goal-led shortlists without hype' },
+              { href: '/library', label: 'Explore the library', detail: 'Compounds, hallmarks, and comparisons' },
+              { href: '/nico', label: 'Build a starting point', detail: 'A free, adjustable questionnaire' },
+            ].map((link) => (
+              <Link key={link.href} href={link.href} className="focus-ring group rounded-2xl border border-border/60 bg-background/25 p-4 transition-colors hover:border-accent-cyan/40 hover:bg-accent-cyan/[0.07]">
+                <span className="block text-sm font-semibold text-foreground group-hover:text-accent-cyan">{link.label}</span>
+                <span className="mt-1 block text-caption leading-relaxed">{link.detail}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+
         <div className="grid sm:grid-cols-2 lg:grid-cols-6 gap-8 lg:gap-10 mb-10">
           <div className="sm:col-span-2 lg:col-span-1">
             {/* No aria-label here — see the matching comment in Nav.tsx. */}

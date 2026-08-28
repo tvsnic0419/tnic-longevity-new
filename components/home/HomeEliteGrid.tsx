@@ -148,18 +148,18 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
           <div className="flex flex-col gap-2">
             <div className="grid grid-cols-2 gap-2">
               <Link
-                href={`/stacks?stack=${intervention.compoundId}&from=elite-home`}
+                href={intervention.libraryHref}
                 className="focus-ring tnic-button-primary inline-flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-sm"
+              >
+                <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
+                Read evidence
+              </Link>
+              <Link
+                href={`/stacks?stack=${intervention.compoundId}&from=elite-home`}
+                className="elite-card-action-secondary focus-ring inline-flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold"
               >
                 <FlaskConical className="h-3.5 w-3.5" aria-hidden="true" />
                 Build a stack
-              </Link>
-              <Link
-                href={intervention.libraryHref}
-                className="elite-card-action-secondary focus-ring inline-flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold"
-              >
-                <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
-                Evidence
               </Link>
             </div>
             <a
@@ -167,7 +167,7 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
               target="_blank"
               rel="noopener noreferrer sponsored"
               className="elite-card-action-verify focus-ring group/buy inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-semibold"
-              aria-label={`Buy ${pick.productName} from ${pick.brand} — opens manufacturer site`}
+              aria-label={`Check ${pick.productName} from ${pick.brand} — opens manufacturer site after evidence review`}
             >
               Verify on {brandShort}
               <ExternalLink className="h-3.5 w-3.5 transition-transform duration-200 group-hover/buy:-translate-y-0.5 group-hover/buy:translate-x-0.5" aria-hidden="true" />

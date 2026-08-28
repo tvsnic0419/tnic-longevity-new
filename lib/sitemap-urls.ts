@@ -8,7 +8,10 @@ import { getAllBestForSlugs } from '@/lib/best-for';
 import { toolsRegistry } from '@/lib/registry';
 import { SITE } from '@/lib/site';
 
-export const DEFAULT_SITEMAP_LAST_MODIFIED = new Date('2026-07-05T00:00:00.000Z');
+// Keep the sitemap's default freshness aligned with the current editorial release.
+// Authenticated or utility-only surfaces are excluded below so crawl equity stays
+// concentrated on public, search-intent pages.
+export const DEFAULT_SITEMAP_LAST_MODIFIED = new Date('2026-08-27T00:00:00.000Z');
 
 export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED): MetadataRoute.Sitemap {
   const base = SITE.url;
@@ -30,25 +33,22 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     { url: `${base}/protocols`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/labs`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/tools`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${base}/elite-8`, lastModified, changeFrequency: 'monthly', priority: 0.75 },
+    { url: `${base}/elite-8`, lastModified, changeFrequency: 'monthly', priority: 0.88 },
     { url: `${base}/compound-engine`, lastModified, changeFrequency: 'monthly', priority: 0.82 },
     { url: `${base}/tools/pathway-architect`, lastModified, changeFrequency: 'monthly', priority: 0.82 },
-    { url: `${base}/dashboard`, lastModified, changeFrequency: 'weekly', priority: 0.92 },
     { url: `${base}/nico`, lastModified, changeFrequency: 'weekly', priority: 0.94 },
     { url: `${base}/best`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/shop`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/products`, lastModified, changeFrequency: 'weekly', priority: 0.87 },
-    { url: `${base}/supplement-guides`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${base}/longevity-supplements-guide`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${base}/nad-supplement-guide`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
-    { url: `${base}/glynac-supplement-guide`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
+    { url: `${base}/supplement-guides`, lastModified, changeFrequency: 'weekly', priority: 0.96 },
+    { url: `${base}/longevity-supplements-guide`, lastModified, changeFrequency: 'weekly', priority: 0.98 },
+    { url: `${base}/nad-supplement-guide`, lastModified, changeFrequency: 'weekly', priority: 0.94 },
+    { url: `${base}/glynac-supplement-guide`, lastModified, changeFrequency: 'weekly', priority: 0.92 },
     { url: `${base}/berberine-supplement-guide`, lastModified, changeFrequency: 'weekly', priority: 0.86 },
     { url: `${base}/taurine-supplement-guide`, lastModified, changeFrequency: 'weekly', priority: 0.86 },
     { url: `${base}/sulforaphane-supplement-guide`, lastModified, changeFrequency: 'weekly', priority: 0.86 },
     { url: `${base}/spermidine-supplement-guide`, lastModified, changeFrequency: 'weekly', priority: 0.86 },
-    { url: `${base}/brief`, lastModified, changeFrequency: 'weekly', priority: 0.82 },
-    { url: `${base}/brief/feed.xml`, lastModified, changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${base}/brief/feed.json`, lastModified, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${base}/brief`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/contact`, lastModified, changeFrequency: 'monthly', priority: 0.75 },
     { url: `${base}/partnerships`, lastModified, changeFrequency: 'monthly', priority: 0.74 },
     { url: `${base}/site-map`, lastModified, changeFrequency: 'weekly', priority: 0.75 },

@@ -6,7 +6,7 @@ import { libraryModules } from './library-modules';
 import { hallmarkLibrary } from './hallmarks-library';
 import { ELITE_8_COMPOUNDS } from './elite-8-data';
 import { citationRegistry } from './trust';
-import { buildSitemapEntries } from './sitemap-urls';
+import { buildSitemapEntries, DEFAULT_SITEMAP_LAST_MODIFIED } from './sitemap-urls';
 import { PRIORITY_INDEX_PATHS } from './index-priority';
 import { CANONICAL_SITE_URL } from './site';
 
@@ -44,6 +44,30 @@ describe('site data integrity', () => {
     }
   });
 
+  it('keeps crawl equity focused on fresh public search-intent routes', () => {
+    const entries = buildSitemapEntries();
+    const paths = entries.map((entry) => new URL(entry.url).pathname);
+    expect(DEFAULT_SITEMAP_LAST_MODIFIED.toISOString()).toBe('2026-08-27T00:00:00.000Z');
+    expect(paths).not.toContain('/dashboard');
+    expect(paths).not.toContain('/brief/feed.xml');
+    expect(paths).not.toContain('/brief/feed.json');
+    expect(entries.find((entry) => new URL(entry.url).pathname === '/longevity-supplements-guide')?.priority).toBe(0.98);
+    expect(entries.find((entry) => new URL(entry.url).pathname === '/supplement-guides')?.priority).toBe(0.96);
+  });
+
+  it('protects the high-intent homepage and commercial decision surfaces', () => {
+    const home = readFileSync(resolve(process.cwd(), 'components/home/HomeDescent.tsx'), 'utf8');
+    const cards = readFileSync(resolve(process.cwd(), 'components/home/HomeEliteGrid.tsx'), 'utf8');
+    const footer = readFileSync(resolve(process.cwd(), 'components/Footer.tsx'), 'utf8');
+    const guideHub = readFileSync(resolve(process.cwd(), 'app/supplement-guides/page.tsx'), 'utf8');
+    expect(home).toContain('Evidence-based');
+    expect(home).toContain('No pay-for-placement');
+    expect(cards).toContain('Read evidence');
+    expect(cards).toContain('after evidence review');
+    expect(footer).toContain('Start with the question you actually have.');
+    expect(guideHub).toContain("title: 'Longevity Supplement Guides 2026 — Evidence-Based Deep Dives'");
+  });
+
   it('every statically-routable app page is present in the sitemap', () => {
     // Walks app/ for directories with a page.tsx, skipping api routes and any
     // dynamic ([slug]) or route-group ((group)) segment — those are either
@@ -77,7 +101,9 @@ describe('site data integrity', () => {
     // It carries robots noindex/nofollow and is kept out of the sitemap and nav
     // on purpose — reachable only by its URL and one discreet footer link — so
     // it must be excluded from the "every page must be sitemapped" guarantee.
-    const UNLISTED_BY_DESIGN = new Set(['/sheepeople']);
+    // The authenticated dashboard is also intentionally excluded: it is a
+    // private utility surface, not an organic landing page.
+    const UNLISTED_BY_DESIGN = new Set(['/sheepeople', '/dashboard']);
 
     const staticRoutes = collectStaticPageRoutes(resolve(process.cwd(), 'app'));
     const sitemapPaths = new Set(buildSitemapEntries().map((e) => new URL(e.url).pathname));
