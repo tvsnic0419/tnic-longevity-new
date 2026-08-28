@@ -1,5 +1,7 @@
 import type { JourneyMilestone } from './types';
 
+import { ELITE_8_COMPOUNDS } from './elite-8-data';
+
 /** TNiC founder/platform journey — N=1 labeled */
 export const journeyMilestones: JourneyMilestone[] = [
   {
@@ -71,7 +73,7 @@ export const journeyMilestones: JourneyMilestone[] = [
     title: 'Elite 8 + Tier B Expansion',
     type: 'platform',
     desc: 'Longevity Quotient ranking tool at /elite-8; Taurine, Spermidine, and Pterostilbene added as Tier B library compounds with full safety profiles.',
-    metric: '9 compounds · /elite-8 live',
+    metric: `${ELITE_8_COMPOUNDS.length} compounds · /elite-8 live`,
     personal: false,
   },
 ];
