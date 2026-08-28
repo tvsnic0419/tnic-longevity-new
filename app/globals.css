@@ -3925,3 +3925,638 @@ p,
   .elite-briefing-grid > div::before,
   .elite-section-secondary-action { transition: none; }
 }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Research Instrument Foundation — flagship hub arrival system
+   Shared by <CinematicHubHero/>. The old component-local hero CSS carried
+   dark-only values and a loose decorative stat row. This system is deliberately
+   global and token-driven so 20+ major hub surfaces gain one coherent, theme-
+   correct hierarchy: quiet atmosphere → proof → action.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.research-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  color: var(--color-text-primary);
+  background:
+    radial-gradient(82% 100% at 8% 6%, color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 18%, transparent), transparent 66%),
+    radial-gradient(56% 78% at 92% 28%, color-mix(in srgb, var(--accent-emerald) 8%, transparent), transparent 70%),
+    linear-gradient(180deg, color-mix(in srgb, var(--color-bg-elevated) 86%, var(--color-bg-base)), var(--color-bg-base));
+  border-bottom: 1px solid color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 14%, var(--color-border-subtle));
+}
+
+.research-hero__field {
+  position: absolute;
+  inset: -14% -4% -20%;
+  z-index: 0;
+  opacity: 0.34;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(74% 82% at 48% 34%, #000 0%, transparent 76%);
+  mask-image: radial-gradient(74% 82% at 48% 34%, #000 0%, transparent 76%);
+}
+
+.research-hero__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--color-bg-base) 14%, transparent), transparent 62%),
+    linear-gradient(180deg, transparent 8%, color-mix(in srgb, var(--color-bg-base) 88%, transparent) 100%);
+}
+
+.research-hero__inner {
+  position: relative;
+  z-index: 2;
+  padding-block: clamp(5.25rem, 10vw, 8.75rem) clamp(3.5rem, 7vw, 6.5rem);
+}
+
+.research-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1.125rem;
+  color: var(--research-hero-accent, var(--accent-cyan));
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.research-hero__eyebrow::before {
+  content: '';
+  width: 2rem;
+  height: 1px;
+  background: currentColor;
+  box-shadow: 0 0 12px color-mix(in srgb, currentColor 40%, transparent);
+}
+
+.research-hero__title {
+  max-width: 18ch;
+  margin: 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-display);
+  font-size: clamp(2.7rem, 6vw, 5.6rem);
+  font-weight: 450;
+  letter-spacing: -0.042em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.research-hero__title em {
+  color: var(--research-hero-accent, var(--accent-cyan));
+  font-style: italic;
+}
+
+.research-hero__lead {
+  max-width: 58ch;
+  margin: 1.35rem 0 0;
+  color: var(--color-text-secondary);
+  font-size: clamp(1rem, 1vw + 0.7rem, 1.1875rem);
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+.research-hero__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10.5rem), 1fr));
+  width: min(100%, 50rem);
+  margin-top: clamp(1.75rem, 3.5vw, 2.5rem);
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 20%, var(--color-border-subtle));
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 14%, var(--color-border-subtle));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 10%, transparent),
+    0 18px 54px -32px color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 45%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(1.12);
+  backdrop-filter: blur(18px) saturate(1.12);
+}
+
+.research-hero__stat {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto auto;
+  align-items: baseline;
+  column-gap: 0.625rem;
+  min-width: 0;
+  padding: 1rem 1.1rem 0.95rem;
+  color: inherit;
+  background: color-mix(in srgb, var(--color-bg-elevated) 78%, transparent);
+}
+
+
+.research-hero__stat::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 1rem;
+  left: 1rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 48%, transparent), transparent);
+  opacity: 0.8;
+}
+
+.research-hero__stat-index {
+  grid-row: 1 / span 2;
+  color: color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 72%, var(--color-text-faint));
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.research-hero__stat-value {
+  min-width: 0;
+  color: var(--research-hero-accent, var(--accent-cyan));
+  font-family: var(--font-display);
+  font-size: clamp(1.55rem, 2.8vw, 2.25rem);
+  font-weight: 520;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  text-shadow: 0 0 24px color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 24%, transparent);
+}
+
+.research-hero__stat-label {
+  grid-column: 2 / span 2;
+  margin-top: 0.35rem;
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.115em;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.research-hero__stat-arrow {
+  align-self: center;
+  color: var(--research-hero-accent, var(--accent-cyan));
+  font-size: 1rem;
+  opacity: 0;
+  transform: translateX(-0.25rem);
+  transition: transform var(--dur-fast) var(--ease-standard), opacity var(--dur-fast) var(--ease-standard);
+}
+
+.research-hero__stat--link {
+  text-decoration: none;
+  transition: background-color var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard);
+}
+
+@media (hover: hover) {
+  .research-hero__stat--link:hover {
+    background: color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 8%, transparent);
+  }
+  .research-hero__stat--link:hover .research-hero__stat-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .research-hero__stat--link:hover .research-hero__stat-label {
+    color: var(--color-text-secondary);
+  }
+}
+
+.research-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: clamp(1.6rem, 3vw, 2.25rem);
+}
+
+.research-hero__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  min-height: 3rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: 0.875rem;
+  font-size: 0.9375rem;
+  font-weight: 650;
+  text-decoration: none;
+  transition: transform var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard), background-color var(--dur-fast) var(--ease-standard);
+}
+
+.research-hero__action--primary {
+  color: #03100c;
+  background: linear-gradient(135deg, var(--research-hero-accent, var(--accent-cyan)) 0%, color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 54%, var(--accent-emerald)) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 12px 30px -16px color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 72%, transparent);
+}
+
+.research-hero__action--secondary {
+  color: var(--color-text-primary);
+  border: 1px solid color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 26%, var(--color-border-strong));
+  background: color-mix(in srgb, var(--color-bg-elevated) 68%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.research-hero__action-arrow {
+  transition: transform var(--dur-fast) var(--ease-standard);
+}
+
+@media (hover: hover) {
+  .research-hero__action:hover { transform: translateY(-2px); }
+  .research-hero__action--primary:hover {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      0 18px 40px -16px color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 86%, transparent);
+  }
+  .research-hero__action--secondary:hover {
+    border-color: color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 55%, var(--color-border-strong));
+    background: color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 9%, var(--color-bg-elevated));
+  }
+  .research-hero__action--primary:hover .research-hero__action-arrow { transform: translateX(0.2rem); }
+}
+
+.research-hero__action:active { transform: scale(0.975); }
+
+@media (max-width: 58rem) {
+  .research-hero__stats { width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 40rem) {
+  .research-hero__inner { padding-block: 4.25rem 3.25rem; }
+  .research-hero__title { font-size: clamp(2.4rem, 12vw, 3.4rem); }
+  .research-hero__lead { margin-top: 1.1rem; font-size: 1rem; }
+  .research-hero__stats { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 1.5rem; }
+  .research-hero__stat { padding: 0.85rem 0.8rem; column-gap: 0.45rem; }
+  .research-hero__stat::before { right: 0.75rem; left: 0.75rem; }
+  .research-hero__stat-value { font-size: 1.55rem; }
+  .research-hero__stat-label { font-size: 0.54rem; letter-spacing: 0.08em; }
+  .research-hero__actions { display: grid; grid-template-columns: 1fr; gap: 0.625rem; margin-top: 1.5rem; }
+  .research-hero__action { width: 100%; min-height: 2.875rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .research-hero__stat,
+  .research-hero__stat-arrow,
+  .research-hero__action,
+  .research-hero__action-arrow { transition: none; }
+}
+
+
+/* ── Research Instrument workspace cue ─────────────────────────────────────
+   The persistent ContextBar is orientation, not another primary nav. These
+   styles keep its function visible while reducing visual weight above every hub
+   arrival surface. */
+.context-bar {
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text-primary) 7%, transparent);
+  background: color-mix(in srgb, var(--color-bg-base) 88%, transparent);
+  box-shadow: 0 12px 30px -26px color-mix(in srgb, #000 72%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(1.15);
+  backdrop-filter: blur(16px) saturate(1.15);
+}
+
+.context-bar__inner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 2.75rem;
+  padding-block: 0.4rem;
+}
+
+.context-bar__crumbs,
+.context-bar__workspace,
+.context-bar__crumb-list,
+.context-bar__crumb {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.context-bar__crumbs { gap: 0.45rem; }
+.context-bar__crumb-list { gap: 0.35rem; }
+.context-bar__crumb { gap: 0.35rem; min-width: 0; }
+.context-bar__pin { width: 0.8rem; height: 0.8rem; flex: none; opacity: 0.8; }
+.context-bar__separator { width: 0.7rem; height: 0.7rem; flex: none; color: var(--color-text-faint); opacity: 0.55; }
+
+.context-bar__crumb-link,
+.context-bar__current {
+  overflow: hidden;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.context-bar__crumb-link {
+  max-width: 9.25rem;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+.context-bar__crumb-link:hover { color: var(--color-text-primary); }
+
+.context-bar__current {
+  max-width: 14rem;
+  color: var(--color-text-primary);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.context-bar__workspace {
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.context-bar__status {
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.context-bar__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2rem;
+  padding: 0.35rem 0.6rem 0.35rem 0.7rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  background: color-mix(in srgb, currentColor 8%, transparent);
+  color: var(--accent-cyan);
+  font-size: 0.75rem;
+  font-weight: 650;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard);
+}
+
+.context-bar__action-arrow { width: 0.8rem; height: 0.8rem; transition: transform var(--dur-fast) var(--ease-standard); }
+
+@media (hover: hover) {
+  .context-bar__action:hover {
+    background: color-mix(in srgb, currentColor 14%, transparent);
+    box-shadow: 0 6px 18px -12px currentColor;
+    transform: translateY(-1px);
+  }
+  .context-bar__action:hover .context-bar__action-arrow { transform: translateX(0.14rem); }
+}
+.context-bar__action:active { transform: scale(0.97); }
+
+@media (max-width: 48rem) {
+  .context-bar__inner { gap: 0.6rem; min-height: 2.55rem; }
+  .context-bar__crumb-link { max-width: 4.25rem; }
+  .context-bar__current { max-width: 6.75rem; }
+  .context-bar__status { display: none; }
+}
+
+@media (max-width: 29rem) {
+  .context-bar__pin { display: none; }
+  .context-bar__crumbs { gap: 0; }
+  .context-bar__crumb-list > .context-bar__crumb:not(:last-child) { display: none; }
+  .context-bar__current { max-width: 8.5rem; }
+  .context-bar__workspace { gap: 0.25rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .context-bar__crumb-link,
+  .context-bar__action,
+  .context-bar__action-arrow { transition: none; }
+}
+
+
+/* ── Research Instrument decision switchboard ──────────────────────────────
+   A single, task-forward surface for the first decision on high-intent hubs.
+   It replaces nested card treatment with a coherent working panel. */
+.decision-switchboard {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 20%, var(--color-border-subtle));
+  border-radius: var(--radius-2xl);
+  background:
+    radial-gradient(80% 140% at 100% 0%, color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 10%, transparent), transparent 60%),
+    color-mix(in srgb, var(--color-bg-elevated) 96%, var(--color-bg-base));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 10%, transparent),
+    var(--glass-shadow-float);
+}
+
+.decision-switchboard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 1.5rem;
+  left: 1.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 68%, transparent), transparent);
+}
+
+.decision-switchboard__intro {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: clamp(1.35rem, 3vw, 2rem) clamp(1.25rem, 3vw, 2rem) 1.25rem;
+}
+
+.decision-switchboard__eyebrow,
+.decision-switchboard__note {
+  margin: 0;
+  color: var(--decision-accent, var(--accent-cyan));
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.decision-switchboard__title {
+  max-width: 30ch;
+  margin: 0.45rem 0 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-display);
+  font-size: clamp(1.55rem, 2.4vw, 2.15rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+.decision-switchboard__detail {
+  max-width: 64ch;
+  margin: 0.65rem 0 0;
+  color: var(--color-text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.decision-switchboard__note {
+  flex: none;
+  align-self: flex-start;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 20%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 7%, transparent);
+  color: var(--color-text-faint);
+}
+
+.decision-switchboard__steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 14%, var(--color-border-subtle));
+  list-style: none;
+}
+
+.decision-switchboard__steps > li + li {
+  border-left: 1px solid color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 14%, var(--color-border-subtle));
+}
+
+.decision-switchboard__step {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 0.65rem;
+  min-height: 100%;
+  padding: 1.1rem 1.15rem 1.2rem;
+  color: inherit;
+}
+
+.decision-switchboard__step--link {
+  text-decoration: none;
+  transition: background-color var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard);
+}
+
+.decision-switchboard__number {
+  margin-top: 0.12rem;
+  color: color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 72%, var(--color-text-faint));
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+}
+
+.decision-switchboard__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border: 1px solid color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 22%, transparent);
+  border-radius: 0.6rem;
+  background: color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 10%, transparent);
+  color: var(--decision-accent, var(--accent-cyan));
+}
+
+.decision-switchboard__copy { min-width: 0; }
+.decision-switchboard__step-title { display: block; color: var(--color-text-primary); font-size: 0.875rem; font-weight: 675; line-height: 1.3; }
+.decision-switchboard__step-detail { display: block; margin-top: 0.3rem; color: var(--color-text-muted); font-size: 0.75rem; line-height: 1.55; }
+.decision-switchboard__arrow { width: 1rem; height: 1rem; margin-top: 0.33rem; color: var(--decision-accent, var(--accent-cyan)); transition: transform var(--dur-fast) var(--ease-standard); }
+
+@media (hover: hover) {
+  .decision-switchboard__step--link:hover {
+    background: color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 7%, transparent);
+  }
+  .decision-switchboard__step--link:hover .decision-switchboard__arrow { transform: translateX(0.2rem); }
+}
+.decision-switchboard__step--link:active { transform: scale(0.985); }
+
+@media (max-width: 48rem) {
+  .decision-switchboard__note { display: none; }
+  .decision-switchboard__steps { grid-template-columns: 1fr; }
+  .decision-switchboard__steps > li + li { border-top: 1px solid color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 14%, var(--color-border-subtle)); border-left: 0; }
+  .decision-switchboard__step { grid-template-columns: auto auto minmax(0, 1fr) auto; padding: 0.95rem 1.1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .decision-switchboard__step--link,
+  .decision-switchboard__arrow { transition: none; }
+}
+
+
+/* ── Research Instrument workbench handoff ─────────────────────────────────
+   Used by PageHeader after a cinematic hub arrival. Semantic headings and
+   context remain intact, while the visual volume becomes a clear bridge into
+   tools, builders, and task controls. */
+.page-header--handoff {
+  position: relative;
+  max-width: 72rem;
+  margin-top: clamp(-1.25rem, -2vw, -0.5rem);
+  padding: clamp(1.35rem, 3vw, 2rem);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-2xl);
+  background:
+    linear-gradient(120deg, color-mix(in srgb, var(--color-bg-elevated) 94%, var(--accent-cyan) 3%), var(--color-bg-elevated));
+  box-shadow: var(--glass-shadow-mid);
+}
+
+.page-header--handoff::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  border-radius: var(--radius-2xl) 0 0 var(--radius-2xl);
+  background: linear-gradient(180deg, var(--accent-cyan), var(--accent-emerald));
+  opacity: 0.78;
+}
+
+.page-header__eyebrow--handoff {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  color: var(--color-text-faint);
+}
+
+.page-header__handoff-title {
+  max-width: 24ch;
+  margin: 0.6rem 0 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 520;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.page-header__handoff-description {
+  max-width: 62ch;
+  margin: 0.7rem 0 0;
+  color: var(--color-text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.62;
+  text-wrap: pretty;
+}
+
+@media (max-width: 40rem) {
+  .page-header--handoff { margin-top: -0.5rem; padding: 1.15rem 1.1rem; }
+  .page-header__handoff-title { font-size: clamp(1.6rem, 8vw, 2rem); }
+}
+
+
+/* Light mode keeps the molecular stage atmospheric, not visible through data
+   surfaces. Solid elevated work planes preserve the designed hierarchy and
+   prevent the proof rail from breaking into dark islands. */
+[data-theme='light'] .research-hero__stats {
+  background: color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 16%, var(--color-border-subtle));
+  box-shadow: 0 18px 54px -34px color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 35%, transparent);
+}
+[data-theme='light'] .research-hero__stat {
+  background: color-mix(in srgb, var(--color-bg-elevated) 96%, var(--research-hero-accent, var(--accent-cyan)) 4%);
+}
+[data-theme='light'] .research-hero__action--secondary {
+  background: color-mix(in srgb, var(--color-bg-elevated) 94%, var(--research-hero-accent, var(--accent-cyan)) 6%);
+}
