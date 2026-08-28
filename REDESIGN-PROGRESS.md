@@ -25,6 +25,47 @@ Everything else recent was already merged. ~90 older branches (44–190
 commits behind `main`, mostly July dates, pre-dating this initiative) are
 dead — not evaluated individually, not touched.
 
+## 2026-08-28 — mobile GPU paint budget for the always-on blur layers
+
+A performance pass on the *visual* layer (no restyle). Audit finding: the
+site's heaviest continuous graphics cost is the always-on ambient field
+(`.ambient-layer` — three `filter: blur(90px)` aurora orbs + a drifting
+molecule cascade, on 100% of pages) plus the per-hub `.hub-hero-field`
+(two `blur(60px)` orbs). The codebase already established a "halve blur cost on
+phones, that's where it janks" budget for the glass surfaces
+(`.glass-deep`, `@media (max-width: 767px)`, globals.css) but **never extended
+it to these `filter: blur()` layers** — they rendered identical blur radii on a
+320px phone and a 5K display. Extended the same pattern:
+
+- `.ambient-orb` blur `90px → 60px` on ≤767px (radius only; ~55% cheaper raster
+  — blur cost scales with radius² — and imperceptible as a background wash at
+  ~55vw). `.molecule-cascade` drops its full-viewport `drop-shadow` filter
+  region on phones (imperceptible at the field's 0.09–0.2 opacity).
+- `.hub-hero-field::before/::after` blur `60px → 38px` on ≤767px.
+- `.ambient-layer` gained `contain: layout paint` — it already clips to itself
+  (`overflow: hidden`) and owns a stacking context (`fixed` + `z-index:0`), so
+  this is zero visual change; it just keeps the always-animating subtree off the
+  document's layout/paint invalidation path.
+
+Nothing hidden or repositioned; reduced-motion still freezes all of it. Dead
+CSS `.aurora-beams` (defined, used nowhere) left untouched.
+
+**`content-visibility: auto` — evaluated and deliberately NOT adopted.** It's
+the biggest modern rendering lever and is unused here, but it forces
+`contain: paint` (clips descendant painting to the box) *even on-screen*, and
+this site leans on outset decoration everywhere: `CellularDivider` chapter
+glyphs sit `absolute top-0 -translate-y-1/2` (half above each home section),
+`.premium-card:hover` lifts + glows past its box, `--footer-lift-shadow` casts
+up above the footer. Applying cv:auto to those surfaces would clip that
+decoration — a real regression. Safe adoption needs per-target restructuring
+(a non-overflowing inner wrapper), so it's a deferred content-visibility item,
+not a mechanical retrofit. Recorded so a future session doesn't ship the naïve
+version.
+
+Verified: lint 0 errors, typecheck clean, 648/648 tests, clean build (427
+routes), all three rules confirmed in the compiled CSS bundle bound to the
+right selectors. Rollback: `git revert <sha>` (single CSS + this note).
+
 ## PR #125 — nav scroll bug + overflow fix + packshot normalization (merged 2026-08-24)
 
 1. **Nav lost its backdrop on scroll, sitewide.** `.nav-glass-scrolled`
