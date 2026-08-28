@@ -151,6 +151,16 @@ const CSS = `
   opacity: 0; transform: translateY(16px);
   transition: opacity 1s ease .2s, transform 1s ease .2s;
 }
+.tnic-trustline {
+  display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 18px;
+  max-width: 720px; color: var(--faint);
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+  opacity: 0; transform: translateY(12px);
+  transition: opacity 1s ease .3s, transform 1s ease .3s;
+}
+.tnic-trustline span { display: inline-flex; align-items: center; gap: 7px; }
+.tnic-trustline span::before { content: '•'; color: var(--cyan); font-size: 14px; line-height: 0; }
 .tnic-note {
   font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
   font-size: 11.5px; letter-spacing: .04em; color: var(--faint);
@@ -162,6 +172,7 @@ const CSS = `
 .is-in .tnic-h1,
 .is-in .tnic-h2,
 .is-in .tnic-lead,
+.is-in .tnic-trustline,
 .is-in .tnic-note,
 .is-in .tnic-stage,
 .is-in .tnic-molcard,
@@ -946,12 +957,18 @@ export function HomeDescent() {
       {/* ACT 0 — ARRIVE */}
       <section ref={s0} data-idx="0" className="tnic-act tnic-hero is-in">
         <p className="tnic-kicker">Evidence-Graded Longevity Library</p>
-        <h1 className="tnic-h1">See what{' '}<br />you&apos;re <em>protecting</em>.</h1>
+        <h1 className="tnic-h1">Evidence-based <em>longevity</em>,<br />without the hype.</h1>
         <p className="tnic-lead">
-          You can&apos;t feel a cell aging. So we made it visible — the real biology
-          behind your stack, rendered instead of promised. Five scenes. One
-          continuous descent, from a molecule to the life it defends.
+          A free, PubMed-backed library for understanding longevity supplements,
+          the 12 Hallmarks of Aging, and the evidence behind each compound —
+          before you buy or build a stack.
         </p>
+        <div className="tnic-trustline" aria-label="TNiC trust signals">
+          <span>Human evidence graded</span>
+          <span>PubMed citations</span>
+          <span>No pay-for-placement</span>
+          <span>Free and privacy-first</span>
+        </div>
         <div className="tnic-hero-badges">
           <Link href="/elite-8" className="pill"><span className="dot" /><b>{eliteInterventions.length}</b>&nbsp;elite interventions</Link>
           <Link href="/library/compounds" className="pill"><span className="dot" /><b>{COMPOUND_COUNT}</b>&nbsp;graded compounds</Link>

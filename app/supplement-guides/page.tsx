@@ -14,7 +14,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 
 export const metadata: Metadata = buildPageMetadata({
-  title: 'Longevity Supplement Guides 2026 — Evidence-Based Deep Dives | TNiC',
+  title: 'Longevity Supplement Guides 2026 — Evidence-Based Deep Dives',
   description:
     'Comprehensive supplement guides covering NAD+, GlyNAC, berberine, taurine, sulforaphane, and more. Each guide covers the clinical evidence, optimal dosing, and how each compound targets specific hallmarks of aging.',
   path: '/supplement-guides',
