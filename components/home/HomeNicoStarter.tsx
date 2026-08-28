@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, type CSSProperties } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { ArrowRight, FlaskConical, ClipboardList, Sparkles, RotateCcw } from 'lucide-react';
 import {
@@ -90,13 +90,7 @@ export function HomeNicoStarter() {
       ? `/stacks?stack=${result.compoundIds.join(',')}&from=nico`
       : '/stacks';
 
-  const singleClass = (on: boolean) =>
-    [
-      'focus-ring interactive rounded-xl border px-4 py-3 text-sm font-semibold transition-all',
-      on
-        ? 'border-accent-violet bg-accent-violet/10 text-accent-violet'
-        : 'border-border bg-card/50 text-foreground hover:border-foreground/40 hover:bg-card/80',
-    ].join(' ');
+  const singleClass = (on: boolean) => ['nico-opt focus-ring interactive', on ? 'is-on' : ''].join(' ');
 
   return (
     <section
@@ -119,10 +113,12 @@ export function HomeNicoStarter() {
           </p>
         </RevealItem>
 
-        <div
-          className="premium-card mx-auto max-w-2xl p-6 md:p-8"
-          style={{ '--card-accent': 'var(--accent-violet)' } as CSSProperties}
-        >
+        <div className="nico-console mx-auto max-w-2xl">
+          <div className="nico-console__head">
+            <span className="nico-console__dot" aria-hidden="true" />
+            NICO engine · runs on your device
+          </div>
+          <div className="nico-console__body">
           {!result ? (
             <div className="space-y-7">
               <fieldset>
@@ -180,10 +176,7 @@ export function HomeNicoStarter() {
                         // already no-ops once three are selected.
                         aria-disabled={atLimit}
                         onClick={() => toggleFocus(f.id)}
-                        className={[
-                          singleClass(on),
-                          atLimit ? 'opacity-40 cursor-not-allowed' : '',
-                        ].join(' ')}
+                        className={[singleClass(on), atLimit ? 'is-limit' : ''].join(' ')}
                       >
                         {f.label}
                       </button>
@@ -284,6 +277,7 @@ export function HomeNicoStarter() {
               </p>
             </div>
           )}
+          </div>
         </div>
 
         <ul className="mx-auto mt-8 flex max-w-2xl flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">

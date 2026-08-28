@@ -7,6 +7,8 @@ import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { RevealItem } from '@/components/ui/RevealItem';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { getHallmarkVisual } from '@/lib/hallmark-visuals';
+import { HallmarkIcon } from '@/components/library/HallmarkIcon';
 
 export const metadata: Metadata = {
   title: '12 Hallmarks of Aging | TNiC Longevity Science',
@@ -97,20 +99,33 @@ export default function HallmarksIndexPage() {
                 const hasEditorial = EDITORIAL_SLUGS.has(h.slug);
                 const topIntervention = [...h.interventions].sort((a, b) => a.rank - b.rank)[0];
                 const coverageColor = COVERAGE_COLOR(h.coverage);
+                const { theme, colorVar } = getHallmarkVisual(h.visual);
                 return (
                   <RevealItem key={h.id} index={i} className="h-full">
                     <div
                       className="premium-card h-full p-5"
-                      style={{ ['--card-accent' as string]: 'var(--accent-emerald)' }}
+                      style={{ ['--card-accent' as string]: colorVar }}
                     >
-                      {/* Header */}
-                      <div className="mb-3 flex items-start justify-between gap-2">
-                        <div>
-                          <span className="font-mono text-xs text-muted-foreground">#{h.number}</span>
-                          <h3 className="mt-0.5 font-display text-lg font-medium tracking-tight text-foreground">
-                            {h.title}
-                          </h3>
-                        </div>
+                      {/* Header — icon + ghost index carry the hallmark's own
+                          accent so the grid reads as a color-coded taxonomy,
+                          matching the homepage §04 mechanism cards. */}
+                      <div className="mb-3 flex items-start justify-between gap-3">
+                        <span className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl icon-badge-${theme}`}>
+                          <HallmarkIcon type={h.visual} size={20} ring={false} />
+                        </span>
+                        <span
+                          className="font-display text-3xl font-medium leading-none tabular-nums"
+                          style={{ color: `color-mix(in srgb, ${colorVar} 42%, transparent)` }}
+                          aria-hidden="true"
+                        >
+                          {String(h.number).padStart(2, '0')}
+                        </span>
+                      </div>
+
+                      <div className="mb-3 flex items-baseline justify-between gap-2">
+                        <h3 className="font-display text-lg font-medium tracking-tight text-foreground">
+                          {h.title}
+                        </h3>
                         <span
                           className="shrink-0 font-mono text-xs font-bold tabular-nums"
                           style={{ color: coverageColor }}
