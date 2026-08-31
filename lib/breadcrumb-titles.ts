@@ -26,6 +26,7 @@ import type { ToolId } from './registry';
 export const routeTitles: Record<string, string> = {
   'compound-engine': 'Compound Engine',
   'pathway-architect': 'Pathway Architect',
+  'sirtuin-atlas': 'Sirtuin Atlas',
 };
 
 /**

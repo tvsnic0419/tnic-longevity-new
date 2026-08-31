@@ -8,6 +8,15 @@ import { eliteInterventions } from '@/lib/elite-interventions';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { EvidenceTrace } from '@/components/trust/EvidenceTrace';
 import { RevealItem } from '@/components/ui/RevealItem';
+import { computeTnicScore, scoreBand } from '@/lib/tnic-score';
+
+// Canonical tier accent (A=emerald / B=cyan / C=amber), matching the
+// TnicScorePanel + EvidenceTag so the score reads in one colour language.
+const TIER_ACCENT: Record<'A' | 'B' | 'C', string> = {
+  A: 'var(--accent-emerald)',
+  B: 'var(--accent-cyan)',
+  C: 'var(--accent-amber)',
+};
 
 /**
  * The elite-interventions grid with a hallmark filter (section 03 of the
@@ -57,6 +66,9 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
   const { pick, compoundName, pathway, mechanismLine, evidence, studyCount, dose, hallmarks } =
     intervention;
   const brandShort = pick.brand.split(' ')[0];
+  const tnic = computeTnicScore(intervention.compoundId);
+  const accent = TIER_ACCENT[evidence];
+  const band = tnic.score !== null ? scoreBand(tnic.score) : null;
 
   return (
     <div
@@ -115,6 +127,28 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
                 {hallmarkLabels[h] ?? h}
               </span>
             ))}
+          </div>
+        )}
+
+        {/* TNiC Score — the derived composite as the card's headline evidence
+            metric, tier-coloured, leading into the supporting micro-facts. */}
+        {tnic.score !== null && (
+          <div
+            className="mb-3 flex items-center justify-between gap-3 rounded-lg border px-3.5 py-2.5"
+            style={{
+              borderColor: `color-mix(in srgb, ${accent} 28%, transparent)`,
+              background: `color-mix(in srgb, ${accent} 7%, transparent)`,
+            }}
+          >
+            <span className="font-mono text-micro font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              TNiC Score
+            </span>
+            <span className="flex items-baseline gap-1.5">
+              <span className="font-mono text-xl font-bold tabular-nums" style={{ color: accent }}>
+                {Math.round(tnic.score)}
+              </span>
+              <span className="font-mono text-micro text-muted-foreground">/100{band ? ` · ${band}` : ''}</span>
+            </span>
           </div>
         )}
 
