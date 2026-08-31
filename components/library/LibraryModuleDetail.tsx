@@ -22,6 +22,7 @@ import type { LifestyleSlug } from '@/lib/lifestyle-pillars';
 import { ModuleContextStrip } from './ModuleContextStrip';
 import { CompoundGlancePanel } from './CompoundGlancePanel';
 import { ModuleGlancePanel } from './ModuleGlancePanel';
+import { TnicScorePanel } from './TnicScorePanel';
 import { recordModuleVisit } from '@/lib/recent-modules';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { ContentByline } from '@/components/trust/ContentByline';
@@ -126,6 +127,13 @@ export function LibraryModuleDetail({
 
         <div className="grid lg:grid-cols-12 gap-10">
           <aside className="order-2 lg:order-1 lg:col-span-4 space-y-6">
+            {/* TNiC Score — the derived 0–100 composite, surfaced at the top of
+                the evidence rail. Renders nothing when no source can score the
+                compound (honesty invariant), so library-only entries stay clean. */}
+            {module.category === 'compounds' && module.compoundId && (
+              <TnicScorePanel compoundId={module.compoundId} />
+            )}
+
             {module.category === 'lifestyle' && (
               <LifestylePillarPanel slug={module.slug as LifestyleSlug} />
             )}
