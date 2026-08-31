@@ -156,7 +156,7 @@ export function StackNetworkTool() {
                         <AlertTriangle className="w-3.5 h-3.5 text-accent-amber shrink-0" />
                       )}
                       <div>
-                        <span className="font-semibold text-foreground/90">{e.label}</span>
+                        <span className="font-semibold text-[var(--color-text-secondary)]">{e.label}</span>
                         <p className="text-muted-foreground mt-0.5">{e.detail}</p>
                       </div>
                     </div>

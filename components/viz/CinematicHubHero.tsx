@@ -12,7 +12,12 @@ import { VIZ, FONT, HUES, type RGB } from "./tokens";
 // Content is real: callers pass stats joined from lib data, never invented.
 // ─────────────────────────────────────────────────────────────────────────────
 
-export type HubStat = { value: string; label: string };
+export type HubStat = {
+  value: string;
+  label: string;
+  /** When set, the stat becomes a deep-link to the exact set it counts. */
+  href?: string;
+};
 
 export function CinematicHubHero({
   hue = "violet",
@@ -22,12 +27,22 @@ export function CinematicHubHero({
   stats,
   primary,
   secondary,
+  titleAsHeading = false,
 }: {
   hue?: keyof typeof HUES;
   kicker: string;
   /** Headline; wrap the accent fragment in <em> for the hue-colored italic. */
   title: React.ReactNode;
-  lead: string;
+  /**
+   * Render the cover headline as the page's real `<h1>` instead of a
+   * decorative `<p>`. Default false, because most hubs put their semantic
+   * `<h1>` in a PageHeader below this and two would collide. Set true on hubs
+   * that have no PageHeader — without it those pages ship with no `<h1>` at
+   * all (was the case on /protocols and /insights).
+   */
+  titleAsHeading?: boolean;
+  /** Supporting line; a string, or rich content with inline CountLinks. */
+  lead: React.ReactNode;
   stats: HubStat[];
   primary?: { href: string; label: string };
   secondary?: { href: string; label: string };
@@ -47,20 +62,40 @@ export function CinematicHubHero({
 
       <div className="hh-inner">
         <p className="hh-kicker">{kicker}</p>
-        {/* Decorative cover headline — the page's semantic <h1> lives in the
-            hub's own PageHeader below, so this stays a non-heading to avoid a
-            duplicate top-level heading. */}
-        <p className="hh-title">{title}</p>
+        {/* Decorative cover headline by default — the page's semantic <h1>
+            usually lives in the hub's own PageHeader below, so this stays a
+            non-heading to avoid a duplicate top-level heading. Hubs with no
+            PageHeader opt in via `titleAsHeading` so the page still has one. */}
+        {titleAsHeading ? (
+          <h1 className="hh-title">{title}</h1>
+        ) : (
+          <p className="hh-title">{title}</p>
+        )}
         <p className="hh-lead">{lead}</p>
 
         {stats.length > 0 && (
           <div className="hh-stats">
-            {stats.map((s) => (
-              <div className="hh-stat stat-instrument" key={s.label}>
-                <span className="v">{s.value}</span>
-                <span className="k">{s.label}</span>
-              </div>
-            ))}
+            {stats.map((s) =>
+              s.href ? (
+                <Link
+                  href={s.href}
+                  key={s.label}
+                  className="hh-stat hh-stat-link stat-instrument focus-ring"
+                  aria-label={`${s.value} ${s.label} — view all`}
+                >
+                  <span className="v">
+                    {s.value}
+                    <span className="hh-stat-arr" aria-hidden="true">→</span>
+                  </span>
+                  <span className="k">{s.label}</span>
+                </Link>
+              ) : (
+                <div className="hh-stat stat-instrument" key={s.label}>
+                  <span className="v">{s.value}</span>
+                  <span className="k">{s.label}</span>
+                </div>
+              ),
+            )}
           </div>
         )}
 
@@ -147,6 +182,23 @@ const HUBHERO_CSS = `
 .hh-stat .k {
   font-family: ${FONT.mono}; font-size: 10px; letter-spacing: 0.16em;
   text-transform: uppercase; color: ${VIZ.faint};
+}
+/* Linkable stat — a deep-link to the exact set it counts. */
+a.hh-stat-link {
+  text-decoration: none; border-radius: 12px; margin: -6px -10px; padding: 6px 10px;
+  transition: background .2s ease, transform .2s ease;
+}
+a.hh-stat-link .v { display: inline-flex; align-items: baseline; gap: 8px; }
+.hh-stat-arr {
+  font-size: 0.5em; color: ${VIZ.faint}; transform: translateX(-4px);
+  opacity: 0; transition: opacity .2s ease, transform .2s ease, color .2s ease;
+}
+a.hh-stat-link:hover { background: color-mix(in srgb, var(--hue) 8%, transparent); }
+a.hh-stat-link:hover .hh-stat-arr { opacity: 1; transform: translateX(0); color: var(--hue); }
+a.hh-stat-link:hover .k { color: ${VIZ.muted}; }
+@media (prefers-reduced-motion: reduce) {
+  a.hh-stat-link, .hh-stat-arr { transition: none; }
+  a.hh-stat-link:hover .hh-stat-arr { transform: none; }
 }
 .hh-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
 .hh-cta {

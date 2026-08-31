@@ -1,7 +1,9 @@
+import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { ArrowRight, FlaskConical, ShieldCheck, TrendingUp, Zap, CheckCircle2, AlertTriangle, ExternalLink, Activity } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { GuideHeroPanel } from '@/components/guides/GuideHeroPanel';
+import { GuideMoleculeWell } from '@/components/guides/GuideMoleculeWell';
 import { DataTable } from '@/components/ui/DataTable';
 import { Accordion, AccordionItem } from '@/components/ui/Accordion';
 import { StructuredData } from '@/components/seo/StructuredData';
@@ -430,6 +432,7 @@ export default function BerberineGuidePage() {
                 icon: Activity,
                 color: 'text-accent-violet',
                 badge: 'bg-accent-violet/10 border-accent-violet/20',
+                accent: 'var(--accent-violet)',
                 title: 'AMPK Activation',
                 body: "Berberine activates AMP-activated protein kinase (AMPK) — the same pathway targeted by metformin and exercise. AMPK is the cell's energy sensor: when activated, it switches on fat burning, glucose uptake, and autophagy, while switching off fat synthesis and gluconeogenesis.",
               },
@@ -437,6 +440,7 @@ export default function BerberineGuidePage() {
                 icon: TrendingUp,
                 color: 'text-accent-cyan',
                 badge: 'bg-accent-cyan/10 border-accent-cyan/20',
+                accent: 'var(--accent-cyan)',
                 title: 'Gut Microbiome Modulation',
                 body: 'A significant part of berberine\'s metabolic effect comes from reshaping the gut microbiome — increasing butyrate-producing bacteria and reducing LPS-producing species. This may explain why berberine works better in some people than others: gut microbiome composition predicts response.',
               },
@@ -444,11 +448,16 @@ export default function BerberineGuidePage() {
                 icon: Zap,
                 color: 'text-accent-emerald',
                 badge: 'bg-accent-emerald/10 border-accent-emerald/20',
+                accent: 'var(--accent-emerald)',
                 title: 'Glucose Transporter Upregulation',
                 body: 'Berberine increases GLUT4 glucose transporter expression on muscle cells — allowing more glucose uptake independent of insulin signaling. This contributes to fasting glucose reduction beyond the AMPK pathway.',
               },
             ].map((card) => (
-              <div key={card.title} className={`rounded-xl border p-5 ${card.badge} bg-card/50`}>
+              <div
+                key={card.title}
+                className="premium-card p-5"
+                style={{ '--card-accent': card.accent } as CSSProperties}
+              >
                 <div className={`inline-flex items-center justify-center w-9 h-9 rounded-lg border mb-3 ${card.badge}`}>
                   <card.icon className={`w-4.5 h-4.5 ${card.color}`} aria-hidden="true" />
                 </div>
@@ -457,6 +466,13 @@ export default function BerberineGuidePage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Molecule illustration */}
+      <section className="py-10">
+        <div className="container-page max-w-4xl">
+          <GuideMoleculeWell compoundId="berberine" />
         </div>
       </section>
 
@@ -492,13 +508,15 @@ export default function BerberineGuidePage() {
                 body: "If you started with elevated fasting glucose or HbA1c, re-test at 3 months. The RCT data shows the primary metabolic effect plateaus around 12 weeks. If you haven't seen a response by then, reassess the dose or form.",
               },
             ].map((step) => (
-              <div key={step.n} className="flex gap-4 rounded-xl border border-border/50 bg-card/50 p-5">
-                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-accent-violet/10 border border-accent-violet/20 flex items-center justify-center">
-                  <span className="text-xs font-mono text-accent-violet">{step.n}</span>
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1">{step.title}</h3>
-                  <p className="text-sm text-muted-foreground">{step.body}</p>
+              <div key={step.n} className="premium-card p-5">
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-accent-violet/10 border border-accent-violet/20 flex items-center justify-center">
+                    <span className="text-xs font-mono text-accent-violet">{step.n}</span>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-1">{step.title}</h3>
+                    <p className="text-sm text-muted-foreground">{step.body}</p>
+                  </div>
                 </div>
               </div>
             ))}

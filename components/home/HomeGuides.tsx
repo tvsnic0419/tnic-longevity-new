@@ -70,6 +70,7 @@ export function HomeGuides() {
             <h2 id="home-guides-heading" className="heading-section mb-3">
               Deep, sourced guides — not sales copy.
             </h2>
+            <div className="heading-accent-rule mb-4" aria-hidden="true" />
             <p className="text-body">
               Each guide walks the mechanism, the human data, and the honest limits before
               it ever mentions a dose.
@@ -97,7 +98,7 @@ export function HomeGuides() {
                 <div className="flex items-center justify-between">
                   <span className="text-label text-accent-violet">Start here</span>
                   <ArrowUpRight
-                    className="h-4 w-4 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent-cyan"
+                    className="h-4 w-4 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent-violet"
                     aria-hidden="true"
                   />
                 </div>
@@ -114,15 +115,16 @@ export function HomeGuides() {
               <RevealItem key={href} index={i + 1}>
                 <Link
                   href={href}
-                  className="focus-ring interactive group flex h-full flex-col justify-between gap-4 rounded-xl border border-border/60 bg-card/40 p-4 hover:border-accent-violet/30"
+                  className="focus-ring interactive group premium-card flex h-full flex-col justify-between gap-4 p-4 hover:border-accent-violet/30"
+                  style={{ ['--card-accent' as string]: 'var(--accent-violet)' }}
                 >
                   <ArrowUpRight
-                    className="h-3.5 w-3.5 self-end text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent-cyan"
+                    className="h-3.5 w-3.5 self-end text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent-violet"
                     aria-hidden="true"
                   />
                   <div>
                     <p className="text-caption mb-1 text-accent-violet">{kicker}</p>
-                    <h4 className="text-sm font-semibold leading-snug text-foreground transition-colors group-hover:text-accent-cyan">
+                    <h4 className="text-sm font-semibold leading-snug text-foreground transition-colors group-hover:text-accent-violet">
                       {label}
                     </h4>
                   </div>
@@ -130,6 +132,22 @@ export function HomeGuides() {
               </RevealItem>
             ))}
           </div>
+        </div>
+
+        {/* Mobile fallback — the header's "Browse all guides" link is desktop-
+            only (sm:inline-flex), so give phone users the same route out rather
+            than stranding them (matches HomeHallmarks' mobile pattern). */}
+        <div className="mt-8 text-center sm:hidden">
+          <Link
+            href="/supplement-guides"
+            className="focus-ring group inline-flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground"
+          >
+            Browse all guides
+            <ArrowUpRight
+              className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              aria-hidden="true"
+            />
+          </Link>
         </div>
       </div>
     </section>

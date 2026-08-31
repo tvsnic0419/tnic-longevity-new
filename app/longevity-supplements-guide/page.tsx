@@ -6,6 +6,8 @@ import { StructuredData } from '@/components/seo/StructuredData';
 import { seoRoutes } from '@/lib/seo-routes';
 import { buildHowToSchema, buildGuidePageSchema, buildBreadcrumbSchema } from '@/lib/seo';
 import { getScoredCompounds } from '@/lib/elite-8-data';
+import { PRODUCT_PICKS } from '@/lib/product-picks';
+import { VIZ } from '@/components/viz/tokens';
 
 export const metadata = seoRoutes.longevityGuide();
 
@@ -125,7 +127,7 @@ export default function LongevitySupplementsGuidePage() {
               2026
             </h1>
 
-            <p className="text-lg sm:text-xl text-white/85 leading-relaxed mb-8 max-w-2xl">
+            <p className="text-lg sm:text-xl text-white leading-relaxed mb-8 max-w-2xl">
               Ranked by composite LQ score across 8 evidence dimensions: clinical trials, epigenetic
               biomarkers, effect size, evolutionary depth, safety, bioavailability, and human
               population data. Every claim linked to a PubMed ID.
@@ -140,13 +142,13 @@ export default function LongevitySupplementsGuidePage() {
               </Link>
               <Link
                 href="/library"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold border border-white/15 text-white/90 hover:border-white/30 hover:text-white transition-all focus-ring"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold tnic-button-secondary focus-ring"
               >
                 Browse Full Library
               </Link>
             </div>
 
-            <p className="mt-6 text-xs text-white/30 font-mono">
+            <p className="mt-6 text-xs text-white/60 font-mono">
               Educational only · Not medical advice · All citations PubMed-verified
             </p>
           </div>
@@ -162,7 +164,7 @@ export default function LongevitySupplementsGuidePage() {
               { icon: Clock, color: 'var(--accent-cyan)', title: 'Epigenetic clock data', body: 'Where available, we show estimated biological age delta from methylation clock studies.' },
               { icon: Star, color: 'var(--accent-amber)', title: 'LQ composite score', body: '8-dimensional weighted score (0–100): CE · EB · ES · EE · SF · BV · HP minus Risk penalty.' },
             ].map(({ icon: Icon, color, title, body }) => (
-              <div key={title} className="rounded-2xl p-5 border border-border/60 bg-card/40">
+              <div key={title} className="premium-card p-5">
                 <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style={{ background: `${color}18` }}>
                   <Icon className="w-4.5 h-4.5" style={{ color }} />
                 </div>
@@ -177,27 +179,37 @@ export default function LongevitySupplementsGuidePage() {
       {/* Ranked Compound Table */}
       <section className="py-16 md:py-20 border-b border-border canvas-scrim">
         <div className="container-page">
-          <h2 className="text-2xl sm:text-3xl font-black text-white mb-3">
+          <h2 className="heading-section mb-3">
             Ranked: Best Longevity Supplements 2026
           </h2>
-          <p className="text-muted-foreground mb-10 max-w-2xl">
-            Sorted by composite LQ score. Click any compound to read the full evidence deep-dive with PMIDs, dosing protocols, and monitoring checklists.
+          <p className="text-muted-foreground mb-4 max-w-2xl">
+            Sorted by composite LQ score. Click any compound to read the full evidence deep-dive with PMIDs, dosing protocols, and monitoring checklists — or jump straight to the one verified product TNiC picks for it.
+          </p>
+          <p className="mb-10 flex items-start gap-2 max-w-2xl text-xs leading-relaxed text-muted-foreground">
+            <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent-amber" aria-hidden="true" />
+            <span>
+              &ldquo;Buy pick&rdquo; links go to the manufacturer and may carry an affiliate token — at no extra cost to you.
+              TNiC sells nothing and commission never moves a ranking or evidence tier. Educational information, not medical advice.
+            </span>
           </p>
 
           <div className="space-y-4">
             {scored.map((c, i) => {
               const score = Math.max(0, Math.min(100, c.score));
-              const scoreColor = score >= 78 ? '#34d399' : score >= 68 ? '#00e0ff' : '#fbbf24';
+              const scoreColor = score >= 78 ? VIZ.emerald : score >= 68 ? VIZ.cyan : VIZ.amber;
               const tier = c.evidenceTier ?? 'B';
-              const tierColor = tier === 'A' ? 'text-accent-emerald' : tier === 'B' ? 'text-accent-amber' : 'text-accent-rose';
-              const tierBg = tier === 'A' ? 'bg-accent-emerald/10 border-accent-emerald/25' : tier === 'B' ? 'bg-accent-amber/10 border-accent-amber/25' : 'bg-accent-rose/10 border-accent-rose/25';
+              // Canonical evidence-tier colors — A=emerald, B=cyan, C=amber
+              // (must match EvidenceTag / lib/trust.ts). Sourced from VIZ, not
+              // restated, so this can't silently drift from the real tokens.
+              const tierColor = tier === 'A' ? 'text-accent-emerald' : tier === 'B' ? 'text-accent-cyan' : 'text-accent-amber';
+              const tierBg = tier === 'A' ? 'bg-accent-emerald/10 border-accent-emerald/25' : tier === 'B' ? 'bg-accent-cyan/10 border-accent-cyan/25' : 'bg-accent-amber/10 border-accent-amber/25';
 
               return (
-                <div key={c.id} className="rounded-2xl border border-border/60 bg-card/30 p-5 sm:p-6 hover:border-border transition-all">
+                <div key={c.id} className="premium-card p-5 sm:p-6">
                   <div className="grid sm:grid-cols-12 gap-4 items-start">
                     {/* Rank + Name */}
                     <div className="sm:col-span-5 flex items-start gap-4">
-                      <span className="text-2xl font-black text-white/15 tabular-nums w-8 shrink-0 leading-none mt-0.5">
+                      <span className="text-2xl font-black text-[var(--color-text-faint)] tabular-nums w-8 shrink-0 leading-none mt-0.5">
                         {String(i + 1).padStart(2, '0')}
                       </span>
                       <div className="flex-1">
@@ -211,7 +223,7 @@ export default function LongevitySupplementsGuidePage() {
                           </span>
                         </div>
                         <p className="text-xs text-muted-foreground mb-2">{c.category} · {c.full}</p>
-                        <p className="text-xs text-white/55 leading-relaxed">{c.mechanism}</p>
+                        <p className="text-xs text-muted-foreground leading-relaxed">{c.mechanism}</p>
                       </div>
                     </div>
 
@@ -229,12 +241,29 @@ export default function LongevitySupplementsGuidePage() {
                     {/* Clock estimate */}
                     <div className="sm:col-span-3">
                       <p className="text-micro font-mono text-muted-foreground mb-1 hidden sm:block">Clock estimate</p>
-                      <p className="text-xs text-white/85 font-mono leading-relaxed">{c.clock}</p>
-                      <p className="text-micro text-white/30 mt-1">{c.clockConfidence} confidence</p>
+                      <p className="text-xs text-[var(--color-text-primary)] font-mono leading-relaxed">{c.clock}</p>
+                      <p className="text-micro text-[var(--color-text-faint)] mt-1">{c.clockConfidence} confidence</p>
                     </div>
 
                     {/* CTA */}
-                    <div className="sm:col-span-2 flex sm:justify-end items-start">
+                    <div className="sm:col-span-2 flex flex-wrap sm:flex-col sm:items-end items-start gap-2">
+                      {/* Derive the pick id from the canonical library slug — the
+                          ranked-table ids (glycine_nac, resveratrol_pterostilbene)
+                          differ from the product-pick keys (glynac, pterostilbene). */}
+                      {(() => {
+                        const pickId = c.libraryHref?.split('/').pop();
+                        return pickId && PRODUCT_PICKS[pickId] ? (
+                          <a
+                            href={`/api/go/${pickId}`}
+                            target="_blank"
+                            rel="noopener noreferrer sponsored"
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-accent-emerald/15 text-accent-emerald border border-accent-emerald/25 transition-colors hover:bg-accent-emerald/25"
+                            aria-label={`Buy the verified ${c.name} pick — opens manufacturer site`}
+                          >
+                            Buy pick <ExternalLink className="w-3 h-3" />
+                          </a>
+                        ) : null;
+                      })()}
                       {c.libraryHref ? (
                         <Link
                           href={c.libraryHref}
@@ -272,7 +301,7 @@ export default function LongevitySupplementsGuidePage() {
             <div className="inline-flex items-center gap-2 text-micro font-mono uppercase tracking-[0.2em] text-accent-violet border border-accent-violet/20 bg-accent-violet/[0.06] px-4 py-2 rounded-full mb-5">
               Step-by-Step Protocol
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-white mb-3">
+            <h2 className="heading-section text-white mb-3">
               How to Build a Longevity Supplement Stack
             </h2>
             <p className="text-muted-foreground">
@@ -298,7 +327,7 @@ export default function LongevitySupplementsGuidePage() {
             <Link href="/nico" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold tnic-button-accent focus-ring">
               Start Step 1 — the NICO Starter Questionnaire <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link href="/stacks" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border border-white/15 text-white/90 hover:border-white/30 transition focus-ring">
+            <Link href="/stacks" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold tnic-button-secondary focus-ring">
               Step 5 — Stack Architect
             </Link>
           </div>
@@ -308,7 +337,7 @@ export default function LongevitySupplementsGuidePage() {
       {/* Red flags to avoid */}
       <section className="py-16 border-b border-border canvas-scrim">
         <div className="container-page max-w-4xl">
-          <h2 className="text-2xl font-black text-white mb-3">Red Flags to Avoid When Buying</h2>
+          <h2 className="heading-section mb-3">Red Flags to Avoid When Buying</h2>
           <p className="text-muted-foreground mb-8">Most supplement marketing is misleading. These are the concrete signals of low-quality products:</p>
 
           <div className="grid sm:grid-cols-2 gap-3 mb-8">
@@ -324,7 +353,7 @@ export default function LongevitySupplementsGuidePage() {
             ].map((flag) => (
               <div key={flag} className="flex items-start gap-3 rounded-xl p-4 border border-accent-rose/15 bg-accent-rose/[0.04]">
                 <AlertTriangle className="w-4 h-4 text-accent-rose shrink-0 mt-0.5" />
-                <p className="text-sm text-foreground/90">{flag}</p>
+                <p className="text-sm text-[var(--color-text-secondary)]">{flag}</p>
               </div>
             ))}
           </div>
@@ -342,7 +371,7 @@ export default function LongevitySupplementsGuidePage() {
       {/* FAQ */}
       <section className="py-16 canvas-scrim">
         <div className="container-page max-w-3xl">
-          <h2 className="text-2xl font-black text-white mb-10">Frequently Asked Questions</h2>
+          <h2 className="heading-section mb-10">Frequently Asked Questions</h2>
 
           <Accordion className="space-y-6">
             {GUIDE_FAQS.map((faq) => (
@@ -353,7 +382,7 @@ export default function LongevitySupplementsGuidePage() {
           </Accordion>
 
           <div className="mt-10 rounded-2xl border border-accent-cyan/15 bg-accent-cyan/[0.04] p-6 text-center">
-            <p className="text-sm text-white/90 mb-4">
+            <p className="text-sm text-[var(--color-text-primary)] mb-4">
               More detailed answers — mechanism deep-dives, dosing nuances, interaction warnings — are in the TNiC Library.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
@@ -387,7 +416,7 @@ export default function LongevitySupplementsGuidePage() {
                 <Link
                   key={g.href}
                   href={g.href}
-                  className="group rounded-xl border border-border/50 bg-card/40 hover:border-accent-cyan/30 hover:bg-accent-cyan/[0.03] p-4 transition-all"
+                  className="premium-card group p-4"
                 >
                   <div className="flex items-center justify-between mb-1">
                     <p className="font-semibold text-sm text-foreground group-hover:text-accent-cyan transition-colors">{g.label}</p>

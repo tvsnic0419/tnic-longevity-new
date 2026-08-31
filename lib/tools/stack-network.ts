@@ -8,14 +8,48 @@ function edgeTypeFromInteraction(type: StackInteraction['type']): NetworkEdgeTyp
   return 'caution';
 }
 
-/** Circular layout — deterministic, no physics engine required */
-function layoutNodes(selectedIds: string[]): NetworkNode[] {
-  const n = compounds.length;
-  const cx = 200;
-  const cy = 200;
-  const radius = 150;
+/**
+ * Clustered radial layout — deterministic, no physics engine required.
+ *
+ * Two deliberate choices make this readable where a plain 81-node ring was
+ * not:
+ * 1. Only compounds that participate in at least one documented interaction
+ *    — or that the user has staged — earn a node. Zero-degree catalogued
+ *    compounds would render as pure label clutter around the ring with no
+ *    edges to show for it; they're counted in stats.isolatedCount and
+ *    surfaced as a caption instead.
+ * 2. Remaining nodes are grouped by physiological pathway (largest clusters
+ *    first) so mechanistically-related compounds sit adjacent and edges
+ *    cross less; each node records its layout angle so the SVG can place
+ *    labels radially outside the ring instead of stacked beneath nodes.
+ */
+function layoutNodes(selectedIds: string[], edges: NetworkEdge[]): NetworkNode[] {
+  const degree = new Map<string, number>();
+  edges.forEach((e) => {
+    degree.set(e.source, (degree.get(e.source) ?? 0) + 1);
+    degree.set(e.target, (degree.get(e.target) ?? 0) + 1);
+  });
 
-  return compounds.map((c, i) => {
+  const shown = compounds.filter(
+    (c) => (degree.get(c.id) ?? 0) > 0 || selectedIds.includes(c.id),
+  );
+
+  const byPathway = new Map<string, typeof shown>();
+  shown.forEach((c) => {
+    const group = byPathway.get(c.pathway);
+    if (group) group.push(c);
+    else byPathway.set(c.pathway, [c]);
+  });
+  const ordered = [...byPathway.values()]
+    .sort((a, b) => b.length - a.length || a[0].pathway.localeCompare(b[0].pathway))
+    .flat();
+
+  const n = ordered.length;
+  const cx = 240;
+  const cy = 240;
+  const radius = 165;
+
+  return ordered.map((c, i) => {
     const angle = (2 * Math.PI * i) / n - Math.PI / 2;
     return {
       id: c.id,
@@ -27,6 +61,8 @@ function layoutNodes(selectedIds: string[]): NetworkNode[] {
       y: cy + radius * Math.sin(angle),
       selected: selectedIds.includes(c.id),
       bioavailability: c.bioavailability,
+      degree: degree.get(c.id) ?? 0,
+      angle,
     };
   });
 }
@@ -68,8 +104,6 @@ function buildPotentialEdges(selectedIds: string[]): NetworkEdge[] {
 }
 
 export function buildStackNetwork(selectedIds: string[]): StackNetworkGraph {
-  const nodes = layoutNodes(selectedIds);
-
   const dbEdges: NetworkEdge[] = stackInteractions.map((i, idx) => ({
     id: `db-${idx}`,
     source: i.compoundIds[0],
@@ -83,6 +117,7 @@ export function buildStackNetwork(selectedIds: string[]): StackNetworkGraph {
 
   const potentialEdges = buildPotentialEdges(selectedIds);
   const edges = [...dbEdges, ...potentialEdges];
+  const nodes = layoutNodes(selectedIds, edges);
 
   const synergyCount = edges.filter((e) => e.type === 'synergy' || e.type === 'potential').length;
   const cautionCount = edges.filter((e) => e.type === 'caution').length;
@@ -106,6 +141,7 @@ export function buildStackNetwork(selectedIds: string[]): StackNetworkGraph {
       activeSynergyCount,
       activeConflictCount,
       networkDensity: Math.round((edges.length / maxEdges) * 100) / 100,
+      isolatedCount: compounds.length - nodes.length,
     },
   };
 }

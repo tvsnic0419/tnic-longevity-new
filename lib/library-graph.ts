@@ -1,7 +1,8 @@
 import { compounds } from './data';
 import { libraryModules } from './library-modules';
 import { hallmarkLibrary } from './hallmarks-library';
-import type { EvidenceTier } from './types';
+import { peptideLibrary } from './peptides-library';
+import type { EvidenceTier, PeptideLegalStatus } from './types';
 
 /**
  * Cross-type interlinking for the library. Derives relationships between
@@ -130,6 +131,24 @@ export function getCompoundSlugsForGuide(guideHref: string): string[] {
     .map(([slug]) => slug);
 }
 
+/**
+ * The compound deep-dives a guide covers, as ready-to-render links (name +
+ * evidence tier), strongest-evidence first. Derived from the same compound→guide
+ * map as everything else, so a guide's compound rail can neither drift from nor
+ * 404 against the library — replacing the fragile hand-authored compound links
+ * guide pages previously carried.
+ */
+export function getCompoundLinksForGuide(guideHref: string): CompoundLink[] {
+  const out: CompoundLink[] = [];
+  for (const slug of getCompoundSlugsForGuide(guideHref)) {
+    const mod = libraryModules.find((m) => m.category === 'compounds' && m.slug === slug);
+    if (mod) out.push({ slug: mod.slug, name: mod.title, evidence: mod.evidenceTier });
+  }
+  return out.sort(
+    (a, b) => a.evidence.localeCompare(b.evidence) || a.name.localeCompare(b.name),
+  );
+}
+
 export interface HallmarkLink {
   /** Resolves to the canonical hallmark page at /library/<slug>. */
   slug: string;
@@ -160,6 +179,30 @@ export function getHallmarksForGuide(guideHref: string): HallmarkLink[] {
 }
 
 /**
+ * The inverse of `getHallmarksForGuide`: the supplement guides that address a
+ * given hallmark, because at least one compound they cover targets it. Closes
+ * the hallmark→guide loop — guides already point *up* to hallmarks, but until
+ * now hallmark pages had no rail *down* to the high-intent buyer guides. Derived
+ * from the same compound→hallmark map, so it can never drift from
+ * `getHallmarksForGuide`.
+ */
+export function getGuidesForHallmark(hallmarkId: string): GuideLink[] {
+  const out: GuideLink[] = [];
+  const seen = new Set<string>();
+  for (const href of getMappedGuideHrefs()) {
+    const covers = getCompoundSlugsForGuide(href).some((slug) => {
+      const mod = libraryModules.find((m) => m.category === 'compounds' && m.slug === slug);
+      return mod?.relatedHallmarkIds.includes(hallmarkId) ?? false;
+    });
+    if (!covers || seen.has(href)) continue;
+    seen.add(href);
+    const label = Object.values(compoundGuides).find((g) => g.href === href)?.label ?? href;
+    out.push({ href, label });
+  }
+  return out;
+}
+
+/**
  * Map of compound id -> compound module slug for every compound that has a
  * page. Lets a server component hand client components the data to build
  * correct `/library/compounds/<slug>` links without importing the compound or
@@ -172,4 +215,55 @@ export function getCompoundIdToSlugMap(): Record<string, string> {
 /** All distinct guide routes referenced by the compound → guide map. */
 export function getMappedGuideHrefs(): string[] {
   return [...new Set(Object.values(compoundGuides).map((g) => g.href))];
+}
+
+export interface PeptideLink {
+  /** Resolves to /peptides/<slug>. */
+  slug: string;
+  name: string;
+  evidenceTier: EvidenceTier;
+  legalStatus: PeptideLegalStatus;
+}
+
+/**
+ * Peptides that target a given hallmark (by id, e.g. 'proteostasis'), inverting
+ * `peptide.relatedHallmarkIds`. Strongest evidence first. The symmetric partner
+ * to `getCompoundsForHallmark`, so a hallmark page can surface the peptides
+ * addressing it — closing the hallmark↔peptide loop the peptide library already
+ * encodes but nothing rendered.
+ */
+export function getPeptidesForHallmark(hallmarkId: string): PeptideLink[] {
+  return peptideLibrary
+    .filter((p) => p.relatedHallmarkIds.includes(hallmarkId))
+    .map((p) => ({
+      slug: p.slug,
+      name: p.name,
+      evidenceTier: p.evidenceTier,
+      legalStatus: p.legalStatus,
+    }))
+    .sort(
+      (a, b) => a.evidenceTier.localeCompare(b.evidenceTier) || a.name.localeCompare(b.name),
+    );
+}
+
+/**
+ * Compounds that share at least one target hallmark with a peptide — a DERIVED,
+ * honest bridge (peptides carry no direct compound edges, and we don't invent
+ * them). Unions `getCompoundsForHallmark` over the peptide's hallmark ids,
+ * deduped, strongest evidence first. Powers a "Compounds that share its targets"
+ * rail on peptide pages so peptides stop being a dead end in the graph.
+ */
+export function getCompoundsForPeptideHallmarks(
+  hallmarkIds: string[],
+  limit = 8,
+): CompoundLink[] {
+  const bySlug = new Map<string, CompoundLink>();
+  for (const hid of hallmarkIds) {
+    for (const c of getCompoundsForHallmark(hid)) {
+      if (!bySlug.has(c.slug)) bySlug.set(c.slug, c);
+    }
+  }
+  return [...bySlug.values()]
+    .sort((a, b) => a.evidence.localeCompare(b.evidence) || a.name.localeCompare(b.name))
+    .slice(0, limit);
 }

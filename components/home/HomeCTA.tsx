@@ -22,6 +22,7 @@ export function HomeCTA() {
           <h2 id="home-cta-heading" className="heading-section mb-4">
             See what the evidence actually supports.
           </h2>
+          <div className="heading-accent-rule is-center mb-6" aria-hidden="true" />
           <p className="text-body mx-auto mb-9 max-w-xl">
             Browse the library by hallmark or compound, or take the NICO Starter Questionnaire for a
             personalized stack. Private, free, and no account — ever.

@@ -239,6 +239,62 @@ export const stackInteractions: StackInteraction[] = [
     severity: 'low',
   },
   {
+    compoundIds: ['coq10', 'nmn'],
+    type: 'synergy',
+    title: 'Electron transport + NAD⁺ input',
+    detail: 'NMN restores the NAD+ that donates electrons at Complex I; CoQ10 shuttles those electrons onward to Complex III. They support the same oxidative-phosphorylation chain at complementary steps.',
+    severity: 'low',
+  },
+  {
+    compoundIds: ['taurine', 'nmn'],
+    type: 'synergy',
+    title: 'Two age-declining currencies restored',
+    detail: 'Taurine supports mitochondrial osmotic and antioxidant balance while NMN replenishes NAD+ for sirtuin-driven DNA repair — two currencies that both fall with age, topped up together.',
+    severity: 'low',
+  },
+  {
+    compoundIds: ['fisetin', 'nmn'],
+    type: 'synergy',
+    title: 'Senolysis lowers the NAD⁺ drain',
+    detail: 'Senescent cells are major NAD+ consumers via CD38; fisetin clears them, so NMN then replenishes NAD+ into a lower-demand system — senolysis and NAD+ repletion reinforce each other.',
+    severity: 'low',
+  },
+  {
+    compoundIds: ['omega3', 'resveratrol'],
+    type: 'synergy',
+    title: 'Resolve + suppress inflammation',
+    detail: 'Omega-3 supplies the EPA/DHA substrate for pro-resolving mediators (resolvins) while resveratrol suppresses NF-κB via SIRT1 — inflammation is resolved and dampened from two directions.',
+    severity: 'low',
+  },
+  {
+    compoundIds: ['berberine', 'nmn'],
+    type: 'synergy',
+    title: 'AMPK ↔ NAD⁺/SIRT1 energy loop',
+    detail: 'Berberine activates AMPK while NMN restores NAD+/SIRT1 — a reciprocally reinforcing energy-sensing loop (AMPK raises NAD+; SIRT1 sustains AMPK) that drives mitochondrial biogenesis and mitophagy.',
+    severity: 'low',
+  },
+  {
+    compoundIds: ['pqq', 'nmn'],
+    type: 'synergy',
+    title: 'Build mitochondria + fuel them',
+    detail: 'PQQ drives mitochondrial biogenesis via PGC-1α; NMN supplies the NAD+ those new mitochondria need to run — added capacity and the fuel to use it.',
+    severity: 'low',
+  },
+  {
+    compoundIds: ['pterostilbene', 'nmn'],
+    type: 'synergy',
+    title: 'SIRT1 activator + its cofactor',
+    detail: 'Pterostilbene — a more bioavailable resveratrol analog — activates SIRT1, which can only work with the NAD+ that NMN restores; the pair supplies activator and cofactor for the same sirtuin axis.',
+    severity: 'low',
+  },
+  {
+    compoundIds: ['urolithin-a', 'nmn'],
+    type: 'synergy',
+    title: 'Recycle + refuel mitochondria',
+    detail: 'Urolithin A triggers mitophagy to clear damaged mitochondria while NMN restores the NAD+ that powers their replacement and function — the recycle-and-refuel halves of mitochondrial quality control.',
+    severity: 'low',
+  },
+  {
     compoundIds: ['rala', 'resveratrol'],
     type: 'caution',
     title: 'Dual metabolic modulation',
@@ -404,6 +460,20 @@ export function analyzeStack(selectedIds: string[]): StackAnalysis {
     compoundCount: selected.length,
     monthlyCost,
   };
+}
+
+/**
+ * One-line label for the active stack, shared by the dashboard status card and
+ * the N=1 status export so the two can never disagree (previously each inlined
+ * its own copy of this logic). First-word names keep the line compact; past
+ * three compounds it truncates to "A + B + C + N more" so the status card and
+ * the canvas-rendered PNG export can't overflow their fixed widths.
+ */
+export function formatActiveProtocol(compoundNames: string[]): string {
+  if (compoundNames.length === 0) return 'No active stack';
+  const firstWords = compoundNames.map((n) => n.split(' ')[0]);
+  if (firstWords.length <= 3) return firstWords.join(' + ');
+  return `${firstWords.slice(0, 3).join(' + ')} + ${firstWords.length - 3} more`;
 }
 
 export function formatStackExport(

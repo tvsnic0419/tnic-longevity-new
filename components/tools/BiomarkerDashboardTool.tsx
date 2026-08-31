@@ -106,7 +106,7 @@ export function BiomarkerDashboardTool() {
       <div className="rounded-xl border border-accent-amber/30 bg-accent-amber/5 p-4 flex gap-3">
         <AlertTriangle className="w-5 h-5 text-accent-amber shrink-0 mt-0.5" aria-hidden="true" />
         <p className="text-xs text-muted-foreground leading-relaxed">
-          <strong className="text-foreground/90">Forecast disclaimer:</strong>{' '}
+          <strong className="text-[var(--color-text-secondary)]">Forecast disclaimer:</strong>{' '}
           {dashboard.globalDisclaimer}
         </p>
       </div>

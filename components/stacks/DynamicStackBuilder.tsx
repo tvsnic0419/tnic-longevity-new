@@ -1,9 +1,11 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sun, Moon } from 'lucide-react';
+import Link from 'next/link';
+import { Sun, Moon, ShoppingBag } from 'lucide-react';
 import { useStack } from '@/context/PlatformContext';
 import { analyzeStack } from '@/lib/stack-analysis';
+import { buildShopStackUrl } from '@/lib/stack-url';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { StackBuilder } from './StackBuilder';
 import { SynergyScorePanel } from './SynergyScorePanel';
@@ -51,7 +53,7 @@ export function DynamicStackBuilder() {
                           key={c.id}
                           className="flex justify-between text-sm py-1 border-b border-border last:border-0"
                         >
-                          <span className="text-foreground/90">{c.name}</span>
+                          <span className="text-[var(--color-text-secondary)]">{c.name}</span>
                           <span className="font-mono text-micro text-muted-foreground">{c.dose}</span>
                         </div>
                       ))}
@@ -67,7 +69,7 @@ export function DynamicStackBuilder() {
                           key={c.id}
                           className="flex justify-between text-sm py-1 border-b border-border last:border-0"
                         >
-                          <span className="text-foreground/90">{c.name}</span>
+                          <span className="text-[var(--color-text-secondary)]">{c.name}</span>
                           <span className="font-mono text-micro text-muted-foreground">{c.dose}</span>
                         </div>
                       ))}
@@ -75,6 +77,17 @@ export function DynamicStackBuilder() {
                   )}
                 </div>
               </GlassPanel>
+
+              {/* Forward exit at the natural finish point — carries the live
+                  stack into the Protocol Shop so the funnel doesn't dead-end at
+                  the dosing panel. */}
+              <Link
+                href={buildShopStackUrl(selected)}
+                className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-xl border border-accent-amber/30 bg-accent-amber/15 px-5 py-3 text-sm font-semibold text-accent-amber transition-colors hover:bg-accent-amber/25"
+              >
+                <ShoppingBag className="h-4 w-4" aria-hidden="true" />
+                Verify &amp; shop this stack
+              </Link>
             </motion.div>
           ) : (
             <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>

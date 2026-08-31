@@ -52,13 +52,14 @@ export function HomeSteps() {
       aria-labelledby="home-steps-heading"
       className="relative border-t border-border/50 py-20 md:py-28"
     >
-      <CellularDivider hue="var(--accent-emerald)" index="05" label="The path" />
+      <CellularDivider hue="var(--accent-emerald)" index="05" label="Protocol" />
       <div className="container-page">
         <RevealItem className="mx-auto mb-12 max-w-2xl text-center">
-          <p className="text-label mb-3 text-accent-emerald">Get started in 3 steps</p>
+          <p className="text-label mb-3 text-accent-emerald">05 / Protocol</p>
           <h2 id="home-steps-heading" className="heading-section mb-3">
             From curious to confident — no account needed.
           </h2>
+          <div className="heading-accent-rule is-center mb-4" aria-hidden="true" />
           <p className="text-body mx-auto max-w-xl">
             No sign-up, no upsell, no data leaving your device — just a clear path from the
             science to a decision you can stand behind.
@@ -68,9 +69,12 @@ export function HomeSteps() {
         {/* Connecting track — badges sit at the flex row's own edges via
             justify-between, so a 22px inset (half the 44px badge) on each
             side lands the line exactly at every badge's center. Desktop only;
-            each step shows its own badge inline below on mobile instead. */}
+            each step shows its own badge inline below on mobile instead.
+            The track is emerald end-to-end (this section's accent) and deepens
+            left→right so the three badges read as an ordered progression, not
+            three equal dots. */}
         <div aria-hidden="true" className="relative mb-8 hidden items-center justify-between md:flex">
-          <div className="absolute left-[22px] right-[22px] top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-accent-emerald/50 to-transparent" />
+          <div className="absolute left-[22px] right-[22px] top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-accent-emerald/30 via-accent-emerald/50 to-accent-emerald/70" />
           {steps.map(({ num, icon: Icon }) => (
             <span
               key={num}

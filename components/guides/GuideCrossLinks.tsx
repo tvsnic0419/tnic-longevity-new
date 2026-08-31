@@ -1,6 +1,11 @@
 import Link from 'next/link';
-import { ArrowRight, BookOpen, GitCompareArrows, Dna } from 'lucide-react';
-import { getSiblingGuides, getCompoundSlugsForGuide, getHallmarksForGuide } from '@/lib/guides';
+import { ArrowRight, BookOpen, GitCompareArrows, Dna, Pill } from 'lucide-react';
+import {
+  getSiblingGuides,
+  getCompoundSlugsForGuide,
+  getCompoundLinksForGuide,
+  getHallmarksForGuide,
+} from '@/lib/guides';
 import { getComparisonsForCompound, type ComparisonLink } from '@/lib/comparison-relations';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 
@@ -29,8 +34,15 @@ export function GuideCrossLinks({ currentHref }: { currentHref: string }) {
   }
 
   const hallmarks = getHallmarksForGuide(currentHref);
+  const compoundLinks = getCompoundLinksForGuide(currentHref);
 
-  if (siblings.length === 0 && comparisons.length === 0 && hallmarks.length === 0) return null;
+  if (
+    siblings.length === 0 &&
+    comparisons.length === 0 &&
+    hallmarks.length === 0 &&
+    compoundLinks.length === 0
+  )
+    return null;
 
   return (
     <section aria-labelledby="guide-cross-links-heading" className="border-t border-border/50 py-14 md:py-16">
@@ -39,6 +51,30 @@ export function GuideCrossLinks({ currentHref }: { currentHref: string }) {
         <h2 id="guide-cross-links-heading" className="heading-section mb-8">
           Related guides &amp; comparisons
         </h2>
+
+        {compoundLinks.length > 0 && (
+          <div className="mb-10">
+            <p className="text-label mb-4 flex items-center gap-2 text-muted-foreground">
+              <Pill className="h-3.5 w-3.5" aria-hidden="true" />
+              Compound deep-dives in this guide
+            </p>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {compoundLinks.map((c) => (
+                <Link
+                  key={c.slug}
+                  href={`/library/compounds/${c.slug}`}
+                  style={{ ['--card-accent' as string]: 'var(--accent-cyan)' }}
+                  className="premium-card focus-ring group flex h-full items-center justify-between gap-3 p-5"
+                >
+                  <h3 className="font-display text-base font-medium tracking-tight text-foreground transition-colors group-hover:[color:var(--card-accent)]">
+                    {c.name}
+                  </h3>
+                  <EvidenceTag tier={c.evidence} size="sm" className="shrink-0" />
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         {siblings.length > 0 && (
           <div className="mb-10">

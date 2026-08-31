@@ -117,7 +117,7 @@ export function ToolsHub() {
           icon={Calculator}
           eyebrow="Interactive Tools"
           title="Longevity Tools"
-          description="Six evidence-graded calculators that turn library knowledge into practical models. Rule-based, transparent reasoning — not generative AI."
+          description={`${toolsRegistry.length} evidence-graded calculators that turn library knowledge into practical models. Rule-based, transparent reasoning — not generative AI.`}
           theme="violet"
           cinematic
           as="h1"

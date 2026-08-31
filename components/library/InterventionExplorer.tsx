@@ -130,11 +130,14 @@ export function InterventionExplorer({
                 </div>
 
                 <div className="min-w-0 flex-1">
-                  {/* Title row */}
+                  {/* Title row. h3, not h4: the hallmark page's MDX body only
+                      goes up to h2 ("## " sections), so this is the next real
+                      heading in DOM order — h4 here would skip a level
+                      (axe-core: heading-order). */}
                   <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5">
-                    <h4 className="text-sm font-semibold text-[var(--color-text-primary)] md:text-base">
+                    <h3 className="text-sm font-semibold text-[var(--color-text-primary)] md:text-base">
                       {item.name}
-                    </h4>
+                    </h3>
                     <EvidenceTag tier={item.evidence} size="sm" />
                     <span className="text-label text-micro text-[var(--color-text-faint)]">
                       {categoryLabels[item.category]}

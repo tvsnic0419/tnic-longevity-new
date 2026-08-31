@@ -3,6 +3,7 @@ import { ArrowRight, Building2, CheckCircle2, Handshake, ShieldCheck, Sparkles }
 import { PageShell } from '@/components/ui/PageShell';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { SponsorSlot } from '@/components/sponsors/SponsorSlot';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildArticleSchema, buildBreadcrumbSchema } from '@/lib/seo';
 import { seoRoutes } from '@/lib/seo-routes';
@@ -102,7 +103,7 @@ export default function PartnershipsPage() {
             {fit.map((item) => (
               <div key={item} className="glass rounded-xl p-4">
                 <CheckCircle2 className="w-4 h-4 text-accent-emerald mb-2" aria-hidden="true" />
-                <p className="text-sm text-foreground/85 leading-relaxed">{item}</p>
+                <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">{item}</p>
               </div>
             ))}
           </div>
@@ -155,6 +156,9 @@ export default function PartnershipsPage() {
           </a>
         </div>
       </section>
+
+      {/* Live sponsor placement — renders only when inventory is sold. */}
+      <SponsorSlot slot="partnerships" className="mt-8" />
       </PageShell>
     </SubPageLayout>
   );

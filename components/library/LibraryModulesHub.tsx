@@ -133,19 +133,22 @@ export function LibraryModulesHub() {
                           <div className="mb-3 flex items-center justify-between gap-2">
                             <EvidenceTag tier={mod.evidenceTier} size="sm" />
                             {mod.requiresDisclaimer && (
-                              <span className="rounded border border-accent-amber/30 bg-accent-amber/10 px-1.5 py-0.5 text-[10px] font-mono font-semibold text-accent-amber">
+                              <span className="rounded border border-accent-amber/30 bg-accent-amber/10 px-1.5 py-0.5 text-micro font-mono font-semibold text-accent-amber">
                                 Rx
                               </span>
                             )}
                           </div>
-                          <h4 className="heading-card mb-1 flex items-center gap-2 transition-colors group-hover:[color:var(--card-accent)]">
+                          {/* h3, not h4: this card grid renders directly under
+                              an h2 in some sections, where an h4 skipped a level.
+                              `.heading-card` sets the size either way. */}
+                          <h3 className="heading-card mb-1 flex items-center gap-2 transition-colors group-hover:[color:var(--card-accent)]">
                             <span
                               aria-hidden="true"
                               className="inline-block h-1.5 w-1.5 shrink-0 rounded-full"
                               style={{ background: accent, boxShadow: `0 0 8px ${accent}` }}
                             />
                             {mod.title}
-                          </h4>
+                          </h3>
                           <p className="mb-3 text-xs text-muted-foreground">{mod.tagline}</p>
                           <p className="text-body-sm flex-1">{mod.summary.slice(0, 120)}…</p>
                           <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold [color:var(--card-accent)]">

@@ -14,15 +14,17 @@ import {
   Syringe,
   Waypoints,
   Orbit,
+  BarChart3,
   Sparkles,
   ArrowRight,
 } from 'lucide-react';
 import { POPULAR_GUIDE_LINKS } from '@/lib/index-priority';
 import { citationRegistry } from '@/lib/trust';
-import { compounds } from '@/lib/data';
+import { compoundTierCount } from '@/lib/compound-core';
+import { FooterBriefSubscribe } from '@/components/brief/FooterBriefSubscribe';
 
-const tierACount = compounds.filter((c) => c.evidence === 'A').length;
-const tierBCount = compounds.filter((c) => c.evidence === 'B').length;
+const tierACount = compoundTierCount('A');
+const tierBCount = compoundTierCount('B');
 
 const hubLinks = [
   { href: '/dashboard', label: 'My Dashboard', icon: LayoutDashboard },
@@ -32,7 +34,9 @@ const hubLinks = [
   { href: '/pathways', label: 'Pathways', icon: Waypoints },
   { href: '/sirtuin-atlas', label: 'Sirtuin Atlas', icon: Orbit },
   { href: '/learn', label: 'Learn Hub', icon: GraduationCap },
+  { href: '/insights', label: 'Longevity by the Numbers', icon: BarChart3 },
   { href: '/stacks', label: 'Stacks & Protocols', icon: Layers },
+  { href: '/protocols', label: 'Protocol Library', icon: Layers },
   { href: '/labs', label: 'Lab Analysis Hub', icon: FlaskConical },
   { href: '/compound-engine', label: 'Compound Engine', icon: Cpu },
 ];
@@ -99,7 +103,9 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-10 mb-10">
+        <FooterBriefSubscribe />
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-6 gap-8 lg:gap-10 mb-10">
           <div className="sm:col-span-2 lg:col-span-1">
             {/* No aria-label here — see the matching comment in Nav.tsx. */}
             <Link
@@ -108,6 +114,7 @@ export function Footer() {
             >
               <Logo variant="lockup" size="md" alt="TNiC – Transformative Nutrition in Cell-Health · Home" />
             </Link>
+            <p className="text-label mb-3 text-muted-foreground">Cell-Health Library</p>
             <p className="text-body-sm max-w-xs">
               Independent longevity intelligence. Evidence-graded compounds,
               transparent methodology, and consumer safety at the center of every recommendation.
@@ -131,9 +138,12 @@ export function Footer() {
             </ul>
           </div>
 
-          <div>
+          {/* Popular Guides runs ~2× the link count of its sibling columns,
+              so it takes two grid tracks and flows its own list into two
+              sub-columns — no single towering tail unbalancing the footer. */}
+          <div className="lg:col-span-2">
             <p className="text-label mb-4">Popular Guides</p>
-            <ul className="space-y-3">
+            <ul className="space-y-3 lg:grid lg:grid-cols-2 lg:gap-x-6 lg:gap-y-3 lg:space-y-0">
               {POPULAR_GUIDE_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link
@@ -216,8 +226,9 @@ export function Footer() {
             © 2026 TNiC · Independent · Evidence-First
           </p>
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-caption font-mono">
-            <span>Tier A: {tierACount} compounds</span>
-            <span>Tier B: {tierBCount} compounds</span>
+            <span title="Of the stack-buildable set — the full library carries more at every tier">
+              Stack-buildable — Tier A: {tierACount} · Tier B: {tierBCount}
+            </span>
             <span>{citationRegistry.length} indexed PMIDs</span>
           </div>
         </div>

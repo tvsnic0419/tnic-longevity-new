@@ -4,9 +4,14 @@ import { join } from 'node:path';
 import { compounds } from './data';
 import { libraryModules } from './library-modules';
 import { hallmarkLibrary } from './hallmarks-library';
+import { peptideLibrary } from './peptides-library';
 import {
   getCompoundsForHallmark,
+  getPeptidesForHallmark,
+  getCompoundsForPeptideHallmarks,
   getGuideForCompound,
+  getGuidesForHallmark,
+  getHallmarksForGuide,
   getMappedGuideHrefs,
 } from './library-graph';
 
@@ -14,6 +19,7 @@ const hallmarkIds = new Set(hallmarkLibrary.map((h) => h.id));
 const compoundModuleSlugs = new Set(
   libraryModules.filter((m) => m.category === 'compounds').map((m) => m.slug),
 );
+const peptideSlugs = new Set(peptideLibrary.map((p) => p.slug));
 
 describe('library-graph: hallmark → compounds', () => {
   it('every hallmark id referenced by a compound is a real hallmark', () => {
@@ -46,6 +52,44 @@ describe('library-graph: hallmark → compounds', () => {
   });
 });
 
+describe('library-graph: hallmark → peptides', () => {
+  it('every hallmark id referenced by a peptide is a real hallmark', () => {
+    for (const p of peptideLibrary) {
+      for (const id of p.relatedHallmarkIds) {
+        expect(hallmarkIds.has(id)).toBe(true);
+      }
+    }
+  });
+
+  it('returns only peptides that resolve to a real peptide page', () => {
+    for (const h of hallmarkLibrary) {
+      for (const link of getPeptidesForHallmark(h.id)) {
+        expect(peptideSlugs.has(link.slug)).toBe(true);
+      }
+    }
+  });
+
+  it('surfaces peptides for a hallmark the library encodes (proteostasis)', () => {
+    const links = getPeptidesForHallmark('proteostasis');
+    expect(links.length).toBeGreaterThan(0);
+    // BPC-157 lists 'proteostasis' among its related hallmarks.
+    expect(links.map((l) => l.slug)).toContain('bpc-157');
+  });
+
+  it('sorts peptides by evidence tier (A before B before C)', () => {
+    const tiers = getPeptidesForHallmark('mito').map((l) => l.evidenceTier);
+    expect(tiers).toEqual([...tiers].sort());
+  });
+
+  it('peptide→compound bridge returns only real compound pages', () => {
+    for (const p of peptideLibrary) {
+      for (const link of getCompoundsForPeptideHallmarks(p.relatedHallmarkIds)) {
+        expect(compoundModuleSlugs.has(link.slug)).toBe(true);
+      }
+    }
+  });
+});
+
 describe('library-graph: compound → guide', () => {
   it('maps only real compound module slugs', () => {
     for (const slug of Object.keys({
@@ -65,5 +109,36 @@ describe('library-graph: compound → guide', () => {
   it('returns a guide for a mapped compound and nothing for an unmapped one', () => {
     expect(getGuideForCompound('nmn')?.href).toBe('/nad-supplement-guide');
     expect(getGuideForCompound('grapeseed')).toBeUndefined();
+  });
+});
+
+describe('library-graph: hallmark → guides (inverse of guide → hallmarks)', () => {
+  const slugToId = new Map(hallmarkLibrary.map((h) => [h.slug, h.id]));
+
+  it('every guide returned for a hallmark resolves to a real app route', () => {
+    for (const h of hallmarkLibrary) {
+      for (const g of getGuidesForHallmark(h.id)) {
+        const dir = join(process.cwd(), 'app', g.href.replace(/^\//, ''));
+        expect(existsSync(join(dir, 'page.tsx'))).toBe(true);
+      }
+    }
+  });
+
+  it('round-trips with getHallmarksForGuide: a guide is returned for every hallmark it targets', () => {
+    for (const href of getMappedGuideHrefs()) {
+      for (const hl of getHallmarksForGuide(href)) {
+        const id = slugToId.get(hl.slug);
+        expect(id).toBeDefined();
+        const hrefs = getGuidesForHallmark(id!).map((g) => g.href);
+        expect(hrefs).toContain(href);
+      }
+    }
+  });
+
+  it('surfaces the NAD+ guide for a hallmark NMN targets', () => {
+    const nmn = libraryModules.find((m) => m.category === 'compounds' && m.slug === 'nmn');
+    expect(nmn).toBeDefined();
+    const targetHallmark = nmn!.relatedHallmarkIds[0];
+    expect(getGuidesForHallmark(targetHallmark).map((g) => g.href)).toContain('/nad-supplement-guide');
   });
 });

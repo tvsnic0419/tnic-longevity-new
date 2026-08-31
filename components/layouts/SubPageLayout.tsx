@@ -1,8 +1,24 @@
+import { Suspense } from 'react';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { ContextBar } from '@/components/os/ContextBar';
 import { GuideCrossLinks } from '@/components/guides/GuideCrossLinks';
+
+/**
+ * Thin placeholder matching ContextBar's own sticky bar (`py-2 text-xs`,
+ * border-b) so the Suspense swap doesn't shift layout. `aria-hidden` — it
+ * carries no information, it's purely a dimensional placeholder.
+ */
+function ContextBarSkeleton() {
+  return (
+    <div className="sticky top-14 md:top-16 z-40 border-b border-border bg-background/95" aria-hidden="true">
+      <div className="container-page flex items-center py-2">
+        <div className="skeleton h-4 w-40 rounded" />
+      </div>
+    </div>
+  );
+}
 
 interface SubPageLayoutProps {
   children: React.ReactNode;
@@ -43,7 +59,16 @@ export function SubPageLayout({
       <div className="pt-14 md:pt-16">
         {!hideContextBar && (
           <aside aria-label="Your saved workspace">
-            <ContextBar hideStackReadout={hideStackReadout} />
+            {/* ContextBar calls useSearchParams(), which requires its own
+                Suspense boundary — without one, Next.js defers the ENTIRE
+                page to client-only rendering during static generation (the
+                nearest ancestor boundary is the route's auto-injected
+                loading.tsx, which wraps everything). Scoping the boundary
+                here keeps that client-only bailout confined to this one
+                narrow strip instead of the whole page. */}
+            <Suspense fallback={<ContextBarSkeleton />}>
+              <ContextBar hideStackReadout={hideStackReadout} />
+            </Suspense>
           </aside>
         )}
         <main id="main-content" tabIndex={-1}>

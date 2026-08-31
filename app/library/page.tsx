@@ -7,6 +7,7 @@ import { LifestylePillarsHub } from '@/components/library/LifestylePillarsHub';
 import { LibrarySearch } from '@/components/library/LibrarySearch';
 import { ToolsPromoStrip } from '@/components/tools/ToolsPromoStrip';
 import { LibraryFacetFilters } from '@/components/library/LibraryFacetFilters';
+import { CompoundExplorer } from '@/components/library/CompoundExplorer';
 import { RecommendedNextSteps } from '@/components/ui/RecommendedNextSteps';
 
 // All 12 visuals
@@ -39,14 +40,14 @@ const visuals = [
   { Component: TelomereAttritionVisual, title: 'Telomere Attrition' },
   { Component: EpigeneticAlterationsVisual, title: 'Epigenetic Alterations' },
   { Component: LossOfProteostasisVisual, title: 'Loss of Proteostasis' },
-  { Component: DeregulatedNutrientSensingVisual, title: 'Deregulated Nutrient Sensing' },
+  { Component: DisabledMacroautophagyVisual, title: 'Disabled Macroautophagy' },
   { Component: MitochondrialDysfunctionVisual, title: 'Mitochondrial Dysfunction' },
   { Component: CellularSenescenceVisual, title: 'Cellular Senescence' },
   { Component: StemCellExhaustionVisual, title: 'Stem Cell Exhaustion' },
   { Component: AlteredIntercellularCommunicationVisual, title: 'Altered Intercellular Communication' },
   { Component: ChronicInflammationVisual, title: 'Chronic Inflammation' },
   { Component: DysbiosisVisual, title: 'Dysbiosis' },
-  { Component: DisabledMacroautophagyVisual, title: 'Disabled Macroautophagy' },
+  { Component: DeregulatedNutrientSensingVisual, title: 'Deregulated Nutrient Sensing' },
 ];
 
 export default function LibraryPage() {
@@ -58,10 +59,10 @@ export default function LibraryPage() {
         title={<>Every intervention, <em>graded</em>.</>}
         lead="The 12 hallmarks of aging, each paired with PMID-cited interventions and mechanistic visuals — the free, evidence-first reference the whole site is built on."
         stats={[
-          { value: String(COMPOUND_COUNT), label: 'Graded compounds' },
-          { value: '12', label: 'Hallmarks of aging' },
-          { value: 'A–C', label: 'Evidence tiers' },
-          { value: String(eliteInterventions.length), label: 'Elite interventions' },
+          { value: String(COMPOUND_COUNT), label: 'Graded compounds', href: '/library/compounds' },
+          { value: '12', label: 'Hallmarks of aging', href: '/hallmarks' },
+          { value: 'A–C', label: 'Evidence tiers', href: '/trust/methodology' },
+          { value: String(eliteInterventions.length), label: 'Elite interventions', href: '/elite-8' },
         ]}
         primary={{ href: '/nico', label: 'Find your personalized stack' }}
         secondary={{ href: '/stacks', label: 'Open the Stack Architect' }}
@@ -76,6 +77,14 @@ export default function LibraryPage() {
       <div className="container-page pb-6">
         <Suspense fallback={<div className="h-20 animate-pulse bg-white/5 rounded-xl" />}>
           <LibraryFacetFilters />
+        </Suspense>
+      </div>
+
+      {/* The result surface those facet filters drive — and the clickable
+          tier-count pills. Same `?tiers=`/`?hallmarks=` params, now rendered. */}
+      <div className="container-page pb-12">
+        <Suspense fallback={<div className="h-40 animate-pulse bg-white/5 rounded-xl" />}>
+          <CompoundExplorer />
         </Suspense>
       </div>
 

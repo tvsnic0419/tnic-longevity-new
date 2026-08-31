@@ -1,7 +1,10 @@
+import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { ArrowRight, FlaskConical, ShieldCheck, TrendingUp, Zap, CheckCircle2, AlertTriangle, ExternalLink } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { GuideHeroPanel } from '@/components/guides/GuideHeroPanel';
+import { GuideMoleculeWell } from '@/components/guides/GuideMoleculeWell';
+import { GuideVerifiedPick } from '@/components/guides/GuideVerifiedPick';
 import { DataTable } from '@/components/ui/DataTable';
 import { Accordion, AccordionItem } from '@/components/ui/Accordion';
 import { StructuredData } from '@/components/seo/StructuredData';
@@ -210,6 +213,13 @@ export default function GlyNACGuidePage() {
         </div>
       </section>
 
+      {/* Verified pick — connect commercial-intent readers to the buy path early */}
+      <section className="py-10 border-b border-border">
+        <div className="container-page max-w-4xl">
+          <GuideVerifiedPick compoundId="glynac" />
+        </div>
+      </section>
+
       {/* Why glutathione matters */}
       <section className="py-14 border-b border-border">
         <div className="container-page max-w-4xl">
@@ -224,6 +234,7 @@ export default function GlyNACGuidePage() {
                 icon: Zap,
                 color: 'text-accent-cyan',
                 badge: 'bg-accent-cyan/10 border-accent-cyan/20',
+                accent: 'var(--accent-cyan)',
                 title: 'The Synthesis Problem',
                 body: 'Glutathione is built from three amino acids: glycine, cysteine, and glutamate. Aging depletes glycine (poor diet absorption) and cysteine (oxidative demand). Without both precursors, synthesis stalls — even if the enzymes are intact.',
               },
@@ -231,6 +242,7 @@ export default function GlyNACGuidePage() {
                 icon: TrendingUp,
                 color: 'text-accent-violet',
                 badge: 'bg-accent-violet/10 border-accent-violet/20',
+                accent: 'var(--accent-violet)',
                 title: 'The Cascade Effect',
                 body: 'Low glutathione → mitochondria cannot neutralize ROS → electron transport chain dysfunction → less ATP → muscle weakness, cognitive fog, metabolic dysfunction. This is the core aging cascade GlyNAC interrupts.',
               },
@@ -238,11 +250,16 @@ export default function GlyNACGuidePage() {
                 icon: ShieldCheck,
                 color: 'text-accent-emerald',
                 badge: 'bg-accent-emerald/10 border-accent-emerald/20',
+                accent: 'var(--accent-emerald)',
                 title: 'Why NAC Alone Falls Short',
                 body: 'N-Acetylcysteine raises cysteine levels but glutathione synthesis also requires glycine as a co-substrate. Without glycine, the reaction bottlenecks. This is why GlyNAC outperforms NAC alone in every head-to-head measure in the Sekhar trials.',
               },
             ].map((card) => (
-              <div key={card.title} className={`rounded-xl border p-5 ${card.badge} bg-card/50`}>
+              <div
+                key={card.title}
+                className="premium-card p-5"
+                style={{ '--card-accent': card.accent } as CSSProperties}
+              >
                 <div className={`inline-flex items-center justify-center w-9 h-9 rounded-lg border mb-3 ${card.badge}`}>
                   <card.icon className={`w-4.5 h-4.5 ${card.color}`} aria-hidden="true" />
                 </div>
@@ -251,6 +268,13 @@ export default function GlyNACGuidePage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Molecule illustration */}
+      <section className="py-10">
+        <div className="container-page max-w-4xl">
+          <GuideMoleculeWell compoundId="glynac" />
         </div>
       </section>
 
@@ -281,19 +305,21 @@ export default function GlyNACGuidePage() {
           <h3 className="font-semibold text-lg mb-4">Hallmarks Addressed</h3>
           <div className="grid md:grid-cols-2 gap-3 mb-8">
             {HALLMARKS_REVERSED.map((h, i) => (
-              <div key={h.name} className="flex gap-3 items-start rounded-xl border border-border/50 bg-card/50 p-4">
-                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-accent-cyan/10 border border-accent-cyan/20 flex items-center justify-center mt-0.5">
-                  <span className="text-xs font-mono text-accent-cyan">{i + 1}</span>
-                </div>
-                <div>
-                  <p className="font-medium text-sm">{h.name}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">{h.detail}</p>
+              <div key={h.name} className="premium-card p-4">
+                <div className="flex gap-3 items-start">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-accent-cyan/10 border border-accent-cyan/20 flex items-center justify-center mt-0.5">
+                    <span className="text-xs font-mono text-accent-cyan">{i + 1}</span>
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">{h.name}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{h.detail}</p>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="rounded-xl border border-accent-violet/20 bg-accent-violet/[0.04] p-5">
+          <div className="premium-card p-5" style={{ '--card-accent': 'var(--accent-violet)' } as CSSProperties}>
             <p className="font-mono text-xs text-accent-violet mb-1">2022 EXTENSION (PMID 35970308)</p>
             <p className="text-sm text-muted-foreground">
               A follow-up trial specifically targeting muscle aging confirmed strength gains, improved physical function, and found epigenetic age reversal of approximately{' '}
@@ -338,7 +364,7 @@ export default function GlyNACGuidePage() {
           </DataTable>
 
           <div className="grid md:grid-cols-2 gap-5">
-            <div className="rounded-xl border border-accent-emerald/20 bg-accent-emerald/[0.04] p-5">
+            <div className="premium-card p-5" style={{ '--card-accent': 'var(--accent-emerald)' } as CSSProperties}>
               <div className="flex items-center gap-2 mb-3">
                 <CheckCircle2 className="w-4 h-4 text-accent-emerald" aria-hidden="true" />
                 <p className="font-semibold text-accent-emerald text-sm">Do</p>
@@ -351,7 +377,7 @@ export default function GlyNACGuidePage() {
                 <li>· Pair with Taurine (1–2 g/day) for additive mitochondrial support</li>
               </ul>
             </div>
-            <div className="rounded-xl border border-accent-rose/20 bg-accent-rose/[0.04] p-5">
+            <div className="premium-card p-5" style={{ '--card-accent': 'var(--accent-rose)' } as CSSProperties}>
               <div className="flex items-center gap-2 mb-3">
                 <AlertTriangle className="w-4 h-4 text-accent-rose" aria-hidden="true" />
                 <p className="font-semibold text-accent-rose text-sm">Caution</p>
@@ -402,13 +428,15 @@ export default function GlyNACGuidePage() {
                 body: 'The Sekhar trial showed measurable changes by week 8 and plateaued around week 24. Repeat baseline tests at 12 weeks. If RBC glutathione hasn\'t improved, consider dose adjustment or checking for malabsorption.',
               },
             ].map((step) => (
-              <div key={step.n} className="flex gap-4 rounded-xl border border-border/50 bg-card/50 p-5">
-                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-accent-cyan/10 border border-accent-cyan/20 flex items-center justify-center">
-                  <span className="text-xs font-mono text-accent-cyan">{step.n}</span>
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1">{step.title}</h3>
-                  <p className="text-sm text-muted-foreground">{step.body}</p>
+              <div key={step.n} className="premium-card p-5">
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-accent-cyan/10 border border-accent-cyan/20 flex items-center justify-center">
+                    <span className="text-xs font-mono text-accent-cyan">{step.n}</span>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-1">{step.title}</h3>
+                    <p className="text-sm text-muted-foreground">{step.body}</p>
+                  </div>
                 </div>
               </div>
             ))}

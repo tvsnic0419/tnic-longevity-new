@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { VIZ } from '@/components/viz/tokens';
 
 interface HallmarkVisualProps {
   className?: string;
@@ -9,15 +10,17 @@ interface HallmarkVisualProps {
   accentColor?: string;
 }
 
-// Stroke hues mirror the canonical accent tokens (lib/design-system.ts palette /
-// --accent-* in globals.css) so the hallmark visuals draw the same cyan/violet
-// the rest of the instrument does — the previous #22d3ee / #a78bfa drifted off-brand.
+// Stroke hues are sourced from the canonical viz tokens (components/viz/tokens.ts)
+// so the hallmark visuals draw the same cyan/violet the rest of the instrument
+// does, without restating the hex and risking drift — the previous local copy
+// (#22d3ee / #a78bfa) had already drifted off-brand once. `f` (dark fill) and
+// `g` (glow-suffix) aren't canonical tokens, so those stay literal.
 const ACC: Record<string, { s: string; f: string; g: string }> = {
-  cyan:    { s: '#00e0ff', f: '#083344', g: '#00e0ff40' },
-  emerald: { s: '#34d399', f: '#052e16', g: '#34d39940' },
-  violet:  { s: '#c084fc', f: '#1e1b4b', g: '#c084fc40' },
-  amber:   { s: '#fbbf24', f: '#292524', g: '#fbbf2440' },
-  rose:    { s: '#f472b6', f: '#2d0a12', g: '#f472b640' },
+  cyan:    { s: VIZ.cyan,    f: '#083344', g: `${VIZ.cyan}40` },
+  emerald: { s: VIZ.emerald, f: '#052e16', g: `${VIZ.emerald}40` },
+  violet:  { s: VIZ.violet,  f: '#1e1b4b', g: `${VIZ.violet}40` },
+  amber:   { s: VIZ.amber,   f: '#292524', g: `${VIZ.amber}40` },
+  rose:    { s: VIZ.rose,    f: '#2d0a12', g: `${VIZ.rose}40` },
 };
 
 function ac(color: string | undefined) {
@@ -168,7 +171,7 @@ export const ProteostasisVisual: React.FC<HallmarkVisualProps> = ({
   );
 };
 
-/* ─── 5. Disabled Autophagy ─── */
+/* ─── 5. Disabled Macroautophagy ─── */
 export const AutophagyVisual: React.FC<HallmarkVisualProps> = ({
   className = '',
   size = 320,
@@ -176,7 +179,7 @@ export const AutophagyVisual: React.FC<HallmarkVisualProps> = ({
 }) => {
   const c = ac(accentColor);
   return (
-    <svg width={size} height={size * 0.75} viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg" className={cn(className)} aria-label="Disabled Autophagy — lysosomal recycling pathway" role="img">
+    <svg width={size} height={size * 0.75} viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg" className={cn(className)} aria-label="Disabled Macroautophagy — lysosomal recycling pathway" role="img">
       <rect width="320" height="240" fill="#030712" rx="8" />
       {/* Autophagosome */}
       <ellipse cx="130" cy="118" rx="50" ry="38" fill="#0a0f1a" stroke={c.s} strokeWidth="2.5" />
@@ -195,7 +198,7 @@ export const AutophagyVisual: React.FC<HallmarkVisualProps> = ({
       <line x1="84" y1="95" x2="80" y2="106" stroke={c.s} strokeWidth="1.2" strokeDasharray="4,3" strokeOpacity="0.7" />
       <text x="55" y="158" textAnchor="middle" fill={c.s} fontSize="8.5" opacity="0.7">NMN · fasting</text>
       <text x="55" y="170" textAnchor="middle" fill={c.s} fontSize="8" opacity="0.6">AMPK ↑</text>
-      <text x="160" y="232" textAnchor="middle" fill="#9ca3af" fontSize="11">Disabled Autophagy</text>
+      <text x="160" y="232" textAnchor="middle" fill="#9ca3af" fontSize="11">Disabled Macroautophagy</text>
     </svg>
   );
 };
@@ -449,7 +452,8 @@ export const hallmarkVisualMap: Record<string, React.ComponentType<HallmarkVisua
   'telomere-attrition':           TelomereAttritionVisual,
   'epigenetic-alterations':       EpigeneticAlterationsVisual,
   'loss-of-proteostasis':         ProteostasisVisual,
-  'disabled-autophagy':           AutophagyVisual,
+  'disabled-autophagy':           AutophagyVisual, // retired slug, redirects to disabled-macroautophagy
+  'disabled-macroautophagy':      AutophagyVisual,
   'mitochondrial-dysfunction':    MitochondrialDysfunctionVisual,
   'cellular-senescence':          CellularSenescenceVisual,
   'stem-cell-exhaustion':         StemCellExhaustionVisual,
@@ -457,4 +461,5 @@ export const hallmarkVisualMap: Record<string, React.ComponentType<HallmarkVisua
   'chronic-inflammation':         ChronicInflammationVisual,
   'dysbiosis':                    DysbiosisVisual,
   'nutrient-sensing':             NutrientSensingVisual,
+  'deregulated-nutrient-sensing': NutrientSensingVisual,
 };

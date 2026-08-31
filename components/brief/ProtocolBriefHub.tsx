@@ -5,15 +5,32 @@ import { Newspaper, ExternalLink, ArrowRight, Radio } from 'lucide-react';
 import { getAllBriefIssues } from '@/lib/brief-research-sync';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { BriefSubscribePanel } from './BriefSubscribePanel';
+import { SponsorSlot } from '@/components/sponsors/SponsorSlot';
 import { getHubContext } from '@/lib/hub-context';
 
 const allIssues = getAllBriefIssues();
 const researchCount = allIssues.filter((i) => i.source === 'research-intel').length;
+const pmidCount = new Set(allIssues.flatMap((i) => i.pmids)).size;
 
 export function ProtocolBriefHub() {
   return (
-    <div>
+    <>
+      <CinematicHubHero
+        hue="violet"
+        kicker="Protocol Brief"
+        title={<>The research, <em>distilled</em>.</>}
+        lead="Weekly PMID-cited research drops tied to live library updates — every headline links straight to the module it moves."
+        stats={[
+          { value: String(allIssues.length), label: 'Issues in rotation' },
+          { value: String(researchCount), label: 'Research-Intel synced' },
+          { value: String(pmidCount), label: 'PMIDs cited' },
+        ]}
+        primary={{ href: '/library', label: 'Browse the library' }}
+        secondary={{ href: '/nico', label: 'Personalize your stack' }}
+      />
+      <div>
       <PageHeader
         icon={Newspaper}
         eyebrow="Protocol Brief · Research Digest"
@@ -25,6 +42,9 @@ export function ProtocolBriefHub() {
       />
 
       <BriefSubscribePanel />
+
+      {/* Clearly-labeled sponsor inventory — renders nothing until a placement is sold. */}
+      <SponsorSlot slot="brief" className="my-6" />
 
       <div className="space-y-6">
         {allIssues.map((entry, i) => (
@@ -96,6 +116,7 @@ export function ProtocolBriefHub() {
           </article>
         ))}
       </div>
-    </div>
+      </div>
+    </>
   );
 }

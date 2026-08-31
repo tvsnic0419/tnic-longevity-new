@@ -57,7 +57,7 @@ See `.env.example` for the full list.
 
 - **Registrar:** Vercel (nameservers already configured)
 - **Canonical:** `tnic.help` (apex)
-- **Redirect:** `www.tnic.help` → `tnic.help` (308, in `vercel.json` + `middleware.ts`)
+- **Redirect:** `www.tnic.help` → `tnic.help` (308, in `vercel.json` + `proxy.ts`)
 
 ### Weekly cron
 

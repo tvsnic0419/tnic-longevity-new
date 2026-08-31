@@ -7,7 +7,13 @@ import { SITE } from '@/lib/site';
 import { getHallmarkBySlug, hallmarkLibrary } from '@/lib/hallmarks-library';
 import { loadMdx } from '@/lib/mdx';
 import { buildArticleSchema, buildBreadcrumbSchema, buildPageMetadata, getCitationsFromBody } from '@/lib/seo';
-import { getCompoundsForHallmark, getCompoundIdToSlugMap } from '@/lib/library-graph';
+import {
+  getCompoundsForHallmark,
+  getCompoundIdToSlugMap,
+  getGuidesForHallmark,
+  getPeptidesForHallmark,
+} from '@/lib/library-graph';
+import { getMolecularPathwaysForHallmark } from '@/lib/pathways';
 import { libraryCategoryMeta, type LibraryModuleCategory } from '@/lib/library-modules';
 import { seoRoutes } from '@/lib/seo-routes';
 
@@ -48,11 +54,18 @@ export async function generateMetadata({
 
 export default async function HallmarkPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ tiers?: string }>;
 }) {
   const { slug } = await params;
   if (isCategorySlug(slug)) {
+    const { tiers } = await searchParams;
+    const activeTiers = (tiers ?? '')
+      .split(',')
+      .map((t) => t.trim().toUpperCase())
+      .filter((t): t is 'A' | 'B' | 'C' => t === 'A' || t === 'B' || t === 'C');
     // Advertise the machine-readable compound dataset to Google Dataset Search
     // and LLM crawlers so /compounds.json becomes a discoverable, citeable source.
     const datasetSchema =
@@ -80,7 +93,7 @@ export default async function HallmarkPage({
     return (
       <>
         {datasetSchema.length > 0 && <StructuredData schemas={datasetSchema} />}
-        <LibraryCategoryIndex category={slug} />
+        <LibraryCategoryIndex category={slug} activeTiers={activeTiers} />
       </>
     );
   }
@@ -91,6 +104,13 @@ export default async function HallmarkPage({
   const path = `/library/${hallmark.slug}`;
   const targetingCompounds = getCompoundsForHallmark(hallmark.id);
   const compoundHrefs = getCompoundIdToSlugMap();
+  const guides = getGuidesForHallmark(hallmark.id);
+  const targetingPeptides = getPeptidesForHallmark(hallmark.id);
+  const drivingPathways = getMolecularPathwaysForHallmark(hallmark.id).map((p) => ({
+    slug: p.slug,
+    name: p.name,
+    summary: p.summary,
+  }));
 
   const reviewer = mdx?.frontmatter.reviewer;
   const breadcrumbItems = [
@@ -117,7 +137,10 @@ export default async function HallmarkPage({
         hallmark={hallmark}
         mdxBody={mdx?.body ?? null}
         targetingCompounds={targetingCompounds}
+        targetingPeptides={targetingPeptides}
+        drivingPathways={drivingPathways}
         compoundHrefs={compoundHrefs}
+        guides={guides}
         lastUpdated={mdx?.frontmatter.last_updated}
         author={mdx?.frontmatter.author}
         reviewer={reviewer}

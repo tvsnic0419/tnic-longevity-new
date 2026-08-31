@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type { EvidenceTier } from '@/lib/types';
 import { evidenceTagDefinitions } from '@/lib/trust';
 import { cn } from '@/lib/utils';
@@ -71,24 +72,36 @@ interface EvidenceTagProps {
   size?: 'sm' | 'md' | 'lg';
   showTooltip?: boolean;
   className?: string;
+  /**
+   * When set, the chip becomes a link to the grading rubric (typically
+   * `/trust/methodology`), making evidence-tier transparency one click away from
+   * wherever a tier is shown. OMIT when the tag already sits inside an `<a>` —
+   * nesting anchors is invalid HTML.
+   */
+  href?: string;
 }
 
-export function EvidenceTag({ tier, size = 'md', showTooltip = true, className = '' }: EvidenceTagProps) {
+export function EvidenceTag({
+  tier,
+  size = 'md',
+  showTooltip = true,
+  className = '',
+  href,
+}: EvidenceTagProps) {
   const def = evidenceTagDefinitions[tier];
   const meta = tierMeta[tier];
   const spec = sizeSpec[size];
 
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center rounded-md border bg-[var(--color-bg-muted)] font-mono font-bold leading-none',
-        meta.shell,
-        spec.chip,
-        className,
-      )}
-      title={showTooltip ? def.description : undefined}
-      aria-label={`Evidence tier ${tier}: ${def.label}`}
-    >
+  const shell = cn(
+    'inline-flex items-center rounded-md border bg-[var(--color-bg-muted)] font-mono font-bold leading-none',
+    meta.shell,
+    spec.chip,
+    href && 'focus-ring cursor-pointer transition hover:brightness-110',
+    className,
+  );
+
+  const inner = (
+    <>
       <TierMeter level={meta.level} color={meta.color} spec={spec} />
       <span className="inline-flex items-baseline gap-1">
         Tier {tier}
@@ -96,6 +109,29 @@ export function EvidenceTag({ tier, size = 'md', showTooltip = true, className =
           <span className="hidden font-normal opacity-70 sm:inline">· {def.short}</span>
         )}
       </span>
+    </>
+  );
+
+  if (href) {
+    return (
+      <Link
+        href={href}
+        className={shell}
+        title={showTooltip ? `${def.description} — see grading methodology` : undefined}
+        aria-label={`Evidence tier ${tier}: ${def.label}. See grading methodology.`}
+      >
+        {inner}
+      </Link>
+    );
+  }
+
+  return (
+    <span
+      className={shell}
+      title={showTooltip ? def.description : undefined}
+      aria-label={`Evidence tier ${tier}: ${def.label}`}
+    >
+      {inner}
     </span>
   );
 }

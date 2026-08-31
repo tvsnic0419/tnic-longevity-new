@@ -118,8 +118,8 @@ export default function SupplementGuidesPage() {
           lead="Deep dives on the molecules with the strongest human data in aging science — mechanism, key trials, dosing, and honest cautions. Cited throughout; affiliate links never drive the rankings."
           stats={[
             { value: String(SUPPLEMENT_GUIDES.length), label: 'In-depth guides' },
-            { value: String(compoundDeepDives.length), label: 'Compound profiles' },
-            { value: String(comparisons.length), label: 'Head-to-head comparisons' },
+            { value: String(compoundDeepDives.length), label: 'Compound profiles', href: '/library/compounds' },
+            { value: String(comparisons.length), label: 'Head-to-head comparisons', href: '/library/compare' },
           ]}
           primary={{ href: '/longevity-supplements-guide', label: 'Start with the Master Guide' }}
           secondary={{ href: '/library', label: 'Compound library' }}

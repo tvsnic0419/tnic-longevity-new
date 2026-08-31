@@ -33,6 +33,15 @@ describe('cross-links resolve to real routes', () => {
     }
   });
 
+  it('every compound deep-dive is represented in the prose cross-link map', () => {
+    // Prevents a new compound shipping "prose-invisible" — never auto-linked
+    // anywhere and unreachable from other articles' bodies.
+    const linked = new Set(crossLinks.map((c) => c.href));
+    for (const href of compoundHrefs) {
+      expect(linked.has(href), `compound ${href} is missing from cross-links (prose-invisible)`).toBe(true);
+    }
+  });
+
   it('no duplicate prose names (would double-process)', () => {
     const names = crossLinkTerms.map((t) => t.name.toLowerCase());
     expect(new Set(names).size, `duplicate cross-link names: ${names.join(', ')}`).toBe(names.length);

@@ -26,7 +26,12 @@ export function DisclaimerBanner({ disclaimer, showAppliesTo = false }: Disclaim
       >
         <Icon className={`w-5 h-5 shrink-0 mt-0.5 ${style.text}`} aria-hidden="true" />
         <div>
-          <h4 className={`heading-card mb-1 ${style.text}`}>{disclaimer.title}</h4>
+          {/* Styled label, not a document heading. This banner renders at
+              varying depths (directly under an h1 on /peptides, below h3s on
+              /trust), so a fixed h4 skipped heading levels wherever it landed.
+              The `aria-label` on the enclosing role="note" already names the
+              region, so nothing is lost by keeping it out of the outline. */}
+          <p className={`heading-card mb-1 ${style.text}`}>{disclaimer.title}</p>
           <p className="text-body-sm">{disclaimer.body}</p>
           {showAppliesTo && disclaimer.appliesTo.length > 0 && (
             <p className="text-caption mt-2">

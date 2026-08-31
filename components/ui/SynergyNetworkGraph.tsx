@@ -3,16 +3,20 @@
 import { useState, useId, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { ExternalLink } from 'lucide-react';
+import { VIZ, tierColor } from '@/components/viz/tokens';
+import { getEdgeExplanation } from '@/lib/hero-network';
 
 // ── Pathway clusters ─────────────────────────────────────────────────────────
 type Pathway = 'nrf2' | 'nad' | 'sirtuin' | 'ampk' | 'senolytic';
 
+// Sourced from the canonical viz tokens, not restated, so this can't drift
+// from EvidenceTag/tierColor() the way a second hardcoded copy could.
 const PATHWAY_COLOR: Record<Pathway, string> = {
-  nrf2:      '#00e0ff',
-  nad:       '#34d399',
-  sirtuin:   '#c084fc',
-  ampk:      '#fbbf24',
-  senolytic: '#f472b6',
+  nrf2:      VIZ.cyan,
+  nad:       VIZ.emerald,
+  sirtuin:   VIZ.violet,
+  ampk:      VIZ.amber,
+  senolytic: VIZ.rose,
 };
 
 const PATHWAY_LABEL: Record<Pathway, string> = {
@@ -64,6 +68,10 @@ interface SynergyEdge {
   a: string;
   b: string;
   strength: 'strong' | 'moderate';
+  /** Superseded by getEdgeExplanation(a, b) at render time — kept on the data
+   *  so this array reads self-documenting, but the hover tooltip and fallback
+   *  table both read through the shared resolver (lib/hero-network.ts) so
+   *  this text can't silently drift from the canonical synergy-mechanism data. */
   note: string;
 }
 
@@ -105,8 +113,10 @@ function hex2rgba(hex: string, alpha: number) {
   return `rgba(${r},${g},${b},${alpha})`;
 }
 
+// Canonical evidence-tier colors — sourced from viz/tokens.ts's tierColor(),
+// the same function EvidenceTag reads, so this can never disagree with it.
 function getTierBadgeColor(tier: 'A' | 'B') {
-  return tier === 'A' ? '#34d399' : '#fbbf24';
+  return tierColor(tier);
 }
 
 export function SynergyNetworkGraph() {
@@ -389,7 +399,7 @@ export function SynergyNetworkGraph() {
                         <span className="font-semibold" style={{ color: PATHWAY_COLOR[partner.pathway] }}>
                           {partner.name}
                         </span>
-                        {' · '}{edge.note}
+                        {' · '}{getEdgeExplanation(edge.a, edge.b).text}
                       </span>
                     </div>
                   );
@@ -425,6 +435,36 @@ export function SynergyNetworkGraph() {
             <span className="text-micro text-muted-foreground">Moderate</span>
           </div>
         </div>
+      </div>
+
+      {/* ── Always-visible fallback table ──
+          The graph above only surfaces edge data on hover — this table gives
+          the same data to anyone who doesn't want the interaction (or can't
+          use it), matching ConnectionMatrix.tsx's established idiom. */}
+      <div className="mt-6 scroll-region rounded-2xl border border-border/70 bg-card/30">
+        <table className="w-full border-collapse text-left">
+          <caption className="sr-only">
+            All {EDGES.length} synergy connections in this network, with strength and mechanism.
+          </caption>
+          <thead>
+            <tr className="border-b border-border/60">
+              <th scope="col" className="px-3 py-2 text-label text-muted-foreground">Compound A</th>
+              <th scope="col" className="px-3 py-2 text-label text-muted-foreground">Compound B</th>
+              <th scope="col" className="px-3 py-2 text-label text-muted-foreground">Strength</th>
+              <th scope="col" className="px-3 py-2 text-label text-muted-foreground">Mechanism</th>
+            </tr>
+          </thead>
+          <tbody>
+            {EDGES.map((e) => (
+              <tr key={`${e.a}-${e.b}`} className="border-t border-border/50">
+                <td className="px-3 py-2 text-body-sm">{nodeMap[e.a]?.name ?? e.a}</td>
+                <td className="px-3 py-2 text-body-sm">{nodeMap[e.b]?.name ?? e.b}</td>
+                <td className="px-3 py-2 text-caption capitalize text-muted-foreground">{e.strength}</td>
+                <td className="px-3 py-2 text-body-sm text-muted-foreground">{getEdgeExplanation(e.a, e.b).text}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       <style>{`

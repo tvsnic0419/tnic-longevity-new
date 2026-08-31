@@ -112,12 +112,14 @@ export function AntiAgingLibrary({ asPageTitle = false }: AntiAgingLibraryProps)
                 const circ = Math.PI * r; // semicircle circumference
                 const dashOffset = circ * (1 - arcPct);
                 return (
+                  // The listitem role belongs on a wrapper, not on the button:
+                  // `role="listitem"` is not a permitted role for <button>, so
+                  // the whole list was invalid to assistive tech.
+                  <div key={h.id} role="listitem" className="h-full">
                   <button
-                    key={h.id}
-                    role="listitem"
                     aria-current={isActive ? 'true' : undefined}
                     onClick={() => setSelected(h.id)}
-                    className={`focus-ring interactive text-left p-4 min-h-[var(--space-touch)] rounded-xl ${
+                    className={`focus-ring interactive text-left p-4 min-h-[var(--space-touch)] h-full w-full rounded-xl ${
                       isActive
                         ? 'bg-accent-cyan/10 border border-accent-cyan/30'
                         : 'glass glass-hover'
@@ -126,7 +128,9 @@ export function AntiAgingLibrary({ asPageTitle = false }: AntiAgingLibraryProps)
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">
                         <span className="text-label">#{h.number}</span>
-                        <h3 className="heading-card mt-1 leading-snug">{h.title}</h3>
+                        {/* h2: the page's only other heading is its h1, so an
+                            h3 here skipped a level. `.heading-card` sets size. */}
+                        <h2 className="heading-card mt-1 leading-snug">{h.title}</h2>
                       </div>
                       {/* Mini coverage arc */}
                       <svg
@@ -171,6 +175,7 @@ export function AntiAgingLibrary({ asPageTitle = false }: AntiAgingLibraryProps)
                       )}
                     </div>
                   </button>
+                  </div>
                 );
               })}
             </div>

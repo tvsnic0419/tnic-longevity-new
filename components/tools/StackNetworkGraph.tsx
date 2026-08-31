@@ -66,11 +66,24 @@ export function StackNetworkGraph({
 
   const isDimmed = (id: string) => relatedIds !== null && !relatedIds.has(id);
 
+  // Canonical evidence-tier colors (A emerald / B cyan / C amber) — the same
+  // mapping EvidenceTag and tierColor() use site-wide, so the letter inside
+  // each node reads as the same grade a user sees on the compound module.
+  const tierFill: Record<string, string> = {
+    A: 'var(--accent-emerald)',
+    B: 'var(--accent-cyan)',
+    C: 'var(--accent-amber)',
+  };
+
+  const RING_R = 165;
+  const CX = 240;
+  const CY = 240;
+
   return (
     <div className={cn('relative w-full', className)}>
       <svg
-        viewBox="0 0 400 400"
-        className="w-full h-auto max-h-[420px]"
+        viewBox="0 0 480 480"
+        className="w-full h-auto max-h-[520px]"
         role="img"
         aria-label="Supplement interaction network graph — hover a compound to highlight its intersecting pathway network"
       >
@@ -89,6 +102,17 @@ export function StackNetworkGraph({
             </marker>
           ))}
         </defs>
+
+        {/* Guide ring — the orbit the pathway clusters are laid out on. */}
+        <circle
+          cx={CX}
+          cy={CY}
+          r={RING_R}
+          fill="none"
+          stroke="var(--color-border-subtle)"
+          strokeWidth="1"
+          strokeDasharray="1 5"
+        />
 
         {visibleEdges.map((edge: NetworkEdge) => {
           const source = nodeMap.get(edge.source)!;
@@ -126,7 +150,18 @@ export function StackNetworkGraph({
           const isFocused = focusId === node.id;
           const isSelected = node.selected;
           const dimmed = isDimmed(node.id);
-          const r = isFocused ? 22 : isSelected ? 18 : 14;
+          // Degree-sized nodes: a compound with ten documented interactions
+          // reads bigger than one with two. Focus/selection raise it further.
+          const baseR = 9 + Math.min(node.degree ?? 1, 8) * 1.2;
+          const r = isFocused ? baseR + 5 : isSelected ? baseR + 2.5 : baseR;
+
+          // Radial label outside the ring — rotated to follow the orbit,
+          // flipped on the left half so text never reads upside-down.
+          const angleDeg = ((node.angle ?? 0) * 180) / Math.PI;
+          const onRight = Math.cos(node.angle ?? 0) >= 0;
+          const labelR = RING_R + r + 12;
+          const lx = CX + labelR * Math.cos(node.angle ?? 0);
+          const ly = CY + labelR * Math.sin(node.angle ?? 0);
 
           return (
             <g
@@ -161,30 +196,37 @@ export function StackNetworkGraph({
                 cy={node.y}
                 r={r}
                 fill={isSelected ? 'var(--accent-violet)' : 'var(--color-bg-elevated)'}
-                stroke={isFocused ? 'var(--accent-cyan)' : 'var(--color-border-strong)'}
+                stroke={isFocused ? 'var(--accent-cyan)' : tierFill[node.evidence] ?? 'var(--color-border-strong)'}
                 strokeWidth={isFocused ? 2.5 : 1.5}
-                opacity={isSelected || isFocused ? 1 : 0.75}
+                strokeOpacity={isSelected || isFocused ? 1 : 0.55}
+                opacity={isSelected || isFocused ? 1 : 0.9}
               />
+              {/* Tier letter inside the node — the ring color above already
+                  carries the grade, this makes it explicit at a glance. */}
               <text
                 x={node.x}
-                y={node.y + 1}
+                y={node.y + 0.5}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                fill={isSelected ? 'var(--color-bg-base)' : 'var(--color-text-primary)'}
-                fontSize={isSelected ? 8 : 7}
-                fontWeight="600"
-              >
-                {node.shortLabel.slice(0, 8)}
-              </text>
-              <text
-                x={node.x}
-                y={node.y + r + 12}
-                textAnchor="middle"
-                fill="var(--color-text-faint)"
-                fontSize="6"
+                fill={isSelected ? 'var(--color-bg-base)' : tierFill[node.evidence] ?? 'var(--color-text-primary)'}
+                fontSize="8"
+                fontWeight="700"
                 fontFamily="var(--font-mono)"
               >
                 {node.evidence}
+              </text>
+              <text
+                x={lx}
+                y={ly}
+                textAnchor={onRight ? 'start' : 'end'}
+                dominantBaseline="middle"
+                transform={`rotate(${onRight ? angleDeg : angleDeg + 180} ${lx} ${ly})`}
+                fill={isFocused ? 'var(--color-text-primary)' : 'var(--color-text-muted)'}
+                fontSize="7.5"
+                fontWeight={isFocused || isSelected ? 600 : 400}
+                fontFamily="var(--font-sans)"
+              >
+                {node.shortLabel}
               </text>
             </g>
           );
@@ -202,6 +244,54 @@ export function StackNetworkGraph({
           </span>
         ))}
       </div>
+
+      {/* Honest omission note — zero-degree catalogued compounds are excluded
+          from the map (they'd render as an illegible label band with no
+          edges), and the caption says so rather than dropping them silently. */}
+      {graph.stats.isolatedCount > 0 && (
+        <p className="mt-2 text-center text-micro text-muted-foreground/70">
+          {graph.stats.isolatedCount} catalogued compounds have no documented pair interaction yet
+          and are omitted from the map.
+        </p>
+      )}
+
+      {/* Always-visible fallback table — the graph above only surfaces edge
+          data on hover/focus; this gives the same data to anyone who doesn't
+          want the interaction (or can't use it). Matches
+          ConnectionMatrix.tsx's established idiom. */}
+      {visibleEdges.length > 0 && (
+        <div className="mt-4 scroll-region rounded-2xl border border-border/70 bg-card/30">
+          <table className="w-full border-collapse text-left">
+            <caption className="sr-only">
+              All {visibleEdges.length} interactions in this stack&apos;s network, with type and detail.
+            </caption>
+            <thead>
+              <tr className="border-b border-border/60">
+                <th scope="col" className="px-3 py-2 text-label text-muted-foreground">Compound A</th>
+                <th scope="col" className="px-3 py-2 text-label text-muted-foreground">Compound B</th>
+                <th scope="col" className="px-3 py-2 text-label text-muted-foreground">Type</th>
+                <th scope="col" className="px-3 py-2 text-label text-muted-foreground">Detail</th>
+              </tr>
+            </thead>
+            <tbody>
+              {visibleEdges.map((edge) => {
+                const source = nodeMap.get(edge.source);
+                const target = nodeMap.get(edge.target);
+                return (
+                  <tr key={edge.id} className="border-t border-border/50">
+                    <td className="px-3 py-2 text-body-sm">{source?.label ?? edge.source}</td>
+                    <td className="px-3 py-2 text-body-sm">{target?.label ?? edge.target}</td>
+                    <td className="px-3 py-2 text-caption capitalize" style={{ color: edgeColors[edge.type] }}>
+                      {edge.type}
+                    </td>
+                    <td className="px-3 py-2 text-body-sm text-muted-foreground">{edge.detail}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

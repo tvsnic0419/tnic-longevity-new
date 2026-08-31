@@ -7,11 +7,13 @@ import {
   FlaskConical,
   Scale,
   CheckCircle2,
+  Info,
 } from 'lucide-react';
 import type { CompoundBuyerGuide as BuyerGuide } from '@/lib/buyer-guides';
 import { getProductPick } from '@/lib/product-picks';
 import { ProductPickCard } from '@/components/shop/ProductPickCard';
 import { GlassPanel } from '@/components/ui/GlassPanel';
+import { AffiliateDisclosure } from '@/components/trust/AffiliateDisclosure';
 import { cn } from '@/lib/utils';
 
 interface CompoundBuyerGuideProps {
@@ -65,13 +67,29 @@ export function CompoundBuyerGuidePanel({
       </div>
 
       <div className={cn('p-5 space-y-5', compact && 'space-y-4')}>
-        {productPick && (
-          <div className="grid md:grid-cols-[minmax(0,1fr)_240px] gap-4 items-start">
-            <p className="text-sm text-muted-foreground leading-relaxed md:col-span-1">
-              After verifying COA demands below, use this TNiC-matched pick — click the image to open
-              the manufacturer product page.
+        {productPick ? (
+          <>
+            <div className="grid md:grid-cols-[minmax(0,1fr)_240px] gap-4 items-start">
+              <p className="text-sm text-muted-foreground leading-relaxed md:col-span-1">
+                After verifying COA demands below, use this TNiC-matched pick — click the image to open
+                the manufacturer product page.
+              </p>
+              <ProductPickCard pick={productPick} compact />
+            </div>
+            <AffiliateDisclosure />
+          </>
+        ) : (
+          <div className="flex items-start gap-2.5 rounded-xl border border-border/50 bg-muted/10 p-4">
+            <Info className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              TNiC hasn&apos;t verified a manufacturer pick for this compound yet — picks are added
+              only after dose-matched COA verification, which is exactly what the checklist below
+              covers. See what TNiC has verified on{' '}
+              <Link href="/products" className="text-accent-cyan hover:underline">
+                Products
+              </Link>
+              .
             </p>
-            <ProductPickCard pick={productPick} compact />
           </div>
         )}
 

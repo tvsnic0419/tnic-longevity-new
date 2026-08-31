@@ -17,13 +17,17 @@ import {
   Link2,
   CheckCircle2,
   Copy,
+  Info,
 } from 'lucide-react';
 import { usePlatform } from '@/context/PlatformContext';
 import { stackPresets, type PresetKey } from '@/lib/presets';
+import { COMPOUND_COUNT } from '@/lib/library-modules';
+import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import {
   getNrAlternativeShopItem,
   getNrShopItems,
   getStackShopItems,
+  getUnmatchedStackCompounds,
   shopDisclosure,
 } from '@/lib/protocol-shop';
 import { buildShopStackUrl, isPresetKey, parseStackParam } from '@/lib/stack-url';
@@ -51,6 +55,10 @@ function ProtocolShopPanelInner() {
   const items = isNrOnlyMode ? getNrShopItems() : getStackShopItems(selected);
   const nrAlternative =
     !isNrOnlyMode && selected.includes('nmn') ? getNrAlternativeShopItem() : null;
+  // NR-only mode's `items` comes from a fixed single card unrelated to
+  // `selected` — comparing them there would falsely claim compounds are
+  // missing that were never meant to be shown as a stack.
+  const unmatched = isNrOnlyMode ? [] : getUnmatchedStackCompounds(selected);
   const [deepLinked, setDeepLinked] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -113,7 +121,21 @@ function ProtocolShopPanelInner() {
   const presetFromUrl = stackParam && isPresetKey(stackParam) ? stackPresets[stackParam].label : null;
 
   return (
-    <div>
+    <>
+      <CinematicHubHero
+        hue="amber"
+        kicker="Protocol Shop"
+        title={<>Buy smart, <em>not branded</em>.</>}
+        lead="Stack-filtered verification checklists from the buyer guides — what to look for on a label before you spend, never who paid to be listed."
+        stats={[
+          { value: String(Object.keys(stackPresets).length), label: 'Stack presets' },
+          { value: String(COMPOUND_COUNT), label: 'Compounds covered' },
+          { value: 'COA-first', label: 'Verification standard' },
+        ]}
+        primary={{ href: '/stacks', label: 'Build a stack to filter' }}
+        secondary={{ href: '/products', label: 'See product picks' }}
+      />
+      <div>
       <PageHeader
         icon={ShoppingBag}
         eyebrow="Protocol Shop"
@@ -187,7 +209,7 @@ function ProtocolShopPanelInner() {
         </Link>
       </div>
 
-      {items.length === 0 ? (
+      {items.length === 0 && selected.length === 0 ? (
         <div className="rounded-2xl border border-accent-amber/20 bg-accent-amber/5 p-6 md:p-8">
           <div className="max-w-2xl">
             <p className="text-label text-accent-amber mb-2">No stack loaded yet</p>
@@ -234,8 +256,84 @@ function ProtocolShopPanelInner() {
             ))}
           </div>
         </div>
+      ) : items.length === 0 ? (
+        <div className="rounded-2xl border border-accent-amber/20 bg-accent-amber/5 p-6 md:p-8">
+          <div className="max-w-2xl">
+            <p className="text-label text-accent-amber mb-2">Stack loaded · no verified picks yet</p>
+            <h2 className="text-2xl font-bold text-foreground mb-3">
+              Your {selected.length}-compound stack is here — TNiC just hasn&apos;t verified a product for these yet.
+            </h2>
+            <p className="text-body-sm text-muted-foreground leading-relaxed">
+              We add a manufacturer pick only after dose-matched COA verification, so none of these carry a
+              verified card yet. Their evidence, dosing, and buyer cautions still live on each module.
+            </p>
+          </div>
+
+          {unmatched.length > 0 && (
+            <ul className="mt-5 flex flex-wrap gap-2">
+              {unmatched.map((c) => (
+                <li key={c.compoundId}>
+                  {c.moduleHref ? (
+                    <Link
+                      href={c.moduleHref}
+                      className="focus-ring inline-flex items-center rounded-lg glass px-3 py-1.5 text-xs font-semibold text-accent-cyan hover:border-accent-cyan/30"
+                    >
+                      {c.compoundName}
+                    </Link>
+                  ) : (
+                    <span className="inline-flex rounded-lg glass px-3 py-1.5 text-xs font-semibold text-muted-foreground">
+                      {c.compoundName}
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link
+              href="/products"
+              className="focus-ring inline-flex items-center gap-2 rounded-xl border border-accent-amber/30 bg-accent-amber/20 px-5 py-2.5 text-sm font-semibold text-accent-amber transition hover:bg-accent-amber/30"
+            >
+              See what is verified <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              href="/stacks"
+              className="focus-ring inline-flex items-center gap-2 rounded-xl border border-border px-5 py-2.5 text-sm font-semibold text-[var(--color-text-secondary)] transition hover:border-foreground/40 hover:text-foreground"
+            >
+              Adjust the stack in Architect
+            </Link>
+          </div>
+        </div>
       ) : (
         <>
+          {unmatched.length > 0 && (
+            <div className="rounded-xl border border-accent-amber/25 bg-accent-amber/5 p-4 mb-6 flex gap-3">
+              <Info className="w-5 h-5 text-accent-amber shrink-0 mt-0.5" />
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {unmatched.length} compound{unmatched.length !== 1 ? 's' : ''} in your stack{' '}
+                {unmatched.length !== 1 ? "don't" : "doesn't"} have a verified pick yet — TNiC adds
+                manufacturer picks only after dose-matched COA verification:{' '}
+                {unmatched.map((c, i) => (
+                  <span key={c.compoundId}>
+                    {i > 0 && ', '}
+                    {c.moduleHref ? (
+                      <Link href={c.moduleHref} className="text-accent-cyan hover:underline">
+                        {c.compoundName}
+                      </Link>
+                    ) : (
+                      c.compoundName
+                    )}
+                  </span>
+                ))}
+                . See what IS verified on{' '}
+                <Link href="/products" className="text-accent-cyan hover:underline">
+                  Products
+                </Link>
+                .
+              </p>
+            </div>
+          )}
           <div className="space-y-4 mb-8">
             {items.map((item) => (
               <div
@@ -349,6 +447,7 @@ function ProtocolShopPanelInner() {
         </>
       )}
     </div>
+    </>
   );
 }
 

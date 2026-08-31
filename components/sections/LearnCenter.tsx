@@ -40,6 +40,7 @@ import {
 } from 'lucide-react';
 import { PageShell } from '@/components/ui/PageShell';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import {
   gettingStartedSteps,
   glossary,
@@ -131,7 +132,21 @@ export function LearnCenter({ defaultTab }: { defaultTab?: TabId }) {
     : consumerFAQ.filter((f) => f.category === faqFilter);
 
   return (
-    <PageShell className="bg-background">
+    <>
+      <CinematicHubHero
+        hue="cyan"
+        kicker="Learn Center"
+        title={<>Learn before you <em>stack</em>.</>}
+        lead="Intelligent consumers ask hard questions. TNiC answers them openly — from first-time basics to the supplement industry's red flags."
+        stats={[
+          { value: String(consumerFAQ.length), label: 'FAQ answers' },
+          { value: String(glossary.length), label: 'Glossary terms' },
+          { value: String(tabs.length), label: 'Learning tracks' },
+        ]}
+        primary={{ href: '/library', label: 'Open the library' }}
+        secondary={{ href: '/nico', label: 'Find your stack' }}
+      />
+      <PageShell className="bg-background">
       <PageHeader
         icon={BookOpen}
         eyebrow="Learn"
@@ -188,14 +203,19 @@ export function LearnCenter({ defaultTab }: { defaultTab?: TabId }) {
                     </span>
                   </label>
                   <a href={step.link} className="flex-1 block">
-                    <h3 className={`font-bold group-hover:text-accent-cyan transition-colors ${done ? 'line-through text-muted-foreground' : ''}`}>
+                    {/* h2: these steps sit directly under the page h1. */}
+                    <h2 className={`font-bold group-hover:text-accent-cyan transition-colors ${done ? 'line-through text-muted-foreground' : ''}`}>
                       {step.title}
-                    </h3>
+                    </h2>
                     <p className="text-sm text-muted-foreground mt-1">{step.desc}</p>
                   </a>
-                  <a href={step.link} className="shrink-0 mt-1">
+                  {/* Decorative affordance, not a second link: it pointed at
+                      the same href as the title link above with no text of its
+                      own, so it was an unnamed duplicate for screen readers
+                      and crawlers alike. */}
+                  <span className="shrink-0 mt-1" aria-hidden="true">
                     <ArrowRight className="w-5 h-5 text-caption group-hover:text-accent-cyan transition-colors" />
-                  </a>
+                  </span>
                 </div>
               );
             })}
@@ -267,7 +287,7 @@ export function LearnCenter({ defaultTab }: { defaultTab?: TabId }) {
                   </div>
                   {openTerm === g.term && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-3">
-                      <p className="text-sm text-foreground/90 mb-2">{g.simple}</p>
+                      <p className="text-sm text-[var(--color-text-secondary)] mb-2">{g.simple}</p>
                       <p className="text-xs text-muted-foreground border-t border-border pt-2">
                         <span className="text-accent-cyan font-mono">Why it matters: </span>{g.why}
                       </p>
@@ -401,5 +421,6 @@ export function LearnCenter({ defaultTab }: { defaultTab?: TabId }) {
         )}
       </AnimatePresence>
     </PageShell>
+    </>
   );
 }

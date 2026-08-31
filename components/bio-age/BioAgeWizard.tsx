@@ -77,7 +77,7 @@ function NumberInput({
           onChange={(e) => { setDraft(e.target.value); onChange(e.target.value); }}
           onBlur={() => setFocused(false)}
           placeholder={placeholder ?? '—'}
-          className="flex-1 bg-background border border-border rounded-lg px-3 py-2 text-sm font-mono text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30 transition"
+          className="flex-1 bg-background border border-border rounded-lg px-3 py-2 text-sm font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30 transition"
         />
         {unit && <span className="text-xs text-muted-foreground shrink-0 w-10">{unit}</span>}
       </div>
@@ -203,7 +203,7 @@ function WizardProgress({ step }: { step: number }) {
           <span
             key={s}
             className={`text-micro font-medium tracking-wide transition-colors ${
-              i === step ? 'text-emerald-400' : i < step ? 'text-muted-foreground' : 'text-foreground/70'
+              i === step ? 'text-emerald-400' : i < step ? 'text-muted-foreground' : 'text-muted-foreground'
             }`}
           >
             {s}
@@ -677,7 +677,7 @@ function Results({
       </div>
 
       {/* Domain breakdown */}
-      <div className="rounded-xl border border-border/60 bg-card/40 p-5 space-y-4">
+      <div className="premium-card p-5 space-y-4">
         <p className="text-xs text-muted-foreground uppercase tracking-widest font-medium">Domain breakdown</p>
         <DomainBar {...result.domains.metabolic} />
         <DomainBar {...result.domains.inflammatory} />
@@ -708,7 +708,7 @@ function Results({
       })()}
 
       {/* Protocol */}
-      <div className="rounded-xl border border-border/60 bg-card/40 p-5">
+      <div className="premium-card p-5">
         <p className="text-xs text-muted-foreground uppercase tracking-widest font-medium mb-4">
           Personalized Protocol
         </p>

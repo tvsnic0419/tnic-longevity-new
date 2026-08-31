@@ -48,11 +48,10 @@ function buildPathwayArchitectSchemas() {
 }
 
 export default function PathwayArchitectPage() {
-  // Same shell as the sibling tool routes (/tools, /compound-engine) — no
-  // ContextBar stack readout, for the same reason as /compound-engine: this
-  // scores against its own curated hallmark dataset, not the one
-  // lib/stack-analysis uses, so showing both would put two different
-  // coverage numbers for the same stack on one screen.
+  // The shell (and `hideStackReadout`, for the same reason as /compound-engine:
+  // this scores against its own curated hallmark dataset, not the one
+  // lib/stack-analysis uses) comes from app/tools/layout.tsx. Wrapping in a
+  // second SubPageLayout here rendered the entire chrome twice.
   return (
     <>
       <StructuredData schemas={buildPathwayArchitectSchemas()} />

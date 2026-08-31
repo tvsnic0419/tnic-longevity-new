@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { BookOpen, FlaskConical, Heart, User, Quote, Check } from 'lucide-react';
 import { SectionShell } from '@/components/SectionShell';
+import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 
 const founder = {
   name: 'Tommy Nichols',
@@ -45,7 +46,21 @@ const scopeNote = {
 
 export function AboutSection() {
   return (
-    <SectionShell
+    <>
+      <CinematicHubHero
+        hue="cyan"
+        kicker="About TNiC"
+        title={<>Evidence first. <em>Independence</em> always.</>}
+        lead="Not a supplement store, not a health blog — a structured, evidence-graded platform where every major claim is traceable and every commercial tie is disclosed."
+        stats={[
+          { value: 'A–C', label: 'Evidence tiers' },
+          { value: '$0', label: 'Inventory sold' },
+          { value: 'Cited', label: 'Every major claim' },
+        ]}
+        primary={{ href: '/library', label: 'Explore the library' }}
+        secondary={{ href: '/trust', label: 'How we grade evidence' }}
+      />
+      <SectionShell
       id="about"
       mod="MOD-ABT-00"
       theme="cyan"
@@ -71,7 +86,7 @@ export function AboutSection() {
           </div>
           <div className="flex-1 space-y-3">
             {founder.bio.map((para, i) => (
-              <p key={i} className="text-sm text-foreground/90 leading-relaxed">{para}</p>
+              <p key={i} className="text-sm text-[var(--color-text-secondary)] leading-relaxed">{para}</p>
             ))}
             <div className="flex items-start gap-3 pt-3 border-t border-border mt-4">
               <Quote className="w-4 h-4 text-accent-cyan shrink-0 mt-0.5" />
@@ -103,7 +118,7 @@ export function AboutSection() {
           <p className="text-micro font-mono text-accent-emerald uppercase tracking-wider mb-3">Currently Covered</p>
           <ul className="space-y-2">
             {scopeNote.covered.map((item) => (
-              <li key={item} className="text-sm text-foreground/90 flex items-start gap-2">
+              <li key={item} className="text-sm text-[var(--color-text-secondary)] flex items-start gap-2">
                 <Check className="h-4 w-4 mt-0.5 shrink-0 text-accent-emerald" aria-hidden="true" /> {item}
               </li>
             ))}
@@ -128,5 +143,6 @@ export function AboutSection() {
         Last reviewed: June 2026 · Content version 1.2 · Evidence tiers re-evaluated quarterly
       </p>
     </SectionShell>
+    </>
   );
 }

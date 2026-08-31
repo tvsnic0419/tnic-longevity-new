@@ -6,14 +6,20 @@ import { compoundModules, COMPOUND_COUNT, libraryModules } from './library-modul
 /**
  * Coverage guardrail for the compound library.
  *
- * The 55 compound deep-dives have gone missing before — stranded on an unmerged
+ * The compound deep-dives have gone missing before — stranded on an unmerged
  * branch, or dropped when a surface silently switched to a smaller dataset. This
  * suite fails the build the moment that recurs, so a regression is caught in CI
  * instead of on the live site. If compounds are *intentionally* added or removed,
  * update EXPECTED_COMPOUND_COUNT in the same commit — that edit is the paper trail.
+ *
+ * Aug 2026: bumped 65 → 100 as the "photo-informed expansion batch" landed
+ * (Mucuna, Ginkgo, Panax, Theobromine, Capsaicin, Pumpkin-seed, SOD, BioPerine,
+ * MCT from the founder's Irwin Naturals label; plus a longevity-relevance
+ * backlog of B-vitamin actives, mushroom polysaccharides, adaptogens, and
+ * connective-tissue support).
  */
 
-const EXPECTED_COMPOUND_COUNT = 55;
+const EXPECTED_COMPOUND_COUNT = 100;
 const COMPOUNDS_DIR = resolve(process.cwd(), 'content/compounds');
 
 function mdxSlugs(): string[] {
@@ -23,7 +29,7 @@ function mdxSlugs(): string[] {
     .sort();
 }
 
-describe('compound library coverage — the 55 never silently disappear', () => {
+describe('compound library coverage — the full set never silently disappears', () => {
   it(`exposes exactly ${EXPECTED_COMPOUND_COUNT} compound modules`, () => {
     expect(COMPOUND_COUNT).toBe(EXPECTED_COMPOUND_COUNT);
     expect(compoundModules).toHaveLength(EXPECTED_COMPOUND_COUNT);

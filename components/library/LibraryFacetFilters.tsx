@@ -13,14 +13,14 @@ const HALLMARKS = [
   { num: 2, label: 'Telomere Attrition' },
   { num: 3, label: 'Epigenetic Alterations' },
   { num: 4, label: 'Loss of Proteostasis' },
-  { num: 5, label: 'Deregulated Nutrient Sensing' },
+  { num: 5, label: 'Disabled Macroautophagy' },
   { num: 6, label: 'Mitochondrial Dysfunction' },
   { num: 7, label: 'Cellular Senescence' },
   { num: 8, label: 'Stem Cell Exhaustion' },
   { num: 9, label: 'Altered Intercellular Communication' },
   { num: 10, label: 'Chronic Inflammation' },
   { num: 11, label: 'Dysbiosis' },
-  { num: 12, label: 'Disabled Macroautophagy' },
+  { num: 12, label: 'Deregulated Nutrient Sensing' },
 ];
 
 const TIERS = ['A', 'B', 'C'] as const;
@@ -114,7 +114,9 @@ export const LibraryFacetFilters: React.FC<LibraryFacetFiltersProps> = ({ classN
         <div className="flex gap-2">
           {TIERS.map(tier => {
             const isActive = activeTiers.includes(tier);
-            const tierColor = tier === 'A' ? 'emerald' : tier === 'B' ? 'amber' : 'rose';
+            // Canonical evidence-tier colors — must match EvidenceTag / trust.ts
+            // (A = clinical/emerald, B = emerging/cyan, C = preclinical/amber).
+            const tierColor = tier === 'A' ? 'emerald' : tier === 'B' ? 'cyan' : 'amber';
             return (
               <button
                 key={tier}
@@ -132,7 +134,7 @@ export const LibraryFacetFilters: React.FC<LibraryFacetFiltersProps> = ({ classN
 
       {hasActiveFilters && (
         <div className="text-micro text-[var(--color-text-faint)]">
-          Active filters applied to search results. Combine with text search for precise discovery.
+          Filtering the compound grid below. Combine tiers and hallmarks to narrow the list.
         </div>
       )}
     </div>

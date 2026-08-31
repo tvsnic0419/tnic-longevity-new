@@ -11,8 +11,8 @@ export const DisabledMacroautophagyVisual: React.FC<{ className?: string; showLa
     <div className={`relative tnic-glass rounded-2xl p-5 overflow-hidden ${className}`}>
       <div className="flex items-start justify-between mb-3">
         <div>
-          <div className="text-label text-[var(--accent-emerald)] mb-0.5">HALLMARK 12</div>
-          <h4 className="heading-card text-lg">Disabled Macroautophagy</h4>
+          <div className="text-label text-[var(--accent-emerald)] mb-0.5">HALLMARK 05</div>
+          <h3 className="heading-card text-lg">Disabled Macroautophagy</h3>
         </div>
       </div>
 

@@ -24,14 +24,14 @@ const EDITORIAL_SLUGS = new Set([
   'telomere-attrition',
   'epigenetic-alterations',
   'loss-of-proteostasis',
-  'disabled-autophagy',
+  'disabled-macroautophagy',
   'mitochondrial-dysfunction',
   'cellular-senescence',
   'stem-cell-exhaustion',
   'altered-intercellular-communication',
   'chronic-inflammation',
   'dysbiosis',
-  'disabled-macroautophagy',
+  'deregulated-nutrient-sensing',
 ]);
 
 // Coverage keeps its semantic green→amber→rose signal (how well TNiC covers the
@@ -64,8 +64,8 @@ export default function HallmarksIndexPage() {
         lead="Twelve cellular mechanisms drive how we age — each paired here with the PMID-cited interventions that move it. This is the map every rational protocol is built on."
         stats={[
           { value: String(hallmarkLibrary.length), label: 'Hallmarks mapped' },
-          { value: String(citationRegistry.length), label: 'PMID citations' },
-          { value: String(tierABCompounds), label: 'Tier A/B compounds' },
+          { value: String(citationRegistry.length), label: 'PMID citations', href: '/trust' },
+          { value: String(tierABCompounds), label: 'Tier A/B compounds', href: '/library/compounds?tiers=A,B' },
         ]}
         primary={{ href: '/stacks', label: 'Build my stack' }}
         secondary={{ href: '/library', label: 'Interactive library' }}
@@ -158,7 +158,7 @@ export default function HallmarksIndexPage() {
                       <div className="mt-auto flex gap-2">
                         <Link
                           href={`/library/${h.slug}`}
-                          className="focus-ring flex-1 rounded-lg border border-border bg-white/[0.02] py-2 text-center text-xs font-medium text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
+                          className="tnic-button-outline focus-ring flex-1 rounded-lg py-2 text-center text-xs font-medium"
                         >
                           Library →
                         </Link>
@@ -185,11 +185,11 @@ export default function HallmarksIndexPage() {
             <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-3">Scientific Foundation</p>
             <p className="text-sm text-muted-foreground leading-relaxed mb-4">
               The hallmarks framework was first published in{' '}
-              <a href="https://pubmed.ncbi.nlm.nih.gov/22768836/" target="_blank" rel="noopener noreferrer" className="text-accent-emerald hover:underline">
+              <a href="https://pubmed.ncbi.nlm.nih.gov/22768836/" target="_blank" rel="noopener noreferrer" className="text-accent-emerald underline underline-offset-2 decoration-accent-emerald/50 hover:decoration-accent-emerald">
                 Cell 2013 (PMID: 22768836)
               </a>{' '}
               by López-Otín et al. and expanded to 12 hallmarks in the{' '}
-              <a href="https://pubmed.ncbi.nlm.nih.gov/36599349/" target="_blank" rel="noopener noreferrer" className="text-accent-emerald hover:underline">
+              <a href="https://pubmed.ncbi.nlm.nih.gov/36599349/" target="_blank" rel="noopener noreferrer" className="text-accent-emerald underline underline-offset-2 decoration-accent-emerald/50 hover:decoration-accent-emerald">
                 2023 update (PMID: 36599349)
               </a>.{' '}
               TNiC maps interventions to this framework using Tier A/B/C evidence grading. The hallmarks are a descriptive
@@ -213,7 +213,7 @@ export default function HallmarksIndexPage() {
               <Link href="/stacks" className="focus-ring group inline-flex items-center gap-2 tnic-button-accent [--btn-accent:var(--accent-emerald)] rounded-xl px-6 py-3 text-sm">
                 Stack Architect <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
-              <Link href="/bio-age" className="focus-ring inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3 text-sm font-medium text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground">
+              <Link href="/bio-age" className="tnic-button-outline focus-ring inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-medium">
                 Calculate Bio Age
               </Link>
             </div>

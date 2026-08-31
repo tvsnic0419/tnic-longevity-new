@@ -113,7 +113,7 @@ export function TrustHub() {
                 href={link.href}
                 className="focus-ring interactive group flex items-center justify-between p-4"
               >
-                <span className="flex items-center gap-2 text-sm font-semibold text-foreground/90 group-hover:text-accent-emerald">
+                <span className="flex items-center gap-2 text-sm font-semibold text-[var(--color-text-secondary)] group-hover:text-accent-emerald">
                   <Icon className="w-4 h-4" aria-hidden="true" />
                   {link.label}
                 </span>
@@ -181,7 +181,7 @@ export function TrustHub() {
                       </span>
                     ))}
                   </div>
-                  <p className="text-caption mt-4 pt-4 border-t border-border/40 text-muted-foreground/70">
+                  <p className="text-caption mt-4 pt-4 border-t border-border/40 text-muted-foreground">
                     All citations are peer-reviewed. Tiers A/B/C assigned by literature strength and re-evaluated quarterly.
                   </p>
                 </div>
@@ -193,7 +193,9 @@ export function TrustHub() {
                 <RevealCard key={item.title} index={i} className="rounded-xl p-5 flex gap-4">
                   <Eye className="w-5 h-5 text-accent-emerald shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
-                    <h3 className="heading-card mb-1">{item.title}</h3>
+                    {/* h2: this is the first heading after the page h1, so an
+                        h3 skipped a level. `.heading-card` carries the size. */}
+                    <h2 className="heading-card mb-1">{item.title}</h2>
                     <p className="text-body-sm">{item.desc}</p>
                   </div>
                 </RevealCard>

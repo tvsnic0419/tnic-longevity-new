@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { ArrowRight, Activity, FlaskConical, LayoutDashboard } from 'lucide-react';
 import { LongevityGaugeArc } from '@/components/ui/LongevityGaugeArc';
 import { usePlatform } from '@/context/PlatformContext';
-import { analyzeStack } from '@/lib/stack-analysis';
+import { analyzeStack, formatActiveProtocol } from '@/lib/stack-analysis';
 import { runBiomarkerDashboard } from '@/lib/tools/biomarker-dashboard';
 import { journeyMilestones } from '@/lib/journey';
 import type { EvidenceLevel } from '@/lib/types';
@@ -49,10 +49,7 @@ export function Dashboard() {
   const { selected, selectedCompounds, score, profile, defenseProfile, labs, quizResult } = usePlatform();
   const analysis = analyzeStack(selected);
 
-  const activeProtocol =
-    selectedCompounds.length > 0
-      ? selectedCompounds.map((c) => c.name.split(' ')[0]).join(' + ')
-      : 'No active stack';
+  const activeProtocol = formatActiveProtocol(selectedCompounds.map((c) => c.name));
 
   const latestLabDate =
     labs.length > 0
@@ -101,7 +98,7 @@ export function Dashboard() {
           <div className="inline-flex items-center gap-2 card-ultra rounded-full px-4 py-2.5 mb-4 text-body-sm">
             <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent-emerald animate-pulse-glow" aria-hidden="true" />
             <LayoutDashboard className="w-4 h-4 text-accent-emerald" aria-hidden="true" />
-            <span className="font-mono text-xs tracking-wide text-foreground/90 uppercase">Personal command center</span>
+            <span className="font-mono text-xs tracking-wide text-[var(--color-text-secondary)] uppercase">Personal command center</span>
           </div>
           <h1 className="heading-page">My Longevity OS</h1>
           <p className="text-body text-muted-foreground mt-3 max-w-2xl">
@@ -129,14 +126,20 @@ export function Dashboard() {
         <div id="dashboard-status" className="lg:col-span-1">
         <Card variant="elevated" className="h-full">
           <CardHeader>
-            <CardTitle>Current status</CardTitle>
+            {/* First heading under the page h1 — h2 so the outline doesn't
+                skip a level; the h3s that follow then nest correctly. */}
+            <CardTitle as="h2">Current status</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <div>
               <p className="text-caption text-muted-foreground">Active protocol</p>
               <p className="text-2xl font-bold mt-1 leading-snug">{activeProtocol}</p>
               <p className="text-body-sm text-muted-foreground mt-1">
-                {selected.length} compound{selected.length === 1 ? '' : 's'} · Tier {analysis.evidenceTier}
+                {selected.length} compound{selected.length === 1 ? '' : 's'}
+                {/* An empty stack has no evidence grade — never print "Tier C"
+                    (a weak-evidence verdict) just because the averaging helper
+                    defaults there when it has nothing to average. */}
+                {selected.length > 0 ? ` · Tier ${analysis.evidenceTier}` : ' · Not graded'}
               </p>
             </div>
 

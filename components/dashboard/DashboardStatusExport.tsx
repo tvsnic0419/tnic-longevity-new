@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import { Copy, FileText, Image as ImageIcon, CheckCircle2 } from 'lucide-react';
 import { usePlatform } from '@/context/PlatformContext';
-import { analyzeStack } from '@/lib/stack-analysis';
+import { analyzeStack, formatActiveProtocol } from '@/lib/stack-analysis';
 import { runBiomarkerDashboard } from '@/lib/tools/biomarker-dashboard';
 import {
   buildDashboardStatusMarkdown,
@@ -26,10 +26,7 @@ export function DashboardStatusExport() {
   const analysis = analyzeStack(selected);
 
   const snapshot = useMemo((): DashboardStatusSnapshot => {
-    const activeProtocol =
-      selectedCompounds.length > 0
-        ? selectedCompounds.map((c) => c.name.split(' ')[0]).join(' + ')
-        : 'No active stack';
+    const activeProtocol = formatActiveProtocol(selectedCompounds.map((c) => c.name));
 
     const latestLabDate =
       labs.length > 0
@@ -41,7 +38,10 @@ export function DashboardStatusExport() {
     return {
       activeProtocol,
       compoundCount: selected.length,
-      evidenceTier: analysis.evidenceTier,
+      // An empty stack has no evidence grade — export an honest em dash rather
+      // than the averaging helper's empty-input default ("C"), which would
+      // claim a weak-evidence verdict about nothing.
+      evidenceTier: selected.length > 0 ? analysis.evidenceTier : '—',
       synergyScore: score,
       biologicalAge: profile.scanned ? defenseProfile.biologicalAge : '—',
       defenseScanned: profile.scanned,

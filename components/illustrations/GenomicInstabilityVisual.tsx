@@ -20,7 +20,7 @@ export const GenomicInstabilityVisual: React.FC<GenomicInstabilityVisualProps> =
       <div className="flex items-start justify-between mb-3">
         <div>
           <div className="text-label text-[var(--accent-cyan)] mb-0.5">HALLMARK 01</div>
-          <h4 className="heading-card text-lg">Genomic Instability</h4>
+          <h3 className="heading-card text-lg">Genomic Instability</h3>
         </div>
         {showLabels && <div className="text-right text-micro text-[var(--color-text-muted)]">DNA Damage · Repair · NAD+</div>}
       </div>

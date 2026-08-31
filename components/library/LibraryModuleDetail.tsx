@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, BookOpen, Layers, FlaskConical, HeartPulse, AlertTriangle, Scale, Pill, type LucideIcon } from 'lucide-react';
+import { ArrowLeft, BookOpen, Layers, FlaskConical, HeartPulse, AlertTriangle, Scale, Pill, ShoppingBag, Info, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import type { LibraryModule, LibraryModuleCategory } from '@/lib/library-modules';
 import type { ComparisonLink } from '@/lib/comparison-relations';
@@ -10,9 +10,12 @@ import type { GuideLink, RelatedCompoundLink } from '@/lib/library-graph';
 import { getModulePath, libraryCategoryMeta } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { compounds } from '@/lib/data';
+import { getEdgeExplanation } from '@/lib/hero-network';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { MdxRenderer } from './MdxRenderer';
 import { CompoundBuyerGuidePanel } from './CompoundBuyerGuide';
+import { ProductPickCard } from '@/components/shop/ProductPickCard';
+import { getProductPick } from '@/lib/product-picks';
 import { LifestylePillarPanel } from './LifestylePillarPanel';
 import { getBuyerGuideByModuleSlug } from '@/lib/buyer-guides';
 import type { LifestyleSlug } from '@/lib/lifestyle-pillars';
@@ -22,6 +25,7 @@ import { ModuleGlancePanel } from './ModuleGlancePanel';
 import { recordModuleVisit } from '@/lib/recent-modules';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { ContentByline } from '@/components/trust/ContentByline';
+import { AffiliateDisclosure } from '@/components/trust/AffiliateDisclosure';
 import { libraryModuleTitles } from '@/lib/breadcrumb-titles';
 
 /**
@@ -78,6 +82,14 @@ export function LibraryModuleDetail({
     .filter(Boolean) ?? [];
   const buyerGuide =
     module.category === 'compounds' ? getBuyerGuideByModuleSlug(module.slug) : undefined;
+  // A compound can have a verified pick without a full authored buyer guide
+  // (e.g. R-ALA). Without this fallback its evidence page would carry no buy
+  // path at all — surface the pick directly so the revenue action is never
+  // missing where one exists.
+  const fallbackPick =
+    module.category === 'compounds' && !buyerGuide && module.compoundId
+      ? getProductPick(module.compoundId)
+      : undefined;
   // Library-first compounds have no canonical dataset entry to drive the rich
   // glance panel; surface the same shape from a live count of the PMIDs cited
   // in the deep-dive body so all 55 compound pages stay coherent.
@@ -122,7 +134,17 @@ export function LibraryModuleDetail({
               <p className="text-micro font-mono text-accent-cyan tracking-widest mb-2 uppercase">
                 {categoryMeta.label}
               </p>
-              <EvidenceTag tier={module.evidenceTier} size="lg" className="mb-4" />
+              <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                <EvidenceTag tier={module.evidenceTier} size="lg" href="/trust/methodology" />
+                {module.category === 'compounds' && (
+                  <Link
+                    href={`/library/compounds?tiers=${module.evidenceTier}`}
+                    className="focus-ring rounded text-xs text-muted-foreground hover:text-accent-cyan transition-colors"
+                  >
+                    See all Tier {module.evidenceTier} compounds →
+                  </Link>
+                )}
+              </div>
               <h2 className="text-lg font-bold mb-4">Module outline</h2>
               <ol className="space-y-2">
                 {module.outline.map((item, i) => (
@@ -177,6 +199,36 @@ export function LibraryModuleDetail({
                 <p className="text-xs text-muted-foreground mt-1">{relatedCompound.dose} · {relatedCompound.timing}</p>
                 <Link href="/stacks" className="text-xs text-accent-cyan hover:text-accent-emerald mt-3 inline-block">
                   Add to stack →
+                </Link>
+              </GlassPanel>
+            )}
+
+            {/* Compound pages: each synergy partner with its real pair-specific
+                mechanism (lib/synergy-mechanisms.ts) — the "why they pair" on
+                the page, not just a list of names. */}
+            {relatedCompound && relatedCompound.synergies.length > 0 && (
+              <GlassPanel depth="mid" className="rounded-xl p-5">
+                <p className="text-micro font-mono text-accent-emerald uppercase mb-3">Synergizes with</p>
+                <ul className="space-y-3">
+                  {relatedCompound.synergies.map((partnerId) => {
+                    const partner = compounds.find((c) => c.id === partnerId);
+                    if (!partner) return null;
+                    const why = getEdgeExplanation(relatedCompound.id, partner.id).text;
+                    return (
+                      <li key={partnerId}>
+                        <Link
+                          href={`/library/compounds/${partner.id}`}
+                          className="text-sm font-semibold text-foreground hover:text-accent-cyan transition"
+                        >
+                          {partner.name}
+                        </Link>
+                        <p className="mt-0.5 text-xs leading-snug text-muted-foreground">{why}</p>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <Link href="/stacks" className="text-xs text-accent-cyan hover:text-accent-emerald mt-4 inline-block">
+                  Open Stack Architect →
                 </Link>
               </GlassPanel>
             )}
@@ -347,6 +399,45 @@ export function LibraryModuleDetail({
               <CompoundBuyerGuidePanel guide={buyerGuide} />
             )}
 
+            {fallbackPick && (
+              <div className="gradient-border p-6 md:p-8">
+                <div className="flex items-center gap-2 mb-4">
+                  <ShoppingBag className="w-4 h-4 text-accent-emerald" aria-hidden="true" />
+                  <p className="text-micro font-mono text-accent-emerald uppercase">Verified pick</p>
+                </div>
+                <ProductPickCard pick={fallbackPick} />
+                <AffiliateDisclosure className="mt-3" />
+              </div>
+            )}
+
+            {/* Honest empty state for compounds with neither a buyer's-guide
+                checklist nor a verified pick — never a fabricated buy card,
+                just an honest note plus a real next step. Gated on
+                'compounds' for the same reason buyerGuide/fallbackPick are:
+                both are unconditionally undefined for every other category
+                (synergies/lifestyle/guides), so without this clause the box
+                would incorrectly render there too. */}
+            {!buyerGuide && !fallbackPick && module.category === 'compounds' && (
+              <div className="gradient-border p-6 md:p-8">
+                <div className="flex items-center gap-2 mb-3">
+                  <Info className="w-4 h-4 text-muted-foreground" aria-hidden="true" />
+                  <p className="text-micro font-mono text-muted-foreground uppercase">No verified pick yet</p>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  TNiC hasn&apos;t verified a manufacturer pick for {module.title} yet — picks are added
+                  only after dose-matched COA verification, not before. See what TNiC has verified on{' '}
+                  <Link href="/products" className="text-accent-cyan hover:underline">
+                    Products
+                  </Link>
+                  , or take the{' '}
+                  <Link href="/nico" className="text-accent-cyan hover:underline">
+                    NICO Starter Questionnaire
+                  </Link>{' '}
+                  for a personalized stack from compounds that are covered.
+                </p>
+              </div>
+            )}
+
             {mdxBody ? (
               <div
                 className="premium-card p-6 md:p-8"
@@ -375,7 +466,7 @@ export function LibraryModuleDetail({
                 <GlassPanel depth="mid" className="glass-hover rounded-lg">
                   <Link
                     href={engineHref}
-                    className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-foreground/90"
+                    className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-[var(--color-text-secondary)]"
                   >
                     See how this scores
                   </Link>
@@ -384,15 +475,15 @@ export function LibraryModuleDetail({
               <GlassPanel depth="mid" className="glass-hover rounded-lg">
                 <Link
                   href="/labs"
-                  className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-foreground/90"
+                  className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-[var(--color-text-secondary)]"
                 >
                   Open Labs hub
                 </Link>
               </GlassPanel>
               <GlassPanel depth="mid" className="glass-hover rounded-lg">
                 <Link
-                  href="/trust"
-                  className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-foreground/90"
+                  href="/trust/methodology"
+                  className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-[var(--color-text-secondary)]"
                 >
                   Evidence methodology
                 </Link>

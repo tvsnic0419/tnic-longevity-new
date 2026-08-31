@@ -13,7 +13,7 @@ export const LossOfProteostasisVisual: React.FC<{ className?: string; showLabels
       <div className="flex items-start justify-between mb-3">
         <div>
           <div className="text-label text-[var(--accent-cyan)] mb-0.5">HALLMARK 04</div>
-          <h4 className="heading-card text-lg">Loss of Proteostasis</h4>
+          <h3 className="heading-card text-lg">Loss of Proteostasis</h3>
         </div>
         {showLabels && <div className="text-right text-micro text-[var(--color-text-muted)]">Proteasome · Autophagy · Aggregates</div>}
       </div>

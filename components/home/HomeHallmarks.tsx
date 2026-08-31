@@ -29,14 +29,15 @@ export function HomeHallmarks() {
       aria-labelledby="home-hallmarks-heading"
       className="relative border-t border-border/50 py-20 md:py-28"
     >
-      <CellularDivider hue="var(--accent-emerald)" index="02" label="The hallmarks" />
+      <CellularDivider hue="var(--accent-emerald)" index="04" label="Mechanisms" />
       <div className="container-page">
         <div className="mb-10 items-center gap-10 lg:mb-14 lg:grid lg:grid-cols-12">
           <RevealItem className="lg:col-span-7">
-            <p className="text-label mb-3 text-accent-emerald">Interventions by hallmark</p>
+            <p className="text-label mb-3 text-accent-emerald">04 / Mechanisms</p>
             <h2 id="home-hallmarks-heading" className="heading-section mb-3">
               Twelve mechanisms of aging. A ranked, cited intervention for each.
             </h2>
+            <div className="heading-accent-rule mb-4" aria-hidden="true" />
             <p className="text-body mb-4">
               Every hallmark links to its highest-evidence levers — compounds, lifestyle
               changes, and clinical options — ranked by impact and traced to PubMed, not

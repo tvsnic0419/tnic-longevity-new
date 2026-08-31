@@ -1,11 +1,18 @@
-import { Color, MeshPhysicalMaterial, type WebGLProgramParametersWithUniforms } from 'three';
+import {
+  AdditiveBlending,
+  Color,
+  MeshBasicMaterial,
+  MeshPhysicalMaterial,
+  PointsMaterial,
+  type WebGLProgramParametersWithUniforms,
+} from 'three';
 
 /**
- * Material factories for the hero network's 3D scene.
+ * Material factories for the hero Pathway Flow scene.
  *
- * Kept out of the component so each node/edge material is constructed once
- * per tier rather than per React render, and so the shader injection below
- * has a single home instead of living inline in JSX.
+ * Kept out of the component so each material is constructed once rather than
+ * per React render, and so the shader injection below has a single home
+ * instead of living inline in JSX.
  */
 
 /**
@@ -54,5 +61,39 @@ export function createNodeMaterial(color: string): MeshPhysicalMaterial {
   };
 
   return material;
+}
+
+/**
+ * A flow ribbon: additive so overlapping routes accumulate into brighter
+ * junctions rather than flatly occluding, and unlit so its colour stays the
+ * pathway's exact hue regardless of scene lighting. One per edge — opacity is
+ * animated toward the selection state, so each needs its own instance.
+ */
+export function createRibbonMaterial(color: string): MeshBasicMaterial {
+  return new MeshBasicMaterial({
+    color,
+    transparent: true,
+    opacity: 0.28,
+    depthWrite: false,
+    blending: AdditiveBlending,
+  });
+}
+
+/**
+ * The flowing particles that stream along the ribbons — the scene's only
+ * motion now that it doesn't rotate. Additive points, colour carried
+ * per-vertex so one material serves every pathway, size attenuated so
+ * particles nearer the camera read larger.
+ */
+export function createParticleMaterial(): PointsMaterial {
+  return new PointsMaterial({
+    size: 0.12,
+    sizeAttenuation: true,
+    transparent: true,
+    depthWrite: false,
+    blending: AdditiveBlending,
+    vertexColors: true,
+    opacity: 0.95,
+  });
 }
 

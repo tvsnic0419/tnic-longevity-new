@@ -1,16 +1,21 @@
 'use client';
 
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { ArrowRight, ChevronRight, Download, MapPin, RotateCcw } from 'lucide-react';
-import { toast } from 'sonner';
-import { EXPORT_KIT_EVENT } from './os-events';
+import { ArrowRight, ChevronRight, MapPin } from 'lucide-react';
 import { usePlatform } from '@/context/PlatformContext';
-import { analyzeStack } from '@/lib/stack-analysis';
-import { HallmarkCoverageRing } from './HallmarkCoverageRing';
 import { accentForRoute, getRouteContext } from '@/lib/route-context';
 import { themes } from '@/lib/design-system';
 import { cn } from '@/lib/utils';
+
+// The stack cluster needs `analyzeStack` (and through it the full compound
+// data layer), but only renders for visitors who have built a stack. The bar
+// itself is on every page, so the readout is fetched on demand.
+const ContextBarStackReadout = dynamic(
+  () => import('./ContextBarStackReadout').then((m) => m.ContextBarStackReadout),
+  { ssr: false },
+);
 
 function daysSince(dateStr: string): number {
   return Math.floor(
@@ -64,26 +69,7 @@ export function ContextBar({ hideStackReadout = false }: ContextBarProps = {}) {
   const accent = accentForRoute(route.hub);
   const theme = themes[accent];
 
-  const { selected, setSelected, selectedCompounds, labs, profile } = usePlatform();
-  const analysis = analyzeStack(selected);
-
-  // Persisted stacks follow the visitor across every hub page. If that state is
-  // stale or unexpected, one click returns the OS to a clean 0/12 slate — with
-  // an Undo so nothing is lost by accident.
-  const resetStack = () => {
-    if (selected.length === 0) return;
-    const previous = selected;
-    setSelected([]);
-    toast('Stack reset', {
-      description: 'Your OS is back to a clean slate.',
-      action: { label: 'Undo', onClick: () => setSelected(previous) },
-    });
-  };
-
-  const stackLabel =
-    selectedCompounds.length > 0
-      ? selectedCompounds.map((c) => c.name.split(' ')[0]).join(' + ')
-      : 'No stack';
+  const { selected, labs, profile } = usePlatform();
 
   const latestLabDate =
     labs.length > 0
@@ -142,32 +128,7 @@ export function ContextBar({ hideStackReadout = false }: ContextBarProps = {}) {
         )}
 
         <div className="ml-auto flex items-center gap-2 min-w-0">
-          {selected.length > 0 && !hideStackReadout && (
-            <>
-              <HallmarkCoverageRing covered={analysis.hallmarkCount} />
-              <span className="hidden md:inline truncate font-medium text-foreground/90 max-w-[200px] lg:max-w-xs">
-                {stackLabel}
-              </span>
-              <button
-                type="button"
-                onClick={resetStack}
-                className="focus-ring interactive inline-flex items-center gap-1 rounded-lg border border-border px-2 py-1.5 text-caption font-semibold text-muted-foreground hover:text-accent-rose hover:border-accent-rose/30 shrink-0"
-                aria-label="Reset stack to a clean slate"
-              >
-                <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
-                <span className="hidden sm:inline">Reset</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => window.dispatchEvent(new Event(EXPORT_KIT_EVENT))}
-                className="focus-ring interactive hidden sm:inline-flex items-center gap-1 rounded-lg border border-border px-2 py-1.5 text-caption font-semibold text-muted-foreground hover:text-accent-cyan hover:border-accent-cyan/30 shrink-0"
-                aria-label="Open export kit"
-              >
-                <Download className="w-3.5 h-3.5" aria-hidden="true" />
-                Export
-              </button>
-            </>
-          )}
+          {selected.length > 0 && !hideStackReadout && <ContextBarStackReadout />}
           <Link
             href={next.href}
             className="focus-ring interactive tnic-button-tonal [--btn-accent:var(--accent-emerald)] inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 shrink-0"

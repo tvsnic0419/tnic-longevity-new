@@ -101,9 +101,9 @@ export const hallmarkLibrary: HallmarkLibraryEntry[] = [
   },
   {
     id: 'autophagy',
-    slug: 'disabled-autophagy',
+    slug: 'disabled-macroautophagy',
     number: 5,
-    title: 'Disabled Autophagy',
+    title: 'Disabled Macroautophagy',
     tagline: 'Cellular recycling slows — junk accumulates',
     summary: 'Autophagy ("self-eating") clears damaged organelles and proteins. mTOR overactivation and NAD+ decline suppress this cleanup with age.',
     mechanism: 'Autophagy flux proceeds through five stages: induction (ULK1 complex phosphorylated by AMPK at Ser317/777), nucleation (BECN1/VPS34 PI3K complex generates the phagophore membrane), elongation (ATG5–12–16L1 complex lipidates LC3-I to LC3-II to coat the autophagosome), fusion with lysosomes, and cargo degradation by lysosomal hydrolases. mTORC1 directly inhibits ULK1 at Ser757, suppressing autophagy initiation when nutrients are abundant; with age, mTORC1 becomes tonically hyperactive, creating a chronic autophagy deficit even during fasting windows. SIRT1 deacetylates ATG5, ATG7, and LC3 to promote autophagosome maturation — NAD+ decline removes this facilitating arm. Cargo specificity matters critically: PINK1/Parkin-driven mitophagy removes dysfunctional mitochondria; ER-phagy (via FAM134B) clears stressed endoplasmic reticulum; lipophagy handles lipid droplets. When any arm fails, the uncleared cargo (damaged mitochondria, misfolded proteins, oxidized lipids) becomes a feedforward damage source for every adjacent hallmark.',
@@ -113,7 +113,7 @@ export const hallmarkLibrary: HallmarkLibraryEntry[] = [
     coverage: 70,
     biomarkers: ['LC3-II/LC3-I ratio (research)', 'p62 levels', 'Fasting glucose / ketones'],
     relatedCompoundIds: ['nmn', 'sulforaphane', 'resveratrol', 'spermidine'],
-    mdxSlug: 'disabled-autophagy',
+    mdxSlug: 'disabled-macroautophagy',
     personalPrompts: ['Log fasting window length', 'Track post-meal energy crashes', 'Note exercise intensity and recovery'],
     interventions: [
       { id: 'a1', name: 'Time-restricted eating (16:8+)', category: 'lifestyle', evidence: 'A', rank: 1, impact: 8, description: 'The most accessible autophagy trigger. mTOR suppression during fasting windows activates cleanup.', tnicAvailable: false },
@@ -278,9 +278,9 @@ export const hallmarkLibrary: HallmarkLibraryEntry[] = [
   },
   {
     id: 'nutrient',
-    slug: 'disabled-macroautophagy',
+    slug: 'deregulated-nutrient-sensing',
     number: 12,
-    title: 'Disabled Macroautophagy',
+    title: 'Deregulated Nutrient Sensing',
     tagline: 'Nutrient sensing gone wrong',
     summary: 'mTOR and AMPK — the nutrient sensing kinases — become dysregulated. Chronic nutrient surplus suppresses autophagy; AMPK activity declines with age.',
     mechanism: 'Two antagonistic kinase complexes implement nutrient sensing: mTORC1 (activated by amino acids via Ragulator/Rag GTPases sensing intra-lysosomal amino acids, by growth factors via PI3K/Akt, and by ROS) promotes protein synthesis, lipogenesis, and ribosome biogenesis while directly phosphorylating and inactivating ULK1 at Ser757 to suppress autophagy; AMPK (activated by rising AMP:ATP ratio via LKB1, and by CAMKK2 during Ca2+ transients) counteracts mTORC1 by phosphorylating Raptor at Ser792 and activating ULK1 at Ser317/777. With age, mTORC1 becomes chronically hyperactivated via three mechanisms: impaired AMPK sensitivity as mitochondrial efficiency declines; elevated branched-chain amino acids from sarcopenic muscle catabolism constitutively stimulating Ragulator; and broken S6K1 negative feedback (S6K1 normally phosphorylates IRS-1 Ser307 to limit insulin signaling, but chronic S6K1 activity converts this to pathological insulin resistance). Rapamycin inhibits mTORC1 by forming an FKBP12 complex that occludes the active site; this mechanism explains its 10–15% mean lifespan extension across 20+ mammalian studies. Metformin and berberine activate AMPK via Complex I inhibition, raising AMP:ATP; caloric restriction works by reducing Ragulator amino acid sensing input — all three therefore restore autophagy and reduce anabolic mTOR overdrive via the same AMPK/mTOR balance.',
@@ -290,7 +290,7 @@ export const hallmarkLibrary: HallmarkLibraryEntry[] = [
     coverage: 72,
     biomarkers: ['Fasting insulin', 'IGF-1', 'Ketone bodies', 'mTOR activity proxies'],
     relatedCompoundIds: ['resveratrol', 'nmn'],
-    mdxSlug: 'disabled-macroautophagy',
+    mdxSlug: 'deregulated-nutrient-sensing',
     personalPrompts: ['Log daily eating window', 'Track fasting glucose', 'Note protein intake timing'],
     interventions: [
       { id: 'n1', name: 'Caloric moderation / fasting', category: 'lifestyle', evidence: 'A', rank: 1, impact: 9, description: 'Caloric restriction is the oldest lifespan intervention in mammals. mTOR suppression is the mechanism.', tnicAvailable: false },

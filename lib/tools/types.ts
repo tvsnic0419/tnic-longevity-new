@@ -93,6 +93,10 @@ export interface NetworkNode {
   y: number;
   selected: boolean;
   bioavailability?: number;
+  /** Number of edges touching this node — drives node size. */
+  degree?: number;
+  /** Layout angle in radians (0 = +x axis) — drives radial label placement. */
+  angle?: number;
 }
 
 export interface NetworkEdge {
@@ -116,6 +120,12 @@ export interface StackNetworkGraph {
     activeSynergyCount: number;
     activeConflictCount: number;
     networkDensity: number;
+    /**
+     * Catalogued compounds omitted from the map because they have no
+     * documented pair interaction and aren't in the user's stack — shown
+     * as an honest caption, never silently dropped.
+     */
+    isolatedCount: number;
   };
 }
 

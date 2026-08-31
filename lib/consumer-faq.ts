@@ -1,0 +1,252 @@
+// Consumer FAQ content, split out of lib/data.ts so lib/hub-context.ts (and
+// through it route-context + the always-rendered ContextBar) doesn't pull the
+// compound data layer into every page's client bundle. Re-exported from
+// lib/data.ts for back-compat.
+//
+// Imports the lightweight compound-core mirror (not lib/data.ts) so the
+// stack-buildable count below stays live without reintroducing the bundle
+// weight this split was meant to avoid.
+import { compoundCore } from './compound-core';
+
+export const consumerFAQ = [
+  {
+    id: 'faq1',
+    category: 'getting-started' as const,
+    question: 'Do I need blood tests before starting?',
+    answer: 'Not required to begin learning and building a stack on TNiC. However, we strongly recommend baseline labs (CBC, metabolic panel, hs-CRP, and optionally glutathione or NAD+ metabolites) within your first 90 days. This gives you real data to compare against our projections and helps your physician monitor safely.',
+  },
+  {
+    id: 'faq2',
+    category: 'safety' as const,
+    question: 'Is TNiC safe for everyone?',
+    answer: 'No supplement protocol is universal. Pregnant/nursing individuals, people under 18, those on chemotherapy, blood thinners, or with kidney/liver disease must consult a physician first. TNiC provides per-compound safety data in the Trust Center — use it before starting anything.',
+  },
+  {
+    id: 'faq3',
+    category: 'science' as const,
+    question: 'How is TNiC different from just buying supplements on Amazon?',
+    answer: 'Amazon sells products. TNiC sells intelligence. Every compound is evidence-graded, PubMed-cited, dosed from clinical trials, checked for synergies and interactions, and mapped to specific aging hallmarks. You are not guessing — you are following a mechanistic protocol.',
+  },
+  {
+    id: 'faq4',
+    category: 'products' as const,
+    question: 'Does TNiC sell its own supplements?',
+    answer: 'No. TNiC is an independent intelligence platform. We curate third-party products that meet our evidence and bioavailability standards. Picks link to manufacturer sites and may include an affiliate token — TNiC may earn a commission on purchases at no extra cost to you. Commission never influences which products are listed or their evidence tier.',
+  },
+  {
+    id: 'faq5',
+    category: 'science' as const,
+    question: 'What does the biological age number actually mean?',
+    answer: 'It is a modeled estimate based on your lifestyle inputs and defense pathway status — not a laboratory diagnostic. It shows directional trend, not clinical certainty. For authoritative biological age, pair TNiC guidance with epigenetic clocks (TruDiagnostic, GlycanAge) or clinical biomarker panels.',
+  },
+  {
+    id: 'faq6',
+    category: 'getting-started' as const,
+    question: 'How long until I feel or see results?',
+    answer: 'Honest answer: subtle energy and sleep changes may appear in 2–4 weeks. Measurable biomarker shifts typically require 12–24 weeks of consistent dosing. GlyNAC human trials showed significant glutathione restoration at 24 weeks. Anyone promising overnight results is not credible.',
+  },
+  {
+    id: 'faq7',
+    category: 'safety' as const,
+    question: 'Can I take TNiC stacks with my medications?',
+    answer: 'Potentially — but you must check. NMN may interact with metformin. Resveratrol affects blood clotting. Sulforaphane may affect thyroid medication absorption. Export your stack protocol and review it with your pharmacist or physician before combining with any prescription.',
+  },
+  {
+    id: 'faq8',
+    category: 'products' as const,
+    question: `Why ${compoundCore.length} compounds and not dozens like other sites?`,
+    answer: `More is not better. Each additional compound increases interaction risk and usually means sub-therapeutic doses. TNiC curates ${compoundCore.length} evidence-graded, stack-buildable compounds — every one with PubMed-cited human data — selected for the strongest mechanistic coverage across all 12 hallmarks. Quality and synergy beat quantity. A stack of 30 unverified compounds with zero clinical evidence is not a protocol — it is a guess.`,
+  },
+  {
+    id: 'faq9',
+    category: 'science' as const,
+    question: 'What is an Evidence Tier A vs B vs C?',
+    answer: 'Tier A: human clinical trial with measured outcomes. Tier B: strong mechanism + emerging human pharmacokinetic data. Tier C: preclinical (animal/cell) only. TNiC builds stacks primarily from Tier A and B compounds and labels everything transparently.',
+  },
+  {
+    id: 'faq10',
+    category: 'getting-started' as const,
+    question: 'I\'m new to biohacking. Where do I start?',
+    answer: 'Follow the 5-step path in the Learn hub (/learn): (1) Run Defense Scan, (2) Review biomarkers, (3) Build your stack, (4) Check safety, (5) Track over 90 days. You do not need to understand NRF2 on day one — the tools guide you.',
+  },
+  {
+    id: 'faq11',
+    category: 'safety' as const,
+    question: 'What red flags should I watch for in supplement brands?',
+    answer: 'Proprietary blends hiding doses, lifespan claims without PubMed links, racemic ALA marketed as premium, NMN without purity certificates, and mega-stacks of 20+ ingredients. TNiC lists all red flags in the Learn hub (/learn) with specific actions to take.',
+  },
+  {
+    id: 'faq12',
+    category: 'products' as const,
+    question: 'How often does TNiC update recommendations?',
+    answer: 'Continuously. When new peer-reviewed trials publish, evidence tiers are re-evaluated. The Research Intel feed surfaces breaking longevity science. Major protocol changes are reflected in the Stack Architect and noted in the Trust Center.',
+  },
+  {
+    id: 'faq13',
+    category: 'safety' as const,
+    question: 'Is it safe to combine all 9 TNiC compounds at once?',
+    answer: 'Starting all 9 simultaneously is not recommended. Ramp in one compound per week so you can attribute any GI or metabolic change to a specific compound. Tier B additions (taurine, spermidine, pterostilbene) follow the same ramp rule. High-priority interactions: resveratrol and pterostilbene affect platelet function — avoid if on blood thinners. R-ALA may amplify insulin sensitivity — monitor glucose if diabetic. NMN and rapamycin should not be self-combined without physician oversight. Use the Stack Architect synergy and warning panel.',
+  },
+  {
+    id: 'faq14',
+    category: 'science' as const,
+    question: 'What is NRF2 and why does TNiC build around it?',
+    answer: 'NRF2 is a transcription factor that switches on 200+ cytoprotective genes when activated. Three TNiC compounds target it: sulforaphane activates it via KEAP1 modification, GlyNAC supplies glutathione precursors it upregulates, and R-ALA recycles oxidized products. Together they form the NRF2 Defense Triad.',
+  },
+  {
+    id: 'faq15',
+    category: 'products',
+    question: 'Why does delivery system (liposomal, phytosome, standard) matter?',
+    answer: 'Many compounds are degraded before absorption. Liposomal delivery encapsulates compounds in phospholipid vesicles. Phytosomes dramatically improve resveratrol and sulforaphane bioavailability. Standard capsules work for water-soluble compounds like NMN and Ca-AKG. R-ALA should be taken with fat for best absorption.',
+  },
+  {
+    id: 'faq16',
+    category: 'safety',
+    question: 'What is rapamycin and should I consider it?',
+    answer: 'Rapamycin is an mTOR inhibitor that has extended lifespan in every model organism tested and improved immune function in the first human pilot trial (PMID: 25540326). It is a prescription immunosuppressant with real risks. TNiC does not recommend self-prescribing it. Your TNiC stack provides overlapping mechanistic benefits without the prescription risk.',
+  },
+  {
+    id: 'faq17',
+    category: 'science',
+    question: 'Can cold therapy or sauna replace supplement stacks?',
+    answer: 'No. Cold exposure activates cold-shock proteins and norepinephrine. Sauna upregulates heat shock proteins. Neither directly restores NAD+ or rebuilds glutathione. Treat thermal stress as a synergistic adjunct — not a replacement for mechanistic substrate restoration.',
+  },
+  {
+    id: 'faq18',
+    category: 'science',
+    question: 'What is an epigenetic clock and how do I get tested?',
+    answer: 'Epigenetic clocks measure DNA methylation patterns to calculate biological age. TruDiagnostic ($300-500) offers the most comprehensive consumer panel including DunedinPACE. TNiC\'s biological age estimate is a lifestyle model — useful for directional feedback before a lab test.',
+  },
+  {
+    id: 'faq19',
+    category: 'safety',
+    question: 'How much does sleep actually affect biological aging?',
+    answer: 'A 2024 SLEEP Journal study (PMID: 27702440) found adults under 6 hours per night accumulated 1.8 extra years of epigenetic aging annually vs 7-9 hour sleepers. Sleep is when SIRT1 and PARP peak, mitophagy clears damaged mitochondria, and the glymphatic system flushes amyloid. Treat sleep as non-negotiable.',
+  },
+  {
+    id: 'faq20',
+    category: 'products',
+    question: 'Should I take these supplements every day or cycle them?',
+    answer: 'Daily dosing matches the clinical evidence base. GlyNAC trials used 24-week continuous protocols. NMN and Ca-AKG require steady-state substrate availability. Sulforaphane can rotate with cruciferous diet days. Unless experiencing side effects, daily dosing is recommended.',
+  },
+  {
+    id: 'faq21',
+    category: 'science',
+    question: 'Does NMN actually work? What does the clinical evidence show?',
+    answer: 'Yes. A 2022 GeroScience trial (PMID: 36482258) confirmed NMN safely raises blood NAD+ in adults. A 2021 Science study (PMID: 33888596) showed NMN improved muscle insulin sensitivity in prediabetic women. Tier A evidence; real effects; appropriately modest claims about what NMN can and cannot do.',
+  },
+  {
+    id: 'faq22',
+    category: 'science',
+    question: 'What is the difference between NMN and NR for NAD+ restoration?',
+    answer: 'NMN is one step closer to NAD+ in biosynthesis and can enter cells via the Slc12a8 transporter. NR requires conversion to NMN first. NMN has the Yoshino 2021 Science study showing muscle metabolic effects (PMID: 33888596). TNiC rates NMN as Tier A and NR as Tier B. Consistency of dosing matters more than the choice between them.',
+  },
+  {
+    id: 'faq23',
+    category: 'science',
+    question: 'What natural foods are highest in sulforaphane?',
+    answer: 'Broccoli sprouts contain 10-100x more glucoraphanin than mature broccoli. Cooking above 70C destroys myrosinase, the enzyme needed to produce sulforaphane. Eat sprouts raw or steam under 3 minutes. Add mustard powder to cooked broccoli to restore exogenous myrosinase. TNiC products use standardized glucoraphanin with active myrosinase.',
+  },
+  {
+    id: 'faq24',
+    category: 'safety',
+    question: 'Is Ca-AKG safe? What are the known side effects of calcium alpha-ketoglutarate?',
+    answer: 'The 2024 Aging Cell trial (PMID: 34847066) — 12 weeks in middle-aged adults — reported no serious adverse events. Most common: mild transient GI discomfort in the first 1-2 weeks. Requires monitoring in kidney disease. Start at 500mg and titrate up over 2 weeks to minimize adjustment.',
+  },
+  {
+    id: 'faq25',
+    category: 'products',
+    question: 'How do I read a Certificate of Analysis (COA) for supplements?',
+    answer: 'Check: (1) Purity >= 98% for active compound. (2) Identity test via HPLC or NMR. (3) Heavy metals below USP limits. (4) Microbial testing with pathogen absence. (5) Batch number matching your product. (6) ISO/IEC 17025-accredited lab. Red flags: COA on request only, missing batch number, or unverifiable lab.',
+  },
+  {
+    id: 'faq26',
+    category: 'science' as const,
+    question: 'Why is taking glutathione directly less effective than GlyNAC?',
+    answer: 'Oral glutathione is cleaved in the gut before absorption — you absorb the component amino acids, not the intact tripeptide. GlyNAC supplies glycine and N-acetylcysteine, the two rate-limiting precursors the body uses to synthesize glutathione intracellularly. Three human RCTs confirm intracellular glutathione is rebuilt at 24 weeks, something direct glutathione supplementation fails to achieve at equivalent doses.',
+  },
+  {
+    id: 'faq27',
+    category: 'science' as const,
+    question: 'Does intermittent fasting synergize with longevity supplement stacks?',
+    answer: 'Yes — with timing discipline. Fasting activates AMPK and suppresses mTORC1, priming autophagy. Time NMN and Ca-AKG to your eating window (not fasted) since they require substrate availability. Sulforaphane and spermidine can be taken fasted. R-ALA needs fat co-ingestion. Avoid dosing resveratrol with fatty meals — it competes with SIRT1 activation that fasting has already primed.',
+  },
+  {
+    id: 'faq28',
+    category: 'safety' as const,
+    question: 'Why does TNiC not include metformin in the standard stack?',
+    answer: 'Metformin is a biguanide prescription drug — not a supplement. Though the TAME trial (Targeting Aging with Metformin) is underway, evidence for longevity outcomes in non-diabetic adults remains incomplete. Metformin also blocks the muscle hypertrophy response to exercise via AMPK interference — a significant tradeoff. TNiC provides overlapping AMPK-supportive mechanisms (Ca-AKG, R-ALA, NMN) without the prescription risk.',
+  },
+  {
+    id: 'faq29',
+    category: 'science' as const,
+    question: 'What exactly are senescent cells and why do they matter?',
+    answer: 'Senescent cells are damaged cells that stop dividing but refuse to die. They secrete the SASP (senescence-associated secretory phenotype) — a cocktail of inflammatory cytokines (IL-6, IL-8, MMP-3) that damages neighboring tissue. Senescent cell accumulation correlates with every major age-related disease. TNiC maps senolytic-adjacent compounds (spermidine, resveratrol, NMN) to the senescence hallmark in Stack Architect.',
+  },
+  {
+    id: 'faq30',
+    category: 'getting-started' as const,
+    question: 'What are the most common mistakes people make when starting a longevity protocol?',
+    answer: 'The big five: (1) Starting 5+ compounds simultaneously — you cannot attribute effects or side effects. (2) Using unverified brands with no third-party COA. (3) Ignoring drug interactions — especially resveratrol with blood thinners. (4) Expecting results in under 8 weeks — biology is slow. (5) Not tracking biomarkers — you are flying blind without baseline labs. TNiC\'s Stack Architect and Lab Hub are designed to prevent all five.',
+  },
+  {
+    id: 'faq31',
+    category: 'safety' as const,
+    question: 'Does TNiC store or share my health data?',
+    answer: 'No. TNiC is built on a local-first architecture. Your questionnaire results, biomarker logs, stack configurations, and biological age inputs are stored in your own browser — never transmitted to TNiC servers or third parties. There is no account system, no user database, and no data monetization. Clearing your browser storage erases your data permanently. This is a deliberate design choice, not a marketing claim.',
+  },
+  {
+    id: 'faq32',
+    category: 'science' as const,
+    question: 'How does the NICO Starter Questionnaire generate a personalized stack?',
+    answer: 'The NICO Starter Questionnaire maps your own inputs — your goals, lifestyle signals (sleep, energy, stress, movement, diet, age), the hallmark focus areas you prioritize, and a safety screen — to a per-compound affinity score across the evidence-graded library. It ranks those compounds, applies safety filters (holding back anything with a known interaction you flagged), and returns a personalized stack computed from your answers, not a fixed preset. Two different sets of answers return two different stacks. No black-box algorithm — every mapping is deterministic and transparent in the methodology section.',
+  },
+  {
+    id: 'faq33',
+    category: 'science' as const,
+    question: 'Can longevity supplements reverse aging or just slow it?',
+    answer: 'Honest answer: current evidence supports slowing measurable aging biomarkers and, in some cases, reversing specific deficits — not reversing aging wholesale. GlyNAC restored glutathione and mitochondrial function to levels resembling younger adults. Ca-AKG reduced epigenetic age by ~8 years in one trial. NMN restored muscle NAD+ metabolism. These are meaningful, measurable changes in specific mechanisms — not the return of youth.',
+  },
+  {
+    id: 'faq34',
+    category: 'products' as const,
+    question: 'What are the head-to-head comparison tables and how were they built?',
+    answer: 'TNiC\'s comparison tables are neutral, PMID-anchored side-by-side analyses across key decision dimensions — mechanism, bioavailability, human RCT evidence, timing, cost, and stack synergy. Each row cites a specific published study. There are no sponsored results, undisclosed affiliate arrangements, or score inflation. Current tables: NMN vs NR, GlyNAC vs liposomal glutathione, Resveratrol vs Pterostilbene, Berberine vs Metformin, Urolithin A vs CoQ10, NMN vs Spermidine, and others. Find them at /library/compare.',
+  },
+  {
+    id: 'faq35',
+    category: 'products' as const,
+    question: 'How does the TNiC buyer guide work — and how is it different from the verified product picks?',
+    answer: 'Each compound in the library has a buyer guide that lists: (1) required form on the label (e.g., "ubiquinol" not "CoQ10" without form disclosure); (2) COA demands — the specific assays to request from any manufacturer; (3) evidence-anchored dose range matched to the trial doses that produced results; and (4) red flags that disqualify a product immediately. Where TNiC does name a verified pick, links may carry an affiliate token — disclosed at the point of purchase, and commission never influences which products are listed or their evidence tier. The buyer guide is an intelligence checklist so you can evaluate any brand against objective criteria — not a placement bought by undisclosed compensation.',
+  },
+  {
+    id: 'faq36',
+    category: 'safety' as const,
+    question: 'Are peptides like BPC-157 legal to buy?',
+    answer: 'It depends entirely on the specific peptide — TNiC grades every peptide on a three-way legal axis, not a single "legal or not" label. Semaglutide and tirzepatide are FDA-approved prescription drugs. Thymosin Alpha-1 is an approved prescription drug (branded Zadaxin) in roughly 35 countries but not FDA-approved in the US. BPC-157 lost its US compounding-pharmacy pathway in 2023 and is now only available from unregulated "research chemical" vendors. Most others on the list (GHK-Cu injectable, epithalon, MOTS-c, humanin, the GH secretagogues) have no FDA-approved human-use pathway at all. Check the legal-status banner at the top of each peptide page before reading anything else about it.',
+  },
+  {
+    id: 'faq37',
+    category: 'products' as const,
+    question: "What's the difference between a research peptide and a prescription one like Ozempic?",
+    answer: 'A prescription peptide like semaglutide (Ozempic/Wegovy) or tirzepatide (Mounjaro/Zepbound) has been through FDA-reviewed human trials, is manufactured under pharmaceutical quality controls, and is dispensed by a licensed pharmacy against a physician prescription. A "research chemical" peptide like BPC-157 or MOTS-c is sold explicitly labeled "not for human consumption," has no FDA oversight of purity or dosing accuracy, and independent testing of these vendors has repeatedly found underdosed, contaminated, or mislabeled product. Both are technically "peptides" — the manufacturing and regulatory gap between them is the entire safety story.',
+  },
+  {
+    id: 'faq38',
+    category: 'safety' as const,
+    question: 'Is it safe to self-inject research-chemical peptides?',
+    answer: 'TNiC does not recommend self-administering any unregulated research-chemical peptide. Beyond the purity and dosing-accuracy risks from unverified sourcing, subcutaneous injection from a non-sterile source carries a real infection risk, and most of these peptides have zero published human safety or interaction data at any dose — every dosing pattern in circulation is extrapolated from animal pharmacokinetics. If you are considering one, read that peptide\'s full safety and red-flag section first, and treat any injection-site redness, fever, or swelling as a possible infection rather than a "normal peptide response."',
+  },
+  {
+    id: 'faq39',
+    category: 'science' as const,
+    question: 'Do peptides work the same way as oral compounds like NMN or GlyNAC?',
+    answer: 'No — mechanistically they are a different class entirely. Oral longevity compounds are typically small molecules absorbed through digestion (e.g., NMN feeding the NAD+ salvage pathway). Peptides are short chains of amino acids that usually cannot survive oral digestion intact, which is why almost all of them on TNiC\'s list are injectable rather than pills, and why they act on specific receptors (e.g., GHK-Cu on copper transport, Ipamorelin on the ghrelin receptor) rather than broad metabolic pathways. The evidence-tier system TNiC uses is identical across both categories, but the delivery route, legal framework, and safety profile are not interchangeable.',
+  },
+  {
+    id: 'faq40',
+    category: 'getting-started' as const,
+    question: 'Should I look into peptides before I finish the compound library?',
+    answer: 'Generally no. Every peptide on TNiC\'s list is either prescription-only, has a materially thinner human evidence base than TNiC\'s Tier-A oral compounds, or both — Semaglutide/Tirzepatide being the one exception with genuine large-RCT backing. If you are new to TNiC, the compound library and NICO Starter Questionnaire are the lower-risk, better-evidenced starting point. Peptides are worth reading once you understand evidence tiers and want to evaluate a specific claim you have already encountered elsewhere, not as a first stop.',
+  },
+];

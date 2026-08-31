@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { track } from '@vercel/analytics/server';
 import { PRODUCT_PICKS } from '@/lib/product-picks';
 import { ANALYTICS_EVENTS } from '@/lib/analytics-events';
+import { applyAffiliateTag } from '@/lib/affiliate';
 
 export const runtime = 'edge';
 
@@ -42,6 +43,11 @@ export async function GET(
   } else {
     dest = pick.affiliateUrl ?? pick.purchaseUrl;
   }
+
+  // Attach the operator's affiliate identifier (Amazon tag / per-program rules).
+  // No-op until configured, and never overwrites an id the destination already
+  // carries — so hand-built affiliate URLs on a pick are left untouched.
+  dest = applyAffiliateTag(dest);
 
   const safeDest = safeRedirectUrl(dest);
   if (!safeDest) {

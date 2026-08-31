@@ -10,6 +10,7 @@ import { PlatformProviderWrapper } from '@/components/PlatformProviderWrapper';
 import { ThemeScript } from '@/components/theme/ThemeScript';
 import { buildRootMetadata } from '@/lib/seo';
 import { AmbientLayer } from '@/components/ui/AmbientLayer';
+import { BackToTop } from '@/components/ui/BackToTop';
 import './globals.css';
 
 // One typography source of truth — the cinematic stack used by the Descent
@@ -79,8 +80,12 @@ export default function RootLayout({
             <div className="page-canvas">{children}</div>
           </PlatformProviderWrapper>
         </ErrorBoundary>
+        <BackToTop />
         <Toaster
           position="bottom-right"
+          // Lift toasts above the fixed Back-to-top control so the two never
+          // collide in the bottom-right corner.
+          offset={{ bottom: '5rem' }}
           theme="dark"
           toastOptions={{
             style: {

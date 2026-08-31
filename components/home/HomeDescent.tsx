@@ -11,6 +11,7 @@ import { MoleculeStage } from "@/components/viz/MoleculeStage";
 import { NetworkStage, type NetworkNode, type NetworkEdge } from "@/components/viz/NetworkStage";
 import { HUES } from "@/components/viz/tokens";
 import { runWhenVisible, cappedDpr } from "@/lib/raf-visibility";
+import { createGlowCache, blitGlow } from "@/lib/canvas-glow";
 
 // Canvas draw colors are plain rgba literals (not CSS custom properties), so
 // they can't pick up the `.tnic-descent` light-theme override in the CSS
@@ -183,6 +184,8 @@ const CSS = `
 }
 .tnic-hero-badges .pill b { color: var(--cyan); font-weight: 500; }
 .tnic-hero-badges .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+.tnic-hero-badges a.pill { text-decoration: none; transition: border-color .2s ease, color .2s ease, background .2s ease; }
+.tnic-hero-badges a.pill:hover { border-color: color-mix(in srgb, var(--cyan) 55%, transparent); color: var(--ink); background: rgba(14,20,38,0.8); }
 
 /* Primary action on the very first screen (Act 0) — a new visitor gets a clear
    CTA above the fold instead of having to scroll the whole descent to act. */
@@ -427,6 +430,14 @@ const CSS = `
 .tnic-descent[data-reduced="true"] .edge.flow,
 .tnic-descent[data-reduced="true"] .node-pulse { animation: none !important; }
 
+/* Act 4 capstone backdrop — the goal curve from Act 3, mirrored into an
+   ascent behind the closing section. Negative z stays inside the act's
+   stacking context (.tnic-act creates one via z-index:3), behind the text. */
+.tnic-act4-sky {
+  position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%;
+  pointer-events: none; opacity: .55;
+}
+
 /* Reduced motion: the per-element entrance reveals (opacity/transform on the
    kicker, headlines, lead, stage, cards, badges, CTA, recap) are motion too —
    show everything in its final composed state immediately instead of sliding
@@ -567,8 +578,11 @@ const CURVE_BASE: Array<[number, number]> = [[30,92],[40,87],[50,79],[60,67],[70
 const CURVE_GOAL: Array<[number, number]> = [[30,96],[40,94],[50,90],[60,85],[70,77],[80,63],[90,38],[95,16]];
 const CURVE_ELITE: Array<[number, number]> = [[30,98],[40,97],[50,95],[60,92],[70,86],[80,74],[90,52],[95,22]];
 
-const MILESTONES: Array<{ at: number; label: string; c: string }> = [
-  { at: 40, label: "NAD⁺ decline steepens", c: "#5fe3e0" },
+const MILESTONES: Array<{ at: number; label: string; c: string; below?: boolean }> = [
+  // NAD⁺ at x=40 sits high on the goal curve, where an above-curve label
+  // collides with the "function preserved →" axis label and crowds the
+  // x=50 milestone — this one renders below its marker instead.
+  { at: 40, label: "NAD⁺ decline steepens", c: "#5fe3e0", below: true },
   { at: 50, label: "Senescent-cell window", c: "#b98cf0" },
   { at: 65, label: "Sarcopenia inflection", c: "#eaa24a" },
   { at: 80, label: "Morbidity horizon", c: "#f08a7a" },
@@ -640,6 +654,11 @@ export function HomeDescent() {
       [95,227,224], [95,227,224], [140,140,245], [240,196,106], [95,227,224],
     ];
     let cur: [number, number, number] = [95,227,224];
+    // Cached glow sprites keyed by the (slowly cross-fading) rounded palette
+    // color — a fresh sprite is baked only when the rounded color changes, so
+    // the 200+ particles/frame blit a bitmap instead of each allocating and
+    // rasterizing its own radial gradient.
+    const glow = createGlowCache();
     const light = isLightTheme();
     // Same hues, dialed back on light: the dark-theme alpha values (0.55–0.85)
     // were calibrated as a glow against near-black — at full strength on a
@@ -682,11 +701,7 @@ export function HomeDescent() {
           const tw = 0.55 + Math.sin(p.ph) * 0.45;
           const px = p.x * w, py = p.y * h;
           const rad = p.r * (li === 2 ? 8 : li === 1 ? 5 : 3);
-          const g = ctx.createRadialGradient(px, py, 0, px, py, rad);
-          g.addColorStop(0, `rgba(${cr},${cg},${cb},${l.alpha * tw * alphaMul})`);
-          g.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
-          ctx.fillStyle = g;
-          ctx.beginPath(); ctx.arc(px, py, rad, 0, Math.PI * 2); ctx.fill();
+          blitGlow(ctx, glow([cr, cg, cb]), px, py, rad, l.alpha * tw * alphaMul);
           if (li < 2) {
             // Sparkle core: near-white reads as a bright twinkle against the
             // dark backdrop but is nearly invisible white-on-white in light
@@ -827,7 +842,7 @@ export function HomeDescent() {
 
       <div className="tnic-rail-track">
         <nav className="tnic-rail" aria-label="Descent sections">
-          {["Arrive", "Molecule", "Synergies", "Healthspan", "Your path"].map((l, i) => (
+          {["Arrive", "Molecule", "System", "Goal", "Your path"].map((l, i) => (
             <button key={l} className={active === i ? "on" : ""} onClick={() => goTo(i)}>
               <span className="lbl">{l}</span><span className="tick" />
             </button>
@@ -837,7 +852,7 @@ export function HomeDescent() {
 
       {/* ACT 0 — ARRIVE */}
       <section ref={s0} data-idx="0" className="tnic-act tnic-hero">
-        <p className="tnic-kicker">TNiC · longevity, shown honestly</p>
+        <p className="tnic-kicker">Evidence-Graded Longevity Library</p>
         <h1 className="tnic-h1">See what{' '}<br />you&apos;re <em>protecting</em>.</h1>
         <p className="tnic-lead">
           You can&apos;t feel a cell aging. So we made it visible — the real biology
@@ -845,23 +860,23 @@ export function HomeDescent() {
           continuous descent, from a molecule to the life it defends.
         </p>
         <div className="tnic-hero-badges">
-          <span className="pill"><span className="dot" /><b>{eliteInterventions.length}</b>&nbsp;elite interventions</span>
-          <span className="pill"><span className="dot" /><b>{COMPOUND_COUNT}</b>&nbsp;graded compounds</span>
-          <span className="pill"><span className="dot" /><b>12</b>&nbsp;hallmarks of aging</span>
-          <span className="pill"><span className="dot" /><b>A–C</b>&nbsp;evidence tiers</span>
+          <Link href="/elite-8" className="pill"><span className="dot" /><b>{eliteInterventions.length}</b>&nbsp;elite interventions</Link>
+          <Link href="/library/compounds" className="pill"><span className="dot" /><b>{COMPOUND_COUNT}</b>&nbsp;graded compounds</Link>
+          <Link href="/hallmarks" className="pill"><span className="dot" /><b>12</b>&nbsp;hallmarks of aging</Link>
+          <Link href="/trust/methodology" className="pill"><span className="dot" /><b>A–C</b>&nbsp;evidence tiers</Link>
         </div>
         <div className="tnic-hero-cta">
-          <Link href="/nico" className="tnic-cta">
-            Start the NICO Questionnaire <span className="arr" aria-hidden="true">→</span>
+          <Link href="/elite-8" className="tnic-cta">
+            Explore the Elite Eight <span className="arr" aria-hidden="true">→</span>
           </Link>
-          <Link href="/library" className="tnic-cta ghost">Explore the evidence</Link>
+          <Link href="#system" className="tnic-cta ghost">View the network</Link>
         </div>
         <div className="tnic-cue"><span className="bar" />descend</div>
       </section>
 
       {/* ACT 1 — MOLECULE */}
       <section ref={s1} data-idx="1" className="tnic-act">
-        <p className="tnic-kicker">01 — the molecule</p>
+        <p className="tnic-kicker">The molecule · rendered live</p>
         <h2 className="tnic-h2">It starts smaller{' '}<br />than you can <em>picture</em>.</h2>
         <p className="tnic-lead">
           Trans-resveratrol — studied for sirtuin activation and healthy-aging
@@ -886,7 +901,7 @@ export function HomeDescent() {
               <div className="fact"><span className="k">Target</span><span className="v">SIRT1 activator</span></div>
               <div className="fact"><span className="k">Family</span><span className="v">Stilbenoid polyphenol</span></div>
               <div className="fact"><span className="k">First isolated</span><span className="v">1939, white hellebore</span></div>
-              <div className="fact"><span className="k">Evidence tier</span><span className="v" style={{ color: 'var(--gold)' }}>B — Human</span></div>
+              <div className="fact"><span className="k">Evidence tier</span><span className="v" style={{ color: 'var(--accent-cyan)' }}>B — Human</span></div>
             </div>
             <p className="why">
               The two carbon rings and the trans double bond form the exact
@@ -906,8 +921,8 @@ export function HomeDescent() {
       </section>
 
       {/* ACT 2 — NETWORK */}
-      <section ref={s2} data-idx="2" className="tnic-act">
-        <p className="tnic-kicker">02 — your stack, alive</p>
+      <section ref={s2} data-idx="2" id="system" className="tnic-act">
+        <p className="tnic-kicker">01 / System · Your stack, alive</p>
         <h2 className="tnic-h2">Nothing works <em>alone</em>.</h2>
         <p className="tnic-lead">
           Every graded compound, plotted against the ones it boosts and the ones
@@ -958,8 +973,8 @@ export function HomeDescent() {
       </section>
 
       {/* ACT 3 — TIMELINE */}
-      <section ref={s3} data-idx="3" className="tnic-act">
-        <p className="tnic-kicker">03 — the honest dream</p>
+      <section ref={s3} data-idx="3" id="goal" className="tnic-act">
+        <p className="tnic-kicker">02 / Goal · The honest dream</p>
         <h2 className="tnic-h2">Not longer. <span className="warm">Well</span>, longer.</h2>
         <p className="tnic-lead">
           Longevity&apos;s real goal isn&apos;t just more years — it&apos;s keeping function
@@ -1026,7 +1041,7 @@ export function HomeDescent() {
                     stroke={m.c} strokeOpacity="0.15" strokeWidth="1" />
                   <circle cx={ageToX(m.at)} cy={vitToY(interp(CURVE_GOAL, m.at))} r="4"
                     fill={m.c} opacity={age >= m.at ? 1 : 0.35} />
-                  <text x={ageToX(m.at) + 6} y={vitToY(interp(CURVE_GOAL, m.at)) - 10}
+                  <text x={ageToX(m.at) + 6} y={vitToY(interp(CURVE_GOAL, m.at)) + (m.below ? 24 : -10)}
                     fontFamily="'JetBrains Mono',monospace" fontSize="10" fill={m.c} opacity={age >= m.at ? 0.95 : 0.4}>
                     {m.label}
                   </text>
@@ -1087,7 +1102,22 @@ export function HomeDescent() {
 
       {/* ACT 4 — YOUR PATH */}
       <section ref={s4} data-idx="4" className="tnic-act">
-        <p className="tnic-kicker">04 — the path from here</p>
+        {/* Capstone backdrop — Act 3's goal curve mirrored into an ascent:
+            the descent you just scrolled becomes the climb you build. Purely
+            decorative; the text below carries the actual content. */}
+        <svg className="tnic-act4-sky" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs>
+            <linearGradient id="tnic-act4-rise" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="rgba(240,196,106,0.28)" />
+              <stop offset="100%" stopColor="rgba(240,196,106,0.02)" />
+            </linearGradient>
+          </defs>
+          <g transform="translate(1000,0) scale(-1,1)">
+            <path d={`${goalPath} L ${TW - PAD.r} ${TH} L ${PAD.l} ${TH} Z`} fill="url(#tnic-act4-rise)" />
+            <path d={goalPath} fill="none" stroke="var(--gold)" strokeWidth="2.5" strokeOpacity="0.38" />
+          </g>
+        </svg>
+        <p className="tnic-kicker">The path from here</p>
         <h2 className="tnic-h2">You&apos;ve seen the shape. <br />Now <em>build</em> to it.</h2>
         <p className="tnic-lead">
           Everything below this section is the working version of what you just
@@ -1141,8 +1171,11 @@ export function HomeDescent() {
                   <div className="name">{e.compoundName}</div>
                   <div className="path">{e.pathway} · {e.mechanismLine}</div>
                 </div>
+                {/* Canonical tier colors (must match EvidenceTag/tierColor()
+                    site-wide) — not this section's local --cyan/--gold/--indigo
+                    palette, which would disagree with every other tier badge. */}
                 <span className="tier" style={{
-                  color: e.evidence === 'A' ? 'var(--cyan)' : e.evidence === 'B' ? 'var(--gold)' : 'var(--indigo)',
+                  color: e.evidence === 'A' ? 'var(--accent-emerald)' : e.evidence === 'B' ? 'var(--accent-cyan)' : 'var(--accent-amber)',
                 }}>Tier {e.evidence}</span>
               </Link>
             ))}

@@ -12,6 +12,7 @@ import dynamic from 'next/dynamic';
 import { FlaskConical, LineChart, Lightbulb, Dna, Shield, Download, FileJson } from 'lucide-react';
 import { exportLabsPartnerJsonString } from '@/lib/lab-partner-export';
 import { analyzeLabs } from '@/lib/lab-analysis';
+import { exportLabsCsv } from '@/lib/labs';
 import { usePlatform } from '@/context/PlatformContext';
 import { PageShell } from '@/components/ui/PageShell';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -56,7 +57,7 @@ const tabs = [
 ];
 
 export function LabHub() {
-  const { labs, selected, exportLabsCsv } = usePlatform();
+  const { labs, selected } = usePlatform();
   const searchParams = useSearchParams();
   const tabParam = searchParams.get('tab');
   const initialTab =
@@ -72,7 +73,7 @@ export function LabHub() {
   const analysis = useMemo(() => analyzeLabs(labs, selected), [labs, selected]);
 
   const downloadCsv = () => {
-    const blob = new Blob([exportLabsCsv()], { type: 'text/csv' });
+    const blob = new Blob([exportLabsCsv(labs)], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;

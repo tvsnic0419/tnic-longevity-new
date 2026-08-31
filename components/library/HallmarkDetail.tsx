@@ -1,14 +1,14 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowLeft, BookOpen, Dna, Network, Pill } from 'lucide-react';
+import { ArrowLeft, BookOpen, Dna, Network, Pill, Syringe } from 'lucide-react';
 import Link from 'next/link';
 import type { HallmarkLibraryEntry } from '@/lib/types';
-import type { CompoundLink } from '@/lib/library-graph';
+import type { CompoundLink, GuideLink, PeptideLink } from '@/lib/library-graph';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { GlassPanel } from '@/components/ui/GlassPanel';
-import { PageHeader } from '@/components/ui/PageHeader';
 import { RevealCard } from '@/components/ui/RevealCard';
+import { HallmarkPageHero } from '@/components/hallmarks/HallmarkPageHero';
 import { HallmarkVisual } from './HallmarkVisual';
 import { getHallmarkVisual } from '@/lib/hallmark-visuals';
 import { InterventionExplorer } from './InterventionExplorer';
@@ -20,11 +20,20 @@ import { SystemsSynthesisView } from './SystemsSynthesisView';
 import { HALLMARK_VISUALS } from '@/components/illustrations/HallmarkVisuals';
 import { ContentByline } from '@/components/trust/ContentByline';
 
+interface PathwayLink {
+  slug: string;
+  name: string;
+  summary: string;
+}
+
 export function HallmarkDetail({
   hallmark,
   mdxBody,
   targetingCompounds = [],
+  targetingPeptides = [],
+  drivingPathways = [],
   compoundHrefs = {},
+  guides = [],
   lastUpdated,
   author,
   reviewer,
@@ -32,7 +41,10 @@ export function HallmarkDetail({
   hallmark: HallmarkLibraryEntry;
   mdxBody: string | null;
   targetingCompounds?: CompoundLink[];
+  targetingPeptides?: PeptideLink[];
+  drivingPathways?: PathwayLink[];
   compoundHrefs?: Record<string, string>;
+  guides?: GuideLink[];
   lastUpdated?: string;
   author?: string;
   reviewer?: string;
@@ -44,7 +56,15 @@ export function HallmarkDetail({
     : 0;
 
   return (
-    <div className="min-h-screen canvas-scrim text-foreground pt-6 md:pt-8 pb-20">
+    <>
+      {/* Cinematic hero, matching /hallmarks/<slug>'s treatment for the same
+          content — this page used to hand-roll its own plain PageHeader here,
+          a real step-down vs. its sibling hub route. HallmarkPageHero's own
+          PageHeader carries description={whyItMatters} and the hero's lead
+          defaults to the summary, so both are removed below to avoid
+          duplicating the same sentence twice on one page. */}
+      <HallmarkPageHero hallmark={hallmark} hue={visualMeta.theme} theme={visualMeta.theme} icon={Dna} />
+      <div className="min-h-screen canvas-scrim text-foreground pt-6 md:pt-8 pb-20">
       <div className="max-w-7xl mx-auto px-6">
         <Link
           href="/library"
@@ -80,19 +100,9 @@ export function HallmarkDetail({
 
           <div className="order-1 lg:order-2 min-w-0 lg:col-span-8 space-y-10">
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-              <PageHeader
-                icon={Dna}
-                eyebrow={`Hallmark ${hallmark.number} of 12`}
-                title={hallmark.title}
-                description={hallmark.tagline}
-                theme={visualMeta.theme}
-                as="h1"
-                align="left"
-              />
-              <p className="text-sm text-muted-foreground leading-relaxed mb-4">{hallmark.summary}</p>
               <GlassPanel depth="mid" className="rounded-xl p-5 mb-4">
                 <p className="text-micro font-mono text-accent-violet uppercase mb-2">Mechanism</p>
-                <p className="text-sm text-foreground/90 leading-relaxed">{hallmark.mechanism}</p>
+                <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">{hallmark.mechanism}</p>
                 {hallmark.keyMolecules && hallmark.keyMolecules.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-border/30">
                     <span className="text-micro font-mono text-muted-foreground uppercase tracking-wider self-center mr-1">Key targets:</span>
@@ -106,10 +116,6 @@ export function HallmarkDetail({
                     ))}
                   </div>
                 )}
-              </GlassPanel>
-              <GlassPanel depth="mid" className="rounded-xl p-5">
-                <p className="text-micro font-mono text-accent-amber uppercase mb-2">Why it matters</p>
-                <p className="text-sm text-foreground/90 leading-relaxed">{hallmark.whyItMatters}</p>
               </GlassPanel>
             </motion.div>
 
@@ -173,6 +179,111 @@ export function HallmarkDetail({
               </div>
             )}
 
+            {guides.length > 0 && (
+              <div>
+                <div className="flex items-center gap-2 mb-4">
+                  <BookOpen className="w-4 h-4 text-accent-emerald" />
+                  <p className="text-micro font-mono text-accent-emerald uppercase tracking-wider">
+                    Supplement guides for {hallmark.title}
+                  </p>
+                </div>
+                <ul className="grid gap-3 sm:grid-cols-2">
+                  {guides.map((guide, i) => (
+                    <li key={guide.href}>
+                      <RevealCard index={i} depth="mid" className="glass-hover rounded-xl">
+                        <Link
+                          href={guide.href}
+                          className="focus-ring interactive group flex items-center gap-3 rounded-xl p-4"
+                        >
+                          <BookOpen className="w-5 h-5 text-accent-emerald shrink-0" />
+                          <div className="min-w-0">
+                            <p className="text-sm font-semibold text-foreground group-hover:text-accent-emerald transition truncate">
+                              {guide.label}
+                            </p>
+                            <p className="text-xs text-muted-foreground">Dosing, forms &amp; evidence</p>
+                          </div>
+                        </Link>
+                      </RevealCard>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {drivingPathways.length > 0 && (
+              <div>
+                <div className="flex items-center justify-between gap-3 mb-4">
+                  <div className="flex items-center gap-2">
+                    <Network className="w-4 h-4 text-accent-violet" />
+                    <p className="text-micro font-mono text-accent-violet uppercase tracking-wider">
+                      Pathways that drive {hallmark.title}
+                    </p>
+                  </div>
+                  <Link
+                    href="/pathways"
+                    className="text-xs font-semibold text-accent-violet hover:text-accent-cyan transition shrink-0"
+                  >
+                    All pathways →
+                  </Link>
+                </div>
+                <ul className="grid gap-3 sm:grid-cols-2">
+                  {drivingPathways.map((pathway, i) => (
+                    <li key={pathway.slug}>
+                      <RevealCard index={i} depth="mid" className="glass-hover rounded-xl h-full">
+                        <Link
+                          href={`/pathways/${pathway.slug}`}
+                          className="focus-ring interactive group flex h-full flex-col gap-1 rounded-xl p-4"
+                        >
+                          <span className="text-sm font-semibold text-foreground group-hover:text-accent-violet transition">
+                            {pathway.name}
+                          </span>
+                          <span className="text-xs text-muted-foreground line-clamp-2">
+                            {pathway.summary}
+                          </span>
+                        </Link>
+                      </RevealCard>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {targetingPeptides.length > 0 && (
+              <div>
+                <div className="flex items-center justify-between gap-3 mb-4">
+                  <div className="flex items-center gap-2">
+                    <Syringe className="w-4 h-4 text-accent-rose" />
+                    <p className="text-micro font-mono text-accent-rose uppercase tracking-wider">
+                      Peptides targeting {hallmark.title}
+                    </p>
+                  </div>
+                  <Link
+                    href="/peptides"
+                    className="text-xs font-semibold text-accent-rose hover:text-accent-cyan transition shrink-0"
+                  >
+                    All peptides →
+                  </Link>
+                </div>
+                <ul className="grid gap-3 sm:grid-cols-2">
+                  {targetingPeptides.map((peptide, i) => (
+                    <li key={peptide.slug}>
+                      <RevealCard index={i} depth="mid" className="glass-hover rounded-xl">
+                        <Link
+                          href={`/peptides/${peptide.slug}`}
+                          className="focus-ring interactive group flex items-center justify-between gap-3 rounded-xl p-4"
+                        >
+                          <span className="text-sm font-semibold text-foreground group-hover:text-accent-rose transition truncate">
+                            {peptide.name}
+                          </span>
+                          <EvidenceTag tier={peptide.evidenceTier} size="sm" className="shrink-0" />
+                        </Link>
+                      </RevealCard>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             <div>
               <p className="text-micro font-mono text-accent-emerald uppercase tracking-wider mb-4">
                 Intervention Explorer — ranked by evidence
@@ -206,5 +317,6 @@ export function HallmarkDetail({
         </div>
       </div>
     </div>
+    </>
   );
 }

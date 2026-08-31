@@ -200,6 +200,28 @@ export function getProductPick(compoundId: string): ProductPick | undefined {
   return PRODUCT_PICKS[compoundId];
 }
 
+/**
+ * Resolve the verified product picks referenced by a comparison slug of the
+ * form `a-vs-b` (e.g. `nmn-vs-nr`). Each side is matched against the pick
+ * registry; a side with no curated pick (e.g. `liposomal-glutathione`,
+ * `metformin`, `coq10`) is simply omitted. Order is preserved (side A before
+ * side B) and duplicates are dropped, so a comparison surfaces 0, 1, or 2 buy
+ * paths and never a fabricated one. Stack/form slugs (`…-triad-vs-…-stack`)
+ * resolve to nothing, which is the intended no-op.
+ */
+export function getComparePicks(slug: string): ProductPick[] {
+  const seen = new Set<string>();
+  const picks: ProductPick[] = [];
+  for (const id of slug.split('-vs-')) {
+    const pick = PRODUCT_PICKS[id];
+    if (pick && !seen.has(id)) {
+      seen.add(id);
+      picks.push(pick);
+    }
+  }
+  return picks;
+}
+
 export function getProductPickByName(compoundName: string): ProductPick | undefined {
   const key = compoundName.toLowerCase().replace(/[^a-z0-9]/g, '');
   const aliases: Record<string, string> = {

@@ -2,6 +2,7 @@ import type { HallmarkLibraryEntry } from '@/lib/types';
 import { getHallmarkVisual } from '@/lib/hallmark-visuals';
 import { HallmarkIcon } from '@/components/library/HallmarkIcon';
 import { TiltGlassPanel } from '@/components/ui/TiltGlassPanel';
+import { tierColor } from '@/components/viz/tokens';
 
 /**
  * The hallmark hero's one primary glass moment (see GlassPanel's own
@@ -13,12 +14,14 @@ import { TiltGlassPanel } from '@/components/ui/TiltGlassPanel';
  * hand-drawn diagram would.
  */
 
-// Canonical evidence-tier colors — must match EvidenceTag / trust.ts
-// (A = clinical/emerald, B = emerging/cyan, C = preclinical/amber).
+// Canonical evidence-tier colors (A = clinical/emerald, B = emerging/cyan,
+// C = preclinical/amber). Read through `tierColor()` rather than re-declared
+// as literals here — the values were already correct, but a hand-copied map
+// is exactly how lib/hero-network.ts silently drifted off canonical.
 const TIER_COLOR: Record<'A' | 'B' | 'C', string> = {
-  A: '#34d399',
-  B: '#00e0ff',
-  C: '#fbbf24',
+  A: tierColor('A'),
+  B: tierColor('B'),
+  C: tierColor('C'),
 };
 
 export function HallmarkHeroVisual({ hallmark }: { hallmark: HallmarkLibraryEntry }) {

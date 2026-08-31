@@ -270,7 +270,7 @@ function ReferencesSection({ pmids }: { pmids: string[] }) {
                   {cite.authors ? (
                     <span>{cite.authors.replace(/\.\s*$/, '')}. </span>
                   ) : null}
-                  <span className="text-foreground/90">
+                  <span className="text-[var(--color-text-secondary)]">
                     {cite.title.replace(/\.\s*$/, '')}.
                   </span>{' '}
                   <em>{cite.journal}</em>
@@ -403,7 +403,7 @@ function renderDirective(
           <p className="text-micro font-mono text-accent-violet uppercase tracking-wider">Suggested visual</p>
         </div>
         <p
-          className="text-sm text-foreground/90 leading-relaxed"
+          className="text-sm text-[var(--color-text-secondary)] leading-relaxed"
           dangerouslySetInnerHTML={{ __html: renderInline(body || attrs.description || '', linkedTerms) }}
         />
       </div>
@@ -442,7 +442,7 @@ function renderDirective(
           </p>
         </div>
         <p
-          className="text-sm text-foreground/90 leading-relaxed"
+          className="text-sm text-[var(--color-text-secondary)] leading-relaxed"
           dangerouslySetInnerHTML={{ __html: renderInline(body, linkedTerms) }}
         />
       </div>
@@ -665,7 +665,17 @@ function renderMarkdownBlock(content: string, blockKey: number, linkedTerms: Set
       const headerCells = rows[0]?.split('|').filter(Boolean).map((c) => c.trim()) ?? [];
       elements.push(
         <div key={key} className="my-4">
-          <div className="overflow-x-auto" role="region" aria-label="Data table">
+          {/* Two axe-core findings fixed here: (1) scrollable-region-focusable —
+              tabIndex makes the horizontally-scrolling region keyboard-reachable;
+              (2) landmark-unique — a per-table label (from its own header row)
+              instead of a generic "Data table" repeated across every table on a
+              page, so screen-reader landmark navigation can tell them apart. */}
+          <div
+            className="overflow-x-auto"
+            role="region"
+            tabIndex={0}
+            aria-label={headerCells.length > 0 ? `Data table: ${headerCells.slice(0, 3).join(', ')}` : 'Data table'}
+          >
             <table className="w-full text-sm border-collapse">
               {rows.length > 0 && (
                 <thead>

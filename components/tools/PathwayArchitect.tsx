@@ -173,7 +173,7 @@ export function PathwayArchitect() {
                     'focus-ring rounded-md border px-2.5 py-1.5 text-xs font-medium transition-colors',
                     active
                       ? 'border-accent-violet bg-accent-violet/15 text-accent-violet'
-                      : 'border-border text-foreground/70 hover:border-foreground/30 hover:text-foreground',
+                      : 'border-border text-muted-foreground hover:border-foreground/30 hover:text-foreground',
                   ].join(' ')}
                 >
                   {f.label}
@@ -203,22 +203,24 @@ export function PathwayArchitect() {
                     />
                     <div className="relative z-10 flex items-start justify-between gap-2">
                       <div className="min-w-0 flex items-center gap-2">
-                        <h3 className="truncate text-sm font-semibold text-foreground">{c.name}</h3>
+                        {/* h2: the page's only other heading is its h1, so an
+                            h3 here skipped a level. Size is set by the classes. */}
+                        <h2 className="truncate text-sm font-semibold text-foreground">{c.name}</h2>
                         <EvidenceTag tier={c.tier as 'A' | 'B' | 'C'} size="sm" />
                       </div>
                       {isSel ? (
                         <Check className="h-[18px] w-[18px] shrink-0 text-accent-violet" aria-hidden="true" />
                       ) : (
-                        <Circle className="h-[18px] w-[18px] shrink-0 text-foreground/30" aria-hidden="true" />
+                        <Circle className="h-[18px] w-[18px] shrink-0 text-[var(--color-text-faint)]" aria-hidden="true" />
                       )}
                     </div>
-                    <p className="relative z-10 mt-1 text-micro font-medium leading-snug text-foreground/70">{c.cls}</p>
-                    <p className="relative z-10 mt-1.5 text-micro leading-snug text-foreground/60">{c.dose}</p>
+                    <p className="relative z-10 mt-1 text-micro font-medium leading-snug text-muted-foreground">{c.cls}</p>
+                    <p className="relative z-10 mt-1.5 text-micro leading-snug text-muted-foreground">{c.dose}</p>
                     {c.libraryHref && (
                       <Link
                         href={c.libraryHref}
                         onClick={(e) => e.stopPropagation()}
-                        className="focus-ring relative z-10 mt-2 inline-flex items-center gap-1 text-micro font-medium text-foreground/60 hover:text-accent-violet"
+                        className="focus-ring relative z-10 mt-2 inline-flex items-center gap-1 text-micro font-medium text-muted-foreground hover:text-accent-violet"
                       >
                         Evidence page <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
                       </Link>
@@ -229,7 +231,7 @@ export function PathwayArchitect() {
             })}
           </div>
 
-          <p className="mt-4 text-caption text-foreground/60">
+          <p className="mt-4 text-caption text-muted-foreground">
             Every card links to its full mechanism and PMID citations. Selections are saved locally and mirrored
             into the URL, so a protocol survives a refresh and can be shared as a link.
           </p>
@@ -243,18 +245,18 @@ export function PathwayArchitect() {
                 <Sparkles className="h-4 w-4 text-accent-violet" aria-hidden="true" />
                 Active protocol
               </h2>
-              <span className="text-sm text-foreground/70">
+              <span className="text-sm text-muted-foreground">
                 {selected.size} {selected.size === 1 ? 'compound' : 'compounds'}
               </span>
             </div>
 
             {isEmpty ? (
               <>
-                <p className="py-2 text-center text-sm text-foreground/70">
+                <p className="py-2 text-center text-sm text-muted-foreground">
                   No compounds selected. Tap cards to build your protocol.
                 </p>
                 <div className="mt-3">
-                  <p className="mb-2 text-xs font-semibold text-foreground/70">Or start with a curated pair:</p>
+                  <p className="mb-2 text-xs font-semibold text-muted-foreground">Or start with a curated pair:</p>
                   <div className="grid gap-2">
                     {STARTER_STACKS.map((s) => (
                       <button
@@ -264,7 +266,7 @@ export function PathwayArchitect() {
                         className="focus-ring card-elevated rounded-lg p-2.5 text-left transition-colors hover:border-accent-violet/40"
                       >
                         <div className="text-sm font-semibold text-foreground">{s.name}</div>
-                        <div className="mt-0.5 text-micro text-foreground/65">{s.blurb}</div>
+                        <div className="mt-0.5 text-micro text-muted-foreground">{s.blurb}</div>
                       </button>
                     ))}
                   </div>
@@ -280,13 +282,13 @@ export function PathwayArchitect() {
                       <div key={id} className="card-elevated flex items-center justify-between rounded-lg px-2.5 py-1.5">
                         <div className="min-w-0">
                           <div className="truncate text-sm font-semibold text-foreground">{c.name}</div>
-                          <div className="truncate text-micro text-foreground/60">{c.dose}</div>
+                          <div className="truncate text-micro text-muted-foreground">{c.dose}</div>
                         </div>
                         <button
                           type="button"
                           onClick={() => toggle(id)}
                           aria-label={`Remove ${c.name}`}
-                          className="focus-ring ml-2 shrink-0 rounded p-1 text-foreground/50 hover:bg-accent-rose/10 hover:text-accent-rose"
+                          className="focus-ring ml-2 shrink-0 rounded p-1 text-[var(--color-text-faint)] hover:bg-accent-rose/10 hover:text-accent-rose"
                         >
                           <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
                         </button>
@@ -297,11 +299,11 @@ export function PathwayArchitect() {
 
                 {/* Synergy intelligence — real detections from analyzeStack() */}
                 <div className="mb-3" aria-live="polite">
-                  <p className="mb-2 text-micro font-mono uppercase tracking-wider text-foreground/60">
+                  <p className="mb-2 text-micro font-mono uppercase tracking-wider text-muted-foreground">
                     Synergy intelligence
                   </p>
                   {analysis.synergies.length === 0 && analysis.cautions.length === 0 && analysis.redundancies.length === 0 ? (
-                    <p className="text-xs text-foreground/60">Add more compounds to unlock synergy intelligence.</p>
+                    <p className="text-xs text-muted-foreground">Add more compounds to unlock synergy intelligence.</p>
                   ) : (
                     <div className="flex flex-col gap-1.5">
                       {analysis.synergies.map((s) => (
@@ -329,7 +331,7 @@ export function PathwayArchitect() {
                 {/* Convergent pathways */}
                 {analysis.convergent.length > 0 && (
                   <div className="mb-3">
-                    <p className="mb-2 text-micro font-mono uppercase tracking-wider text-foreground/60">
+                    <p className="mb-2 text-micro font-mono uppercase tracking-wider text-muted-foreground">
                       Convergent pathways
                     </p>
                     <div className="flex flex-wrap gap-1.5">
@@ -348,7 +350,7 @@ export function PathwayArchitect() {
 
                 {/* Hallmark coverage */}
                 <div className="mb-3">
-                  <div className="mb-2 flex items-center justify-between text-micro font-mono uppercase tracking-wider text-foreground/60">
+                  <div className="mb-2 flex items-center justify-between text-micro font-mono uppercase tracking-wider text-muted-foreground">
                     <span>Hallmark coverage</span>
                     <span>{analysis.coveredCount}/{HALLMARKS.length}</span>
                   </div>
@@ -358,7 +360,7 @@ export function PathwayArchitect() {
                       const on = depth > 0;
                       return (
                         <div key={h.id} className="flex items-center gap-2">
-                          <span className="w-[110px] shrink-0 truncate text-right text-micro text-foreground/60" title={h.label}>
+                          <span className="w-[110px] shrink-0 truncate text-right text-micro text-muted-foreground" title={h.label}>
                             {h.short}
                           </span>
                           <div className="h-1.5 flex-1 overflow-hidden rounded bg-border/40">
@@ -377,11 +379,11 @@ export function PathwayArchitect() {
                   <div className="mb-3 grid grid-cols-2 gap-2">
                     <div className="card-elevated rounded-lg p-2.5 text-center">
                       <p className="text-xl font-black font-mono text-accent-violet">{Math.round(analysis.synergyScore)}</p>
-                      <p className="text-micro uppercase tracking-wide text-foreground/60">Synergy /100</p>
+                      <p className="text-micro uppercase tracking-wide text-muted-foreground">Synergy /100</p>
                     </div>
                     <div className="card-elevated rounded-lg p-2.5 text-center">
                       <p className="text-xl font-black font-mono text-accent-violet">{analysis.coveragePct}%</p>
-                      <p className="text-micro uppercase tracking-wide text-foreground/60">Hallmark coverage</p>
+                      <p className="text-micro uppercase tracking-wide text-muted-foreground">Hallmark coverage</p>
                     </div>
                   </div>
                 )}
@@ -401,7 +403,7 @@ export function PathwayArchitect() {
                     type="button"
                     onClick={() => window.print()}
                     aria-label="Print protocol"
-                    className="focus-ring rounded-lg border border-border px-3 py-2 text-sm font-medium text-foreground/80 hover:text-foreground"
+                    className="focus-ring rounded-lg border border-border px-3 py-2 text-sm font-medium text-[var(--color-text-secondary)] hover:text-foreground"
                   >
                     <Printer className="h-3.5 w-3.5" aria-hidden="true" />
                   </button>
@@ -409,13 +411,13 @@ export function PathwayArchitect() {
                     type="button"
                     onClick={clear}
                     aria-label="Clear protocol"
-                    className="focus-ring rounded-lg border border-border px-3 py-2 text-sm font-medium text-foreground/80 hover:text-foreground"
+                    className="focus-ring rounded-lg border border-border px-3 py-2 text-sm font-medium text-[var(--color-text-secondary)] hover:text-foreground"
                   >
                     <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
                   </button>
                 </div>
 
-                <p className="mt-3 text-micro leading-relaxed text-foreground/55">
+                <p className="mt-3 text-micro leading-relaxed text-muted-foreground">
                   Educational planning tool, not medical advice. Consult a qualified healthcare provider before
                   starting any regimen — synergy and caution notes reflect published mechanistic literature curated
                   by TNiC, not a personalized safety review.

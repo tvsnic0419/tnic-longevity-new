@@ -13,7 +13,7 @@ export const ChronicInflammationVisual: React.FC<{ className?: string; showLabel
       <div className="flex items-start justify-between mb-3">
         <div>
           <div className="text-label text-[var(--accent-rose)] mb-0.5">HALLMARK 10</div>
-          <h4 className="heading-card text-lg">Chronic Inflammation</h4>
+          <h3 className="heading-card text-lg">Chronic Inflammation</h3>
         </div>
         {showLabels && <div className="text-right text-micro text-[var(--color-text-muted)]">NF-κB · Cytokines · Resolution</div>}
       </div>

@@ -57,7 +57,11 @@ function ProductCard({ pick }: { pick: ProductPick }) {
         className="absolute inset-0 z-0 rounded-2xl focus-ring"
         aria-label={`Buy ${pick.productName} from ${pick.brand} — opens manufacturer site`}
       />
-      <div className="relative pointer-events-none flex items-center justify-center bg-white/[0.03] h-48 overflow-hidden border-b border-border/50">
+      {/* Manufacturer packshots are photographed on white, so they sit on a
+          dedicated ivory `.product-stage` shelf (globals.css) instead of a
+          3%-white tint — the photo blends into the stage like e-commerce
+          photography rather than reading as a floating white rectangle. */}
+      <div className="relative pointer-events-none flex items-center justify-center product-stage h-48 overflow-hidden border-b border-border/50">
         <Image
           src={pick.imageSrc}
           alt={`${pick.brand} ${pick.productName}`}
@@ -68,7 +72,12 @@ function ProductCard({ pick }: { pick: ProductPick }) {
         />
         {tier && (
           <div className="absolute top-3 left-3">
-            <EvidenceTag tier={tier} size="sm" />
+            <EvidenceTag
+              tier={tier}
+              size="sm"
+              href="/trust/methodology"
+              className="pointer-events-auto relative z-10"
+            />
           </div>
         )}
         <span className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity inline-flex items-center gap-1 text-micro font-semibold bg-accent-emerald/90 text-black px-2 py-1 rounded-full">
@@ -131,7 +140,7 @@ export function ProductsHub() {
     <div className="container-page py-10 md:py-14 max-w-6xl section-mesh">
       <PageHeader
         icon={Package}
-        eyebrow="Verified Picks"
+        eyebrow="How we pick"
         title="Recommended Products"
         description="One evidence-aligned product per compound. TNiC may earn a commission on purchases via affiliate links — it never influences which products are listed or their evidence tier."
         theme="emerald"
