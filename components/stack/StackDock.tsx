@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { FlaskConical, ShoppingBag, SlidersHorizontal, X, ChevronDown, Trash2 } from 'lucide-react';
 import { useStack } from '@/context/PlatformContext';
 import { buildShopStackUrl } from '@/lib/stack-url';
+import { encodeScorecard, buildShareText, scorecardGrade, gradeColors, gradeLabels } from '@/lib/scorecard';
+import { ShareButton } from '@/components/ui/ShareButton';
 
 /**
  * StackDock — the persistent "Your Protocol" tray.
@@ -29,11 +31,38 @@ export function StackDock() {
   const coverage = new Set(selectedCompounds.flatMap((c) => c.hallmarks)).size;
   const accent = 'var(--accent-emerald)';
 
+  // The dock floats over page content, so its panels need an opaque, elevated
+  // surface — the default translucent .premium-card fill would let content bleed
+  // through. Uses the theme-aware elevated bg token (#080f1c dark / #fff light).
+  const surfaceStyle: CSSProperties = {
+    background: 'var(--color-bg-elevated)',
+    backdropFilter: 'blur(16px)',
+    WebkitBackdropFilter: 'blur(16px)',
+    boxShadow: '0 18px 50px -18px rgba(0,0,0,0.55)',
+  };
+
+  // Share the protocol as a personalized scorecard grade card — the encoder +
+  // /scorecard/<code> OG route already exist (graded on synergy + coverage, so
+  // no bio-age scan required). A shared card carries the stack; the recipient's
+  // scorecard links straight back into building their own.
+  const scorePayload = {
+    age: 0,
+    bioAge: 0,
+    synergy: score,
+    coverage: Math.round((coverage / 12) * 100),
+    stackSize: selected.length,
+  };
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://tnic.help';
+  const shareUrl = `${origin}/scorecard/${encodeScorecard(scorePayload)}`;
+  const shareText = buildShareText(scorePayload);
+  const grade = scorecardGrade(scorePayload);
+  const gradeColor = gradeColors[grade];
+
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex justify-center px-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
       <div className="pointer-events-auto w-full max-w-md" style={{ ['--card-accent' as string]: accent } as CSSProperties}>
         {open && (
-          <div className="premium-card mb-2 p-4" role="region" aria-label="Your protocol">
+          <div className="premium-card mb-2 p-4" style={surfaceStyle} role="region" aria-label="Your protocol">
             <div className="mb-3 flex items-center justify-between gap-2">
               <p className="text-label text-accent-emerald">Your protocol</p>
               <button
@@ -95,6 +124,35 @@ export function StackDock() {
               </Link>
             </div>
 
+            {/* Share the protocol as a personalized scorecard grade card — the
+                free-traffic loop. The grade badge previews the shareable card. */}
+            <div className="mt-3 flex items-center justify-between gap-3 border-t border-border/40 pt-3">
+              <span className="flex items-center gap-2.5">
+                <span
+                  className="grid h-9 w-9 shrink-0 place-items-center rounded-xl font-mono text-lg font-black"
+                  style={{
+                    color: gradeColor,
+                    background: `color-mix(in srgb, ${gradeColor} 12%, transparent)`,
+                    border: `1px solid color-mix(in srgb, ${gradeColor} 35%, transparent)`,
+                  }}
+                  aria-hidden="true"
+                >
+                  {grade}
+                </span>
+                <span className="leading-tight">
+                  <span className="block text-caption font-semibold text-foreground">Grade {grade} · {gradeLabels[grade]}</span>
+                  <span className="block text-micro text-muted-foreground">Share your protocol card</span>
+                </span>
+              </span>
+              <ShareButton
+                url={shareUrl}
+                title={`My longevity protocol — Grade ${grade}`}
+                text={shareText}
+                label="Share"
+                variant="ghost"
+              />
+            </div>
+
             <button
               type="button"
               onClick={() => setSelected([])}
@@ -111,6 +169,7 @@ export function StackDock() {
           type="button"
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
+          style={surfaceStyle}
           className="premium-card focus-ring group flex w-full items-center justify-between gap-3 px-4 py-3"
         >
           <span className="flex items-center gap-2.5">
