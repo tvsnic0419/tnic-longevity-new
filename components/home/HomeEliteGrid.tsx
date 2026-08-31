@@ -3,8 +3,9 @@
 import { useMemo, useState, type CSSProperties } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ExternalLink, BookOpen, FlaskConical } from 'lucide-react';
+import { ExternalLink, BookOpen, Check, Plus } from 'lucide-react';
 import { eliteInterventions } from '@/lib/elite-interventions';
+import { useStack } from '@/context/PlatformContext';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { EvidenceTrace } from '@/components/trust/EvidenceTrace';
 import { RevealItem } from '@/components/ui/RevealItem';
@@ -69,6 +70,8 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
   const tnic = computeTnicScore(intervention.compoundId);
   const accent = TIER_ACCENT[evidence];
   const band = tnic.score !== null ? scoreBand(tnic.score) : null;
+  const { selected, toggle } = useStack();
+  const inStack = selected.includes(intervention.compoundId);
 
   return (
     <div
@@ -188,13 +191,18 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
                 <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
                 Read evidence
               </Link>
-              <Link
-                href={`/stacks?stack=${intervention.compoundId}&from=elite-home`}
+              {/* Add to the persistent protocol (StackDock) rather than
+                  navigating away and replacing the whole stack. */}
+              <button
+                type="button"
+                onClick={() => toggle(intervention.compoundId)}
+                aria-pressed={inStack}
                 className="elite-card-action-secondary focus-ring inline-flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold"
+                style={inStack ? { borderColor: 'color-mix(in srgb, var(--accent-emerald) 45%, transparent)', color: 'var(--accent-emerald)' } : undefined}
               >
-                <FlaskConical className="h-3.5 w-3.5" aria-hidden="true" />
-                Build a stack
-              </Link>
+                {inStack ? <Check className="h-3.5 w-3.5" aria-hidden="true" /> : <Plus className="h-3.5 w-3.5" aria-hidden="true" />}
+                {inStack ? 'In protocol' : 'Add to protocol'}
+              </button>
             </div>
             <a
               href={intervention.goHref}
