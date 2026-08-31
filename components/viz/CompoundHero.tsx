@@ -1,6 +1,7 @@
 "use client";
 
-import { MoleculeStage } from "./MoleculeStage";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 import { hasGeometry, getGeometry } from "./molecule";
 import { VIZ, FONT, tierColor, signatureHue } from "./tokens";
 
@@ -25,6 +26,47 @@ export type CompoundHeroData = {
   synergyCount: number;
   hallmarks: string[];
 };
+
+const LazyMoleculeStage = dynamic(
+  () => import("./MoleculeStage").then((module) => module.MoleculeStage),
+  { ssr: false },
+);
+
+/**
+ * The molecular canvas is an optional visual aid, not the source of the page's
+ * evidence or meaning. Delaying its client bundle until the browser is idle
+ * keeps the editorial hero responsive while preserving the same reserved space
+ * and accessible caption. The 1.2 s timeout protects the enhancement from
+ * waiting indefinitely on a busy device.
+ */
+function DeferredCompoundMoleculeStage({
+  geometryId,
+  hue,
+  ariaLabel,
+}: {
+  geometryId?: string;
+  hue: [number, number, number];
+  ariaLabel: string;
+}) {
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    const activate = () => setIsReady(true);
+    if (typeof window.requestIdleCallback === "function") {
+      const idleId = window.requestIdleCallback(activate, { timeout: 1200 });
+      return () => window.cancelIdleCallback(idleId);
+    }
+
+    const timeoutId = window.setTimeout(activate, 300);
+    return () => window.clearTimeout(timeoutId);
+  }, []);
+
+  return isReady ? (
+    <LazyMoleculeStage geometryId={geometryId} hue={hue} ariaLabel={ariaLabel} />
+  ) : (
+    <div className="chero-stage-placeholder" aria-hidden="true" />
+  );
+}
 
 function firstSentence(text: string): string {
   const m = text.match(/^.*?[.!?](?=\s|$)/);
@@ -58,7 +100,11 @@ export function CompoundHero(data: CompoundHeroData) {
       <div className="chero-grid">
         <div className="chero-stage-wrap">
           <div className="chero-stage">
-            <MoleculeStage geometryId={structured ? data.id : undefined} hue={hue} />
+            <DeferredCompoundMoleculeStage
+              geometryId={structured ? data.id : undefined}
+              hue={hue}
+              ariaLabel={structured ? `${data.name} molecular structure visualization` : `${data.name} orbital field visualization`}
+            />
             <div className="chero-hint">
               <span className="dot" />
               {structured ? "drag · scroll to zoom" : "orbital field · illustrative"}
@@ -127,6 +173,12 @@ const CHERO_CSS = `
     radial-gradient(100% 100% at 30% 20%, color-mix(in srgb, var(--hue) 14%, transparent), transparent 60%),
     radial-gradient(100% 100% at 80% 90%, rgba(140,140,245,0.06), transparent 60%),
     linear-gradient(180deg, rgba(14,20,38,0.6), rgba(10,14,30,0.9));
+}
+.chero-stage-placeholder {
+  width: 100%; height: 100%;
+  background:
+    radial-gradient(34% 42% at 48% 48%, color-mix(in srgb, var(--hue) 20%, transparent), transparent 72%),
+    radial-gradient(66% 66% at 25% 20%, rgba(140,140,245,0.08), transparent 78%);
 }
 .chero-hint {
   position: absolute; bottom: 12px; right: 14px;

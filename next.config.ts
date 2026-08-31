@@ -29,6 +29,21 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['lucide-react', 'recharts', 'framer-motion'],
   },
 
+  async rewrites() {
+    return {
+      // The public master-guide pathname is a stable, heavily linked canonical
+      // URL. Serve the unchanged implementation from a dedicated internal
+      // target so Next resolves it reliably while readers and crawlers retain
+      // the original public address and canonical metadata.
+      beforeFiles: [
+        {
+          source: '/longevity-supplements-guide',
+          destination: '/guides/master-longevity-supplements',
+        },
+      ],
+    };
+  },
+
   async redirects() {
     return [
       // The 3-question starter quiz was retired in favor of the NICO Starter

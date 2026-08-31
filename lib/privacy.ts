@@ -16,6 +16,7 @@ export const STORAGE_KEYS = {
   milestones: 'tnic-user-milestones',
   consent: 'tnic-privacy-consent',
   quizResult: 'tnic-quiz-result',
+  researchIntent: 'tnic-research-intent',
 } as const;
 
 export type PrivacyStorageMode = 'local' | 'session';
@@ -130,6 +131,7 @@ export function purgeAllHealthData(): void {
     STORAGE_KEYS.checklist,
     STORAGE_KEYS.hallmarkNotes,
     STORAGE_KEYS.milestones,
+    STORAGE_KEYS.researchIntent,
   ];
   (['local', 'session'] as PrivacyStorageMode[]).forEach((mode) => {
     keys.forEach((key) => removeStorageItem(key, mode));

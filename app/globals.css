@@ -1197,6 +1197,13 @@ p,
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
+  /* Isolate the always-on decorative field (orbs + drifting molecules) from the
+     document. It already clips to itself (overflow:hidden) and owns a stacking
+     context (fixed + z-index:0), so layout+paint containment adds no visual
+     change — it just lets the browser skip this animating subtree when
+     invalidating the real page, keeping the ambient motion off the main
+     layout/paint path. */
+  contain: layout paint;
 }
 
 .ambient-orb {
@@ -1348,6 +1355,24 @@ p,
 :root[data-theme='light'] .molecule-node.depth-1 { opacity: 0.14; }
 :root[data-theme='light'] .molecule-node.depth-2 { opacity: 0.1; }
 :root[data-theme='light'] .molecule-node.depth-3 { opacity: 0.06; }
+
+/* Mobile paint budget for the site-wide ambient layer.
+   Extends the same "phones are where blur janks, so trim its cost there" rule
+   the glass surfaces already use (see .glass-deep below). These aurora orbs are
+   the single largest blur region on the site AND render on 100% of pages, yet —
+   unlike the glass — they were never given a phone budget. Radius only: at
+   ~55vw the orb is almost entirely soft either way, so 60px vs 90px is
+   imperceptible as a background wash while rasterizing ~55% cheaper (blur cost
+   scales with radius²). Nothing is hidden or moved; reduced-motion still freezes
+   the drift entirely. */
+@media (max-width: 767px) {
+  .ambient-orb { filter: blur(60px); }
+  /* The drifting molecule field's full-viewport drop-shadow is a filter region
+     re-rasterized behind every page; at the field's phone opacity (0.09–0.2)
+     the 10px glow is imperceptible, so drop just the halo and keep the
+     linework. */
+  .molecule-cascade { filter: none; }
+}
 
 @keyframes molecule-drift {
   0%, 100% { transform: rotate(var(--rot, 0deg)) translate(0, 0); }
@@ -3635,6 +3660,13 @@ p,
   .hub-hero-field::before,
   .hub-hero-field::after { animation: none; }
 }
+/* Same phone blur budget as the ambient orbs — the hub hero's two 42rem blur
+   fields render on every hub page; 38px reads the same as 60px at that size
+   while costing far less to rasterize on mobile GPUs. Radius only. */
+@media (max-width: 767px) {
+  .hub-hero-field::before,
+  .hub-hero-field::after { filter: blur(38px); }
+}
 
 /* Accent glow utility — a soft luminous halo for figures/icons/nodes. */
 .flair-glow-cyan   { filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent-cyan) 55%, transparent)); }
@@ -3664,4 +3696,1154 @@ p,
   background:
     radial-gradient(120% 90% at 50% 0%, #ffffff 0%, #f1f5f9 58%, #e2e8f0 100%);
   box-shadow: inset 0 -14px 28px -20px rgba(15, 23, 42, 0.28);
+}
+
+
+/* ============================================================================
+   Homepage refinement layer — August 2026
+   A focused quality pass that extends the existing TNiC materials, typography,
+   motion and token system. All treatments are intentionally scoped to current
+   homepage classes so other product surfaces remain unchanged.
+   ========================================================================== */
+
+/* Give the fixed navigation a subtle internal spectrum even before scrolling.
+   The decorative wash sits inside the existing backdrop and never competes with
+   content, which preserves the nav's reliable legibility over every section. */
+.nav-glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(48% 180% at 8% -70%, color-mix(in srgb, var(--accent-cyan) 13%, transparent), transparent 72%),
+    radial-gradient(36% 180% at 92% -78%, color-mix(in srgb, var(--accent-emerald) 9%, transparent), transparent 75%);
+  opacity: 0.9;
+}
+
+.nav-glass-scrolled::after {
+  opacity: 0.58;
+}
+
+/* The filter is a lightweight instrument panel: it frames a dense choice set
+   without treating it as a full card or adding unnecessary visual weight. */
+.elite-filter-shell {
+  position: relative;
+  overflow: hidden;
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, var(--accent-emerald) 17%, var(--color-border-subtle));
+  border-radius: 1rem;
+  background:
+    linear-gradient(120deg, color-mix(in srgb, var(--accent-emerald) 6%, transparent), transparent 46%),
+    color-mix(in srgb, var(--color-bg-elevated) 68%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 7%, transparent);
+}
+
+.elite-filter-shell::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 2px;
+  background: linear-gradient(var(--accent-cyan), var(--accent-emerald), transparent);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.elite-filter-signal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--accent-emerald);
+}
+
+.elite-filter-signal::before {
+  content: '';
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 13%, transparent), 0 0 11px color-mix(in srgb, currentColor 65%, transparent);
+}
+
+.elite-filter-count {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.elite-filter-count::before {
+  content: '';
+  width: 1.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent-emerald), transparent);
+}
+
+/* Preserve the grid's information density while giving every intervention a
+   deeper, more product-like media plinth and a calm, usable focus state. */
+.elite-card {
+  min-height: 100%;
+  background:
+    radial-gradient(120% 76% at 100% 0%, color-mix(in srgb, var(--accent-emerald) 6%, transparent), transparent 58%),
+    linear-gradient(180deg, color-mix(in srgb, var(--color-bg-elevated) 78%, transparent), color-mix(in srgb, var(--color-bg-base) 55%, transparent));
+}
+
+.elite-card:focus-within {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--accent-emerald) 50%, transparent),
+    0 20px 60px -30px color-mix(in srgb, var(--accent-emerald) 52%, transparent),
+    var(--glass-shadow-content);
+}
+
+.elite-card-media {
+  background:
+    radial-gradient(80% 120% at 50% 118%, color-mix(in srgb, var(--accent-emerald) 16%, transparent), transparent 62%),
+    linear-gradient(135deg, color-mix(in srgb, var(--accent-cyan) 7%, transparent), transparent 52%);
+}
+
+.elite-card-media::after {
+  content: '';
+  position: absolute;
+  inset: auto 8% 0;
+  height: 28%;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent-emerald) 15%, transparent);
+  filter: blur(22px);
+  pointer-events: none;
+}
+
+.elite-card-media > img {
+  z-index: 1;
+}
+
+.elite-card-action-secondary,
+.elite-card-action-verify {
+  color: var(--color-text-secondary);
+  border: 1px solid color-mix(in srgb, var(--color-border-subtle) 86%, transparent);
+  background: color-mix(in srgb, var(--color-bg-base) 18%, transparent);
+  transition: color 0.24s ease, border-color 0.24s ease, background 0.24s ease, transform 0.24s ease;
+}
+
+@media (hover: hover) {
+  .elite-card-action-secondary:hover {
+    color: var(--accent-cyan);
+    border-color: color-mix(in srgb, var(--accent-cyan) 44%, transparent);
+    background: color-mix(in srgb, var(--accent-cyan) 8%, transparent);
+    transform: translateY(-1px);
+  }
+
+  .elite-card-action-verify:hover {
+    color: var(--accent-emerald);
+    border-color: color-mix(in srgb, var(--accent-emerald) 44%, transparent);
+    background: color-mix(in srgb, var(--accent-emerald) 8%, transparent);
+    transform: translateY(-1px);
+  }
+}
+
+[data-theme="light"] .elite-filter-shell {
+  background:
+    linear-gradient(120deg, color-mix(in srgb, var(--accent-emerald) 7%, transparent), transparent 52%),
+    var(--color-bg-elevated);
+  box-shadow: var(--glass-shadow-mid);
+}
+
+[data-theme="light"] .elite-card {
+  background:
+    radial-gradient(120% 76% at 100% 0%, color-mix(in srgb, var(--accent-emerald) 5%, transparent), transparent 58%),
+    var(--color-bg-elevated);
+}
+
+[data-theme="light"] .elite-card-action-secondary,
+[data-theme="light"] .elite-card-action-verify {
+  background: color-mix(in srgb, var(--color-text-primary) 3%, var(--color-bg-elevated));
+}
+
+@media (max-width: 639px) {
+  .elite-filter-shell { padding: 0.875rem; }
+  .elite-filter-signal { align-self: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elite-card-action-secondary,
+  .elite-card-action-verify { transition: none; }
+}
+
+
+/* Evidence briefing: a compact editorial bridge from the cinematic opening to
+   concrete intervention choices. It is intentionally factual and derives its
+   only numeric value from the current intervention registry. */
+.elite-briefing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--accent-emerald) 20%, var(--color-border-subtle));
+  border-radius: var(--radius-2xl);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--accent-cyan) 5%, transparent), transparent 42%),
+    linear-gradient(315deg, color-mix(in srgb, var(--accent-emerald) 6%, transparent), transparent 48%),
+    color-mix(in srgb, var(--color-bg-elevated) 65%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 7%, transparent);
+}
+
+.elite-briefing-grid > div {
+  position: relative;
+  min-height: 8.5rem;
+  padding: 1.25rem 1.35rem;
+}
+
+.elite-briefing-grid > div + div {
+  border-left: 1px solid color-mix(in srgb, var(--color-border-subtle) 88%, transparent);
+}
+
+.elite-briefing-grid > div::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--accent-emerald) 55%, transparent), transparent);
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+
+.elite-briefing-grid > div:hover::before {
+  opacity: 1;
+}
+
+.elite-briefing-label {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1.25;
+  text-transform: uppercase;
+  color: var(--accent-emerald);
+}
+
+.elite-briefing-grid strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1.15vw + 0.8rem, 1.625rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+}
+
+.elite-briefing-grid p {
+  margin: 0.45rem 0 0;
+  max-width: 29ch;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+.elite-disclosure {
+  background:
+    linear-gradient(105deg, color-mix(in srgb, var(--accent-amber) 7%, transparent), transparent 54%),
+    color-mix(in srgb, var(--color-bg-elevated) 60%, transparent);
+}
+
+.elite-section-secondary-action {
+  color: var(--color-text-secondary);
+  border: 1px solid color-mix(in srgb, var(--color-border-subtle) 86%, transparent);
+  background: color-mix(in srgb, var(--color-bg-base) 18%, transparent);
+  transition: color 0.24s ease, border-color 0.24s ease, background 0.24s ease, transform 0.24s ease;
+}
+
+@media (hover: hover) {
+  .elite-section-secondary-action:hover {
+    color: var(--accent-amber);
+    border-color: color-mix(in srgb, var(--accent-amber) 50%, transparent);
+    background: color-mix(in srgb, var(--accent-amber) 8%, transparent);
+    transform: translateY(-1px);
+  }
+}
+
+[data-theme="light"] .elite-briefing-grid,
+[data-theme="light"] .elite-disclosure {
+  background: var(--color-bg-elevated);
+  box-shadow: var(--glass-shadow-mid);
+}
+
+[data-theme="light"] .elite-section-secondary-action {
+  background: color-mix(in srgb, var(--color-text-primary) 3%, var(--color-bg-elevated));
+}
+
+@media (max-width: 767px) {
+  .elite-briefing-grid { grid-template-columns: 1fr; }
+  .elite-briefing-grid > div { min-height: 0; padding: 1rem 1.1rem; }
+  .elite-briefing-grid > div + div { border-top: 1px solid color-mix(in srgb, var(--color-border-subtle) 88%, transparent); border-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elite-briefing-grid > div::before,
+  .elite-section-secondary-action { transition: none; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Research Instrument Foundation — flagship hub arrival system
+   Shared by <CinematicHubHero/>. The old component-local hero CSS carried
+   dark-only values and a loose decorative stat row. This system is deliberately
+   global and token-driven so 20+ major hub surfaces gain one coherent, theme-
+   correct hierarchy: quiet atmosphere → proof → action.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.research-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  color: var(--color-text-primary);
+  background:
+    radial-gradient(82% 100% at 8% 6%, color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 18%, transparent), transparent 66%),
+    radial-gradient(56% 78% at 92% 28%, color-mix(in srgb, var(--accent-emerald) 8%, transparent), transparent 70%),
+    linear-gradient(180deg, color-mix(in srgb, var(--color-bg-elevated) 86%, var(--color-bg-base)), var(--color-bg-base));
+  border-bottom: 1px solid color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 14%, var(--color-border-subtle));
+}
+
+.research-hero__field {
+  position: absolute;
+  inset: -14% -4% -20%;
+  z-index: 0;
+  opacity: 0.34;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(74% 82% at 48% 34%, #000 0%, transparent 76%);
+  mask-image: radial-gradient(74% 82% at 48% 34%, #000 0%, transparent 76%);
+}
+
+.research-hero__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--color-bg-base) 14%, transparent), transparent 62%),
+    linear-gradient(180deg, transparent 8%, color-mix(in srgb, var(--color-bg-base) 88%, transparent) 100%);
+}
+
+.research-hero__inner {
+  position: relative;
+  z-index: 2;
+  padding-block: clamp(5.25rem, 10vw, 8.75rem) clamp(3.5rem, 7vw, 6.5rem);
+}
+
+.research-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1.125rem;
+  color: var(--research-hero-accent, var(--accent-cyan));
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.research-hero__eyebrow::before {
+  content: '';
+  width: 2rem;
+  height: 1px;
+  background: currentColor;
+  box-shadow: 0 0 12px color-mix(in srgb, currentColor 40%, transparent);
+}
+
+.research-hero__title {
+  max-width: 18ch;
+  margin: 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-display);
+  font-size: clamp(2.7rem, 6vw, 5.6rem);
+  font-weight: 450;
+  letter-spacing: -0.042em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.research-hero__title em {
+  color: var(--research-hero-accent, var(--accent-cyan));
+  font-style: italic;
+}
+
+.research-hero__lead {
+  max-width: 58ch;
+  margin: 1.35rem 0 0;
+  color: var(--color-text-secondary);
+  font-size: clamp(1rem, 1vw + 0.7rem, 1.1875rem);
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+.research-hero__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10.5rem), 1fr));
+  width: min(100%, 50rem);
+  margin-top: clamp(1.75rem, 3.5vw, 2.5rem);
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 20%, var(--color-border-subtle));
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 14%, var(--color-border-subtle));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 10%, transparent),
+    0 18px 54px -32px color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 45%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(1.12);
+  backdrop-filter: blur(18px) saturate(1.12);
+}
+
+.research-hero__stat {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto auto;
+  align-items: baseline;
+  column-gap: 0.625rem;
+  min-width: 0;
+  padding: 1rem 1.1rem 0.95rem;
+  color: inherit;
+  background: color-mix(in srgb, var(--color-bg-elevated) 78%, transparent);
+}
+
+
+.research-hero__stat::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 1rem;
+  left: 1rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 48%, transparent), transparent);
+  opacity: 0.8;
+}
+
+.research-hero__stat-index {
+  grid-row: 1 / span 2;
+  color: color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 72%, var(--color-text-faint));
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.research-hero__stat-value {
+  min-width: 0;
+  color: var(--research-hero-accent, var(--accent-cyan));
+  font-family: var(--font-display);
+  font-size: clamp(1.55rem, 2.8vw, 2.25rem);
+  font-weight: 520;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  text-shadow: 0 0 24px color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 24%, transparent);
+}
+
+.research-hero__stat-label {
+  grid-column: 2 / span 2;
+  margin-top: 0.35rem;
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.115em;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.research-hero__stat-arrow {
+  align-self: center;
+  color: var(--research-hero-accent, var(--accent-cyan));
+  font-size: 1rem;
+  opacity: 0;
+  transform: translateX(-0.25rem);
+  transition: transform var(--dur-fast) var(--ease-standard), opacity var(--dur-fast) var(--ease-standard);
+}
+
+.research-hero__stat--link {
+  text-decoration: none;
+  transition: background-color var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard);
+}
+
+@media (hover: hover) {
+  .research-hero__stat--link:hover {
+    background: color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 8%, transparent);
+  }
+  .research-hero__stat--link:hover .research-hero__stat-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .research-hero__stat--link:hover .research-hero__stat-label {
+    color: var(--color-text-secondary);
+  }
+}
+
+.research-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: clamp(1.6rem, 3vw, 2.25rem);
+}
+
+.research-hero__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  min-height: 3rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: 0.875rem;
+  font-size: 0.9375rem;
+  font-weight: 650;
+  text-decoration: none;
+  transition: transform var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard), background-color var(--dur-fast) var(--ease-standard);
+}
+
+.research-hero__action--primary {
+  color: #03100c;
+  background: linear-gradient(135deg, var(--research-hero-accent, var(--accent-cyan)) 0%, color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 54%, var(--accent-emerald)) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 12px 30px -16px color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 72%, transparent);
+}
+
+.research-hero__action--secondary {
+  color: var(--color-text-primary);
+  border: 1px solid color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 26%, var(--color-border-strong));
+  background: color-mix(in srgb, var(--color-bg-elevated) 68%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.research-hero__action-arrow {
+  transition: transform var(--dur-fast) var(--ease-standard);
+}
+
+@media (hover: hover) {
+  .research-hero__action:hover { transform: translateY(-2px); }
+  .research-hero__action--primary:hover {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      0 18px 40px -16px color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 86%, transparent);
+  }
+  .research-hero__action--secondary:hover {
+    border-color: color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 55%, var(--color-border-strong));
+    background: color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 9%, var(--color-bg-elevated));
+  }
+  .research-hero__action--primary:hover .research-hero__action-arrow { transform: translateX(0.2rem); }
+}
+
+.research-hero__action:active { transform: scale(0.975); }
+
+@media (max-width: 58rem) {
+  .research-hero__stats { width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 40rem) {
+  .research-hero__inner { padding-block: 4.25rem 3.25rem; }
+  .research-hero__title { font-size: clamp(2.4rem, 12vw, 3.4rem); }
+  .research-hero__lead { margin-top: 1.1rem; font-size: 1rem; }
+  .research-hero__stats { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 1.5rem; }
+  .research-hero__stat { padding: 0.85rem 0.8rem; column-gap: 0.45rem; }
+  .research-hero__stat::before { right: 0.75rem; left: 0.75rem; }
+  .research-hero__stat-value { font-size: 1.55rem; }
+  .research-hero__stat-label { font-size: 0.54rem; letter-spacing: 0.08em; }
+  .research-hero__actions { display: grid; grid-template-columns: 1fr; gap: 0.625rem; margin-top: 1.5rem; }
+  .research-hero__action { width: 100%; min-height: 2.875rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .research-hero__stat,
+  .research-hero__stat-arrow,
+  .research-hero__action,
+  .research-hero__action-arrow { transition: none; }
+}
+
+
+/* ── Research Instrument workspace cue ─────────────────────────────────────
+   The persistent ContextBar is orientation, not another primary nav. These
+   styles keep its function visible while reducing visual weight above every hub
+   arrival surface. */
+.context-bar {
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text-primary) 7%, transparent);
+  background: color-mix(in srgb, var(--color-bg-base) 88%, transparent);
+  box-shadow: 0 12px 30px -26px color-mix(in srgb, #000 72%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(1.15);
+  backdrop-filter: blur(16px) saturate(1.15);
+}
+
+.context-bar__inner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 2.75rem;
+  padding-block: 0.4rem;
+}
+
+.context-bar__crumbs,
+.context-bar__workspace,
+.context-bar__crumb-list,
+.context-bar__crumb {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.context-bar__crumbs { gap: 0.45rem; }
+.context-bar__crumb-list { gap: 0.35rem; }
+.context-bar__crumb { gap: 0.35rem; min-width: 0; }
+.context-bar__pin { width: 0.8rem; height: 0.8rem; flex: none; opacity: 0.8; }
+.context-bar__separator { width: 0.7rem; height: 0.7rem; flex: none; color: var(--color-text-faint); opacity: 0.55; }
+
+.context-bar__crumb-link,
+.context-bar__current {
+  overflow: hidden;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.context-bar__crumb-link {
+  max-width: 9.25rem;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+.context-bar__crumb-link:hover { color: var(--color-text-primary); }
+
+.context-bar__current {
+  max-width: 14rem;
+  color: var(--color-text-primary);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.context-bar__workspace {
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.context-bar__status {
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.context-bar__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2rem;
+  padding: 0.35rem 0.6rem 0.35rem 0.7rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  background: color-mix(in srgb, currentColor 8%, transparent);
+  color: var(--accent-cyan);
+  font-size: 0.75rem;
+  font-weight: 650;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard);
+}
+
+.context-bar__action-arrow { width: 0.8rem; height: 0.8rem; transition: transform var(--dur-fast) var(--ease-standard); }
+
+@media (hover: hover) {
+  .context-bar__action:hover {
+    background: color-mix(in srgb, currentColor 14%, transparent);
+    box-shadow: 0 6px 18px -12px currentColor;
+    transform: translateY(-1px);
+  }
+  .context-bar__action:hover .context-bar__action-arrow { transform: translateX(0.14rem); }
+}
+.context-bar__action:active { transform: scale(0.97); }
+
+@media (max-width: 48rem) {
+  .context-bar__inner { gap: 0.6rem; min-height: 2.55rem; }
+  .context-bar__crumb-link { max-width: 4.25rem; }
+  .context-bar__current { max-width: 6.75rem; }
+  .context-bar__status { display: none; }
+}
+
+@media (max-width: 29rem) {
+  .context-bar__pin { display: none; }
+  .context-bar__crumbs { gap: 0; }
+  .context-bar__crumb-list > .context-bar__crumb:not(:last-child) { display: none; }
+  .context-bar__current { max-width: 8.5rem; }
+  .context-bar__workspace { gap: 0.25rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .context-bar__crumb-link,
+  .context-bar__action,
+  .context-bar__action-arrow { transition: none; }
+}
+
+
+/* ── Research Instrument decision switchboard ──────────────────────────────
+   A single, task-forward surface for the first decision on high-intent hubs.
+   It replaces nested card treatment with a coherent working panel. */
+.decision-switchboard {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 20%, var(--color-border-subtle));
+  border-radius: var(--radius-2xl);
+  background:
+    radial-gradient(80% 140% at 100% 0%, color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 10%, transparent), transparent 60%),
+    color-mix(in srgb, var(--color-bg-elevated) 96%, var(--color-bg-base));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 10%, transparent),
+    var(--glass-shadow-float);
+}
+
+.decision-switchboard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 1.5rem;
+  left: 1.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 68%, transparent), transparent);
+}
+
+.decision-switchboard__intro {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: clamp(1.35rem, 3vw, 2rem) clamp(1.25rem, 3vw, 2rem) 1.25rem;
+}
+
+.decision-switchboard__eyebrow,
+.decision-switchboard__note {
+  margin: 0;
+  color: var(--decision-accent, var(--accent-cyan));
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.decision-switchboard__title {
+  max-width: 30ch;
+  margin: 0.45rem 0 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-display);
+  font-size: clamp(1.55rem, 2.4vw, 2.15rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+.decision-switchboard__detail {
+  max-width: 64ch;
+  margin: 0.65rem 0 0;
+  color: var(--color-text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.decision-switchboard__note {
+  flex: none;
+  align-self: flex-start;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 20%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 7%, transparent);
+  color: var(--color-text-faint);
+}
+
+.decision-switchboard__steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 14%, var(--color-border-subtle));
+  list-style: none;
+}
+
+.decision-switchboard__steps > li + li {
+  border-left: 1px solid color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 14%, var(--color-border-subtle));
+}
+.decision-switchboard__steps > li {
+  position: relative;
+  min-width: 0;
+}
+.decision-switchboard__step {
+  position: relative;
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  gap: 0;
+  padding: 1.05rem 1.15rem 1.1rem;
+  color: inherit;
+}
+
+.decision-switchboard__step--link {
+  text-decoration: none;
+  transition: background-color var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard);
+}
+
+.decision-switchboard__step-head {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 1.85rem;
+}
+.decision-switchboard__number {
+  color: color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 72%, var(--color-text-faint));
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+}
+
+.decision-switchboard__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border: 1px solid color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 22%, transparent);
+  border-radius: 0.6rem;
+  background: color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 10%, transparent);
+  color: var(--decision-accent, var(--accent-cyan));
+}
+
+.decision-switchboard__recommended {
+  margin-left: auto;
+  padding: 0.25rem 0.42rem;
+  border: 1px solid color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 32%, transparent);
+  border-radius: 999px;
+  color: var(--decision-accent, var(--accent-cyan));
+  background: color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 9%, transparent);
+  font-family: var(--font-mono);
+  font-size: 0.53rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.decision-switchboard__copy { display: block; min-width: 0; margin-top: 0.95rem; }
+.decision-switchboard__step-title { display: block; color: var(--color-text-primary); font-size: 0.9rem; font-weight: 675; line-height: 1.3; }
+.decision-switchboard__step-detail { display: block; margin-top: 0.32rem; color: var(--color-text-muted); font-size: 0.76rem; line-height: 1.55; }
+.decision-switchboard__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  color: var(--decision-accent, var(--accent-cyan));
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+.decision-switchboard__arrow { width: 1rem; height: 1rem; color: currentColor; transition: transform var(--dur-fast) var(--ease-standard); }
+.decision-switchboard__item--recommended {
+  background: linear-gradient(145deg, color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 12%, transparent), transparent 75%);
+}
+.decision-switchboard__item--recommended::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 1.15rem;
+  left: 1.15rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 78%, transparent), transparent);
+}
+
+@media (hover: hover) {
+  .decision-switchboard__step--link:hover {
+    background: linear-gradient(145deg, color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 12%, transparent), transparent 70%);
+  }
+  .decision-switchboard__step--link:hover .decision-switchboard__arrow { transform: translateX(0.2rem); }
+}
+.decision-switchboard__step--link:active { transform: scale(0.985); }
+
+@media (max-width: 48rem) {
+  .decision-switchboard__note { display: none; }
+  .decision-switchboard__steps { grid-template-columns: 1fr; }
+  .decision-switchboard__steps > li + li { border-top: 1px solid color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 14%, var(--color-border-subtle)); border-left: 0; }
+  .decision-switchboard__step { min-height: 9.25rem; padding: 0.95rem 1.1rem; }
+  .decision-switchboard__item--recommended::before { right: 1.1rem; left: 1.1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .decision-switchboard__step--link,
+  .decision-switchboard__arrow { transition: none; }
+}
+
+/* ── Action Card — premium task-entry surface ─────────────────────────────
+   A focused, accent-aware destination card. It is intentionally used for
+   consequential choices (not every ordinary card) so its depth and light
+   carry meaning instead of becoming visual noise. */
+.action-card {
+  --action-card-accent: var(--accent-cyan);
+  position: relative;
+  display: flex;
+  min-height: 12.25rem;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--action-card-accent) 23%, var(--color-border-subtle));
+  border-radius: 1rem;
+  padding: 1rem;
+  color: inherit;
+  text-decoration: none;
+  background:
+    radial-gradient(135% 94% at 100% 0%, color-mix(in srgb, var(--action-card-accent) 12%, transparent), transparent 54%),
+    linear-gradient(145deg, color-mix(in srgb, var(--color-bg-elevated) 86%, transparent), color-mix(in srgb, var(--color-bg-base) 72%, transparent));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 8%, transparent), var(--glass-shadow-mid);
+  transition: border-color 220ms var(--ease-standard), transform 220ms var(--ease-standard), box-shadow 220ms var(--ease-standard), background 220ms var(--ease-standard);
+  isolation: isolate;
+}
+.action-card::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  opacity: 0.7;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--action-card-accent) 56%, transparent), transparent 34%) top left / 58% 1px no-repeat,
+    linear-gradient(180deg, color-mix(in srgb, var(--action-card-accent) 42%, transparent), transparent 48%) top right / 1px 48% no-repeat;
+  transition: opacity 220ms var(--ease-standard);
+}
+.action-card::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  right: -3rem;
+  bottom: -3rem;
+  width: 9rem;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  opacity: 0.18;
+  background: var(--action-card-accent);
+  filter: blur(30px);
+  transition: opacity 220ms var(--ease-standard), transform 220ms var(--ease-standard);
+}
+.action-card__topline {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+}
+.action-card__icon {
+  display: inline-flex;
+  width: 2rem;
+  height: 2rem;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--action-card-accent) 32%, transparent);
+  border-radius: 0.65rem;
+  color: var(--action-card-accent);
+  background: color-mix(in srgb, var(--action-card-accent) 12%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 12%, transparent);
+}
+.action-card__eyebrow,
+.action-card__featured-label,
+.action-card__footer {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 650;
+  letter-spacing: 0.11em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+.action-card__eyebrow {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--color-text-faint);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.action-card__featured-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: auto;
+  padding: 0.32rem 0.44rem;
+  border: 1px solid color-mix(in srgb, var(--action-card-accent) 34%, transparent);
+  border-radius: 999px;
+  color: var(--action-card-accent);
+  background: color-mix(in srgb, var(--action-card-accent) 11%, transparent);
+  letter-spacing: 0.075em;
+}
+.action-card__content {
+  display: block;
+  margin-top: 1.15rem;
+}
+.action-card__title {
+  display: block;
+  color: var(--color-text-primary);
+  font-family: var(--font-display);
+  font-size: clamp(1.08rem, 1vw + 0.75rem, 1.35rem);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.12;
+}
+.action-card__description {
+  display: block;
+  margin-top: 0.58rem;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+.action-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--action-card-accent) 15%, var(--color-border-subtle));
+  color: var(--color-text-faint);
+}
+.action-card__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  flex: none;
+  border: 1px solid color-mix(in srgb, var(--action-card-accent) 28%, transparent);
+  border-radius: 999px;
+  color: var(--action-card-accent);
+  background: color-mix(in srgb, var(--action-card-accent) 7%, transparent);
+  transition: transform 220ms var(--ease-standard), background 220ms var(--ease-standard);
+}
+.action-card--featured {
+  border-color: color-mix(in srgb, var(--action-card-accent) 55%, var(--color-border-subtle));
+  background:
+    radial-gradient(126% 100% at 100% 0%, color-mix(in srgb, var(--action-card-accent) 22%, transparent), transparent 56%),
+    linear-gradient(145deg, color-mix(in srgb, var(--color-bg-elevated) 90%, transparent), color-mix(in srgb, var(--action-card-accent) 7%, var(--color-bg-base)));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 12%, transparent), 0 1.25rem 2.6rem -1.65rem color-mix(in srgb, var(--action-card-accent) 68%, transparent), var(--glass-shadow-mid);
+}
+.action-card--featured::after { opacity: 0.32; }
+@media (hover: hover) {
+  .action-card:hover {
+    border-color: color-mix(in srgb, var(--action-card-accent) 58%, var(--color-border-subtle));
+    transform: translateY(-0.25rem);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 11%, transparent), 0 1.25rem 2.8rem -1.85rem color-mix(in srgb, var(--action-card-accent) 70%, transparent), var(--glass-shadow-float);
+  }
+  .action-card:hover::before { opacity: 1; }
+  .action-card:hover::after { opacity: 0.42; transform: scale(1.16); }
+  .action-card:hover .action-card__arrow {
+    transform: translateX(0.18rem);
+    background: color-mix(in srgb, var(--action-card-accent) 16%, transparent);
+  }
+}
+.action-card:focus-visible {
+  border-color: var(--action-card-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--action-card-accent) 32%, transparent), var(--glass-shadow-float);
+}
+[data-theme="light"] .action-card {
+  background:
+    radial-gradient(130% 94% at 100% 0%, color-mix(in srgb, var(--action-card-accent) 10%, transparent), transparent 54%),
+    var(--color-bg-elevated);
+}
+@media (max-width: 48rem) {
+  .action-card { min-height: 10.5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .action-card,
+  .action-card::before,
+  .action-card::after,
+  .action-card__arrow { transition: none; }
+}
+
+/* ── Research Instrument workbench handoff ─────────────────────────────────
+   Used by PageHeader after a cinematic hub arrival. Semantic headings and
+   context remain intact, while the visual volume becomes a clear bridge into
+   tools, builders, and task controls. */
+.page-header--handoff {
+  position: relative;
+  max-width: 72rem;
+  margin-top: clamp(-1.25rem, -2vw, -0.5rem);
+  padding: clamp(1.35rem, 3vw, 2rem);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-2xl);
+  background:
+    linear-gradient(120deg, color-mix(in srgb, var(--color-bg-elevated) 94%, var(--accent-cyan) 3%), var(--color-bg-elevated));
+  box-shadow: var(--glass-shadow-mid);
+}
+
+.page-header--handoff::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  border-radius: var(--radius-2xl) 0 0 var(--radius-2xl);
+  background: linear-gradient(180deg, var(--accent-cyan), var(--accent-emerald));
+  opacity: 0.78;
+}
+
+.page-header__eyebrow--handoff {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  color: var(--color-text-faint);
+}
+
+.page-header__handoff-title {
+  max-width: 24ch;
+  margin: 0.6rem 0 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 520;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.page-header__handoff-description {
+  max-width: 62ch;
+  margin: 0.7rem 0 0;
+  color: var(--color-text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.62;
+  text-wrap: pretty;
+}
+
+@media (max-width: 40rem) {
+  .page-header--handoff { margin-top: -0.5rem; padding: 1.15rem 1.1rem; }
+  .page-header__handoff-title { font-size: clamp(1.6rem, 8vw, 2rem); }
+}
+
+
+/* Light mode keeps the molecular stage atmospheric, not visible through data
+   surfaces. Solid elevated work planes preserve the designed hierarchy and
+   prevent the proof rail from breaking into dark islands. */
+[data-theme='light'] .research-hero__stats {
+  background: color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 16%, var(--color-border-subtle));
+  box-shadow: 0 18px 54px -34px color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 35%, transparent);
+}
+[data-theme='light'] .research-hero__stat {
+  background: color-mix(in srgb, var(--color-bg-elevated) 96%, var(--research-hero-accent, var(--accent-cyan)) 4%);
+}
+[data-theme='light'] .research-hero__action--secondary {
+  background: color-mix(in srgb, var(--color-bg-elevated) 94%, var(--research-hero-accent, var(--accent-cyan)) 6%);
 }

@@ -8,6 +8,7 @@ import { usePlatform } from '@/context/PlatformContext';
 import { accentForRoute, getRouteContext } from '@/lib/route-context';
 import { themes } from '@/lib/design-system';
 import { cn } from '@/lib/utils';
+import styles from '@/components/ui/FlagshipFoundation.module.css';
 
 // The stack cluster needs `analyzeStack` (and through it the full compound
 // data layer), but only renders for visitors who have built a stack. The bar
@@ -61,6 +62,11 @@ interface ContextBarProps {
   hideStackReadout?: boolean;
 }
 
+/**
+ * The persistent workspace cue. It deliberately stays compact: breadcrumb
+ * establishes location, optional live data proves continuity, and one next
+ * action removes ambiguity. The component never owns primary navigation.
+ */
 export function ContextBar({ hideStackReadout = false }: ContextBarProps = {}) {
   const pathname = usePathname() ?? '/';
   const searchParams = useSearchParams();
@@ -89,34 +95,21 @@ export function ContextBar({ hideStackReadout = false }: ContextBarProps = {}) {
   const crumbs = route.breadcrumbs;
 
   return (
-    <aside
-      className={cn(
-        'sticky top-14 md:top-16 z-40 border-b border-border',
-        'bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/85',
-      )}
-      aria-label="Hub context and OS status"
-    >
-      <div className="container-page flex items-center gap-x-4 gap-y-2 py-2 text-xs">
+    <aside className={`${styles.foundation} context-bar sticky top-14 md:top-16 z-40`} aria-label="Hub context and OS status">
+      <div className="context-bar__inner container-page">
         {crumbs.length > 1 && (
-          <nav aria-label="Breadcrumb" className="flex items-center gap-1 min-w-0">
-            <MapPin className={cn('w-3.5 h-3.5 shrink-0', theme.text)} aria-hidden="true" />
-            <ol className="flex items-center gap-1 min-w-0 flex-wrap">
-              {crumbs.map((crumb, i) => {
-                const isLast = i === crumbs.length - 1;
+          <nav aria-label="Breadcrumb" className="context-bar__crumbs">
+            <MapPin className={cn('context-bar__pin', theme.text)} aria-hidden="true" />
+            <ol className="context-bar__crumb-list">
+              {crumbs.map((crumb, index) => {
+                const isLast = index === crumbs.length - 1;
                 return (
-                  <li key={crumb.href} className="flex items-center gap-1 min-w-0">
-                    {i > 0 && (
-                      <ChevronRight className="w-3 h-3 text-muted-foreground shrink-0" aria-hidden="true" />
-                    )}
+                  <li key={crumb.href} className="context-bar__crumb">
+                    {index > 0 && <ChevronRight className="context-bar__separator" aria-hidden="true" />}
                     {isLast ? (
-                      <span className="font-semibold text-foreground truncate max-w-[180px] sm:max-w-xs">
-                        {crumb.label}
-                      </span>
+                      <span className="context-bar__current">{crumb.label}</span>
                     ) : (
-                      <Link
-                        href={crumb.href}
-                        className="focus-ring text-muted-foreground hover:text-foreground truncate max-w-[100px] sm:max-w-none rounded"
-                      >
+                      <Link href={crumb.href} className="context-bar__crumb-link focus-ring">
                         {crumb.label}
                       </Link>
                     )}
@@ -127,14 +120,15 @@ export function ContextBar({ hideStackReadout = false }: ContextBarProps = {}) {
           </nav>
         )}
 
-        <div className="ml-auto flex items-center gap-2 min-w-0">
+        <div className="context-bar__workspace">
           {selected.length > 0 && !hideStackReadout && <ContextBarStackReadout />}
+          <span className="context-bar__status">{next.message}</span>
           <Link
             href={next.href}
-            className="focus-ring interactive tnic-button-tonal [--btn-accent:var(--accent-emerald)] inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 shrink-0"
+            className={cn('context-bar__action focus-ring', theme.text)}
           >
-            {next.label}
-            <ArrowRight className="w-3 h-3" aria-hidden="true" />
+            <span>{next.label}</span>
+            <ArrowRight className="context-bar__action-arrow" aria-hidden="true" />
           </Link>
         </div>
       </div>

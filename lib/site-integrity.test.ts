@@ -6,7 +6,7 @@ import { libraryModules } from './library-modules';
 import { hallmarkLibrary } from './hallmarks-library';
 import { ELITE_8_COMPOUNDS } from './elite-8-data';
 import { citationRegistry } from './trust';
-import { buildSitemapEntries } from './sitemap-urls';
+import { buildSitemapEntries, DEFAULT_SITEMAP_LAST_MODIFIED } from './sitemap-urls';
 import { PRIORITY_INDEX_PATHS } from './index-priority';
 import { CANONICAL_SITE_URL } from './site';
 
@@ -44,6 +44,70 @@ describe('site data integrity', () => {
     }
   });
 
+  it('keeps crawl equity focused on fresh public search-intent routes', () => {
+    const entries = buildSitemapEntries();
+    const paths = entries.map((entry) => new URL(entry.url).pathname);
+    expect(DEFAULT_SITEMAP_LAST_MODIFIED.toISOString()).toBe('2026-08-27T00:00:00.000Z');
+    expect(paths).not.toContain('/dashboard');
+    expect(paths).not.toContain('/brief/feed.xml');
+    expect(paths).not.toContain('/brief/feed.json');
+    expect(entries.find((entry) => new URL(entry.url).pathname === '/longevity-supplements-guide')?.priority).toBe(0.98);
+    expect(entries.find((entry) => new URL(entry.url).pathname === '/supplement-guides')?.priority).toBe(0.96);
+  });
+
+  it('protects the high-intent homepage and commercial decision surfaces', () => {
+    const home = readFileSync(resolve(process.cwd(), 'components/home/HomeDescent.tsx'), 'utf8');
+    const cards = readFileSync(resolve(process.cwd(), 'components/home/HomeEliteGrid.tsx'), 'utf8');
+    const footer = readFileSync(resolve(process.cwd(), 'components/Footer.tsx'), 'utf8');
+    const guideHub = readFileSync(resolve(process.cwd(), 'app/supplement-guides/page.tsx'), 'utf8');
+    expect(home).toContain('Evidence-based');
+    expect(home).toContain('No pay-for-placement');
+    expect(cards).toContain('Read evidence');
+    expect(cards).toContain('after evidence review');
+    expect(footer).toContain('Start with the question you actually have.');
+    expect(guideHub).toContain("title: 'Longevity Supplement Guides 2026 — Evidence-Based Deep Dives'");
+  });
+
+  it('keeps the flagship research-instrument foundation shared, theme-aware, and task-forward', () => {
+    // High-visibility hub surfaces must share a token-driven component contract,
+    // not regress into component-local, dark-only hero CSS or one-off task cards.
+    const hero = readFileSync(resolve(process.cwd(), 'components/viz/CinematicHubHero.tsx'), 'utf8');
+    const contextBar = readFileSync(resolve(process.cwd(), 'components/os/ContextBar.tsx'), 'utf8');
+    const decisionSteps = readFileSync(resolve(process.cwd(), 'components/ui/DecisionSteps.tsx'), 'utf8');
+    const home = readFileSync(resolve(process.cwd(), 'components/home/HomeDescent.tsx'), 'utf8');
+    const labs = readFileSync(resolve(process.cwd(), 'components/labs/LabHub.tsx'), 'utf8');
+    const stacks = readFileSync(resolve(process.cwd(), 'components/stacks/StacksLibrary.tsx'), 'utf8');
+    const pageHeader = readFileSync(resolve(process.cwd(), 'components/ui/PageHeader.tsx'), 'utf8');
+    const css = readFileSync(resolve(process.cwd(), 'app/globals.css'), 'utf8');
+    const foundationCss = readFileSync(resolve(process.cwd(), 'components/ui/FlagshipFoundation.module.css'), 'utf8');
+
+    expect(hero).toContain('research-hero');
+    expect(hero).not.toContain('const HUBHERO_CSS');
+    expect(hero).toContain('titleAsHeading');
+    expect(hero).toContain('focus-ring');
+    expect(css).toContain('.research-hero {');
+    expect(css).toContain('var(--color-text-primary)');
+    expect(foundationCss).toContain('.foundation');
+    expect(foundationCss).toContain(':global(.research-hero)');
+    expect(foundationCss).toContain(':global(.decision-switchboard)');
+    expect(hero).toContain('FlagshipFoundation.module.css');
+    expect(contextBar).toContain('FlagshipFoundation.module.css');
+    expect(decisionSteps).toContain('FlagshipFoundation.module.css');
+    expect(pageHeader).toContain('FlagshipFoundation.module.css');
+    expect(css).toContain('.context-bar {');
+    expect(css).toContain('.page-header--handoff');
+    expect(pageHeader).toContain("variant?: 'default' | 'handoff'");
+    expect(labs).toContain('variant="handoff"');
+    expect(stacks).toContain('variant="handoff"');
+    expect(contextBar).toContain('context-bar__status');
+    expect(contextBar).toContain('next.message');
+    expect(decisionSteps).toContain('decision-switchboard');
+    expect(decisionSteps).toContain('Choose a starting point');
+    expect(home).toContain('grid-template-columns: repeat(2, minmax(0, 1fr));');
+    expect(home).toContain('tnic-path primary focus-ring');
+    expect(home).toContain('.tnic-descent .tnic-paths');
+  });
+
   it('every statically-routable app page is present in the sitemap', () => {
     // Walks app/ for directories with a page.tsx, skipping api routes and any
     // dynamic ([slug]) or route-group ((group)) segment — those are either
@@ -77,7 +141,9 @@ describe('site data integrity', () => {
     // It carries robots noindex/nofollow and is kept out of the sitemap and nav
     // on purpose — reachable only by its URL and one discreet footer link — so
     // it must be excluded from the "every page must be sitemapped" guarantee.
-    const UNLISTED_BY_DESIGN = new Set(['/sheepeople']);
+    // The authenticated dashboard is also intentionally excluded: it is a
+    // private utility surface, not an organic landing page.
+    const UNLISTED_BY_DESIGN = new Set(['/sheepeople', '/dashboard']);
 
     const staticRoutes = collectStaticPageRoutes(resolve(process.cwd(), 'app'));
     const sitemapPaths = new Set(buildSitemapEntries().map((e) => new URL(e.url).pathname));
@@ -85,6 +151,27 @@ describe('site data integrity', () => {
       if (CANONICALIZED_DUPLICATES.has(route) || UNLISTED_BY_DESIGN.has(route)) continue;
       expect(sitemapPaths.has(route), `app route ${route} has a page.tsx but is missing from the sitemap`).toBe(true);
     }
+  });
+
+  it('keeps the promoted master guide resolvable at its canonical URL', () => {
+    // The master guide is a primary discovery destination, linked throughout
+    // the site and intentionally listed in the sitemap. Its direct app route
+    // unexpectedly resolved as a 404 despite building successfully, so the
+    // public path now rewrites to a dedicated internal target. Pin all four
+    // sides of that contract: the public URL, rewrite, page implementation,
+    // and sitemap. This prevents a polished but credibility-damaging dead end.
+    const config = readFileSync(resolve(process.cwd(), 'next.config.ts'), 'utf8');
+    const masterGuide = readFileSync(
+      resolve(process.cwd(), 'app/(internal)/guides/master-longevity-supplements/page.tsx'),
+      'utf8',
+    );
+    const sitemapPaths = new Set(buildSitemapEntries().map((entry) => new URL(entry.url).pathname));
+
+    expect(config).toContain("source: '/longevity-supplements-guide'");
+    expect(config).toContain("destination: '/guides/master-longevity-supplements'");
+    expect(masterGuide).toContain("path: '/longevity-supplements-guide'");
+    expect(masterGuide).toContain('Best Longevity Supplements 2026');
+    expect(sitemapPaths.has('/longevity-supplements-guide')).toBe(true);
   });
 
   it('Elite 8 OTC compounds link to library routes when available', () => {
@@ -205,6 +292,179 @@ describe('site data integrity', () => {
     // The old hardcoded band rendered "150+" and a bare "9" as font-black stats.
     expect(src).not.toMatch(/>150\+</);
     expect(src).not.toMatch(/text-4xl font-black/);
+  });
+
+  it('the supplement-guides hub preserves its decision and safety reading layer', () => {
+    // This high-intent index previously jumped from its hero straight to cards.
+    // Keep the source-backed reading framework, visible safety checkpoint, and
+    // FAQPage metadata in place so it remains decision support, not a thin list
+    // of affiliate-adjacent links.
+    const src = readFileSync(
+      resolve(process.cwd(), 'app/supplement-guides/page.tsx'),
+      'utf8',
+    );
+
+    expect(src).toContain('Move from a question to a well-framed decision.');
+    expect(src).toContain('Evidence, identity, and personal safety are three different checks.');
+    expect(src).toContain('GUIDE_SELECTION_FAQS');
+    expect(src).toContain('buildFaqPageSchema');
+    expect(src).toContain('https://ods.od.nih.gov/factsheets/WYNTK-Consumer/');
+    expect(src).toContain('https://www.fda.gov/consumers/consumer-updates/mixing-medications-and-dietary-supplements-can-endanger-your-health');
+    expect(src).toContain('https://ods.od.nih.gov/Research/Dietary_Supplement_Label_Database.aspx');
+  });
+
+  it('the stack-to-shop journey preserves its readiness, preset, and buyer-review layers', () => {
+    // This is the highest-intent conversion path: an active stack should make
+    // its buyer-grade next step obvious, while product verification remains
+    // transparent and locally private. Pin the source landmarks so a later
+    // visual refactor cannot quietly collapse it back to an unmeasured link row.
+    const stackHub = readFileSync(resolve(process.cwd(), 'components/stacks/StacksLibrary.tsx'), 'utf8');
+    const stackBuilder = readFileSync(resolve(process.cwd(), 'components/stacks/DynamicStackBuilder.tsx'), 'utf8');
+    const shop = readFileSync(resolve(process.cwd(), 'components/shop/ProtocolShopPanel.tsx'), 'utf8');
+
+    expect(stackHub).toContain('parseStackParam');
+    expect(stackHub).toContain('if (!isAlreadyLoaded) setSelected(incomingStack)');
+    expect(stackBuilder).toContain('Stack readiness');
+    expect(stackBuilder).toContain('Verify your active stack');
+    expect(stackBuilder).toContain('ANALYTICS_EVENTS.stackShopOpened');
+    expect(shop).toContain('Choose a stack by the question you want to inspect.');
+    expect(shop).toContain('Keep the checklist with the stack you are evaluating.');
+    expect(shop).toContain('window.localStorage.setItem(checklistKey, JSON.stringify(next))');
+    expect(shop).toContain('ANALYTICS_EVENTS.shopPresetLoaded');
+    expect(shop).toContain('ANALYTICS_EVENTS.shopChecklistProgress');
+  });
+
+  it('defers optional homepage canvases until the cinematic stages are near the viewport', () => {
+    // The homepage stays semantically complete through server-rendered narrative
+    // and supporting panels, while optional canvas artwork is loaded only when it
+    // approaches the reader. Guard that seam: eager imports would restore the
+    // mobile execution cost found in the production performance audit.
+    const descent = readFileSync(resolve(process.cwd(), 'components/home/HomeDescent.tsx'), 'utf8');
+    const deferredStage = readFileSync(resolve(process.cwd(), 'components/home/DeferredCinematicStage.tsx'), 'utf8');
+
+    expect(descent).toContain('DeferredMoleculeStage');
+    expect(descent).toContain('DeferredNetworkStage');
+    expect(descent).not.toContain('import { MoleculeStage }');
+    expect(descent).not.toContain('import { NetworkStage');
+    expect(deferredStage).toContain("ssr: false");
+    expect(deferredStage).toContain('IntersectionObserver');
+    expect(deferredStage).toContain('tnic-stage-placeholder');
+  });
+
+  it('keeps deep-dive provenance labels honest and independently reviewable', () => {
+    // PMID counts are useful source traces, but they do not prove every claim
+    // or establish that every reference is a primary study. Pages without a
+    // real reviewer must disclose that status and link to the current policy.
+    const byline = readFileSync(resolve(process.cwd(), 'components/trust/ContentByline.tsx'), 'utf8');
+    const evidenceTrace = readFileSync(resolve(process.cwd(), 'components/trust/EvidenceTrace.tsx'), 'utf8');
+
+    expect(byline).toContain('PMID-linked sources');
+    expect(byline).not.toContain("'primary sources'");
+    expect(byline).toContain('Not independently clinician-reviewed');
+    expect(byline).toContain('href="/editorial-policy"');
+    expect(evidenceTrace).toContain('Source IDs not tagged');
+    expect(evidenceTrace).toContain('not a verdict on every');
+  });
+
+  it('defers the optional compound molecular canvas until the browser is idle', () => {
+    // The factual compound hero and the semantic deep-dive content must remain
+    // immediately available; only the decorative client canvas is deferred.
+    const compoundHero = readFileSync(resolve(process.cwd(), 'components/viz/CompoundHero.tsx'), 'utf8');
+
+    expect(compoundHero).toContain('dynamic(');
+    expect(compoundHero).toContain('ssr: false');
+    expect(compoundHero).toContain('requestIdleCallback');
+    expect(compoundHero).toContain('chero-stage-placeholder');
+    expect(compoundHero).toContain('DeferredCompoundMoleculeStage');
+    expect(compoundHero).not.toContain('import { MoleculeStage }');
+  });
+
+  it('preserves the evidence-in-flow research, lab, NICO, and systems-map experience layers', () => {
+    // This release is intentionally cross-surface: the value comes from linking
+    // evidence, research continuity, local review context, and the systems map
+    // rather than adding a standalone decorative component. Pin the landmarks.
+    const evidenceTrace = readFileSync(resolve(process.cwd(), 'components/trust/EvidenceTrace.tsx'), 'utf8');
+    const nico = readFileSync(resolve(process.cwd(), 'components/nico/NicoQuestionnaire.tsx'), 'utf8');
+    const labHub = readFileSync(resolve(process.cwd(), 'components/labs/LabHub.tsx'), 'utf8');
+    const labReview = readFileSync(resolve(process.cwd(), 'components/labs/LabReviewContext.tsx'), 'utf8');
+    const dashboard = readFileSync(resolve(process.cwd(), 'components/dashboard/Dashboard.tsx'), 'utf8');
+    const researchIntent = readFileSync(resolve(process.cwd(), 'components/dashboard/ResearchIntentPanel.tsx'), 'utf8');
+    const researchIntentStore = readFileSync(resolve(process.cwd(), 'lib/research-intent.ts'), 'utf8');
+    const library = readFileSync(resolve(process.cwd(), 'components/library/AntiAgingLibrary.tsx'), 'utf8');
+    const systems = readFileSync(resolve(process.cwd(), 'components/library/SystemsPage.tsx'), 'utf8');
+    const systemsRoute = readFileSync(resolve(process.cwd(), 'app/library/systems/page.tsx'), 'utf8');
+
+    expect(evidenceTrace).toContain('ANALYTICS_EVENTS.evidenceTraceOpened');
+    expect(nico).toContain('Evidence route');
+    expect(nico).toContain('ANALYTICS_EVENTS.nicoResearchRouteOpened');
+    expect(nico).toContain('/library/systems?hallmark=');
+    expect(labHub).toContain('<LabReviewContext labs={labs} selectedCount={selected.length} />');
+    expect(labReview).toContain('does not determine personal suitability, diagnose, or prove');
+    expect(dashboard).toContain('<ResearchIntentPanel />');
+    expect(researchIntent).toContain("from '@/lib/research-intent'");
+    expect(researchIntent).toContain('trackEvent(ANALYTICS_EVENTS.researchIntentSet');
+    expect(researchIntentStore).toContain('STORAGE_KEYS.researchIntent');
+    expect(researchIntentStore).toContain('getPrivacyMode()');
+    expect(library).toContain('See system connections');
+    expect(systems).toContain("searchParams.get('hallmark')");
+    expect(systems).toContain("router.replace(`/library/systems?${params.toString()}`");
+    expect(systemsRoute).toContain('<Suspense');
+  });
+
+  it('keeps every Library visual card as a direct canonical hallmark link and defers only its artwork', () => {
+    // All twelve visual cards once looped readers back to /library. The card
+    // title and its actual deep-dive are a single navigation contract; rich SVG
+    // artwork stays a below-fold enhancement rather than initial page weight.
+    const libraryPage = readFileSync(resolve(process.cwd(), 'app/library/page.tsx'), 'utf8');
+    const gallery = readFileSync(resolve(process.cwd(), 'components/library/DeferredHallmarkVisualGallery.tsx'), 'utf8');
+
+    expect(hallmarkLibrary).toHaveLength(12);
+    expect(libraryPage).toContain('DeferredHallmarkVisualGallery cards={visualCards}');
+    expect(libraryPage).toContain('href: `/library/${slug}`');
+    expect(libraryPage).not.toContain('href="/library"\n                className="group block transition-transform hover:scale-[1.01]"');
+    expect(gallery).toContain('IntersectionObserver');
+    expect(gallery).toContain("ssr: false");
+    expect(gallery).toContain('Open the evidence deep-dive');
+    for (const hallmark of hallmarkLibrary) {
+      expect(buildSitemapEntries().some((entry) => new URL(entry.url).pathname === `/library/${hallmark.slug}`)).toBe(true);
+    }
+  });
+
+  it('records the verified production source without relying on a legacy repository name', () => {
+    // This checked-in record is operational provenance, not a claim about the
+    // Vercel project's display name. It prevents deploy instructions from
+    // silently drifting to a deprecated repo or an older application snapshot.
+    const project = JSON.parse(
+      readFileSync(resolve(process.cwd(), 'infra/vercel-project.json'), 'utf8'),
+    ) as {
+      git: { remote: string; productionBranch: string };
+      domains: { canonical: string };
+    };
+
+    expect(project.git.remote).toBe('https://github.com/tvsnic0419/tnic-longevity-new.git');
+    expect(project.git.productionBranch).toBe('main');
+    expect(project.domains.canonical).toBe(new URL(CANONICAL_SITE_URL).host);
+  });
+
+  it('keeps public provenance and internal navigation destinations canonical', () => {
+    const site = readFileSync(resolve(process.cwd(), 'lib/site.ts'), 'utf8');
+    const paletteIndex = readFileSync(resolve(process.cwd(), 'lib/command-palette-index.ts'), 'utf8');
+    const paletteContext = readFileSync(resolve(process.cwd(), 'lib/command-palette-context.ts'), 'utf8');
+    const nextUp = readFileSync(resolve(process.cwd(), 'lib/next-up.ts'), 'utf8');
+    const briefSync = readFileSync(resolve(process.cwd(), 'lib/brief-research-sync.ts'), 'utf8');
+    const protocolBrief = readFileSync(resolve(process.cwd(), 'lib/protocol-brief.ts'), 'utf8');
+    const commandPalette = readFileSync(resolve(process.cwd(), 'components/os/CommandPalette.tsx'), 'utf8');
+
+    expect(site).toContain('https://github.com/tvsnic0419/tnic-longevity-new');
+    expect(site).not.toContain('https://github.com/tvsnic0419/tnic-help');
+    expect(paletteIndex).toContain("href: '/library#hallmark-atlas'");
+    expect(paletteIndex).not.toContain("href: '/#hallmark-targets'");
+    expect(protocolBrief).toContain("href: '/library#hallmark-atlas'");
+    expect(protocolBrief).not.toContain("href: '/#hallmark-targets'");
+    expect(paletteContext).not.toContain("href: '/#research'");
+    expect(nextUp).not.toContain("href: '/#research'");
+    expect(briefSync).not.toContain("href: '/#research'");
+    expect(commandPalette).not.toContain('window.location.href = item.href');
   });
 
   it('vercel.json enforces HSTS preload and www→apex redirect', () => {

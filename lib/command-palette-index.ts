@@ -153,7 +153,7 @@ const hubPages: PaletteItem[] = [
     kind: 'page',
     title: 'Hallmark targets',
     subtitle: 'Target what slows with age',
-    href: '/#hallmark-targets',
+    href: '/library#hallmark-atlas',
     keywords: ['hallmark', 'target', 'aging', 'twelve'],
   },
   {

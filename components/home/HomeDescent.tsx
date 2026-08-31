@@ -7,8 +7,8 @@ import {
 import { eliteInterventions } from "@/lib/elite-interventions";
 import { COMPOUND_COUNT } from "@/lib/library-modules";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { MoleculeStage } from "@/components/viz/MoleculeStage";
-import { NetworkStage, type NetworkNode, type NetworkEdge } from "@/components/viz/NetworkStage";
+import { DeferredMoleculeStage, DeferredNetworkStage } from "@/components/home/DeferredCinematicStage";
+import type { NetworkNode, NetworkEdge } from "@/components/viz/NetworkStage";
 import { HUES } from "@/components/viz/tokens";
 import { runWhenVisible, cappedDpr } from "@/lib/raf-visibility";
 import { createGlowCache, blitGlow } from "@/lib/canvas-glow";
@@ -89,8 +89,8 @@ const CSS = `
   position: absolute; inset: 0; width: 100%; height: 100%;
   pointer-events: none; display: block;
 }
-.tnic-shimmer { z-index: 0; }
-.tnic-cursor  { z-index: 1; mix-blend-mode: screen; opacity: .85; }
+.tnic-shimmer { z-index: 0; height: 100svh; }
+.tnic-cursor  { z-index: 1; height: 100svh; mix-blend-mode: screen; opacity: .85; }
 .tnic-vignette {
   z-index: 2;
   background:
@@ -121,7 +121,7 @@ const CSS = `
   color: var(--cyan); margin: 0 0 20px;
   display: inline-flex; align-items: center; gap: 12px;
   opacity: 0; transform: translateY(14px);
-  transition: opacity .8s ease, transform .8s ease;
+  transition: opacity .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)), transform .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1));
 }
 .tnic-kicker::before { content: ''; width: 26px; height: 1px; background: var(--cyan); opacity: .6; }
 
@@ -130,7 +130,7 @@ const CSS = `
   font-size: clamp(44px, 9vw, 108px); line-height: 0.96;
   letter-spacing: -0.025em; margin: 0; color: var(--ink);
   opacity: 0; transform: translateY(22px);
-  transition: opacity 1s ease .08s, transform 1s ease .08s;
+  transition: opacity .58s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .04s, transform .58s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .04s;
 }
 .tnic-h1 em { font-style: italic; color: var(--cyan); }
 .tnic-h1 .warm { color: var(--gold); font-style: italic; }
@@ -140,7 +140,7 @@ const CSS = `
   font-size: clamp(32px, 6.2vw, 66px); line-height: 1.02;
   letter-spacing: -0.02em; margin: 0; color: var(--ink);
   opacity: 0; transform: translateY(20px);
-  transition: opacity 1s ease .08s, transform 1s ease .08s;
+  transition: opacity .58s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .04s, transform .58s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .04s;
 }
 .tnic-h2 em { font-style: italic; color: var(--cyan); }
 .tnic-h2 .warm { color: var(--gold); font-style: italic; }
@@ -149,8 +149,18 @@ const CSS = `
   font-size: clamp(15px, 2.1vw, 19px); line-height: 1.6;
   color: var(--muted); max-width: 52ch; margin: 22px 0 0;
   opacity: 0; transform: translateY(16px);
-  transition: opacity 1s ease .2s, transform 1s ease .2s;
+  transition: opacity .54s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .1s, transform .54s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .1s;
 }
+.tnic-trustline {
+  display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 18px;
+  max-width: 720px; color: var(--faint);
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+  opacity: 0; transform: translateY(12px);
+  transition: opacity .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .16s, transform .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .16s;
+}
+.tnic-trustline span { display: inline-flex; align-items: center; gap: 7px; }
+.tnic-trustline span::before { content: '•'; color: var(--cyan); font-size: 14px; line-height: 0; }
 .tnic-note {
   font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
   font-size: 11.5px; letter-spacing: .04em; color: var(--faint);
@@ -162,18 +172,67 @@ const CSS = `
 .is-in .tnic-h1,
 .is-in .tnic-h2,
 .is-in .tnic-lead,
+.is-in .tnic-trustline,
 .is-in .tnic-note,
 .is-in .tnic-stage,
 .is-in .tnic-molcard,
 .is-in .tnic-hero-badges,
-.is-in .tnic-hero-cta,
+.is-in .tnic-paths,
 .is-in .tnic-final { opacity: 1; transform: none; }
 
-.tnic-hero { align-items: flex-start; text-align: left; }
+.tnic-hero {
+  align-items: flex-start;
+  text-align: left;
+  isolation: isolate;
+}
+/* The first screen should feel atmospheric but never empty. These low-contrast
+   orbital planes focus the arrival moment without suggesting an actual molecular
+   structure or competing with the real render in Act 1. */
+.tnic-hero::before,
+.tnic-hero::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+}
+.tnic-hero::before {
+  width: min(70vw, 820px);
+  aspect-ratio: 1;
+  right: -10vw;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 1px solid color-mix(in srgb, var(--cyan) 15%, transparent);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 52px color-mix(in srgb, var(--cyan) 5%, transparent),
+    0 0 0 132px color-mix(in srgb, var(--indigo) 3%, transparent),
+    0 0 150px 36px color-mix(in srgb, var(--cyan) 8%, transparent);
+  opacity: .9;
+}
+.tnic-hero::after {
+  inset: 16% 4% 14% 46%;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--cyan) 16%, transparent) 1px, transparent 1px) 0 0 / 72px 72px,
+    linear-gradient(color-mix(in srgb, var(--cyan) 12%, transparent) 1px, transparent 1px) 0 0 / 72px 72px;
+  mask-image: radial-gradient(75% 80% at 70% 50%, #000 0%, transparent 72%);
+  -webkit-mask-image: radial-gradient(75% 80% at 70% 50%, #000 0%, transparent 72%);
+  opacity: .42;
+}
+@media (max-width: 720px) {
+  /* The global nav is fixed; reserve a deliberate arrival margin so the
+     eyebrow never enters beneath its glass edge on narrow screens. */
+  .tnic-hero {
+    justify-content: flex-start;
+    padding-top: calc(5.5rem + env(safe-area-inset-top));
+    padding-bottom: 4rem;
+  }
+  .tnic-hero::before { width: 100vw; right: -38vw; top: 28%; opacity: .56; }
+  .tnic-hero::after { inset: 8% -30% auto 18%; height: 44%; opacity: .24; }
+}
 .tnic-hero-badges {
   display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px;
   opacity: 0; transform: translateY(14px);
-  transition: opacity 1s ease .35s, transform 1s ease .35s;
+  transition: opacity .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .2s, transform .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .2s;
 }
 .tnic-hero-badges .pill {
   display: inline-flex; align-items: center; gap: 8px;
@@ -187,12 +246,68 @@ const CSS = `
 .tnic-hero-badges a.pill { text-decoration: none; transition: border-color .2s ease, color .2s ease, background .2s ease; }
 .tnic-hero-badges a.pill:hover { border-color: color-mix(in srgb, var(--cyan) 55%, transparent); color: var(--ink); background: rgba(14,20,38,0.8); }
 
-/* Primary action on the very first screen (Act 0) — a new visitor gets a clear
-   CTA above the fold instead of having to scroll the whole descent to act. */
-.tnic-hero-cta {
-  display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px;
+/* The arrival screen now makes the three principal visitor jobs explicit:
+   evaluate the strongest evidence, browse the science, or get a personalised
+   starting point. This replaces competing generic CTAs with a compact choice
+   architecture that stays inside the first viewport. */
+.tnic-paths {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;
+  width: min(100%, 780px); margin-top: 28px;
   opacity: 0; transform: translateY(14px);
-  transition: opacity 1s ease .45s, transform 1s ease .45s;
+  transition: opacity .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .26s, transform .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .26s;
+}
+.tnic-path {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center;
+  gap: 10px; min-height: 82px; padding: 13px 14px; border-radius: 14px;
+  color: var(--ink); text-decoration: none; border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel) 86%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+  transition: transform .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease;
+}
+.tnic-path:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--cyan) 55%, transparent); background: color-mix(in srgb, var(--panel2) 92%, transparent); box-shadow: 0 12px 28px -16px rgba(95,227,224,.55); }
+.tnic-path.primary { color: #030712; border-color: transparent; background: linear-gradient(135deg, #5fe3e0 0%, #68e5c7 52%, #b8f3d8 100%); box-shadow: 0 10px 30px -16px rgba(95,227,224,.85); }
+.tnic-path.primary:hover { border-color: transparent; background: linear-gradient(135deg, #75ebe7 0%, #77ebcf 52%, #c8f7e2 100%); box-shadow: 0 14px 36px -16px rgba(95,227,224,.95); }
+.tnic-path-index { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10px; letter-spacing: .12em; color: var(--faint); }
+.tnic-path.primary .tnic-path-index { color: rgba(3,7,18,.58); }
+.tnic-path-copy { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.tnic-path-label { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 9px; line-height: 1.2; letter-spacing: .11em; text-transform: uppercase; color: var(--faint); }
+.tnic-path.primary .tnic-path-label { color: rgba(3,7,18,.62); }
+.tnic-path-name { font-size: 14px; line-height: 1.2; font-weight: 650; }
+.tnic-path-detail { font-size: 11px; line-height: 1.35; color: var(--muted); }
+.tnic-path.primary .tnic-path-detail { color: rgba(3,7,18,.66); }
+.tnic-path-arr { font-size: 18px; line-height: 1; color: var(--cyan); transition: transform .2s ease; }
+.tnic-path.primary .tnic-path-arr { color: #030712; }
+.tnic-path:hover .tnic-path-arr { transform: translateX(3px); }
+@media (max-width: 720px) {
+  /* Keep the full proof set, but turn it into a compact 2×2 telemetry panel so
+     the visitor reaches the primary choice in the first mobile viewport. */
+  .tnic-hero-badges {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    max-width: 440px;
+    margin-top: 20px;
+  }
+  .tnic-hero-badges .pill {
+    min-width: 0;
+    gap: 5px;
+    padding: 7px 8px;
+    font-size: 8px;
+    letter-spacing: .09em;
+    white-space: nowrap;
+  }
+  .tnic-hero-badges .pill .dot { width: 5px; height: 5px; }
+
+  /* One primary path earns the full row. The two supporting paths become an
+     adjacent comparison, preserving every destination without a three-card
+     vertical stack competing with the hero. */
+  .tnic-paths { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; max-width: 440px; margin-top: 18px; }
+  .tnic-path.primary { grid-column: 1 / -1; }
+  .tnic-path { min-height: 78px; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; padding: 11px; }
+  .tnic-path-index { display: none; }
+  .tnic-path-label { font-size: 8px; letter-spacing: .09em; }
+  .tnic-path-name { font-size: 13px; }
+  .tnic-path-detail { font-size: 10px; line-height: 1.3; }
 }
 
 .tnic-cue {
@@ -219,7 +334,40 @@ const CSS = `
     linear-gradient(180deg, rgba(14,20,38,0.55), rgba(10,14,30,0.85));
   border: 1px solid var(--line);
 }
-.tnic-stage canvas, .tnic-stage svg { width: 100%; height: 100%; display: block; }
+.tnic-stage canvas, .tnic-stage svg { position: relative; z-index: 1; width: 100%; height: 100%; display: block; }
+.tnic-stage-mount { position: relative; width: 100%; height: 100%; isolation: isolate; }
+.tnic-stage-fallback {
+  position: absolute; z-index: 0; inset: 0; overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(95,227,224,0.14), transparent 17%),
+    radial-gradient(circle at 50% 50%, rgba(140,140,245,0.1), transparent 45%),
+    linear-gradient(135deg, rgba(95,227,224,0.025), transparent 44%, rgba(140,140,245,0.035));
+}
+.tnic-stage-fallback::before {
+  content: ''; position: absolute; inset: 10%; opacity: .26;
+  background:
+    linear-gradient(rgba(95,227,224,.14) 1px, transparent 1px) 0 0 / 42px 42px,
+    linear-gradient(90deg, rgba(95,227,224,.14) 1px, transparent 1px) 0 0 / 42px 42px;
+  mask-image: radial-gradient(70% 70% at 50% 50%, #000 0%, transparent 80%);
+  -webkit-mask-image: radial-gradient(70% 70% at 50% 50%, #000 0%, transparent 80%);
+}
+.tnic-stage-fallback__orbit,
+.tnic-stage-fallback__node,
+.tnic-stage-fallback__core { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+.tnic-stage-fallback__orbit { border: 1px solid rgba(95,227,224,.24); border-radius: 50%; transform: translate(-50%, -50%) rotate(-18deg); }
+.tnic-stage-fallback__orbit--outer { width: 68%; aspect-ratio: 1.8; border-color: rgba(140,140,245,.18); animation: tnic-orbit-breathe 11s ease-in-out infinite; }
+.tnic-stage-fallback__orbit--middle { width: 50%; aspect-ratio: 1.8; transform: translate(-50%, -50%) rotate(54deg); border-color: rgba(95,227,224,.28); animation: tnic-orbit-breathe 8s ease-in-out infinite reverse; }
+.tnic-stage-fallback__orbit--inner { width: 31%; aspect-ratio: 1.8; transform: translate(-50%, -50%) rotate(-48deg); border-color: rgba(240,196,106,.3); animation: tnic-orbit-breathe 6s ease-in-out infinite; }
+@keyframes tnic-orbit-breathe { 0%, 100% { opacity: .62; scale: .98; } 50% { opacity: 1; scale: 1.02; } }
+.tnic-stage-fallback__node { width: .55rem; height: .55rem; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 0 .25rem rgba(95,227,224,.08), 0 0 1.2rem rgba(95,227,224,.62); }
+.tnic-stage-fallback__node--one { margin: -25% 0 0 27%; }
+.tnic-stage-fallback__node--two { margin: 20% 0 0 -25%; background: var(--gold); box-shadow: 0 0 0 .25rem rgba(240,196,106,.08), 0 0 1.2rem rgba(240,196,106,.56); }
+.tnic-stage-fallback__node--three { margin: -18% 0 0 -33%; background: var(--violet); box-shadow: 0 0 0 .25rem rgba(185,140,240,.08), 0 0 1.2rem rgba(185,140,240,.56); }
+.tnic-stage-fallback__core { width: 7%; aspect-ratio: 1; border: 1px solid rgba(255,255,255,.72); border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, var(--cyan) 42%, rgba(95,227,224,.12) 100%); box-shadow: 0 0 0 12px rgba(95,227,224,.06), 0 0 2.2rem rgba(95,227,224,.6); }
+.tnic-stage-fallback__label { position: absolute; left: 22px; top: 20px; display: flex; flex-direction: column; gap: 5px; color: var(--faint); font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 9px; letter-spacing: .16em; line-height: 1.2; text-transform: uppercase; }
+.tnic-stage-fallback__label strong { color: var(--ink); font-size: 11px; font-weight: 500; letter-spacing: .1em; }
+.tnic-stage-placeholder { display: none; }
+@media (max-width: 720px) { .tnic-stage-fallback__label { left: 16px; top: 16px; } }
 
 .tnic-molhint {
   position: absolute; bottom: 12px; right: 14px;
@@ -413,22 +561,25 @@ const CSS = `
 .tnic-cta.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); box-shadow: none; margin-left: 12px; }
 .tnic-cta.ghost:hover { border-color: var(--cyan); }
 
-.tnic-rail-track { position: absolute; top: 0; right: clamp(14px,2.5vw,30px); bottom: 0; width: 84px; pointer-events: none; z-index: 6; }
-.tnic-rail { position: sticky; top: 50vh; transform: translateY(-50%); display: flex; flex-direction: column; gap: 4px; pointer-events: auto; }
+/* Journey navigator — persistent labels turn the cinematic sequence into an
+   understandable five-part story instead of an unexplained floating rail. */
+.tnic-rail-track { position: absolute; top: 0; right: clamp(14px,2.5vw,30px); bottom: 0; width: 144px; pointer-events: none; z-index: 6; }
+.tnic-rail { position: sticky; top: 50vh; transform: translateY(-50%); display: flex; flex-direction: column; gap: 1px; padding: 8px 9px; border: 1px solid color-mix(in srgb, var(--line) 85%, transparent); border-radius: 14px; background: color-mix(in srgb, var(--void) 82%, transparent); box-shadow: 0 12px 34px -18px rgba(0,0,0,.6); backdrop-filter: blur(14px); pointer-events: auto; }
 @media (max-width: 720px){ .tnic-rail-track { display: none; } }
 .tnic-rail button {
-  background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 10px;
-  padding: 6px 0; color: var(--faint); justify-content: flex-end;
+  background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 9px;
+  padding: 7px 0; color: var(--faint); justify-content: flex-end;
 }
-.tnic-rail .lbl { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; opacity: 0; transform: translateX(6px); transition: all .3s ease; }
-.tnic-rail button:hover .lbl, .tnic-rail button.on .lbl { opacity: 1; transform: none; color: var(--ink); }
-.tnic-rail .tick { width: 26px; height: 2px; background: currentColor; border-radius: 2px; transition: all .3s ease; }
+.tnic-rail .lbl { width: 78px; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 9.5px; letter-spacing: .13em; text-align: right; text-transform: uppercase; opacity: .54; transform: none; transition: all .25s ease; }
+.tnic-rail button:hover .lbl, .tnic-rail button.on .lbl { opacity: 1; color: var(--ink); }
+.tnic-rail .tick { width: 20px; height: 2px; background: currentColor; border-radius: 2px; transition: all .25s ease; }
 .tnic-rail button.on { color: var(--cyan); }
-.tnic-rail button.on .tick { width: 44px; box-shadow: 0 0 12px var(--cyan); }
+.tnic-rail button.on .tick { width: 30px; box-shadow: 0 0 12px var(--cyan); }
 
 .tnic-descent[data-reduced="true"] .bar,
 .tnic-descent[data-reduced="true"] .edge.flow,
-.tnic-descent[data-reduced="true"] .node-pulse { animation: none !important; }
+.tnic-descent[data-reduced="true"] .node-pulse,
+.tnic-descent[data-reduced="true"] .tnic-stage-fallback__orbit { animation: none !important; }
 
 /* Act 4 capstone backdrop — the goal curve from Act 3, mirrored into an
    ascent behind the closing section. Negative z stays inside the act's
@@ -451,12 +602,13 @@ const CSS = `
   .tnic-descent .tnic-stage,
   .tnic-descent .tnic-molcard,
   .tnic-descent .tnic-hero-badges,
-  .tnic-descent .tnic-hero-cta,
+  .tnic-descent .tnic-paths,
   .tnic-descent .tnic-final {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
   }
+  .tnic-descent .tnic-stage-fallback__orbit { animation: none !important; }
 }
 `;
 
@@ -851,25 +1003,54 @@ export function HomeDescent() {
       </div>
 
       {/* ACT 0 — ARRIVE */}
-      <section ref={s0} data-idx="0" className="tnic-act tnic-hero">
+      <section ref={s0} data-idx="0" className="tnic-act tnic-hero is-in">
         <p className="tnic-kicker">Evidence-Graded Longevity Library</p>
-        <h1 className="tnic-h1">See what{' '}<br />you&apos;re <em>protecting</em>.</h1>
+        <h1 className="tnic-h1">Evidence-based <em>longevity</em>,<br />without the hype.</h1>
         <p className="tnic-lead">
-          You can&apos;t feel a cell aging. So we made it visible — the real biology
-          behind your stack, rendered instead of promised. Five scenes. One
-          continuous descent, from a molecule to the life it defends.
+          A free, PubMed-backed library for understanding longevity supplements,
+          the 12 Hallmarks of Aging, and the evidence behind each compound —
+          before you buy or build a stack.
         </p>
-        <div className="tnic-hero-badges">
-          <Link href="/elite-8" className="pill"><span className="dot" /><b>{eliteInterventions.length}</b>&nbsp;elite interventions</Link>
-          <Link href="/library/compounds" className="pill"><span className="dot" /><b>{COMPOUND_COUNT}</b>&nbsp;graded compounds</Link>
-          <Link href="/hallmarks" className="pill"><span className="dot" /><b>12</b>&nbsp;hallmarks of aging</Link>
-          <Link href="/trust/methodology" className="pill"><span className="dot" /><b>A–C</b>&nbsp;evidence tiers</Link>
+        <div className="tnic-trustline" aria-label="TNiC trust signals">
+          <span>Human evidence graded</span>
+          <span>PubMed citations</span>
+          <span>No pay-for-placement</span>
+          <span>Free and privacy-first</span>
         </div>
-        <div className="tnic-hero-cta">
-          <Link href="/elite-8" className="tnic-cta">
-            Explore the Elite Eight <span className="arr" aria-hidden="true">→</span>
+        <div className="tnic-hero-badges">
+          <Link href="/elite-8" className="pill focus-ring"><span className="dot" /><b>{eliteInterventions.length}</b>&nbsp;elite interventions</Link>
+          <Link href="/library/compounds" className="pill focus-ring"><span className="dot" /><b>{COMPOUND_COUNT}</b>&nbsp;graded compounds</Link>
+          <Link href="/hallmarks" className="pill focus-ring"><span className="dot" /><b>12</b>&nbsp;hallmarks of aging</Link>
+          <Link href="/trust/methodology" className="pill focus-ring"><span className="dot" /><b>A–C</b>&nbsp;evidence tiers</Link>
+        </div>
+        <div className="tnic-paths" aria-label="Choose where to begin">
+          <Link href="/elite-8" className="tnic-path primary focus-ring">
+            <span className="tnic-path-index">01</span>
+            <span className="tnic-path-copy">
+              <span className="tnic-path-label">Start with confidence</span>
+              <span className="tnic-path-name">Elite Eight</span>
+              <span className="tnic-path-detail">8 dose-matched picks · cited human trials</span>
+            </span>
+            <span className="tnic-path-arr" aria-hidden="true">→</span>
           </Link>
-          <Link href="#system" className="tnic-cta ghost">View the network</Link>
+          <Link href="/library" className="tnic-path focus-ring">
+            <span className="tnic-path-index">02</span>
+            <span className="tnic-path-copy">
+              <span className="tnic-path-label">Explore the science</span>
+              <span className="tnic-path-name">The Library</span>
+              <span className="tnic-path-detail">100 graded compounds · 12 hallmarks</span>
+            </span>
+            <span className="tnic-path-arr" aria-hidden="true">→</span>
+          </Link>
+          <Link href="/nico" className="tnic-path focus-ring">
+            <span className="tnic-path-index">03</span>
+            <span className="tnic-path-copy">
+              <span className="tnic-path-label">Get your starting point</span>
+              <span className="tnic-path-name">NICO Starter</span>
+              <span className="tnic-path-detail">Nine questions · adjustable stack plan</span>
+            </span>
+            <span className="tnic-path-arr" aria-hidden="true">→</span>
+          </Link>
         </div>
         <div className="tnic-cue"><span className="bar" />descend</div>
       </section>
@@ -886,7 +1067,7 @@ export function HomeDescent() {
 
         <div className="tnic-molwrap">
           <div className="tnic-stage">
-            <MoleculeStage geometryId="resveratrol" hue={HUES.cyan} ariaLabel="Rotatable 3D model of the resveratrol molecule. Full details are in the panel beside it." />
+            <DeferredMoleculeStage geometryId="resveratrol" hue={HUES.cyan} ariaLabel="Rotatable 3D model of the resveratrol molecule. Full details are in the panel beside it." />
             <div className="tnic-molhint"><span className="dot" />drag · scroll to zoom</div>
           </div>
 
@@ -933,7 +1114,7 @@ export function HomeDescent() {
 
         <div className="tnic-netwrap">
           <div className="tnic-stage" style={{ aspectRatio: "10/7", maxHeight: "62vh" }}>
-            <NetworkStage nodes={NET_NODES} edges={NET_EDGES}
+            <DeferredNetworkStage nodes={NET_NODES} edges={NET_EDGES}
               ariaLabel="Rotatable 3D network of TNiC compounds. Cool links are synergies, amber links are clashes, gold-haloed nodes are elite picks. Details and the legend are in the panel beside it." />
             <div className="tnic-molhint"><span className="dot" />drag · scroll to zoom</div>
           </div>

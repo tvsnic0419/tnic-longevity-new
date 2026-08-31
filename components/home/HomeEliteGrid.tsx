@@ -3,9 +3,10 @@
 import { useMemo, useState, type CSSProperties } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ExternalLink, BookOpen } from 'lucide-react';
+import { ExternalLink, BookOpen, FlaskConical } from 'lucide-react';
 import { eliteInterventions } from '@/lib/elite-interventions';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { EvidenceTrace } from '@/components/trust/EvidenceTrace';
 import { RevealItem } from '@/components/ui/RevealItem';
 import { computeTnicScore, scoreBand } from '@/lib/tnic-score';
 
@@ -70,7 +71,10 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
   const band = tnic.score !== null ? scoreBand(tnic.score) : null;
 
   return (
-    <div className="elite-card group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-gradient-to-b from-card/70 to-card/25 transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-accent-emerald/50 hover:shadow-[0_24px_70px_-24px_rgba(16,185,129,0.4)]">
+    <div
+      className="elite-card premium-card group h-full"
+      style={{ '--card-accent': 'var(--accent-emerald)' } as CSSProperties}
+    >
       {/* top-edge light catch */}
       <span
         aria-hidden="true"
@@ -78,7 +82,7 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
       />
 
       {/* Product image band — layered ambience: emerald glow + dot-grid + hover shine */}
-      <div className="relative flex h-44 items-center justify-center overflow-hidden border-b border-border/50">
+      <div className="elite-card-media relative flex h-44 items-center justify-center overflow-hidden border-b border-border/50">
         <span
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_100%_at_50%_120%,rgba(16,185,129,0.16),transparent_60%)]"
@@ -161,6 +165,14 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
           </div>
         </dl>
 
+        <EvidenceTrace
+          tier={evidence}
+          sourceCount={studyCount}
+          reviewedLabel="Dose-matched"
+          href={intervention.libraryHref}
+          className="mb-5"
+        />
+
         {/* Verified pick */}
         <div className="mt-auto">
           <p className="text-label mb-1 text-accent-emerald">Verified pick</p>
@@ -168,23 +180,32 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
             {pick.brand} — <span className="text-[var(--color-text-secondary)]">{pick.productName}</span>
           </p>
           <div className="flex flex-col gap-2">
+            <div className="grid grid-cols-2 gap-2">
+              <Link
+                href={intervention.libraryHref}
+                className="focus-ring tnic-button-primary inline-flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-sm"
+              >
+                <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
+                Read evidence
+              </Link>
+              <Link
+                href={`/stacks?stack=${intervention.compoundId}&from=elite-home`}
+                className="elite-card-action-secondary focus-ring inline-flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold"
+              >
+                <FlaskConical className="h-3.5 w-3.5" aria-hidden="true" />
+                Build a stack
+              </Link>
+            </div>
             <a
               href={intervention.goHref}
               target="_blank"
               rel="noopener noreferrer sponsored"
-              className="focus-ring group/buy inline-flex items-center justify-center gap-1.5 rounded-xl bg-accent-emerald/12 px-4 py-2.5 text-sm font-semibold text-accent-emerald transition-colors hover:bg-accent-emerald/20"
-              aria-label={`Buy ${pick.productName} from ${pick.brand} — opens manufacturer site`}
+              className="elite-card-action-verify focus-ring group/buy inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-semibold"
+              aria-label={`Check ${pick.productName} from ${pick.brand} — opens manufacturer site after evidence review`}
             >
-              Buy on {brandShort}
+              Verify on {brandShort}
               <ExternalLink className="h-3.5 w-3.5 transition-transform duration-200 group-hover/buy:-translate-y-0.5 group-hover/buy:translate-x-0.5" aria-hidden="true" />
             </a>
-            <Link
-              href={intervention.libraryHref}
-              className="focus-ring inline-flex items-center justify-center gap-1.5 rounded-xl border border-border/70 px-4 py-2.5 text-sm font-semibold text-[var(--color-text-secondary)] transition-colors hover:border-accent-cyan/40 hover:text-accent-cyan"
-            >
-              <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
-              Read the evidence
-            </Link>
           </div>
         </div>
       </div>
@@ -218,11 +239,19 @@ export function HomeEliteGrid() {
 
   return (
     <>
-      <div
-        role="group"
-        aria-label="Filter elite interventions by hallmark"
-        className="mb-8 flex flex-wrap gap-2"
-      >
+      <div className="elite-filter-shell mb-8">
+        <div className="mb-3 flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
+          <div>
+            <p className="text-label text-accent-emerald">Evidence-led shortlist</p>
+            <p className="mt-1 text-sm text-muted-foreground">Filter by the biological system you want to explore.</p>
+          </div>
+          <span className="elite-filter-signal">{eliteInterventions.length} reviewed picks</span>
+        </div>
+        <div
+          role="group"
+          aria-label="Filter elite interventions by hallmark"
+          className="flex flex-wrap gap-2"
+        >
         <button
           type="button"
           aria-pressed={active === 'all'}
@@ -242,12 +271,13 @@ export function HomeEliteGrid() {
             {hallmarkLabels[h] ?? h}
           </button>
         ))}
+        </div>
       </div>
 
       {/* Live count of the visible set, announced politely on filter change. */}
       <p
         aria-live="polite"
-        className="mb-4 font-mono text-micro font-semibold uppercase tracking-[0.12em] text-muted-foreground"
+        className="elite-filter-count mb-4 font-mono text-micro font-semibold uppercase tracking-[0.12em] text-muted-foreground"
       >
         {active === 'all'
           ? `${eliteInterventions.length} elite interventions`

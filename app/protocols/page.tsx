@@ -1,9 +1,8 @@
-import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { Compass, Scale, Wand2 } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
-import { ProtocolCard } from '@/components/protocols/ProtocolCard';
-import { RevealItem } from '@/components/ui/RevealItem';
+import { ProtocolExplorer } from '@/components/protocols/ProtocolExplorer';
+import { DecisionSteps } from '@/components/ui/DecisionSteps';
 import { buildPageMetadata } from '@/lib/seo';
 import { protocols } from '@/lib/protocols';
 
@@ -43,39 +42,20 @@ export default function ProtocolsPage() {
       />
 
       <div className="container-page pb-20">
-        <div className="mb-10 max-w-2xl">
-          <p className="text-label text-accent-violet mb-3">How to read these</p>
-          <h2 className="heading-section mb-3">Each protocol is a plan, not a pile.</h2>
-          <div className="heading-accent-rule mb-4" aria-hidden="true" />
-          <p className="text-body">
-            Every stack shows what each compound does, when to take it, and which hallmarks of aging
-            it targets. Start with one that matches your goal, tap any compound to read its evidence,
-            and talk to a clinician before you begin.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-          {protocols.map((p, i) => (
-            <RevealItem key={p.slug} index={i} className="h-full">
-              <ProtocolCard protocol={p} />
-            </RevealItem>
-          ))}
-        </div>
-
-        <div className="premium-card mt-10 p-6">
-          <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-body-sm max-w-xl text-muted-foreground">
-              Want a stack tuned to your own goals, biomarkers, and safety profile? The Stack Architect
-              builds one for you — with synergy scoring and contraindication checks.
-            </p>
-            <Link
-              href="/stacks"
-              className="btn-gradient focus-ring group shrink-0 justify-center rounded-full text-sm !py-3 !px-6"
-            >
-              Open Stack Architect
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-            </Link>
-          </div>
+        <DecisionSteps
+          className="mb-8"
+          eyebrow="A considered protocol path"
+          title="Each protocol is a plan, not a pile."
+          detail="Start with the system you want to understand, inspect its authored structure and evidence context, then use Stack Architect only when you want to explore your own configuration."
+          theme="violet"
+          steps={[
+            { title: 'Choose a system', detail: 'Use a focus lens to orient the curated protocol library.', href: '#protocol-explorer', icon: Compass },
+            { title: 'Inspect the structure', detail: 'Compare timing, compound count, targets, and evidence tier.', href: '#protocol-explorer', icon: Scale },
+            { title: 'Open the workspace', detail: 'Explore a stack with transparent coverage and interaction checks.', href: '/stacks', icon: Wand2 },
+          ]}
+        />
+        <div id="protocol-explorer">
+          <ProtocolExplorer />
         </div>
       </div>
     </SubPageLayout>

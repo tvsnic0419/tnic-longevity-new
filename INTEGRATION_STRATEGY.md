@@ -1,10 +1,22 @@
-# TNiC Integration Strategy
+# TNiC Production Source and Historical Integration Record
 
-`feature/priority-upgrades` → `tnic-help` main
+## Active production source — verified 2026-08-27
 
-**Decision:** Strategy A — selective cherry-pick (not rebase).  
-**Canonical repo:** `tvsnic0419/tnic-help` (production at https://tnic.help)  
-**Mirror repo:** `tvsnic0419/tnic-longevity-platform` — `main` synced to match `tnic-help` main.
+The production-equivalent TNiC application source is [`tvsnic0419/tnic-longevity-new`](https://github.com/tvsnic0419/tnic-longevity-new) on `main`. Its current commits include the shipped Evidence-in-Flow experience, progressive homepage delivery, and canonical master-guide repair. Its configured origin is `https://github.com/tvsnic0419/tnic-longevity-new.git`.
+
+| Role | Verified reference | Operational rule |
+|---|---|---|
+| Active application source | `tvsnic0419/tnic-longevity-new` → `main` | Create reviewed feature branches here, merge only approved pull requests into `main`, then verify the production release. |
+| Hosting project | `tnic-projects/tnic-help` (`prj_SMGpRy7Dgmk3UOyjgxdKqwBkvtcU`) | Preserve project, environment variables, redirects, domains, and production-branch safeguards. The project name is a hosting identifier, not source-control evidence. |
+| Canonical domain | `https://tnic.help` | Verify the apex URL after each production deployment; `www.tnic.help` must redirect to the apex. |
+| Deprecated source reference | `tvsnic0419/tnic-help` | Do not use as a release base or deploy from it. |
+| Older snapshot | `tvsnic0419/tnic-longevity-platform` | Do not deploy it over the modern production application. |
+
+> **Release safety rule:** Never resolve a repository discrepancy by deploying a legacy snapshot. Confirm the modern production-equivalent source, protect it through a branch and pull request, retain a rollback-capable production deployment, and verify the apex domain after release.
+
+## Historical migration record
+
+The remainder of this file records a June 2026 selective-cherry-pick plan. It is retained for its implementation history, but it is not current deployment instruction. References below to `tnic-help` or `tnic-longevity-platform` are historical and must not supersede the active-source table above.
 
 ## Execution status (2026-06-20)
 
@@ -38,8 +50,8 @@
 
 ## Governance
 
-- Single source of truth: `tnic-help`
-- Archive `tnic-longevity-platform` after integration with README redirect (manual GitHub setting)
+- Current source of truth: `tnic-longevity-new` → `main`; the prior `tnic-help` reference is deprecated.
+- Treat `tnic-longevity-platform` as an older snapshot; do not use it as a production release base.
 - Sprint commits: `feat: Sprint NN — [area]: [description]`
 
 ## Open product decisions (resolved)

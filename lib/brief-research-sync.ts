@@ -34,7 +34,7 @@ export function researchFeedToBriefEntry(
     pmids: [item.pmid],
     libraryHrefs: [
       ...item.relatedHrefs,
-      { label: 'Research intel feed', href: '/#research' },
+      { label: 'Research intel feed', href: '/brief' },
     ],
     takeaway: `PubMed ${item.pmid} — use protocol links above before changing your stack.`,
     tags,

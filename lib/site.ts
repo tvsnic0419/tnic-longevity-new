@@ -17,7 +17,7 @@ export function resolveSiteUrl(): string {
 
 /** Public profiles — used in Organization JSON-LD sameAs and social metadata */
 export const SOCIAL_PROFILES = [
-  'https://github.com/tvsnic0419/tnic-help',
+  'https://github.com/tvsnic0419/tnic-longevity-new',
   'https://x.com/tnic_help',
 ] as const;
 
