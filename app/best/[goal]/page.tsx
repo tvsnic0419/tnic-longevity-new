@@ -6,6 +6,7 @@ import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { AnswerBox } from '@/components/ui/AnswerBox';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { BestLeaderboard } from '@/components/best/BestLeaderboard';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema, buildFaqPageSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
@@ -52,6 +53,15 @@ export default async function BestForGoalPage({
   if (!g) notFound();
 
   const picks = rankCompoundsForGoal(g);
+  const leaderboardPicks = picks.map((p) => ({
+    id: p.compound.id,
+    name: p.compound.name,
+    evidence: p.compound.evidence,
+    pathway: p.compound.pathway,
+    dose: p.compound.dose,
+    timing: p.compound.timing,
+    pmidCount: p.pmids.length,
+  }));
   const hallmarks = hallmarkTitlesFor(g.hallmarkIds);
   const others = bestForGoals.filter((x) => x.slug !== g.slug);
 
@@ -132,44 +142,9 @@ export default async function BestForGoalPage({
             </div>
           </div>
 
-          {/* Ranked list */}
-          <ol className="space-y-4 mb-12">
-            {picks.map((p, i) => (
-              <li key={p.compound.id}>
-                <Link
-                  href={`/library/compounds/${p.compound.id}`}
-                  className="focus-ring interactive group block rounded-2xl border border-border/60 bg-card/40 p-5 hover:border-accent-emerald/40 transition-colors"
-                >
-                  <div className="flex items-start gap-4">
-                    <span className="shrink-0 font-mono text-lg font-black text-muted-foreground w-8 text-center">
-                      {i + 1}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2 flex-wrap mb-1">
-                        <h2 className="text-base font-bold text-foreground group-hover:text-accent-emerald transition-colors">
-                          {p.compound.name}
-                        </h2>
-                        <EvidenceTag tier={p.compound.evidence} size="sm" />
-                      </div>
-                      <p className="text-sm text-muted-foreground mb-2">{p.why}</p>
-                      <div className="flex flex-wrap items-center gap-3 text-micro font-mono text-caption">
-                        <span>{p.compound.dose}</span>
-                        <span>·</span>
-                        <span>{p.compound.timing}</span>
-                        {p.pmids.length > 0 && (
-                          <>
-                            <span>·</span>
-                            <span>{p.pmids.length} PMID{p.pmids.length === 1 ? '' : 's'}</span>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                    <ArrowRight className="w-4 h-4 shrink-0 text-muted-foreground group-hover:text-accent-emerald group-hover:translate-x-1 transition-all mt-1" aria-hidden="true" />
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ol>
+          {/* Ranked list — premium leaderboard with per-rank accent and a
+              one-tap add-to-protocol action (see BestLeaderboard). */}
+          <BestLeaderboard picks={leaderboardPicks} />
 
           {/* The mechanisms behind this goal */}
           {hallmarks.length > 0 && (
