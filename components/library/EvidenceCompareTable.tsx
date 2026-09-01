@@ -1,5 +1,6 @@
 'use client';
 
+import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { ArrowRight, ExternalLink } from 'lucide-react';
 import type { EvidenceComparison, CompareVerdict } from '@/lib/comparisons';
@@ -49,11 +50,21 @@ export function EvidenceCompareTable({ comparison }: EvidenceCompareTableProps) 
           <div className="p-4 text-muted-foreground border-l border-border hidden sm:block w-28">Verdict</div>
         </div>
 
-        {rows.map((row, i) => (
+        {rows.map((row, i) => {
+          // Winner emphasis: the value cell on the winning side gets a faint
+          // accent wash, an inset accent bar, and brighter text, so the eye
+          // reads the per-row winner instantly — the verdict chip in prose.
+          const aWin = row.verdict === 'a';
+          const bWin = row.verdict === 'b';
+          const winStyle = (accent: string): CSSProperties => ({
+            background: `color-mix(in srgb, ${accent} 8%, transparent)`,
+            boxShadow: `inset 2px 0 0 0 color-mix(in srgb, ${accent} 55%, transparent)`,
+          });
+          return (
           <div
             key={row.dimension}
             className={cn(
-              'grid grid-cols-1 sm:grid-cols-[1.2fr_1fr_1fr_auto] gap-0 border-b border-border last:border-b-0',
+              'grid grid-cols-1 sm:grid-cols-[1.2fr_1fr_1fr_auto] gap-0 border-b border-border last:border-b-0 transition-colors hover:bg-foreground/[0.02]',
               i % 2 === 0 ? 'bg-card/20' : 'bg-transparent',
             )}
           >
@@ -63,13 +74,19 @@ export function EvidenceCompareTable({ comparison }: EvidenceCompareTableProps) 
                 <p className="text-xs text-muted-foreground mt-1">{row.note}</p>
               )}
             </div>
-            <div className="p-4 border-t sm:border-t-0 sm:border-r border-border">
+            <div
+              className="p-4 border-t sm:border-t-0 sm:border-r border-border"
+              style={aWin ? winStyle('var(--accent-cyan)') : undefined}
+            >
               <p className="text-micro font-mono text-accent-cyan sm:hidden mb-1">{labelA}</p>
-              <p className="text-sm text-muted-foreground">{row.a}</p>
+              <p className={cn('text-sm', aWin ? 'text-foreground font-medium' : 'text-muted-foreground')}>{row.a}</p>
             </div>
-            <div className="p-4 border-t sm:border-t-0 sm:border-r border-border">
+            <div
+              className="p-4 border-t sm:border-t-0 sm:border-r border-border"
+              style={bWin ? winStyle('var(--accent-violet)') : undefined}
+            >
               <p className="text-micro font-mono text-accent-violet sm:hidden mb-1">{labelB}</p>
-              <p className="text-sm text-muted-foreground">{row.b}</p>
+              <p className={cn('text-sm', bWin ? 'text-foreground font-medium' : 'text-muted-foreground')}>{row.b}</p>
             </div>
             <div className="p-4 border-t sm:border-t-0 border-border flex items-start gap-2">
               <span
@@ -92,7 +109,8 @@ export function EvidenceCompareTable({ comparison }: EvidenceCompareTableProps) 
               )}
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">

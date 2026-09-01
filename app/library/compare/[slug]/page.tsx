@@ -7,6 +7,7 @@ import { StructuredData } from '@/components/seo/StructuredData';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { AnswerBox } from '@/components/ui/AnswerBox';
 import { ContextRail } from '@/components/ui/ContextRail';
+import { AddToProtocol } from '@/components/ui/AddToProtocol';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { GuideVerifiedPick } from '@/components/guides/GuideVerifiedPick';
 import { getComparePicks } from '@/lib/product-picks';
@@ -152,7 +153,18 @@ export default async function CompareDetailPage({
             </p>
             <div className="grid gap-4">
               {comparePicks.map((pick) => (
-                <GuideVerifiedPick key={pick.compoundId} compoundId={pick.compoundId} showDisclosure={false} />
+                <div key={pick.compoundId}>
+                  <GuideVerifiedPick compoundId={pick.compoundId} showDisclosure={false} />
+                  {/* Peak decision intent — bank the chosen compound into the
+                      protocol without leaving the comparison. */}
+                  <div className="mt-2">
+                    <AddToProtocol
+                      compoundId={pick.compoundId}
+                      name={compounds.find((c) => c.id === pick.compoundId)?.name}
+                      size="sm"
+                    />
+                  </div>
+                </div>
               ))}
             </div>
             <p className="mt-3 flex items-start gap-2 text-xs leading-relaxed text-muted-foreground">

@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { hasGeometry, getGeometry } from "./molecule";
 import { VIZ, FONT, tierColor, signatureHue } from "./tokens";
+import { AddToProtocol } from "@/components/ui/AddToProtocol";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CompoundHero — a "mini-Descent" overture band for every compound page.
@@ -147,6 +148,12 @@ export function CompoundHero(data: CompoundHeroData) {
               ))}
             </div>
           )}
+
+          {/* Turn the deep-dive into a protocol decision in one tap — feeds the
+              persistent StackDock. Renders only for stackable compounds. */}
+          <div className="chero-actions">
+            <AddToProtocol compoundId={data.id} name={data.name} />
+          </div>
         </div>
       </div>
     </div>
@@ -231,6 +238,8 @@ const CHERO_CSS = `
   font-size: 12px; color: ${VIZ.muted}; padding: 5px 11px; border-radius: 999px;
   border: 1px solid ${VIZ.line}; background: rgba(14,20,38,0.5);
 }
+
+.chero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
 
 @media (prefers-reduced-motion: reduce) {
   .chero-hint .dot { box-shadow: none; }
