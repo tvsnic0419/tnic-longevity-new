@@ -6,6 +6,7 @@ import { EvidenceCompareTable } from '@/components/library/EvidenceCompareTable'
 import { StructuredData } from '@/components/seo/StructuredData';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { AnswerBox } from '@/components/ui/AnswerBox';
+import { ContextRail } from '@/components/ui/ContextRail';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { GuideVerifiedPick } from '@/components/guides/GuideVerifiedPick';
 import { getComparePicks } from '@/lib/product-picks';
@@ -117,15 +118,26 @@ export default async function CompareDetailPage({
           description={comparison.subtitle}
           theme="cyan"
           align="left"
-          context={getCompareContext(comparison)}
         />
 
-        {/* Answer-first: the authored verdict leads the page — above the table —
-            so the citable "which is better" answer is in the first screen for
-            readers and AI answer engines, not buried below the metric grid. */}
-        <AnswerBox question={`${comparison.title}: which is better?`} className="mb-8">
-          {comparison.verdict}
-        </AnswerBox>
+        {/* Answer-first, mobile-aware. The verdict is the citable answer, so it
+            must lead the first screen — decisive on a phone, where the 3-card
+            orientation rail otherwise pushes it ~900px down, below the fold. On
+            mobile the AnswerBox is order-1 (leads); on desktop the rail keeps
+            its established position above the verdict (md:order-1). */}
+        <div className="mb-8 flex flex-col gap-8">
+          <AnswerBox
+            question={`${comparison.title}: which is better?`}
+            className="order-1 md:order-2"
+          >
+            {comparison.verdict}
+          </AnswerBox>
+          <ContextRail
+            {...getCompareContext(comparison)}
+            theme="cyan"
+            className="order-2 md:order-1 max-w-3xl"
+          />
+        </div>
 
         <EvidenceCompareTable comparison={comparison} />
 
