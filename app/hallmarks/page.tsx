@@ -11,9 +11,14 @@ import { getHallmarkVisual } from '@/lib/hallmark-visuals';
 import { HallmarkIcon } from '@/components/library/HallmarkIcon';
 
 export const metadata: Metadata = {
-  title: '12 Hallmarks of Aging | TNiC Longevity Science',
+  // Absolute title so the root layout's `%s | TNiC` template doesn't double the
+  // brand ("… Longevity Science | TNiC").
+  title: { absolute: '12 Hallmarks of Aging | TNiC Longevity Science' },
   description:
     'The complete guide to all 12 hallmarks of aging — genomic instability, telomere attrition, epigenetic alterations, and more. Evidence-graded interventions and biomarker monitoring for each.',
+  // Self-canonical: without this the page inherited the root canonical
+  // (homepage), telling crawlers it was a duplicate — suppressing its indexing.
+  alternates: { canonical: '/hallmarks' },
   openGraph: {
     title: '12 Hallmarks of Aging — Evidence Guide | TNiC',
     description:
