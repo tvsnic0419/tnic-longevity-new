@@ -5,6 +5,7 @@ import { ArrowLeft, Scale, ShieldCheck } from 'lucide-react';
 import { EvidenceCompareTable } from '@/components/library/EvidenceCompareTable';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { AnswerBox } from '@/components/ui/AnswerBox';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { GuideVerifiedPick } from '@/components/guides/GuideVerifiedPick';
 import { getComparePicks } from '@/lib/product-picks';
@@ -118,6 +119,13 @@ export default async function CompareDetailPage({
           align="left"
           context={getCompareContext(comparison)}
         />
+
+        {/* Answer-first: the authored verdict leads the page — above the table —
+            so the citable "which is better" answer is in the first screen for
+            readers and AI answer engines, not buried below the metric grid. */}
+        <AnswerBox question={`${comparison.title}: which is better?`} className="mb-8">
+          {comparison.verdict}
+        </AnswerBox>
 
         <EvidenceCompareTable comparison={comparison} />
 

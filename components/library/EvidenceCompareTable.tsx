@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, Scale, ExternalLink } from 'lucide-react';
+import { ArrowRight, ExternalLink } from 'lucide-react';
 import type { EvidenceComparison, CompareVerdict } from '@/lib/comparisons';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { CompareShareCard } from '@/components/library/CompareShareCard';
@@ -93,14 +93,6 @@ export function EvidenceCompareTable({ comparison }: EvidenceCompareTableProps) 
             </div>
           </div>
         ))}
-      </div>
-
-      <div className="gradient-border p-6">
-        <div className="flex items-center gap-2 mb-2">
-          <Scale className="w-4 h-4 text-accent-emerald" />
-          <p className="text-label text-accent-emerald">TNiC verdict</p>
-        </div>
-        <p className="text-sm leading-relaxed">{comparison.verdict}</p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">
