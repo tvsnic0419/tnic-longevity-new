@@ -415,6 +415,10 @@ export function LibraryModuleDetail({
               </div>
             )}
 
+            {/* Jump target for the sticky action rail's "See the verified pick".
+                Extra scroll-margin clears the fixed nav + the sticky bar. */}
+            <div id="verified-pick" aria-hidden="true" className="scroll-mt-[7.5rem]" />
+
             {buyerGuide && (
               <CompoundBuyerGuidePanel guide={buyerGuide} />
             )}

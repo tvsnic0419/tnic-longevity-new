@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { LibraryModuleDetail } from '@/components/library/LibraryModuleDetail';
+import { CompoundStickyBar } from '@/components/library/CompoundStickyBar';
 import { CompoundIntelligenceMatrix } from '@/components/library/CompoundIntelligenceMatrix';
+import { getBuyerGuideByModuleSlug } from '@/lib/buyer-guides';
+import { getProductPick } from '@/lib/product-picks';
 import { CompoundHero, type CompoundHeroData } from '@/components/viz/CompoundHero';
 import { ModuleHero, type ModuleHeroData } from '@/components/viz/ModuleHero';
 import { StructuredData } from '@/components/seo/StructuredData';
@@ -194,11 +197,32 @@ export default async function LibraryModulePage({
           breadcrumb,
         ];
 
+  // Sticky conversion rail (compounds only): does a verified pick / buyer guide
+  // actually exist for this compound? Computed here — same sources the detail
+  // body uses — so the rail's "See the verified pick" only appears when there is
+  // one to jump to. Otherwise the rail's primary action is building a stack.
+  const isCompound = mod.category === 'compounds';
+  const stickyHasPick =
+    isCompound &&
+    Boolean(getBuyerGuideByModuleSlug(mod.slug) || (mod.compoundId && getProductPick(mod.compoundId)));
+  const stickyStackHref = mod.compoundId
+    ? `/stacks?stack=${mod.compoundId}&from=deep-dive`
+    : undefined;
+
   return (
     <>
       <StructuredData schemas={schemas} />
       {heroData && <CompoundHero {...heroData} />}
       {moduleHeroData && <ModuleHero {...moduleHeroData} />}
+      {isCompound && (stickyHasPick || stickyStackHref) && (
+        <CompoundStickyBar
+          name={mod.title}
+          tier={mod.evidenceTier}
+          pathway={heroCompound?.pathway}
+          hasPick={stickyHasPick}
+          stackHref={stickyStackHref}
+        />
+      )}
       {engineCompound && <CompoundIntelligenceMatrix compound={engineCompound} />}
       <LibraryModuleDetail
         module={mod}
