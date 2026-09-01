@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowRight, Sparkles, FlaskConical, ScrollText, Dna } from 'lucide-react';
+import { ArrowRight, Sparkles, FlaskConical, ScrollText, Dna, Trophy } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { AnswerBox } from '@/components/ui/AnswerBox';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema, buildFaqPageSchema } from '@/lib/seo';
@@ -95,6 +96,29 @@ export default async function BestForGoalPage({
             theme="emerald"
             align="left"
           />
+
+          {/* Answer-first: name the top-ranked pick above the fold, derived
+              from the deterministic ranking (no hand-picking, no new claims) —
+              so the citable answer leads for readers and AI answer engines. */}
+          {picks.length > 0 && (
+            <AnswerBox
+              icon={Trophy}
+              label="The top pick"
+              className="mb-6"
+            >
+              The top-ranked pick here is{' '}
+              <strong className="font-semibold text-foreground">{picks[0].compound.name}</strong>{' '}
+              <EvidenceTag tier={picks[0].compound.evidence} size="sm" className="align-middle" />
+              {' — '}
+              {picks[0].compound.pathway}.
+              {picks.slice(1, 3).length > 0 && (
+                <>
+                  {' '}Next best-evidenced:{' '}
+                  {picks.slice(1, 3).map((p) => p.compound.name).join(' and ')}.
+                </>
+              )}
+            </AnswerBox>
+          )}
 
           {/* How we rank — honesty note */}
           <div className="premium-card mb-8 p-4">
