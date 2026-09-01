@@ -10,6 +10,7 @@ export const navLinks = [
   // same tier filter). The route stays — it's load-bearing for every
   // /library/compounds/<slug> deep-dive — just not double-billed in nav.
   { href: '/peptides', label: 'Peptides', mod: 'MOD-PEP-15' },
+  { href: '/sirtuin-atlas', label: 'Sirtuins', mod: 'MOD-SIRT-01' },
   { href: '/learn', label: 'Learn', mod: 'MOD-LRN-09' },
   { href: '/stacks', label: 'Stacks', mod: 'MOD-ARC-04' },
   { href: '/labs', label: 'Labs', mod: 'MOD-LAB-11' },
@@ -33,6 +34,7 @@ export const navGroups = [
     links: [
       { href: '/library', label: 'Library' },
       { href: '/peptides', label: 'Peptides' },
+      { href: '/sirtuin-atlas', label: 'Sirtuins' },
       { href: '/insights', label: 'Insights' },
       { href: '/learn', label: 'Learn' },
     ],

@@ -4,6 +4,7 @@ import { ArrowRight, Target } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
+import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
@@ -95,12 +96,21 @@ export default function BestHubPage() {
                 <h2 className="font-display text-xl font-medium tracking-tight text-foreground transition-colors group-hover:[color:var(--card-accent)] mb-2">
                   {g.title}
                 </h2>
-                <p className="text-caption text-muted-foreground leading-relaxed mb-2 font-mono uppercase tracking-[0.12em]">
-                  {top.length} ranked picks
-                </p>
-                <p className="text-body-sm text-muted-foreground leading-relaxed mb-4 flex-1">
-                  {top.map((p) => p.compound.name.replace(/\s*\(.*\)$/, '')).join(' · ')}
-                </p>
+                {/* Top picks as evidence-graded rows — each carries its tier
+                    bar-meter so the goal grid reads as graded, not a plain list.
+                    EvidenceTag renders without an href here (no nested anchors
+                    inside the card's own Link). */}
+                <div className="mb-4 flex-1">
+                  <p className="text-micro font-mono uppercase tracking-wider text-muted-foreground mb-2">Top picks</p>
+                  <ul className="flex flex-col gap-1.5">
+                    {top.map((p) => (
+                      <li key={p.compound.id} className="flex items-center justify-between gap-2">
+                        <span className="text-sm text-foreground/85 truncate">{p.compound.name.replace(/\s*\(.*\)$/, '')}</span>
+                        <EvidenceTag tier={p.compound.evidence} size="sm" showTooltip={false} className="shrink-0" />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
                 <span className="inline-flex items-center gap-1.5 text-xs font-semibold [color:var(--card-accent)]">
                   See the ranking <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                 </span>

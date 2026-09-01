@@ -104,6 +104,10 @@ export function NetworkStage({
       ctx.fillStyle = back;
       ctx.beginPath(); ctx.arc(cx, cy, Math.max(w, h) * 0.7, 0, Math.PI * 2); ctx.fill();
 
+      // Edges + node glows composite additively so link crossings and
+      // overlapping blooms accumulate into light — a cheap stand-in for the
+      // WebGL scene's bloom pass, keeping this canvas in the same family.
+      ctx.globalCompositeOperation = "lighter";
       // Edges, back-to-front so nearer links read brighter.
       ctx.lineCap = "round";
       const edgeOrder = E
@@ -130,19 +134,22 @@ export function NetworkStage({
         const rad = (5.5 + Math.min(n.degree, 6) * 1.5) * p.persp * (1.15 - depth * 0.3);
         const a = 0.95 - depth * 0.4;
 
+        ctx.globalCompositeOperation = "lighter";
         if (n.elite) {
-          const halo = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, rad * 3.4);
-          halo.addColorStop(0, `${ELITE_GLOW}${0.5 * a})`);
+          const halo = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, rad * 3.6);
+          halo.addColorStop(0, `${ELITE_GLOW}${0.45 * a})`);
           halo.addColorStop(1, `${ELITE_GLOW}0)`);
           ctx.fillStyle = halo;
-          ctx.beginPath(); ctx.arc(p.sx, p.sy, rad * 3.4, 0, Math.PI * 2); ctx.fill();
+          ctx.beginPath(); ctx.arc(p.sx, p.sy, rad * 3.6, 0, Math.PI * 2); ctx.fill();
         } else {
-          const bloom = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, rad * 2.6);
-          bloom.addColorStop(0, `rgba(95,227,224,${0.4 * a})`);
+          const bloom = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, rad * 2.8);
+          bloom.addColorStop(0, `rgba(95,227,224,${0.34 * a})`);
           bloom.addColorStop(1, "rgba(95,227,224,0)");
           ctx.fillStyle = bloom;
-          ctx.beginPath(); ctx.arc(p.sx, p.sy, rad * 2.6, 0, Math.PI * 2); ctx.fill();
+          ctx.beginPath(); ctx.arc(p.sx, p.sy, rad * 2.8, 0, Math.PI * 2); ctx.fill();
         }
+        // Spheres, rims and labels read solid — back to normal compositing.
+        ctx.globalCompositeOperation = "source-over";
 
         const hi = n.elite ? [255, 244, 214] as const : NODE_HI;
         const core = n.elite ? [240, 196, 106] as const : NODE_CORE;
@@ -165,6 +172,7 @@ export function NetworkStage({
           ctx.fillText(n.name, p.sx, p.sy - rad - 8 * p.persp);
         }
       }
+      ctx.globalCompositeOperation = "source-over";
     }
 
     const stopLoop = runWhenVisible(cv, draw);
