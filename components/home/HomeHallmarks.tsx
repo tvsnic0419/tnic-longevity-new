@@ -1,9 +1,9 @@
+import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { getHallmarkVisual } from '@/lib/hallmark-visuals';
 import { HallmarkIcon } from '@/components/library/HallmarkIcon';
-import { GlassPanel } from '@/components/ui/GlassPanel';
 import { RevealItem } from '@/components/ui/RevealItem';
 import { CellularDivider } from '@/components/ui/CellularDivider';
 import { HallmarksConstellation } from '@/components/ui/HallmarksConstellation';
@@ -13,14 +13,22 @@ import { HallmarksConstellation } from '@/components/ui/HallmarksConstellation';
  * with its top-ranked interventions. Replaces the old trust-narrative
  * section — the case for TNiC is the interventions themselves, not a pitch
  * about the platform.
+ *
+ * Each card is a color-coded instrument tile: its frame carries the hallmark's
+ * own accent (`--card-accent`), while the ranked-intervention rows carry the
+ * canonical evidence-tier colors (A/emerald · B/cyan · C/amber) — the frame says
+ * *which mechanism*, the chips say *how strong the evidence*.
  */
 
-// Canonical evidence-tier colors — must match EvidenceTag / trust.ts
-// (A = clinical/emerald, B = emerging/cyan, C = preclinical/amber).
-const TIER_TEXT: Record<'A' | 'B' | 'C', string> = {
-  A: 'text-accent-emerald',
-  B: 'text-accent-cyan',
-  C: 'text-accent-amber',
+// Map each hallmark's theme accent to the CSS custom property the .hm-card frame
+// reads. Kept explicit (not string-built) so the accent set stays a closed,
+// auditable list rather than an arbitrary interpolation.
+const ACCENT_VAR: Record<string, string> = {
+  cyan: 'var(--accent-cyan)',
+  emerald: 'var(--accent-emerald)',
+  violet: 'var(--accent-violet)',
+  amber: 'var(--accent-amber)',
+  rose: 'var(--accent-rose)',
 };
 
 export function HomeHallmarks() {
@@ -67,39 +75,42 @@ export function HomeHallmarks() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {hallmarkLibrary.map((h, i) => {
             const { theme } = getHallmarkVisual(h.visual);
-            const topInterventions = [...h.interventions].sort((a, b) => a.rank - b.rank).slice(0, 2);
+            const topInterventions = [...h.interventions].sort((a, b) => a.rank - b.rank).slice(0, 3);
 
             return (
               <RevealItem key={h.id} index={i}>
-                <GlassPanel depth="mid" className="glass-hover h-full overflow-hidden rounded-2xl">
-                  <Link href={`/hallmarks/${h.slug}`} className="focus-ring group flex h-full flex-col p-5">
-                    <div className="mb-4 flex items-center justify-between">
-                      <span className={`inline-flex h-9 w-9 items-center justify-center rounded-lg icon-badge-${theme}`}>
-                        <HallmarkIcon type={h.visual} size={18} ring={false} />
-                      </span>
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-xs text-muted-foreground">
-                          #{h.number}
+                <Link
+                  href={`/hallmarks/${h.slug}`}
+                  className="hm-card focus-ring group"
+                  style={{ '--card-accent': ACCENT_VAR[theme] ?? 'var(--accent-cyan)' } as CSSProperties}
+                >
+                  <div className="hm-card__head">
+                    <span className={`inline-flex h-10 w-10 items-center justify-center rounded-xl icon-badge-${theme}`}>
+                      <HallmarkIcon type={h.visual} size={20} ring={false} />
+                    </span>
+                    <span className="hm-card__num" aria-hidden="true">
+                      {String(h.number).padStart(2, '0')}
+                    </span>
+                  </div>
+                  <h3 className="hm-card__title">{h.title}</h3>
+                  <ul className="hm-card__rows">
+                    {topInterventions.map((iv) => (
+                      <li key={iv.id} className="hm-row">
+                        <span className={`hm-tier hm-tier--${iv.evidence}`} aria-hidden="true">
+                          {iv.evidence}
                         </span>
-                        <ArrowUpRight
-                          className="h-4 w-4 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground"
-                          aria-hidden="true"
-                        />
-                      </div>
-                    </div>
-                    <h3 className="heading-card mb-3 text-sm">{h.title}</h3>
-                    <ul className="mt-auto space-y-1.5">
-                      {topInterventions.map((iv) => (
-                        <li key={iv.id} className="text-body-sm flex items-baseline gap-1.5 leading-snug">
-                          <span className={`shrink-0 font-mono text-micro font-bold ${TIER_TEXT[iv.evidence]}`}>
-                            {iv.evidence}
-                          </span>
-                          <span className="line-clamp-1">{iv.name}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </Link>
-                </GlassPanel>
+                        <span className="hm-row__name">
+                          <span className="sr-only">Tier {iv.evidence}: </span>
+                          {iv.name}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                  <span className="hm-card__go">
+                    View mechanism
+                    <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
+                  </span>
+                </Link>
               </RevealItem>
             );
           })}

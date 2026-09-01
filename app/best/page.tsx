@@ -9,6 +9,7 @@ import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
 import { bestForGoals, rankCompoundsForGoal } from '@/lib/best-for';
+import { signatureHue } from '@/components/viz/tokens';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Best Supplements by Goal — Evidence-Ranked',
@@ -65,16 +66,34 @@ export default function BestHubPage() {
         />
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto">
-          {bestForGoals.map((g) => {
+          {bestForGoals.map((g, i) => {
             const top = rankCompoundsForGoal(g, 3);
+            const [r, gr, b] = signatureHue(g.slug);
+            const accent = `rgb(${r}, ${gr}, ${b})`;
             return (
               <Link
                 key={g.slug}
                 href={`/best/${g.slug}`}
-                style={{ ['--card-accent' as string]: 'var(--accent-emerald)' }}
+                style={{ ['--card-accent' as string]: accent }}
                 className="premium-card focus-ring group p-5 flex flex-col"
               >
-                <h2 className="font-bold text-foreground transition-colors group-hover:[color:var(--card-accent)] mb-2">
+                {/* Ghost index + goal accent — the grid reads as a color-coded
+                    set of intents, matching the site's instrument-card idiom. */}
+                <div className="mb-3 flex items-start justify-between gap-2">
+                  <span
+                    aria-hidden="true"
+                    className="mt-1 inline-block h-2 w-2 shrink-0 rounded-full"
+                    style={{ background: accent, boxShadow: `0 0 8px ${accent}` }}
+                  />
+                  <span
+                    className="font-display text-3xl font-medium leading-none tabular-nums"
+                    style={{ color: `color-mix(in srgb, ${accent} 42%, transparent)` }}
+                    aria-hidden="true"
+                  >
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                </div>
+                <h2 className="font-display text-xl font-medium tracking-tight text-foreground transition-colors group-hover:[color:var(--card-accent)] mb-2">
                   {g.title}
                 </h2>
                 {/* Top picks as evidence-graded rows — each carries its tier

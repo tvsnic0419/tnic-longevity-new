@@ -3987,6 +3987,332 @@ p,
   .elite-section-secondary-action { transition: none; }
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   Homepage §04 Mechanisms — evidence-grade hallmark cards
+   ----------------------------------------------------------------------------
+   Replaces the hollow glass rectangles with a color-coded taxonomy: each of the
+   twelve carries its own hallmark accent (passed per card as --card-accent) as a
+   top light-catch, a ghost index numeral, and an accent hover-glow, while its
+   ranked interventions render as real evidence-graded rows (tier chip color =
+   canonical A/emerald · B/cyan · C/amber, never the card accent). Two color
+   systems doing two jobs: hallmark identity on the frame, evidence tier on the
+   data. Token-driven so both themes stay correct.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.hm-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.15rem 1.2rem 1.1rem;
+  border-radius: 1rem;
+  border: 1px solid var(--color-border-subtle);
+  background:
+    radial-gradient(130% 80% at 0% 0%, color-mix(in srgb, var(--card-accent, var(--accent-cyan)) 10%, transparent), transparent 56%),
+    color-mix(in srgb, var(--color-bg-elevated) 90%, var(--card-accent, var(--accent-cyan)) 4%);
+  box-shadow: var(--glass-shadow-content);
+  overflow: hidden;
+  transition: transform 0.35s var(--ease-standard), border-color 0.35s var(--ease-standard), box-shadow 0.35s var(--ease-standard);
+}
+.hm-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--card-accent, var(--accent-cyan)) 62%, transparent), transparent);
+  opacity: 0.55;
+  transition: opacity 0.35s var(--ease-standard);
+}
+@media (hover: hover) {
+  .hm-card:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--card-accent, var(--accent-cyan)) 45%, var(--color-border-subtle));
+    box-shadow: var(--glass-shadow-float), 0 0 42px -22px color-mix(in srgb, var(--card-accent, var(--accent-cyan)) 62%, transparent);
+  }
+  .hm-card:hover::before { opacity: 1; }
+  .hm-card:hover .hm-card__go { color: var(--card-accent, var(--accent-cyan)); }
+  .hm-card:hover .hm-card__go svg { transform: translate(2px, -2px); }
+}
+.hm-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 0.7rem;
+}
+.hm-card__num {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  line-height: 0.9;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--card-accent, var(--accent-cyan)) 42%, transparent);
+}
+.hm-card__title {
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  margin-bottom: 0.7rem;
+}
+.hm-card__rows {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid color-mix(in srgb, var(--color-border-subtle) 85%, transparent);
+}
+.hm-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.42rem 0;
+}
+.hm-row + .hm-row {
+  border-top: 1px solid color-mix(in srgb, var(--color-border-subtle) 70%, transparent);
+}
+.hm-row__name {
+  font-size: 0.8125rem;
+  line-height: 1.25;
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Evidence-tier chip — canonical grade colors, shared idiom across the site. */
+.hm-tier {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 0.34rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.hm-tier--A { color: var(--accent-emerald); background: color-mix(in srgb, var(--accent-emerald) 15%, transparent); border: 1px solid color-mix(in srgb, var(--accent-emerald) 36%, transparent); }
+.hm-tier--B { color: var(--accent-cyan);    background: color-mix(in srgb, var(--accent-cyan) 15%, transparent);    border: 1px solid color-mix(in srgb, var(--accent-cyan) 36%, transparent); }
+.hm-tier--C { color: var(--accent-amber);   background: color-mix(in srgb, var(--accent-amber) 15%, transparent);   border: 1px solid color-mix(in srgb, var(--accent-amber) 36%, transparent); }
+.hm-card__go {
+  margin-top: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  transition: color 0.3s var(--ease-standard);
+}
+.hm-card__go svg { transition: transform 0.3s var(--ease-standard); }
+@media (prefers-reduced-motion: reduce) {
+  .hm-card, .hm-card::before, .hm-card__go, .hm-card__go svg { transition: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Homepage §05 Protocol — sequenced step cards
+   ----------------------------------------------------------------------------
+   The steps were bare text hung off a hairline. Now each is a substantial
+   emerald-accented card carrying a large ghost index numeral (the sequence
+   reads 01 → 02 → 03 at a glance), sharing the §04 card language so the page
+   reads as one system. A faint connecting line threads the three on desktop.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.step-row {
+  position: relative;
+}
+/* The thread: a hairline behind the three cards' index band, emerald deepening
+   left→right so the row reads as an ordered progression. Desktop only. */
+.step-row::before {
+  content: '';
+  position: absolute;
+  top: 3.35rem;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent-emerald) 12%, transparent), color-mix(in srgb, var(--accent-emerald) 45%, transparent), color-mix(in srgb, var(--accent-emerald) 70%, transparent));
+  z-index: 0;
+}
+@media (max-width: 767px) { .step-row::before { display: none; } }
+.step-card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.5rem 1.4rem 1.4rem;
+  border-radius: 1.1rem;
+  border: 1px solid var(--color-border-subtle);
+  background:
+    radial-gradient(130% 85% at 0% 0%, color-mix(in srgb, var(--accent-emerald) 9%, transparent), transparent 58%),
+    color-mix(in srgb, var(--color-bg-elevated) 91%, var(--accent-emerald) 4%);
+  box-shadow: var(--glass-shadow-content);
+  overflow: hidden;
+  transition: transform 0.35s var(--ease-standard), border-color 0.35s var(--ease-standard), box-shadow 0.35s var(--ease-standard);
+}
+.step-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent-emerald) 60%, transparent), transparent);
+  opacity: 0.6;
+  transition: opacity 0.35s var(--ease-standard);
+}
+@media (hover: hover) {
+  .step-card:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--accent-emerald) 42%, var(--color-border-subtle));
+    box-shadow: var(--glass-shadow-float), 0 0 44px -22px color-mix(in srgb, var(--accent-emerald) 58%, transparent);
+  }
+  .step-card:hover::before { opacity: 1; }
+  .step-card:hover .step-card__cta svg { transform: translateX(3px); }
+}
+.step-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.1rem;
+}
+.step-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.85rem;
+}
+.step-card__num {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  line-height: 0.8;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--accent-emerald) 26%, transparent);
+}
+.step-card__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--accent-emerald) 78%, var(--color-text-faint));
+  margin-bottom: 0.5rem;
+}
+.step-card__title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  margin-bottom: 0.55rem;
+}
+.step-card__desc {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--color-text-secondary);
+  margin-bottom: 1.15rem;
+}
+.step-card__cta {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--accent-emerald);
+}
+.step-card__cta svg { transition: transform 0.3s var(--ease-standard); }
+@media (prefers-reduced-motion: reduce) {
+  .step-card, .step-card::before, .step-card__cta svg { transition: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Homepage §06 Personalize — NICO console
+   ----------------------------------------------------------------------------
+   The starter form was a floaty premium-card. This frames it as a deliberate
+   instrument console (violet-accented header, top light-catch, no hover-lift —
+   it's a stationary input surface) with precision segmented controls in place
+   of the plain pills.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.nico-console {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.35rem;
+  border: 1px solid color-mix(in srgb, var(--accent-violet) 20%, var(--color-border-subtle));
+  background:
+    radial-gradient(120% 70% at 100% 0%, color-mix(in srgb, var(--accent-violet) 10%, transparent), transparent 58%),
+    color-mix(in srgb, var(--color-bg-elevated) 93%, var(--accent-violet) 4%);
+  box-shadow: var(--glass-shadow-float);
+}
+.nico-console::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent-violet) 65%, transparent), transparent);
+  opacity: 0.7;
+}
+.nico-console__head {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--accent-violet) 14%, var(--color-border-subtle));
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--accent-violet) 80%, var(--color-text-faint));
+}
+.nico-console__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--accent-violet);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent-violet) 70%, transparent);
+}
+.nico-console__body { padding: 1.75rem 1.5rem; }
+@media (min-width: 768px) { .nico-console__body { padding: 2rem; } }
+
+/* Precision segmented control — replaces the plain option pills. */
+.nico-opt {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.7rem 1rem;
+  border-radius: 0.85rem;
+  border: 1px solid var(--color-border-subtle);
+  background: color-mix(in srgb, var(--color-bg-base) 45%, transparent);
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-align: center;
+  transition: border-color 0.25s var(--ease-standard), background-color 0.25s var(--ease-standard), color 0.25s var(--ease-standard), box-shadow 0.25s var(--ease-standard);
+}
+@media (hover: hover) {
+  .nico-opt:not(.is-on):not(.is-limit):hover {
+    border-color: color-mix(in srgb, var(--color-text-primary) 32%, transparent);
+    background: color-mix(in srgb, var(--color-bg-base) 62%, transparent);
+    color: var(--color-text-primary);
+  }
+}
+.nico-opt.is-on {
+  border-color: color-mix(in srgb, var(--accent-violet) 62%, transparent);
+  background: color-mix(in srgb, var(--accent-violet) 15%, transparent);
+  color: color-mix(in srgb, var(--accent-violet) 90%, #fff);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-violet) 28%, transparent), 0 0 22px -10px color-mix(in srgb, var(--accent-violet) 65%, transparent);
+}
+.nico-opt.is-limit { opacity: 0.4; cursor: not-allowed; }
+@media (prefers-reduced-motion: reduce) { .nico-opt { transition: none; } }
 
 /* ═══════════════════════════════════════════════════════════════════════════
    Research Instrument Foundation — flagship hub arrival system
