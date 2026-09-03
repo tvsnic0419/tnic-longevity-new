@@ -14,6 +14,32 @@ export function cappedDpr(max = 3): number {
 }
 
 /**
+ * Size a canvas's backing store to *exact* device pixels and scale its context
+ * so one drawing unit stays one CSS pixel. Rounding the backing store to whole
+ * integers — rather than letting `clientWidth * dpr` land on a fraction the
+ * browser silently truncates — is what keeps the render pixel-crisp on
+ * non-integer layout widths (a flex/grid cell at 390.5px, an aspect-ratio box).
+ * The transform is scaled by the *actual* integer ratio, so an integer width
+ * (the common case) is byte-for-byte identical to `setTransform(dpr,…)` and a
+ * fractional width simply gets sharper. Returns the CSS w/h the caller draws in.
+ */
+export function fitCanvas(
+  cv: HTMLCanvasElement,
+  ctx: CanvasRenderingContext2D,
+  dpr: number,
+): { w: number; h: number } {
+  const w = cv.clientWidth;
+  const h = cv.clientHeight;
+  if (w <= 0 || h <= 0) return { w, h };
+  const bw = Math.round(w * dpr);
+  const bh = Math.round(h * dpr);
+  if (cv.width !== bw) cv.width = bw;
+  if (cv.height !== bh) cv.height = bh;
+  ctx.setTransform(bw / w, 0, 0, bh / h, 0, 0);
+  return { w, h };
+}
+
+/**
  * Drive `draw` on requestAnimationFrame, but only while `el` is in (or near)
  * the viewport and the tab is visible. Returns a cleanup that stops the loop
  * and detaches its observers. `draw` renders exactly one frame — it must not

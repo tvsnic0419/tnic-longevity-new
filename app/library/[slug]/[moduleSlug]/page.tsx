@@ -221,6 +221,7 @@ export default async function LibraryModulePage({
           pathway={heroCompound?.pathway}
           hasPick={stickyHasPick}
           stackHref={stickyStackHref}
+          compoundId={mod.compoundId}
         />
       )}
       {engineCompound && <CompoundIntelligenceMatrix compound={engineCompound} />}

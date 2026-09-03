@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { ArrowRight, ShoppingBag } from 'lucide-react';
 import type { EvidenceTier } from '@/lib/types';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { AddToProtocol } from '@/components/ui/AddToProtocol';
+import { isStackCompoundId } from '@/lib/compound-core';
 
 /**
  * Sticky compound action rail for the deep-dive pages.
@@ -30,6 +32,7 @@ export function CompoundStickyBar({
   hasPick,
   buyAnchor = '#verified-pick',
   stackHref,
+  compoundId,
 }: {
   name: string;
   tier: EvidenceTier;
@@ -37,7 +40,15 @@ export function CompoundStickyBar({
   hasPick: boolean;
   buyAnchor?: string;
   stackHref?: string;
+  /** Stack compound id — lets the rail carry the same one-tap "Add to protocol"
+   *  verb as the hero (via AddToProtocol), instead of a navigate-away CTA. */
+  compoundId?: string;
 }) {
+  // One conversion language: when the compound is stackable, the rail adds to
+  // the protocol in place (matching the hero + StackDock). "Build a stack" only
+  // survives as the fallback for non-stackable modules, which never showed the
+  // hero's add control either.
+  const stackable = compoundId ? isStackCompoundId(compoundId) : false;
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const [shown, setShown] = useState(false);
   const [top, setTop] = useState(64);
@@ -93,20 +104,16 @@ export function CompoundStickyBar({
             <EvidenceTag tier={tier} size="sm" showTooltip={false} className="shrink-0 whitespace-nowrap" />
           </div>
           <div className="compound-bar__cta">
+            {stackable && compoundId && (
+              <AddToProtocol compoundId={compoundId} name={name} size="sm" />
+            )}
             {hasPick ? (
-              <>
-                {stackHref && (
-                  <Link href={stackHref} className="compound-bar__secondary focus-ring">
-                    Build a stack
-                  </Link>
-                )}
-                <a href={buyAnchor} className="compound-bar__primary focus-ring">
-                  <ShoppingBag className="h-4 w-4" aria-hidden="true" />
-                  See the verified pick
-                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                </a>
-              </>
-            ) : stackHref ? (
+              <a href={buyAnchor} className="compound-bar__primary focus-ring">
+                <ShoppingBag className="h-4 w-4" aria-hidden="true" />
+                See the verified pick
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </a>
+            ) : !stackable && stackHref ? (
               <Link href={stackHref} className="compound-bar__primary focus-ring">
                 Build a stack
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
