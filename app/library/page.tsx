@@ -11,6 +11,7 @@ import { LibraryFacetFilters } from '@/components/library/LibraryFacetFilters';
 import { CompoundExplorer } from '@/components/library/CompoundExplorer';
 import { RecommendedNextSteps } from '@/components/ui/RecommendedNextSteps';
 import { ResearchQueueShelf } from '@/components/library/ResearchQueueShelf';
+import { EvidenceTierSpectrum } from '@/components/library/EvidenceTierSpectrum';
 import { DecisionSteps } from '@/components/ui/DecisionSteps';
 import {
   DeferredHallmarkVisualGallery,
@@ -74,6 +75,9 @@ export default function LibraryPage() {
             { title: 'Inspect a configuration', detail: 'Use Stack Architect for coverage and interaction checks.', href: '/stacks', icon: Layers3 },
           ]}
         />
+      </div>
+      <div className="container-page pb-2">
+        <EvidenceTierSpectrum />
       </div>
       <ResearchQueueShelf />
       {/* Lead with the page title and context, then the tools to act on it */}

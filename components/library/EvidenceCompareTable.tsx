@@ -6,6 +6,7 @@ import { ArrowRight, ExternalLink } from 'lucide-react';
 import type { EvidenceComparison, CompareVerdict } from '@/lib/comparisons';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { CompareShareCard } from '@/components/library/CompareShareCard';
+import { CompareVerdictScorecard } from '@/components/library/CompareVerdictScorecard';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { RevealCard } from '@/components/ui/RevealCard';
 import { cn } from '@/lib/utils';
@@ -41,6 +42,8 @@ export function EvidenceCompareTable({ comparison }: EvidenceCompareTableProps) 
       <p className="text-body-sm text-muted-foreground leading-relaxed max-w-3xl">
         {comparison.summary}
       </p>
+
+      <CompareVerdictScorecard labelA={labelA} labelB={labelB} rows={rows} />
 
       <div className="rounded-2xl border border-border overflow-hidden">
         <div className="grid grid-cols-[1.2fr_1fr_1fr_auto] gap-0 bg-muted/30 border-b border-border text-micro font-mono uppercase tracking-wider">
