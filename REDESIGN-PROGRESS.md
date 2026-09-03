@@ -4,6 +4,77 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-03 — reconciliation + Phase 7 (audit-driven gap fixes)
+
+This file hadn't been updated since before PR #131, even though work
+continued: PRs #131 (Sirtuin Atlas + TNiC Score/Match surfaced), #155
+(color-coded instrument-card redesign), #156/#157 (StackDock "Your Protocol"
+tray + shareable protocol grade card), #158 (self-canonical fix on 4 pages),
+#159/#160 (answer-first AnswerBox on comparisons/best-for/lead pages), #161
+(AddToProtocol primitive, best-leaderboard, Combination Lab empty state),
+#162 (sticky compound conversion rail), and #163 ("Sharper & faster"
+fidelity/perf pass) all merged to `main` with no entry here. Recorded now so
+this doc is trustworthy as the single source of truth again.
+
+A large creative-direction brief (repositioning as "evidence intelligence
+for healthy aging," a full IA/visual/evidence-system rebuild) was received
+and handled per CLAUDE.md Section 6 — as a quality-bar/gap-finder audit, not
+a rebuild spec. Most of the brief's asks already exist at or above the bar
+described (cinematic homepage, `.premium-card`/tier-color system, Cmd+K
+command palette across compounds/hallmarks/tools/comparisons, Stack
+Architect with synergy/redundancy/interaction detection, curated evidence
+comparisons, TNiC Score/Match, methodology/trust pages, corrections process).
+Three concrete, verified gaps were fixed this pass; larger ones are flagged
+below as recommended future phases rather than attempted unilaterally.
+
+**Fixed this pass:**
+- **No automated accessibility regression guard.** Prior sweeps (28-page
+  axe-core pass, 0 violations) were manual and left nothing to catch a
+  future regression — noted as a known gap in this doc's own Decisions log
+  ("a11y tooling" entry, which proposed `@axe-core/playwright`). Took a
+  lighter path instead: added `jsdom` + `@testing-library/react` + `jest-axe`
+  as devDependencies and `lib/accessibility.test.tsx`, a component-level axe
+  guardrail (EvidenceBadge/EvidenceBadgeLegend, ProductPickCard) that now
+  runs in `npm run test`/`npm run ci`. Verified it's a real guard, not a
+  no-op, by deliberately introducing an `alt`-text violation and confirming
+  the test failed, then reverting. Full page-level (Playwright) coverage is
+  still a good future addition — this covers the highest-regression-risk
+  components, not every route.
+- **Product cards had no testing/COA field and no visible affiliate
+  disclosure.** `ProductPickCard.tsx` showed manufacturer/dose/TNiC
+  Match/link-verified-date but nothing on third-party testing, and the
+  affiliate relationship lived only in link `rel="sponsored"` + page-level
+  copy. Added an optional `thirdPartyTested` field to `ProductPick` in
+  `lib/product-picks.ts`, set to `true` only on the 5 entries whose existing
+  `whyThisPick` prose already states it (nmn, cakg, spermidine,
+  pterostilbene, tudca) — never inferred for the rest, which now render an
+  honest "Testing documentation not verified" state. Added a visible
+  "Affiliate link" chip on every card next to the buy CTA, and reworded
+  "Link verified" to "Buy link checked" to avoid implying lab verification.
+- **Compare hub didn't say it was curated.** `/library/compare` only offers
+  pre-authored pairs (NMN vs NR, etc.), not a free pick-any-two tool, with
+  nothing telling the user that. Added one line of microcopy pointing users
+  who want an uncovered pairing to Stack Architect instead.
+
+**Flagged for a future phase (not attempted here — each is a real
+architectural change, not a small fix):**
+- Multi-axis evidence model (mechanistic/animal/human-biomarker/RCT/
+  observational/clinical-outcome, distinct from the current single A/B/C
+  tier) — the brief's "Evidence Breakdown/Matrix/Timeline" components. Real
+  gap: `lib/trust.ts`'s `evidenceLevelFromTier` derives Strong/Moderate/
+  Mechanistic 1:1 from the tier, it doesn't independently track evidence
+  *type*. Building this without fabricating data means auditing every
+  compound's existing MDX/citations first — a multi-session content project.
+- Free-form "pick any two compounds" comparison tool, distinct from the
+  curated-pairs `/library/compare` hub.
+- Homepage: no dedicated "featured compounds," "Stack Architect preview," or
+  "product verification" *sections* — those live as full separate routes
+  and the homepage points to them via `HomeEliteInterventions`/`HomeSteps`/
+  footer rather than dedicated blocks. Worth a homepage-audit pass against
+  Section 8's checklist specifically, next.
+- Full page-level a11y coverage (Playwright-driven, all routes) as a
+  successor to this pass's component-level guard.
+
 ## Current phase
 
 **Phase 6 complete**, and — undocumented here until now — six more PRs from
