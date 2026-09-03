@@ -7,7 +7,7 @@ import {
 import { getGeometry, type Geometry } from "./molecule";
 import type { RGB } from "./tokens";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { runWhenVisible, cappedDpr } from "@/lib/raf-visibility";
+import { runWhenVisible, cappedDpr, fitCanvas } from "@/lib/raf-visibility";
 import { makeGlowSprite, blitGlow, createGlowCache } from "@/lib/canvas-glow";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -118,9 +118,8 @@ export function MoleculeStage({
 
     function resize() {
       if (!cv || !ctx) return;
-      w = cv.clientWidth; h = cv.clientHeight;
-      cv.width = w * dpr; cv.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      // Device-pixel-exact backing store — crisp on fractional layout widths.
+      ({ w, h } = fitCanvas(cv, ctx, dpr));
     }
     resize();
     const ro = new ResizeObserver(resize); ro.observe(cv);

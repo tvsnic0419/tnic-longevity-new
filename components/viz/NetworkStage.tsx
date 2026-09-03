@@ -5,7 +5,7 @@ import {
   type MouseEvent, type TouchEvent, type WheelEvent,
 } from "react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { runWhenVisible, cappedDpr } from "@/lib/raf-visibility";
+import { runWhenVisible, cappedDpr, fitCanvas } from "@/lib/raf-visibility";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // NetworkStage — the network sibling of MoleculeStage. Renders a compound-
@@ -66,9 +66,8 @@ export function NetworkStage({
 
     function resize() {
       if (!cv || !ctx) return;
-      w = cv.clientWidth; h = cv.clientHeight;
-      cv.width = w * dpr; cv.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      // Device-pixel-exact backing store — crisp on fractional layout widths.
+      ({ w, h } = fitCanvas(cv, ctx, dpr));
     }
     resize();
     const ro = new ResizeObserver(resize); ro.observe(cv);
