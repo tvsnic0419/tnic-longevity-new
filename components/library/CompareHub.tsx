@@ -27,6 +27,15 @@ export function CompareHub() {
         align="left"
       />
 
+      <p className="text-xs text-muted-foreground/80 max-w-2xl mt-2">
+        These are curated head-to-head pairs we&apos;ve written up in depth — not a free pick-any-two
+        tool. Looking to weigh compounds we haven&apos;t paired here? Add them side by side in the{' '}
+        <Link href="/stacks" className="underline decoration-dotted underline-offset-2 hover:text-accent-cyan">
+          Stack Architect
+        </Link>{' '}
+        instead.
+      </p>
+
       <div className="grid md:grid-cols-2 gap-4 mt-6">
         {evidenceComparisons.map((comp, i) => {
           const Icon = categoryIcon[comp.category];

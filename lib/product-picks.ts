@@ -28,6 +28,14 @@ export interface ProductPick {
   };
   /** ISO date when purchaseUrl was last verified */
   linkVerifiedAt?: string;
+  /**
+   * Whether the manufacturer publishes third-party testing/COA documentation
+   * for this product, per that manufacturer's own product page. Set only
+   * when `whyThisPick` already states it in prose (never inferred) — omit
+   * (undefined) rather than assume testing exists when the source material
+   * doesn't say so.
+   */
+  thirdPartyTested?: boolean;
   whyThisPick: string;
   doseNote: string;
 }
@@ -60,6 +68,7 @@ export const PRODUCT_PICKS: Record<string, ProductPick> = {
     purchaseUrl: 'https://www.codeage.com/products/amen-nmn-supplement',
     brandWebsite: 'https://www.codeage.com',
     linkVerifiedAt: '2026-06-18',
+    thirdPartyTested: true,
     whyThisPick:
       '500mg per capsule — matches common longevity protocol doses. Third-party tested.',
     doseNote: 'Typical: 500mg–1g daily. Start at 500mg.',
@@ -116,6 +125,7 @@ export const PRODUCT_PICKS: Record<string, ProductPick> = {
     purchaseUrl: 'https://www.toniiq.com/products/calcium-akg',
     brandWebsite: 'https://www.toniiq.com',
     linkVerifiedAt: '2026-07-05',
+    thirdPartyTested: true,
     whyThisPick:
       'Manufacturer-direct Ca-AKG with 99%+ purity language, COA access, and third-party testing details.',
     doseNote: 'Label serving: 3 capsules daily for 1,500mg Ca-AKG. Compare with protocol target before use.',
@@ -160,6 +170,7 @@ export const PRODUCT_PICKS: Record<string, ProductPick> = {
       'https://oxfordhealthspan.com/products/whole-food-spermidine-supplement-primeadine-original-1-bottle-30-day-supply',
     brandWebsite: 'https://oxfordhealthspan.com',
     linkVerifiedAt: '2026-07-05',
+    thirdPartyTested: true,
     whyThisPick:
       'Whole-food spermidine from concentrated Japanese wheat germ extract, with posted COA links and third-party testing language.',
     doseNote: 'Label serving: 3 capsules daily provides 1mg whole-food spermidine; avoid if wheat/gluten is unsuitable.',
@@ -174,6 +185,7 @@ export const PRODUCT_PICKS: Record<string, ProductPick> = {
     purchaseUrl: 'https://doublewoodsupplements.com/products/pterostilbene',
     brandWebsite: 'https://doublewoodsupplements.com',
     linkVerifiedAt: '2026-07-05',
+    thirdPartyTested: true,
     whyThisPick:
       'Single-ingredient pterostilbene with manufacturer COA/test-result links and third-party testing for identity, potency, and contaminants.',
     doseNote: 'Label guidance centers on 100-200mg/day with food; monitor lipids if using long term.',
@@ -188,6 +200,7 @@ export const PRODUCT_PICKS: Record<string, ProductPick> = {
     purchaseUrl: 'https://doublewoodsupplements.com/products/tudca',
     brandWebsite: 'https://doublewoodsupplements.com',
     linkVerifiedAt: '2026-07-05',
+    thirdPartyTested: true,
     whyThisPick:
       'Synthetic, non-animal TUDCA with batch COA/test-result links and cGMP plus third-party testing language.',
     doseNote: 'Label: 250mg per capsule; standard serving is 2 capsules for 500mg/day, preferably on an empty stomach.',

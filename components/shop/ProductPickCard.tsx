@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { ExternalLink, Check, Minus } from 'lucide-react';
+import { ExternalLink, Check, Minus, ShieldCheck, ShieldQuestion } from 'lucide-react';
 import type { ProductPick } from '@/lib/product-picks';
 import { computeTnicMatch } from '@/lib/tnic-match';
 
@@ -61,6 +61,31 @@ function TnicMatchChecklist({ pick, compact }: { pick: ProductPick; compact?: bo
         Transparent fit criteria — not a purity or lab-testing claim.
       </p>
     </div>
+  );
+}
+
+/**
+ * Testing/COA status — explicitly a documentation-availability signal, never
+ * a purity or lab-testing guarantee. `thirdPartyTested` is only set on
+ * `ProductPick` entries where the manufacturer's own product page states
+ * this in prose; every other product renders the honest "not verified"
+ * state rather than a fabricated pass/fail.
+ */
+function TestingStatus({ tested }: { tested?: boolean }) {
+  return (
+    <span className="inline-flex items-center gap-1 text-micro text-muted-foreground/80">
+      {tested ? (
+        <>
+          <ShieldCheck className="h-3 w-3 text-accent-emerald" aria-hidden="true" />
+          Manufacturer states third-party testing/COA documentation is available
+        </>
+      ) : (
+        <>
+          <ShieldQuestion className="h-3 w-3 text-muted-foreground/60" aria-hidden="true" />
+          Testing documentation not verified
+        </>
+      )}
+    </span>
   );
 }
 
@@ -127,9 +152,14 @@ export function ProductPickCard({ pick, compact, className }: ProductPickCardPro
           {!compact && (
             <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{pick.whyThisPick}</p>
           )}
-          <span className="inline-flex items-center gap-1 text-xs text-accent-emerald mt-2">
-            Buy on {pick.brand.split(' ')[0]}
-            <ExternalLink className="w-3 h-3" />
+          <span className="inline-flex flex-wrap items-center gap-x-2 gap-y-1 mt-2">
+            <span className="inline-flex items-center gap-1 text-xs text-accent-emerald">
+              Buy on {pick.brand.split(' ')[0]}
+              <ExternalLink className="w-3 h-3" />
+            </span>
+            <span className="rounded-full border border-border/60 px-1.5 py-0.5 text-micro uppercase tracking-wide text-muted-foreground/70">
+              Affiliate link
+            </span>
           </span>
         </div>
       </a>
@@ -149,12 +179,13 @@ export function ProductPickCard({ pick, compact, className }: ProductPickCardPro
       <TnicMatchChecklist pick={pick} compact={compact} />
 
       {!compact && (
-        <p className="text-xs text-muted-foreground mt-3 border-t border-border/50 pt-2">
-          {pick.doseNote}
+        <div className="text-xs text-muted-foreground mt-3 border-t border-border/50 pt-2 space-y-1.5">
+          <p>{pick.doseNote}</p>
+          <TestingStatus tested={pick.thirdPartyTested} />
           {pick.linkVerifiedAt && (
-            <span className="block mt-1">Link verified {pick.linkVerifiedAt}</span>
+            <p className="text-micro text-muted-foreground/70">Buy link checked {pick.linkVerifiedAt}</p>
           )}
-        </p>
+        </div>
       )}
     </div>
   );
