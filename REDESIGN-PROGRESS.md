@@ -4,6 +4,84 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-04 — Head-to-Head: the free-form "pick any two" comparison
+
+Closed the second of the three gaps flagged on 2026-09-03 ("Free-form 'pick
+any two compounds' comparison tool, distinct from the curated-pairs
+`/library/compare` hub"). New route `/library/compare/head-to-head`.
+
+**Why this one, and why NOT the multi-axis evidence model.** The brief's
+biggest-visual-impact candidate was the flagged "Evidence Breakdown/Matrix"
+(mechanistic / animal / human-biomarker / RCT / observational axes). It was
+investigated first and **ruled out on measured evidence, not on effort**:
+classifying study design requires study *titles*, and of the 276 study entries
+in `lib/data.ts`, only ~25% carry classifiable design language. The rest are
+author-year citation stubs (`Zhang 2016`, `Ferenci 1989`, `SELECT 2011`,
+`HOPE-2 (Lonn 2006`). A conservative keyword classifier over all 276 scored
+**25.4% coverage**. Building the matrix would have meant either rendering
+"unclassified" on three-quarters of every compound's evidence, or inventing the
+classification — the one thing `NOTES-COMPOUND-LIBRARY.md` forbids absolutely.
+Recorded here so a future session doesn't re-derive this: **the blocker is the
+citation data shape, not the UI.** The unlock is backfilling real titles for
+the ~180 stub entries, which is a content project.
+
+**What shipped instead.** The comparison tool is the highest-intent surface on
+the site and its engines were already built and *completely unused*:
+`lib/tnic-score.ts` (PR #124) had zero UI consumers in the entire codebase.
+This makes the six-dimension derived score visible for the first time.
+
+- `lib/head-to-head.ts` — pure server-safe reader joining `tnic-score` +
+  canonical `lib/data.ts`. No new dataset, no new claim. Honesty contract
+  enforced in code and in `lib/head-to-head.test.ts` (13 tests): a dimension
+  either side can't support is `insufficient` and is never scored as zero (an
+  unscored dimension must not read as a loss); a `TIE_BAND` of ±3 points
+  suppresses fake winners on what are derived composites, not measurements; an
+  undocumented pairing reads as *absence of a record*, explicitly "not evidence
+  that the pairing is safe".
+- `components/library/HeadToHeadCompare.tsx` — server-rendered end to end.
+  Diverging "duel" bars (compound A grows left from a centre line, B grows
+  right), dual `ScoreGauge`s, hallmark shared/unique partition, and the
+  always-visible `<table>` fallback required by CLAUDE.md §12.
+- `components/library/HeadToHeadPicker.tsx` — the only client component.
+  Selection lives in the URL (`?a=&b=`), so every comparison is a real
+  shareable address. **Deliberately does not call `useSearchParams()`** — the
+  page reads its own `searchParams` prop on the server, which is what keeps
+  this surface out of the §3 client-side-rendering bailout. Verified: 0
+  `BAILOUT_TO_CLIENT_SIDE_RENDERING` markers in the served HTML.
+- **SEO**: ~3,200 valid pairings all canonicalize to the bare tool URL, and
+  only that base URL is added to the sitemap. Enumerating the variants would
+  be doorway-page spam, not coverage. Confirmed in the served HTML that
+  `?a=iodine&b=piperine` emits `canonical → /library/compare/head-to-head`.
+- Two real bugs found by looking at the rendered page rather than trusting the
+  diff: (1) screen-reader text read "Too close to call **by 0 points**" — the
+  gap is now only voiced when a leader was actually declared; (2) a genuine
+  **stat contradiction** — the scored `Bioavailability` *rating* (resveratrol
+  30) sat on the same page as the library's published oral-bioavailability
+  *percentage* (72%), same word, different units, no explanation. Both are now
+  explicitly labelled ("rating 0–100" vs "measured %") with a note naming them
+  as different measures.
+- `CompareHub.tsx` microcopy no longer apologizes ("not a free pick-any-two
+  tool") and instead routes to the tool, plus a CTA banner on the hub.
+
+**Verified**: lint 0 errors (3 pre-existing warnings, all in untouched files),
+typecheck clean, **667/667 tests** across 51 files, clean production build
+(exit 0, route builds as `ƒ` dynamic — correct for a `searchParams` page).
+axe-core WCAG 2.1 A/AA + best-practice sweep against the real production
+server: **0 violations** on the tool (rich-data pair), the tool (thin-data
+pair), and the compare hub. Exactly one `<h1>`. Verified against a server whose
+PID start-time postdates the build, per this doc's own stale-process warning —
+which did in fact bite once this session and was caught.
+
+**Rollback**: `git revert <merge sha of PR>` — additive apart from the
+`CompareHub` microcopy and one sitemap line; nothing existing was removed.
+
+**Note for the next session**: 57 of 81 compounds resolve to the `canonical`
+scoring source, which returns `null` for clinicalEvidence / mechanisticStrength
+/ safety — so a comparison between two of them is honest but thin (renders
+"Not scored for both" on 3–4 of 6 rows). Only 24 compounds carry full-depth
+scores. Widening that is a `lib/compound-engine-data.ts` coverage question, not
+a UI one.
+
 ## 2026-09-03 — reconciliation + Phase 7 (audit-driven gap fixes)
 
 This file hadn't been updated since before PR #131, even though work
