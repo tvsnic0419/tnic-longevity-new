@@ -205,11 +205,11 @@ function AtlasNetwork({ selected, onSelect }: { selected: SirtuinId; onSelect: (
     <div className="relative isolate overflow-hidden rounded-[2rem] border border-accent-cyan/15 bg-[#030712]/75 p-2 shadow-[0_30px_80px_-40px_rgba(34,211,238,0.36)] md:p-4">
       <div className="pointer-events-none absolute inset-0 opacity-70 [background-image:linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)] [background-size:28px_28px]" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_47%,rgba(34,211,238,0.14),transparent_30%),radial-gradient(circle_at_20%_15%,rgba(167,139,250,0.10),transparent_28%),radial-gradient(circle_at_84%_78%,rgba(52,211,153,0.08),transparent_28%)]" />
-      <div className="absolute left-4 top-4 z-20 flex items-center gap-2 rounded-full border border-white/10 bg-black/35 px-3 py-1.5 backdrop-blur-xl">
+      <div className="absolute left-4 top-4 z-20 flex items-center gap-2 rounded-full border border-white/10 bg-[#020811]/92 px-3 py-1.5">>
         <ScanLine className="h-3.5 w-3.5 text-accent-cyan" />
         <span className="font-mono text-micro uppercase tracking-[0.22em] text-foreground/70">Live target topology</span>
       </div>
-      <div className="absolute right-4 top-4 z-20 hidden items-center gap-3 rounded-full border border-white/10 bg-black/35 px-3 py-1.5 text-micro uppercase tracking-[0.16em] text-muted-foreground backdrop-blur-xl sm:flex">
+      <div className="absolute right-4 top-4 z-20 hidden items-center gap-3 rounded-full border border-white/10 bg-[#020811]/92 px-3 py-1.5 text-micro uppercase tracking-[0.16em] text-muted-foreground sm:flex">
         <span>Vector-native</span><span className="h-1 w-1 rounded-full bg-accent-emerald" /><span>Hi-DPI</span>
       </div>
 
@@ -839,7 +839,7 @@ export function SirtuinAtlas() {
         <div className="scroll-region overflow-x-auto rounded-2xl border border-border/60 bg-black/10 shadow-[0_24px_60px_-45px_rgba(34,211,238,0.35)]">
           <table className="w-full min-w-[980px] border-collapse text-sm">
             <caption className="sr-only">Matrix showing direct activation, NAD support, expression signaling, or uncertain effects for candidate compounds across SIRT1 through SIRT7.</caption>
-            <thead className="bg-muted/25 backdrop-blur-xl">
+            <thead className="bg-muted">
               <tr>
                 <th scope="col" className="sticky left-0 z-10 bg-background/95 px-4 py-3 text-left text-label">Candidate</th>
                 <th scope="col" className="px-3 py-3 text-center text-label">Stage</th>

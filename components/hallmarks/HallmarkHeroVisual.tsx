@@ -106,7 +106,7 @@ export function HallmarkHeroVisual({ hallmark }: { hallmark: HallmarkLibraryEntr
               title={iv.name}
             >
               <span
-                className="flex h-full w-full items-center justify-center rounded-full border font-mono text-micro font-bold backdrop-blur-sm"
+                className="flex h-full w-full items-center justify-center rounded-full border font-mono text-micro font-bold"
                 style={{ borderColor: TIER_COLOR[iv.evidence], color: TIER_COLOR[iv.evidence], background: 'color-mix(in srgb, var(--glass-bg) 88%, transparent)' }}
               >
                 {iv.evidence}

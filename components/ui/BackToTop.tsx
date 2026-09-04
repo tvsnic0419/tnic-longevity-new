@@ -38,7 +38,7 @@ export function BackToTop() {
       tabIndex={show ? 0 : -1}
       className={[
         'focus-ring fixed bottom-6 right-6 z-40 flex h-11 w-11 items-center justify-center rounded-full',
-        'border border-border/70 bg-card/80 text-foreground shadow-lg backdrop-blur',
+        'border border-border/70 bg-card text-foreground shadow-lg',
         'transition-all duration-300 hover:border-accent-cyan/50 hover:text-accent-cyan',
         show ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-3 opacity-0',
       ].join(' ')}

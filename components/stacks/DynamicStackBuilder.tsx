@@ -140,7 +140,7 @@ export function DynamicStackBuilder() {
           <Link
             href={shopHref}
             onClick={() => openShop('mobile_tray')}
-            className="focus-ring flex items-center justify-between gap-3 rounded-2xl border border-accent-amber/45 bg-[color-mix(in_srgb,var(--color-bg-base)_88%,var(--accent-amber)_12%)] px-4 py-3 shadow-[0_16px_40px_rgba(0,0,0,0.36)] backdrop-blur-xl"
+            className="focus-ring flex items-center justify-between gap-3 rounded-2xl border border-accent-amber/45 bg-[color-mix(in_srgb,var(--color-bg-base)_92%,var(--accent-amber)_8%)] px-4 py-3 shadow-[0_16px_40px_rgba(0,0,0,0.36)]"
           >
             <span className="min-w-0 text-left">
               <span className="block text-micro font-mono uppercase tracking-[0.12em] text-accent-amber">{selected.length} {selected.length === 1 ? 'compound' : 'compounds'} · {analysis.hallmarkCount}/12 hallmarks</span>

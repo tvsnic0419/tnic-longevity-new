@@ -352,7 +352,7 @@ export function SynergyNetworkGraph() {
         aria-atomic="true"
       >
         {hoveredNode ? (
-          <div className="rounded-2xl border border-border/60 bg-card/80 backdrop-blur-sm p-4 max-w-2xl mx-auto">
+          <div className="rounded-2xl border border-border/60 bg-card p-4 max-w-2xl mx-auto">
             <div className="flex items-center gap-3 mb-3">
               <span
                 className="inline-block w-3 h-3 rounded-full shrink-0"

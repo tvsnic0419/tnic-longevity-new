@@ -348,7 +348,7 @@ export function Nav() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -8, scale: 0.98 }}
                   transition={{ duration: 0.16, ease: 'easeOut' }}
-                  className="absolute right-0 top-[calc(100%+0.8rem)] grid w-[25rem] grid-cols-2 gap-2 rounded-2xl border border-border/80 bg-[color-mix(in_srgb,var(--color-bg-elevated)_94%,transparent)] p-3 shadow-[0_18px_50px_-18px_rgba(0,0,0,0.7)] backdrop-blur-2xl"
+                  className="absolute right-0 top-[calc(100%+0.8rem)] grid w-[25rem] grid-cols-2 gap-2 rounded-2xl border border-border/80 bg-[color-mix(in_srgb,var(--color-bg-elevated)_96%,transparent)] p-3 shadow-[0_18px_50px_-18px_rgba(0,0,0,0.7)]"
                   aria-label="Explore more TNiC resources"
                 >
                   {exploreGroups.map((group) => (

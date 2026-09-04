@@ -134,7 +134,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
       role="presentation"
       onClick={close}
     >
-      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" aria-hidden="true" />
+      <div className="absolute inset-0 bg-background/92" aria-hidden="true" />
 
       <div
         role="dialog"

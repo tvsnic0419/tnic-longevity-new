@@ -119,7 +119,7 @@ const css = `
   background:linear-gradient(180deg,
     color-mix(in srgb, var(--sie-panel) 88%, transparent),
     color-mix(in srgb, var(--sie-ink) 82%, transparent));
-  border:1px solid var(--sie-line);border-radius:var(--sie-r-panel);backdrop-filter:blur(6px);
+  border:1px solid var(--sie-line);border-radius:var(--sie-r-panel);
 }
 .sie-hair{border:1px solid var(--sie-line);border-radius:var(--sie-r-card);}
 

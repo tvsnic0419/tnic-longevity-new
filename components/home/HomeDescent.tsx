@@ -269,7 +269,7 @@ const CSS = `
   font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 11px;
   letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
   padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px;
-  background: rgba(14,20,38,0.55); backdrop-filter: blur(6px);
+  background: rgba(14,20,38,0.94);
 }
 .tnic-hero-badges .pill b { color: var(--cyan); font-weight: 500; }
 .tnic-hero-badges .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
@@ -618,7 +618,7 @@ const CSS = `
 /* Journey navigator — persistent labels turn the cinematic sequence into an
    understandable five-part story instead of an unexplained floating rail. */
 .tnic-rail-track { position: absolute; top: 0; right: clamp(14px,2.5vw,30px); bottom: 0; width: 144px; pointer-events: none; z-index: 6; }
-.tnic-rail { position: sticky; top: 50vh; transform: translateY(-50%); display: flex; flex-direction: column; gap: 1px; padding: 8px 9px; border: 1px solid color-mix(in srgb, var(--line) 85%, transparent); border-radius: 14px; background: color-mix(in srgb, var(--void) 82%, transparent); box-shadow: 0 12px 34px -18px rgba(0,0,0,.6); backdrop-filter: blur(14px); pointer-events: auto; }
+.tnic-rail { position: sticky; top: 50vh; transform: translateY(-50%); display: flex; flex-direction: column; gap: 1px; padding: 8px 9px; border: 1px solid color-mix(in srgb, var(--line) 85%, transparent); border-radius: 14px; background: color-mix(in srgb, var(--void) 94%, transparent); box-shadow: 0 12px 34px -18px rgba(0,0,0,.6); pointer-events: auto; }
 @media (max-width: 720px){ .tnic-rail-track { display: none; } }
 .tnic-rail button {
   background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 9px;
