@@ -9,6 +9,7 @@ import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
 import { bestForGoals, rankCompoundsForGoal } from '@/lib/best-for';
+import { GoalCoverageGrid } from '@/components/best/GoalCoverageGrid';
 import { signatureHue } from '@/components/viz/tokens';
 
 export const metadata: Metadata = buildPageMetadata({
@@ -64,6 +65,10 @@ export default function BestHubPage() {
           description="Start from what you want to improve. Each guide ranks the evidence-graded compounds that act on that goal's mechanisms — by strength of human evidence, not marketing — with doses, citations, and a hand-off into a personalized stack."
           theme="emerald"
         />
+
+        <div className="mx-auto mb-8 max-w-5xl">
+          <GoalCoverageGrid />
+        </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto">
           {bestForGoals.map((g, i) => {
