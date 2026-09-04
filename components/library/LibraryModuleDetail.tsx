@@ -22,6 +22,7 @@ import type { LifestyleSlug } from '@/lib/lifestyle-pillars';
 import { ModuleContextStrip } from './ModuleContextStrip';
 import { CompoundGlancePanel } from './CompoundGlancePanel';
 import { ModuleGlancePanel } from './ModuleGlancePanel';
+import { TnicScorePanel } from './TnicScorePanel';
 import { recordModuleVisit } from '@/lib/recent-modules';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { ContentByline } from '@/components/trust/ContentByline';
@@ -38,12 +39,12 @@ import { libraryModuleTitles } from '@/lib/breadcrumb-titles';
  */
 const categoryVisual: Record<
   LibraryModuleCategory,
-  { icon: LucideIcon; badgeClass: string; glowClass: string; textClass: string }
+  { icon: LucideIcon; badgeClass: string; glowClass: string; textClass: string; accentVar: string }
 > = {
-  compounds: { icon: FlaskConical, badgeClass: 'icon-badge-cyan', glowClass: 'glow-cyan', textClass: 'text-accent-cyan' },
-  synergies: { icon: Layers, badgeClass: 'icon-badge-violet', glowClass: 'glow-violet', textClass: 'text-accent-violet' },
-  lifestyle: { icon: HeartPulse, badgeClass: 'icon-badge-amber', glowClass: 'glow-amber', textClass: 'text-accent-amber' },
-  guides: { icon: BookOpen, badgeClass: 'icon-badge-emerald', glowClass: 'glow-emerald', textClass: 'text-accent-emerald' },
+  compounds: { icon: FlaskConical, badgeClass: 'icon-badge-cyan', glowClass: 'glow-cyan', textClass: 'text-accent-cyan', accentVar: 'var(--accent-cyan)' },
+  synergies: { icon: Layers, badgeClass: 'icon-badge-violet', glowClass: 'glow-violet', textClass: 'text-accent-violet', accentVar: 'var(--accent-violet)' },
+  lifestyle: { icon: HeartPulse, badgeClass: 'icon-badge-amber', glowClass: 'glow-amber', textClass: 'text-accent-amber', accentVar: 'var(--accent-amber)' },
+  guides: { icon: BookOpen, badgeClass: 'icon-badge-emerald', glowClass: 'glow-emerald', textClass: 'text-accent-emerald', accentVar: 'var(--accent-emerald)' },
 };
 
 export function LibraryModuleDetail({
@@ -138,6 +139,13 @@ export function LibraryModuleDetail({
 
         <div className="grid lg:grid-cols-12 gap-10">
           <aside className="order-2 lg:order-1 lg:col-span-4 space-y-6">
+            {/* TNiC Score — the derived 0–100 composite, surfaced at the top of
+                the evidence rail. Renders nothing when no source can score the
+                compound (honesty invariant), so library-only entries stay clean. */}
+            {module.category === 'compounds' && module.compoundId && (
+              <TnicScorePanel compoundId={module.compoundId} />
+            )}
+
             {module.category === 'lifestyle' && (
               <LifestylePillarPanel slug={module.slug as LifestyleSlug} />
             )}
@@ -378,7 +386,7 @@ export function LibraryModuleDetail({
                     return <CategoryIcon className={`h-7 w-7 ${categoryVisual[module.category].textClass}`} />;
                   })()}
                 </span>
-                <h1 className="text-3xl md:text-4xl font-bold tracking-tight pt-1">{module.title}</h1>
+                <h1 className="heading-page pt-1">{module.title}</h1>
               </div>
               <p className="text-lg text-muted-foreground mb-4">{module.tagline}</p>
               <p className="text-sm text-muted-foreground leading-relaxed">{module.summary}</p>
@@ -406,6 +414,10 @@ export function LibraryModuleDetail({
                 </div>
               </div>
             )}
+
+            {/* Jump target for the sticky action rail's "See the verified pick".
+                Extra scroll-margin clears the fixed nav + the sticky bar. */}
+            <div id="verified-pick" aria-hidden="true" className="scroll-mt-[7.5rem]" />
 
             {buyerGuide && (
               <CompoundBuyerGuidePanel guide={buyerGuide} />
@@ -451,7 +463,10 @@ export function LibraryModuleDetail({
             )}
 
             {mdxBody ? (
-              <div className="gradient-border p-6 md:p-8">
+              <div
+                className="premium-card p-6 md:p-8"
+                style={{ ['--card-accent' as string]: categoryVisual[module.category].accentVar } as React.CSSProperties}
+              >
                 <div className="flex items-center gap-2 mb-4">
                   <BookOpen className="w-4 h-4 text-accent-cyan" />
                   <p className="text-micro font-mono text-accent-cyan uppercase">Deep dive</p>

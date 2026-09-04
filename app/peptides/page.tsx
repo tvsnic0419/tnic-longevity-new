@@ -5,6 +5,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { RevealItem } from '@/components/ui/RevealItem';
 import { DisclaimerBanner } from '@/components/trust/DisclaimerBanner';
 import { EvidenceTagLegend } from '@/components/trust/EvidenceTag';
+import { PeptideLandscape } from '@/components/peptides/PeptideLandscape';
 import { peptideCategoryMeta, peptideLibrary, getPeptidesByCategory } from '@/lib/peptides-library';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { disclaimers } from '@/lib/trust';
@@ -53,6 +54,8 @@ export default function PeptidesHubPage() {
         <div className="mx-auto mb-10 max-w-3xl md:mb-14">
           <DisclaimerBanner disclaimer={legalDisclaimer} showAppliesTo />
         </div>
+
+        <PeptideLandscape className="mb-12" />
 
         <div className="mx-auto mb-12 max-w-3xl">
           <p className="text-label mb-3 text-muted-foreground">Evidence tiers used on every page</p>

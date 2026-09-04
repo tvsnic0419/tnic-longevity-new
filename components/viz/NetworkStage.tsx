@@ -5,7 +5,7 @@ import {
   type MouseEvent, type TouchEvent, type WheelEvent,
 } from "react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { runWhenVisible, cappedDpr } from "@/lib/raf-visibility";
+import { runWhenVisible, cappedDpr, fitCanvas } from "@/lib/raf-visibility";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // NetworkStage — the network sibling of MoleculeStage. Renders a compound-
@@ -66,9 +66,8 @@ export function NetworkStage({
 
     function resize() {
       if (!cv || !ctx) return;
-      w = cv.clientWidth; h = cv.clientHeight;
-      cv.width = w * dpr; cv.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      // Device-pixel-exact backing store — crisp on fractional layout widths.
+      ({ w, h } = fitCanvas(cv, ctx, dpr));
     }
     resize();
     const ro = new ResizeObserver(resize); ro.observe(cv);
@@ -104,6 +103,10 @@ export function NetworkStage({
       ctx.fillStyle = back;
       ctx.beginPath(); ctx.arc(cx, cy, Math.max(w, h) * 0.7, 0, Math.PI * 2); ctx.fill();
 
+      // Edges + node glows composite additively so link crossings and
+      // overlapping blooms accumulate into light — a cheap stand-in for the
+      // WebGL scene's bloom pass, keeping this canvas in the same family.
+      ctx.globalCompositeOperation = "lighter";
       // Edges, back-to-front so nearer links read brighter.
       ctx.lineCap = "round";
       const edgeOrder = E
@@ -130,19 +133,22 @@ export function NetworkStage({
         const rad = (5.5 + Math.min(n.degree, 6) * 1.5) * p.persp * (1.15 - depth * 0.3);
         const a = 0.95 - depth * 0.4;
 
+        ctx.globalCompositeOperation = "lighter";
         if (n.elite) {
-          const halo = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, rad * 3.4);
-          halo.addColorStop(0, `${ELITE_GLOW}${0.5 * a})`);
+          const halo = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, rad * 3.6);
+          halo.addColorStop(0, `${ELITE_GLOW}${0.45 * a})`);
           halo.addColorStop(1, `${ELITE_GLOW}0)`);
           ctx.fillStyle = halo;
-          ctx.beginPath(); ctx.arc(p.sx, p.sy, rad * 3.4, 0, Math.PI * 2); ctx.fill();
+          ctx.beginPath(); ctx.arc(p.sx, p.sy, rad * 3.6, 0, Math.PI * 2); ctx.fill();
         } else {
-          const bloom = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, rad * 2.6);
-          bloom.addColorStop(0, `rgba(95,227,224,${0.4 * a})`);
+          const bloom = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, rad * 2.8);
+          bloom.addColorStop(0, `rgba(95,227,224,${0.34 * a})`);
           bloom.addColorStop(1, "rgba(95,227,224,0)");
           ctx.fillStyle = bloom;
-          ctx.beginPath(); ctx.arc(p.sx, p.sy, rad * 2.6, 0, Math.PI * 2); ctx.fill();
+          ctx.beginPath(); ctx.arc(p.sx, p.sy, rad * 2.8, 0, Math.PI * 2); ctx.fill();
         }
+        // Spheres, rims and labels read solid — back to normal compositing.
+        ctx.globalCompositeOperation = "source-over";
 
         const hi = n.elite ? [255, 244, 214] as const : NODE_HI;
         const core = n.elite ? [240, 196, 106] as const : NODE_CORE;
@@ -165,6 +171,7 @@ export function NetworkStage({
           ctx.fillText(n.name, p.sx, p.sy - rad - 8 * p.persp);
         }
       }
+      ctx.globalCompositeOperation = "source-over";
     }
 
     const stopLoop = runWhenVisible(cv, draw);

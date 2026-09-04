@@ -32,8 +32,11 @@ const fraunces = Fraunces({
   variable: '--font-fraunces',
   subsets: ['latin'],
   display: 'swap',
-  // Optical-size + weights the display headings actually use.
-  weight: ['300', '400', '500', '600'],
+  // Weights the display headings actually use — 400 (headlines), 500
+  // (font-medium card titles), 600 (bold section heads). Weight 300 is
+  // unreferenced anywhere in the tree, so it (and its italic) is dropped:
+  // two fewer font files on every page, faster font settle, less CLS.
+  weight: ['400', '500', '600'],
   style: ['normal', 'italic'],
 });
 

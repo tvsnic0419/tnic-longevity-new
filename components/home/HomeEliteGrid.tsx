@@ -3,11 +3,21 @@
 import { useMemo, useState, type CSSProperties } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ExternalLink, BookOpen, FlaskConical } from 'lucide-react';
+import { ExternalLink, BookOpen, Check, Plus } from 'lucide-react';
 import { eliteInterventions } from '@/lib/elite-interventions';
+import { useStack } from '@/context/PlatformContext';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { EvidenceTrace } from '@/components/trust/EvidenceTrace';
 import { RevealItem } from '@/components/ui/RevealItem';
+import { computeTnicScore, scoreBand } from '@/lib/tnic-score';
+
+// Canonical tier accent (A=emerald / B=cyan / C=amber), matching the
+// TnicScorePanel + EvidenceTag so the score reads in one colour language.
+const TIER_ACCENT: Record<'A' | 'B' | 'C', string> = {
+  A: 'var(--accent-emerald)',
+  B: 'var(--accent-cyan)',
+  C: 'var(--accent-amber)',
+};
 
 /**
  * The elite-interventions grid with a hallmark filter (section 03 of the
@@ -57,6 +67,11 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
   const { pick, compoundName, pathway, mechanismLine, evidence, studyCount, dose, hallmarks } =
     intervention;
   const brandShort = pick.brand.split(' ')[0];
+  const tnic = computeTnicScore(intervention.compoundId);
+  const accent = TIER_ACCENT[evidence];
+  const band = tnic.score !== null ? scoreBand(tnic.score) : null;
+  const { selected, toggle } = useStack();
+  const inStack = selected.includes(intervention.compoundId);
 
   return (
     <div
@@ -118,6 +133,28 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
           </div>
         )}
 
+        {/* TNiC Score — the derived composite as the card's headline evidence
+            metric, tier-coloured, leading into the supporting micro-facts. */}
+        {tnic.score !== null && (
+          <div
+            className="mb-3 flex items-center justify-between gap-3 rounded-lg border px-3.5 py-2.5"
+            style={{
+              borderColor: `color-mix(in srgb, ${accent} 28%, transparent)`,
+              background: `color-mix(in srgb, ${accent} 7%, transparent)`,
+            }}
+          >
+            <span className="font-mono text-micro font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              TNiC Score
+            </span>
+            <span className="flex items-baseline gap-1.5">
+              <span className="font-mono text-xl font-bold tabular-nums" style={{ color: accent }}>
+                {Math.round(tnic.score)}
+              </span>
+              <span className="font-mono text-micro text-muted-foreground">/100{band ? ` · ${band}` : ''}</span>
+            </span>
+          </div>
+        )}
+
         {/* Evidence + dose micro-facts — framed and high-contrast so the
             supporting data reads as crisp instrument readout, not fine print. */}
         <dl className="mb-5 grid grid-cols-2 gap-x-3 gap-y-2 rounded-lg border border-border/60 bg-white/[0.025] px-3.5 py-3">
@@ -154,13 +191,18 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
                 <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
                 Read evidence
               </Link>
-              <Link
-                href={`/stacks?stack=${intervention.compoundId}&from=elite-home`}
+              {/* Add to the persistent protocol (StackDock) rather than
+                  navigating away and replacing the whole stack. */}
+              <button
+                type="button"
+                onClick={() => toggle(intervention.compoundId)}
+                aria-pressed={inStack}
                 className="elite-card-action-secondary focus-ring inline-flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold"
+                style={inStack ? { borderColor: 'color-mix(in srgb, var(--accent-emerald) 45%, transparent)', color: 'var(--accent-emerald)' } : undefined}
               >
-                <FlaskConical className="h-3.5 w-3.5" aria-hidden="true" />
-                Build a stack
-              </Link>
+                {inStack ? <Check className="h-3.5 w-3.5" aria-hidden="true" /> : <Plus className="h-3.5 w-3.5" aria-hidden="true" />}
+                {inStack ? 'In protocol' : 'Add to protocol'}
+              </button>
             </div>
             <a
               href={intervention.goHref}

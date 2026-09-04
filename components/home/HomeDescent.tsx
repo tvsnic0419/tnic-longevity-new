@@ -10,7 +10,7 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { DeferredMoleculeStage, DeferredNetworkStage } from "@/components/home/DeferredCinematicStage";
 import type { NetworkNode, NetworkEdge } from "@/components/viz/NetworkStage";
 import { HUES } from "@/components/viz/tokens";
-import { runWhenVisible, cappedDpr } from "@/lib/raf-visibility";
+import { runWhenVisible, cappedDpr, fitCanvas } from "@/lib/raf-visibility";
 import { createGlowCache, blitGlow } from "@/lib/canvas-glow";
 
 // Canvas draw colors are plain rgba literals (not CSS custom properties), so
@@ -494,6 +494,7 @@ const CSS = `
   letter-spacing: .14em; text-transform: uppercase; cursor: pointer; transition: all .2s ease;
 }
 .tnic-chip.on { color: var(--ink); border-color: currentColor; background: rgba(255,255,255,0.03); }
+.tnic-chip:focus-visible { outline: none; border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(95,227,224,0.15); }
 .tnic-chip .sw { width: 8px; height: 8px; border-radius: 50%; }
 
 .tnic-readout {
@@ -608,6 +609,7 @@ const CSS = `
   transition: transform .2s ease, box-shadow .2s ease;
 }
 .tnic-cta:hover { transform: translateY(-1px); box-shadow: 0 0 42px rgba(0,224,255,0.5); }
+.tnic-cta:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
 .tnic-cta .arr { display: inline-block; transition: transform .2s ease; }
 .tnic-cta:hover .arr { transform: translateX(4px); }
 .tnic-cta.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); box-shadow: none; margin-left: 12px; }
@@ -849,9 +851,8 @@ export function HomeDescent() {
     })));
     function resize() {
       if (!cv || !ctx) return;
-      w = cv.clientWidth; h = cv.clientHeight;
-      cv.width = w * dpr; cv.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      // Device-pixel-exact backing store — crisp on fractional layout widths.
+      ({ w, h } = fitCanvas(cv, ctx, dpr));
     }
     resize();
     const ro = new ResizeObserver(resize); ro.observe(cv);
@@ -934,9 +935,8 @@ export function HomeDescent() {
     const state = { x: 0, y: 0, tx: 0, ty: 0, on: false };
     function resize() {
       if (!cv || !ctx) return;
-      w = cv.clientWidth; h = cv.clientHeight;
-      cv.width = w * dpr; cv.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      // Device-pixel-exact backing store — crisp on fractional layout widths.
+      ({ w, h } = fitCanvas(cv, ctx, dpr));
     }
     resize();
     const ro = new ResizeObserver(resize); ro.observe(cv);

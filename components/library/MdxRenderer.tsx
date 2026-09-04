@@ -8,7 +8,6 @@ import {
   ClipboardList,
   Lightbulb,
   OctagonX,
-  ListTree,
   BookMarked,
 } from 'lucide-react';
 import type { EvidenceTier } from '@/lib/types';
@@ -24,6 +23,7 @@ import {
 import { citationRegistry } from '@/lib/trust';
 import { glossary } from '@/lib/data';
 import { crossLinkTerms } from '@/lib/cross-links';
+import { ReadingToc } from '@/components/library/ReadingToc';
 
 const PMID_PATTERN = /\bPMID:?\s?(\d{7,8})\b/g;
 // Bare DOIs in prose (e.g. "DOI: 10.1038/s41586-020-2975-4" or "doi:10.1000/xyz").
@@ -218,38 +218,10 @@ function estimateReadingMinutes(content: string): number {
   return Math.max(1, Math.round(words / WORDS_PER_MINUTE));
 }
 
-function TableOfContents({ headings, readingMinutes }: { headings: Heading[]; readingMinutes: number }) {
-  return (
-    <nav
-      aria-label="On this page"
-      className="not-prose mb-8 rounded-xl border border-border bg-muted/20 p-5"
-    >
-      <div className="mb-3 flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <ListTree className="h-4 w-4 text-accent-cyan" aria-hidden="true" />
-          <p className="text-micro font-mono uppercase tracking-wider text-muted-foreground">
-            On this page
-          </p>
-        </div>
-        <p className="text-micro font-mono uppercase tracking-wider text-muted-foreground">
-          ~{readingMinutes} min read
-        </p>
-      </div>
-      <ul className="space-y-1.5">
-        {headings.map((h) => (
-          <li key={h.id} className={h.level === 3 ? 'ml-4' : ''}>
-            <a
-              href={`#${h.id}`}
-              className="focus-ring rounded text-sm text-muted-foreground transition-colors hover:text-accent-cyan"
-            >
-              {h.text}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  );
-}
+// The "On this page" panel is rendered by ReadingToc, a client component that
+// keeps this exact markup but adds scroll-spy plus a docked control for the
+// rest of the page — this panel scrolls out of view within the first ~5% of a
+// 24,000px deep-dive and previously never came back. See ReadingToc's header.
 
 function ReferencesSection({ pmids }: { pmids: string[] }) {
   return (
@@ -788,7 +760,7 @@ export function MdxRenderer({
 
   return (
     <article className="max-w-none">
-      {headings.length >= 3 && <TableOfContents headings={headings} readingMinutes={readingMinutes} />}
+      {headings.length >= 3 && <ReadingToc headings={headings} readingMinutes={readingMinutes} />}
       {elements}
       {pmids.length > 0 && <ReferencesSection pmids={pmids} />}
     </article>

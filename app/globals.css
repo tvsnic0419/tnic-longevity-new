@@ -54,9 +54,12 @@
      hierarchy still reads even as the gap narrows. */
   --color-text-secondary: #edeef1;
   --color-text-muted: #ced0d7;
-  /* Faint tier — small labels/captions sitewide; brightest it's been while
-     staying a clear step under muted. */
-  --color-text-faint: #c1c2ca;
+  /* Faint tier — small labels/captions sitewide. Nudged a step down from the
+     last brightening pass (#c1c2ca had drifted to near-identical with muted
+     #ced0d7) so captions/labels read as their own distinct tier again. Still
+     ~9.5:1 on the base (AAA) — bright, just no longer merged with muted. Body
+     tiers (secondary/muted) keep their brightened values untouched. */
+  --color-text-faint: #adaeb9;
 
   /* Hub accents — v2.1 sharp pop */
   --accent-cyan: #00e0ff;
@@ -345,16 +348,16 @@ body::after {
 }
 
 /* Editorial display utility — Fraunces, for the biggest headline moments
-   site-wide (Elite 8 hero, etc.). Consolidated from two separate blocks that
-   previously cascaded into each other; the values below are what the merged
-   cascade actually produced — so no visual change, one source of truth. */
+   site-wide (Elite 8 hero, etc.). One canonical definition: a duplicate in the
+   v3 sprint layer set an unloaded weight 800 — Fraunces only ships 300–600 here
+   (see app/layout.tsx), so it rendered faux-bold; merged at the cinematic 400. */
 .font-display { font-family: var(--font-display); }
 .text-display {
   font-family: var(--font-display);
   font-size: var(--type-6xl);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1.02;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 0.98;
 }
 
 /* ── Typographic coherence & polish ──────────────────────────────────────────
@@ -1069,6 +1072,15 @@ p,
   margin-bottom: 0.375rem;
 }
 
+/* Mobile: the three-card orientation rail stacks vertically, so trim its
+   footprint so it never dominates the first phone screen ahead of the page's
+   primary content. Padding and gap only — copy, contrast, and desktop layout
+   are all unchanged. */
+@media (max-width: 767px) {
+  .context-rail { gap: 0.625rem; }
+  .context-rail-item { padding: 0.9rem 1rem 0.9rem 1.15rem; }
+}
+
 /* Compact rail — one slim strip instead of three glass cards, for pages
    the reader arrived to read rather than to be onboarded into a tool. */
 .context-rail-compact {
@@ -1194,6 +1206,13 @@ p,
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
+  /* Isolate the always-on decorative field (orbs + drifting molecules) from the
+     document. It already clips to itself (overflow:hidden) and owns a stacking
+     context (fixed + z-index:0), so layout+paint containment adds no visual
+     change — it just lets the browser skip this animating subtree when
+     invalidating the real page, keeping the ambient motion off the main
+     layout/paint path. */
+  contain: layout paint;
 }
 
 .ambient-orb {
@@ -1345,6 +1364,24 @@ p,
 :root[data-theme='light'] .molecule-node.depth-1 { opacity: 0.14; }
 :root[data-theme='light'] .molecule-node.depth-2 { opacity: 0.1; }
 :root[data-theme='light'] .molecule-node.depth-3 { opacity: 0.06; }
+
+/* Mobile paint budget for the site-wide ambient layer.
+   Extends the same "phones are where blur janks, so trim its cost there" rule
+   the glass surfaces already use (see .glass-deep below). These aurora orbs are
+   the single largest blur region on the site AND render on 100% of pages, yet —
+   unlike the glass — they were never given a phone budget. Radius only: at
+   ~55vw the orb is almost entirely soft either way, so 60px vs 90px is
+   imperceptible as a background wash while rasterizing ~55% cheaper (blur cost
+   scales with radius²). Nothing is hidden or moved; reduced-motion still freezes
+   the drift entirely. */
+@media (max-width: 767px) {
+  .ambient-orb { filter: blur(60px); }
+  /* The drifting molecule field's full-viewport drop-shadow is a filter region
+     re-rasterized behind every page; at the field's phone opacity (0.09–0.2)
+     the 10px glow is imperceptible, so drop just the halo and keep the
+     linework. */
+  .molecule-cascade { filter: none; }
+}
 
 @keyframes molecule-drift {
   0%, 100% { transform: rotate(var(--rot, 0deg)) translate(0, 0); }
@@ -1958,11 +1995,16 @@ p,
    workhorse section/hero headline. Removed .headline-display and
    .feature-headline — both were defined but unused. */
 .headline-editorial {
+  /* Cinematic display voice — Fraunces 400, matching the hub heroes (.hh-title)
+     and HomeDescent. Was a weight-800 heavy sans (no font-family set → Inter),
+     which read as a different brand than the rest of the site's headlines. The
+     cyan halo is kept but softened so the finer serif strokes stay crisp. */
+  font-family: var(--font-display);
   font-size: var(--type-5xl);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1.0;
-  text-shadow: 0 0 80px rgba(0, 224, 255, 0.28), 0 0 160px rgba(0, 224, 255, 0.10), 0 2px 8px rgba(0, 0, 0, 0.6);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+  text-shadow: 0 0 60px rgba(0, 224, 255, 0.18), 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 /* Light-theme parity — the dark-tuned glow stack ends in a hardcoded black
@@ -3275,7 +3317,11 @@ p,
   overflow: hidden;
   border-radius: var(--radius-2xl);
   border: 1px solid var(--color-border-subtle);
+  /* Fill + the accent top light-catch hairline as a 1px background layer. The
+     hairline moved off the ::before pseudo (now the elite-card shine sweep)
+     into the background so one card keeps both signature tells. */
   background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--card-accent) 55%, transparent), transparent) 0 0 / 100% 1px no-repeat,
     linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.006));
   /* Resting depth — the lightest elevation plane so cards read as engineered
      surfaces sitting on the page rather than flat outlines, plus an inset
@@ -3287,21 +3333,21 @@ p,
     border-color 0.32s ease,
     box-shadow 0.32s ease;
 }
-/* Top light-catch hairline — the signature "elite card" tell, now accent-aware. */
+/* Diagonal shine sweep on hover — the elite-interventions card's signature
+   tell (a skewed translucent bar that travels across), now shared by every
+   content card. Sits above content (z-3) as a glossy sheen; runs only on
+   hover-capable pointers with motion allowed. */
 .premium-card::before {
   content: "";
   position: absolute;
-  inset-inline: 0;
   top: 0;
-  height: 1px;
+  bottom: 0;
+  left: -60%;
+  width: 42%;
   z-index: 3;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    color-mix(in srgb, var(--card-accent) 60%, transparent),
-    transparent
-  );
-  opacity: 0.75;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.10), transparent);
+  transform: skewX(-14deg);
+  opacity: 0;
   pointer-events: none;
 }
 /* Accent bloom that warms up on hover — kept behind content (z-0). */
@@ -3334,6 +3380,16 @@ p,
 .premium-card:hover::after {
   opacity: 1;
 }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .premium-card:hover::before {
+    animation: premium-shine 0.9s var(--ease-glass);
+  }
+}
+@keyframes premium-shine {
+  0%   { left: -60%; opacity: 0; }
+  12%  { opacity: 0.9; }
+  100% { left: 130%; opacity: 0; }
+}
 .premium-card:focus-within {
   border-color: color-mix(in srgb, var(--card-accent) 42%, transparent);
 }
@@ -3360,8 +3416,15 @@ p,
    surface + the v8 shadow (same approach as .card-elevated), and soften the
    accent bloom, so the cards read in both themes. */
 [data-theme="light"] .premium-card {
-  background: var(--color-bg-elevated);
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--card-accent) 42%, transparent), transparent) 0 0 / 100% 1px no-repeat,
+    var(--color-bg-elevated);
   box-shadow: var(--glass-shadow-mid);
+}
+/* A white sheen is invisible on the light base — the shine uses a faint accent
+   tint there instead. */
+[data-theme="light"] .premium-card::before {
+  background: linear-gradient(100deg, transparent, color-mix(in srgb, var(--card-accent) 14%, transparent), transparent);
 }
 [data-theme="light"] .premium-card::after {
   background: radial-gradient(
@@ -3611,6 +3674,13 @@ p,
 @media (prefers-reduced-motion: reduce) {
   .hub-hero-field::before,
   .hub-hero-field::after { animation: none; }
+}
+/* Same phone blur budget as the ambient orbs — the hub hero's two 42rem blur
+   fields render on every hub page; 38px reads the same as 60px at that size
+   while costing far less to rasterize on mobile GPUs. Radius only. */
+@media (max-width: 767px) {
+  .hub-hero-field::before,
+  .hub-hero-field::after { filter: blur(38px); }
 }
 
 /* Accent glow utility — a soft luminous halo for figures/icons/nodes. */
@@ -3932,6 +4002,426 @@ p,
   .elite-section-secondary-action { transition: none; }
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   Homepage §04 Mechanisms — evidence-grade hallmark cards
+   ----------------------------------------------------------------------------
+   Replaces the hollow glass rectangles with a color-coded taxonomy: each of the
+   twelve carries its own hallmark accent (passed per card as --card-accent) as a
+   top light-catch, a ghost index numeral, and an accent hover-glow, while its
+   ranked interventions render as real evidence-graded rows (tier chip color =
+   canonical A/emerald · B/cyan · C/amber, never the card accent). Two color
+   systems doing two jobs: hallmark identity on the frame, evidence tier on the
+   data. Token-driven so both themes stay correct.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.hm-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.15rem 1.2rem 1.1rem;
+  border-radius: 1rem;
+  border: 1px solid var(--color-border-subtle);
+  background:
+    radial-gradient(130% 80% at 0% 0%, color-mix(in srgb, var(--card-accent, var(--accent-cyan)) 10%, transparent), transparent 56%),
+    color-mix(in srgb, var(--color-bg-elevated) 90%, var(--card-accent, var(--accent-cyan)) 4%);
+  box-shadow: var(--glass-shadow-content);
+  overflow: hidden;
+  transition: transform 0.35s var(--ease-standard), border-color 0.35s var(--ease-standard), box-shadow 0.35s var(--ease-standard);
+}
+.hm-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--card-accent, var(--accent-cyan)) 62%, transparent), transparent);
+  opacity: 0.55;
+  transition: opacity 0.35s var(--ease-standard);
+}
+@media (hover: hover) {
+  .hm-card:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--card-accent, var(--accent-cyan)) 45%, var(--color-border-subtle));
+    box-shadow: var(--glass-shadow-float), 0 0 42px -22px color-mix(in srgb, var(--card-accent, var(--accent-cyan)) 62%, transparent);
+  }
+  .hm-card:hover::before { opacity: 1; }
+  .hm-card:hover .hm-card__go { color: var(--card-accent, var(--accent-cyan)); }
+  .hm-card:hover .hm-card__go svg { transform: translate(2px, -2px); }
+}
+.hm-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 0.7rem;
+}
+.hm-card__num {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  line-height: 0.9;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--card-accent, var(--accent-cyan)) 42%, transparent);
+}
+.hm-card__title {
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  margin-bottom: 0.7rem;
+}
+.hm-card__rows {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid color-mix(in srgb, var(--color-border-subtle) 85%, transparent);
+}
+.hm-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.42rem 0;
+}
+.hm-row + .hm-row {
+  border-top: 1px solid color-mix(in srgb, var(--color-border-subtle) 70%, transparent);
+}
+.hm-row__name {
+  font-size: 0.8125rem;
+  line-height: 1.25;
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Evidence-tier chip — canonical grade colors, shared idiom across the site. */
+.hm-tier {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 0.34rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.hm-tier--A { color: var(--accent-emerald); background: color-mix(in srgb, var(--accent-emerald) 15%, transparent); border: 1px solid color-mix(in srgb, var(--accent-emerald) 36%, transparent); }
+.hm-tier--B { color: var(--accent-cyan);    background: color-mix(in srgb, var(--accent-cyan) 15%, transparent);    border: 1px solid color-mix(in srgb, var(--accent-cyan) 36%, transparent); }
+.hm-tier--C { color: var(--accent-amber);   background: color-mix(in srgb, var(--accent-amber) 15%, transparent);   border: 1px solid color-mix(in srgb, var(--accent-amber) 36%, transparent); }
+.hm-card__go {
+  margin-top: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  transition: color 0.3s var(--ease-standard);
+}
+.hm-card__go svg { transition: transform 0.3s var(--ease-standard); }
+@media (prefers-reduced-motion: reduce) {
+  .hm-card, .hm-card::before, .hm-card__go, .hm-card__go svg { transition: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Homepage §05 Protocol — sequenced step cards
+   ----------------------------------------------------------------------------
+   The steps were bare text hung off a hairline. Now each is a substantial
+   emerald-accented card carrying a large ghost index numeral (the sequence
+   reads 01 → 02 → 03 at a glance), sharing the §04 card language so the page
+   reads as one system. A faint connecting line threads the three on desktop.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.step-row {
+  position: relative;
+}
+/* The thread: a hairline behind the three cards' index band, emerald deepening
+   left→right so the row reads as an ordered progression. Desktop only. */
+.step-row::before {
+  content: '';
+  position: absolute;
+  top: 3.35rem;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent-emerald) 12%, transparent), color-mix(in srgb, var(--accent-emerald) 45%, transparent), color-mix(in srgb, var(--accent-emerald) 70%, transparent));
+  z-index: 0;
+}
+@media (max-width: 767px) { .step-row::before { display: none; } }
+.step-card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.5rem 1.4rem 1.4rem;
+  border-radius: 1.1rem;
+  border: 1px solid var(--color-border-subtle);
+  background:
+    radial-gradient(130% 85% at 0% 0%, color-mix(in srgb, var(--accent-emerald) 9%, transparent), transparent 58%),
+    color-mix(in srgb, var(--color-bg-elevated) 91%, var(--accent-emerald) 4%);
+  box-shadow: var(--glass-shadow-content);
+  overflow: hidden;
+  transition: transform 0.35s var(--ease-standard), border-color 0.35s var(--ease-standard), box-shadow 0.35s var(--ease-standard);
+}
+.step-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent-emerald) 60%, transparent), transparent);
+  opacity: 0.6;
+  transition: opacity 0.35s var(--ease-standard);
+}
+@media (hover: hover) {
+  .step-card:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--accent-emerald) 42%, var(--color-border-subtle));
+    box-shadow: var(--glass-shadow-float), 0 0 44px -22px color-mix(in srgb, var(--accent-emerald) 58%, transparent);
+  }
+  .step-card:hover::before { opacity: 1; }
+  .step-card:hover .step-card__cta svg { transform: translateX(3px); }
+}
+.step-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.1rem;
+}
+.step-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.85rem;
+}
+.step-card__num {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  line-height: 0.8;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--accent-emerald) 26%, transparent);
+}
+.step-card__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--accent-emerald) 78%, var(--color-text-faint));
+  margin-bottom: 0.5rem;
+}
+.step-card__title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  margin-bottom: 0.55rem;
+}
+.step-card__desc {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--color-text-secondary);
+  margin-bottom: 1.15rem;
+}
+.step-card__cta {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--accent-emerald);
+}
+.step-card__cta svg { transition: transform 0.3s var(--ease-standard); }
+@media (prefers-reduced-motion: reduce) {
+  .step-card, .step-card::before, .step-card__cta svg { transition: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Homepage §06 Personalize — NICO console
+   ----------------------------------------------------------------------------
+   The starter form was a floaty premium-card. This frames it as a deliberate
+   instrument console (violet-accented header, top light-catch, no hover-lift —
+   it's a stationary input surface) with precision segmented controls in place
+   of the plain pills.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.nico-console {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.35rem;
+  border: 1px solid color-mix(in srgb, var(--accent-violet) 20%, var(--color-border-subtle));
+  background:
+    radial-gradient(120% 70% at 100% 0%, color-mix(in srgb, var(--accent-violet) 10%, transparent), transparent 58%),
+    color-mix(in srgb, var(--color-bg-elevated) 93%, var(--accent-violet) 4%);
+  box-shadow: var(--glass-shadow-float);
+}
+.nico-console::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent-violet) 65%, transparent), transparent);
+  opacity: 0.7;
+}
+.nico-console__head {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--accent-violet) 14%, var(--color-border-subtle));
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--accent-violet) 80%, var(--color-text-faint));
+}
+.nico-console__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--accent-violet);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent-violet) 70%, transparent);
+}
+.nico-console__body { padding: 1.75rem 1.5rem; }
+@media (min-width: 768px) { .nico-console__body { padding: 2rem; } }
+
+/* Precision segmented control — replaces the plain option pills. */
+.nico-opt {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.7rem 1rem;
+  border-radius: 0.85rem;
+  border: 1px solid var(--color-border-subtle);
+  background: color-mix(in srgb, var(--color-bg-base) 45%, transparent);
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-align: center;
+  transition: border-color 0.25s var(--ease-standard), background-color 0.25s var(--ease-standard), color 0.25s var(--ease-standard), box-shadow 0.25s var(--ease-standard);
+}
+@media (hover: hover) {
+  .nico-opt:not(.is-on):not(.is-limit):hover {
+    border-color: color-mix(in srgb, var(--color-text-primary) 32%, transparent);
+    background: color-mix(in srgb, var(--color-bg-base) 62%, transparent);
+    color: var(--color-text-primary);
+  }
+}
+.nico-opt.is-on {
+  border-color: color-mix(in srgb, var(--accent-violet) 62%, transparent);
+  background: color-mix(in srgb, var(--accent-violet) 15%, transparent);
+  color: color-mix(in srgb, var(--accent-violet) 90%, #fff);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-violet) 28%, transparent), 0 0 22px -10px color-mix(in srgb, var(--accent-violet) 65%, transparent);
+}
+.nico-opt.is-limit { opacity: 0.4; cursor: not-allowed; }
+@media (prefers-reduced-motion: reduce) { .nico-opt { transition: none; } }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Compound deep-dive — sticky conversion action rail (CompoundStickyBar)
+   ----------------------------------------------------------------------------
+   Deep-dives run tens of thousands of px; once the hero + its buy CTA scroll
+   off, buy-intent has nowhere to land. This rail pins the compound + evidence
+   tier + the primary conversion action under the nav for the whole read. Hidden
+   (visibility:hidden → out of tab order + a11y tree) until the reader scrolls
+   past the hero; `top` is set inline from the measured nav height.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.compound-bar-sentinel { display: block; height: 1px; margin: 0; }
+.compound-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 40; /* under the nav (z-50), over page content */
+  transform: translateY(-115%);
+  visibility: hidden;
+  transition: transform 0.32s var(--ease-standard);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent-emerald) 22%, var(--color-border-subtle));
+  background: color-mix(in srgb, var(--color-bg-elevated) 90%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  backdrop-filter: blur(18px) saturate(1.2);
+  box-shadow: 0 14px 34px -20px rgba(0, 0, 0, 0.6);
+}
+.compound-bar.is-shown { transform: translateY(0); visibility: visible; }
+.compound-bar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 3.25rem;
+  padding-block: 0.5rem;
+}
+.compound-bar__id { display: flex; align-items: center; gap: 0.65rem; min-width: 0; }
+.compound-bar__name {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.compound-bar__path {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  white-space: nowrap;
+}
+.compound-bar__cta { display: flex; align-items: center; gap: 0.65rem; flex: none; }
+.compound-bar__secondary {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  border-radius: 0.5rem;
+  transition: color 0.2s var(--ease-standard);
+}
+.compound-bar__secondary:hover { color: var(--color-text-primary); }
+.compound-bar__primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.95rem;
+  border-radius: 0.7rem;
+  font-size: 0.8125rem;
+  font-weight: 650;
+  white-space: nowrap;
+  color: #03100c;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-emerald));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 8px 22px -12px color-mix(in srgb, var(--accent-emerald) 70%, transparent);
+  transition: transform 0.2s var(--ease-standard), box-shadow 0.2s var(--ease-standard);
+}
+@media (hover: hover) {
+  .compound-bar__primary:hover {
+    transform: translateY(-1px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 12px 28px -12px color-mix(in srgb, var(--accent-emerald) 80%, transparent);
+  }
+}
+@media (max-width: 640px) {
+  .compound-bar__path { display: none; }
+  .compound-bar__name { font-size: 0.95rem; max-width: 44vw; }
+  .compound-bar__secondary { display: none; }
+  .compound-bar__primary { padding: 0.5rem 0.8rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .compound-bar { transition: none; }
+  .compound-bar__primary { transition: none; }
+}
 
 /* ═══════════════════════════════════════════════════════════════════════════
    Research Instrument Foundation — flagship hub arrival system
@@ -4791,4 +5281,139 @@ p,
 }
 [data-theme='light'] .research-hero__action--secondary {
   background: color-mix(in srgb, var(--color-bg-elevated) 94%, var(--research-hero-accent, var(--accent-cyan)) 6%);
+}
+
+/* ── ReadingToc — docked section wayfinding on long-form pages ─────────────
+   Bottom-LEFT by deliberate choice: BackToTop owns bottom-right (fixed
+   bottom-6 right-6) and CompoundStickyBar owns the top edge, so this is the
+   one free corner. z-index 40 matches those siblings — under the nav (50). */
+.reading-toc-dock {
+  position: fixed;
+  left: 1rem;
+  bottom: 1.5rem;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  max-width: min(22rem, calc(100vw - 5.5rem)); /* clears BackToTop at 390px */
+}
+
+.reading-toc-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 100%;
+  padding: 0.5rem 0.875rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent-cyan) 24%, var(--color-border-subtle));
+  background: color-mix(in srgb, var(--color-bg-elevated) 92%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  backdrop-filter: blur(18px) saturate(1.2);
+  box-shadow: 0 14px 34px -20px rgba(0, 0, 0, 0.6);
+  color: var(--color-foreground);
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  /* Colour-only hover, and deliberately NO transform: this is a fixed control
+     the reader must be able to hit first time. A hover lift (or .interactive's
+     :active scale) moves the button between pointerdown and pointerup, so the
+     click lands on the element underneath instead — measured, and worst on
+     touch, where a tap has no settling hover at all. */
+  transition: border-color 0.2s var(--ease-standard), background-color 0.2s var(--ease-standard);
+}
+.reading-toc-trigger:hover {
+  border-color: color-mix(in srgb, var(--accent-cyan) 55%, transparent);
+  background: color-mix(in srgb, var(--color-bg-elevated) 99%, var(--accent-cyan));
+}
+.reading-toc-trigger__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reading-toc-panel {
+  width: min(20rem, calc(100vw - 5.5rem));
+  overflow: hidden;
+  border-radius: 0.875rem;
+  /* Deliberately NOT .premium-card: that is a glass surface tuned to sit in the
+     page flow, and its translucency let the article read straight through this
+     panel when it floats over content. A floating list needs its own near-opaque
+     ground. */
+  border: 1px solid color-mix(in srgb, var(--accent-cyan) 20%, var(--color-border-subtle));
+  background: color-mix(in srgb, var(--color-bg-elevated) 97%, transparent);
+  -webkit-backdrop-filter: blur(22px) saturate(1.25);
+  backdrop-filter: blur(22px) saturate(1.25);
+  box-shadow: 0 22px 48px -22px rgba(0, 0, 0, 0.85);
+  animation: reading-toc-in 0.18s var(--ease-standard);
+}
+.reading-toc-list {
+  max-height: min(55vh, 22rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0.5rem;
+}
+
+@keyframes reading-toc-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reading-toc-trigger { transition: none; }
+  .reading-toc-panel { animation: none; }
+}
+
+/* ── NICO starter step rail ────────────────────────────────────────────────
+   Sits between the console head and body, so the three-step flow reads as
+   progress rather than as three unrelated screens. */
+.nico-steps {
+  display: flex;
+  align-items: stretch;
+  gap: 0.25rem;
+  padding: 0.75rem 1.5rem 0;
+  list-style: none;
+  margin: 0;
+}
+@media (min-width: 768px) { .nico-steps { padding: 0.875rem 2rem 0; } }
+
+.nico-step {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.5rem 0.55rem;
+  border-bottom: 2px solid var(--color-border-subtle);
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: color 0.25s var(--ease-standard), border-color 0.25s var(--ease-standard);
+}
+.nico-step__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  font-family: var(--font-mono, ui-monospace), monospace;
+  font-size: 0.625rem;
+  line-height: 1;
+}
+.nico-step.is-done {
+  color: color-mix(in srgb, var(--accent-emerald) 85%, #fff);
+  border-bottom-color: color-mix(in srgb, var(--accent-emerald) 55%, transparent);
+}
+.nico-step.is-current {
+  color: color-mix(in srgb, var(--accent-violet) 92%, #fff);
+  border-bottom-color: color-mix(in srgb, var(--accent-violet) 70%, transparent);
+}
+.nico-step.is-current .nico-step__num {
+  background: color-mix(in srgb, var(--accent-violet) 18%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nico-step { transition: none; }
 }

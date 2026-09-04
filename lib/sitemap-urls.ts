@@ -21,10 +21,15 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     { url: `${base}/library`, lastModified, changeFrequency: 'weekly', priority: 0.95 },
     { url: `${base}/peptides`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/pathways`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
+    { url: `${base}/sirtuin-atlas`, lastModified, changeFrequency: 'weekly', priority: 0.86 },
     { url: `${base}/library/delivery-systems`, lastModified, changeFrequency: 'monthly', priority: 0.84 },
     { url: `${base}/library/systems`, lastModified, changeFrequency: 'monthly', priority: 0.84 },
     { url: `${base}/library/top-picks`, lastModified, changeFrequency: 'monthly', priority: 0.85 },
     { url: `${base}/library/compare`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
+    // Only the base tool URL is listed. Its ?a=&b= variants are ~3,200 valid
+    // addresses that all canonicalize back here, so they are deliberately not
+    // enumerated — listing them would be doorway-page spam, not coverage.
+    { url: `${base}/library/compare/head-to-head`, lastModified, changeFrequency: 'monthly', priority: 0.84 },
     { url: `${base}/insights`, lastModified, changeFrequency: 'weekly', priority: 0.86 },
     { url: `${base}/learn`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/faq`, lastModified, changeFrequency: 'monthly', priority: 0.85 },

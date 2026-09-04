@@ -12,6 +12,8 @@ import {
   type Subscores,
   type Tier,
 } from '@/lib/compound-engine-data';
+import { ScoreGauge } from '@/components/viz/ScoreGauge';
+import { HallmarkReachRadial } from '@/components/viz/HallmarkReachRadial';
 
 // Performance gradient for a 0–100 score, drawn from the site's canonical,
 // theme-aware accent tokens (not the engine's component-scoped --sie-* vars):
@@ -76,7 +78,6 @@ export function CompoundIntelligenceMatrix({ compound }: { compound: Compound })
   const tColor = TIER_ACCENT[c.tier];
   const tInk = tColor;
   const oColor = perfColor(overall);
-  const oInk = oColor;
 
   const pathways = c.pathways.map((p) => PATHWAY_LABELS[p]).filter(Boolean);
   const hallmarks = c.hallmarks.map((h) => HALLMARK_MAP[h]).filter(Boolean);
@@ -107,9 +108,13 @@ export function CompoundIntelligenceMatrix({ compound }: { compound: Compound })
               </span>
             </div>
           </div>
-          <div className="cim-lq" role="group" aria-label={`Longevity Quotient ${overall} out of 100`}>
-            <span className="cim-lq-num" style={{ color: oInk }}>{overall}</span>
-            <span className="cim-lq-cap">Longevity&nbsp;Quotient</span>
+          <div className="cim-lq">
+            <ScoreGauge
+              value={overall}
+              color={oColor}
+              caption="Longevity Quotient"
+              ariaLabel={`Longevity Quotient ${overall} out of 100`}
+            />
           </div>
         </div>
 
@@ -134,13 +139,18 @@ export function CompoundIntelligenceMatrix({ compound }: { compound: Compound })
           )}
           {hallmarks.length > 0 && (
             <div className="cim-cover-block">
-              <p className="cim-cover-label">Hallmarks targeted · {hallmarks.length}/12</p>
-              <div className="cim-tags">
-                {hallmarks.map((h) => (
-                  <span key={h.id} className="cim-tag" title={h.blurb}>
-                    <span className="cim-tag-short">{h.short}</span>{h.label}
-                  </span>
-                ))}
+              <p className="cim-cover-label">Mechanistic reach · {hallmarks.length}/12 hallmarks</p>
+              <div className="cim-hallmarks">
+                <div className="cim-radial" aria-hidden="false">
+                  <HallmarkReachRadial engaged={c.hallmarks} color={oColor} />
+                </div>
+                <div className="cim-tags cim-hallmark-tags">
+                  {hallmarks.map((h) => (
+                    <span key={h.id} className="cim-tag" title={h.blurb}>
+                      <span className="cim-tag-short">{h.short}</span>{h.label}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           )}
@@ -192,14 +202,7 @@ const CIM_CSS = `
 }
 .cim-chip-ic { width: 13px; height: 13px; }
 .cim-rct { color: var(--accent-emerald); border-color: color-mix(in srgb, var(--accent-emerald) 40%, transparent); }
-.cim-lq {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  min-width: 110px; padding: 10px 18px; border-radius: 16px;
-  border: 1px solid color-mix(in srgb, var(--card-accent) 35%, transparent);
-  background: radial-gradient(120% 120% at 50% 0%, color-mix(in srgb, var(--card-accent) 12%, transparent), transparent 70%);
-}
-.cim-lq-num { font-family: var(--font-display, Fraunces, serif); font-weight: 600; font-size: 44px; line-height: 0.9; letter-spacing: -0.03em; }
-.cim-lq-cap { font-family: var(--font-mono, ui-monospace, monospace); font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-text-faint); margin-top: 6px; }
+.cim-lq { display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
 .cim-grid {
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -228,6 +231,10 @@ const CIM_CSS = `
   border: 1px solid var(--color-border-subtle); background: var(--color-bg-muted);
 }
 .cim-tag-path { color: var(--accent-cyan); border-color: color-mix(in srgb, var(--accent-cyan) 28%, transparent); }
+.cim-hallmarks { display: flex; flex-wrap: wrap; align-items: center; gap: 20px 28px; }
+.cim-radial { flex: 0 0 auto; width: min(240px, 62vw); }
+.cim-hallmark-tags { flex: 1 1 200px; align-content: flex-start; }
+@media (max-width: 560px) { .cim-radial { margin-inline: auto; } .cim-hallmarks { justify-content: center; } }
 .cim-tag-short {
   font-family: var(--font-mono, ui-monospace, monospace); font-size: 9px; letter-spacing: 0.08em;
   color: var(--color-text-faint); background: var(--color-bg-base); padding: 2px 5px; border-radius: 5px;

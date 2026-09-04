@@ -4,9 +4,12 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { BioAgeWizard } from '@/components/bio-age/BioAgeWizard';
 
 export const metadata: Metadata = {
-  title: 'Biological Age Calculator | TNiC Longevity',
+  // Absolute title so the `%s | TNiC` template doesn't double the brand.
+  title: { absolute: 'Biological Age Calculator | TNiC Longevity' },
   description:
     'Estimate your biological age across 5 domains — Metabolic, Inflammatory, Hormonal, Mitochondrial, and Lifestyle — and get a personalized anti-aging compound protocol.',
+  // Self-canonical (was inheriting the homepage root canonical).
+  alternates: { canonical: '/bio-age' },
   openGraph: {
     title: 'Biological Age Calculator | TNiC Longevity',
     description: 'How old are your cells? Find out in 4 steps and get your personalized longevity protocol.',
