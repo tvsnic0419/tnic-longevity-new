@@ -10,11 +10,11 @@ import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { computeTnicScore } from '@/lib/tnic-score';
 
 // Canonical tier accent (A=emerald / B=cyan / C=amber) for the score chip.
-const TIER_ACCENT: Record<'A' | 'B' | 'C', string> = {
+const TIER_ACCENT: Record<EvidenceTier, string> = {
   A: 'var(--tier-a)',
   B: 'var(--tier-b)',
   C: 'var(--tier-c)',
-    D: 'var(--tier-d)',
+  D: 'var(--tier-d)',
 };
 import type { EvidenceTier } from '@/lib/types';
 

@@ -148,7 +148,7 @@ export interface StackScore {
   penalties: StackPenalty[];
   /** Modeled biological-age reduction (years younger), bounded. */
   bioAgeDelta: number;
-  evidenceMix: { A: number; B: number; C: number };
+  evidenceMix: { A: number; B: number; C: number; D: number };
   explanation: string[];
 }
 
@@ -197,7 +197,7 @@ export function scoreStack(compoundIds: string[]): StackScore {
       bonuses: [],
       penalties: [],
       bioAgeDelta: 0,
-      evidenceMix: { A: 0, B: 0, C: 0 },
+      evidenceMix: { A: 0, B: 0, C: 0, D: 0 },
       explanation: ['No compounds selected — add compounds to model stack mechanics.'],
     };
   }
@@ -313,7 +313,7 @@ export function scoreStack(compoundIds: string[]): StackScore {
       acc[tier] += 1;
       return acc;
     },
-    { A: 0, B: 0, C: 0 } as { A: number; B: number; C: number },
+    { A: 0, B: 0, C: 0, D: 0 } as { A: number; B: number; C: number; D: number },
   );
 
   // 8. Bounded, modeled bio-age reduction.
@@ -324,7 +324,7 @@ export function scoreStack(compoundIds: string[]): StackScore {
   // Reasoning lines.
   const explanation: string[] = [];
   explanation.push(
-    `${ids.length} compound${ids.length > 1 ? 's' : ''} across ${breadth} pathway ${breadth === 1 ? 'axis' : 'axes'} (${evidenceMix.A} Tier-A · ${evidenceMix.B} Tier-B · ${evidenceMix.C} Tier-C).`,
+    `${ids.length} compound${ids.length > 1 ? 's' : ''} across ${breadth} pathway ${breadth === 1 ? 'axis' : 'axes'} (${evidenceMix.A} Tier-A · ${evidenceMix.B} Tier-B · ${evidenceMix.C} Tier-C · ${evidenceMix.D} Tier-D).`,
   );
   const topGaps = [...hallmarkDepth]
     .sort((a, b) => a.depth01 - b.depth01)

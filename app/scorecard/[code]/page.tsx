@@ -35,7 +35,6 @@ const gradeTextColor: Record<string, string> = {
   B: 'text-accent-violet',
   C: 'text-[color:var(--tier-c)]',
   D: 'text-[color:var(--tier-d)]',
-  D: 'text-accent-rose',
 };
 
 export default async function ScorecardPage({ params }: Props) {

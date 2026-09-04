@@ -205,7 +205,7 @@ export interface NicoResult {
   compoundCount: number;
   estMonthlyCost: number;
   bioAgeDelta: number;
-  evidenceMix: { A: number; B: number; C: number };
+  evidenceMix: { A: number; B: number; C: number; D: number };
   summary: string;
   drivers: string[];
   safetyNotes: string[];

@@ -18,10 +18,11 @@ import { tierColor } from '@/components/viz/tokens';
 // C = preclinical/amber). Read through `tierColor()` rather than re-declared
 // as literals here — the values were already correct, but a hand-copied map
 // is exactly how lib/hero-network.ts silently drifted off canonical.
-const TIER_COLOR: Record<'A' | 'B' | 'C', string> = {
+const TIER_COLOR: Record<'A' | 'B' | 'C' | 'D', string> = {
   A: tierColor('A'),
   B: tierColor('B'),
   C: tierColor('C'),
+  D: tierColor('D'),
 };
 
 export function HallmarkHeroVisual({ hallmark }: { hallmark: HallmarkLibraryEntry }) {

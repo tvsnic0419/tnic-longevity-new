@@ -22,7 +22,7 @@ export function LibraryCategoryIndex({
   activeTiers = [],
 }: {
   category: LibraryModuleCategory;
-  activeTiers?: Array<'A' | 'B' | 'C'>;
+  activeTiers?: Array<'A' | 'B' | 'C' | 'D'>;
 }) {
   const meta = libraryCategoryMeta[category];
   const allModules = getModulesByCategory(category);
@@ -36,11 +36,11 @@ export function LibraryCategoryIndex({
   // clickable filters that toggle a tier in/out of the active set.
   const isFiltering = activeTiers.length > 0;
   const modules = isFiltering
-    ? allModules.filter((m) => activeTiers.includes(m.evidenceTier as 'A' | 'B' | 'C'))
+    ? allModules.filter((m) => activeTiers.includes(m.evidenceTier as 'A' | 'B' | 'C' | 'D'))
     : allModules;
 
   const base = `/library/${category}`;
-  const tierHref = (tier: 'A' | 'B' | 'C') => {
+  const tierHref = (tier: 'A' | 'B' | 'C' | 'D') => {
     const next = activeTiers.includes(tier)
       ? activeTiers.filter((t) => t !== tier)
       : [...activeTiers, tier].sort();

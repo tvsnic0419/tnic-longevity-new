@@ -26,8 +26,7 @@ const TIER_ACCENT: Record<Tier, string> = {
   A: 'var(--tier-a)',
   B: 'var(--tier-b)',
   C: 'var(--tier-c)',
-    D: 'var(--tier-d)',
-  D: 'var(--accent-rose)',
+  D: 'var(--tier-d)',
 };
 
 // ─────────────────────────────────────────────────────────────────────────────

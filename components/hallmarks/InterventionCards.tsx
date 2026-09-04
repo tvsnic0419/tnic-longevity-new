@@ -13,9 +13,10 @@ import { compounds } from '@/lib/data';
 // Canonical evidence-tier colors — must match EvidenceTag / trust.ts
 // (A = clinical/emerald, B = emerging/cyan, C = preclinical/amber).
 const TIER_CLASSES: Record<HallmarkIntervention['evidence'], string> = {
-  A: 'bg-accent-emerald/15 text-accent-emerald border border-accent-emerald/30',
-  B: 'bg-accent-cyan/15 text-accent-cyan border border-accent-cyan/30',
-  C: 'bg-accent-amber/15 text-accent-amber border border-accent-amber/30',
+  A: 'text-[color:var(--tier-a)] border border-[color:color-mix(in_srgb,var(--tier-a)_30%,transparent)] bg-[color:color-mix(in_srgb,var(--tier-a)_15%,transparent)]',
+  B: 'text-[color:var(--tier-b)] border border-[color:color-mix(in_srgb,var(--tier-b)_30%,transparent)] bg-[color:color-mix(in_srgb,var(--tier-b)_15%,transparent)]',
+  C: 'text-[color:var(--tier-c)] border border-[color:color-mix(in_srgb,var(--tier-c)_30%,transparent)] bg-[color:color-mix(in_srgb,var(--tier-c)_15%,transparent)]',
+  D: 'text-[color:var(--tier-d)] border border-[color:color-mix(in_srgb,var(--tier-d)_30%,transparent)] bg-[color:color-mix(in_srgb,var(--tier-d)_15%,transparent)]',
 };
 
 const CATEGORY_LABEL: Record<HallmarkIntervention['category'], string> = {

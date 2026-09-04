@@ -49,10 +49,11 @@ type StepId = 'goals' | 'age' | (typeof SCALE_ORDER)[number] | 'focus' | 'safety
 const STEP_IDS: StepId[] = ['goals', 'age', ...SCALE_ORDER, 'focus', 'safety', 'result'];
 const QUESTION_COUNT = STEP_IDS.length - 1; // excludes the result screen
 
-function primaryEvidenceTier(mix: { A: number; B: number; C: number }): 'A' | 'B' | 'C' {
+function primaryEvidenceTier(mix: { A: number; B: number; C: number; D: number }): 'A' | 'B' | 'C' | 'D' {
   if (mix.A > 0) return 'A';
   if (mix.B > 0) return 'B';
-  return 'C';
+  if (mix.C > 0) return 'C';
+  return 'D';
 }
 
 // The questionnaire asks one focused question at a time, but the experience
