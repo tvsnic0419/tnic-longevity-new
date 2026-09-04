@@ -442,6 +442,7 @@ const CSS = `
   letter-spacing: .14em; text-transform: uppercase; cursor: pointer; transition: all .2s ease;
 }
 .tnic-chip.on { color: var(--ink); border-color: currentColor; background: rgba(255,255,255,0.03); }
+.tnic-chip:focus-visible { outline: none; border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(95,227,224,0.15); }
 .tnic-chip .sw { width: 8px; height: 8px; border-radius: 50%; }
 
 .tnic-readout {
@@ -556,6 +557,7 @@ const CSS = `
   transition: transform .2s ease, box-shadow .2s ease;
 }
 .tnic-cta:hover { transform: translateY(-1px); box-shadow: 0 0 42px rgba(0,224,255,0.5); }
+.tnic-cta:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
 .tnic-cta .arr { display: inline-block; transition: transform .2s ease; }
 .tnic-cta:hover .arr { transform: translateX(4px); }
 .tnic-cta.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); box-shadow: none; margin-left: 12px; }

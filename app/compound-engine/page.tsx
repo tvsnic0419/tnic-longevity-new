@@ -1,5 +1,6 @@
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { CompoundIntelligenceEngine } from '@/components/engine/CompoundIntelligenceEngine';
+import { EngineReference } from '@/components/engine/EngineReference';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildBreadcrumbSchema, buildArticleSchema } from '@/lib/seo';
 import { seoRoutes } from '@/lib/seo-routes';
@@ -77,6 +78,10 @@ export default function CompoundEnginePage() {
         secondary={{ href: '/tools', label: 'All interactive tools' }}
       />
       <CompoundIntelligenceEngine />
+      {/* Server-rendered reference: ships the scoring model, the full curated
+          catalog (with deep-dive links), and a methodology note in the initial
+          HTML — the interactive engine above is client-only. */}
+      <EngineReference />
     </SubPageLayout>
   );
 }

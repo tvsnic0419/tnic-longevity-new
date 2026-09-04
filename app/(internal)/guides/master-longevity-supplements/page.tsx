@@ -3,6 +3,7 @@ import { ArrowRight, FlaskConical, ShieldCheck, Clock, ExternalLink, CheckCircle
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { Accordion, AccordionItem } from '@/components/ui/Accordion';
 import { StructuredData } from '@/components/seo/StructuredData';
+import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { seoRoutes } from '@/lib/seo-routes';
 import { buildHowToSchema, buildGuidePageSchema, buildBreadcrumbSchema } from '@/lib/seo';
 import { getScoredCompounds } from '@/lib/elite-8-data';
@@ -198,11 +199,6 @@ export default function LongevitySupplementsGuidePage() {
               const score = Math.max(0, Math.min(100, c.score));
               const scoreColor = score >= 78 ? VIZ.emerald : score >= 68 ? VIZ.cyan : VIZ.amber;
               const tier = c.evidenceTier ?? 'B';
-              // Canonical evidence-tier colors — A=emerald, B=cyan, C=amber
-              // (must match EvidenceTag / lib/trust.ts). Sourced from VIZ, not
-              // restated, so this can't silently drift from the real tokens.
-              const tierColor = tier === 'A' ? 'text-accent-emerald' : tier === 'B' ? 'text-accent-cyan' : 'text-accent-amber';
-              const tierBg = tier === 'A' ? 'bg-accent-emerald/10 border-accent-emerald/25' : tier === 'B' ? 'bg-accent-cyan/10 border-accent-cyan/25' : 'bg-accent-amber/10 border-accent-amber/25';
 
               return (
                 <div key={c.id} className="premium-card p-5 sm:p-6">
@@ -218,9 +214,7 @@ export default function LongevitySupplementsGuidePage() {
                           {c.isRx && (
                             <span className="text-micro font-mono font-bold text-accent-rose bg-accent-rose/10 border border-accent-rose/25 px-1.5 py-0.5 rounded">Rx</span>
                           )}
-                          <span className={`text-micro font-mono font-bold px-1.5 py-0.5 rounded border ${tierColor} ${tierBg}`}>
-                            Tier {tier}
-                          </span>
+                          <EvidenceTag tier={tier} size="sm" />
                         </div>
                         <p className="text-xs text-muted-foreground mb-2">{c.category} · {c.full}</p>
                         <p className="text-xs text-muted-foreground leading-relaxed">{c.mechanism}</p>
