@@ -4,6 +4,56 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-04 (third pass) — NICO starter: the safety screen it claimed but never ran
+
+**The finding.** The homepage NICO starter (section 06) collected age, activity
+and goals, then called the engine as
+`computeNicoStack({ ...NICO_DEFAULT_ANSWERS, age, movement, goals })`. That
+spread silently sent **`safety: []`** and a neutral **3** for sleep / energy /
+stress / diet on every single run. Two real consequences:
+
+1. **A safety claim the code did not honour.** `answers.safety` drives
+   `SAFETY_EXCLUDE`, `SAFETY_BOOST` and `safetyNotes`. With an always-empty
+   list the exclusions never fired — flagging pregnancy removes 13 compounds,
+   anticoagulants removes 4 — and the result panel's "Safety notes" block was
+   unreachable code. Meanwhile the section copy promised "a built-in safety
+   screen". On a health platform that is the credibility spine, not a nit.
+2. **Everyone got the same answer.** `SIGNAL_BOOST` keys off sleep <= 2,
+   stress >= 4, energy <= 2, diet <= 2. Pinned at 3, none could ever fire.
+
+**Shipped.** Rebuilt as three short steps (You / Signals / Safety) with a
+progress rail, rather than one long column:
+- **Step 2** asks the four lifestyle pillars the engine actually scores, using
+  `NICO_SCALE_LABELS`' own question and endpoint wording so the starter cannot
+  drift from `/nico`.
+- **Step 3** is a real safety screen built from `NICO_SAFETY_OPTIONS`, and
+  **Compute is disabled until it is answered** — including an explicit "None of
+  these apply". Treating an unanswered question as "no contraindications" is
+  exactly the original bug, so a blank answer must never reach the engine.
+- Result gains a **"What NICO used"** panel listing the inputs, so the numbers
+  are inspectable rather than asserted.
+
+**Measured effect, stated honestly — the two are not the same size**, and the
+UI copy was corrected mid-build to stop overstating the weaker one:
+- Safety screen: **large**. Flagging pregnancy takes the stack from
+  `nmn / cakg / spermidine / glynac` to `glynac / coq10 / egcg / grapeseed` and
+  emits a real note. Verified through the rendered UI, not just the engine.
+- Lifestyle signals: **a scoring nudge**. `diet 1 / energy 1` swaps a slot
+  (glynac -> coq10); `sleep 1 / stress 5` on a longevity goal reorders the same
+  four compounds without changing the set. An earlier draft of the step-2 copy
+  said these "genuinely change the stack" — measured, corrected.
+
+**Verified**: lint 0 errors (3 pre-existing warnings, untouched files),
+typecheck clean, **677/677 tests** across 53 files (5 new in
+`components/home/HomeNicoStarter.test.tsx`, guarding that the safety step stays
+reachable and still refuses a blank answer), clean build. axe-core WCAG 2.1
+A/AA + best-practice: **0 violations** across all three steps and the result, on
+mobile and desktop. Flow driven end to end against the real build: the gate
+blocks compute until answered, and pregnancy/anticoagulant flags produce the
+right stack and notes.
+
+**Rollback**: `git revert <merge sha>` — one component, one test, one CSS block.
+
 ## 2026-09-04 (second pass) — persistent section wayfinding on long-form pages
 
 **What the audit found.** Measured, not assumed: a compound deep-dive renders
