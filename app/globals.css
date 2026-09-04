@@ -221,9 +221,10 @@
   --leading-body: 1.65;
   --leading-tight: 1.15;
 
-  /* ── Typography scale (modular, minor third ~1.25) ──
-     Three roles only: DISPLAY (3xl–6xl), BODY (sm–lg), LABEL (xs mono).
-     Hand-picked clamp curves are fluid from mobile → 1440px. */
+  /* ── Typography scale (modular, minor third = 1.25) ──
+     Ratio is declared: each named step is the previous × 1.25 where the
+     scale is discrete (xs→sm→base→lg). Fluid display steps keep the same
+     ratio as their clamp midpoints. */
   --type-xs:   0.75rem;                                  /* 12px — captions, eyebrows */
   --type-sm:   0.875rem;                                 /* 14px — body small */
   --type-base: 1rem;                                     /* 16px — body */
@@ -382,6 +383,16 @@ p,
   text-wrap: pretty;
 }
 
+/* Number columns stay aligned as values change. */
+table td,
+table th,
+.font-mono,
+.tabular-nums,
+.tnic-tabular,
+[data-numeric] {
+  font-variant-numeric: tabular-nums;
+}
+
 .heading-card {
   font-size: 1rem;
   font-weight: 600;
@@ -405,11 +416,13 @@ p,
 .text-body {
   font-size: 1rem;
   line-height: var(--leading-body);
+  max-width: 68ch;
 }
 
 .text-body-sm {
   font-size: 0.875rem;
   line-height: 1.6;
+  max-width: 68ch;
 }
 
 .text-caption {
@@ -3484,6 +3497,11 @@ p,
 .prose-tnic {
   color: var(--color-text-secondary);
   line-height: var(--leading-body, 1.65);
+  max-width: 68ch;
+}
+.prose-tnic p,
+.prose-tnic li {
+  max-width: 68ch;
 }
 .prose-tnic a {
   color: var(--accent-cyan);
