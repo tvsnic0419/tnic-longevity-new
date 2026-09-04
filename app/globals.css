@@ -5356,3 +5356,58 @@ p,
   .reading-toc-trigger { transition: none; }
   .reading-toc-panel { animation: none; }
 }
+
+/* ── NICO starter step rail ────────────────────────────────────────────────
+   Sits between the console head and body, so the three-step flow reads as
+   progress rather than as three unrelated screens. */
+.nico-steps {
+  display: flex;
+  align-items: stretch;
+  gap: 0.25rem;
+  padding: 0.75rem 1.5rem 0;
+  list-style: none;
+  margin: 0;
+}
+@media (min-width: 768px) { .nico-steps { padding: 0.875rem 2rem 0; } }
+
+.nico-step {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.5rem 0.55rem;
+  border-bottom: 2px solid var(--color-border-subtle);
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: color 0.25s var(--ease-standard), border-color 0.25s var(--ease-standard);
+}
+.nico-step__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  font-family: var(--font-mono, ui-monospace), monospace;
+  font-size: 0.625rem;
+  line-height: 1;
+}
+.nico-step.is-done {
+  color: color-mix(in srgb, var(--accent-emerald) 85%, #fff);
+  border-bottom-color: color-mix(in srgb, var(--accent-emerald) 55%, transparent);
+}
+.nico-step.is-current {
+  color: color-mix(in srgb, var(--accent-violet) 92%, #fff);
+  border-bottom-color: color-mix(in srgb, var(--accent-violet) 70%, transparent);
+}
+.nico-step.is-current .nico-step__num {
+  background: color-mix(in srgb, var(--accent-violet) 18%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nico-step { transition: none; }
+}
