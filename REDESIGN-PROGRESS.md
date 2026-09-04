@@ -4,6 +4,73 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-04 (second pass) — persistent section wayfinding on long-form pages
+
+**What the audit found.** Measured, not assumed: a compound deep-dive renders
+**~24,000-25,000px on a 390px phone (about 30 screens)** and ~13,000px on
+desktop, across **13 h2 sections**. Its only in-page navigation was the static
+"On this page" panel inside the MDX flow, which leaves the viewport inside the
+first ~5% and never returns — so for the remaining 95% a reader had no way to
+see where they were or reach the section they came for. The one persistent rail
+on the site (`ScrollProgress`) navigates top-level **routes**, not sections, and
+only renders at >=1280px, yet was labelled `aria-label="Section navigation"` —
+telling screen-reader users it would move within the page.
+
+**Shipped.** `components/library/ReadingToc.tsx` replaces the static TOC inside
+`MdxRenderer`, so every long MDX page benefits (compound deep-dives *and*
+hallmark pages), not just one route:
+- the inline panel keeps its markup and **server-rendered** links (11 section
+  anchors still in the SSR HTML — no SEO or no-JS regression) and gains an
+  active-section highlight;
+- once it scrolls above the reading line, a compact control docks bottom-left
+  (BackToTop owns bottom-right, CompoundStickyBar owns the top edge) showing the
+  section you are in, expanding to the full list;
+- jumping moves focus to the target heading, so keyboard and screen-reader users
+  land in the section rather than just scrolling the page.
+- `ScrollProgress`'s rail relabelled `aria-label="Site sections"` to match what
+  it actually does.
+
+**Four real bugs found by driving the built page rather than trusting the diff
+— worth recording, because three are traps any future floating UI here will hit:**
+1. **`position: fixed` was silently neutralised.** An ancestor with a
+   transform/filter/backdrop-filter becomes the containing block for fixed
+   descendants, and the deep-dive's article column has one: the "fixed" dock was
+   being parked at document y~4741 and scrolling away with the article on
+   desktop, while mobile's different column layout happened to escape it.
+   **Any fixed overlay rendered inside page content on this site must be
+   portalled to `<body>`.**
+2. **Activation could not rely on `click`.** On this control the browser did not
+   reliably synthesise a click from pointer input (pointerdown landed on the
+   button, no click followed), leaving an onClick-only trigger dead to mouse and
+   touch alike. Now opens on `pointerdown`, with keyboard activation handled via
+   `click` where `detail === 0`, so Enter/Space still work.
+3. **`.premium-card` is not an overlay surface.** Its translucency let the
+   article read straight through the floating panel — verified by screenshot,
+   not by reasoning. The panel now carries its own near-opaque blurred ground.
+4. **A zero-size rect read as "already scrolled past".** An unlaid-out or hidden
+   element reports an all-zero rect, so a bare `bottom < offset` test floated the
+   control over the hero. The dock now requires a real measurement
+   (`height > 0`). Caught by the new jsdom test, which is exactly the condition
+   that surfaces it.
+
+Also: portalling to `<body>` put the dock outside every landmark, which axe
+flags as `region`; it is genuinely section navigation, so it is a labelled
+`<nav>` — correct semantics and the fix at once.
+
+**Verified**: lint 0 errors (3 pre-existing warnings in untouched files),
+typecheck clean, **672/672 tests** across 52 files (5 new in
+`components/library/ReadingToc.test.tsx`), clean production build. axe-core
+WCAG 2.1 A/AA + best-practice: **0 violations** across compound desktop/mobile
+with the panel open, compound dock-closed, and a hallmark page. Behaviour driven
+against the real build on phone/tablet/desktop: dock correctly absent at 0-5%,
+present at 50-95%; open, jump, focus-move, Escape and keyboard activation all
+confirmed. One synthetic-only failure is *not* a defect: Playwright's
+`isMobile:true` at 768px remaps tap coordinates, and the same width with plain
+touch (and 820/1024/390) works.
+
+**Rollback**: `git revert <merge sha>` — additive apart from the MdxRenderer TOC
+swap and the ScrollProgress aria-label.
+
 ## 2026-09-04 — Head-to-Head: the free-form "pick any two" comparison
 
 Closed the second of the three gaps flagged on 2026-09-03 ("Free-form 'pick

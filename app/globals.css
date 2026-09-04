@@ -5276,3 +5276,83 @@ p,
 [data-theme='light'] .research-hero__action--secondary {
   background: color-mix(in srgb, var(--color-bg-elevated) 94%, var(--research-hero-accent, var(--accent-cyan)) 6%);
 }
+
+/* ── ReadingToc — docked section wayfinding on long-form pages ─────────────
+   Bottom-LEFT by deliberate choice: BackToTop owns bottom-right (fixed
+   bottom-6 right-6) and CompoundStickyBar owns the top edge, so this is the
+   one free corner. z-index 40 matches those siblings — under the nav (50). */
+.reading-toc-dock {
+  position: fixed;
+  left: 1rem;
+  bottom: 1.5rem;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  max-width: min(22rem, calc(100vw - 5.5rem)); /* clears BackToTop at 390px */
+}
+
+.reading-toc-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 100%;
+  padding: 0.5rem 0.875rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent-cyan) 24%, var(--color-border-subtle));
+  background: color-mix(in srgb, var(--color-bg-elevated) 92%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  backdrop-filter: blur(18px) saturate(1.2);
+  box-shadow: 0 14px 34px -20px rgba(0, 0, 0, 0.6);
+  color: var(--color-foreground);
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  /* Colour-only hover, and deliberately NO transform: this is a fixed control
+     the reader must be able to hit first time. A hover lift (or .interactive's
+     :active scale) moves the button between pointerdown and pointerup, so the
+     click lands on the element underneath instead — measured, and worst on
+     touch, where a tap has no settling hover at all. */
+  transition: border-color 0.2s var(--ease-standard), background-color 0.2s var(--ease-standard);
+}
+.reading-toc-trigger:hover {
+  border-color: color-mix(in srgb, var(--accent-cyan) 55%, transparent);
+  background: color-mix(in srgb, var(--color-bg-elevated) 99%, var(--accent-cyan));
+}
+.reading-toc-trigger__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reading-toc-panel {
+  width: min(20rem, calc(100vw - 5.5rem));
+  overflow: hidden;
+  border-radius: 0.875rem;
+  /* Deliberately NOT .premium-card: that is a glass surface tuned to sit in the
+     page flow, and its translucency let the article read straight through this
+     panel when it floats over content. A floating list needs its own near-opaque
+     ground. */
+  border: 1px solid color-mix(in srgb, var(--accent-cyan) 20%, var(--color-border-subtle));
+  background: color-mix(in srgb, var(--color-bg-elevated) 97%, transparent);
+  -webkit-backdrop-filter: blur(22px) saturate(1.25);
+  backdrop-filter: blur(22px) saturate(1.25);
+  box-shadow: 0 22px 48px -22px rgba(0, 0, 0, 0.85);
+  animation: reading-toc-in 0.18s var(--ease-standard);
+}
+.reading-toc-list {
+  max-height: min(55vh, 22rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0.5rem;
+}
+
+@keyframes reading-toc-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reading-toc-trigger { transition: none; }
+  .reading-toc-panel { animation: none; }
+}
