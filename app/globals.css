@@ -68,9 +68,17 @@
   --accent-rose: #f472b6;
   --accent-amber: #fbbf24;
 
+  /* Evidence ramp — one hue, four lightness steps. Not the hub accents. */
+  --tier-a: #67E8F9;
+  --tier-b: #22B8CF;
+  --tier-c: #2A7A8C;
+  --tier-d: #3A5560;
+  --status-caution: #E0575F;
+  --elite-rim: #C9A227;
+
   /* Status */
   --status-optimal: #34d399;
-  --status-watch: #fbbf24;
+  --status-watch: #E0575F;
   --status-critical: #f472b6;
 
   /* Luminous glow tokens */
@@ -136,8 +144,15 @@
   --accent-rose: #e11d48;
   --accent-amber: #d97706;
 
+  --tier-a: #67E8F9;
+  --tier-b: #22B8CF;
+  --tier-c: #2A7A8C;
+  --tier-d: #3A5560;
+  --status-caution: #E0575F;
+  --elite-rim: #C9A227;
+
   --status-optimal: #059669;
-  --status-watch: #d97706;
+  --status-watch: #E0575F;
   --status-critical: #e11d48;
 
   --glass-bg: rgba(255, 255, 255, 0.75);

@@ -70,9 +70,10 @@ export function StackNetworkGraph({
   // mapping EvidenceTag and tierColor() use site-wide, so the letter inside
   // each node reads as the same grade a user sees on the compound module.
   const tierFill: Record<string, string> = {
-    A: 'var(--accent-emerald)',
-    B: 'var(--accent-cyan)',
-    C: 'var(--accent-amber)',
+    A: 'var(--tier-a)',
+    B: 'var(--tier-b)',
+    C: 'var(--tier-c)',
+    D: 'var(--tier-d)',
   };
 
   const RING_R = 165;

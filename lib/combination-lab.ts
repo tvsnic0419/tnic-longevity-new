@@ -522,7 +522,7 @@ export const DEFAULT_LAB_CONFIG: LabScoringConfig = {
   interactionPenalty: { demonstrated: 6, hypothesized: 2 },
   complexityThreshold: 6,
   complexityPenalty: 1.5,
-  tierMultipliers: { A: 1, B: 0.7, C: 0.4 },
+  tierMultipliers: { A: 1, B: 0.7, C: 0.4, D: 0.2 },
   caps: {
     /* Safety rails only — the per-edge diminishing transform below keeps
      * realistic stacks well under these, so every added edge still moves
@@ -596,6 +596,7 @@ export function sanitizeLabConfig(raw: unknown): LabScoringConfig {
       A: asFiniteNumber(tm.A, d.tierMultipliers.A),
       B: asFiniteNumber(tm.B, d.tierMultipliers.B),
       C: asFiniteNumber(tm.C, d.tierMultipliers.C),
+      D: asFiniteNumber(tm.D, d.tierMultipliers.D),
     },
     caps: {
       synergy: asFiniteNumber(cp.synergy, d.caps.synergy),

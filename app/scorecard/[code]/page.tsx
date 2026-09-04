@@ -33,7 +33,8 @@ const gradeTextColor: Record<string, string> = {
   S: 'text-accent-emerald',
   A: 'text-accent-cyan',
   B: 'text-accent-violet',
-  C: 'text-accent-amber',
+  C: 'text-[color:var(--tier-c)]',
+  D: 'text-[color:var(--tier-d)]',
   D: 'text-accent-rose',
 };
 

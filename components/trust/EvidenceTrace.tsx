@@ -7,9 +7,10 @@ import { trackEvent } from '@/lib/analytics';
 import { ANALYTICS_EVENTS } from '@/lib/analytics-events';
 
 const tierCopy: Record<EvidenceTier, { label: string; tone: string }> = {
-  A: { label: 'Human evidence', tone: 'text-accent-emerald' },
-  B: { label: 'Emerging human evidence', tone: 'text-accent-cyan' },
-  C: { label: 'Preclinical evidence', tone: 'text-accent-amber' },
+  A: { label: 'Human evidence', tone: 'text-[color:var(--tier-a)]' },
+  B: { label: 'Emerging human evidence', tone: 'text-[color:var(--tier-b)]' },
+  C: { label: 'Preclinical evidence', tone: 'text-[color:var(--tier-c)]' },
+  D: { label: 'Hypothesis only', tone: 'text-[color:var(--tier-d)]' },
 };
 
 interface EvidenceTraceProps {

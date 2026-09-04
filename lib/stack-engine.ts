@@ -47,7 +47,7 @@ function getCompoundsForHallmark(hallmarkId: string): string[] {
 // ─── Tunable constants (documented, not magic) ──────────────────────────────
 
 /** Human-RCT evidence contributes full weight; preclinical is discounted. */
-const EVIDENCE_WEIGHT: Record<EvidenceTier, number> = { A: 1, B: 0.7, C: 0.45 };
+const EVIDENCE_WEIGHT: Record<EvidenceTier, number> = { A: 1, B: 0.7, C: 0.45, D: 0.2 };
 
 /** Within-axis diminishing returns: contribution_n = base × DECAY^n. */
 const SATURATION_DECAY = 0.6;

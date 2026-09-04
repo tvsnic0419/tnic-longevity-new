@@ -211,7 +211,7 @@ export interface NicoResult {
   safetyNotes: string[];
 }
 
-const EVIDENCE_RANK: Record<EvidenceTier, number> = { A: 3, B: 2, C: 1 };
+const EVIDENCE_RANK: Record<EvidenceTier, number> = { A: 3, B: 2, C: 1, D: 0 };
 
 const PROTOCOL_NAME: Record<NicoGoal, string> = {
   energy: 'Mitochondrial Energy Protocol',

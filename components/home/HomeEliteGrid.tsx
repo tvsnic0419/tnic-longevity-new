@@ -13,10 +13,11 @@ import { computeTnicScore, scoreBand } from '@/lib/tnic-score';
 
 // Canonical tier accent (A=emerald / B=cyan / C=amber), matching the
 // TnicScorePanel + EvidenceTag so the score reads in one colour language.
-const TIER_ACCENT: Record<'A' | 'B' | 'C', string> = {
-  A: 'var(--accent-emerald)',
-  B: 'var(--accent-cyan)',
-  C: 'var(--accent-amber)',
+const TIER_ACCENT: Record<'A' | 'B' | 'C' | 'D', string> = {
+  A: 'var(--tier-a)',
+  B: 'var(--tier-b)',
+  C: 'var(--tier-c)',
+  D: 'var(--tier-d)',
 };
 
 /**

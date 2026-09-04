@@ -23,9 +23,10 @@ function perfColor(v: number): string {
 }
 // Canonical evidence-tier accent — matches EvidenceTag / lib/trust.ts.
 const TIER_ACCENT: Record<Tier, string> = {
-  A: 'var(--accent-emerald)',
-  B: 'var(--accent-cyan)',
-  C: 'var(--accent-amber)',
+  A: 'var(--tier-a)',
+  B: 'var(--tier-b)',
+  C: 'var(--tier-c)',
+    D: 'var(--tier-d)',
   D: 'var(--accent-rose)',
 };
 

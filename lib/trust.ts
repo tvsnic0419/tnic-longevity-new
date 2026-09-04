@@ -46,7 +46,19 @@ export const evidenceTagDefinitions: Record<
       'Included only when mechanism aligns with hallmark',
       'Clearly labeled as preclinical',
     ],
-    color: 'amber',
+    color: 'slate',
+  },
+  D: {
+    label: 'Tier D — Hypothesis Only',
+    short: 'Hypothesis',
+    description: 'Speculative or poorly characterized. Not a protocol foundation.',
+    criteria: [
+      'No controlled human data',
+      'Mechanism inferred rather than measured',
+      'Included only as a labeled hypothesis',
+      'Must not be ranked as Elite',
+    ],
+    color: 'slate',
   },
 };
 
@@ -86,6 +98,7 @@ export function evidenceLevelFromTier(tier: EvidenceTier): EvidenceLevel {
     A: 'Strong',
     B: 'Moderate',
     C: 'Mechanistic',
+    D: 'Personal',
   };
   return map[tier];
 }

@@ -211,7 +211,7 @@ export const bestForGoals: BestForGoal[] = [
   },
 ];
 
-const EVIDENCE_WEIGHT: Record<EvidenceTier, number> = { A: 3, B: 2, C: 1 };
+const EVIDENCE_WEIGHT: Record<EvidenceTier, number> = { A: 3, B: 2, C: 1, D: 0.5 };
 
 export interface RankedPick {
   compound: Compound;

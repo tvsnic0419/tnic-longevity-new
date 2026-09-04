@@ -20,13 +20,14 @@ import type { EvidenceTier } from './types';
  * that carry it are included, and the copy says so.
  */
 
-export const EVIDENCE_TIERS: EvidenceTier[] = ['A', 'B', 'C'];
+export const EVIDENCE_TIERS: EvidenceTier[] = ['A', 'B', 'C', 'D'];
 
-/** Canonical evidence-tier accents — must match EvidenceTag / trust.ts. */
+/** Canonical evidence-tier accents — one hue, four lightness steps. */
 export const TIER_ACCENT: Record<EvidenceTier, string> = {
-  A: 'var(--accent-emerald)',
-  B: 'var(--accent-cyan)',
-  C: 'var(--accent-amber)',
+  A: 'var(--tier-a)',
+  B: 'var(--tier-b)',
+  C: 'var(--tier-c)',
+  D: 'var(--tier-d)',
 };
 
 export interface TierSlice {

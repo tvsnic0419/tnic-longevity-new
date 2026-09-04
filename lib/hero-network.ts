@@ -65,12 +65,14 @@ export const HERO_NETWORK_TIER_COLOR: Record<EvidenceTier, string> = {
   A: tierColor('A'),
   B: tierColor('B'),
   C: tierColor('C'),
+  D: tierColor('D'),
 };
 
 export const HERO_NETWORK_TIER_LABEL: Record<EvidenceTier, string> = {
   A: 'Tier A — strong evidence',
   B: 'Tier B — moderate evidence',
   C: 'Tier C — early evidence',
+  D: 'Tier D — hypothesis',
 };
 
 // ── 3D layout — deterministic Fibonacci sphere, computed once at module init ──

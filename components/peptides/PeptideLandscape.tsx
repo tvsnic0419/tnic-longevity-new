@@ -24,9 +24,10 @@ const LEGAL_ACCENT: Record<PeptideLegalStatus, string> = {
 };
 
 const TIER_ACCENT: Record<EvidenceTier, string> = {
-  A: 'var(--accent-emerald)',
-  B: 'var(--accent-cyan)',
-  C: 'var(--accent-amber)',
+  A: 'var(--tier-a)',
+  B: 'var(--tier-b)',
+  C: 'var(--tier-c)',
+  D: 'var(--tier-d)',
 };
 
 export function PeptideLandscape({ className = '' }: { className?: string }) {

@@ -32,7 +32,7 @@ export function BestLeaderboard({ picks }: { picks: LeaderboardPick[] }) {
     <ol className="mb-12 space-y-3">
       {picks.map((p, i) => {
         const rank = i + 1;
-        const accent = rank === 1 ? 'var(--accent-amber)' : 'var(--accent-emerald)';
+        const accent = rank === 1 ? 'var(--elite-rim)' : 'var(--tier-a)';
         return (
           <li
             key={p.id}
@@ -45,8 +45,8 @@ export function BestLeaderboard({ picks }: { picks: LeaderboardPick[] }) {
                 className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl font-mono text-lg font-black tabular-nums"
                 style={{
                   color: accent,
-                  background: `color-mix(in srgb, ${accent} 12%, transparent)`,
-                  border: `1px solid color-mix(in srgb, ${accent} 32%, transparent)`,
+                  background: rank === 1 ? '#0b1220' : `color-mix(in srgb, ${accent} 12%, transparent)`,
+                  border: rank === 1 ? '2px solid var(--elite-rim)' : `1px solid color-mix(in srgb, ${accent} 32%, transparent)`,
                 }}
                 aria-hidden="true"
               >

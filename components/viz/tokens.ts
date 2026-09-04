@@ -70,16 +70,15 @@ export function signatureHue(id: string): RGB {
 }
 
 /**
- * Evidence tier → accent color. Canonical grading language, matching
- * `EvidenceTag` / `evidenceTagDefinitions` (lib/trust.ts): A=emerald, B=cyan,
- * C=amber. Keep this in lockstep with that map — the hero medallion and the
- * evidence badge sit on the same page and must never disagree.
+ * Evidence tier → accent color. One cyan-slate hue, four lightness steps.
+ * Caution and Elite are not on this ramp.
  */
 export function tierColor(tier: string): string {
   switch (tier) {
-    case "A": return VIZ.emerald;
-    case "B": return VIZ.cyan;
-    case "C": return VIZ.amber;
+    case "A": return "var(--tier-a)";
+    case "B": return "var(--tier-b)";
+    case "C": return "var(--tier-c)";
+    case "D": return "var(--tier-d)";
     default:  return VIZ.muted;
   }
 }

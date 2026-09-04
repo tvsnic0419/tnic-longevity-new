@@ -16,12 +16,13 @@ import { cn } from '@/lib/utils';
 // ─────────────────────────────────────────────────────────────────────────────
 
 const ACCENT: Record<EvidenceTier, string> = {
-  A: 'var(--accent-emerald)',
-  B: 'var(--accent-cyan)',
-  C: 'var(--accent-amber)',
+  A: 'var(--tier-a)',
+  B: 'var(--tier-b)',
+  C: 'var(--tier-c)',
+  D: 'var(--tier-d)',
 };
 
-const ORDER: EvidenceTier[] = ['A', 'B', 'C'];
+const ORDER: EvidenceTier[] = ['A', 'B', 'C', 'D'];
 
 export function EvidenceGradingLadder({ className = '' }: { className?: string }) {
   const total = compoundModules.length;

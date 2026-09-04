@@ -12,36 +12,34 @@ import { cn } from '@/lib/utils';
  */
 
 interface TierMeta {
-  level: 1 | 2 | 3;
-  /** CSS custom property for the tier accent (matches globals.css tokens). */
+  level: 1 | 2 | 3 | 4;
   color: string;
-  /** Tailwind classes for the chip's tinted-glass shell. */
-  shell: string;
 }
 
 const tierMeta: Record<EvidenceTier, TierMeta> = {
-  A: { level: 3, color: 'var(--accent-emerald)', shell: 'text-accent-emerald border-accent-emerald/25' },
-  B: { level: 2, color: 'var(--accent-cyan)', shell: 'text-accent-cyan border-accent-cyan/25' },
-  C: { level: 1, color: 'var(--accent-amber)', shell: 'text-accent-amber border-accent-amber/25' },
+  A: { level: 4, color: 'var(--tier-a)' },
+  B: { level: 3, color: 'var(--tier-b)' },
+  C: { level: 2, color: 'var(--tier-c)' },
+  D: { level: 1, color: 'var(--tier-d)' },
 };
 
 interface SizeSpec {
   chip: string;
-  /** [bar width, gap] and the three ascending bar heights, all in px. */
+  /** [bar width, gap] and the four ascending bar heights, all in px. */
   barW: number;
   barGap: number;
-  barH: [number, number, number];
+  barH: [number, number, number, number];
   label: string;
 }
 
 const sizeSpec: Record<'sm' | 'md' | 'lg', SizeSpec> = {
-  sm: { chip: 'gap-1.5 text-micro px-1.5 py-0.5', barW: 2.5, barGap: 1.5, barH: [5, 7, 9], label: 'text-micro' },
-  md: { chip: 'gap-2 text-xs px-2 py-1', barW: 3, barGap: 2, barH: [6, 9, 12], label: 'text-xs' },
-  lg: { chip: 'gap-2 text-sm px-2.5 py-1.5', barW: 3.5, barGap: 2.5, barH: [7, 11, 15], label: 'text-sm' },
+  sm: { chip: 'gap-1.5 text-micro px-1.5 py-0.5', barW: 2.5, barGap: 1.5, barH: [4, 6, 8, 10], label: 'text-micro' },
+  md: { chip: 'gap-2 text-xs px-2 py-1', barW: 3, barGap: 2, barH: [5, 7, 10, 13], label: 'text-xs' },
+  lg: { chip: 'gap-2 text-sm px-2.5 py-1.5', barW: 3.5, barGap: 2.5, barH: [6, 9, 12, 16], label: 'text-sm' },
 };
 
 function TierMeter({ level, color, spec }: { level: number; color: string; spec: SizeSpec }) {
-  const max = spec.barH[2];
+  const max = spec.barH[3];
   return (
     <span
       aria-hidden="true"
@@ -94,7 +92,6 @@ export function EvidenceTag({
 
   const shell = cn(
     'inline-flex items-center rounded-md border bg-[var(--color-bg-muted)] font-mono font-bold leading-none',
-    meta.shell,
     spec.chip,
     href && 'focus-ring cursor-pointer transition hover:brightness-110',
     className,
@@ -103,7 +100,7 @@ export function EvidenceTag({
   const inner = (
     <>
       <TierMeter level={meta.level} color={meta.color} spec={spec} />
-      <span className="inline-flex items-baseline gap-1">
+      <span className="inline-flex items-baseline gap-1" style={{ color: meta.color }}>
         Tier {tier}
         {size !== 'sm' && (
           <span className="hidden font-normal opacity-70 sm:inline">· {def.short}</span>
@@ -117,6 +114,7 @@ export function EvidenceTag({
       <Link
         href={href}
         className={shell}
+        style={{ borderColor: `color-mix(in srgb, ${meta.color} 35%, transparent)`, color: meta.color }}
         title={showTooltip ? `${def.description} — see grading methodology` : undefined}
         aria-label={`Evidence tier ${tier}: ${def.label}. See grading methodology.`}
       >
@@ -128,6 +126,7 @@ export function EvidenceTag({
   return (
     <span
       className={shell}
+      style={{ borderColor: `color-mix(in srgb, ${meta.color} 35%, transparent)`, color: meta.color }}
       title={showTooltip ? def.description : undefined}
       aria-label={`Evidence tier ${tier}: ${def.label}`}
     >
@@ -139,12 +138,42 @@ export function EvidenceTag({
 export function EvidenceTagLegend({ className = '' }: { className?: string }) {
   return (
     <div className={cn('flex flex-wrap gap-3', className)} role="list" aria-label="Evidence tier legend">
-      {(['A', 'B', 'C'] as EvidenceTier[]).map((tier) => (
+      {(['A', 'B', 'C', 'D'] as EvidenceTier[]).map((tier) => (
         <div key={tier} role="listitem" className="flex items-center gap-2">
           <EvidenceTag tier={tier} size="sm" showTooltip={false} />
           <span className="text-caption hidden md:inline">{evidenceTagDefinitions[tier].description}</span>
         </div>
       ))}
     </div>
+  );
+}
+
+/** Rank mark — a rim, never a fill. Not an evidence tier. */
+export function EliteChip({ label = 'Elite', size = 'md' }: { label?: string; size?: 'sm' | 'md' | 'lg' }) {
+  const pad = size === 'lg' ? 'px-2.5 py-1.5 text-sm' : size === 'sm' ? 'px-1.5 py-0.5 text-micro' : 'px-2 py-1 text-xs';
+  return (
+    <span
+      className={`inline-flex items-center rounded-md bg-[#0b1220] font-mono font-bold leading-none ${pad}`}
+      style={{ border: '2px solid var(--elite-rim)', color: 'var(--elite-rim)' }}
+    >
+      {label}
+    </span>
+  );
+}
+
+/** Caution mark — hue #E0575F, used for watch-state only. */
+export function CautionChip({ label = 'Caution', size = 'md' }: { label?: string; size?: 'sm' | 'md' | 'lg' }) {
+  const pad = size === 'lg' ? 'px-2.5 py-1.5 text-sm' : size === 'sm' ? 'px-1.5 py-0.5 text-micro' : 'px-2 py-1 text-xs';
+  return (
+    <span
+      className={`inline-flex items-center rounded-md font-mono font-bold leading-none ${pad}`}
+      style={{
+        color: 'var(--status-caution)',
+        border: '1px solid color-mix(in srgb, var(--status-caution) 40%, transparent)',
+        background: 'color-mix(in srgb, var(--status-caution) 10%, transparent)',
+      }}
+    >
+      {label}
+    </span>
   );
 }

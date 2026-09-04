@@ -40,7 +40,7 @@ const WEIGHTS = {
   verified: 10,
 } as const;
 
-const EVIDENCE_POINTS: Record<EvidenceTier, number> = { A: 25, B: 18, C: 10 };
+const EVIDENCE_POINTS: Record<EvidenceTier, number> = { A: 25, B: 18, C: 10, D: 4 };
 
 /**
  * Does the dose note carry a real, comparable dose — a number followed by a

@@ -11,9 +11,10 @@ import { computeTnicScore } from '@/lib/tnic-score';
 
 // Canonical tier accent (A=emerald / B=cyan / C=amber) for the score chip.
 const TIER_ACCENT: Record<'A' | 'B' | 'C', string> = {
-  A: 'var(--accent-emerald)',
-  B: 'var(--accent-cyan)',
-  C: 'var(--accent-amber)',
+  A: 'var(--tier-a)',
+  B: 'var(--tier-b)',
+  C: 'var(--tier-c)',
+    D: 'var(--tier-d)',
 };
 import type { EvidenceTier } from '@/lib/types';
 
@@ -34,12 +35,13 @@ import type { EvidenceTier } from '@/lib/types';
  * on rather than a dead end.
  */
 
-const TIER_ORDER: EvidenceTier[] = ['A', 'B', 'C'];
+const TIER_ORDER: EvidenceTier[] = ['A', 'B', 'C', 'D'];
 
 const TIER_LABEL: Record<EvidenceTier, string> = {
   A: 'Human RCT evidence',
   B: 'Emerging human data',
   C: 'Preclinical / early',
+  D: 'Hypothesis only',
 };
 
 // number (1–12, as the facet chips emit) → hallmark id (as compounds store).
@@ -51,7 +53,7 @@ const TIER_COUNTS: Record<EvidenceTier, number> = compoundModules.reduce(
     acc[m.evidenceTier] = (acc[m.evidenceTier] ?? 0) + 1;
     return acc;
   },
-  { A: 0, B: 0, C: 0 } as Record<EvidenceTier, number>,
+  { A: 0, B: 0, C: 0, D: 0 } as Record<EvidenceTier, number>,
 );
 
 export function CompoundExplorer() {

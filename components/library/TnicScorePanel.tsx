@@ -10,9 +10,10 @@ import type { CSSProperties } from 'react';
 // Mani unified sitewide). The score arc + card accent borrow it so the panel
 // reads in the same colour language as the EvidenceBadge beside it.
 const TIER_ACCENT: Record<'A' | 'B' | 'C', string> = {
-  A: 'var(--accent-emerald)',
-  B: 'var(--accent-cyan)',
-  C: 'var(--accent-amber)',
+  A: 'var(--tier-a)',
+  B: 'var(--tier-b)',
+  C: 'var(--tier-c)',
+    D: 'var(--tier-d)',
 };
 
 const CONFIDENCE_META: Record<TnicScoreConfidence, { label: string; note: string }> = {

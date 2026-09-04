@@ -6,7 +6,7 @@ export type CostTier = 'budget' | 'moderate' | 'premium' | 'clinical';
 
 export type SimplicityTier = 'minimal' | 'moderate' | 'advanced' | 'clinical';
 
-export type EvidenceTier = 'A' | 'B' | 'C';
+export type EvidenceTier = 'A' | 'B' | 'C' | 'D';
 
 /** User-facing evidence labels for content blocks and journey entries */
 export type EvidenceLevel = 'Strong' | 'Moderate' | 'Mechanistic' | 'Personal' | 'Emerging';
