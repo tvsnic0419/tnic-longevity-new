@@ -252,6 +252,7 @@ function AtlasNetwork({ selected, onSelect }: { selected: SirtuinId; onSelect: (
           stroke="#22d3ee"
           strokeOpacity="0.42"
           filter="url(#softGlow)"
+          initial={{ r: 74, opacity: 0.88 }}
           animate={{ r: [74, 78, 74], opacity: [0.88, 1, 0.88] }}
           transition={{ duration: 4.4, repeat: Infinity, ease: 'easeInOut' }}
         />
