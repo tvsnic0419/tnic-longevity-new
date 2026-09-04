@@ -23,7 +23,7 @@ const HALLMARKS = [
   { num: 12, label: 'Deregulated Nutrient Sensing' },
 ];
 
-const TIERS = ['A', 'B', 'C'] as const;
+const TIERS = ['A', 'B', 'C', 'D'] as const;
 
 type Tier = typeof TIERS[number];
 

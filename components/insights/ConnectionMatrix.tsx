@@ -21,7 +21,7 @@ export function ConnectionMatrix() {
     <div>
       <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-2">
         <span className="text-label text-muted-foreground">Evidence tier</span>
-        {(['A', 'B', 'C'] as EvidenceTier[]).map((t) => (
+        {(['A', 'B', 'C', 'D'] as EvidenceTier[]).map((t) => (
           <span key={t} className="inline-flex items-center gap-1.5 text-caption text-muted-foreground">
             <span className="h-3 w-3 rounded-[3px]" style={{ background: TIER_ACCENT[t] }} aria-hidden="true" />
             Tier {t}

@@ -41,7 +41,7 @@ export function PeptideLandscape({ className = '' }: { className?: string }) {
     color: LEGAL_ACCENT[status],
   })).filter((l) => l.count > 0);
 
-  const tiers = (['A', 'B', 'C'] as EvidenceTier[])
+  const tiers = (['A', 'B', 'C', 'D'] as EvidenceTier[])
     .map((tier) => ({
       tier,
       count: peptideLibrary.filter((p) => p.evidenceTier === tier).length,

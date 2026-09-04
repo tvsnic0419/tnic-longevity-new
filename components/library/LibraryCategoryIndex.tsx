@@ -69,7 +69,7 @@ export function LibraryCategoryIndex({
           <span className="font-semibold text-foreground">
             {isFiltering ? `${modules.length} of ${allModules.length}` : `${allModules.length} entries`}
           </span>
-          {(['A', 'B', 'C'] as const).map((tier) =>
+          {(['A', 'B', 'C', 'D'] as const).map((tier) =>
             tierCounts[tier] ? (
               <Link
                 key={tier}

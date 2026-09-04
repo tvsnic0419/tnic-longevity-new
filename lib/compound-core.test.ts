@@ -32,7 +32,7 @@ describe('compound-core mirror', () => {
   });
 
   it('tier counts agree with lib/data.ts', () => {
-    for (const tier of ['A', 'B', 'C'] as const) {
+    for (const tier of ['A', 'B', 'C', 'D'] as const) {
       expect(compoundTierCount(tier)).toBe(
         compounds.filter((c) => c.evidence === tier).length,
       );

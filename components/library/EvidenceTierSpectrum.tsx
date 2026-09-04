@@ -6,7 +6,7 @@ import type { EvidenceTier } from '@/lib/types';
 // ─────────────────────────────────────────────────────────────────────────────
 // EvidenceTierSpectrum — an "evidence landscape" glance for the library hub.
 // A proportional segmented bar showing how the graded compound library breaks
-// down across Tier A / B / C, so a first-time visitor sees the shape of the
+// down across Tier A / B / C / D, so a first-time visitor sees the shape of the
 // evidence base (mostly emerging, a solid clinical core, a small preclinical
 // tail) before scrolling a single card.
 //
@@ -16,15 +16,14 @@ import type { EvidenceTier } from '@/lib/types';
 // Tier labels/colors come from the canonical `evidenceTagDefinitions`.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const ACCENT: Record<string, string> = {
-  emerald: 'var(--accent-emerald)',
-  cyan: 'var(--accent-cyan)',
-  amber: 'var(--accent-amber)',
-  violet: 'var(--accent-violet)',
-  rose: 'var(--accent-rose)',
+const ACCENT: Record<EvidenceTier, string> = {
+  A: 'var(--tier-a)',
+  B: 'var(--tier-b)',
+  C: 'var(--tier-c)',
+  D: 'var(--tier-d)',
 };
 
-const ORDER: EvidenceTier[] = ['A', 'B', 'C'];
+const ORDER: EvidenceTier[] = ['A', 'B', 'C', 'D'];
 
 export function EvidenceTierSpectrum() {
   const total = compoundModules.length;
@@ -37,7 +36,7 @@ export function EvidenceTierSpectrum() {
       pct: total ? (count / total) * 100 : 0,
       short: def.short,
       description: def.description,
-      color: ACCENT[def.color] ?? 'var(--accent-cyan)',
+      color: ACCENT[tier],
     };
   }).filter((t) => t.count > 0);
 

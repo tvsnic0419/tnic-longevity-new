@@ -18,8 +18,8 @@ import { hallmarkLibrary } from './hallmarks-library';
  * /insights page honest. Values below were computed from the live data.
  */
 describe('insights — derived analytics stay honest', () => {
-  it('tier split sums to the graded-compound count and is ordered A,B,C', () => {
-    expect(TIER_SPLIT.map((t) => t.tier)).toEqual(['A', 'B', 'C']);
+  it('tier split sums to the graded-compound count and is ordered A,B,C,D', () => {
+    expect(TIER_SPLIT.map((t) => t.tier)).toEqual(['A', 'B', 'C', 'D']);
     expect(TIER_SPLIT.reduce((s, t) => s + t.count, 0)).toBe(compounds.length);
     expect(TIER_SPLIT.every((t) => t.share >= 0 && t.share <= 1)).toBe(true);
   });

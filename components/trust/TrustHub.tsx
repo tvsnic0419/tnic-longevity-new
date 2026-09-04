@@ -211,8 +211,8 @@ export function TrustHub() {
             <p className="text-body-sm">
               Every compound, intervention, and stack recommendation carries an evidence tier. Tiers are assigned by literature review and re-evaluated quarterly.
             </p>
-            <div className="grid md:grid-cols-3 gap-4">
-              {(['A', 'B', 'C'] as EvidenceTier[]).map((tier) => {
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {(['A', 'B', 'C', 'D'] as EvidenceTier[]).map((tier) => {
                 const def = evidenceTagDefinitions[tier];
                 const std = evidenceStandards.find((s) => s.tier === tier)!;
                 return (

@@ -47,7 +47,7 @@ export function ComparisonLandscape({ className = '' }: { className?: string }) 
     }))
     .sort((a, b) => b.count - a.count);
 
-  const tiers = (['A', 'B', 'C'] as EvidenceTier[])
+  const tiers = (['A', 'B', 'C', 'D'] as EvidenceTier[])
     .map((tier) => ({
       tier,
       count: evidenceComparisons.filter((c) => c.evidenceTier === tier).length,

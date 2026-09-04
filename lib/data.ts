@@ -1964,6 +1964,17 @@ export const evidenceStandards = [
     ],
     example: 'Compounds with mouse lifespan data but no human trials — disclosed transparently',
   },
+  {
+    tier: 'D' as const,
+    label: 'Tier D — Hypothesis Only',
+    criteria: [
+      'No controlled human data',
+      'Mechanism inferred rather than measured',
+      'Included only as a labeled hypothesis',
+      'Must not be ranked as Elite',
+    ],
+    example: 'Early mechanistic hypotheses that have not been tested in animals or humans',
+  },
 ];
 
 export const selectionCriteria = [

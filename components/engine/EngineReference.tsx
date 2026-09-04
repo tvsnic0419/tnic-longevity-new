@@ -75,7 +75,7 @@ const TIER_HEADING: Record<Tier, string> = {
   C: 'Tier C — preclinical + mechanistic',
   D: 'Tier D — theoretical / in-vitro',
 };
-const isBadgeTier = (t: Tier): t is EvidenceTier => t === 'A' || t === 'B' || t === 'C';
+const isBadgeTier = (t: Tier): t is EvidenceTier => t === 'A' || t === 'B' || t === 'C' || t === 'D';
 
 export function EngineReference() {
   const catalog = [...COMPOUND_DB].sort((a, b) => a.name.localeCompare(b.name));
