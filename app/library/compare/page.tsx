@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { CompareHub } from '@/components/library/CompareHub';
+import { ComparisonLandscape } from '@/components/library/ComparisonLandscape';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildBreadcrumbSchema, buildCollectionPageSchema } from '@/lib/seo';
 import { evidenceComparisons } from '@/lib/comparisons';
@@ -39,6 +40,7 @@ export default function CompareIndexPage() {
           <ArrowLeft className="w-4 h-4" aria-hidden="true" />
           Library
         </Link>
+        <ComparisonLandscape className="mb-8" />
         <CompareHub />
       </div>
     </div>

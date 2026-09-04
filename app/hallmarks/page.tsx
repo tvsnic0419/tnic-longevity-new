@@ -9,6 +9,7 @@ import { RevealItem } from '@/components/ui/RevealItem';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { getHallmarkVisual } from '@/lib/hallmark-visuals';
 import { HallmarkIcon } from '@/components/library/HallmarkIcon';
+import { HallmarkCoverageAtlas } from '@/components/hallmarks/HallmarkCoverageAtlas';
 
 export const metadata: Metadata = {
   // Absolute title so the root layout's `%s | TNiC` template doesn't double the
@@ -90,6 +91,10 @@ export default function HallmarksIndexPage() {
           />
         </div>
       </section>
+
+        <div className="container-page max-w-5xl">
+          <HallmarkCoverageAtlas />
+        </div>
 
         {/* Hallmark grid */}
         <section className="py-20">
