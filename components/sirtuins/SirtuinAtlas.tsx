@@ -205,7 +205,7 @@ function AtlasNetwork({ selected, onSelect }: { selected: SirtuinId; onSelect: (
     <div className="relative isolate overflow-hidden rounded-[2rem] border border-accent-cyan/15 bg-[#030712]/75 p-2 shadow-[0_30px_80px_-40px_rgba(34,211,238,0.36)] md:p-4">
       <div className="pointer-events-none absolute inset-0 opacity-70 [background-image:linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)] [background-size:28px_28px]" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_47%,rgba(34,211,238,0.14),transparent_30%),radial-gradient(circle_at_20%_15%,rgba(167,139,250,0.10),transparent_28%),radial-gradient(circle_at_84%_78%,rgba(52,211,153,0.08),transparent_28%)]" />
-      <div className="absolute left-4 top-4 z-20 flex items-center gap-2 rounded-full border border-white/10 bg-[#020811]/92 px-3 py-1.5">>
+      <div className="absolute left-4 top-4 z-20 flex items-center gap-2 rounded-full border border-white/10 bg-[#020811]/92 px-3 py-1.5">
         <ScanLine className="h-3.5 w-3.5 text-accent-cyan" />
         <span className="font-mono text-micro uppercase tracking-[0.22em] text-foreground/70">Live target topology</span>
       </div>
