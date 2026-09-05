@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import type { NetworkEdge, NetworkNode } from '@/components/viz/NetworkStage';
 import type { RGB } from '@/components/viz/tokens';
+import type { StageHandle } from '@/components/viz/stage-handle';
 
 const LazyMoleculeStage = dynamic(
   () => import('@/components/viz/MoleculeStage').then((module) => module.MoleculeStage),
@@ -72,14 +73,17 @@ export function DeferredMoleculeStage({
   geometryId,
   hue,
   ariaLabel,
+  stageRef,
 }: {
   geometryId: string;
   hue: RGB;
   ariaLabel: string;
+  /** Passed through so a shell can drive Reset / Zoom / keyboard rotation. */
+  stageRef?: React.RefObject<StageHandle | null>;
 }) {
   return (
     <DeferredStageFrame label="Molecular structure">
-      <LazyMoleculeStage geometryId={geometryId} hue={hue} ariaLabel={ariaLabel} />
+      <LazyMoleculeStage geometryId={geometryId} hue={hue} ariaLabel={ariaLabel} handleRef={stageRef} />
     </DeferredStageFrame>
   );
 }
@@ -88,14 +92,17 @@ export function DeferredNetworkStage({
   nodes,
   edges,
   ariaLabel,
+  stageRef,
 }: {
   nodes: NetworkNode[];
   edges: NetworkEdge[];
   ariaLabel: string;
+  /** Passed through so a shell can drive Reset / Zoom / keyboard rotation. */
+  stageRef?: React.RefObject<StageHandle | null>;
 }) {
   return (
     <DeferredStageFrame label="Compound system">
-      <LazyNetworkStage nodes={nodes} edges={edges} ariaLabel={ariaLabel} />
+      <LazyNetworkStage nodes={nodes} edges={edges} ariaLabel={ariaLabel} handleRef={stageRef} />
     </DeferredStageFrame>
   );
 }

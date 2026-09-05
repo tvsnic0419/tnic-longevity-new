@@ -68,6 +68,16 @@
   --accent-rose: #f472b6;
   --accent-amber: #fbbf24;
 
+  /* ── signal.elite ──
+     The brief's `signal.gold`: elite / rank ONLY, and explicitly "never
+     duplicate evidence-tier color". Until now there was no gold token at all —
+     `VIZ.gold` and `--sie-gold` both aliased `--accent-amber`, which IS Tier C,
+     so a rank accent and a Tier C badge rendered the same hue side by side in
+     the Compound Intelligence panel. This is a real, distinct antique gold:
+     desaturated and deeper than amber, so it reads as rank rather than
+     warning, and it can never be mistaken for a tier. */
+  --signal-elite: #d8b25f;
+
   /* Status */
   --status-optimal: #34d399;
   --status-watch: #fbbf24;
@@ -135,6 +145,8 @@
   --accent-violet: #7c3aed;
   --accent-rose: #e11d48;
   --accent-amber: #d97706;
+  /* Deepened for AA on the light base — the dark-theme gold is far too pale. */
+  --signal-elite: #8a6a12;
 
   --status-optimal: #059669;
   --status-watch: #d97706;
@@ -218,6 +230,33 @@
   --breakpoint-nav: 90rem; /* 1440px — full nav fits at ~1331px content (measured) with margin, so it now appears on standard laptops instead of only >1700px displays */
 
   --space-touch: 2.75rem;
+
+  /* ── Spacing scale ──
+     The brief's 4 / 8 / 12 / 16 / 24 / 32 / 48 / 72 / 112 rhythm, named so
+     narrative sections and library modules can share one vertical language
+     instead of each reaching into Tailwind's raw scale. Tailwind's own
+     utilities still cover the small steps; these exist for the large
+     editorial gaps (--space-9/-10) that had no named value and were being
+     hand-tuned per section, and so the scale is documented somewhere real.
+     `lib/tokens.ts` previously carried a rival `spaceScale` that nothing
+     imported — it has been deleted rather than left as a second source. */
+  --space-1: 0.25rem;   /* 4px  */
+  --space-2: 0.5rem;    /* 8px  */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.5rem;    /* 24px */
+  --space-6: 2rem;      /* 32px */
+  --space-7: 3rem;      /* 48px */
+  --space-8: 4.5rem;    /* 72px */
+  --space-9: 7rem;      /* 112px */
+
+  /* The brief's `surface.selected`: an 8–12% accent tint over the raised
+     surface, used for every chosen state — selected chips, the active scene in
+     the rail, a picked questionnaire answer. Emerald is the site's "chosen /
+     advance" signal, so selection reads the same everywhere instead of being
+     violet in one flow and cyan in the next. Tint via --selected-accent. */
+  --surface-selected: color-mix(in srgb, var(--selected-accent, var(--accent-emerald)) 10%, transparent);
+  --surface-selected-border: color-mix(in srgb, var(--selected-accent, var(--accent-emerald)) 45%, transparent);
   --leading-body: 1.65;
   --leading-tight: 1.15;
 
@@ -482,6 +521,66 @@ p,
 .touch-target {
   min-height: var(--space-touch);
   min-width: var(--space-touch);
+}
+
+/* Extends a visually compact control's HIT AREA vertically to the 44px minimum
+   without growing the control itself — a filter chip keeps its small pill shape
+   and is still comfortably tappable. Use this instead of .touch-target only
+   where padding the control out to 44px would wreck the layout; where the
+   control CAN simply be 44px, make it 44px.
+   The pseudo-element is deliberately NOT pointer-events:none — it IS the
+   enlarged target. Only safe on controls with no interactive children.
+
+   IMPORTANT: an expanded hit area can overlap a neighbour's, and then the
+   wrong control receives the tap — worse than a small target, because it is
+   silently wrong rather than merely fiddly. This bit twice. On the homepage
+   filter row, 28px chips at a 36px row pitch overlapped by 8px and a tap 6px
+   below one chip landed on the chip in the row beneath. On the section rail,
+   14px ticks at an 18px pitch overlapped so badly that clicking one step
+   activated another. So: pair this with `.chip-row`, whose 16px row gap makes
+   the pitch exactly 44px, and never expand a control whose neighbours sit
+   closer than 44px away.
+
+   Vertical only, deliberately: horizontal padding already carries chips past
+   44px wide, and a both-axes variant existed briefly with no consumers left
+   once the rail moved to a real 44px height. */
+.tap-expand-y { position: relative; }
+.tap-expand-y::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  min-height: var(--space-touch);
+}
+
+/* A wrapping row of compact chips. The 16px row gap is load-bearing, not
+   taste: 28px chip + 16px = a 44px pitch, exactly the expanded hit height, so
+   neighbouring rows can never steal each other's taps. */
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.5rem;
+  row-gap: 1rem;
+}
+
+/* When SectionProgress's mobile strip is mounted it occupies the bottom edge,
+   which BackToTop and the toast region already use. This is the single place
+   that gets moved out of its way — the strip only exists on the homepage, so
+   hardcoding an offset into those sitewide components would be wrong
+   everywhere else. The strip is ~52px; 4rem clears it with room to spare. */
+@media (max-width: 767px) {
+  body.has-section-strip {
+    padding-bottom: 3.25rem;
+  }
+  body.has-section-strip .back-to-top {
+    bottom: 4.25rem;
+  }
+  body.has-section-strip [data-sonner-toaster] {
+    --offset-bottom: 8rem;
+  }
 }
 
 .interactive {

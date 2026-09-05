@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import {
-  useState, useRef, useEffect, useMemo, useCallback,
-} from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { eliteInterventions } from "@/lib/elite-interventions";
 import { COMPOUND_COUNT } from "@/lib/library-modules";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { DeferredMoleculeStage, DeferredNetworkStage } from "@/components/home/DeferredCinematicStage";
+import { InteractiveSciencePanel } from "@/components/viz/InteractiveSciencePanel";
+import type { StageHandle } from "@/components/viz/stage-handle";
 import type { NetworkNode, NetworkEdge } from "@/components/viz/NetworkStage";
 import { HUES } from "@/components/viz/tokens";
 import { runWhenVisible, cappedDpr, fitCanvas } from "@/lib/raf-visibility";
@@ -442,7 +442,18 @@ const CSS = `
 .tnic-molcard .fact { display: flex; flex-direction: column; gap: 3px; }
 .tnic-molcard .fact .k { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--faint); }
 .tnic-molcard .fact .v { font-size: 15px; color: var(--ink); }
-.tnic-molcard .why { font-size: 13.5px; color: var(--muted); line-height: 1.55; margin-top: 4px; border-top: 1px solid var(--line); padding-top: 14px; }
+/* The shared science panel, sized inside the Descent's two-column wraps. It
+   wraps the deferred stage rather than replacing it, so the lazy-mount seam
+   (DeferredCinematicStage) still governs when the canvas loads. Stage ratios
+   match the .tnic-stage frame these acts used before — the molecule renderer
+   sizes geometry to the canvas, so a changed ratio crops it. */
+.tnic-sci { background: linear-gradient(180deg, var(--panel2), var(--panel)); border-color: var(--line); }
+.tnic-sci > div:nth-child(2) { min-height: 300px; aspect-ratio: 16 / 10; max-height: 62vh; }
+.tnic-sci--net > div:nth-child(2) { aspect-ratio: 10 / 7; }
+.tnic-sci .tnic-stage-mount { width: 100%; height: 100%; }
+.tnic-sci canvas { width: 100%; height: 100%; display: block; }
+
+.tnic-molcard .why { font-size: 13.5px; color: var(--muted); line-height: 1.55; max-width: 52ch; margin-top: 4px; border-top: 1px solid var(--line); padding-top: 14px; }
 .tnic-molcard .cite { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; color: var(--faint); letter-spacing: .1em; }
 
 .tnic-netwrap { display: grid; grid-template-columns: 1.5fr 1fr; gap: 28px; align-items: start; margin-top: 10px; }
@@ -617,18 +628,7 @@ const CSS = `
 
 /* Journey navigator — persistent labels turn the cinematic sequence into an
    understandable five-part story instead of an unexplained floating rail. */
-.tnic-rail-track { position: absolute; top: 0; right: clamp(14px,2.5vw,30px); bottom: 0; width: 144px; pointer-events: none; z-index: 6; }
-.tnic-rail { position: sticky; top: 50vh; transform: translateY(-50%); display: flex; flex-direction: column; gap: 1px; padding: 8px 9px; border: 1px solid color-mix(in srgb, var(--line) 85%, transparent); border-radius: 14px; background: color-mix(in srgb, var(--void) 82%, transparent); box-shadow: 0 12px 34px -18px rgba(0,0,0,.6); backdrop-filter: blur(14px); pointer-events: auto; }
-@media (max-width: 720px){ .tnic-rail-track { display: none; } }
-.tnic-rail button {
-  background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 9px;
-  padding: 7px 0; color: var(--faint); justify-content: flex-end;
-}
-.tnic-rail .lbl { width: 78px; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 9.5px; letter-spacing: .13em; text-align: right; text-transform: uppercase; opacity: .54; transform: none; transition: all .25s ease; }
-.tnic-rail button:hover .lbl, .tnic-rail button.on .lbl { opacity: 1; color: var(--ink); }
-.tnic-rail .tick { width: 20px; height: 2px; background: currentColor; border-radius: 2px; transition: all .25s ease; }
-.tnic-rail button.on { color: var(--cyan); }
-.tnic-rail button.on .tick { width: 30px; box-shadow: 0 0 12px var(--cyan); }
+/* .tnic-rail* retired — see SectionProgress (mounted in app/page.tsx). */
 
 .tnic-descent[data-reduced="true"] .bar,
 .tnic-descent[data-reduced="true"] .edge.flow,
@@ -771,6 +771,16 @@ const NET_EDGES: NetworkEdge[] = EDGES.map((e) => ({
   dashed: e.tier === "caution",
 }));
 const NET_ELITE_COUNT = NET_NODES.filter((n) => n.elite).length;
+const NET_ELITE_NAMES = NET_NODES.filter((n) => n.elite).map((n) => n.name);
+
+/**
+ * MoleculeStage has coloured atoms by element since it shipped, and nothing in
+ * the UI ever said what the colours meant. Mirrors its own ELEMENT_COLOR cores.
+ */
+const MOLECULE_LEGEND: Array<{ symbol: string; name: string; color: string }> = [
+  { symbol: "C", name: "Carbon", color: "rgb(216,234,255)" },
+  { symbol: "O", name: "Oxygen", color: "rgb(244,142,126)" },
+];
 
 const STAGES = [
   { at: 30, cap: "Peak reserve. Nothing feels at stake yet." },
@@ -811,9 +821,17 @@ const STAR_D = "M0 -6 L1.7 -1.9 L6 -1.9 L2.6 0.7 L3.9 5 L0 2.5 L-3.9 5 L-2.6 0.7
 
 
 export function HomeDescent() {
-  const [active, setActive] = useState(0);
+  // `active` was React state purely to drive the old scene rail's highlight.
+  // The rail moved to SectionProgress and nothing rendered here reads it now —
+  // only `activeRef`, inside the canvas loop, to lerp the ambient palette.
+  // Dropping the state also drops a re-render per scene.
   const [age, setAge] = useState(50);
   const reduced = useReducedMotion();
+  // Handles onto the two canvases so the shared science panel can drive
+  // Reset / Zoom / keyboard rotation. Passed as plain props through the
+  // deferred wrappers, so the lazy-mount seam is untouched.
+  const moleculeRef = useRef<StageHandle | null>(null);
+  const networkRef = useRef<StageHandle | null>(null);
   const [showElite, setShowElite] = useState(true);
   const reducedRef = useRef(false);
   const shimmerRef = useRef<HTMLCanvasElement | null>(null);
@@ -983,16 +1001,12 @@ export function HomeDescent() {
         if (en.isIntersecting) {
           en.target.classList.add("is-in");
           const idx = Number((en.target as HTMLElement).dataset.idx);
-          setActive(idx); activeRef.current = idx;
+          activeRef.current = idx;
         }
       });
     }, { threshold: 0.45 });
     sectionRefs.forEach((s) => { if (s.current) obs.observe(s.current); });
     return () => obs.disconnect();
-  }, [sectionRefs]);
-
-  const goTo = useCallback((i: number) => {
-    sectionRefs[i]?.current?.scrollIntoView({ behavior: reducedRef.current ? "auto" : "smooth" });
   }, [sectionRefs]);
 
   // ── timeline geometry ──
@@ -1047,18 +1061,14 @@ export function HomeDescent() {
       <canvas ref={cursorRef} className="tnic-layer tnic-cursor" aria-hidden="true" />
       <div className="tnic-layer tnic-vignette" aria-hidden="true" />
 
-      <div className="tnic-rail-track">
-        <nav className="tnic-rail" aria-label="Descent sections">
-          {["Arrive", "Molecule", "System", "Goal", "Your path"].map((l, i) => (
-            <button key={l} className={active === i ? "on" : ""} onClick={() => goTo(i)}>
-              <span className="lbl">{l}</span><span className="tick" />
-            </button>
-          ))}
-        </nav>
-      </div>
+      {/* The scene rail moved to the shared `SectionProgress`, mounted at page
+          level. It covers the full 01–06 chapter spine rather than these five
+          overture acts, adds a completed state and `aria-current="step"`, and
+          becomes a scrollable strip on mobile instead of `display: none`. This
+          rail's panel treatment was ported across, so nothing visual is lost. */}
 
       {/* ACT 0 — ARRIVE */}
-      <section ref={s0} data-idx="0" className="tnic-act tnic-hero is-in">
+      <section ref={s0} data-idx="0" id="arrive" className="tnic-act tnic-hero is-in">
         <p className="tnic-kicker">Evidence-Graded Longevity Library</p>
         <h1 className="tnic-h1">Evidence-based <em>longevity</em>,<br />without the hype.</h1>
         <p className="tnic-lead">
@@ -1111,7 +1121,7 @@ export function HomeDescent() {
       </section>
 
       {/* ACT 1 — MOLECULE */}
-      <section ref={s1} data-idx="1" className="tnic-act">
+      <section ref={s1} data-idx="1" id="molecule" className="tnic-act">
         <p className="tnic-kicker">The molecule · rendered live</p>
         <h2 className="tnic-h2">It starts smaller{' '}<br />than you can <em>picture</em>.</h2>
         <p className="tnic-lead">
@@ -1121,10 +1131,41 @@ export function HomeDescent() {
         </p>
 
         <div className="tnic-molwrap">
-          <div className="tnic-stage">
-            <DeferredMoleculeStage geometryId="resveratrol" hue={HUES.cyan} ariaLabel="Rotatable 3D model of the resveratrol molecule. Full details are in the panel beside it." />
-            <div className="tnic-molhint"><span className="dot" />drag · scroll to zoom</div>
-          </div>
+          <InteractiveSciencePanel
+            title="Resveratrol · 3D structure"
+            eyebrow="Rendered live"
+            stageRef={moleculeRef}
+            cue="Drag to rotate"
+            className="tnic-sci"
+            legend={
+              <div className="tnic-legend">
+                {MOLECULE_LEGEND.map((el) => (
+                  <span className="lg" key={el.symbol}>
+                    <span className="sw" style={{ background: el.color }} />
+                    {el.symbol} · {el.name}
+                  </span>
+                ))}
+              </div>
+            }
+            summary={
+              <p>
+                Trans-resveratrol, C₁₄H₁₂O₃ — a stilbenoid polyphenol of 228.24 g/mol
+                with a half-life near 9 hours, studied as a SIRT1 activator and graded
+                Tier B on human evidence. Two carbon rings joined by a trans double
+                bond, with three hydroxyl groups placed for the hydrogen bonds that
+                hold it in the binding site. Atoms are coloured by element:{' '}
+                {MOLECULE_LEGEND.map((el) => `${el.symbol} (${el.name})`).join(', ')}.
+                Stylised for legibility — not a crystallographic reproduction.
+              </p>
+            }
+          >
+            <DeferredMoleculeStage
+              geometryId="resveratrol"
+              hue={HUES.cyan}
+              stageRef={moleculeRef}
+              ariaLabel="Rotatable 3D model of the resveratrol molecule. Full details are in the panel beside it."
+            />
+          </InteractiveSciencePanel>
 
           <aside className="tnic-molcard">
             <div>
@@ -1168,11 +1209,50 @@ export function HomeDescent() {
         </p>
 
         <div className="tnic-netwrap">
-          <div className="tnic-stage" style={{ aspectRatio: "10/7", maxHeight: "62vh" }}>
-            <DeferredNetworkStage nodes={NET_NODES} edges={NET_EDGES}
-              ariaLabel="Rotatable 3D network of TNiC compounds. Cool links are synergies, amber links are clashes, gold-haloed nodes are elite picks. Details and the legend are in the panel beside it." />
-            <div className="tnic-molhint"><span className="dot" />drag · scroll to zoom</div>
-          </div>
+          <InteractiveSciencePanel
+            title="Compound synergy network"
+            eyebrow={`${NODE_DEFS.length} compounds · ${EDGES.length} graded links`}
+            stageRef={networkRef}
+            cue="Drag to rotate"
+            className="tnic-sci tnic-sci--net"
+            legend={
+              <div className="tnic-legend">
+                {Object.values(TIER).map((t) => (
+                  <span className="lg" key={t.label}>
+                    <span className="sw" style={{ background: t.color }} />{t.label}
+                  </span>
+                ))}
+                <span className="lg" style={{ color: 'var(--gold)' }}>
+                  <svg width="12" height="12" viewBox="-8 -8 16 16" aria-hidden="true">
+                    <path d={STAR_D} fill="currentColor" />
+                  </svg>
+                  Elite pick
+                </span>
+              </div>
+            }
+            summary={
+              <>
+                <p className="mb-2">
+                  {NODE_DEFS.length} graded compounds and {EDGES.length} documented links.
+                  Link colour encodes confidence in the pairing —{' '}
+                  {Object.values(TIER).map((t) => t.label).join(', ').toLowerCase()} — and a
+                  gold halo marks a TNiC elite pick.
+                </p>
+                <ul className="space-y-1">
+                  {NET_ELITE_NAMES.map((name) => (
+                    <li key={name}>Elite pick · {name}</li>
+                  ))}
+                </ul>
+              </>
+            }
+          >
+            <DeferredNetworkStage
+              nodes={NET_NODES}
+              edges={NET_EDGES}
+              stageRef={networkRef}
+              ariaLabel="Rotatable 3D network of TNiC compounds. Cool links are synergies, amber links are clashes, gold-haloed nodes are elite picks. Details and the legend are in the panel beside it."
+            />
+          </InteractiveSciencePanel>
 
           <aside className="tnic-molcard">
             <div>
@@ -1337,7 +1417,7 @@ export function HomeDescent() {
       </section>
 
       {/* ACT 4 — YOUR PATH */}
-      <section ref={s4} data-idx="4" className="tnic-act">
+      <section ref={s4} data-idx="4" id="your-path" className="tnic-act">
         {/* Capstone backdrop — Act 3's goal curve mirrored into an ascent:
             the descent you just scrolled becomes the climb you build. Purely
             decorative; the text below carries the actual content. */}

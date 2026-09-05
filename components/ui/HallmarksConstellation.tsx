@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { hallmarkVisualRegistry } from '@/lib/hallmark-visuals';
 import type { ThemeAccent } from '@/lib/design-system';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 const themeStroke: Record<ThemeAccent, string> = {
   cyan: 'var(--accent-cyan)',
@@ -18,6 +19,9 @@ const themeStroke: Record<ThemeAccent, string> = {
 /** Interactive orbital map of all 12 Hallmarks of Aging */
 export function HallmarksConstellation() {
   const [active, setActive] = useState<string | null>(null);
+  // The 12-node entrance stagger ran unconditionally — the one animated
+  // surface in the viz family that never checked. RevealItem next to it does.
+  const reduced = useReducedMotion();
   const count = hallmarkLibrary.length;
   const radius = 42;
 
@@ -83,13 +87,18 @@ export function HallmarksConstellation() {
                 '--angle': `${angle}deg`,
                 '--radius': `${radius}%`,
               } as React.CSSProperties}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={reduced ? false : { opacity: 0, scale: 0.8 }}
+              whileInView={reduced ? undefined : { opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.04, duration: 0.4 }}
+              transition={reduced ? { duration: 0 } : { delay: i * 0.04, duration: 0.4 }}
             >
               <Link
-                href={`/library/${h.slug}`}
+                // Was /library/{slug} while the grid immediately beside it linked
+                // to /hallmarks/{slug} — two destinations for the same hallmark
+                // on one screen. Both routes are real; the deep dive is the one
+                // this section is about, and the library module is reachable
+                // from the detail panel.
+                href={`/hallmarks/${h.slug}`}
                 className={`constellation-node-btn focus-ring ${isActive ? 'is-active' : ''}`}
                 onMouseEnter={() => setActive(h.id)}
                 onMouseLeave={() => setActive(null)}

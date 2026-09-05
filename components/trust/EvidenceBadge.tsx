@@ -8,15 +8,25 @@ import {
 } from '@/lib/trust';
 import { cn } from '@/lib/utils';
 
-// Strong/Moderate/Mechanistic mirror Tier A/B/C 1:1 (via evidenceLevelFromTier)
-// and must use the same canonical colors as EvidenceTag/tierColor() — a Tier-C
-// compound can't show amber on /library and violet on /stacks for the same
-// grade. Emerging/Personal are a separate axis (evidence *type*, not grade)
-// and keep their own colors.
+// AXIS NOTE — read before using this component.
+//
+// `Emerging` / `Personal` are evidence *type*, and this badge is the right
+// component for them. `Strong` / `Moderate` / `Mechanistic` mirror Tier A/B/C
+// and are the evidence *grade* — for those, render `<EvidenceTag>` instead.
+// EvidenceTag carries the tier letter, its descriptor, and a three-bar
+// strength meter, so a grade is never communicated by color alone; this badge
+// has no shape channel. The site used to run both vocabularies side by side
+// ("Strong Evidence" here, "Tier A · Clinical" there) for the same underlying
+// grade. The remaining callers are all on the type axis.
+//
+// Colors stay aligned with lib/trust.ts's canonical map either way, so a
+// Tier-C compound can never show amber on one page and violet on another.
 const levelStyles: Record<EvidenceLevel, string> = {
+  // The three grade-mirroring levels keep the canonical tier hues (A/B/C).
   Strong: 'bg-accent-emerald/90 text-white border-accent-emerald/40',
   Moderate: 'bg-accent-cyan/90 text-white border-accent-cyan/40',
   Mechanistic: 'bg-accent-amber/90 text-white border-accent-amber/40',
+  // Type axis — deliberately off the tier scale.
   Personal: 'bg-accent-violet/90 text-white border-accent-violet/40',
   Emerging: 'bg-muted text-muted-foreground border-border',
 };

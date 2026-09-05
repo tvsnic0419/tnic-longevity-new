@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { TIER_TEXT_CLASS } from '@/lib/trust';
 import { motion } from 'framer-motion';
 import { Filter, ArrowUpDown } from 'lucide-react';
 import { DataTable } from '@/components/ui/DataTable';
@@ -20,7 +21,8 @@ const allGoals = [...new Set(eliteStacks.map((s) => s.goal))] as StackGoal[];
 const allCosts = [...new Set(eliteStacks.map((s) => s.costTier))] as CostTier[];
 const allSimplicity = [...new Set(eliteStacks.map((s) => s.simplicity))] as SimplicityTier[];
 
-const tierColor = { A: 'text-accent-emerald', B: 'text-accent-cyan', C: 'text-accent-amber' };
+/** The canonical map, imported — this was a local copy. */
+const tierColor = TIER_TEXT_CLASS;
 
 export function StackComparisonTable() {
   const { setSelected } = useStack();

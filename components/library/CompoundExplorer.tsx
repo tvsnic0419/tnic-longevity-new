@@ -7,14 +7,14 @@ import { ArrowUpRight } from 'lucide-react';
 import { compoundModules } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { SelectableChip } from '@/components/ui/SelectableChip';
 import { computeTnicScore } from '@/lib/tnic-score';
+import { TIER_COLOR_VAR } from '@/lib/trust';
 
-// Canonical tier accent (A=emerald / B=cyan / C=amber) for the score chip.
-const TIER_ACCENT: Record<'A' | 'B' | 'C', string> = {
-  A: 'var(--accent-emerald)',
-  B: 'var(--accent-cyan)',
-  C: 'var(--accent-amber)',
-};
+// Tier accent for the score chip — the canonical map, imported. main added a
+// local copy here; that is precisely the duplication the site-integrity guard
+// added in Phase 2 exists to catch.
+const TIER_ACCENT = TIER_COLOR_VAR;
 import type { EvidenceTier } from '@/lib/types';
 
 /**
@@ -112,27 +112,22 @@ export function CompoundExplorer() {
       {/* Clickable tier-count pills — the primary affordance. Each shows how many
           compounds sit at that tier and toggles the shared `tiers` URL param, so
           clicking "8 · Tier A" filters the grid below to exactly those eight. */}
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="chip-row items-center">
         {TIER_ORDER.map((tier) => {
           const isActive = activeTiers.includes(tier);
           return (
-            <button
+            <SelectableChip
               key={tier}
-              type="button"
-              onClick={() => toggleTier(tier)}
-              aria-pressed={isActive}
-              className={`focus-ring interactive group inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm ${
-                isActive
-                  ? 'border-accent-cyan/50 bg-accent-cyan/10 text-foreground'
-                  : 'border-border/70 text-muted-foreground hover:border-border hover:text-foreground'
-              }`}
-              title={`${TIER_COUNTS[tier]} compounds · ${TIER_LABEL[tier]}`}
+              selected={isActive}
+              onSelect={() => toggleTier(tier)}
+              label={`${TIER_COUNTS[tier]} compounds · ${TIER_LABEL[tier]}`}
+              className="px-3 py-1.5"
             >
               <span className="tnic-tabular font-mono text-base font-bold tabular-nums text-foreground">
                 {TIER_COUNTS[tier]}
               </span>
               <EvidenceTag tier={tier} size="sm" showTooltip={false} />
-            </button>
+            </SelectableChip>
           );
         })}
         {(activeTiers.length > 0 || activeHallmarkIds.length > 0) && (

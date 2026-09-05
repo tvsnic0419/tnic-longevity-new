@@ -2,6 +2,7 @@
 
 import { Moon, Sun, Monitor } from 'lucide-react';
 import { useTheme, type ThemeMode } from './ThemeProvider';
+import { IconButton } from '@/components/ui/IconButton';
 
 const modes: { id: ThemeMode; icon: typeof Sun; label: string }[] = [
   { id: 'light', icon: Sun, label: 'Light' },
@@ -16,15 +17,11 @@ export function ThemeToggle({ compact = false }: { compact?: boolean }) {
     const next = theme === 'dark' ? 'light' : theme === 'light' ? 'system' : 'dark';
     const Icon = theme === 'light' ? Sun : theme === 'dark' ? Moon : Monitor;
     return (
-      <button
-        type="button"
+      <IconButton
+        icon={Icon}
+        label={`Theme: ${theme}. Click to switch.`}
         onClick={() => setTheme(next)}
-        className="focus-ring interactive touch-target flex items-center justify-center rounded-lg text-muted-foreground hover:text-accent-cyan"
-        aria-label={`Theme: ${theme}. Click to switch.`}
-        title={`Theme: ${theme}`}
-      >
-        <Icon className="w-5 h-5" aria-hidden="true" />
-      </button>
+      />
     );
   }
 

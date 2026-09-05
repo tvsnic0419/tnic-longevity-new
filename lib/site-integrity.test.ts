@@ -5,7 +5,13 @@ import { compounds, researchFeed, safetyNotes } from './data';
 import { libraryModules } from './library-modules';
 import { hallmarkLibrary } from './hallmarks-library';
 import { ELITE_8_COMPOUNDS } from './elite-8-data';
-import { citationRegistry } from './trust';
+import {
+  citationRegistry,
+  evidenceTagDefinitions,
+  TIER_ACCENT_NAME,
+  TIER_COLOR_VAR,
+  TIER_TEXT_CLASS,
+} from './trust';
 import { buildSitemapEntries, DEFAULT_SITEMAP_LAST_MODIFIED } from './sitemap-urls';
 import { PRIORITY_INDEX_PATHS } from './index-priority';
 import { CANONICAL_SITE_URL } from './site';
@@ -292,6 +298,50 @@ describe('site data integrity', () => {
     // The old hardcoded band rendered "150+" and a bare "9" as font-black stats.
     expect(src).not.toMatch(/>150\+</);
     expect(src).not.toMatch(/text-4xl font-black/);
+  });
+
+
+  /**
+   * Evidence-tier color is a credibility surface: three components had drifted
+   * to hardcoding emerald for every tier (a Tier C stack rendered green) and
+   * one guide colored its tier pill by the product's brand hue. The map now
+   * lives in lib/trust.ts and is imported everywhere. These guards fail if a
+   * component re-declares its own copy or if the three maps disagree.
+   */
+  it('tier color maps agree with each other and with the tier definitions', () => {
+    for (const tier of ['A', 'B', 'C'] as const) {
+      const accent = TIER_ACCENT_NAME[tier];
+      expect(TIER_COLOR_VAR[tier]).toBe(`var(--accent-${accent})`);
+      expect(TIER_TEXT_CLASS[tier]).toBe(`text-accent-${accent}`);
+      expect(evidenceTagDefinitions[tier].color).toBe(accent);
+    }
+  });
+
+  it('no component re-declares the tier color map locally', () => {
+    const roots = ['components', 'app'];
+    const offenders: string[] = [];
+    // The literal shape of the duplicated map: an A key mapped to the emerald
+    // accent, in either the CSS-var or the Tailwind-class form.
+    const duplicated =
+      /A:\s*'(?:var\(--accent-emerald\)|text-accent-emerald|bg-accent-emerald)/;
+
+    const walk = (dir: string) => {
+      for (const entry of readdirSync(resolve(process.cwd(), dir), { withFileTypes: true })) {
+        const rel = `${dir}/${entry.name}`;
+        if (entry.isDirectory()) {
+          walk(rel);
+        } else if (/\.tsx?$/.test(entry.name)) {
+          const src = readFileSync(resolve(process.cwd(), rel), 'utf8');
+          if (duplicated.test(src)) offenders.push(rel);
+        }
+      }
+    };
+    roots.forEach(walk);
+
+    expect(
+      offenders,
+      `these files declare a local tier color map — import TIER_COLOR_VAR / TIER_TEXT_CLASS from lib/trust.ts instead:\n${offenders.join('\n')}`,
+    ).toEqual([]);
   });
 
   it('the supplement-guides hub preserves its decision and safety reading layer', () => {

@@ -48,7 +48,7 @@ export function SiteSearch() {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search library… ⌘K"
-        className="focus-ring w-44 pl-9 pr-3 py-2 rounded-full text-sm glass border border-border bg-transparent placeholder:text-caption"
+        className="focus-ring w-44 min-h-[var(--space-touch)] pl-9 pr-3 py-2 rounded-full text-sm glass border border-border bg-transparent placeholder:text-caption"
       />
     </form>
   );

@@ -113,7 +113,11 @@ export default function HallmarksIndexPage() {
                 return (
                   <RevealItem key={h.id} index={i} className="h-full">
                     <div
-                      className="premium-card h-full p-5"
+                      // The card relied on `.premium-card`'s own flex column
+                      // implicitly while its children used `flex-1` / `mt-auto`,
+                      // which were therefore inert — the footer links were never
+                      // bottom-pinned as the markup intended. Made explicit.
+                      className="premium-card flex h-full flex-col p-5"
                       style={{ ['--card-accent' as string]: colorVar }}
                     >
                       {/* Header — icon + ghost index carry the hallmark's own

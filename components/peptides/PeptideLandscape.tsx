@@ -1,4 +1,5 @@
 import { peptideLibrary } from '@/lib/peptides-library';
+import { TIER_COLOR_VAR } from '@/lib/trust';
 import { getPeptideLegalStatusMeta } from '@/components/peptides/PeptideLegalBadge';
 import type { PeptideLegalStatus, EvidenceTier } from '@/lib/types';
 
@@ -23,11 +24,8 @@ const LEGAL_ACCENT: Record<PeptideLegalStatus, string> = {
   'research-use-only': 'var(--accent-amber)',
 };
 
-const TIER_ACCENT: Record<EvidenceTier, string> = {
-  A: 'var(--accent-emerald)',
-  B: 'var(--accent-cyan)',
-  C: 'var(--accent-amber)',
-};
+// The canonical tier accent, imported from lib/trust.ts — this was a local copy.
+const TIER_ACCENT = TIER_COLOR_VAR;
 
 export function PeptideLandscape({ className = '' }: { className?: string }) {
   const total = peptideLibrary.length;

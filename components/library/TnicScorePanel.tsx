@@ -1,19 +1,15 @@
 'use client';
 
 import { useState } from 'react';
+import { TIER_COLOR_VAR } from '@/lib/trust';
 import { Info, ChevronDown } from 'lucide-react';
 import { LongevityGaugeArc } from '@/components/ui/LongevityGaugeArc';
 import { computeTnicScore, scoreBand, type TnicScoreConfidence } from '@/lib/tnic-score';
 import type { CSSProperties } from 'react';
 
-// Canonical evidence-tier accent (A=emerald / B=cyan / C=amber — the mapping
-// Mani unified sitewide). The score arc + card accent borrow it so the panel
-// reads in the same colour language as the EvidenceBadge beside it.
-const TIER_ACCENT: Record<'A' | 'B' | 'C', string> = {
-  A: 'var(--accent-emerald)',
-  B: 'var(--accent-cyan)',
-  C: 'var(--accent-amber)',
-};
+// The canonical tier accent, imported from lib/trust.ts — this was a local copy.
+// Its old comment called itself canonical; five files each said that.
+const TIER_ACCENT = TIER_COLOR_VAR;
 
 const CONFIDENCE_META: Record<TnicScoreConfidence, { label: string; note: string }> = {
   high: { label: 'High confidence', note: 'Derived from the richest source (the LQ model).' },

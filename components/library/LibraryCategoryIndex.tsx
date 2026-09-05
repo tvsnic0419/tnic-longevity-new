@@ -74,10 +74,13 @@ export function LibraryCategoryIndex({
               <Link
                 key={tier}
                 href={tierHref(tier)}
-                aria-pressed={activeTiers.includes(tier)}
-                className={`focus-ring inline-flex items-center gap-1.5 rounded-full border px-2 py-1 transition-colors ${
+                // aria-pressed is only valid on a button role; this filter is
+                // a real navigation (it rewrites the `tiers` URL param), so the
+                // selected state is aria-current.
+                aria-current={activeTiers.includes(tier) ? 'true' : undefined}
+                className={`focus-ring tap-expand-y inline-flex items-center gap-1.5 rounded-full border px-2 py-1 transition-colors ${
                   activeTiers.includes(tier)
-                    ? 'border-accent-cyan/60 bg-accent-cyan/10 text-foreground'
+                    ? 'border-[var(--surface-selected-border)] bg-[var(--surface-selected)] text-foreground'
                     : 'border-transparent hover:border-[var(--color-border-subtle)]'
                 }`}
               >

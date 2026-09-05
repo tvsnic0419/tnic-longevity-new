@@ -272,6 +272,14 @@ architectural change, not a small fix):**
 
 ## Current phase
 
+**Component UI pass merged onto current `main` (PR #133)** — applies the Manus
+"TNIC.help Component UI Upgrade Brief" Thomas supplied on 2026-08-26. Built as
+five phases, then merged forward on 2026-09-05 after the branch fell 86 commits
+behind; two phases were dropped as superseded by concurrent work. See
+"Component UI upgrade brief" and "Merging onto current `main`" directly below —
+the second records what actually landed, and a list of pre-existing a11y debt
+on `main` that the merge verification surfaced but did not widen into scope.
+
 **Phase 6 complete**, and — undocumented here until now — six more PRs from
 other concurrent sessions shipped on top of it between 2026-08-19 and
 2026-08-23 (six-chapter homepage restructure, Combination Lab, a 28-page
@@ -290,6 +298,176 @@ merged via the GitHub API (`a6c20f77`), Vercel Production Deploy green.
 Everything else recent was already merged. ~90 older branches (44–190
 commits behind `main`, mostly July dates, pre-dating this initiative) are
 dead — not evaluated individually, not touched.
+
+## Component UI upgrade brief — PR #133 (5 phases, 2026-08-26 → 09-05)
+
+Thomas supplied an 8-page Manus brief ("cinematic discovery, clinical clarity")
+and asked what was already on `main` and what wasn't.
+
+**The headline finding: most of the brief was already satisfied.** It was
+written from the rendered site, not the source, so it repeatedly asks for
+things that exist and are good — `EvidenceTag` already renders a tier as letter
++ descriptor + a three-bar strength meter (never colour alone); the type scale,
+`--space-touch`, `.focus-ring`, `.premium-card`, the viz fallback tables and the
+NICO progress component were all in place. Per CLAUDE.md §6 those were left
+alone and said so, rather than rebuilt.
+
+What the brief did surface is one real, consistent gap: **the site had canonical
+primitives for surfaces and evidence but none for the interactive layer.** Chips,
+icon buttons, selection cards and visualization shells were each re-implemented
+per component — three different "selected" colours, hit areas as small as 25px,
+`rel` drifted into five variants. That is what the pass fixes.
+
+**Two product decisions went to Thomas rather than being taken unilaterally**
+(CLAUDE.md §1 — business decisions):
+- **Elite card CTAs** — the brief wants "Read evidence" primary and the retailer
+  link demoted. **Decision: keep Buy visually primary.** The brief's UI argument
+  doesn't outweigh the funnel PR #128 deliberately tightened. Every
+  non-commercial part of the card rebuild still shipped.
+- **Mobile elite card** — **decision: ship the brief's compact preview +
+  one-tap expansion.**
+
+### Phase 1 — interaction primitives (`d91f1e2`)
+
+New in `components/ui/`: `IconButton`, `SelectableChip`, `ExternalAction`.
+Selected now means emerald everywhere via a new `--surface-selected` token (the
+homepage NICO starter was violet, the full NICO flow's chips were emerald while
+its own 1–5 scale *in the same flow* was cyan). `rel` is decided once — two of
+eight off-site links had shipped `noreferrer` with no `noopener`. Nav's
+Dashboard CTA used `!min-h-0`, cancelling `.btn-gradient`'s own 44px floor;
+site-search was ~37px. New `--signal-elite` (`#d8b25f`): there was no gold token
+at all — `VIZ.gold` and `--sie-gold` both aliased `--accent-amber`, which *is*
+Tier C, so a rank accent and a Tier C badge rendered the same hue side by side.
+`lib/tokens.ts` (a rival `spaceScale` nothing imported) deleted.
+
+### Phase 2 — decision surfaces (`51ee5d7`)
+
+**Three components were showing readers the wrong evidence grade:**
+`SynergyScorePanel` and `Elite8Hub` hardcoded emerald for *every* tier (a Tier C
+stack rendered green), and `/nad-supplement-guide` coloured its tier pill by the
+product's brand hue. All three now render `EvidenceTag`.
+
+The A/B/C→colour map was copy-pasted into a dozen components, each with a "keep
+in sync" comment instead of an import — and they had drifted. It now lives in
+`lib/trust.ts` (`TIER_ACCENT_NAME`, `TIER_COLOR_VAR`, `TIER_TEXT_CLASS`,
+`TIER_CHIP_CLASS`, `TIER_CHIP_CLASS_STRONG`), with two `site-integrity` guards:
+one asserts the maps agree, the other fails if any file under `components/` or
+`app/` re-declares a local copy. **The second guard immediately found two more
+copies the manual sweep had missed**, which is the point.
+
+Elite card reworked to the brief's four-zone anatomy: three consistent facts
+instead of two, the `whyThisPick` disclosure (already authored in
+`lib/product-picks.ts`, previously rendered only into JSON-LD), line-clamps so
+uneven copy stops stretching the grid row, and the mobile compact preview.
+
+### Phase 3 — interactive science (`1690300`)
+
+`InteractiveSciencePanel` — the two canvas stages shipped as bare
+`<canvas role="img">`: no title bar, no legend, no controls, no keyboard path.
+**The molecule renderer had coloured atoms by element since it shipped and
+nothing in the UI ever said what the colours meant.** The panel adds a title
+bar, legend, Reset/Zoom/Fullscreen, arrow-key rotation, a first-use cue that
+dismisses, and an always-present text summary.
+
+Goal simulator: the "Elite protocol" control was a bare `<button>` with no
+`type` and **no `aria-pressed`** — now a labelled `role="radiogroup"`. Its
+swatch was gold while the curve it toggles is cyan; the "Elite ceiling" metric
+rendered unconditionally even with the curve switched off. New `OutcomeMetric`
+gives every number the same uncertainty marker.
+
+Reduced motion: the constellation's stagger, the synergy graph's pulse rings and
+the Descent's cursor-glow lerp all ran unconditionally.
+
+**Hit areas — a bug found by measurement, not reading.** `.tap-expand` worked,
+but a tap 6px below one filter chip landed on the chip in the row *beneath*:
+28px chips at a 36px pitch gave overlapping 44px areas. Split into `.tap-expand`
+(both axes, isolated controls) and `.tap-expand-y` (vertical only), plus a
+`.chip-row` container whose 16px row gap makes the pitch exactly 44px.
+
+### Phase 4 — guided paths (`366d48e`) — **superseded, dropped at merge**
+
+Built a hallmark persistent detail panel and selected-answer summaries for both
+NICO flows. PR #171 rebuilt the NICO starter (safety screen) and #176 reworked
+the elite card in the same week, so at merge time main's versions won and this
+phase was dropped rather than merged over them. Its `aria-pressed` /
+`aria-expanded` fixes to `CompoundSelectorGrid` and `Elite8Hub` did survive.
+
+### Phase 5 — SectionProgress (`08e99bb`)
+
+The Descent's scene rail covered only the overture, had two states, no numerals,
+no `aria-current`, a ~25px hit area and `display: none` below 721px.
+`components/ui/SectionProgress.tsx` spans the whole page — which is what lets
+its numerals be the real 01–06 chapter spine rather than a second numbering
+contradicting the visible "01 / System". Adds a complete state (a check mark,
+not just a colour), `aria-current="step"`, and a mobile strip.
+
+**A second hit-area overlap bug, same family as Phase 3's:** clicking a rail
+step activated a *different* step — 14px ticks at an 18px pitch made the 44px
+expanded areas overlap so a neighbour won every hit test. The rail is a column
+with nothing beside it, so each step is now a real 44px control at a 44px pitch.
+**The first test pass missed it because it clicked only the last step**, which
+has no later sibling to steal its hit area. The retest clicks all nine. This is
+the lesson worth keeping: test every element of a repeated control, not one.
+
+## Merging onto current `main` (2026-09-05, `a3e718a`)
+
+The session paused after Phase 5 and resumed nine days later, by which point the
+branch was **86 commits behind** and 12 files conflicted — PRs #153, #167, #170,
+#171 and #176 had reworked much of the same surface. Thomas had closed PR #133
+on 09-04; it was reopened to carry the merge, on his instruction to "merge main
+in, resolve all 12".
+
+**Resolution rule: main's newer version is the base, mine re-applied on top.**
+The four heavily-reworked homepage components were reset to main *exactly*
+(`git checkout origin/main --`) and then given only additive changes, so the
+result is provable rather than hand-woven.
+
+**Kept** (all with real consumers): `IconButton`, `SelectableChip`,
+`ExternalAction`, `SectionProgress`, `InteractiveSciencePanel`, the canonical
+tier map + guards, the three tier-colour bug fixes, the tokens, and
+`STYLE_GUIDE.md` v1.2. **Dropped as superseded**: the elite-card rework, the
+hallmark detail panel, the NICO summaries, the goal-simulator toggle.
+
+**The tier guard earned its keep immediately.** main had added five *more* files
+each carrying a private tier-colour map — `ComparisonLandscape`,
+`TnicScorePanel`, `PeptideLandscape`, `HomeEliteGrid`, `EvidenceGradingLadder` —
+several with comments calling themselves canonical. All five now import
+`TIER_COLOR_VAR`; values are byte-identical, so nothing renders differently.
+**This is the drift mechanism that produced the three live tier-colour bugs, and
+it recurs on its own within days.** Do not weaken that guard.
+
+**Two collisions:** main's `HomeDescent` still had its own `.tnic-rail` (two
+rails on one page) — removed in favour of `SectionProgress`, with main's nicer
+panel treatment ported across. And #167 moved the canvases behind lazy
+`Deferred*Stage` wrappers, orphaning `InteractiveSciencePanel`; the panel now
+*wraps* those wrappers, so the lazy-mount seam still governs when the canvas
+loads. Stage handles cross that boundary as a plain `handleRef` prop —
+`next/dynamic` does not reliably forward refs.
+
+### Verification
+
+lint 0 errors · typecheck · **679/679 tests** · clean build. axe-core
+WCAG 2.1 A/AA + best-practice across 9 pages: **0 violations and 0 JS errors on
+`/`, a compound deep-dive, `/hallmarks`, `/nico`, `/stacks`, `/elite-8`,
+`/peptides`.** Rail driven in a browser: 44px step at a 44px pitch, every step
+owning its own centre, all 9 landing correctly in both normal and
+reduced-motion contexts.
+
+**Known pre-existing a11y debt on `main`, NOT from this branch** (proven by
+diffing the owning files, not assumed) — worth a future pass:
+
+- `/library`: 24 colour-contrast failures on the TNiC-score chip's `/100`
+  suffix (`#248b6c` on `#0c1f29` at 8.5px ≈ 4:1), plus 7 `dl`/`dlitem`
+  structure failures in `EvidenceTierSpectrum.tsx` (`<dt>`/`<dd>` wrapped in
+  intermediate `<div>`s).
+- `/trust/methodology`: 1 heading-order skip in `EvidenceGradingLadder.tsx`.
+
+**The stale-`next start` trap recorded below bit twice during this pass**,
+producing exactly the misleading result it warns about (a hit-area test
+"failing" against a previous build). Confirm the port is free *and* that the
+serving process postdates the build — `ss -ltn` alone raced and reported free
+while a server still held it.
+
 
 ## 2026-08-28 — mobile GPU paint budget for the always-on blur layers
 

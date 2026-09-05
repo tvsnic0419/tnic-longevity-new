@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { ArrowUp } from 'lucide-react';
+import { IconButton } from '@/components/ui/IconButton';
 
 /**
  * A small, unobtrusive "back to top" control for long pages. Appears only once
@@ -28,22 +29,19 @@ export function BackToTop() {
   };
 
   return (
-    <button
-      type="button"
+    <IconButton
+      icon={ArrowUp}
+      label="Back to top"
+      variant="surface"
       onClick={toTop}
-      aria-label="Back to top"
       // aria-hidden + tabindex track visibility so the control isn't reachable
       // (by pointer or keyboard) while it's faded out.
       aria-hidden={!show}
       tabIndex={show ? 0 : -1}
       className={[
-        'focus-ring fixed bottom-6 right-6 z-40 flex h-11 w-11 items-center justify-center rounded-full',
-        'border border-border/70 bg-card/80 text-foreground shadow-lg backdrop-blur',
-        'transition-all duration-300 hover:border-accent-cyan/50 hover:text-accent-cyan',
+        'back-to-top fixed bottom-6 right-6 z-40 rounded-full shadow-lg transition-all duration-300',
         show ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-3 opacity-0',
       ].join(' ')}
-    >
-      <ArrowUp className="h-5 w-5" aria-hidden="true" />
-    </button>
+    />
   );
 }

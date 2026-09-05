@@ -11,9 +11,7 @@ import {
   hallmarkDisplayNames,
   compoundBaseScores,
 } from '@/lib/stack-analysis';
-import { evidenceLevelFromTier } from '@/lib/trust';
-import type { EvidenceLevel } from '@/lib/types';
-import EvidenceBadge from '@/components/trust/EvidenceBadge';
+import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -306,7 +304,6 @@ function CompoundLibrary({
           </div>
         ) : filteredCompounds.map((c) => {
           const inStack = selected.includes(c.id);
-          const evidence = evidenceLevelFromTier(c.evidence) as EvidenceLevel;
           const baseScore = compoundBaseScores[c.id] ?? 7;
           const hallmarkPreview = c.hallmarks
             .slice(0, 2)
@@ -324,7 +321,7 @@ function CompoundLibrary({
               <div className="min-w-0 flex-1">
                 <p className="font-medium text-sm">{c.name}</p>
                 <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
-                  <EvidenceBadge level={evidence} size="sm" showTooltip={false} />
+                  <EvidenceTag tier={c.evidence} size="sm" />
                   <Badge variant="info" className="normal-case tracking-normal font-sans">
                     {baseScore}/10
                   </Badge>
@@ -398,7 +395,6 @@ function ActiveStackPanel({
         ) : (
           <div className="space-y-3">
             {selectedCompounds.map((c) => {
-              const evidence = evidenceLevelFromTier(c.evidence) as EvidenceLevel;
               return (
                 <div
                   key={c.id}
@@ -406,7 +402,7 @@ function ActiveStackPanel({
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 min-w-0 flex-1">
                     <span className="font-semibold">{c.name}</span>
-                    <EvidenceBadge level={evidence} size="sm" showTooltip={false} />
+                    <EvidenceTag tier={c.evidence} size="sm" />
                     <span className="text-caption font-mono text-muted-foreground hidden sm:inline">
                       {c.dose}
                     </span>

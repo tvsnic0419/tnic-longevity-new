@@ -1,4 +1,5 @@
 import { evidenceComparisons } from '@/lib/comparisons';
+import { TIER_COLOR_VAR } from '@/lib/trust';
 import type { EvidenceTier } from '@/lib/types';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -22,11 +23,8 @@ const CATEGORY_ACCENT: Record<string, string> = {
   form: 'var(--accent-amber)',
 };
 
-const TIER_ACCENT: Record<EvidenceTier, string> = {
-  A: 'var(--accent-emerald)',
-  B: 'var(--accent-cyan)',
-  C: 'var(--accent-amber)',
-};
+// The canonical tier accent, imported from lib/trust.ts — this was a local copy.
+const TIER_ACCENT = TIER_COLOR_VAR;
 
 export function ComparisonLandscape({ className = '' }: { className?: string }) {
   const total = evidenceComparisons.length;

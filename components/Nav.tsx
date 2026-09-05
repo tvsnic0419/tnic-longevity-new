@@ -11,6 +11,7 @@ import { SiteSearch } from '@/components/SiteSearch';
 import { COMMAND_PALETTE_EVENT } from '@/components/os/os-events';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { GlassPanel } from '@/components/ui/GlassPanel';
+import { IconButton } from '@/components/ui/IconButton';
 import { cn } from '@/lib/utils';
 import { usePlatform } from '@/context/PlatformContext';
 
@@ -393,7 +394,9 @@ export function Nav() {
               {secondaryAction.label}
             </Link>
           </GlassPanel>
-          <Link href={primaryAction.href} aria-label={primaryAction.ariaLabel} className="focus-ring btn-gradient text-sm !py-2.5 !px-5 !min-h-0 rounded-full">
+          {/* No `!min-h-0`: it cancelled .btn-gradient's own
+              `min-height: var(--space-touch)` and landed the CTA at ~40px. */}
+          <Link href={primaryAction.href} aria-label={primaryAction.ariaLabel} className="focus-ring btn-gradient text-sm !py-2.5 !px-5 rounded-full">
             {primaryAction.label}
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </Link>
@@ -402,23 +405,19 @@ export function Nav() {
         {/* Compact chrome — shown only when the full bar above does not fit. */}
         <div className={cn('items-center gap-1 max-[1023px]:!flex', compact ? 'flex' : 'hidden')}>
           <ThemeToggle compact />
-          <button
+          <IconButton
+            icon={Search}
+            label="Search"
             onClick={() => window.dispatchEvent(new Event(COMMAND_PALETTE_EVENT))}
-            className="focus-ring touch-target flex items-center justify-center text-muted-foreground hover:text-foreground rounded-lg"
-            aria-label="Search"
-          >
-            <Search className="w-5 h-5" />
-          </button>
-          <button
+          />
+          <IconButton
             ref={menuButtonRef}
+            icon={mobileOpen ? X : Menu}
+            label={mobileOpen ? 'Close menu' : 'Open menu'}
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="focus-ring touch-target flex items-center justify-center text-muted-foreground hover:text-foreground rounded-lg"
             aria-expanded={mobileOpen}
             aria-controls="mobile-menu"
-            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-          >
-            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          />
         </div>
       </div>
 

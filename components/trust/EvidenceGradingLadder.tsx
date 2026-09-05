@@ -1,6 +1,6 @@
 import { CheckCircle2 } from 'lucide-react';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
-import { evidenceTagDefinitions } from '@/lib/trust';
+import { TIER_COLOR_VAR, evidenceTagDefinitions } from '@/lib/trust';
 import { compoundModules } from '@/lib/library-modules';
 import type { EvidenceTier } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -15,11 +15,8 @@ import { cn } from '@/lib/utils';
 // ladder can never drift from what's published. Server-safe, no client JS.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const ACCENT: Record<EvidenceTier, string> = {
-  A: 'var(--accent-emerald)',
-  B: 'var(--accent-cyan)',
-  C: 'var(--accent-amber)',
-};
+// The canonical tier accent, imported from lib/trust.ts — this was a local copy.
+const ACCENT = TIER_COLOR_VAR;
 
 const ORDER: EvidenceTier[] = ['A', 'B', 'C'];
 

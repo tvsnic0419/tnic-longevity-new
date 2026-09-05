@@ -61,10 +61,16 @@ export function CompoundSelectorGrid({
             key={c.id}
             type="button"
             onClick={() => onToggle(c.id)}
+            // This is a toggle and had no aria-pressed at all — the checkmark
+            // communicated selection to sighted users only.
+            aria-pressed={isOn}
             className={cn(
               'focus-ring interactive text-left p-4 rounded-xl transition-all duration-300 relative',
               isOn
-                ? 'bg-accent-violet/10 border border-accent-violet/40 shadow-sm'
+                // Was violet (the Stacks hub accent). Selected now reads emerald
+                // from the shared token, like every other chosen state on the
+                // site — a hub accent colors the hub, not the selection.
+                ? 'border border-[var(--surface-selected-border)] bg-[var(--surface-selected)] shadow-sm'
                 : 'glass glass-hover opacity-80 hover:opacity-100',
             )}
           >
@@ -85,7 +91,7 @@ export function CompoundSelectorGrid({
               <span
                 className={cn(
                   'w-5 h-5 rounded-md flex items-center justify-center shrink-0 transition-all',
-                  isOn ? 'bg-accent-violet text-primary-foreground' : 'border border-border',
+                  isOn ? 'bg-accent-emerald text-[#04110c]' : 'border border-border',
                 )}
               >
                 {isOn && <Check className="w-3 h-3" aria-hidden="true" />}

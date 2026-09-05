@@ -1,10 +1,11 @@
 "use client";
 
 import {
-  useRef, useEffect,
+  useRef, useEffect, useImperativeHandle, useMemo, forwardRef,
   type MouseEvent, type TouchEvent, type WheelEvent,
 } from "react";
 import { getGeometry, type Geometry } from "./molecule";
+import type { StageHandle } from "./stage-handle";
 import type { RGB } from "./tokens";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { runWhenVisible, cappedDpr, fitCanvas } from "@/lib/raf-visibility";
@@ -59,21 +60,28 @@ function makeSphereSprite(pal: { core: RGB; hi: RGB }): HTMLCanvasElement {
   return cv;
 }
 
-export function MoleculeStage({
-  geometryId,
-  hue,
-  interactive = true,
-  className,
-  style,
-  ariaLabel,
-}: {
+export const MoleculeStage = forwardRef<StageHandle, {
   geometryId?: string;
   hue: RGB;
   interactive?: boolean;
   className?: string;
   style?: React.CSSProperties;
   ariaLabel?: string;
-}) {
+  /**
+   * Plain-prop alternative to the forwarded ref. `next/dynamic` does not
+   * reliably forward refs, and this stage is lazy-loaded behind it, so the
+   * shell hands its handle down as an ordinary prop instead.
+   */
+  handleRef?: React.RefObject<StageHandle | null>;
+}>(function MoleculeStage({
+  geometryId,
+  hue,
+  interactive = true,
+  className,
+  style,
+  ariaLabel,
+  handleRef,
+}, ref) {
   const reduced = useReducedMotion();
   const reducedRef = useRef(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -83,6 +91,29 @@ export function MoleculeStage({
 
   useEffect(() => { reducedRef.current = reduced; }, [reduced]);
   useEffect(() => { hueRef.current = hue; }, [hue]);
+
+  // Expose the drag state so a shell can offer Reset / Zoom controls and a
+  // keyboard path. Zoom limits mirror the wheel handler's exactly.
+  const handle = useMemo<StageHandle>(() => ({
+    reset() {
+      const d = drag.current;
+      d.rx = -0.15; d.ry = 0.5; d.vx = 0; d.vy = 0; d.zoom = 1;
+    },
+    zoomBy(factor: number) {
+      const d = drag.current;
+      d.zoom = Math.max(0.55, Math.min(2.4, d.zoom * factor));
+    },
+    rotateBy(dx: number, dy: number) {
+      const d = drag.current;
+      d.ry += dx; d.rx += dy; d.vx = 0; d.vy = 0;
+    },
+  }), []);
+  useImperativeHandle(ref, () => handle, [handle]);
+  useEffect(() => {
+    if (!handleRef) return;
+    handleRef.current = handle;
+    return () => { handleRef.current = null; };
+  }, [handle, handleRef]);
   useEffect(() => {
     geomRef.current = geometryId ? getGeometry(geometryId) : null;
   }, [geometryId]);
@@ -301,4 +332,4 @@ export function MoleculeStage({
       onWheel={onWheel}
     />
   );
-}
+});

@@ -1,4 +1,5 @@
 import { compounds } from './data';
+import { TIER_COLOR_VAR } from './trust';
 import { pathways } from './pathways';
 import { hallmarkLibrary } from './hallmarks-library';
 import type { EvidenceTier } from './types';
@@ -23,11 +24,8 @@ import type { EvidenceTier } from './types';
 export const EVIDENCE_TIERS: EvidenceTier[] = ['A', 'B', 'C'];
 
 /** Canonical evidence-tier accents — must match EvidenceTag / trust.ts. */
-export const TIER_ACCENT: Record<EvidenceTier, string> = {
-  A: 'var(--accent-emerald)',
-  B: 'var(--accent-cyan)',
-  C: 'var(--accent-amber)',
-};
+/** Re-exported from the canonical map in lib/trust.ts — not a second copy. */
+export const TIER_ACCENT: Record<EvidenceTier, string> = TIER_COLOR_VAR;
 
 export interface TierSlice {
   tier: EvidenceTier;

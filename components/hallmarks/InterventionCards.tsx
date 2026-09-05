@@ -1,4 +1,5 @@
 import type { HallmarkIntervention } from '@/lib/types';
+import { TIER_CHIP_CLASS_STRONG } from '@/lib/trust';
 import { compounds } from '@/lib/data';
 
 /**
@@ -10,13 +11,9 @@ import { compounds } from '@/lib/data';
  * in that slot instead, since they have no dosage to report.
  */
 
-// Canonical evidence-tier colors — must match EvidenceTag / trust.ts
-// (A = clinical/emerald, B = emerging/cyan, C = preclinical/amber).
-const TIER_CLASSES: Record<HallmarkIntervention['evidence'], string> = {
-  A: 'bg-accent-emerald/15 text-accent-emerald border border-accent-emerald/30',
-  B: 'bg-accent-cyan/15 text-accent-cyan border border-accent-cyan/30',
-  C: 'bg-accent-amber/15 text-accent-amber border border-accent-amber/30',
-};
+// Evidence-tier chip styling now comes from lib/trust.ts. The comment that
+// used to sit here said "must match EvidenceTag / trust.ts" — an import is a
+// stronger guarantee than a comment.
 
 const CATEGORY_LABEL: Record<HallmarkIntervention['category'], string> = {
   compound: 'Compound',
@@ -36,7 +33,7 @@ export function InterventionCards({ interventions }: { interventions: HallmarkIn
           <div key={iv.id} className="premium-card p-6">
             <div className="flex items-start justify-between gap-4 mb-3">
               <h3 className="font-bold text-foreground text-lg">{iv.name}</h3>
-              <span className={`shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold ${TIER_CLASSES[iv.evidence]}`}>
+              <span className={`shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold ${TIER_CHIP_CLASS_STRONG[iv.evidence]}`}>
                 Tier {iv.evidence}
               </span>
             </div>

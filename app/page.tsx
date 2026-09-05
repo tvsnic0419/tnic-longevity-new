@@ -1,6 +1,7 @@
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { ScrollProgress } from '@/components/ScrollProgress';
+import { SectionProgress } from '@/components/ui/SectionProgress';
 import { HomeDescent } from '@/components/home/HomeDescent';
 import { HomeCredibilityStrip } from '@/components/home/HomeCredibilityStrip';
 import { HomeEliteInterventions } from '@/components/home/HomeEliteInterventions';
@@ -52,6 +53,24 @@ const eliteProductSchema = buildProductListSchema(
   })),
 );
 
+/**
+ * The homepage spine, in scroll order. The numerals are the page's own chapter
+ * numbers — the same ones the section eyebrows and CellularDivider print — so
+ * the rail can never disagree with what is on screen. The three overture
+ * scenes carry no numeral because the page gives them none.
+ */
+const HOME_SECTIONS = [
+  { targetId: 'arrive', label: 'Start' },
+  { targetId: 'molecule', label: 'Molecule' },
+  { targetId: 'system', label: 'System', numeral: '01' },
+  { targetId: 'goal', label: 'Goal', numeral: '02' },
+  { targetId: 'your-path', label: 'Your path' },
+  { targetId: 'elite-interventions', label: 'Interventions', numeral: '03' },
+  { targetId: 'mechanisms', label: 'Mechanisms', numeral: '04' },
+  { targetId: 'protocol', label: 'Protocol', numeral: '05' },
+  { targetId: 'personalize', label: 'Personalize', numeral: '06' },
+];
+
 export default function HomePage() {
   return (
     <div className="min-h-screen overflow-x-hidden canvas-scrim text-foreground">
@@ -63,6 +82,12 @@ export default function HomePage() {
         ]}
       />
       <ScrollProgress />
+      {/* The homepage's location rail. Mounted here rather than inside
+          HomeDescent because it spans the whole six-chapter spine, not just the
+          cinematic overture — which is also what lets its numerals be the
+          page's real 01–06 chapter numbers. ScrollProgress suppresses its own
+          route rail on `/` so the two never collide. */}
+      <SectionProgress ariaLabel="Homepage sections" steps={HOME_SECTIONS} />
       <Nav />
       <main id="main-content" tabIndex={-1}>
         <HomeDescent />

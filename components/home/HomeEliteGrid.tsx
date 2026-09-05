@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState, type CSSProperties } from 'react';
+import { TIER_COLOR_VAR } from '@/lib/trust';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ExternalLink, BookOpen, Check, Plus } from 'lucide-react';
@@ -11,13 +12,8 @@ import { EvidenceTrace } from '@/components/trust/EvidenceTrace';
 import { RevealItem } from '@/components/ui/RevealItem';
 import { computeTnicScore, scoreBand } from '@/lib/tnic-score';
 
-// Canonical tier accent (A=emerald / B=cyan / C=amber), matching the
-// TnicScorePanel + EvidenceTag so the score reads in one colour language.
-const TIER_ACCENT: Record<'A' | 'B' | 'C', string> = {
-  A: 'var(--accent-emerald)',
-  B: 'var(--accent-cyan)',
-  C: 'var(--accent-amber)',
-};
+// The canonical tier accent, imported from lib/trust.ts — this was a local copy.
+const TIER_ACCENT = TIER_COLOR_VAR;
 
 /**
  * The elite-interventions grid with a hallmark filter (section 03 of the

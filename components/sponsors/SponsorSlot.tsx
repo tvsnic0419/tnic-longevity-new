@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowUpRight } from 'lucide-react';
+
+import { ExternalAction } from '@/components/ui/ExternalAction';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { cn } from '@/lib/utils';
 import { trackEvent } from '@/lib/analytics';
@@ -62,18 +63,17 @@ export function SponsorSlot({ slot, className }: SponsorSlotProps) {
           <p className="mt-1 text-body-sm text-muted-foreground">{sponsor.tagline}</p>
         </div>
 
-        <a
+        <ExternalAction
           href={sponsor.href}
-          target="_blank"
-          rel="sponsored noopener noreferrer"
+          destination={`${sponsor.cta} — ${sponsor.name}`}
+          variant="inline"
           onClick={() =>
             trackEvent(ANALYTICS_EVENTS.sponsorClick, { sponsor: sponsor.id, slot })
           }
-          className="focus-ring interactive inline-flex w-fit items-center gap-1.5 rounded-lg text-sm font-semibold text-foreground hover:text-accent-cyan"
+          className="interactive w-fit rounded-lg text-sm font-semibold text-foreground hover:text-accent-cyan"
         >
           {sponsor.cta}
-          <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-        </a>
+        </ExternalAction>
       </aside>
     </GlassPanel>
   );

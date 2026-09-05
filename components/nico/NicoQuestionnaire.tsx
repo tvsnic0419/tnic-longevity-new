@@ -13,6 +13,7 @@ import {
   Minus,
   Plus,
 } from 'lucide-react';
+import { SelectableChip } from '@/components/ui/SelectableChip';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { EvidenceTrace } from '@/components/trust/EvidenceTrace';
@@ -67,34 +68,6 @@ const JOURNEY_STAGES = [
   { label: 'Stack', start: 9, end: 9 },
 ] as const;
 
-function Chip({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={active}
-      className={[
-        'focus-ring interactive text-left rounded-xl border px-4 py-3 text-sm font-semibold transition-all',
-        active
-          ? 'border-accent-emerald bg-accent-emerald/10 text-accent-emerald shadow-[0_0_0_1px_rgba(52,211,153,0.15),0_8px_20px_-12px_rgba(52,211,153,0.4)]'
-          // Label stays bright (text-foreground) even when inactive — only the
-          // border/background communicate selection state, not text contrast.
-          : 'border-border bg-card/60 text-foreground hover:border-foreground/40 hover:bg-card/80',
-      ].join(' ')}
-    >
-      {children}
-    </button>
-  );
-}
-
 /** Renders just the 1–5 buttons + low/high labels. The question itself is the
  * step's own <h2> now that each scale has a full screen — no duplicate text. */
 function ScaleButtons({
@@ -111,20 +84,14 @@ function ScaleButtons({
     <div>
       <div className="grid grid-cols-5 gap-2" role="group" aria-label={meta.question}>
         {[1, 2, 3, 4, 5].map((n) => (
-          <button
+          <SelectableChip
             key={n}
-            type="button"
-            aria-pressed={value === n}
-            onClick={() => onChange(n as Scale)}
-            className={[
-              'focus-ring interactive rounded-lg border py-3 text-base font-mono transition-all',
-              value === n
-                ? 'border-accent-cyan bg-accent-cyan/10 text-accent-cyan'
-                : 'border-border bg-card/40 text-muted-foreground hover:border-foreground/30',
-            ].join(' ')}
-          >
-            {n}
-          </button>
+            shape="card"
+            selected={value === n}
+            onSelect={() => onChange(n as Scale)}
+            label={String(n)}
+            className="justify-center py-3 text-center font-mono text-base"
+          />
         ))}
       </div>
       <div className="flex justify-between text-micro font-mono text-caption mt-2">
@@ -318,16 +285,14 @@ export function NicoQuestionnaire() {
               <QuestionHeading id="nico-goals" question="What do you most want to improve?" helper="Pick one or more. This anchors your stack." />
               <div className="grid sm:grid-cols-2 gap-3">
                 {NICO_GOAL_OPTIONS.map((g) => (
-                  <Chip
+                  <SelectableChip
                     key={g.id}
-                    active={answers.goals.includes(g.id)}
-                    onClick={() => setAnswers((a) => ({ ...a, goals: toggle<NicoGoal>(a.goals, g.id) }))}
-                  >
-                    <span className="block">{g.label}</span>
-                    <span className="block text-micro font-normal text-muted-foreground mt-0.5">
-                      {g.desc}
-                    </span>
-                  </Chip>
+                    shape="card"
+                    selected={answers.goals.includes(g.id)}
+                    onSelect={() => setAnswers((a) => ({ ...a, goals: toggle<NicoGoal>(a.goals, g.id) }))}
+                    label={g.label}
+                    description={g.desc}
+                  />
                 ))}
               </div>
               {selectedGoalOptions.length > 0 && (
@@ -407,16 +372,14 @@ export function NicoQuestionnaire() {
               />
               <div className="grid sm:grid-cols-2 gap-3">
                 {NICO_FOCUS_OPTIONS.map((f) => (
-                  <Chip
+                  <SelectableChip
                     key={f.id}
-                    active={answers.focus.includes(f.id)}
-                    onClick={() => setAnswers((a) => ({ ...a, focus: toggle<NicoFocus>(a.focus, f.id) }))}
-                  >
-                    <span className="block">{f.label}</span>
-                    <span className="block text-micro font-normal text-muted-foreground mt-0.5">
-                      {f.desc}
-                    </span>
-                  </Chip>
+                    shape="card"
+                    selected={answers.focus.includes(f.id)}
+                    onSelect={() => setAnswers((a) => ({ ...a, focus: toggle<NicoFocus>(a.focus, f.id) }))}
+                    label={f.label}
+                    description={f.desc}
+                  />
                 ))}
               </div>
             </section>
@@ -437,15 +400,15 @@ export function NicoQuestionnaire() {
               </p>
               <div className="grid gap-3">
                 {NICO_SAFETY_OPTIONS.map((s) => (
-                  <Chip
+                  <SelectableChip
                     key={s.id}
-                    active={answers.safety.includes(s.id)}
-                    onClick={() =>
+                    shape="card"
+                    selected={answers.safety.includes(s.id)}
+                    onSelect={() =>
                       setAnswers((a) => ({ ...a, safety: toggle<NicoSafetyFlag>(a.safety, s.id) }))
                     }
-                  >
-                    {s.label}
-                  </Chip>
+                    label={s.label}
+                  />
                 ))}
               </div>
             </section>
@@ -586,6 +549,58 @@ export function NicoQuestionnaire() {
           )}
         </div>
 
+        {/* Selected-answer summary, on the last question only. The flow showed
+            every question in isolation and never recapped the answers before
+            computing a stack — so the visitor committed blind. Read back from
+            the current answers; nothing here is stored or invented. */}
+        {!isResult && step === STEP_IDS.length - 2 && (
+          <div className="mt-6 rounded-xl border border-border/60 bg-card/40 px-4 py-3">
+            <p className="text-label mb-2 text-muted-foreground">Your answers</p>
+            <dl className="grid gap-1.5 text-sm sm:grid-cols-2">
+              <div className="flex flex-wrap gap-x-2">
+                <dt className="text-muted-foreground">Goals:</dt>
+                <dd className="font-medium text-foreground">
+                  {answers.goals.length
+                    ? answers.goals
+                        .map((g) => NICO_GOAL_OPTIONS.find((o) => o.id === g)?.label)
+                        .join(' · ')
+                    : '—'}
+                </dd>
+              </div>
+              <div className="flex flex-wrap gap-x-2">
+                <dt className="text-muted-foreground">Age:</dt>
+                <dd className="font-medium text-foreground">{answers.age}</dd>
+              </div>
+              {SCALE_ORDER.map((pillar) => (
+                <div key={pillar} className="flex flex-wrap gap-x-2">
+                  <dt className="capitalize text-muted-foreground">{pillar}:</dt>
+                  <dd className="font-medium text-foreground">{answers[pillar]} / 5</dd>
+                </div>
+              ))}
+              <div className="flex flex-wrap gap-x-2 sm:col-span-2">
+                <dt className="text-muted-foreground">Focus:</dt>
+                <dd className="font-medium text-foreground">
+                  {answers.focus.length
+                    ? answers.focus
+                        .map((f) => NICO_FOCUS_OPTIONS.find((o) => o.id === f)?.label)
+                        .join(' · ')
+                    : 'None picked'}
+                </dd>
+              </div>
+              <div className="flex flex-wrap gap-x-2 sm:col-span-2">
+                <dt className="text-muted-foreground">Safety flags:</dt>
+                <dd className="font-medium text-foreground">
+                  {answers.safety.length
+                    ? answers.safety
+                        .map((f) => NICO_SAFETY_OPTIONS.find((o) => o.id === f)?.label)
+                        .join(' · ')
+                    : 'None selected'}
+                </dd>
+              </div>
+            </dl>
+          </div>
+        )}
+
         {/* Nav buttons */}
         {!isResult && (
           <div className="flex items-center justify-between mt-6">
@@ -597,14 +612,25 @@ export function NicoQuestionnaire() {
             >
               <ArrowLeft className="w-4 h-4" /> Back
             </button>
-            <button
-              type="button"
-              onClick={goNext}
-              disabled={!canAdvance}
-              className="focus-ring inline-flex items-center gap-2 bg-accent-emerald text-black px-6 py-3 rounded-xl text-sm font-bold hover:bg-accent-emerald/90 transition-colors disabled:opacity-40 disabled:pointer-events-none"
-            >
-              {step === STEP_IDS.length - 2 ? 'See my stack' : 'Continue'} <ArrowRight className="w-4 h-4" />
-            </button>
+            <div className="flex flex-col items-end gap-1.5">
+              <button
+                type="button"
+                onClick={goNext}
+                disabled={!canAdvance}
+                // The disabled state used to communicate itself with opacity
+                // alone — and `pointer-events-none` meant hover couldn't
+                // surface an explanation either. Now it names the reason.
+                aria-describedby={!canAdvance ? 'nico-continue-hint' : undefined}
+                className="focus-ring inline-flex min-h-[var(--space-touch)] items-center gap-2 bg-accent-emerald text-black px-6 py-3 rounded-xl text-sm font-bold hover:bg-accent-emerald/90 transition-colors disabled:opacity-40 disabled:pointer-events-none"
+              >
+                {step === STEP_IDS.length - 2 ? 'See my stack' : 'Continue'} <ArrowRight className="w-4 h-4" />
+              </button>
+              {!canAdvance && (
+                <p id="nico-continue-hint" className="text-caption text-muted-foreground">
+                  Pick at least one goal to continue.
+                </p>
+              )}
+            </div>
           </div>
         )}
       </div>

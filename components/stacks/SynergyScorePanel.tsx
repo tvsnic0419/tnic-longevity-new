@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
+import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import type { StackAnalysis } from '@/lib/stack-analysis';
 import { cn } from '@/lib/utils';
 import { LongevityGaugeArc } from '@/components/ui/LongevityGaugeArc';
@@ -66,9 +67,13 @@ export function SynergyScorePanel({ score, analysis, verdict, className = '' }: 
 
       {/* Evidence tier + cost pills */}
       <div className="grid grid-cols-2 gap-2 mt-4">
-        <div className="glass-deep glass-plane-mid rounded-xl py-2.5 px-3 text-center">
-          <p className="text-sm font-bold text-accent-emerald">Tier {analysis.evidenceTier}</p>
-          <p className="text-micro font-mono text-muted-foreground mt-0.5">EVIDENCE GRADE</p>
+        <div className="glass-deep glass-plane-mid flex flex-col items-center gap-1.5 rounded-xl py-2.5 px-3 text-center">
+          {/* Was a hardcoded `text-accent-emerald` for EVERY tier — a Tier C
+              stack rendered green, i.e. the panel showed the wrong grade.
+              EvidenceTag carries the canonical color plus the strength meter,
+              so the grade can never be read from hue alone. */}
+          <EvidenceTag tier={analysis.evidenceTier} size="sm" href="/trust/methodology" />
+          <p className="text-micro font-mono text-muted-foreground">EVIDENCE GRADE</p>
         </div>
         <div className="glass-deep glass-plane-mid rounded-xl py-2.5 px-3 text-center">
           <p className="text-sm font-bold text-accent-amber">

@@ -1,10 +1,11 @@
 "use client";
 
 import {
-  useRef, useEffect,
+  useRef, useEffect, useImperativeHandle, useMemo, forwardRef,
   type MouseEvent, type TouchEvent, type WheelEvent,
 } from "react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import type { StageHandle } from "./stage-handle";
 import { runWhenVisible, cappedDpr, fitCanvas } from "@/lib/raf-visibility";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -38,17 +39,14 @@ const ELITE_GLOW = "rgba(240,196,106,"; // gold halo for elite picks
 const NODE_HI: [number, number, number] = [240, 248, 255];
 const NODE_CORE: [number, number, number] = [150, 220, 240];
 
-export function NetworkStage({
-  nodes,
-  edges,
-  className,
-  ariaLabel,
-}: {
+export const NetworkStage = forwardRef<StageHandle, {
   nodes: NetworkNode[];
   edges: NetworkEdge[];
   className?: string;
   ariaLabel?: string;
-}) {
+  /** See MoleculeStage — plain-prop handle, safe across next/dynamic. */
+  handleRef?: React.RefObject<StageHandle | null>;
+}>(function NetworkStage({ nodes, edges, className, ariaLabel, handleRef }, ref) {
   const reduced = useReducedMotion();
   const reducedRef = useRef(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -57,6 +55,29 @@ export function NetworkStage({
 
   useEffect(() => { reducedRef.current = reduced; }, [reduced]);
   useEffect(() => { dataRef.current = { nodes, edges }; }, [nodes, edges]);
+
+  // See MoleculeStage — same contract, same reason. Zoom limits mirror the
+  // wheel handler's.
+  const handle = useMemo<StageHandle>(() => ({
+    reset() {
+      const d = drag.current;
+      d.rx = -0.12; d.ry = 0.5; d.vx = 0; d.vy = 0; d.zoom = 1;
+    },
+    zoomBy(factor: number) {
+      const d = drag.current;
+      d.zoom = Math.max(0.6, Math.min(2.2, d.zoom * factor));
+    },
+    rotateBy(dx: number, dy: number) {
+      const d = drag.current;
+      d.ry += dx; d.rx += dy; d.vx = 0; d.vy = 0;
+    },
+  }), []);
+  useImperativeHandle(ref, () => handle, [handle]);
+  useEffect(() => {
+    if (!handleRef) return;
+    handleRef.current = handle;
+    return () => { handleRef.current = null; };
+  }, [handle, handleRef]);
 
   useEffect(() => {
     const cv = canvasRef.current; if (!cv) return;
@@ -214,4 +235,4 @@ export function NetworkStage({
       onWheel={onWheel}
     />
   );
-}
+});
