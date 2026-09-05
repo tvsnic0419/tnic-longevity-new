@@ -272,10 +272,13 @@ architectural change, not a small fix):**
 
 ## Current phase
 
-**Component UI pass complete (PR #133, 5 phases)** — applies the Manus
-"TNIC.help Component UI Upgrade Brief" that Thomas supplied on 2026-08-26.
-See "Component UI upgrade brief" directly below. Everything before that
-heading is the prior state and is unchanged.
+**Component UI pass merged onto current `main` (PR #133)** — applies the Manus
+"TNIC.help Component UI Upgrade Brief" Thomas supplied on 2026-08-26. Built as
+five phases, then merged forward on 2026-09-05 after the branch fell 86 commits
+behind; two phases were dropped as superseded by concurrent work. See
+"Component UI upgrade brief" and "Merging onto current `main`" directly below —
+the second records what actually landed, and a list of pre-existing a11y debt
+on `main` that the merge verification surfaced but did not widen into scope.
 
 **Phase 6 complete**, and — undocumented here until now — six more PRs from
 other concurrent sessions shipped on top of it between 2026-08-19 and
@@ -381,26 +384,13 @@ but a tap 6px below one filter chip landed on the chip in the row *beneath*:
 (both axes, isolated controls) and `.tap-expand-y` (vertical only), plus a
 `.chip-row` container whose 16px row gap makes the pitch exactly 44px.
 
-### Phase 4 — guided paths (`366d48e`)
+### Phase 4 — guided paths (`366d48e`) — **superseded, dropped at merge**
 
-Hallmark cards open a persistent detail panel in place instead of navigating
-away. **Crawlability drove the implementation**: all twelve panels render into
-the HTML with only the selected one shown, the same pattern the elite grid uses
-— buttons plus a conditionally rendered panel would have shipped one hallmark
-link on the homepage instead of twelve (verified: 12 `/hallmarks/<slug>` +
-15 `/library/<slug>` links still in the built HTML). Cards gained their
-`tagline`. The constellation linked to `/library/{slug}` while the grid beside
-it linked to `/hallmarks/{slug}` — two destinations for the same hallmark on one
-screen; unified.
-
-Both NICO flows gained a selected-answer summary before submit (the starter
-*replaces* the form with the result, so the answers had vanished entirely).
-`Elite8Hub`'s card is its own disclosure control and had no `aria-expanded`;
-`CompoundSelectorGrid` is a toggle with no `aria-pressed`.
-
-**No `SelectableGrid` was built, deliberately** — `SelectableChip shape="card"`
-already is the selection card, and a grid wrapper on top would only wrap a
-`<div className="grid">`.
+Built a hallmark persistent detail panel and selected-answer summaries for both
+NICO flows. PR #171 rebuilt the NICO starter (safety screen) and #176 reworked
+the elite card in the same week, so at merge time main's versions won and this
+phase was dropped rather than merged over them. Its `aria-pressed` /
+`aria-expanded` fixes to `CompoundSelectorGrid` and `Elite8Hub` did survive.
 
 ### Phase 5 — SectionProgress (`08e99bb`)
 
@@ -409,28 +399,76 @@ no `aria-current`, a ~25px hit area and `display: none` below 721px.
 `components/ui/SectionProgress.tsx` spans the whole page — which is what lets
 its numerals be the real 01–06 chapter spine rather than a second numbering
 contradicting the visible "01 / System". Adds a complete state (a check mark,
-not just a colour), `aria-current="step"`, and a mobile strip where there was
-nothing.
+not just a colour), `aria-current="step"`, and a mobile strip.
 
-**A second overlap bug, same family as Phase 3's:** clicking a rail step
-activated a *different* step — 14px ticks at an 18px pitch made the 44px
+**A second hit-area overlap bug, same family as Phase 3's:** clicking a rail
+step activated a *different* step — 14px ticks at an 18px pitch made the 44px
 expanded areas overlap so a neighbour won every hit test. The rail is a column
 with nothing beside it, so each step is now a real 44px control at a 44px pitch.
-The first test pass missed it because it only clicked the *last* step, which has
-no later sibling to steal from it. The retest clicks all nine.
+**The first test pass missed it because it clicked only the last step**, which
+has no later sibling to steal its hit area. The retest clicks all nine. This is
+the lesson worth keeping: test every element of a repeated control, not one.
 
-### Verification (every phase, not just the last)
+## Merging onto current `main` (2026-09-05, `a3e718a`)
 
-lint · typecheck · **632/632 tests** · clean build after every commit.
-axe-core WCAG 2.1 A/AA + best-practice across `/`, a compound deep-dive,
-`/hallmarks`, `/nico`, `/stacks`, `/trust/methodology`, `/elite-8`:
-**0 violations, 0 JS errors.** Plus browser-driven checks at 1440px and 390px,
-reduced-motion emulation, and SSR greps against the built HTML.
+The session paused after Phase 5 and resumed nine days later, by which point the
+branch was **86 commits behind** and 12 files conflicted — PRs #153, #167, #170,
+#171 and #176 had reworked much of the same surface. Thomas had closed PR #133
+on 09-04; it was reopened to carry the merge, on his instruction to "merge main
+in, resolve all 12".
 
-**The stale-`next start` trap recorded below bit once during this pass** and
-produced exactly the misleading result it warns about (a chip hit-area test
-"failing" against a previous build). Every later run confirmed the port was free
-and the serving process postdated the build.
+**Resolution rule: main's newer version is the base, mine re-applied on top.**
+The four heavily-reworked homepage components were reset to main *exactly*
+(`git checkout origin/main --`) and then given only additive changes, so the
+result is provable rather than hand-woven.
+
+**Kept** (all with real consumers): `IconButton`, `SelectableChip`,
+`ExternalAction`, `SectionProgress`, `InteractiveSciencePanel`, the canonical
+tier map + guards, the three tier-colour bug fixes, the tokens, and
+`STYLE_GUIDE.md` v1.2. **Dropped as superseded**: the elite-card rework, the
+hallmark detail panel, the NICO summaries, the goal-simulator toggle.
+
+**The tier guard earned its keep immediately.** main had added five *more* files
+each carrying a private tier-colour map — `ComparisonLandscape`,
+`TnicScorePanel`, `PeptideLandscape`, `HomeEliteGrid`, `EvidenceGradingLadder` —
+several with comments calling themselves canonical. All five now import
+`TIER_COLOR_VAR`; values are byte-identical, so nothing renders differently.
+**This is the drift mechanism that produced the three live tier-colour bugs, and
+it recurs on its own within days.** Do not weaken that guard.
+
+**Two collisions:** main's `HomeDescent` still had its own `.tnic-rail` (two
+rails on one page) — removed in favour of `SectionProgress`, with main's nicer
+panel treatment ported across. And #167 moved the canvases behind lazy
+`Deferred*Stage` wrappers, orphaning `InteractiveSciencePanel`; the panel now
+*wraps* those wrappers, so the lazy-mount seam still governs when the canvas
+loads. Stage handles cross that boundary as a plain `handleRef` prop —
+`next/dynamic` does not reliably forward refs.
+
+### Verification
+
+lint 0 errors · typecheck · **679/679 tests** · clean build. axe-core
+WCAG 2.1 A/AA + best-practice across 9 pages: **0 violations and 0 JS errors on
+`/`, a compound deep-dive, `/hallmarks`, `/nico`, `/stacks`, `/elite-8`,
+`/peptides`.** Rail driven in a browser: 44px step at a 44px pitch, every step
+owning its own centre, all 9 landing correctly in both normal and
+reduced-motion contexts.
+
+**Known pre-existing a11y debt on `main`, NOT from this branch** (proven by
+diffing the owning files, not assumed) — worth a future pass:
+
+- `/library`: 24 colour-contrast failures on the TNiC-score chip's `/100`
+  suffix (`#248b6c` on `#0c1f29` at 8.5px ≈ 4:1), plus 7 `dl`/`dlitem`
+  structure failures in `EvidenceTierSpectrum.tsx` (`<dt>`/`<dd>` wrapped in
+  intermediate `<div>`s).
+- `/trust/methodology`: 1 heading-order skip in `EvidenceGradingLadder.tsx`.
+
+**The stale-`next start` trap recorded below bit twice during this pass**,
+producing exactly the misleading result it warns about (a hit-area test
+"failing" against a previous build). Confirm the port is free *and* that the
+serving process postdates the build — `ss -ltn` alone raced and reported free
+while a server still held it.
+
+
 ## 2026-08-28 — mobile GPU paint budget for the always-on blur layers
 
 A performance pass on the *visual* layer (no restyle). Audit finding: the
