@@ -116,22 +116,27 @@ the other.
 | Touch min | `--space-touch: 2.75rem` (44px) |
 | Spacing scale | `--space-1…9`: 4, 8, 12, 16, 24, 32, 48, 72, 112px |
 
-**Touch targets.** Use `.touch-target` when the control can afford to be 44px.
-When it cannot — a compact filter chip, a scene-rail step — expand the *hit
-area* instead of the control:
+**Touch targets.** Prefer making the control 44px. Expand the *hit area*
+instead only where real height would wreck the layout — a compact filter chip
+in a wrapping row.
 
 | Class | Use for |
 |---|---|
-| `.touch-target` | Controls that can simply be 44px (icon buttons, nav rows) |
-| `.tap-expand` | An isolated compact control with clear space around it — grows the hit area on **both** axes |
-| `.tap-expand-y` | A compact control inside a row of them — grows **vertically only** |
+| `.touch-target` | Controls that can simply be 44px (icon buttons, nav rows, rail steps) |
+| `.tap-expand-y` | A compact control inside a row of them — grows the hit area **vertically only** |
 | `.chip-row` | The container for a wrapping chip row. Its 16px row gap is load-bearing |
 
 An expanded hit area that overlaps a neighbour's is worse than a small one: the
-wrong control receives the tap, silently. Measured on the homepage filter row —
-28px chips at a 36px row pitch had their expanded areas overlap by 8px, and a
-tap 6px below one chip landed on the chip in the row beneath. `.chip-row`'s
-16px gap makes the pitch exactly 44px, so the areas tile without overlapping.
+wrong control receives the tap, silently. **This bit twice.** On the homepage
+filter row, 28px chips at a 36px row pitch overlapped by 8px and a tap 6px
+below one chip landed on the chip in the row beneath. On the section rail, 14px
+ticks at an 18px pitch overlapped so badly that clicking one step activated
+another — caught only once the test clicked *every* step rather than the last
+one, which has no later sibling to steal from it.
+
+So: pair `.tap-expand-y` with `.chip-row`, whose 16px gap makes the pitch
+exactly 44px; and never expand a control whose neighbours sit closer than 44px
+away. A both-axes variant existed briefly and was removed once nothing used it.
 
 ---
 

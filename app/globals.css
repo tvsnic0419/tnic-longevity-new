@@ -520,26 +520,28 @@ p,
   min-width: var(--space-touch);
 }
 
-/* Extends a visually compact control's HIT AREA to the 44px minimum without
-   growing the control itself — a filter chip can keep its small pill shape and
-   still be comfortably tappable. Use this instead of .touch-target wherever
-   padding the control to 44px would wreck the layout (chip rows, scene rails).
+/* Extends a visually compact control's HIT AREA vertically to the 44px minimum
+   without growing the control itself — a filter chip keeps its small pill shape
+   and is still comfortably tappable. Use this instead of .touch-target only
+   where padding the control out to 44px would wreck the layout; where the
+   control CAN simply be 44px, make it 44px.
    The pseudo-element is deliberately NOT pointer-events:none — it IS the
    enlarged target. Only safe on controls with no interactive children.
 
    IMPORTANT: an expanded hit area can overlap a neighbour's, and then the
-   wrong control receives the tap — which is worse than a small target, because
-   it is silently wrong rather than merely fiddly. Measured on the homepage
-   filter row: 28px chips at a 36px row pitch had their expanded areas overlap
-   by 8px, and a tap 6px below one chip landed on the chip in the row beneath.
-   So: use `.tap-expand-y` inside wrapping rows (vertical only — horizontal
-   padding already carries chips past 44px wide), and give the row `.chip-row`,
-   whose 16px row gap makes the pitch exactly 44px with no overlap at all.
-   Reserve the both-axes `.tap-expand` for isolated controls with clear space
-   around them. */
-.tap-expand,
+   wrong control receives the tap — worse than a small target, because it is
+   silently wrong rather than merely fiddly. This bit twice. On the homepage
+   filter row, 28px chips at a 36px row pitch overlapped by 8px and a tap 6px
+   below one chip landed on the chip in the row beneath. On the section rail,
+   14px ticks at an 18px pitch overlapped so badly that clicking one step
+   activated another. So: pair this with `.chip-row`, whose 16px row gap makes
+   the pitch exactly 44px, and never expand a control whose neighbours sit
+   closer than 44px away.
+
+   Vertical only, deliberately: horizontal padding already carries chips past
+   44px wide, and a both-axes variant existed briefly with no consumers left
+   once the rail moved to a real 44px height. */
 .tap-expand-y { position: relative; }
-.tap-expand::after,
 .tap-expand-y::after {
   content: "";
   position: absolute;
@@ -550,7 +552,6 @@ p,
   height: 100%;
   min-height: var(--space-touch);
 }
-.tap-expand::after { min-width: var(--space-touch); }
 
 /* A wrapping row of compact chips. The 16px row gap is load-bearing, not
    taste: 28px chip + 16px = a 44px pitch, exactly the expanded hit height, so
