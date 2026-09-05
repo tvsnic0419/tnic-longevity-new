@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, BookOpen, FlaskConical, Microscope, Shield, Zap, Leaf, Recycle } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { StructuredData } from '@/components/seo/StructuredData';
-import { buildPageMetadata, buildCollectionPageSchema, buildBreadcrumbSchema } from '@/lib/seo';
+import { buildPageMetadata, buildCollectionPageSchema, buildBreadcrumbSchema, buildFaqPageSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
 import { SUPPLEMENT_GUIDES } from '@/lib/guides';
 import { themes } from '@/lib/design-system';
@@ -14,7 +14,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 
 export const metadata: Metadata = buildPageMetadata({
-  title: 'Longevity Supplement Guides 2026 — Evidence-Based Deep Dives | TNiC',
+  title: 'Longevity Supplement Guides 2026 — Evidence-Based Deep Dives',
   description:
     'Comprehensive supplement guides covering NAD+, GlyNAC, berberine, taurine, sulforaphane, and more. Each guide covers the clinical evidence, optimal dosing, and how each compound targets specific hallmarks of aging.',
   path: '/supplement-guides',
@@ -48,6 +48,29 @@ const GUIDE_ICONS: Record<string, LucideIcon> = {
   '/sulforaphane-supplement-guide': Leaf,
   '/spermidine-supplement-guide': Recycle,
 };
+
+const GUIDE_SELECTION_FAQS = [
+  {
+    question: 'Where should I start if I am new to longevity supplements?',
+    answer:
+      'Begin with the Master Guide for orientation, then move to the guide that matches the specific compound or comparison you are evaluating. Evidence tiers describe the strength and type of available research; they are not personal medical recommendations.',
+  },
+  {
+    question: 'Do these guides provide personal dosing instructions?',
+    answer:
+      'No. Study sections report the form and amount used in cited research for context. They do not select an amount, schedule, or duration for an individual.',
+  },
+  {
+    question: 'How should I evaluate a product after reading a guide?',
+    answer:
+      'Treat the research question and the product-verification question separately. Compare the label’s form and amount with the evidence context, then use the product pages to review manufacturer information and quality checks.',
+  },
+  {
+    question: 'When should I involve a clinician or pharmacist?',
+    answer:
+      'Discuss any supplement you are considering with a qualified health professional if you take medicines, are pregnant or breastfeeding, or are preparing for surgery. Bring the complete list of medicines and supplements you use.',
+  },
+] as const;
 
 const comparisons = [
   { href: '/library/compare/nmn-vs-nr', label: 'NMN vs NR', desc: 'The definitive NAD+ precursor showdown' },
@@ -86,6 +109,8 @@ const breadcrumbSchema = buildBreadcrumbSchema([
   { name: 'Supplement Guides', path: '/supplement-guides' },
 ]);
 
+const guideSelectionFaqSchema = buildFaqPageSchema([...GUIDE_SELECTION_FAQS]);
+
 const itemListSchema = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
@@ -105,7 +130,14 @@ const itemListSchema = {
 export default function SupplementGuidesPage() {
   return (
     <SubPageLayout hideStackReadout>
-      <StructuredData schemas={[collectionSchema, breadcrumbSchema, itemListSchema]} />
+      <StructuredData
+        schemas={[
+          collectionSchema,
+          breadcrumbSchema,
+          itemListSchema,
+          ...(guideSelectionFaqSchema ? [guideSelectionFaqSchema] : []),
+        ]}
+      />
 
       <div className="bg-bg-base">
         {/* Cinematic hub hero — decorative band; the semantic <h1> is the
@@ -135,6 +167,84 @@ export default function SupplementGuidesPage() {
               description="Mechanism, key human-trial data, dosing protocol, and honest cautions for each major longevity compound — structured around the 12 Hallmarks of Aging."
               theme="cyan"
             />
+          </div>
+        </section>
+
+        {/* A decision framework turns a card index into a guided reading path.
+            It intentionally separates research context, product-label comparison,
+            and personalized safety review — the key distinctions that readers need
+            before interpreting any individual guide. */}
+        <section aria-labelledby="guide-reading-path" className="relative overflow-hidden border-b border-border bg-[radial-gradient(100%_90%_at_12%_0%,color-mix(in_srgb,var(--accent-cyan)_7%,transparent),transparent_54%)] py-16 md:py-20">
+          <div className="container-page">
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:items-start">
+              <div className="max-w-xl">
+                <p className="text-label mb-3 text-accent-cyan">A better way to use this library</p>
+                <h2 id="guide-reading-path" className="heading-section mb-4">Move from a question to a well-framed decision.</h2>
+                <p className="text-body text-muted-foreground">
+                  You do not need to read the library in order. Start with the question you are trying to answer, then move from the evidence to the product context and finally to the safety questions that only your full health picture can answer.
+                </p>
+                <p className="mt-4 text-body-sm text-muted-foreground">
+                  The purpose is not to assemble the longest stack. It is to understand what a compound is being studied for, how strong that evidence is, and what information is still missing before you act.
+                </p>
+                <Link href="/trust/methodology" className="link-underline mt-6 inline-flex items-center gap-2 text-sm font-semibold text-accent-cyan">
+                  See how TNiC grades evidence
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+              </div>
+
+              <ol className="grid gap-3 sm:grid-cols-2" aria-label="How to use the supplement guide library">
+                {[
+                  {
+                    step: '01',
+                    title: 'Start with the decision',
+                    body: 'Use the Master Guide for broad orientation, a compound guide for depth, or a comparison when two options are competing for the same role.',
+                    href: '/longevity-supplements-guide',
+                    link: 'Open the Master Guide',
+                    accent: 'var(--accent-cyan)',
+                  },
+                  {
+                    step: '02',
+                    title: 'Read the evidence before the product',
+                    body: 'Check the evidence tier, study context, and stated limitations first. Product pages are a separate verification step, not proof that an outcome is guaranteed.',
+                    href: '/trust/methodology',
+                    link: 'Review the methodology',
+                    accent: 'var(--accent-violet)',
+                  },
+                  {
+                    step: '03',
+                    title: 'Compare the form and label',
+                    body: 'Use each guide’s study context to understand the form and amount being discussed, then compare it with the Supplement Facts label rather than relying on marketing language alone.',
+                    href: '/shop',
+                    link: 'Use the product checklist',
+                    accent: 'var(--accent-emerald)',
+                  },
+                  {
+                    step: '04',
+                    title: 'Keep the full routine visible',
+                    body: 'Use the Stack Architect to organize your research. A complete list of medicines and supplements is the useful starting point for a clinician or pharmacist review.',
+                    href: '/stacks',
+                    link: 'Open Stack Architect',
+                    accent: 'var(--accent-amber)',
+                  },
+                ].map((item) => (
+                  <li key={item.step}>
+                    <Link
+                      href={item.href}
+                      style={{ ['--card-accent' as string]: item.accent }}
+                      className="premium-card focus-ring group h-full min-h-48 p-5"
+                    >
+                      <span className="mb-7 font-mono text-xs font-semibold tracking-[0.18em] [color:var(--card-accent)]">{item.step}</span>
+                      <h3 className="font-display text-xl font-medium tracking-tight text-foreground">{item.title}</h3>
+                      <p className="mt-2 flex-1 text-body-sm leading-relaxed text-muted-foreground">{item.body}</p>
+                      <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold [color:var(--card-accent)]">
+                        {item.link}
+                        <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true" />
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ol>
+            </div>
           </div>
         </section>
 
@@ -285,6 +395,66 @@ export default function SupplementGuidesPage() {
               Explore the full compound library
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
+          </div>
+        </section>
+
+        {/* Product interpretation and safety checkpoint. The source-backed
+            distinctions below are intentionally visible before product-oriented
+            next steps, but they do not make individualized treatment claims. */}
+        <section aria-labelledby="guide-safety-checkpoint" className="border-b border-border bg-[radial-gradient(80%_100%_at_92%_100%,color-mix(in_srgb,var(--accent-amber)_8%,transparent),transparent_58%)] py-16 md:py-20">
+          <div className="container-page">
+            <div className="premium-card overflow-visible p-6 md:p-8" style={{ ['--card-accent' as string]: 'var(--accent-amber)' }}>
+              <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+                <div>
+                  <p className="text-label mb-3 text-accent-amber">Safety and quality checkpoint</p>
+                  <h2 id="guide-safety-checkpoint" className="font-display text-3xl font-medium tracking-tight text-foreground md:text-4xl">Evidence, identity, and personal safety are three different checks.</h2>
+                  <p className="mt-4 text-body-sm leading-relaxed text-muted-foreground">
+                    A guide can help you understand the research. The label helps you identify the ingredient form and amount per serving. Neither replaces a conversation about your medicines, health history, or upcoming care.
+                  </p>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-3">
+                  <div className="rounded-xl border border-border/60 bg-white/[0.025] p-4">
+                    <p className="text-label mb-2 text-accent-cyan">Research context</p>
+                    <p className="text-body-sm text-muted-foreground">Read the evidence tier, study design, and limitations before deciding what a result means.</p>
+                  </div>
+                  <div className="rounded-xl border border-border/60 bg-white/[0.025] p-4">
+                    <p className="text-label mb-2 text-accent-emerald">Label and quality</p>
+                    <p className="text-body-sm text-muted-foreground">Supplement Facts identifies active ingredients and amounts. Quality testing can support identity and label accuracy; it does not establish effectiveness. <a className="link-underline text-accent-emerald" href="https://ods.od.nih.gov/factsheets/WYNTK-Consumer/" target="_blank" rel="noopener noreferrer">[1]</a></p>
+                  </div>
+                  <div className="rounded-xl border border-border/60 bg-white/[0.025] p-4">
+                    <p className="text-label mb-2 text-accent-amber">Personal safety</p>
+                    <p className="text-body-sm text-muted-foreground">Before starting or changing a supplement, involve a qualified professional if you take medicines, are pregnant or breastfeeding, or are preparing for surgery. <a className="link-underline text-accent-amber" href="https://www.fda.gov/consumers/consumer-updates/mixing-medications-and-dietary-supplements-can-endanger-your-health" target="_blank" rel="noopener noreferrer">[2]</a></p>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-7 flex flex-col gap-3 border-t border-border/60 pt-5 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+                <p>For label research, the NIH Dietary Supplement Label Database catalogs U.S. product-label information. <a className="link-underline text-accent-cyan" href="https://dsld.od.nih.gov" target="_blank" rel="noopener noreferrer">[3]</a></p>
+                <Link href="/trust" className="link-underline shrink-0 font-semibold text-accent-cyan">Visit the Trust Center</Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Short, directly answered questions make the index more useful without
+            duplicating the 40-question FAQ hub or generating new therapeutic claims. */}
+        <section aria-labelledby="guide-faq-heading" className="border-b border-border py-16 md:py-20">
+          <div className="container-page">
+            <div className="max-w-2xl">
+              <p className="text-label mb-3 text-accent-violet">Guide selection FAQ</p>
+              <h2 id="guide-faq-heading" className="heading-section mb-4">Four decisions to make before you go deeper.</h2>
+              <p className="text-body-sm text-muted-foreground">These answers explain how to use the content on this page; they are not a substitute for individualized medical advice.</p>
+            </div>
+            <dl className="mt-8 grid gap-4 md:grid-cols-2">
+              {GUIDE_SELECTION_FAQS.map((faq) => (
+                <div key={faq.question} className="premium-card p-5" style={{ ['--card-accent' as string]: 'var(--accent-violet)' }}>
+                  <dt className="font-display text-lg font-medium tracking-tight text-foreground">{faq.question}</dt>
+                  <dd className="mt-3 text-body-sm leading-relaxed text-muted-foreground">{faq.answer}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-6 text-caption leading-relaxed text-muted-foreground">
+              <strong className="text-foreground">References.</strong> <a className="link-underline text-accent-cyan" href="https://ods.od.nih.gov/factsheets/WYNTK-Consumer/" target="_blank" rel="noopener noreferrer">[1] NIH Office of Dietary Supplements, Dietary Supplements: What You Need to Know.</a>{' '}<a className="link-underline text-accent-cyan" href="https://www.fda.gov/consumers/consumer-updates/mixing-medications-and-dietary-supplements-can-endanger-your-health" target="_blank" rel="noopener noreferrer">[2] U.S. FDA, Mixing Medications and Dietary Supplements Can Endanger Your Health.</a>{' '}<a className="link-underline text-accent-cyan" href="https://ods.od.nih.gov/Research/Dietary_Supplement_Label_Database.aspx" target="_blank" rel="noopener noreferrer">[3] NIH Office of Dietary Supplements, Dietary Supplement Label Database.</a>
+            </p>
           </div>
         </section>
 

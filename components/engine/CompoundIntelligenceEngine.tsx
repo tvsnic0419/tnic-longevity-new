@@ -22,9 +22,7 @@
 ============================================================================ */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import {
-  RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer,
-} from 'recharts';
+import dynamic from 'next/dynamic';
 import {
   FlaskConical, Network, ShieldCheck, Search, X,
   AlertTriangle, CheckCircle2, Dna, ExternalLink, BookOpen, Info,
@@ -44,6 +42,14 @@ import { ENGINE_STACK_PARAM } from '@/lib/stack-url';
    `.text-label` in globals.css. SVG text is sized in user units, and every
    surface here renders its viewBox 1:1 or larger, so these are literal px. */
 const LABEL_PX = 11;
+
+// The recharts radar is lazy + client-only so recharts (~85 KB gz) stays out of
+// this route's first-load bundle. A same-size aria-hidden placeholder holds the
+// chart's slot so nothing reflows when it swaps in.
+const EngineRadar = dynamic(() => import('./EngineRadar'), {
+  ssr: false,
+  loading: () => <div aria-hidden style={{ width: '100%', height: '100%' }} />,
+});
 
 const css = `
 .sie-root{
@@ -710,20 +716,7 @@ export function CompoundIntelligenceEngine() {
 
                           <div style={{ display: 'grid', gridTemplateColumns: '240px minmax(0,1fr)', gap: 18, marginTop: 16, alignItems: 'center' }} className="sie-detail-grid">
                             <div style={{ height: 180 }}>
-                              <ResponsiveContainer width="100%" height="100%">
-                                {/* outerRadius pulled well in from the 80%
-                                    default: the axis labels are 11px mono and
-                                    need the margin to render unclipped. */}
-                                <RadarChart outerRadius="55%" data={[
-                                  { k: 'Evidence', v: selected.subs.evidence }, { k: 'Effect', v: selected.subs.effect },
-                                  { k: 'Breadth', v: selected.subs.breadth }, { k: 'Bioavail', v: selected.subs.bioavail },
-                                  { k: 'Safety', v: selected.subs.safety },
-                                ]}>
-                                  <PolarGrid stroke={COLORS.line} />
-                                  <PolarAngleAxis dataKey="k" tick={{ fill: COLORS.muted, fontSize: LABEL_PX, fontFamily: 'var(--font-mono)' }} />
-                                  <Radar dataKey="v" stroke={COLORS.jade} fill={COLORS.jade} fillOpacity={0.28} />
-                                </RadarChart>
-                              </ResponsiveContainer>
+                              <EngineRadar subs={selected.subs} />
                             </div>
                             {/* Same five axes as the radar, same order, one shared alignment. */}
                             <div style={{ display: 'grid', gap: 7 }}>

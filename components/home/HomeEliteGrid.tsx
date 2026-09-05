@@ -1,15 +1,19 @@
 'use client';
 
 import { useMemo, useState, type CSSProperties } from 'react';
+import { TIER_COLOR_VAR } from '@/lib/trust';
 import Link from 'next/link';
 import Image from 'next/image';
-import { BookOpen, ChevronDown } from 'lucide-react';
-import { ExternalAction } from '@/components/ui/ExternalAction';
+import { ExternalLink, BookOpen, Check, Plus } from 'lucide-react';
 import { eliteInterventions } from '@/lib/elite-interventions';
+import { useStack } from '@/context/PlatformContext';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
-import { evidenceTagDefinitions } from '@/lib/trust';
+import { EvidenceTrace } from '@/components/trust/EvidenceTrace';
 import { RevealItem } from '@/components/ui/RevealItem';
-import { SelectableChip } from '@/components/ui/SelectableChip';
+import { computeTnicScore, scoreBand } from '@/lib/tnic-score';
+
+// The canonical tier accent, imported from lib/trust.ts — this was a local copy.
+const TIER_ACCENT = TIER_COLOR_VAR;
 
 /**
  * The elite-interventions grid with a hallmark filter (section 03 of the
@@ -55,24 +59,21 @@ const CHIP_ORDER = [
   'dysbiosis',
 ];
 
-/** "Clinical" / "Emerging" / "Preclinical" — the tier's own authored descriptor. */
-const tierShort = (tier: keyof typeof evidenceTagDefinitions) => evidenceTagDefinitions[tier].short;
-
 function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)[number] }) {
   const { pick, compoundName, pathway, mechanismLine, evidence, studyCount, dose, hallmarks } =
     intervention;
   const brandShort = pick.brand.split(' ')[0];
-
-  // Mobile shows a compact preview: the decision layer (rank, tier, name,
-  // mechanism, the three facts) is always on the surface, and the product
-  // specifics open on one tap. Desktop renders everything, always — `sm:hidden`
-  // / `sm:block` do the switching, so the server HTML still carries the full
-  // card and every internal link for crawlers.
-  const [open, setOpen] = useState(false);
-  const detailId = `elite-detail-${intervention.compoundId}`;
+  const tnic = computeTnicScore(intervention.compoundId);
+  const accent = TIER_ACCENT[evidence];
+  const band = tnic.score !== null ? scoreBand(tnic.score) : null;
+  const { selected, toggle } = useStack();
+  const inStack = selected.includes(intervention.compoundId);
 
   return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-gradient-to-b from-card/70 to-card/25 transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-accent-emerald/50 hover:shadow-[0_24px_70px_-24px_rgba(16,185,129,0.4)]">
+    <div
+      className="elite-card premium-card group h-full"
+      style={{ '--card-accent': 'var(--accent-emerald)' } as CSSProperties}
+    >
       {/* top-edge light catch */}
       <span
         aria-hidden="true"
@@ -80,9 +81,7 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
       />
 
       {/* Product image band — layered ambience: emerald glow + dot-grid + hover shine */}
-      <div
-        className={`relative h-44 items-center justify-center overflow-hidden border-b border-border/50 sm:flex ${open ? 'flex' : 'hidden'}`}
-      >
+      <div className="elite-card-media relative flex h-44 items-center justify-center overflow-hidden border-b border-border/50">
         <span
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_100%_at_50%_120%,rgba(16,185,129,0.16),transparent_60%)]"
@@ -103,34 +102,19 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
           className="relative max-h-32 object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.55)] transition-transform duration-500 ease-out group-hover:-translate-y-1 group-hover:scale-[1.07]"
           unoptimized={pick.imageSrc.endsWith('.svg')}
         />
-        {/* Desktop only. On mobile these live in the header row below, which is
-            always visible — showing them here too would print the rank and the
-            tier twice once the drawer opens. */}
-        <span className="absolute left-3 top-3 z-10 hidden sm:inline-flex">
+        <span className="absolute left-3 top-3 z-10">
           <EvidenceTag tier={evidence} size="sm" href="/trust/methodology" />
         </span>
-        <span className="absolute right-4 top-2 z-10 hidden font-display text-3xl leading-none text-[var(--color-text-faint)] tabular-nums sm:block">
+        <span className="absolute right-4 top-2 z-10 font-display text-3xl leading-none text-[var(--color-text-faint)] tabular-nums">
           {String(intervention.rank).padStart(2, '0')}
         </span>
       </div>
 
-      {/* ── Header zone — rank, tier, mechanism label, compound name ──
-          On mobile the rank and tier move up here, since the image band they
-          normally sit on is collapsed. */}
+      {/* Body */}
       <div className="flex flex-1 flex-col p-5">
-        <div className="mb-1 flex items-center gap-2 sm:hidden">
-          <span className="font-display text-2xl leading-none text-[var(--color-text-faint)] tabular-nums">
-            {String(intervention.rank).padStart(2, '0')}
-          </span>
-          <EvidenceTag tier={evidence} size="sm" href="/trust/methodology" />
-        </div>
         <p className="text-label mb-1 text-accent-cyan">{pathway}</p>
         <h3 className="font-display mb-1.5 text-2xl font-medium tracking-tight text-foreground">{compoundName}</h3>
-        {/* Clamped: an uneven mechanism line used to stretch the whole grid row,
-            so the fact tables below never lined up card to card. */}
-        <p className="mb-4 line-clamp-2 min-h-[3.2em] text-[0.9375rem] leading-relaxed text-[var(--color-text-secondary)] antialiased">
-          {mechanismLine}
-        </p>
+        <p className="mb-4 text-[0.9375rem] leading-relaxed text-[var(--color-text-secondary)] antialiased">{mechanismLine}</p>
 
         {hallmarks.length > 0 && (
           <div className="mb-4 flex flex-wrap gap-1">
@@ -145,21 +129,34 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
           </div>
         )}
 
-        {/* ── Decision zone — the three consistent facts ──
-            Was two (studies, dose). Evidence strength was stranded up on the
-            image band, so it wasn't part of the comparable triple and vanished
-            entirely once the band collapsed on mobile. Three columns now, in
-            the same order on every card. */}
-        <dl className="mb-5 grid grid-cols-3 gap-x-3 rounded-lg border border-border/60 bg-white/[0.025] px-3.5 py-3">
-          <div>
-            <dt className="mb-0.5 font-mono text-micro font-semibold uppercase tracking-[0.12em] text-muted-foreground">Evidence</dt>
-            <dd className="text-sm font-semibold text-foreground">
-              Tier {evidence} · {tierShort(evidence)}
-            </dd>
+        {/* TNiC Score — the derived composite as the card's headline evidence
+            metric, tier-coloured, leading into the supporting micro-facts. */}
+        {tnic.score !== null && (
+          <div
+            className="mb-3 flex items-center justify-between gap-3 rounded-lg border px-3.5 py-2.5"
+            style={{
+              borderColor: `color-mix(in srgb, ${accent} 28%, transparent)`,
+              background: `color-mix(in srgb, ${accent} 7%, transparent)`,
+            }}
+          >
+            <span className="font-mono text-micro font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              TNiC Score
+            </span>
+            <span className="flex items-baseline gap-1.5">
+              <span className="font-mono text-xl font-bold tabular-nums" style={{ color: accent }}>
+                {Math.round(tnic.score)}
+              </span>
+              <span className="font-mono text-micro text-muted-foreground">/100{band ? ` · ${band}` : ''}</span>
+            </span>
           </div>
+        )}
+
+        {/* Evidence + dose micro-facts — framed and high-contrast so the
+            supporting data reads as crisp instrument readout, not fine print. */}
+        <dl className="mb-5 grid grid-cols-2 gap-x-3 gap-y-2 rounded-lg border border-border/60 bg-white/[0.025] px-3.5 py-3">
           <div>
-            <dt className="mb-0.5 font-mono text-micro font-semibold uppercase tracking-[0.12em] text-muted-foreground">Studies</dt>
-            <dd className="tnic-tabular font-mono text-sm font-semibold text-foreground">{studyCount}</dd>
+            <dt className="mb-0.5 font-mono text-micro font-semibold uppercase tracking-[0.12em] text-muted-foreground">Human studies cited</dt>
+            <dd className="tnic-tabular font-mono text-base font-semibold text-foreground">{studyCount}</dd>
           </div>
           <div>
             <dt className="mb-0.5 font-mono text-micro font-semibold uppercase tracking-[0.12em] text-muted-foreground">Studied dose</dt>
@@ -167,49 +164,52 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
           </div>
         </dl>
 
-        {/* Mobile-only disclosure for the product specifics. Desktop never sees
-            this control; the zones below are simply always visible there. */}
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          aria-expanded={open}
-          aria-controls={detailId}
-          className="focus-ring interactive mb-3 inline-flex min-h-[var(--space-touch)] items-center justify-between gap-2 rounded-xl border border-border/70 px-4 text-sm font-semibold text-[var(--color-text-secondary)] hover:border-accent-emerald/40 hover:text-accent-emerald sm:hidden"
-        >
-          {open ? 'Hide the verified pick' : 'See the verified pick'}
-          <ChevronDown
-            className={`h-4 w-4 shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
-            aria-hidden="true"
-          />
-        </button>
+        <EvidenceTrace
+          tier={evidence}
+          sourceCount={studyCount}
+          reviewedLabel="Dose-matched"
+          href={intervention.libraryHref}
+          className="mb-5"
+        />
 
-        {/* ── Recommendation + action zones ── */}
-        <div id={detailId} className={`mt-auto sm:block ${open ? 'block' : 'hidden'}`}>
+        {/* Verified pick */}
+        <div className="mt-auto">
           <p className="text-label mb-1 text-accent-emerald">Verified pick</p>
-          {/* Clamped for the same height reason as the mechanism line. */}
-          <p className="mb-1.5 line-clamp-2 min-h-[2.9em] text-sm font-medium text-foreground">
+          <p className="mb-3 text-sm font-medium text-foreground">
             {pick.brand} — <span className="text-[var(--color-text-secondary)]">{pick.productName}</span>
           </p>
-          {/* The "why this form" disclosure the card never showed. `whyThisPick`
-              was already authored in lib/product-picks.ts and rendered only in
-              the page's JSON-LD — nothing here is newly written. */}
-          <p className="mb-3 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
-            {pick.whyThisPick}
-          </p>
           <div className="flex flex-col gap-2">
-            <ExternalAction
+            <div className="grid grid-cols-2 gap-2">
+              <Link
+                href={intervention.libraryHref}
+                className="focus-ring tnic-button-primary inline-flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-sm"
+              >
+                <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
+                Read evidence
+              </Link>
+              {/* Add to the persistent protocol (StackDock) rather than
+                  navigating away and replacing the whole stack. */}
+              <button
+                type="button"
+                onClick={() => toggle(intervention.compoundId)}
+                aria-pressed={inStack}
+                className="elite-card-action-secondary focus-ring inline-flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold"
+                style={inStack ? { borderColor: 'color-mix(in srgb, var(--accent-emerald) 45%, transparent)', color: 'var(--accent-emerald)' } : undefined}
+              >
+                {inStack ? <Check className="h-3.5 w-3.5" aria-hidden="true" /> : <Plus className="h-3.5 w-3.5" aria-hidden="true" />}
+                {inStack ? 'In protocol' : 'Add to protocol'}
+              </button>
+            </div>
+            <a
               href={intervention.goHref}
-              destination={`${pick.productName} from ${pick.brand}`}
+              target="_blank"
+              rel="noopener noreferrer sponsored"
+              className="elite-card-action-verify focus-ring group/buy inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-semibold"
+              aria-label={`Check ${pick.productName} from ${pick.brand} — opens manufacturer site after evidence review`}
             >
-              Buy on {brandShort}
-            </ExternalAction>
-            <Link
-              href={intervention.libraryHref}
-              className="focus-ring inline-flex min-h-[var(--space-touch)] items-center justify-center gap-1.5 rounded-xl border border-border/70 px-4 py-2.5 text-sm font-semibold text-[var(--color-text-secondary)] transition-colors hover:border-accent-cyan/40 hover:text-accent-cyan"
-            >
-              <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
-              Read the evidence
-            </Link>
+              Verify on {brandShort}
+              <ExternalLink className="h-3.5 w-3.5 transition-transform duration-200 group-hover/buy:-translate-y-0.5 group-hover/buy:translate-x-0.5" aria-hidden="true" />
+            </a>
           </div>
         </div>
       </div>
@@ -233,32 +233,55 @@ export function HomeEliteGrid() {
       ? eliteInterventions
       : eliteInterventions.filter((e) => e.hallmarks.includes(active));
 
+  const chipClass = (on: boolean) =>
+    [
+      'focus-ring interactive rounded-full border px-3.5 py-1.5 font-mono text-micro font-semibold uppercase tracking-[0.12em] transition-all',
+      on
+        ? 'border-accent-emerald bg-accent-emerald/10 text-accent-emerald'
+        : 'border-border/70 bg-card/40 text-muted-foreground hover:border-foreground/40 hover:text-foreground',
+    ].join(' ');
+
   return (
     <>
-      <div
-        role="group"
-        aria-label="Filter elite interventions by hallmark"
-        className="chip-row mb-8"
-      >
-        <SelectableChip
-          selected={active === 'all'}
-          onSelect={() => setActive('all')}
-          label="All"
-        />
+      <div className="elite-filter-shell mb-8">
+        <div className="mb-3 flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
+          <div>
+            <p className="text-label text-accent-emerald">Evidence-led shortlist</p>
+            <p className="mt-1 text-sm text-muted-foreground">Filter by the biological system you want to explore.</p>
+          </div>
+          <span className="elite-filter-signal">{eliteInterventions.length} reviewed picks</span>
+        </div>
+        <div
+          role="group"
+          aria-label="Filter elite interventions by hallmark"
+          className="flex flex-wrap gap-2"
+        >
+        <button
+          type="button"
+          aria-pressed={active === 'all'}
+          onClick={() => setActive('all')}
+          className={chipClass(active === 'all')}
+        >
+          All
+        </button>
         {chips.map((h) => (
-          <SelectableChip
+          <button
             key={h}
-            selected={active === h}
-            onSelect={() => setActive(h)}
-            label={hallmarkLabels[h] ?? h}
-          />
+            type="button"
+            aria-pressed={active === h}
+            onClick={() => setActive(h)}
+            className={chipClass(active === h)}
+          >
+            {hallmarkLabels[h] ?? h}
+          </button>
         ))}
+        </div>
       </div>
 
       {/* Live count of the visible set, announced politely on filter change. */}
       <p
         aria-live="polite"
-        className="mb-4 font-mono text-micro font-semibold uppercase tracking-[0.12em] text-muted-foreground"
+        className="elite-filter-count mb-4 font-mono text-micro font-semibold uppercase tracking-[0.12em] text-muted-foreground"
       >
         {active === 'all'
           ? `${eliteInterventions.length} elite interventions`

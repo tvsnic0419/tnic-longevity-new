@@ -1,14 +1,14 @@
 "use client";
 
 import {
-  useRef, useEffect, useImperativeHandle, forwardRef,
+  useRef, useEffect, useImperativeHandle, useMemo, forwardRef,
   type MouseEvent, type TouchEvent, type WheelEvent,
 } from "react";
 import { getGeometry, type Geometry } from "./molecule";
 import type { StageHandle } from "./stage-handle";
 import type { RGB } from "./tokens";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { runWhenVisible, cappedDpr } from "@/lib/raf-visibility";
+import { runWhenVisible, cappedDpr, fitCanvas } from "@/lib/raf-visibility";
 import { makeGlowSprite, blitGlow, createGlowCache } from "@/lib/canvas-glow";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -67,6 +67,12 @@ export const MoleculeStage = forwardRef<StageHandle, {
   className?: string;
   style?: React.CSSProperties;
   ariaLabel?: string;
+  /**
+   * Plain-prop alternative to the forwarded ref. `next/dynamic` does not
+   * reliably forward refs, and this stage is lazy-loaded behind it, so the
+   * shell hands its handle down as an ordinary prop instead.
+   */
+  handleRef?: React.RefObject<StageHandle | null>;
 }>(function MoleculeStage({
   geometryId,
   hue,
@@ -74,6 +80,7 @@ export const MoleculeStage = forwardRef<StageHandle, {
   className,
   style,
   ariaLabel,
+  handleRef,
 }, ref) {
   const reduced = useReducedMotion();
   const reducedRef = useRef(false);
@@ -87,7 +94,7 @@ export const MoleculeStage = forwardRef<StageHandle, {
 
   // Expose the drag state so a shell can offer Reset / Zoom controls and a
   // keyboard path. Zoom limits mirror the wheel handler's exactly.
-  useImperativeHandle(ref, () => ({
+  const handle = useMemo<StageHandle>(() => ({
     reset() {
       const d = drag.current;
       d.rx = -0.15; d.ry = 0.5; d.vx = 0; d.vy = 0; d.zoom = 1;
@@ -101,6 +108,12 @@ export const MoleculeStage = forwardRef<StageHandle, {
       d.ry += dx; d.rx += dy; d.vx = 0; d.vy = 0;
     },
   }), []);
+  useImperativeHandle(ref, () => handle, [handle]);
+  useEffect(() => {
+    if (!handleRef) return;
+    handleRef.current = handle;
+    return () => { handleRef.current = null; };
+  }, [handle, handleRef]);
   useEffect(() => {
     geomRef.current = geometryId ? getGeometry(geometryId) : null;
   }, [geometryId]);
@@ -136,9 +149,8 @@ export const MoleculeStage = forwardRef<StageHandle, {
 
     function resize() {
       if (!cv || !ctx) return;
-      w = cv.clientWidth; h = cv.clientHeight;
-      cv.width = w * dpr; cv.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      // Device-pixel-exact backing store — crisp on fractional layout widths.
+      ({ w, h } = fitCanvas(cv, ctx, dpr));
     }
     resize();
     const ro = new ResizeObserver(resize); ro.observe(cv);

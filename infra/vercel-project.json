@@ -19,7 +19,7 @@
     "nameservers": ["ns1.vercel-dns.com", "ns2.vercel-dns.com"]
   },
   "git": {
-    "remote": "https://github.com/tvsnic0419/tnic-help.git",
+    "remote": "https://github.com/tvsnic0419/tnic-longevity-new.git",
     "productionBranch": "main"
   },
   "cron": [

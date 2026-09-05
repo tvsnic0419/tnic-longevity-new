@@ -4,6 +4,7 @@ import { MotionConfig } from 'framer-motion';
 import { PlatformProvider } from '@/context/PlatformContext';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
 import { OsOverlays } from '@/components/os/OsOverlays';
+import { StackDock } from '@/components/stack/StackDock';
 import type { ReactNode } from 'react';
 
 export function PlatformProviderWrapper({ children }: { children: ReactNode }) {
@@ -17,6 +18,7 @@ export function PlatformProviderWrapper({ children }: { children: ReactNode }) {
         <PlatformProvider>
           <OsOverlays />
           {children}
+          <StackDock />
         </PlatformProvider>
       </ThemeProvider>
     </MotionConfig>

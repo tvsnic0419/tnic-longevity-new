@@ -8,6 +8,13 @@ import { compoundModules } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { SelectableChip } from '@/components/ui/SelectableChip';
+import { computeTnicScore } from '@/lib/tnic-score';
+import { TIER_COLOR_VAR } from '@/lib/trust';
+
+// Tier accent for the score chip — the canonical map, imported. main added a
+// local copy here; that is precisely the duplication the site-integrity guard
+// added in Phase 2 exists to catch.
+const TIER_ACCENT = TIER_COLOR_VAR;
 import type { EvidenceTier } from '@/lib/types';
 
 /**
@@ -158,13 +165,32 @@ export function CompoundExplorer() {
               .map((id) => HALLMARK_BY_ID.get(id))
               .filter((h): h is NonNullable<typeof h> => Boolean(h))
               .slice(0, 3);
+            const tnic = m.compoundId ? computeTnicScore(m.compoundId) : null;
+            const scoreAccent = TIER_ACCENT[m.evidenceTier];
             return (
               <li
                 key={m.slug}
                 className="glass glass-hover group relative flex h-full flex-col rounded-xl border border-border p-4"
               >
                 <div className="mb-2 flex items-start justify-between gap-2">
-                  <EvidenceTag tier={m.evidenceTier} size="sm" />
+                  <div className="flex items-center gap-1.5">
+                    <EvidenceTag tier={m.evidenceTier} size="sm" />
+                    {tnic && tnic.score !== null && (
+                      <span
+                        className="relative z-10 inline-flex items-baseline gap-0.5 rounded-full border px-1.5 py-0.5 font-mono text-micro font-semibold tabular-nums"
+                        style={{
+                          color: scoreAccent,
+                          borderColor: `color-mix(in srgb, ${scoreAccent} 30%, transparent)`,
+                          background: `color-mix(in srgb, ${scoreAccent} 8%, transparent)`,
+                        }}
+                        title={`TNiC Score ${Math.round(tnic.score)} / 100`}
+                      >
+                        {Math.round(tnic.score)}
+                        <span className="text-[0.85em] opacity-60">/100</span>
+                        <span className="sr-only"> TNiC Score</span>
+                      </span>
+                    )}
+                  </div>
                   <ArrowUpRight
                     className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent-cyan"
                     aria-hidden="true"

@@ -1,36 +1,37 @@
-'use client';
-
-import { useState } from 'react';
+import type { CSSProperties } from 'react';
 import Link from 'next/link';
-import { ArrowUpRight, BookOpen } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { getHallmarkVisual } from '@/lib/hallmark-visuals';
 import { HallmarkIcon } from '@/components/library/HallmarkIcon';
-import { EvidenceTag } from '@/components/trust/EvidenceTag';
-import { GlassPanel } from '@/components/ui/GlassPanel';
 import { RevealItem } from '@/components/ui/RevealItem';
 import { CellularDivider } from '@/components/ui/CellularDivider';
 import { HallmarksConstellation } from '@/components/ui/HallmarksConstellation';
 
 /**
  * The homepage's evidence surface: all 12 hallmarks of aging, each paired
- * with its top-ranked interventions. The case for TNiC is the interventions
- * themselves, not a pitch about the platform.
+ * with its top-ranked interventions. Replaces the old trust-narrative
+ * section — the case for TNiC is the interventions themselves, not a pitch
+ * about the platform.
  *
- * Selecting a hallmark now opens a **persistent detail panel in place** rather
- * than navigating straight out to a deep-dive — the visitor can compare
- * several mechanisms before committing to a route.
- *
- * Crawlability is preserved deliberately: all twelve detail panels are
- * rendered into the HTML and only the selected one is shown, exactly as the
- * elite grid does with its filter. If the cards were buttons and the panel
- * were conditionally rendered, the homepage would ship one hallmark link
- * instead of twelve.
+ * Each card is a color-coded instrument tile: its frame carries the hallmark's
+ * own accent (`--card-accent`), while the ranked-intervention rows carry the
+ * canonical evidence-tier colors (A/emerald · B/cyan · C/amber) — the frame says
+ * *which mechanism*, the chips say *how strong the evidence*.
  */
 
-export function HomeHallmarks() {
-  const [activeId, setActiveId] = useState(hallmarkLibrary[0]?.id ?? '');
+// Map each hallmark's theme accent to the CSS custom property the .hm-card frame
+// reads. Kept explicit (not string-built) so the accent set stays a closed,
+// auditable list rather than an arbitrary interpolation.
+const ACCENT_VAR: Record<string, string> = {
+  cyan: 'var(--accent-cyan)',
+  emerald: 'var(--accent-emerald)',
+  violet: 'var(--accent-violet)',
+  amber: 'var(--accent-amber)',
+  rose: 'var(--accent-rose)',
+};
 
+export function HomeHallmarks() {
   return (
     <section
       id="mechanisms"
@@ -72,113 +73,46 @@ export function HomeHallmarks() {
           </div>
         </div>
 
-        <div
-          className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-          role="group"
-          aria-label="The 12 hallmarks of aging"
-        >
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {hallmarkLibrary.map((h, i) => {
             const { theme } = getHallmarkVisual(h.visual);
-            const isActive = h.id === activeId;
+            const topInterventions = [...h.interventions].sort((a, b) => a.rank - b.rank).slice(0, 3);
 
             return (
-              <RevealItem key={h.id} index={i} className="h-full">
-                <GlassPanel
-                  depth="mid"
-                  className={`glass-hover h-full overflow-hidden rounded-2xl transition-colors ${
-                    isActive ? 'ring-1 ring-accent-emerald/50' : ''
-                  }`}
+              <RevealItem key={h.id} index={i}>
+                <Link
+                  href={`/hallmarks/${h.slug}`}
+                  className="hm-card focus-ring group"
+                  style={{ '--card-accent': ACCENT_VAR[theme] ?? 'var(--accent-cyan)' } as CSSProperties}
                 >
-                  <button
-                    type="button"
-                    aria-pressed={isActive}
-                    aria-controls={`hallmark-detail-${h.id}`}
-                    onClick={() => setActiveId(h.id)}
-                    className="focus-ring group flex h-full w-full flex-col p-5 text-left"
-                  >
-                    <div className="mb-4 flex items-center justify-between">
-                      <span className={`inline-flex h-9 w-9 items-center justify-center rounded-lg icon-badge-${theme}`}>
-                        <HallmarkIcon type={h.visual} size={18} ring={false} />
-                      </span>
-                      <span className="font-mono text-xs text-muted-foreground">#{h.number}</span>
-                    </div>
-                    <h3 className="heading-card mb-1.5 text-sm">{h.title}</h3>
-                    {/* The one-line description. `tagline` was already authored
-                        and rendered on /hallmarks, but never here. */}
-                    <p className="text-body-sm mb-3 line-clamp-2 leading-snug text-muted-foreground">
-                      {h.tagline}
-                    </p>
-                    <ul className="mt-auto space-y-1.5">
-                      {[...h.interventions]
-                        .sort((a, b) => a.rank - b.rank)
-                        .slice(0, 2)
-                        .map((iv) => (
-                          <li key={iv.id} className="text-body-sm flex items-center gap-1.5 leading-snug">
-                            <EvidenceTag tier={iv.evidence} size="sm" showTooltip={false} />
-                            <span className="line-clamp-1">{iv.name}</span>
-                          </li>
-                        ))}
-                    </ul>
-                  </button>
-                </GlassPanel>
+                  <div className="hm-card__head">
+                    <span className={`inline-flex h-10 w-10 items-center justify-center rounded-xl icon-badge-${theme}`}>
+                      <HallmarkIcon type={h.visual} size={20} ring={false} />
+                    </span>
+                    <span className="hm-card__num" aria-hidden="true">
+                      {String(h.number).padStart(2, '0')}
+                    </span>
+                  </div>
+                  <h3 className="hm-card__title">{h.title}</h3>
+                  <ul className="hm-card__rows">
+                    {topInterventions.map((iv) => (
+                      <li key={iv.id} className="hm-row">
+                        <span className={`hm-tier hm-tier--${iv.evidence}`} aria-hidden="true">
+                          {iv.evidence}
+                        </span>
+                        <span className="hm-row__name">
+                          <span className="sr-only">Tier {iv.evidence}: </span>
+                          {iv.name}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                  <span className="hm-card__go">
+                    View mechanism
+                    <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
+                  </span>
+                </Link>
               </RevealItem>
-            );
-          })}
-        </div>
-
-        {/* Persistent detail panel. Every hallmark's panel is in the HTML — only
-            the selected one is shown — so all 24 routes below stay crawlable
-            from the homepage. */}
-        <div className="mt-6">
-          {hallmarkLibrary.map((h) => {
-            const isActive = h.id === activeId;
-            const ranked = [...h.interventions].sort((a, b) => a.rank - b.rank).slice(0, 4);
-
-            return (
-              <div
-                key={h.id}
-                id={`hallmark-detail-${h.id}`}
-                className={`premium-card p-6 md:p-7 ${isActive ? 'block' : 'hidden'}`}
-                style={{ ['--card-accent' as string]: 'var(--accent-emerald)' }}
-              >
-                <p className="text-label mb-2 text-accent-emerald">
-                  Hallmark {h.number} · {ranked.length} ranked interventions
-                </p>
-                <h3 className="heading-card mb-1.5 text-lg">{h.title}</h3>
-                <p className="text-body mb-5 max-w-[60ch]">{h.tagline}</p>
-
-                <ul className="mb-6 grid gap-2 sm:grid-cols-2">
-                  {ranked.map((iv) => (
-                    <li
-                      key={iv.id}
-                      className="flex items-center gap-2 rounded-lg border border-border/60 bg-white/[0.02] px-3 py-2"
-                    >
-                      <span className="tnic-tabular shrink-0 font-mono text-micro font-bold text-muted-foreground">
-                        {String(iv.rank).padStart(2, '0')}
-                      </span>
-                      <EvidenceTag tier={iv.evidence} size="sm" showTooltip={false} />
-                      <span className="text-body-sm line-clamp-1">{iv.name}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="flex flex-wrap gap-2">
-                  <Link
-                    href={`/hallmarks/${h.slug}`}
-                    className="focus-ring tnic-button-tonal [--btn-accent:var(--accent-emerald)] inline-flex min-h-[var(--space-touch)] items-center gap-1.5 rounded-xl px-4 py-2.5 text-sm"
-                  >
-                    Read the {h.title} deep dive
-                    <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                  </Link>
-                  <Link
-                    href={`/library/${h.slug}`}
-                    className="focus-ring tnic-button-outline inline-flex min-h-[var(--space-touch)] items-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-semibold"
-                  >
-                    <BookOpen className="h-4 w-4" aria-hidden="true" />
-                    Library module
-                  </Link>
-                </div>
-              </div>
             );
           })}
         </div>

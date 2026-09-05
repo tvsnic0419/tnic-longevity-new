@@ -7,11 +7,19 @@ import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { RevealItem } from '@/components/ui/RevealItem';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { getHallmarkVisual } from '@/lib/hallmark-visuals';
+import { HallmarkIcon } from '@/components/library/HallmarkIcon';
+import { HallmarkCoverageAtlas } from '@/components/hallmarks/HallmarkCoverageAtlas';
 
 export const metadata: Metadata = {
-  title: '12 Hallmarks of Aging | TNiC Longevity Science',
+  // Absolute title so the root layout's `%s | TNiC` template doesn't double the
+  // brand ("… Longevity Science | TNiC").
+  title: { absolute: '12 Hallmarks of Aging | TNiC Longevity Science' },
   description:
     'The complete guide to all 12 hallmarks of aging — genomic instability, telomere attrition, epigenetic alterations, and more. Evidence-graded interventions and biomarker monitoring for each.',
+  // Self-canonical: without this the page inherited the root canonical
+  // (homepage), telling crawlers it was a duplicate — suppressing its indexing.
+  alternates: { canonical: '/hallmarks' },
   openGraph: {
     title: '12 Hallmarks of Aging — Evidence Guide | TNiC',
     description:
@@ -84,6 +92,10 @@ export default function HallmarksIndexPage() {
         </div>
       </section>
 
+        <div className="container-page max-w-5xl">
+          <HallmarkCoverageAtlas />
+        </div>
+
         {/* Hallmark grid */}
         <section className="py-20">
           <div className="container-page max-w-5xl">
@@ -97,25 +109,37 @@ export default function HallmarksIndexPage() {
                 const hasEditorial = EDITORIAL_SLUGS.has(h.slug);
                 const topIntervention = [...h.interventions].sort((a, b) => a.rank - b.rank)[0];
                 const coverageColor = COVERAGE_COLOR(h.coverage);
+                const { theme, colorVar } = getHallmarkVisual(h.visual);
                 return (
                   <RevealItem key={h.id} index={i} className="h-full">
                     <div
-                      // `.premium-card` is already `display:flex; flex-direction:column`, but the
-                // Tailwind `flex flex-col` here makes that explicit and, more to the
-                // point, the card previously relied on it implicitly while its
-                // children used `flex-1` / `mt-auto` — which were inert, so the
-                // footer links were never actually bottom-pinned as intended.
-                className="premium-card flex h-full flex-col p-5"
-                      style={{ ['--card-accent' as string]: 'var(--accent-emerald)' }}
+                      // The card relied on `.premium-card`'s own flex column
+                      // implicitly while its children used `flex-1` / `mt-auto`,
+                      // which were therefore inert — the footer links were never
+                      // bottom-pinned as the markup intended. Made explicit.
+                      className="premium-card flex h-full flex-col p-5"
+                      style={{ ['--card-accent' as string]: colorVar }}
                     >
-                      {/* Header */}
-                      <div className="mb-3 flex items-start justify-between gap-2">
-                        <div>
-                          <span className="font-mono text-xs text-muted-foreground">#{h.number}</span>
-                          <h3 className="mt-0.5 font-display text-lg font-medium tracking-tight text-foreground">
-                            {h.title}
-                          </h3>
-                        </div>
+                      {/* Header — icon + ghost index carry the hallmark's own
+                          accent so the grid reads as a color-coded taxonomy,
+                          matching the homepage §04 mechanism cards. */}
+                      <div className="mb-3 flex items-start justify-between gap-3">
+                        <span className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl icon-badge-${theme}`}>
+                          <HallmarkIcon type={h.visual} size={20} ring={false} />
+                        </span>
+                        <span
+                          className="font-display text-3xl font-medium leading-none tabular-nums"
+                          style={{ color: `color-mix(in srgb, ${colorVar} 42%, transparent)` }}
+                          aria-hidden="true"
+                        >
+                          {String(h.number).padStart(2, '0')}
+                        </span>
+                      </div>
+
+                      <div className="mb-3 flex items-baseline justify-between gap-2">
+                        <h3 className="font-display text-lg font-medium tracking-tight text-foreground">
+                          {h.title}
+                        </h3>
                         <span
                           className="shrink-0 font-mono text-xs font-bold tabular-nums"
                           style={{ color: coverageColor }}

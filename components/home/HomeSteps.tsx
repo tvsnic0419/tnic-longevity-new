@@ -67,46 +67,24 @@ export function HomeSteps() {
           </p>
         </RevealItem>
 
-        {/* Connecting track — badges sit at the flex row's own edges via
-            justify-between, so a 22px inset (half the 44px badge) on each
-            side lands the line exactly at every badge's center. Desktop only;
-            each step shows its own badge inline below on mobile instead.
-            The track is emerald end-to-end (this section's accent) and deepens
-            left→right so the three badges read as an ordered progression, not
-            three equal dots. */}
-        <div aria-hidden="true" className="relative mb-8 hidden items-center justify-between md:flex">
-          <div className="absolute left-[22px] right-[22px] top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-accent-emerald/30 via-accent-emerald/50 to-accent-emerald/70" />
-          {steps.map(({ num, icon: Icon }) => (
-            <span
-              key={num}
-              className="relative z-10 flex h-11 w-11 items-center justify-center rounded-full icon-badge-emerald ring-4 ring-background"
-            >
-              <Icon className="h-5 w-5 text-accent-emerald" aria-hidden="true" />
-            </span>
-          ))}
-        </div>
-
-        <ol className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-8">
+        <ol className="step-row grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-6">
           {steps.map(({ num, icon: Icon, title, desc, cta, href }, i) => (
-            <li key={num}>
-              <RevealItem index={i}>
-                <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-full icon-badge-emerald md:hidden">
-                  <Icon className="h-5 w-5 text-accent-emerald" aria-hidden="true" />
-                </span>
-                <p className="mb-1.5 font-mono text-xs font-bold tracking-widest text-accent-emerald/70">
-                  STEP {num}
-                </p>
-                <h3 className="heading-card mb-2 text-lg">{title}</h3>
-                <p className="text-body-sm mb-4 leading-relaxed">{desc}</p>
-                <Link
-                  href={href}
-                  className="focus-ring group inline-flex items-center gap-1.5 rounded-md text-sm font-semibold text-accent-emerald"
-                >
-                  {cta}
-                  <ArrowRight
-                    className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
-                    aria-hidden="true"
-                  />
+            <li key={num} className="h-full">
+              <RevealItem index={i} className="h-full">
+                <Link href={href} className="step-card focus-ring group">
+                  <div className="step-card__head">
+                    <span className="step-card__icon icon-badge-emerald">
+                      <Icon className="h-5 w-5 text-accent-emerald" aria-hidden="true" />
+                    </span>
+                    <span className="step-card__num" aria-hidden="true">{num}</span>
+                  </div>
+                  <p className="step-card__eyebrow">Step {num}</p>
+                  <h3 className="step-card__title">{title}</h3>
+                  <p className="step-card__desc">{desc}</p>
+                  <span className="step-card__cta">
+                    {cta}
+                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                  </span>
                 </Link>
               </RevealItem>
             </li>

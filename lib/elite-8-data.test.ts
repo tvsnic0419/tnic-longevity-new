@@ -6,10 +6,16 @@ import {
   getScoredCompounds,
   sumLQWeights,
 } from './elite-8-data';
+import { journeyMilestones } from './journey';
 
 describe('elite-8-data', () => {
   it('has eight compounds', () => {
     expect(ELITE_8_COMPOUNDS).toHaveLength(8);
+  });
+
+  it('keeps the trust journey metric aligned with the canonical ranking', () => {
+    const milestone = journeyMilestones.find((item) => item.title === 'Elite 8 + Tier B Expansion');
+    expect(milestone?.metric).toBe(`${ELITE_8_COMPOUNDS.length} compounds · /elite-8 live`);
   });
 
   it('weights sum to 1.0 (CE–HP) minus penalty weight', () => {

@@ -43,10 +43,28 @@ export function HomeEliteInterventions() {
           </p>
         </RevealItem>
 
+        <RevealItem className="elite-briefing-grid mb-8">
+          <div>
+            <span className="elite-briefing-label">Evidence threshold</span>
+            <strong>{tierA} Tier A</strong>
+            <p>Selections led by human clinical evidence.</p>
+          </div>
+          <div>
+            <span className="elite-briefing-label">Match standard</span>
+            <strong>Dose-matched</strong>
+            <p>Products aligned to the studied form and amount.</p>
+          </div>
+          <div>
+            <span className="elite-briefing-label">Buying posture</span>
+            <strong>Verify first</strong>
+            <p>Manufacturer link, evidence trace, and COA guidance.</p>
+          </div>
+        </RevealItem>
+
         <HomeEliteGrid />
 
         {/* Disclosure — required because this section leads with product buys */}
-        <div className="premium-card mt-8 p-4 text-sm" style={{ '--card-accent': 'var(--accent-amber)' } as CSSProperties}>
+        <div className="elite-disclosure premium-card mt-8 p-4 text-sm" style={{ '--card-accent': 'var(--accent-amber)' } as CSSProperties}>
           <div className="flex items-start gap-3">
             <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-accent-amber" aria-hidden="true" />
             <p className="leading-relaxed text-muted-foreground">
@@ -62,7 +80,7 @@ export function HomeEliteInterventions() {
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Link
             href="/products"
-            className="focus-ring group inline-flex items-center justify-center gap-2 rounded-xl bg-accent-emerald/12 px-5 py-3 text-sm font-semibold text-accent-emerald transition-colors hover:bg-accent-emerald/20"
+            className="focus-ring tnic-button-primary group inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm"
           >
             See all recommended products
             <ArrowUpRight
@@ -72,7 +90,7 @@ export function HomeEliteInterventions() {
           </Link>
           <Link
             href="/shop"
-            className="focus-ring inline-flex items-center justify-center gap-2 rounded-xl border border-border/70 px-5 py-3 text-sm font-semibold text-[var(--color-text-secondary)] transition-colors hover:border-accent-amber/40 hover:text-accent-amber"
+            className="elite-section-secondary-action focus-ring inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold"
           >
             Verify a product before you buy
           </Link>

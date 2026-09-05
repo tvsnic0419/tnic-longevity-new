@@ -13,7 +13,10 @@ import {
   Rocket,
   Syringe,
   Waypoints,
+  Orbit,
   BarChart3,
+  Sparkles,
+  ArrowRight,
 } from 'lucide-react';
 import { POPULAR_GUIDE_LINKS } from '@/lib/index-priority';
 import { citationRegistry } from '@/lib/trust';
@@ -29,6 +32,7 @@ const hubLinks = [
   { href: '/library', label: 'Anti-Aging Library', icon: Library },
   { href: '/peptides', label: 'Peptide Library', icon: Syringe },
   { href: '/pathways', label: 'Pathways', icon: Waypoints },
+  { href: '/sirtuin-atlas', label: 'Sirtuin Atlas', icon: Orbit },
   { href: '/learn', label: 'Learn Hub', icon: GraduationCap },
   { href: '/insights', label: 'Longevity by the Numbers', icon: BarChart3 },
   { href: '/stacks', label: 'Stacks & Protocols', icon: Layers },
@@ -76,9 +80,56 @@ export function Footer() {
             No supplement inventory to move. No user health data sales model.
             Just cell-health research made easier to inspect, question, and apply responsibly.
           </p>
+          {/* Closing conversion beat — the footer's one action moment, so the
+              long scroll ends in a next step rather than a wall of links.
+              Semantic color: emerald primary = advance (the questionnaire),
+              cyan secondary = explore (the library). */}
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+            <Link
+              href="/nico"
+              className="tnic-button-primary focus-ring group inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm"
+            >
+              <Sparkles className="h-4 w-4" aria-hidden="true" />
+              Start the NICO Questionnaire
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+            </Link>
+            <Link
+              href="/library"
+              className="tnic-button-secondary focus-ring inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm"
+            >
+              <Library className="h-4 w-4" aria-hidden="true" />
+              Explore the evidence library
+            </Link>
+          </div>
         </div>
 
         <FooterBriefSubscribe />
+
+        <section className="mb-12 rounded-3xl border border-accent-cyan/20 bg-accent-cyan/[0.045] p-5 md:p-6" aria-labelledby="footer-start-heading">
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-xl">
+              <p className="text-label mb-2 text-accent-cyan">Choose your next step</p>
+              <h2 id="footer-start-heading" className="font-display text-2xl tracking-tight text-foreground md:text-3xl">Start with the question you actually have.</h2>
+              <p className="mt-2 text-body-sm">Use the shortest path to the evidence, comparison, or starting point you need.</p>
+            </div>
+            <Link href="/site-map" className="focus-ring inline-flex shrink-0 items-center gap-2 rounded-xl border border-border/70 px-4 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-accent-cyan/50 hover:text-accent-cyan">
+              View the full map <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+          <div className="mt-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { href: '/supplement-guides', label: 'Understand a supplement', detail: 'Mechanism, human evidence, and cautions' },
+              { href: '/best', label: 'Find by goal', detail: 'Goal-led shortlists without hype' },
+              { href: '/library', label: 'Explore the library', detail: 'Compounds, hallmarks, and comparisons' },
+              { href: '/nico', label: 'Build a starting point', detail: 'A free, adjustable questionnaire' },
+            ].map((link) => (
+              <Link key={link.href} href={link.href} className="focus-ring group rounded-2xl border border-border/60 bg-background/25 p-4 transition-colors hover:border-accent-cyan/40 hover:bg-accent-cyan/[0.07]">
+                <span className="block text-sm font-semibold text-foreground group-hover:text-accent-cyan">{link.label}</span>
+                <span className="mt-1 block text-caption leading-relaxed">{link.detail}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-6 gap-8 lg:gap-10 mb-10">
           <div className="sm:col-span-2 lg:col-span-1">

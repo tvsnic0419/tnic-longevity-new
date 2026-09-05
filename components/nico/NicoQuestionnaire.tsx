@@ -16,6 +16,9 @@ import {
 import { SelectableChip } from '@/components/ui/SelectableChip';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
+import { EvidenceTrace } from '@/components/trust/EvidenceTrace';
+import { trackEvent } from '@/lib/analytics';
+import { ANALYTICS_EVENTS } from '@/lib/analytics-events';
 import {
   computeNicoStack,
   NICO_DEFAULT_ANSWERS,
@@ -46,6 +49,24 @@ type StepId = 'goals' | 'age' | (typeof SCALE_ORDER)[number] | 'focus' | 'safety
 
 const STEP_IDS: StepId[] = ['goals', 'age', ...SCALE_ORDER, 'focus', 'safety', 'result'];
 const QUESTION_COUNT = STEP_IDS.length - 1; // excludes the result screen
+
+function primaryEvidenceTier(mix: { A: number; B: number; C: number }): 'A' | 'B' | 'C' {
+  if (mix.A > 0) return 'A';
+  if (mix.B > 0) return 'B';
+  return 'C';
+}
+
+// The questionnaire asks one focused question at a time, but the experience
+// should still read as a coherent path rather than nine anonymous screens.
+// These are presentational waypoints only; the scoring engine remains unchanged.
+const JOURNEY_STAGES = [
+  { label: 'Goals', start: 0, end: 0 },
+  { label: 'Basics', start: 1, end: 1 },
+  { label: 'Lifestyle', start: 2, end: 6 },
+  { label: 'Focus', start: 7, end: 7 },
+  { label: 'Safety', start: 8, end: 8 },
+  { label: 'Stack', start: 9, end: 9 },
+] as const;
 
 /** Renders just the 1–5 buttons + low/high labels. The question itself is the
  * step's own <h2> now that each scale has a full screen — no duplicate text. */
@@ -112,7 +133,8 @@ function QuestionHeading({
 
 export function NicoQuestionnaire() {
   const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<NicoAnswers>({ ...NICO_DEFAULT_ANSWERS });
+  const [answers, setAnswers] = useState<NicoAnswers>(NICO_DEFAULT_ANSWERS);
+  const [researchRouteOpen, setResearchRouteOpen] = useState(false);
 
   const stepId = STEP_IDS[step];
   const isResult = stepId === 'result';
@@ -130,7 +152,8 @@ export function NicoQuestionnaire() {
   const goNext = () => setStep((s) => Math.min(STEP_IDS.length - 1, s + 1));
   const goBack = () => setStep((s) => Math.max(0, s - 1));
   const restart = () => {
-    setAnswers({ ...NICO_DEFAULT_ANSWERS });
+    setAnswers(NICO_DEFAULT_ANSWERS);
+    setResearchRouteOpen(false);
     setStep(0);
   };
 
@@ -158,6 +181,8 @@ export function NicoQuestionnaire() {
     result && result.compoundIds.length
       ? `/stacks?stack=${result.compoundIds.join(',')}&from=nico`
       : '/stacks';
+
+  const selectedGoalOptions = NICO_GOAL_OPTIONS.filter((goal) => answers.goals.includes(goal.id));
 
   const currentQuestionText = (() => {
     switch (stepId) {
@@ -187,17 +212,60 @@ export function NicoQuestionnaire() {
           theme="emerald"
         />
 
-        {/* Progress — "Step X of N" plus a continuous bar. A per-segment tick
-            row (as the old 5-step version used) gets too dense once each
-            question has its own screen, so this mirrors the pacing already
-            verified on real devices for a similarly-sized flow. */}
+        {/* On the first question, move the meaningful assurances out of the
+            explanatory paragraph and into a quick visual promise close to the
+            first decision. This clarifies what the visitor gets before asking
+            for any personal context. */}
+        {step === 0 && (
+          <div className="mb-6 grid grid-cols-3 overflow-hidden rounded-2xl border border-border/70 bg-card/40">
+            <div className="border-r border-border/60 px-3 py-3 text-center">
+              <p className="text-[0.5625rem] font-mono font-semibold uppercase tracking-[0.1em] text-accent-emerald">Goal-led</p>
+              <p className="mt-1 text-xs font-medium text-foreground">Starts with you</p>
+            </div>
+            <div className="border-r border-border/60 px-3 py-3 text-center">
+              <p className="text-[0.5625rem] font-mono font-semibold uppercase tracking-[0.1em] text-accent-emerald">No account</p>
+              <p className="mt-1 text-xs font-medium text-foreground">Begin freely</p>
+            </div>
+            <div className="px-3 py-3 text-center">
+              <p className="text-[0.5625rem] font-mono font-semibold uppercase tracking-[0.1em] text-accent-emerald">Build-ready</p>
+              <p className="mt-1 text-xs font-medium text-foreground">Open your stack</p>
+            </div>
+          </div>
+        )}
+
+        {/* Progress now combines the exact question count with a human-readable
+            map of the personalization journey. The phases reveal what remains
+            without making the one-question flow feel more complex. */}
         {!isResult && (
           <div className="mb-8">
-            <div className="flex items-center justify-between mb-2">
+            <div className="mb-3 flex items-center justify-between gap-3">
               <p className="font-mono text-micro uppercase tracking-widest text-accent-emerald">
                 Question {step + 1} of {QUESTION_COUNT}
               </p>
+              <p className="text-micro font-mono uppercase tracking-wide text-muted-foreground">Your path</p>
             </div>
+            <ol className="mb-3 grid grid-cols-6 gap-1" aria-label="NICO personalization journey">
+              {JOURNEY_STAGES.map((stage) => {
+                const active = step >= stage.start && step <= stage.end;
+                const complete = step > stage.end;
+                return (
+                  <li key={stage.label} aria-current={active ? 'step' : undefined}>
+                    <div
+                      className={[
+                        'rounded-md border px-1 py-1.5 text-center font-mono text-[0.5rem] font-semibold uppercase leading-tight tracking-[0.05em] transition-colors',
+                        active
+                          ? 'border-accent-emerald/60 bg-accent-emerald/12 text-accent-emerald'
+                          : complete
+                            ? 'border-accent-cyan/20 bg-accent-cyan/[0.06] text-accent-cyan'
+                            : 'border-border/60 bg-card/30 text-muted-foreground',
+                      ].join(' ')}
+                    >
+                      {stage.label}
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
             <div className="h-1 rounded-full bg-border/50 overflow-hidden">
               <div
                 className="h-full rounded-full bg-accent-emerald transition-all duration-300"
@@ -227,6 +295,14 @@ export function NicoQuestionnaire() {
                   />
                 ))}
               </div>
+              {selectedGoalOptions.length > 0 && (
+                <aside className="mt-4 rounded-xl border border-accent-emerald/25 bg-accent-emerald/[0.06] px-4 py-3" aria-live="polite">
+                  <p className="text-micro font-mono font-semibold uppercase tracking-[0.11em] text-accent-emerald">Your stack anchor</p>
+                  <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
+                    NICO will prioritize {selectedGoalOptions.map((goal) => goal.label).join(', ')} as it builds your starting stack.
+                  </p>
+                </aside>
+              )}
             </section>
           )}
 
@@ -387,6 +463,51 @@ export function NicoQuestionnaire() {
                   </ul>
                 </div>
               )}
+
+              <div className="card-elevated p-4 mb-4">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <p className="text-micro font-mono text-accent-cyan uppercase tracking-wider">Evidence route</p>
+                    <p className="mt-1 text-xs text-muted-foreground">Inspect the biology and source context before treating this as a starting configuration.</p>
+                  </div>
+                  <EvidenceTrace
+                    tier={primaryEvidenceTier(result.evidenceMix)}
+                    reviewedLabel="Methodology visible"
+                    href="/trust/methodology"
+                    surface="nico_result"
+                    className="shrink-0"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const next = !researchRouteOpen;
+                    setResearchRouteOpen(next);
+                    if (next) trackEvent(ANALYTICS_EVENTS.nicoResearchRouteOpened, { compound_count: result.compoundCount });
+                  }}
+                  aria-expanded={researchRouteOpen}
+                  className="focus-ring interactive mt-4 inline-flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs font-semibold text-accent-cyan hover:bg-accent-cyan/[0.08]"
+                >
+                  {researchRouteOpen ? 'Hide research route' : 'See what to inspect next'}
+                  <ArrowRight className={`h-3.5 w-3.5 transition-transform ${researchRouteOpen ? 'rotate-90' : ''}`} aria-hidden="true" />
+                </button>
+                {researchRouteOpen && (
+                  <div className="mt-3 grid gap-2 sm:grid-cols-3">
+                    <Link href={`/library/compounds/${result.compounds[0]?.id ?? ''}`} className="focus-ring rounded-lg border border-border/65 bg-background/25 p-3 text-xs font-semibold text-foreground transition-colors hover:border-accent-cyan/35 hover:text-accent-cyan">
+                      <span className="text-micro font-mono uppercase tracking-[0.1em] text-accent-cyan">Inspect</span>
+                      <span className="mt-1.5 block">Read the lead compound</span>
+                    </Link>
+                    <Link href={`/library/systems?hallmark=${result.compounds[0]?.hallmarks[0] ?? ''}`} className="focus-ring rounded-lg border border-border/65 bg-background/25 p-3 text-xs font-semibold text-foreground transition-colors hover:border-accent-violet/35 hover:text-accent-violet">
+                      <span className="text-micro font-mono uppercase tracking-[0.1em] text-accent-violet">Connect</span>
+                      <span className="mt-1.5 block">Map a hallmark pathway</span>
+                    </Link>
+                    <Link href="/labs?mode=single" className="focus-ring rounded-lg border border-border/65 bg-background/25 p-3 text-xs font-semibold text-foreground transition-colors hover:border-accent-emerald/35 hover:text-accent-emerald">
+                      <span className="text-micro font-mono uppercase tracking-[0.1em] text-accent-emerald">Review</span>
+                      <span className="mt-1.5 block">Log a starting reference</span>
+                    </Link>
+                  </div>
+                )}
+              </div>
 
               {result.safetyNotes.length > 0 && (
                 <div className="rounded-xl border border-accent-rose/30 bg-accent-rose/10 p-4 mb-6">

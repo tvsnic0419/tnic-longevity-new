@@ -25,6 +25,7 @@ export function recordModuleVisit(module: LibraryModule): void {
     };
     const deduped = [entry, ...existing.filter((e) => e.slug !== module.slug)].slice(0, MAX_RECENT);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(deduped));
+    window.dispatchEvent(new Event('tnic:research-passport-updated'));
   } catch {
     /* ignore quota */
   }

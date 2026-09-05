@@ -125,7 +125,7 @@ export function SectionProgress({
             // hit areas of adjacent steps overlapped so badly that clicking
             // one step activated another. Same failure the chip rows hit;
             // `.tap-expand-y` is for controls that genuinely cannot grow.
-            ? 'relative min-h-[var(--space-touch)] w-full justify-end rounded text-right'
+            ? 'min-h-[var(--space-touch)] w-full justify-end rounded px-1 text-right'
             : 'min-h-[var(--space-touch)] rounded-lg px-2.5',
           state === 'active'
             ? 'text-accent-cyan'
@@ -136,17 +136,17 @@ export function SectionProgress({
       >
         {layout === 'rail' ? (
           <>
-            {/* Absolutely positioned to the LEFT of the tick, and never
-                wrapping. In flow it would have to fit the rail's own width,
-                and labels like "04 MECHANISMS" wrapped and clipped against it.
-                Floating it keeps every label on one line and keeps the rail —
-                and therefore its clickable area — exactly as wide as the tick. */}
+            {/* Fixed-width and truncated rather than wrapping: labels like
+                "04 MECHANISMS" used to wrap and clip against the rail's width.
+                The plate now reserves room for them, so they stay on one line. */}
             <span
               className={cn(
-                'pointer-events-none absolute right-full mr-2.5 whitespace-nowrap font-mono text-micro tracking-[0.16em] transition-opacity duration-300',
+                'text-label pointer-events-none w-[92px] shrink-0 truncate text-right transition-opacity duration-300',
+                // main's rail kept labels legible at rest (opacity .54) rather
+                // than hiding them until hover; that reads better and is kept.
                 state === 'active'
                   ? 'opacity-100'
-                  : 'opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100',
+                  : 'opacity-55 group-hover:opacity-100 group-focus-visible:opacity-100',
               )}
             >
               {step.numeral ? `${step.numeral} ` : ''}
@@ -179,7 +179,7 @@ export function SectionProgress({
                 )}
               />
             )}
-            <span className="whitespace-nowrap font-mono text-micro font-semibold tracking-[0.12em]">
+            <span className="text-label whitespace-nowrap">
               {step.numeral ? `${step.numeral} ` : ''}
               {step.label.toUpperCase()}
             </span>
@@ -202,9 +202,14 @@ export function SectionProgress({
         // page content for no benefit.
         // gap-0 keeps the step pitch at exactly 44px — the step height — so
         // neighbouring hit areas tile without overlapping.
-        className="pointer-events-none fixed right-[clamp(14px,2.5vw,30px)] top-1/2 z-40 hidden w-14 -translate-y-1/2 flex-col md:flex"
+        className="pointer-events-none fixed right-[clamp(14px,2.5vw,30px)] top-1/2 z-40 hidden -translate-y-1/2 flex-col md:flex"
       >
-        <div className="pointer-events-auto flex flex-col">
+        {/* Panel treatment ported from the rail this replaced (main's
+            HomeDescent version): a bordered, blurred plate rather than bare
+            ticks floating on the page. gap-0 keeps the step pitch at exactly
+            44px — the step height — so neighbouring hit areas tile without
+            overlapping. */}
+        <div className="pointer-events-auto flex flex-col rounded-2xl border border-border/70 bg-[color-mix(in_srgb,var(--color-bg-base)_82%,transparent)] px-2 py-2 shadow-[0_12px_34px_-18px_rgba(0,0,0,0.6)] backdrop-blur-md">
           {steps.map((s, i) => item(s, i, 'rail'))}
         </div>
       </nav>

@@ -18,9 +18,12 @@ import { cn } from '@/lib/utils';
 import { EXPORT_KIT_EVENT } from '@/components/os/os-events';
 import { NextUpPanel } from '@/components/os/NextUpPanel';
 import { DashboardStatusExport } from '@/components/dashboard/DashboardStatusExport';
-import { OnboardingStrip } from '@/components/dashboard/OnboardingStrip';
+import { DashboardFocusDeck } from '@/components/dashboard/DashboardFocusDeck';
 import { UserNextStepsPanel } from '@/components/dashboard/UserNextStepsPanel';
 import { ContextRail } from '@/components/ui/ContextRail';
+import { ResearchPassport } from '@/components/dashboard/ResearchPassport';
+import { ResearchIntentPanel } from '@/components/dashboard/ResearchIntentPanel';
+import { ClubCabinet } from '@/components/dashboard/ClubCabinet';
 import { getHubContext } from '@/lib/hub-context';
 
 function formatDaysAgo(dateStr: string): string {
@@ -120,7 +123,7 @@ export function Dashboard() {
         <ContextRail {...getHubContext('dashboard')} theme="emerald" className="mb-8" />
       )}
 
-      <OnboardingStrip />
+      <DashboardFocusDeck />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         <div id="dashboard-status" className="lg:col-span-1">
@@ -223,6 +226,15 @@ export function Dashboard() {
             </CardContent>
           </Card>
         )}
+
+        <div className="lg:col-span-3 grid gap-6 xl:grid-cols-2">
+          <ClubCabinet />
+          <ResearchPassport />
+        </div>
+
+        <div className="lg:col-span-3">
+          <ResearchIntentPanel />
+        </div>
 
         <div className="lg:col-span-3">
           <UserMilestonesPanel />

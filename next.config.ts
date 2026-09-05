@@ -17,6 +17,16 @@ const nextConfig: NextConfig = {
   compress: true,
 
   images: {
+    // AVIF first (≈20–30% smaller than WebP at equal or better fidelity), WebP
+    // fallback — sharper product/media imagery at fewer bytes. next/image is
+    // used everywhere (no raw <img> in the tree), so every image benefits.
+    formats: ['image/avif', 'image/webp'],
+    // Serve a crisp source without over-fetching: 90 for the few hero/product
+    // shots that want the extra fidelity, 75 as the lean default (Next 16
+    // requires quality values to be allow-listed).
+    qualities: [75, 90],
+    // Cache the optimizer output for a day so repeat views skip re-encoding.
+    minimumCacheTTL: 86400,
     remotePatterns: [
       { protocol: 'https', hostname: 'www.codeage.com', pathname: '/cdn/shop/**' },
       { protocol: 'https', hostname: 'www.avmacol.com', pathname: '/cdn/shop/**' },
@@ -27,6 +37,21 @@ const nextConfig: NextConfig = {
 
   experimental: {
     optimizePackageImports: ['lucide-react', 'recharts', 'framer-motion'],
+  },
+
+  async rewrites() {
+    return {
+      // The public master-guide pathname is a stable, heavily linked canonical
+      // URL. Serve the unchanged implementation from a dedicated internal
+      // target so Next resolves it reliably while readers and crawlers retain
+      // the original public address and canonical metadata.
+      beforeFiles: [
+        {
+          source: '/longevity-supplements-guide',
+          destination: '/guides/master-longevity-supplements',
+        },
+      ],
+    };
   },
 
   async redirects() {

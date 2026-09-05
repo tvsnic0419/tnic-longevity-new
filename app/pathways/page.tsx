@@ -4,6 +4,7 @@ import { Waypoints, ArrowRight } from 'lucide-react';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { SynergyNetworkGraph } from '@/components/ui/SynergyNetworkGraph';
+import { PathwayFamilies } from '@/components/library/PathwayFamilies';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema } from '@/lib/seo';
 import {
@@ -77,9 +78,7 @@ export default function PathwaysHubPage() {
           theme="violet"
         />
 
-        <p className="mx-auto mb-12 max-w-3xl text-body-sm text-muted-foreground">
-          {pathways.length} pathways across {pathwayCategoryOrder.length} families.
-        </p>
+        <PathwayFamilies className="mb-12" />
 
         {pathwayCategoryOrder.map((category) => {
           const items = getPathwaysByCategory(category);

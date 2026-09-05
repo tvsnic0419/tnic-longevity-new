@@ -5,12 +5,12 @@ import { useState, useRef, useEffect, useMemo } from "react";
 import { eliteInterventions } from "@/lib/elite-interventions";
 import { COMPOUND_COUNT } from "@/lib/library-modules";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { DeferredMoleculeStage, DeferredNetworkStage } from "@/components/home/DeferredCinematicStage";
 import { InteractiveSciencePanel } from "@/components/viz/InteractiveSciencePanel";
 import type { StageHandle } from "@/components/viz/stage-handle";
-import { MoleculeStage } from "@/components/viz/MoleculeStage";
-import { NetworkStage, type NetworkNode, type NetworkEdge } from "@/components/viz/NetworkStage";
+import type { NetworkNode, NetworkEdge } from "@/components/viz/NetworkStage";
 import { HUES } from "@/components/viz/tokens";
-import { runWhenVisible, cappedDpr } from "@/lib/raf-visibility";
+import { runWhenVisible, cappedDpr, fitCanvas } from "@/lib/raf-visibility";
 import { createGlowCache, blitGlow } from "@/lib/canvas-glow";
 
 // Canvas draw colors are plain rgba literals (not CSS custom properties), so
@@ -89,8 +89,8 @@ const CSS = `
   position: absolute; inset: 0; width: 100%; height: 100%;
   pointer-events: none; display: block;
 }
-.tnic-shimmer { z-index: 0; }
-.tnic-cursor  { z-index: 1; mix-blend-mode: screen; opacity: .85; }
+.tnic-shimmer { z-index: 0; height: 100svh; }
+.tnic-cursor  { z-index: 1; height: 100svh; mix-blend-mode: screen; opacity: .85; }
 .tnic-vignette {
   z-index: 2;
   background:
@@ -105,6 +105,36 @@ const CSS = `
     linear-gradient(90deg, rgba(150,170,220,0.05) 1px, transparent 1px) 0 0/60px 60px;
   mask-image: radial-gradient(90% 70% at 50% 40%, #000 40%, transparent 100%);
   -webkit-mask-image: radial-gradient(90% 70% at 50% 40%, #000 40%, transparent 100%);
+}
+/* ── Volumetric arrival light ──
+   A single restrained light source high on the arrival screen: a soft cyan
+   "sun" that lifts the headline off the void, plus two faint, near-vertical
+   god-ray beams for depth. Sits at the very back (z:0, first layer) so the
+   particle shimmer and grid composite over it — it deepens the background,
+   never washes the foreground. Height is capped to the first screen so it
+   reads as the atmosphere of the arrival, not the whole descent. The drift is
+   a 34s barely-perceptible breath, disabled under reduced-motion. */
+.tnic-aurora {
+  z-index: 0; height: 118svh; opacity: .9;
+  background:
+    radial-gradient(52% 42% at 30% 8%, color-mix(in srgb, var(--cyan) 24%, transparent) 0%, transparent 58%),
+    radial-gradient(40% 40% at 82% 4%, color-mix(in srgb, var(--emerald) 12%, transparent) 0%, transparent 62%),
+    conic-gradient(from 180deg at 34% -14%,
+      transparent 0deg,
+      color-mix(in srgb, var(--cyan) 9%, transparent) 12deg,
+      transparent 26deg,
+      transparent 150deg,
+      color-mix(in srgb, var(--emerald) 7%, transparent) 172deg,
+      transparent 192deg);
+  mask-image: linear-gradient(180deg, #000 0%, #000 44%, transparent 82%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 44%, transparent 82%);
+  transform-origin: 40% 0%;
+  animation: tnic-aurora-drift 34s ease-in-out infinite;
+}
+:root[data-theme="light"] .tnic-aurora { opacity: .5; }
+@keyframes tnic-aurora-drift {
+  0%, 100% { transform: translate3d(-1.5%, 0, 0) scale(1.02); opacity: .82; }
+  50%      { transform: translate3d(2.5%, 0, 0) scale(1.06); opacity: 1; }
 }
 
 .tnic-act {
@@ -121,7 +151,7 @@ const CSS = `
   color: var(--cyan); margin: 0 0 20px;
   display: inline-flex; align-items: center; gap: 12px;
   opacity: 0; transform: translateY(14px);
-  transition: opacity .8s ease, transform .8s ease;
+  transition: opacity .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)), transform .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1));
 }
 .tnic-kicker::before { content: ''; width: 26px; height: 1px; background: var(--cyan); opacity: .6; }
 
@@ -130,7 +160,7 @@ const CSS = `
   font-size: clamp(44px, 9vw, 108px); line-height: 0.96;
   letter-spacing: -0.025em; margin: 0; color: var(--ink);
   opacity: 0; transform: translateY(22px);
-  transition: opacity 1s ease .08s, transform 1s ease .08s;
+  transition: opacity .58s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .04s, transform .58s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .04s;
 }
 .tnic-h1 em { font-style: italic; color: var(--cyan); }
 .tnic-h1 .warm { color: var(--gold); font-style: italic; }
@@ -140,7 +170,7 @@ const CSS = `
   font-size: clamp(32px, 6.2vw, 66px); line-height: 1.02;
   letter-spacing: -0.02em; margin: 0; color: var(--ink);
   opacity: 0; transform: translateY(20px);
-  transition: opacity 1s ease .08s, transform 1s ease .08s;
+  transition: opacity .58s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .04s, transform .58s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .04s;
 }
 .tnic-h2 em { font-style: italic; color: var(--cyan); }
 .tnic-h2 .warm { color: var(--gold); font-style: italic; }
@@ -149,8 +179,18 @@ const CSS = `
   font-size: clamp(15px, 2.1vw, 19px); line-height: 1.6;
   color: var(--muted); max-width: 52ch; margin: 22px 0 0;
   opacity: 0; transform: translateY(16px);
-  transition: opacity 1s ease .2s, transform 1s ease .2s;
+  transition: opacity .54s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .1s, transform .54s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .1s;
 }
+.tnic-trustline {
+  display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 18px;
+  max-width: 720px; color: var(--faint);
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+  opacity: 0; transform: translateY(12px);
+  transition: opacity .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .16s, transform .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .16s;
+}
+.tnic-trustline span { display: inline-flex; align-items: center; gap: 7px; }
+.tnic-trustline span::before { content: '•'; color: var(--cyan); font-size: 14px; line-height: 0; }
 .tnic-note {
   font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
   font-size: 11.5px; letter-spacing: .04em; color: var(--faint);
@@ -162,18 +202,67 @@ const CSS = `
 .is-in .tnic-h1,
 .is-in .tnic-h2,
 .is-in .tnic-lead,
+.is-in .tnic-trustline,
 .is-in .tnic-note,
 .is-in .tnic-stage,
 .is-in .tnic-molcard,
 .is-in .tnic-hero-badges,
-.is-in .tnic-hero-cta,
+.is-in .tnic-paths,
 .is-in .tnic-final { opacity: 1; transform: none; }
 
-.tnic-hero { align-items: flex-start; text-align: left; }
+.tnic-hero {
+  align-items: flex-start;
+  text-align: left;
+  isolation: isolate;
+}
+/* The first screen should feel atmospheric but never empty. These low-contrast
+   orbital planes focus the arrival moment without suggesting an actual molecular
+   structure or competing with the real render in Act 1. */
+.tnic-hero::before,
+.tnic-hero::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+}
+.tnic-hero::before {
+  width: min(70vw, 820px);
+  aspect-ratio: 1;
+  right: -10vw;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 1px solid color-mix(in srgb, var(--cyan) 15%, transparent);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 52px color-mix(in srgb, var(--cyan) 5%, transparent),
+    0 0 0 132px color-mix(in srgb, var(--indigo) 3%, transparent),
+    0 0 150px 36px color-mix(in srgb, var(--cyan) 8%, transparent);
+  opacity: .9;
+}
+.tnic-hero::after {
+  inset: 16% 4% 14% 46%;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--cyan) 16%, transparent) 1px, transparent 1px) 0 0 / 72px 72px,
+    linear-gradient(color-mix(in srgb, var(--cyan) 12%, transparent) 1px, transparent 1px) 0 0 / 72px 72px;
+  mask-image: radial-gradient(75% 80% at 70% 50%, #000 0%, transparent 72%);
+  -webkit-mask-image: radial-gradient(75% 80% at 70% 50%, #000 0%, transparent 72%);
+  opacity: .42;
+}
+@media (max-width: 720px) {
+  /* The global nav is fixed; reserve a deliberate arrival margin so the
+     eyebrow never enters beneath its glass edge on narrow screens. */
+  .tnic-hero {
+    justify-content: flex-start;
+    padding-top: calc(5.5rem + env(safe-area-inset-top));
+    padding-bottom: 4rem;
+  }
+  .tnic-hero::before { width: 100vw; right: -38vw; top: 28%; opacity: .56; }
+  .tnic-hero::after { inset: 8% -30% auto 18%; height: 44%; opacity: .24; }
+}
 .tnic-hero-badges {
   display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px;
   opacity: 0; transform: translateY(14px);
-  transition: opacity 1s ease .35s, transform 1s ease .35s;
+  transition: opacity .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .2s, transform .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .2s;
 }
 .tnic-hero-badges .pill {
   display: inline-flex; align-items: center; gap: 8px;
@@ -187,12 +276,90 @@ const CSS = `
 .tnic-hero-badges a.pill { text-decoration: none; transition: border-color .2s ease, color .2s ease, background .2s ease; }
 .tnic-hero-badges a.pill:hover { border-color: color-mix(in srgb, var(--cyan) 55%, transparent); color: var(--ink); background: rgba(14,20,38,0.8); }
 
-/* Primary action on the very first screen (Act 0) — a new visitor gets a clear
-   CTA above the fold instead of having to scroll the whole descent to act. */
-.tnic-hero-cta {
-  display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px;
+/* The arrival screen now makes the three principal visitor jobs explicit:
+   evaluate the strongest evidence, browse the science, or get a personalised
+   starting point. This replaces competing generic CTAs with a compact choice
+   architecture that stays inside the first viewport. */
+.tnic-paths {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;
+  width: min(100%, 780px); margin-top: 28px;
   opacity: 0; transform: translateY(14px);
-  transition: opacity 1s ease .45s, transform 1s ease .45s;
+  transition: opacity .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .26s, transform .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .26s;
+}
+.tnic-path {
+  position: relative; overflow: hidden;
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center;
+  gap: 10px; min-height: 82px; padding: 13px 14px; border-radius: 14px;
+  color: var(--ink); text-decoration: none; border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel) 86%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 8px 22px -18px rgba(0,0,0,.7);
+  transition: transform .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease;
+}
+/* Engineered top light-catch + hover accent bloom on the two secondary paths —
+   brings them up to the "elite card" tell without touching the primary gradient. */
+.tnic-path:not(.primary)::before {
+  content: ''; position: absolute; inset-inline: 0; top: 0; height: 1px; z-index: 2;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--cyan) 52%, transparent), transparent);
+  opacity: .55; pointer-events: none;
+}
+.tnic-path:not(.primary)::after {
+  content: ''; position: absolute; inset: 0; z-index: 0;
+  background: radial-gradient(130% 90% at 50% -20%, color-mix(in srgb, var(--cyan) 14%, transparent), transparent 60%);
+  opacity: 0; transition: opacity .25s ease; pointer-events: none;
+}
+.tnic-path:not(.primary) > * { position: relative; z-index: 1; }
+.tnic-path:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--cyan) 55%, transparent); background: color-mix(in srgb, var(--panel2) 92%, transparent); box-shadow: 0 14px 30px -16px rgba(95,227,224,.5), inset 0 1px 0 rgba(255,255,255,.08); }
+.tnic-path:not(.primary):hover::before { opacity: .95; }
+.tnic-path:not(.primary):hover::after { opacity: 1; }
+/* Tactile press — the card acknowledges the tap, matching the sitewide
+   press vocabulary in globals.css. Gated so reduced-motion users get none. */
+@media (prefers-reduced-motion: no-preference) {
+  .tnic-path:active { transform: translateY(0) scale(.988); transition-duration: .09s; }
+  .tnic-hero-badges a.pill:active { transform: scale(.96); }
+}
+.tnic-path.primary { color: #030712; border-color: transparent; background: linear-gradient(135deg, #5fe3e0 0%, #68e5c7 52%, #b8f3d8 100%); box-shadow: 0 10px 30px -16px rgba(95,227,224,.85); }
+.tnic-path.primary:hover { border-color: transparent; background: linear-gradient(135deg, #75ebe7 0%, #77ebcf 52%, #c8f7e2 100%); box-shadow: 0 14px 36px -16px rgba(95,227,224,.95); }
+.tnic-path-index { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10px; letter-spacing: .12em; color: var(--faint); }
+.tnic-path.primary .tnic-path-index { color: rgba(3,7,18,.58); }
+.tnic-path-copy { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.tnic-path-label { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 9px; line-height: 1.2; letter-spacing: .11em; text-transform: uppercase; color: var(--faint); }
+.tnic-path.primary .tnic-path-label { color: rgba(3,7,18,.62); }
+.tnic-path-name { font-size: 14px; line-height: 1.2; font-weight: 650; }
+.tnic-path-detail { font-size: 11px; line-height: 1.35; color: var(--muted); }
+.tnic-path.primary .tnic-path-detail { color: rgba(3,7,18,.66); }
+.tnic-path-arr { font-size: 18px; line-height: 1; color: var(--cyan); transition: transform .2s ease; }
+.tnic-path.primary .tnic-path-arr { color: #030712; }
+.tnic-path:hover .tnic-path-arr { transform: translateX(3px); }
+@media (max-width: 720px) {
+  /* Keep the full proof set, but turn it into a compact 2×2 telemetry panel so
+     the visitor reaches the primary choice in the first mobile viewport. */
+  .tnic-hero-badges {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    max-width: 440px;
+    margin-top: 20px;
+  }
+  .tnic-hero-badges .pill {
+    min-width: 0;
+    gap: 5px;
+    padding: 7px 8px;
+    font-size: 8px;
+    letter-spacing: .09em;
+    white-space: nowrap;
+  }
+  .tnic-hero-badges .pill .dot { width: 5px; height: 5px; }
+
+  /* One primary path earns the full row. The two supporting paths become an
+     adjacent comparison, preserving every destination without a three-card
+     vertical stack competing with the hero. */
+  .tnic-paths { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; max-width: 440px; margin-top: 18px; }
+  .tnic-path.primary { grid-column: 1 / -1; }
+  .tnic-path { min-height: 78px; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; padding: 11px; }
+  .tnic-path-index { display: none; }
+  .tnic-path-label { font-size: 8px; letter-spacing: .09em; }
+  .tnic-path-name { font-size: 13px; }
+  .tnic-path-detail { font-size: 10px; line-height: 1.3; }
 }
 
 .tnic-cue {
@@ -219,10 +386,48 @@ const CSS = `
     linear-gradient(180deg, rgba(14,20,38,0.55), rgba(10,14,30,0.85));
   border: 1px solid var(--line);
 }
-.tnic-stage canvas, .tnic-stage svg { width: 100%; height: 100%; display: block; }
+.tnic-stage canvas, .tnic-stage svg { position: relative; z-index: 1; width: 100%; height: 100%; display: block; }
+.tnic-stage-mount { position: relative; width: 100%; height: 100%; isolation: isolate; }
+.tnic-stage-fallback {
+  position: absolute; z-index: 0; inset: 0; overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(95,227,224,0.14), transparent 17%),
+    radial-gradient(circle at 50% 50%, rgba(140,140,245,0.1), transparent 45%),
+    linear-gradient(135deg, rgba(95,227,224,0.025), transparent 44%, rgba(140,140,245,0.035));
+}
+.tnic-stage-fallback::before {
+  content: ''; position: absolute; inset: 10%; opacity: .26;
+  background:
+    linear-gradient(rgba(95,227,224,.14) 1px, transparent 1px) 0 0 / 42px 42px,
+    linear-gradient(90deg, rgba(95,227,224,.14) 1px, transparent 1px) 0 0 / 42px 42px;
+  mask-image: radial-gradient(70% 70% at 50% 50%, #000 0%, transparent 80%);
+  -webkit-mask-image: radial-gradient(70% 70% at 50% 50%, #000 0%, transparent 80%);
+}
+.tnic-stage-fallback__orbit,
+.tnic-stage-fallback__node,
+.tnic-stage-fallback__core { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+.tnic-stage-fallback__orbit { border: 1px solid rgba(95,227,224,.24); border-radius: 50%; transform: translate(-50%, -50%) rotate(-18deg); }
+.tnic-stage-fallback__orbit--outer { width: 68%; aspect-ratio: 1.8; border-color: rgba(140,140,245,.18); animation: tnic-orbit-breathe 11s ease-in-out infinite; }
+.tnic-stage-fallback__orbit--middle { width: 50%; aspect-ratio: 1.8; transform: translate(-50%, -50%) rotate(54deg); border-color: rgba(95,227,224,.28); animation: tnic-orbit-breathe 8s ease-in-out infinite reverse; }
+.tnic-stage-fallback__orbit--inner { width: 31%; aspect-ratio: 1.8; transform: translate(-50%, -50%) rotate(-48deg); border-color: rgba(240,196,106,.3); animation: tnic-orbit-breathe 6s ease-in-out infinite; }
+@keyframes tnic-orbit-breathe { 0%, 100% { opacity: .62; scale: .98; } 50% { opacity: 1; scale: 1.02; } }
+.tnic-stage-fallback__node { width: .55rem; height: .55rem; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 0 .25rem rgba(95,227,224,.08), 0 0 1.2rem rgba(95,227,224,.62); }
+.tnic-stage-fallback__node--one { margin: -25% 0 0 27%; }
+.tnic-stage-fallback__node--two { margin: 20% 0 0 -25%; background: var(--gold); box-shadow: 0 0 0 .25rem rgba(240,196,106,.08), 0 0 1.2rem rgba(240,196,106,.56); }
+.tnic-stage-fallback__node--three { margin: -18% 0 0 -33%; background: var(--violet); box-shadow: 0 0 0 .25rem rgba(185,140,240,.08), 0 0 1.2rem rgba(185,140,240,.56); }
+.tnic-stage-fallback__core { width: 7%; aspect-ratio: 1; border: 1px solid rgba(255,255,255,.72); border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, var(--cyan) 42%, rgba(95,227,224,.12) 100%); box-shadow: 0 0 0 12px rgba(95,227,224,.06), 0 0 2.2rem rgba(95,227,224,.6); }
+.tnic-stage-fallback__label { position: absolute; left: 22px; top: 20px; display: flex; flex-direction: column; gap: 5px; color: var(--faint); font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 9px; letter-spacing: .16em; line-height: 1.2; text-transform: uppercase; }
+.tnic-stage-fallback__label strong { color: var(--ink); font-size: 11px; font-weight: 500; letter-spacing: .1em; }
+.tnic-stage-placeholder { display: none; }
+@media (max-width: 720px) { .tnic-stage-fallback__label { left: 16px; top: 16px; } }
 
-/* .tnic-molhint retired — the always-on "drag · scroll to zoom" line is now
-   InteractiveSciencePanel's first-use cue, which dismisses once used. */
+.tnic-molhint {
+  position: absolute; bottom: 12px; right: 14px;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 11px;
+  color: var(--faint); letter-spacing: .06em; pointer-events: none;
+  display: flex; align-items: center; gap: 7px;
+}
+.tnic-molhint .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 10px var(--cyan); animation: tnic-cuepulse 2s infinite; }
 
 .tnic-molcard {
   background: linear-gradient(180deg, var(--panel2), var(--panel));
@@ -237,22 +442,18 @@ const CSS = `
 .tnic-molcard .fact { display: flex; flex-direction: column; gap: 3px; }
 .tnic-molcard .fact .k { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--faint); }
 .tnic-molcard .fact .v { font-size: 15px; color: var(--ink); }
-/* The shared science panel, sized inside the Descent's two-column wraps. The
-   old hand-rolled .tnic-stage frame lives on for other callers; these two acts
-   now use the shell so they get the title bar, legend, controls and keyboard
-   path with everything else on the site. */
+/* The shared science panel, sized inside the Descent's two-column wraps. It
+   wraps the deferred stage rather than replacing it, so the lazy-mount seam
+   (DeferredCinematicStage) still governs when the canvas loads. Stage ratios
+   match the .tnic-stage frame these acts used before — the molecule renderer
+   sizes geometry to the canvas, so a changed ratio crops it. */
 .tnic-sci { background: linear-gradient(180deg, var(--panel2), var(--panel)); border-color: var(--line); }
-/* Stage ratios preserved from the .tnic-stage frame these two acts used
-   before — the molecule renderer sizes its geometry to the canvas, so a
-   changed ratio crops it. */
-.tnic-sci > div:nth-child(2) { min-height: 300px; }
-.tnic-molwrap .tnic-sci > div:nth-child(2) { aspect-ratio: 16 / 10; max-height: 62vh; }
-.tnic-netwrap .tnic-sci > div:nth-child(2) { aspect-ratio: 10 / 7; max-height: 62vh; }
+.tnic-sci > div:nth-child(2) { min-height: 300px; aspect-ratio: 16 / 10; max-height: 62vh; }
+.tnic-sci--net > div:nth-child(2) { aspect-ratio: 10 / 7; }
+.tnic-sci .tnic-stage-mount { width: 100%; height: 100%; }
 .tnic-sci canvas { width: 100%; height: 100%; display: block; }
 
-/* max-width added: this was the only explanatory paragraph in the Descent with
-   no measure limit — .tnic-lead, .tnic-stage-cap and .tnic-honest all have one. */
-.tnic-molcard .why { font-size: 13.5px; color: var(--muted); line-height: 1.55; margin-top: 4px; border-top: 1px solid var(--line); padding-top: 14px; max-width: 52ch; }
+.tnic-molcard .why { font-size: 13.5px; color: var(--muted); line-height: 1.55; max-width: 52ch; margin-top: 4px; border-top: 1px solid var(--line); padding-top: 14px; }
 .tnic-molcard .cite { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; color: var(--faint); letter-spacing: .1em; }
 
 .tnic-netwrap { display: grid; grid-template-columns: 1.5fr 1fr; gap: 28px; align-items: start; margin-top: 10px; }
@@ -304,6 +505,7 @@ const CSS = `
   letter-spacing: .14em; text-transform: uppercase; cursor: pointer; transition: all .2s ease;
 }
 .tnic-chip.on { color: var(--ink); border-color: currentColor; background: rgba(255,255,255,0.03); }
+.tnic-chip:focus-visible { outline: none; border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(95,227,224,0.15); }
 .tnic-chip .sw { width: 8px; height: 8px; border-radius: 50%; }
 
 .tnic-readout {
@@ -363,58 +565,6 @@ const CSS = `
 .tnic-honest { font-size: 13px; color: var(--faint); font-style: italic; margin-top: 14px; max-width: 60ch; line-height: 1.55; }
 .tnic-tl-toggle { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
 
-/* ── Segmented trajectory control ──
-   Was a single unlabelled chip whose only state signal was a CSS class and an
-   inline color: no type attribute, no aria-pressed, no name for what the two
-   states even were. This is a real radiogroup with both options named. */
-.tnic-seg {
-  display: inline-flex; padding: 3px; gap: 3px;
-  background: rgba(14,20,38,0.6); border: 1px solid var(--line); border-radius: 999px;
-}
-.tnic-seg button {
-  display: inline-flex; align-items: center; gap: 7px;
-  min-height: var(--space-touch); padding: 8px 14px;
-  background: none; border: none; border-radius: 999px; cursor: pointer;
-  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--faint); transition: color .2s ease, background-color .2s ease;
-}
-.tnic-seg button:hover { color: var(--muted); }
-.tnic-seg button[aria-checked="true"] { color: var(--ink); background: rgba(255,255,255,0.06); }
-.tnic-seg button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
-.tnic-seg .sw { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-
-/* Current-age value field, sitting with the slider rather than up by the chart. */
-.tnic-agefield {
-  display: flex; align-items: center; gap: 10px; margin-top: 12px;
-}
-.tnic-agefield label {
-  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint);
-}
-.tnic-agefield output {
-  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: 15px; font-weight: 600; color: var(--ink);
-  min-width: 3.5ch; text-align: center;
-  padding: 4px 8px; border: 1px solid var(--line); border-radius: 8px;
-  background: rgba(14,20,38,0.6); font-variant-numeric: tabular-nums;
-}
-.tnic-agefield .tnic-range { margin: 0; flex: 1; }
-
-/* Every outcome number carries the same uncertainty marker. The values are
-   computed to one decimal, which reads as precision; the marker keeps the
-   "illustrative, not promised" frame attached to the number itself instead of
-   only to the italic note below the row. */
-.tnic-tl-stat .u {
-  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase;
-  color: var(--faint); display: inline-flex; align-items: center; gap: 5px;
-}
-.tnic-tl-stat .u::before {
-  content: ""; width: 5px; height: 5px; border-radius: 50%;
-  background: currentColor; opacity: .6;
-}
-
 .tnic-final {
   opacity: 0; transform: translateY(20px);
   transition: opacity 1s ease .15s, transform 1s ease .15s;
@@ -470,17 +620,21 @@ const CSS = `
   transition: transform .2s ease, box-shadow .2s ease;
 }
 .tnic-cta:hover { transform: translateY(-1px); box-shadow: 0 0 42px rgba(0,224,255,0.5); }
+.tnic-cta:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
 .tnic-cta .arr { display: inline-block; transition: transform .2s ease; }
 .tnic-cta:hover .arr { transform: translateX(4px); }
 .tnic-cta.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); box-shadow: none; margin-left: 12px; }
 .tnic-cta.ghost:hover { border-color: var(--cyan); }
 
-/* .tnic-rail* retired — the scene rail is now the shared SectionProgress,
-   mounted at page level over the full 01–06 chapter spine. */
+/* Journey navigator — persistent labels turn the cinematic sequence into an
+   understandable five-part story instead of an unexplained floating rail. */
+/* .tnic-rail* retired — see SectionProgress (mounted in app/page.tsx). */
 
 .tnic-descent[data-reduced="true"] .bar,
 .tnic-descent[data-reduced="true"] .edge.flow,
-.tnic-descent[data-reduced="true"] .node-pulse { animation: none !important; }
+.tnic-descent[data-reduced="true"] .node-pulse,
+.tnic-descent[data-reduced="true"] .tnic-aurora,
+.tnic-descent[data-reduced="true"] .tnic-stage-fallback__orbit { animation: none !important; }
 
 /* Act 4 capstone backdrop — the goal curve from Act 3, mirrored into an
    ascent behind the closing section. Negative z stays inside the act's
@@ -503,12 +657,14 @@ const CSS = `
   .tnic-descent .tnic-stage,
   .tnic-descent .tnic-molcard,
   .tnic-descent .tnic-hero-badges,
-  .tnic-descent .tnic-hero-cta,
+  .tnic-descent .tnic-paths,
   .tnic-descent .tnic-final {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
   }
+  .tnic-descent .tnic-stage-fallback__orbit { animation: none !important; }
+  .tnic-descent .tnic-aurora { animation: none !important; }
 }
 `;
 
@@ -618,10 +774,8 @@ const NET_ELITE_COUNT = NET_NODES.filter((n) => n.elite).length;
 const NET_ELITE_NAMES = NET_NODES.filter((n) => n.elite).map((n) => n.name);
 
 /**
- * The molecule renderer's atom palette, named. MoleculeStage has coloured atoms
- * by element since it shipped (ELEMENT_COLOR), but nothing in the UI ever said
- * what the colours meant — the legend the brief asks for did not exist for this
- * visualization. Values mirror MoleculeStage's own core hues.
+ * MoleculeStage has coloured atoms by element since it shipped, and nothing in
+ * the UI ever said what the colours meant. Mirrors its own ELEMENT_COLOR cores.
  */
 const MOLECULE_LEGEND: Array<{ symbol: string; name: string; color: string }> = [
   { symbol: "C", name: "Carbon", color: "rgb(216,234,255)" },
@@ -652,24 +806,6 @@ const MILESTONES: Array<{ at: number; label: string; c: string; below?: boolean 
   { at: 80, label: "Morbidity horizon", c: "#f08a7a" },
 ];
 
-/**
- * One outcome number from the goal simulator. Label, the highlighted value, a
- * two-line interpretation, and — the part that was missing — a consistent
- * uncertainty marker on every card, so the "illustrative, not promised" frame
- * travels with the number instead of living only in the italic note below the
- * whole row.
- */
-function OutcomeMetric({ label, value, note }: { label: string; value: string; note: string }) {
-  return (
-    <div className="tnic-tl-stat">
-      <span className="k">{label}</span>
-      <b>{value}</b>
-      <span className="n">{note}</span>
-      <span className="u">Illustrative</span>
-    </div>
-  );
-}
-
 function interp(pts: Array<[number, number]>, x: number): number {
   if (x <= pts[0][0]) return pts[0][1];
   if (x >= pts[pts.length - 1][0]) return pts[pts.length - 1][1];
@@ -685,14 +821,15 @@ const STAR_D = "M0 -6 L1.7 -1.9 L6 -1.9 L2.6 0.7 L3.9 5 L0 2.5 L-3.9 5 L-2.6 0.7
 
 
 export function HomeDescent() {
-  // `active` used to be React state purely to drive the old scene rail's
-  // highlight. The rail moved to SectionProgress, and nothing rendered here
-  // reads it any more — only `activeRef` does, inside the canvas loop, to lerp
-  // the ambient palette. Dropping the state also drops a re-render per scene.
+  // `active` was React state purely to drive the old scene rail's highlight.
+  // The rail moved to SectionProgress and nothing rendered here reads it now —
+  // only `activeRef`, inside the canvas loop, to lerp the ambient palette.
+  // Dropping the state also drops a re-render per scene.
   const [age, setAge] = useState(50);
   const reduced = useReducedMotion();
-  // Handles onto the two canvases, so the panel shell can drive Reset / Zoom /
-  // keyboard rotation — none of which existed before.
+  // Handles onto the two canvases so the shared science panel can drive
+  // Reset / Zoom / keyboard rotation. Passed as plain props through the
+  // deferred wrappers, so the lazy-mount seam is untouched.
   const moleculeRef = useRef<StageHandle | null>(null);
   const networkRef = useRef<StageHandle | null>(null);
   const [showElite, setShowElite] = useState(true);
@@ -732,9 +869,8 @@ export function HomeDescent() {
     })));
     function resize() {
       if (!cv || !ctx) return;
-      w = cv.clientWidth; h = cv.clientHeight;
-      cv.width = w * dpr; cv.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      // Device-pixel-exact backing store — crisp on fractional layout widths.
+      ({ w, h } = fitCanvas(cv, ctx, dpr));
     }
     resize();
     const ro = new ResizeObserver(resize); ro.observe(cv);
@@ -817,9 +953,8 @@ export function HomeDescent() {
     const state = { x: 0, y: 0, tx: 0, ty: 0, on: false };
     function resize() {
       if (!cv || !ctx) return;
-      w = cv.clientWidth; h = cv.clientHeight;
-      cv.width = w * dpr; cv.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      // Device-pixel-exact backing store — crisp on fractional layout widths.
+      ({ w, h } = fitCanvas(cv, ctx, dpr));
     }
     resize();
     const ro = new ResizeObserver(resize); ro.observe(cv);
@@ -836,13 +971,8 @@ export function HomeDescent() {
     root.addEventListener("pointerleave", onLeave);
     function draw() {
       if (!ctx) return;
-      // The shimmer layer above gates its motion on reduced-motion; this glow
-      // never did — its easing lerp ran unconditionally. Under reduced motion
-      // the glow snaps to the pointer instead of trailing it, so the effect
-      // still reads without the continuous animation.
-      const ease = reducedRef.current ? 1 : 0.15;
-      state.x += (state.tx - state.x) * ease;
-      state.y += (state.ty - state.y) * ease;
+      state.x += (state.tx - state.x) * 0.15;
+      state.y += (state.ty - state.y) * 0.15;
       ctx.clearRect(0, 0, w, h);
       if (state.on) {
         const rad = 220;
@@ -925,35 +1055,67 @@ export function HomeDescent() {
   return (
     <div className="tnic-descent" data-reduced={reduced} ref={rootRef}>
       <style>{CSS}</style>
+      <div className="tnic-layer tnic-aurora" aria-hidden="true" />
       <canvas ref={shimmerRef} className="tnic-layer tnic-shimmer" aria-hidden="true" />
       <div className="tnic-layer tnic-grid" aria-hidden="true" />
       <canvas ref={cursorRef} className="tnic-layer tnic-cursor" aria-hidden="true" />
       <div className="tnic-layer tnic-vignette" aria-hidden="true" />
 
-      {/* The scene rail used to live here, covering only these five acts. It is
-          now `SectionProgress`, mounted once at page level over the whole
-          six-chapter spine — see components/ui/SectionProgress.tsx. */}
+      {/* The scene rail moved to the shared `SectionProgress`, mounted at page
+          level. It covers the full 01–06 chapter spine rather than these five
+          overture acts, adds a completed state and `aria-current="step"`, and
+          becomes a scrollable strip on mobile instead of `display: none`. This
+          rail's panel treatment was ported across, so nothing visual is lost. */}
 
       {/* ACT 0 — ARRIVE */}
-      <section ref={s0} data-idx="0" id="arrive" className="tnic-act tnic-hero">
+      <section ref={s0} data-idx="0" id="arrive" className="tnic-act tnic-hero is-in">
         <p className="tnic-kicker">Evidence-Graded Longevity Library</p>
-        <h1 className="tnic-h1">See what{' '}<br />you&apos;re <em>protecting</em>.</h1>
+        <h1 className="tnic-h1">Evidence-based <em>longevity</em>,<br />without the hype.</h1>
         <p className="tnic-lead">
-          You can&apos;t feel a cell aging. So we made it visible — the real biology
-          behind your stack, rendered instead of promised. Five scenes. One
-          continuous descent, from a molecule to the life it defends.
+          A free, PubMed-backed library for understanding longevity supplements,
+          the 12 Hallmarks of Aging, and the evidence behind each compound —
+          before you buy or build a stack.
         </p>
-        <div className="tnic-hero-badges">
-          <Link href="/elite-8" className="pill"><span className="dot" /><b>{eliteInterventions.length}</b>&nbsp;elite interventions</Link>
-          <Link href="/library/compounds" className="pill"><span className="dot" /><b>{COMPOUND_COUNT}</b>&nbsp;graded compounds</Link>
-          <Link href="/hallmarks" className="pill"><span className="dot" /><b>12</b>&nbsp;hallmarks of aging</Link>
-          <Link href="/trust/methodology" className="pill"><span className="dot" /><b>A–C</b>&nbsp;evidence tiers</Link>
+        <div className="tnic-trustline" aria-label="TNiC trust signals">
+          <span>Human evidence graded</span>
+          <span>PubMed citations</span>
+          <span>No pay-for-placement</span>
+          <span>Free and privacy-first</span>
         </div>
-        <div className="tnic-hero-cta">
-          <Link href="/elite-8" className="tnic-cta">
-            Explore the Elite Eight <span className="arr" aria-hidden="true">→</span>
+        <div className="tnic-hero-badges">
+          <Link href="/elite-8" className="pill focus-ring"><span className="dot" /><b>{eliteInterventions.length}</b>&nbsp;elite interventions</Link>
+          <Link href="/library/compounds" className="pill focus-ring"><span className="dot" /><b>{COMPOUND_COUNT}</b>&nbsp;graded compounds</Link>
+          <Link href="/hallmarks" className="pill focus-ring"><span className="dot" /><b>12</b>&nbsp;hallmarks of aging</Link>
+          <Link href="/trust/methodology" className="pill focus-ring"><span className="dot" /><b>A–C</b>&nbsp;evidence tiers</Link>
+        </div>
+        <div className="tnic-paths" aria-label="Choose where to begin">
+          <Link href="/elite-8" className="tnic-path primary focus-ring">
+            <span className="tnic-path-index">01</span>
+            <span className="tnic-path-copy">
+              <span className="tnic-path-label">Start with confidence</span>
+              <span className="tnic-path-name">Elite Eight</span>
+              <span className="tnic-path-detail">8 dose-matched picks · cited human trials</span>
+            </span>
+            <span className="tnic-path-arr" aria-hidden="true">→</span>
           </Link>
-          <Link href="#system" className="tnic-cta ghost">View the network</Link>
+          <Link href="/library" className="tnic-path focus-ring">
+            <span className="tnic-path-index">02</span>
+            <span className="tnic-path-copy">
+              <span className="tnic-path-label">Explore the science</span>
+              <span className="tnic-path-name">The Library</span>
+              <span className="tnic-path-detail">100 graded compounds · 12 hallmarks</span>
+            </span>
+            <span className="tnic-path-arr" aria-hidden="true">→</span>
+          </Link>
+          <Link href="/nico" className="tnic-path focus-ring">
+            <span className="tnic-path-index">03</span>
+            <span className="tnic-path-copy">
+              <span className="tnic-path-label">Get your starting point</span>
+              <span className="tnic-path-name">NICO Starter</span>
+              <span className="tnic-path-detail">Nine questions · adjustable stack plan</span>
+            </span>
+            <span className="tnic-path-arr" aria-hidden="true">→</span>
+          </Link>
         </div>
         <div className="tnic-cue"><span className="bar" />descend</div>
       </section>
@@ -989,18 +1151,18 @@ export function HomeDescent() {
               <p>
                 Trans-resveratrol, C₁₄H₁₂O₃ — a stilbenoid polyphenol of 228.24 g/mol
                 with a half-life near 9 hours, studied as a SIRT1 activator and graded
-                Tier B on human evidence. The model shows two carbon rings joined by a
-                trans double bond, with three hydroxyl groups placed for the hydrogen
-                bonds that hold it in the binding site. Atoms are colored by element:{' '}
+                Tier B on human evidence. Two carbon rings joined by a trans double
+                bond, with three hydroxyl groups placed for the hydrogen bonds that
+                hold it in the binding site. Atoms are coloured by element:{' '}
                 {MOLECULE_LEGEND.map((el) => `${el.symbol} (${el.name})`).join(', ')}.
-                Stylized for legibility — not a crystallographic reproduction.
+                Stylised for legibility — not a crystallographic reproduction.
               </p>
             }
           >
-            <MoleculeStage
-              ref={moleculeRef}
+            <DeferredMoleculeStage
               geometryId="resveratrol"
               hue={HUES.cyan}
+              stageRef={moleculeRef}
               ariaLabel="Rotatable 3D model of the resveratrol molecule. Full details are in the panel beside it."
             />
           </InteractiveSciencePanel>
@@ -1052,7 +1214,7 @@ export function HomeDescent() {
             eyebrow={`${NODE_DEFS.length} compounds · ${EDGES.length} graded links`}
             stageRef={networkRef}
             cue="Drag to rotate"
-            className="tnic-sci"
+            className="tnic-sci tnic-sci--net"
             legend={
               <div className="tnic-legend">
                 {Object.values(TIER).map((t) => (
@@ -1072,7 +1234,7 @@ export function HomeDescent() {
               <>
                 <p className="mb-2">
                   {NODE_DEFS.length} graded compounds and {EDGES.length} documented links.
-                  Link color encodes confidence in the pairing —{' '}
+                  Link colour encodes confidence in the pairing —{' '}
                   {Object.values(TIER).map((t) => t.label).join(', ').toLowerCase()} — and a
                   gold halo marks a TNiC elite pick.
                 </p>
@@ -1084,10 +1246,10 @@ export function HomeDescent() {
               </>
             }
           >
-            <NetworkStage
-              ref={networkRef}
+            <DeferredNetworkStage
               nodes={NET_NODES}
               edges={NET_EDGES}
+              stageRef={networkRef}
               ariaLabel="Rotatable 3D network of TNiC compounds. Cool links are synergies, amber links are clashes, gold-haloed nodes are elite picks. Details and the legend are in the panel beside it."
             />
           </InteractiveSciencePanel>
@@ -1104,6 +1266,17 @@ export function HomeDescent() {
               only duplicate each other. The graph shows which pairings reinforce
               — and which are redundant.
             </p>
+            <div className="tnic-legend" style={{ marginTop: 4 }}>
+              {Object.values(TIER).map((t) => (
+                <span className="lg" key={t.label}>
+                  <span className="sw" style={{ background: t.color }} />{t.label}
+                </span>
+              ))}
+              <span className="lg" style={{ color: 'var(--gold)' }}>
+                <svg width="12" height="12" viewBox="-8 -8 16 16"><path d={STAR_D} fill="currentColor" /></svg>
+                Elite pick
+              </span>
+            </div>
             <div className="cite">
               <Link href="/library" style={{ color: 'var(--cyan)', textDecoration: 'none' }}>
                 Explore every compound →
@@ -1126,32 +1299,12 @@ export function HomeDescent() {
           the ceiling a graded stack aims at.
         </p>
 
-        <div className="tnic-tl-toggle" role="radiogroup" aria-label="Trajectory shown">
-          <div className="tnic-seg">
-            <button
-              type="button"
-              role="radio"
-              aria-checked={!showElite}
-              onClick={() => setShowElite(false)}
-              title="The goal curve against a typical decline — no protocol applied."
-            >
-              {/* Swatch matches the curve it names. The old single chip showed a
-                  GOLD dot for the elite protocol, whose curve is stroked CYAN —
-                  the legend contradicted the chart. */}
-              <span className="sw" style={{ background: 'var(--gold)' }} />
-              Typical trajectory
-            </button>
-            <button
-              type="button"
-              role="radio"
-              aria-checked={showElite}
-              onClick={() => setShowElite(true)}
-              title="Adds the ceiling a graded stack aims at. Illustrative — no supplement is proven to land you there."
-            >
-              <span className="sw" style={{ background: 'var(--cyan)' }} />
-              Illustrative elite protocol
-            </button>
-          </div>
+        <div className="tnic-tl-toggle">
+          <button className={`tnic-chip${showElite ? " on" : ""}`}
+            style={showElite ? { color: 'var(--gold)' } : {}}
+            onClick={() => setShowElite(v => !v)}>
+            <span className="sw" style={{ background: 'var(--gold)' }} />Elite protocol
+          </button>
         </div>
 
         <div className="tnic-tl">
@@ -1232,58 +1385,26 @@ export function HomeDescent() {
             </svg>
           </div>
 
-          {/* The big {age} readout sits above the chart; the slider was below
-              it, so the control and its value were visually detached. This is
-              the stable numeric value field the brief asks for, adjacent to
-              the input. aria-valuetext already carried the age + stage. */}
-          <div className="tnic-agefield">
-            <label htmlFor="tnic-age-range">Age</label>
-            <input
-              id="tnic-age-range"
-              className="tnic-range"
-              type="range"
-              min="30"
-              max="95"
-              value={age}
-              onChange={(e) => setAge(Number(e.target.value))}
-              aria-valuetext={`Age ${age} — ${curStage.cap}`}
-            />
-            <output htmlFor="tnic-age-range">{age}</output>
-          </div>
+          <input className="tnic-range" type="range" min="30" max="95" value={age}
+            onChange={(e) => setAge(Number(e.target.value))}
+            aria-label="Age" aria-valuetext={`Age ${age} — ${curStage.cap}`} />
 
-          {/* Outcome metrics. Every card carries the same uncertainty marker:
-              the values are computed to one decimal, which reads as precision,
-              and previously the only "illustrative" framing was the italic
-              note below the whole row. aria-live announces the numbers as the
-              slider moves — they used to change silently. */}
-          <div className="tnic-tl-stats" aria-live="polite">
-            <OutcomeMetric
-              label="Function preserved"
-              value={`${yearsPreserved} yrs`}
-              note={`Goal-curve gain over the typical trajectory by age ${age}.`}
-            />
-            {/* Only rendered when the elite trajectory is actually shown. It
-                used to render its number unconditionally, so switching the
-                protocol off left a figure on screen for a curve that was no
-                longer on the chart. */}
-            {showElite ? (
-              <OutcomeMetric
-                label="Elite ceiling"
-                value={`+${eliteExtra} yrs`}
-                note="Additional runway the elite protocol reaches for on top of the goal curve."
-              />
-            ) : (
-              <OutcomeMetric
-                label="Elite ceiling"
-                value="—"
-                note="Switch on the illustrative elite protocol to see the ceiling a graded stack aims at."
-              />
-            )}
-            <OutcomeMetric
-              label="Morbidity compressed"
-              value={`${morbidityCompressed} yrs`}
-              note="Delay to crossing the frailty threshold — the point at which everyday function starts to give."
-            />
+          <div className="tnic-tl-stats">
+            <div className="tnic-tl-stat">
+              <span className="k">Function preserved</span>
+              <b>{yearsPreserved} yrs</b>
+              <span className="n">Goal-curve gain over the typical trajectory by age {age}.</span>
+            </div>
+            <div className="tnic-tl-stat">
+              <span className="k">Elite ceiling</span>
+              <b>+{eliteExtra} yrs</b>
+              <span className="n">Additional runway the elite protocol reaches for on top of the goal curve.</span>
+            </div>
+            <div className="tnic-tl-stat">
+              <span className="k">Morbidity compressed</span>
+              <b>{morbidityCompressed} yrs</b>
+              <span className="n">Delay to crossing the frailty threshold — the point at which everyday function starts to give.</span>
+            </div>
           </div>
 
           <p className="tnic-honest">

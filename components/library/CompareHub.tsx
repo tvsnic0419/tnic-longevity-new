@@ -27,6 +27,37 @@ export function CompareHub() {
         align="left"
       />
 
+      <p className="text-xs text-muted-foreground/80 max-w-2xl mt-2">
+        These are curated head-to-head pairs we&apos;ve written up in depth. Want a pairing we
+        haven&apos;t authored? Weigh{' '}
+        <Link
+          href="/library/compare/head-to-head"
+          className="underline decoration-dotted underline-offset-2 hover:text-accent-cyan"
+        >
+          any two graded compounds side by side
+        </Link>{' '}
+        on derived evidence dimensions, or build a full protocol in the{' '}
+        <Link href="/stacks" className="underline decoration-dotted underline-offset-2 hover:text-accent-cyan">
+          Stack Architect
+        </Link>
+        .
+      </p>
+
+      <Link
+        href="/library/compare/head-to-head"
+        className="focus-ring interactive group mt-4 flex items-center gap-3 rounded-xl border border-accent-cyan/25 bg-accent-cyan/5 px-4 py-3 hover:bg-accent-cyan/10"
+      >
+        <Scale className="w-4 h-4 text-accent-cyan shrink-0" aria-hidden="true" />
+        <span className="text-sm">
+          <strong className="font-semibold">Head-to-Head</strong>
+          <span className="text-muted-foreground"> — compare any two graded compounds</span>
+        </span>
+        <ArrowRight
+          className="w-4 h-4 text-accent-cyan ml-auto shrink-0 group-hover:translate-x-1 transition"
+          aria-hidden="true"
+        />
+      </Link>
+
       <div className="grid md:grid-cols-2 gap-4 mt-6">
         {evidenceComparisons.map((comp, i) => {
           const Icon = categoryIcon[comp.category];

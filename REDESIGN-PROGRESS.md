@@ -4,6 +4,272 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-04 (third pass) — NICO starter: the safety screen it claimed but never ran
+
+**The finding.** The homepage NICO starter (section 06) collected age, activity
+and goals, then called the engine as
+`computeNicoStack({ ...NICO_DEFAULT_ANSWERS, age, movement, goals })`. That
+spread silently sent **`safety: []`** and a neutral **3** for sleep / energy /
+stress / diet on every single run. Two real consequences:
+
+1. **A safety claim the code did not honour.** `answers.safety` drives
+   `SAFETY_EXCLUDE`, `SAFETY_BOOST` and `safetyNotes`. With an always-empty
+   list the exclusions never fired — flagging pregnancy removes 13 compounds,
+   anticoagulants removes 4 — and the result panel's "Safety notes" block was
+   unreachable code. Meanwhile the section copy promised "a built-in safety
+   screen". On a health platform that is the credibility spine, not a nit.
+2. **Everyone got the same answer.** `SIGNAL_BOOST` keys off sleep <= 2,
+   stress >= 4, energy <= 2, diet <= 2. Pinned at 3, none could ever fire.
+
+**Shipped.** Rebuilt as three short steps (You / Signals / Safety) with a
+progress rail, rather than one long column:
+- **Step 2** asks the four lifestyle pillars the engine actually scores, using
+  `NICO_SCALE_LABELS`' own question and endpoint wording so the starter cannot
+  drift from `/nico`.
+- **Step 3** is a real safety screen built from `NICO_SAFETY_OPTIONS`, and
+  **Compute is disabled until it is answered** — including an explicit "None of
+  these apply". Treating an unanswered question as "no contraindications" is
+  exactly the original bug, so a blank answer must never reach the engine.
+- Result gains a **"What NICO used"** panel listing the inputs, so the numbers
+  are inspectable rather than asserted.
+
+**Measured effect, stated honestly — the two are not the same size**, and the
+UI copy was corrected mid-build to stop overstating the weaker one:
+- Safety screen: **large**. Flagging pregnancy takes the stack from
+  `nmn / cakg / spermidine / glynac` to `glynac / coq10 / egcg / grapeseed` and
+  emits a real note. Verified through the rendered UI, not just the engine.
+- Lifestyle signals: **a scoring nudge**. `diet 1 / energy 1` swaps a slot
+  (glynac -> coq10); `sleep 1 / stress 5` on a longevity goal reorders the same
+  four compounds without changing the set. An earlier draft of the step-2 copy
+  said these "genuinely change the stack" — measured, corrected.
+
+**Verified**: lint 0 errors (3 pre-existing warnings, untouched files),
+typecheck clean, **677/677 tests** across 53 files (5 new in
+`components/home/HomeNicoStarter.test.tsx`, guarding that the safety step stays
+reachable and still refuses a blank answer), clean build. axe-core WCAG 2.1
+A/AA + best-practice: **0 violations** across all three steps and the result, on
+mobile and desktop. Flow driven end to end against the real build: the gate
+blocks compute until answered, and pregnancy/anticoagulant flags produce the
+right stack and notes.
+
+**Rollback**: `git revert <merge sha>` — one component, one test, one CSS block.
+
+## 2026-09-04 (second pass) — persistent section wayfinding on long-form pages
+
+**What the audit found.** Measured, not assumed: a compound deep-dive renders
+**~24,000-25,000px on a 390px phone (about 30 screens)** and ~13,000px on
+desktop, across **13 h2 sections**. Its only in-page navigation was the static
+"On this page" panel inside the MDX flow, which leaves the viewport inside the
+first ~5% and never returns — so for the remaining 95% a reader had no way to
+see where they were or reach the section they came for. The one persistent rail
+on the site (`ScrollProgress`) navigates top-level **routes**, not sections, and
+only renders at >=1280px, yet was labelled `aria-label="Section navigation"` —
+telling screen-reader users it would move within the page.
+
+**Shipped.** `components/library/ReadingToc.tsx` replaces the static TOC inside
+`MdxRenderer`, so every long MDX page benefits (compound deep-dives *and*
+hallmark pages), not just one route:
+- the inline panel keeps its markup and **server-rendered** links (11 section
+  anchors still in the SSR HTML — no SEO or no-JS regression) and gains an
+  active-section highlight;
+- once it scrolls above the reading line, a compact control docks bottom-left
+  (BackToTop owns bottom-right, CompoundStickyBar owns the top edge) showing the
+  section you are in, expanding to the full list;
+- jumping moves focus to the target heading, so keyboard and screen-reader users
+  land in the section rather than just scrolling the page.
+- `ScrollProgress`'s rail relabelled `aria-label="Site sections"` to match what
+  it actually does.
+
+**Four real bugs found by driving the built page rather than trusting the diff
+— worth recording, because three are traps any future floating UI here will hit:**
+1. **`position: fixed` was silently neutralised.** An ancestor with a
+   transform/filter/backdrop-filter becomes the containing block for fixed
+   descendants, and the deep-dive's article column has one: the "fixed" dock was
+   being parked at document y~4741 and scrolling away with the article on
+   desktop, while mobile's different column layout happened to escape it.
+   **Any fixed overlay rendered inside page content on this site must be
+   portalled to `<body>`.**
+2. **Activation could not rely on `click`.** On this control the browser did not
+   reliably synthesise a click from pointer input (pointerdown landed on the
+   button, no click followed), leaving an onClick-only trigger dead to mouse and
+   touch alike. Now opens on `pointerdown`, with keyboard activation handled via
+   `click` where `detail === 0`, so Enter/Space still work.
+3. **`.premium-card` is not an overlay surface.** Its translucency let the
+   article read straight through the floating panel — verified by screenshot,
+   not by reasoning. The panel now carries its own near-opaque blurred ground.
+4. **A zero-size rect read as "already scrolled past".** An unlaid-out or hidden
+   element reports an all-zero rect, so a bare `bottom < offset` test floated the
+   control over the hero. The dock now requires a real measurement
+   (`height > 0`). Caught by the new jsdom test, which is exactly the condition
+   that surfaces it.
+
+Also: portalling to `<body>` put the dock outside every landmark, which axe
+flags as `region`; it is genuinely section navigation, so it is a labelled
+`<nav>` — correct semantics and the fix at once.
+
+**Verified**: lint 0 errors (3 pre-existing warnings in untouched files),
+typecheck clean, **672/672 tests** across 52 files (5 new in
+`components/library/ReadingToc.test.tsx`), clean production build. axe-core
+WCAG 2.1 A/AA + best-practice: **0 violations** across compound desktop/mobile
+with the panel open, compound dock-closed, and a hallmark page. Behaviour driven
+against the real build on phone/tablet/desktop: dock correctly absent at 0-5%,
+present at 50-95%; open, jump, focus-move, Escape and keyboard activation all
+confirmed. One synthetic-only failure is *not* a defect: Playwright's
+`isMobile:true` at 768px remaps tap coordinates, and the same width with plain
+touch (and 820/1024/390) works.
+
+**Rollback**: `git revert <merge sha>` — additive apart from the MdxRenderer TOC
+swap and the ScrollProgress aria-label.
+
+## 2026-09-04 — Head-to-Head: the free-form "pick any two" comparison
+
+Closed the second of the three gaps flagged on 2026-09-03 ("Free-form 'pick
+any two compounds' comparison tool, distinct from the curated-pairs
+`/library/compare` hub"). New route `/library/compare/head-to-head`.
+
+**Why this one, and why NOT the multi-axis evidence model.** The brief's
+biggest-visual-impact candidate was the flagged "Evidence Breakdown/Matrix"
+(mechanistic / animal / human-biomarker / RCT / observational axes). It was
+investigated first and **ruled out on measured evidence, not on effort**:
+classifying study design requires study *titles*, and of the 276 study entries
+in `lib/data.ts`, only ~25% carry classifiable design language. The rest are
+author-year citation stubs (`Zhang 2016`, `Ferenci 1989`, `SELECT 2011`,
+`HOPE-2 (Lonn 2006`). A conservative keyword classifier over all 276 scored
+**25.4% coverage**. Building the matrix would have meant either rendering
+"unclassified" on three-quarters of every compound's evidence, or inventing the
+classification — the one thing `NOTES-COMPOUND-LIBRARY.md` forbids absolutely.
+Recorded here so a future session doesn't re-derive this: **the blocker is the
+citation data shape, not the UI.** The unlock is backfilling real titles for
+the ~180 stub entries, which is a content project.
+
+**What shipped instead.** The comparison tool is the highest-intent surface on
+the site and its engines were already built and *completely unused*:
+`lib/tnic-score.ts` (PR #124) had zero UI consumers in the entire codebase.
+This makes the six-dimension derived score visible for the first time.
+
+- `lib/head-to-head.ts` — pure server-safe reader joining `tnic-score` +
+  canonical `lib/data.ts`. No new dataset, no new claim. Honesty contract
+  enforced in code and in `lib/head-to-head.test.ts` (13 tests): a dimension
+  either side can't support is `insufficient` and is never scored as zero (an
+  unscored dimension must not read as a loss); a `TIE_BAND` of ±3 points
+  suppresses fake winners on what are derived composites, not measurements; an
+  undocumented pairing reads as *absence of a record*, explicitly "not evidence
+  that the pairing is safe".
+- `components/library/HeadToHeadCompare.tsx` — server-rendered end to end.
+  Diverging "duel" bars (compound A grows left from a centre line, B grows
+  right), dual `ScoreGauge`s, hallmark shared/unique partition, and the
+  always-visible `<table>` fallback required by CLAUDE.md §12.
+- `components/library/HeadToHeadPicker.tsx` — the only client component.
+  Selection lives in the URL (`?a=&b=`), so every comparison is a real
+  shareable address. **Deliberately does not call `useSearchParams()`** — the
+  page reads its own `searchParams` prop on the server, which is what keeps
+  this surface out of the §3 client-side-rendering bailout. Verified: 0
+  `BAILOUT_TO_CLIENT_SIDE_RENDERING` markers in the served HTML.
+- **SEO**: ~3,200 valid pairings all canonicalize to the bare tool URL, and
+  only that base URL is added to the sitemap. Enumerating the variants would
+  be doorway-page spam, not coverage. Confirmed in the served HTML that
+  `?a=iodine&b=piperine` emits `canonical → /library/compare/head-to-head`.
+- Two real bugs found by looking at the rendered page rather than trusting the
+  diff: (1) screen-reader text read "Too close to call **by 0 points**" — the
+  gap is now only voiced when a leader was actually declared; (2) a genuine
+  **stat contradiction** — the scored `Bioavailability` *rating* (resveratrol
+  30) sat on the same page as the library's published oral-bioavailability
+  *percentage* (72%), same word, different units, no explanation. Both are now
+  explicitly labelled ("rating 0–100" vs "measured %") with a note naming them
+  as different measures.
+- `CompareHub.tsx` microcopy no longer apologizes ("not a free pick-any-two
+  tool") and instead routes to the tool, plus a CTA banner on the hub.
+
+**Verified**: lint 0 errors (3 pre-existing warnings, all in untouched files),
+typecheck clean, **667/667 tests** across 51 files, clean production build
+(exit 0, route builds as `ƒ` dynamic — correct for a `searchParams` page).
+axe-core WCAG 2.1 A/AA + best-practice sweep against the real production
+server: **0 violations** on the tool (rich-data pair), the tool (thin-data
+pair), and the compare hub. Exactly one `<h1>`. Verified against a server whose
+PID start-time postdates the build, per this doc's own stale-process warning —
+which did in fact bite once this session and was caught.
+
+**Rollback**: `git revert <merge sha of PR>` — additive apart from the
+`CompareHub` microcopy and one sitemap line; nothing existing was removed.
+
+**Note for the next session**: 57 of 81 compounds resolve to the `canonical`
+scoring source, which returns `null` for clinicalEvidence / mechanisticStrength
+/ safety — so a comparison between two of them is honest but thin (renders
+"Not scored for both" on 3–4 of 6 rows). Only 24 compounds carry full-depth
+scores. Widening that is a `lib/compound-engine-data.ts` coverage question, not
+a UI one.
+
+## 2026-09-03 — reconciliation + Phase 7 (audit-driven gap fixes)
+
+This file hadn't been updated since before PR #131, even though work
+continued: PRs #131 (Sirtuin Atlas + TNiC Score/Match surfaced), #155
+(color-coded instrument-card redesign), #156/#157 (StackDock "Your Protocol"
+tray + shareable protocol grade card), #158 (self-canonical fix on 4 pages),
+#159/#160 (answer-first AnswerBox on comparisons/best-for/lead pages), #161
+(AddToProtocol primitive, best-leaderboard, Combination Lab empty state),
+#162 (sticky compound conversion rail), and #163 ("Sharper & faster"
+fidelity/perf pass) all merged to `main` with no entry here. Recorded now so
+this doc is trustworthy as the single source of truth again.
+
+A large creative-direction brief (repositioning as "evidence intelligence
+for healthy aging," a full IA/visual/evidence-system rebuild) was received
+and handled per CLAUDE.md Section 6 — as a quality-bar/gap-finder audit, not
+a rebuild spec. Most of the brief's asks already exist at or above the bar
+described (cinematic homepage, `.premium-card`/tier-color system, Cmd+K
+command palette across compounds/hallmarks/tools/comparisons, Stack
+Architect with synergy/redundancy/interaction detection, curated evidence
+comparisons, TNiC Score/Match, methodology/trust pages, corrections process).
+Three concrete, verified gaps were fixed this pass; larger ones are flagged
+below as recommended future phases rather than attempted unilaterally.
+
+**Fixed this pass:**
+- **No automated accessibility regression guard.** Prior sweeps (28-page
+  axe-core pass, 0 violations) were manual and left nothing to catch a
+  future regression — noted as a known gap in this doc's own Decisions log
+  ("a11y tooling" entry, which proposed `@axe-core/playwright`). Took a
+  lighter path instead: added `jsdom` + `@testing-library/react` + `jest-axe`
+  as devDependencies and `lib/accessibility.test.tsx`, a component-level axe
+  guardrail (EvidenceBadge/EvidenceBadgeLegend, ProductPickCard) that now
+  runs in `npm run test`/`npm run ci`. Verified it's a real guard, not a
+  no-op, by deliberately introducing an `alt`-text violation and confirming
+  the test failed, then reverting. Full page-level (Playwright) coverage is
+  still a good future addition — this covers the highest-regression-risk
+  components, not every route.
+- **Product cards had no testing/COA field and no visible affiliate
+  disclosure.** `ProductPickCard.tsx` showed manufacturer/dose/TNiC
+  Match/link-verified-date but nothing on third-party testing, and the
+  affiliate relationship lived only in link `rel="sponsored"` + page-level
+  copy. Added an optional `thirdPartyTested` field to `ProductPick` in
+  `lib/product-picks.ts`, set to `true` only on the 5 entries whose existing
+  `whyThisPick` prose already states it (nmn, cakg, spermidine,
+  pterostilbene, tudca) — never inferred for the rest, which now render an
+  honest "Testing documentation not verified" state. Added a visible
+  "Affiliate link" chip on every card next to the buy CTA, and reworded
+  "Link verified" to "Buy link checked" to avoid implying lab verification.
+- **Compare hub didn't say it was curated.** `/library/compare` only offers
+  pre-authored pairs (NMN vs NR, etc.), not a free pick-any-two tool, with
+  nothing telling the user that. Added one line of microcopy pointing users
+  who want an uncovered pairing to Stack Architect instead.
+
+**Flagged for a future phase (not attempted here — each is a real
+architectural change, not a small fix):**
+- Multi-axis evidence model (mechanistic/animal/human-biomarker/RCT/
+  observational/clinical-outcome, distinct from the current single A/B/C
+  tier) — the brief's "Evidence Breakdown/Matrix/Timeline" components. Real
+  gap: `lib/trust.ts`'s `evidenceLevelFromTier` derives Strong/Moderate/
+  Mechanistic 1:1 from the tier, it doesn't independently track evidence
+  *type*. Building this without fabricating data means auditing every
+  compound's existing MDX/citations first — a multi-session content project.
+- Free-form "pick any two compounds" comparison tool, distinct from the
+  curated-pairs `/library/compare` hub.
+- Homepage: no dedicated "featured compounds," "Stack Architect preview," or
+  "product verification" *sections* — those live as full separate routes
+  and the homepage points to them via `HomeEliteInterventions`/`HomeSteps`/
+  footer rather than dedicated blocks. Worth a homepage-audit pass against
+  Section 8's checklist specifically, next.
+- Full page-level a11y coverage (Playwright-driven, all routes) as a
+  successor to this pass's component-level guard.
+
 ## Current phase
 
 **Component UI pass complete (PR #133, 5 phases)** — applies the Manus
@@ -165,6 +431,46 @@ reduced-motion emulation, and SSR greps against the built HTML.
 produced exactly the misleading result it warns about (a chip hit-area test
 "failing" against a previous build). Every later run confirmed the port was free
 and the serving process postdated the build.
+## 2026-08-28 — mobile GPU paint budget for the always-on blur layers
+
+A performance pass on the *visual* layer (no restyle). Audit finding: the
+site's heaviest continuous graphics cost is the always-on ambient field
+(`.ambient-layer` — three `filter: blur(90px)` aurora orbs + a drifting
+molecule cascade, on 100% of pages) plus the per-hub `.hub-hero-field`
+(two `blur(60px)` orbs). The codebase already established a "halve blur cost on
+phones, that's where it janks" budget for the glass surfaces
+(`.glass-deep`, `@media (max-width: 767px)`, globals.css) but **never extended
+it to these `filter: blur()` layers** — they rendered identical blur radii on a
+320px phone and a 5K display. Extended the same pattern:
+
+- `.ambient-orb` blur `90px → 60px` on ≤767px (radius only; ~55% cheaper raster
+  — blur cost scales with radius² — and imperceptible as a background wash at
+  ~55vw). `.molecule-cascade` drops its full-viewport `drop-shadow` filter
+  region on phones (imperceptible at the field's 0.09–0.2 opacity).
+- `.hub-hero-field::before/::after` blur `60px → 38px` on ≤767px.
+- `.ambient-layer` gained `contain: layout paint` — it already clips to itself
+  (`overflow: hidden`) and owns a stacking context (`fixed` + `z-index:0`), so
+  this is zero visual change; it just keeps the always-animating subtree off the
+  document's layout/paint invalidation path.
+
+Nothing hidden or repositioned; reduced-motion still freezes all of it. Dead
+CSS `.aurora-beams` (defined, used nowhere) left untouched.
+
+**`content-visibility: auto` — evaluated and deliberately NOT adopted.** It's
+the biggest modern rendering lever and is unused here, but it forces
+`contain: paint` (clips descendant painting to the box) *even on-screen*, and
+this site leans on outset decoration everywhere: `CellularDivider` chapter
+glyphs sit `absolute top-0 -translate-y-1/2` (half above each home section),
+`.premium-card:hover` lifts + glows past its box, `--footer-lift-shadow` casts
+up above the footer. Applying cv:auto to those surfaces would clip that
+decoration — a real regression. Safe adoption needs per-target restructuring
+(a non-overflowing inner wrapper), so it's a deferred content-visibility item,
+not a mechanical retrofit. Recorded so a future session doesn't ship the naïve
+version.
+
+Verified: lint 0 errors, typecheck clean, 648/648 tests, clean build (427
+routes), all three rules confirmed in the compiled CSS bundle bound to the
+right selectors. Rollback: `git revert <sha>` (single CSS + this note).
 
 ## PR #125 — nav scroll bug + overflow fix + packshot normalization (merged 2026-08-24)
 

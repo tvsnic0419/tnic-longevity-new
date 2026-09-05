@@ -1,8 +1,8 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { Plus, X, CheckCircle2, AlertTriangle, BookOpen } from 'lucide-react';
+import { Plus, X, CheckCircle2, AlertTriangle, BookOpen, Search } from 'lucide-react';
 import { useStack } from '@/context/PlatformContext';
 import { compounds } from '@/lib/data';
 import {
@@ -92,6 +92,29 @@ export function StackBuilder({
   const analysis = analyzeStack(selected);
   const liveAnalysis = useMemo(() => computeLiveStackAnalysis(selected), [selected]);
 
+  // Suggest only compounds connected to the active stack by the authored
+  // synergy data. This narrows a 100-item catalogue into a small, explainable
+  // next step without changing scoring or making a new recommendation claim.
+  const complementarySuggestions = useMemo(() => {
+    if (selected.length === 0) return [];
+
+    return compounds
+      .filter((candidate) => !selected.includes(candidate.id))
+      .map((candidate) => {
+        const linkedTo = selectedCompounds.filter(
+          (active) => active.synergies.includes(candidate.id) || candidate.synergies.includes(active.id),
+        );
+        return { candidate, linkedTo };
+      })
+      .filter(({ linkedTo }) => linkedTo.length > 0)
+      .sort((a, b) => {
+        const connectionDifference = b.linkedTo.length - a.linkedTo.length;
+        if (connectionDifference !== 0) return connectionDifference;
+        return (compoundBaseScores[b.candidate.id] ?? 0) - (compoundBaseScores[a.candidate.id] ?? 0);
+      })
+      .slice(0, 3);
+  }, [selected, selectedCompounds]);
+
   const addCompound = (id: string) => {
     if (!selected.includes(id)) toggle(id);
   };
@@ -153,6 +176,47 @@ export function StackBuilder({
         </div>
       </div>
 
+      {complementarySuggestions.length > 0 && (
+        <section
+          className="mb-6 rounded-2xl border border-accent-cyan/20 bg-accent-cyan/[0.045] p-4 md:p-5"
+          aria-labelledby="stack-next-additions"
+        >
+          <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
+            <div>
+              <p className="text-label text-accent-cyan">Build with intent</p>
+              <h3 id="stack-next-additions" className="mt-1 text-base font-semibold text-foreground">
+                Complements your active stack
+              </h3>
+            </div>
+            <p className="text-micro text-muted-foreground">Based on authored synergy links</p>
+          </div>
+          <div className="grid gap-3 md:grid-cols-3">
+            {complementarySuggestions.map(({ candidate, linkedTo }) => (
+              <div key={candidate.id} className="rounded-xl border border-border/70 bg-card/60 p-3.5">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-foreground">{candidate.name}</p>
+                    <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                      Connects with {linkedTo.map((compound) => compound.name).join(', ')}
+                    </p>
+                  </div>
+                  <Button
+                    variant="outline"
+                    theme="cyan"
+                    size="sm"
+                    onClick={() => addCompound(candidate.id)}
+                    aria-label={`Add ${candidate.name} to your stack`}
+                  >
+                    <Plus className="h-3.5 w-3.5" aria-hidden="true" />
+                    Add
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
         <div className="lg:col-span-5">
           <Card variant="elevated" className="lg:sticky lg:top-24">
@@ -184,16 +248,61 @@ function CompoundLibrary({
   onAdd: (id: string) => void;
   compact?: boolean;
 }) {
+  const [query, setQuery] = useState('');
+  const normalizedQuery = query.trim().toLowerCase();
+  const filteredCompounds = useMemo(() => {
+    if (!normalizedQuery) return compounds;
+
+    return compounds.filter((compound) => {
+      const searchable = [
+        compound.name,
+        compound.pathway,
+        compound.mechanism,
+        compound.desc,
+        ...compound.hallmarks.map((hallmark) => hallmarkDisplayNames[hallmark] ?? hallmark),
+      ]
+        .join(' ')
+        .toLowerCase();
+      return searchable.includes(normalizedQuery);
+    });
+  }, [normalizedQuery]);
+
   return (
     <>
       <CardHeader className={compact ? 'p-4 pb-2' : undefined}>
         <CardTitle className={compact ? 'text-base' : undefined}>Compound library</CardTitle>
         <p className="text-body-sm text-muted-foreground mt-1">
-          {compounds.length} evidence-graded compounds
+          {normalizedQuery
+            ? `${filteredCompounds.length} of ${compounds.length} matching compounds`
+            : `${compounds.length} evidence-graded compounds`}
         </p>
       </CardHeader>
       <CardContent className={cn('space-y-3', compact && 'p-4 pt-0')}>
-        {compounds.map((c) => {
+        <div>
+          <label htmlFor="stack-compound-search" className="sr-only">
+            Search compounds, pathways, or hallmarks
+          </label>
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+            <input
+              id="stack-compound-search"
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search compounds, pathways, or hallmarks"
+              className="focus-ring w-full rounded-xl border border-border bg-background/50 py-2.5 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground"
+            />
+          </div>
+          <p className="mt-2 text-micro text-muted-foreground" aria-live="polite">
+            {normalizedQuery ? `${filteredCompounds.length} result${filteredCompounds.length === 1 ? '' : 's'}` : 'Search the full evidence-graded catalogue'}
+          </p>
+        </div>
+
+        {filteredCompounds.length === 0 ? (
+          <div className="rounded-xl border border-dashed border-border px-4 py-8 text-center text-sm text-muted-foreground">
+            No compounds match “{query.trim()}”. Try a compound, pathway, or hallmark.
+          </div>
+        ) : filteredCompounds.map((c) => {
           const inStack = selected.includes(c.id);
           const baseScore = compoundBaseScores[c.id] ?? 7;
           const hallmarkPreview = c.hallmarks

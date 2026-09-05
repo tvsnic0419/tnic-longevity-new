@@ -67,6 +67,12 @@ export function LibrarySearch() {
       aria-label="Library search"
     >
       <div className="container-page py-8 md:py-10">
+        <div className="mx-auto mb-4 max-w-2xl text-center">
+          <p className="text-label text-accent-cyan">SEARCH THE EVIDENCE</p>
+          <p className="mt-1 text-body-sm text-muted-foreground">
+            Find a compound, hallmark, comparison, pathway, or research brief without browsing the full catalogue first.
+          </p>
+        </div>
         <form onSubmit={onSubmit} className="max-w-2xl mx-auto">
           <label htmlFor="library-search" className="sr-only">
             Search library
@@ -105,20 +111,23 @@ export function LibrarySearch() {
         </form>
 
         {!urlQuery && (
-          <div className="flex flex-wrap justify-center gap-2 mt-4 max-w-2xl mx-auto">
-            {librarySearchSuggestions.map((s) => (
-              <button
-                key={s}
-                type="button"
-                onClick={() => {
-                  setInput(s);
-                  setQuery(s);
-                }}
-                className="focus-ring text-caption font-mono rounded-full border border-border px-3 py-1 hover:border-accent-cyan/40 hover:text-accent-cyan transition-colors"
-              >
-                {s}
-              </button>
-            ))}
+          <div className="mt-4 max-w-2xl mx-auto">
+            <p className="mb-2 text-center text-micro font-mono uppercase tracking-[0.12em] text-muted-foreground">Popular research paths</p>
+            <div className="flex flex-wrap justify-center gap-2">
+              {librarySearchSuggestions.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => {
+                    setInput(s);
+                    setQuery(s);
+                  }}
+                  className="focus-ring min-h-[var(--space-touch)] text-caption font-mono rounded-full border border-border px-3 py-1 hover:border-accent-cyan/40 hover:text-accent-cyan transition-colors"
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
           </div>
         )}
 

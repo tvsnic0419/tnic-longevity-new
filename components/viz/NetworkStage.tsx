@@ -1,12 +1,12 @@
 "use client";
 
 import {
-  useRef, useEffect, useImperativeHandle, forwardRef,
+  useRef, useEffect, useImperativeHandle, useMemo, forwardRef,
   type MouseEvent, type TouchEvent, type WheelEvent,
 } from "react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import type { StageHandle } from "./stage-handle";
-import { runWhenVisible, cappedDpr } from "@/lib/raf-visibility";
+import { runWhenVisible, cappedDpr, fitCanvas } from "@/lib/raf-visibility";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // NetworkStage — the network sibling of MoleculeStage. Renders a compound-
@@ -44,7 +44,9 @@ export const NetworkStage = forwardRef<StageHandle, {
   edges: NetworkEdge[];
   className?: string;
   ariaLabel?: string;
-}>(function NetworkStage({ nodes, edges, className, ariaLabel }, ref) {
+  /** See MoleculeStage — plain-prop handle, safe across next/dynamic. */
+  handleRef?: React.RefObject<StageHandle | null>;
+}>(function NetworkStage({ nodes, edges, className, ariaLabel, handleRef }, ref) {
   const reduced = useReducedMotion();
   const reducedRef = useRef(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -56,7 +58,7 @@ export const NetworkStage = forwardRef<StageHandle, {
 
   // See MoleculeStage — same contract, same reason. Zoom limits mirror the
   // wheel handler's.
-  useImperativeHandle(ref, () => ({
+  const handle = useMemo<StageHandle>(() => ({
     reset() {
       const d = drag.current;
       d.rx = -0.12; d.ry = 0.5; d.vx = 0; d.vy = 0; d.zoom = 1;
@@ -70,6 +72,12 @@ export const NetworkStage = forwardRef<StageHandle, {
       d.ry += dx; d.rx += dy; d.vx = 0; d.vy = 0;
     },
   }), []);
+  useImperativeHandle(ref, () => handle, [handle]);
+  useEffect(() => {
+    if (!handleRef) return;
+    handleRef.current = handle;
+    return () => { handleRef.current = null; };
+  }, [handle, handleRef]);
 
   useEffect(() => {
     const cv = canvasRef.current; if (!cv) return;
@@ -79,9 +87,8 @@ export const NetworkStage = forwardRef<StageHandle, {
 
     function resize() {
       if (!cv || !ctx) return;
-      w = cv.clientWidth; h = cv.clientHeight;
-      cv.width = w * dpr; cv.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      // Device-pixel-exact backing store — crisp on fractional layout widths.
+      ({ w, h } = fitCanvas(cv, ctx, dpr));
     }
     resize();
     const ro = new ResizeObserver(resize); ro.observe(cv);
@@ -117,6 +124,10 @@ export const NetworkStage = forwardRef<StageHandle, {
       ctx.fillStyle = back;
       ctx.beginPath(); ctx.arc(cx, cy, Math.max(w, h) * 0.7, 0, Math.PI * 2); ctx.fill();
 
+      // Edges + node glows composite additively so link crossings and
+      // overlapping blooms accumulate into light — a cheap stand-in for the
+      // WebGL scene's bloom pass, keeping this canvas in the same family.
+      ctx.globalCompositeOperation = "lighter";
       // Edges, back-to-front so nearer links read brighter.
       ctx.lineCap = "round";
       const edgeOrder = E
@@ -143,19 +154,22 @@ export const NetworkStage = forwardRef<StageHandle, {
         const rad = (5.5 + Math.min(n.degree, 6) * 1.5) * p.persp * (1.15 - depth * 0.3);
         const a = 0.95 - depth * 0.4;
 
+        ctx.globalCompositeOperation = "lighter";
         if (n.elite) {
-          const halo = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, rad * 3.4);
-          halo.addColorStop(0, `${ELITE_GLOW}${0.5 * a})`);
+          const halo = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, rad * 3.6);
+          halo.addColorStop(0, `${ELITE_GLOW}${0.45 * a})`);
           halo.addColorStop(1, `${ELITE_GLOW}0)`);
           ctx.fillStyle = halo;
-          ctx.beginPath(); ctx.arc(p.sx, p.sy, rad * 3.4, 0, Math.PI * 2); ctx.fill();
+          ctx.beginPath(); ctx.arc(p.sx, p.sy, rad * 3.6, 0, Math.PI * 2); ctx.fill();
         } else {
-          const bloom = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, rad * 2.6);
-          bloom.addColorStop(0, `rgba(95,227,224,${0.4 * a})`);
+          const bloom = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, rad * 2.8);
+          bloom.addColorStop(0, `rgba(95,227,224,${0.34 * a})`);
           bloom.addColorStop(1, "rgba(95,227,224,0)");
           ctx.fillStyle = bloom;
-          ctx.beginPath(); ctx.arc(p.sx, p.sy, rad * 2.6, 0, Math.PI * 2); ctx.fill();
+          ctx.beginPath(); ctx.arc(p.sx, p.sy, rad * 2.8, 0, Math.PI * 2); ctx.fill();
         }
+        // Spheres, rims and labels read solid — back to normal compositing.
+        ctx.globalCompositeOperation = "source-over";
 
         const hi = n.elite ? [255, 244, 214] as const : NODE_HI;
         const core = n.elite ? [240, 196, 106] as const : NODE_CORE;
@@ -178,6 +192,7 @@ export const NetworkStage = forwardRef<StageHandle, {
           ctx.fillText(n.name, p.sx, p.sy - rad - 8 * p.persp);
         }
       }
+      ctx.globalCompositeOperation = "source-over";
     }
 
     const stopLoop = runWhenVisible(cv, draw);

@@ -358,18 +358,41 @@ export function CombinationLab() {
             <CompoundLibrary selected={selected} onToggle={toggle} />
           </div>
 
-          {/* Center — network graph + WHY panel */}
+          {/* Center — network graph + WHY panel, or a designed empty state
+              before anything is added (the graph is meaningless with 0 nodes). */}
           <div className="min-w-0">
-            <LabGraph
-              nodes={nodes}
-              relationships={result.relationships}
-              selectedPairKey={selectedPairKey}
-              onSelectRelationship={selectRelationship}
-            />
-            {activeRelationship && (
-              <div className="mt-4">
-                <WhyPanel relationship={activeRelationship} onClose={() => setSelectedPairKey(null)} />
+            {selected.length === 0 ? (
+              <div className="glass flex min-h-[360px] flex-col items-center justify-center rounded-2xl p-8 text-center">
+                <span
+                  className="mb-4 grid h-14 w-14 place-items-center rounded-2xl border border-accent-violet/30 bg-accent-violet/[0.08] text-accent-violet"
+                  aria-hidden="true"
+                >
+                  <Network className="h-7 w-7" />
+                </span>
+                <h2 className="heading-card mb-1.5 text-foreground">Add compounds to begin</h2>
+                <p className="mx-auto max-w-sm text-body-sm text-muted-foreground">
+                  Pick from the library on the left. As you add each compound, every pair is
+                  classified live — synergy, redundancy, or antagonism — with its marginal
+                  contribution to the stack score itemized.
+                </p>
+                <p className="mt-4 text-caption font-mono uppercase tracking-wider text-accent-violet/80">
+                  Synergy · Redundancy · Antagonism
+                </p>
               </div>
+            ) : (
+              <>
+                <LabGraph
+                  nodes={nodes}
+                  relationships={result.relationships}
+                  selectedPairKey={selectedPairKey}
+                  onSelectRelationship={selectRelationship}
+                />
+                {activeRelationship && (
+                  <div className="mt-4">
+                    <WhyPanel relationship={activeRelationship} onClose={() => setSelectedPairKey(null)} />
+                  </div>
+                )}
+              </>
             )}
           </div>
 

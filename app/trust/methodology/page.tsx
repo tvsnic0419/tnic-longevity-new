@@ -1,9 +1,12 @@
 import { FileText } from 'lucide-react';
 import { TrustPageTemplate } from '@/components/trust/TrustPageTemplate';
 import { MethodologySection } from '@/components/trust/MethodologySection';
-import { EvidenceTagLegend } from '@/components/trust/EvidenceTag';
+import { EvidenceGradingLadder } from '@/components/trust/EvidenceGradingLadder';
+import { EvidenceRecencyBand } from '@/components/trust/EvidenceRecencyBand';
+import { PlatformCredibilityStrip } from '@/components/trust/PlatformCredibilityStrip';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { methodologySections } from '@/lib/trust';
+import { platformStats } from '@/lib/platform-stats';
 import { seoRoutes } from '@/lib/seo-routes';
 import { buildArticleSchema, buildBreadcrumbSchema } from '@/lib/seo';
 
@@ -35,10 +38,12 @@ export default function MethodologyPage() {
       pageKey="methodology"
     >
       <StructuredData schemas={buildMethodologySchemas()} />
-      <EvidenceTagLegend className="mb-10" />
+      <EvidenceGradingLadder className="mb-8" />
+      <EvidenceRecencyBand className="mb-12" />
       {methodologySections.map((section) => (
         <MethodologySection key={section.id} {...section} />
       ))}
+      <PlatformCredibilityStrip stats={platformStats} className="mt-12" />
     </TrustPageTemplate>
   );
 }

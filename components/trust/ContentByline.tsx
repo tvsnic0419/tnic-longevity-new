@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ShieldCheck, CalendarClock, Users, BookMarked } from 'lucide-react';
+import { ShieldAlert, ShieldCheck, CalendarClock, Users, BookMarked } from 'lucide-react';
 
 /**
  * Authorship + freshness byline for content deep-dives — a core E-E-A-T signal
@@ -11,9 +11,9 @@ import { ShieldCheck, CalendarClock, Users, BookMarked } from 'lucide-react';
  * renders when a real reviewer name is supplied (via MDX frontmatter). Until
  * then nothing is claimed — matching the site's editorial-policy disclosure.
  *
- * `citationCount` is a live count of the distinct PMIDs the page cites, so the
- * freshness signal never overstates depth — a page with sparse evidence shows
- * a small number, which is the honest content, not a weakness to hide.
+ * `citationCount` is a live count of the distinct PubMed identifiers the page
+ * cites. It communicates source traceability, not that every nearby statement
+ * is established or that every cited record is a primary study.
  */
 export function ContentByline({
   author = 'TNiC Research Team',
@@ -47,14 +47,22 @@ export function ContentByline({
         <span className="inline-flex items-center gap-1.5">
           <BookMarked className="w-3.5 h-3.5 text-accent-cyan" aria-hidden="true" />
           <span className="text-foreground font-medium">{citationCount}</span>
-          {citationCount === 1 ? 'primary source' : 'primary sources'}
+          {citationCount === 1 ? 'PMID-linked source' : 'PMID-linked sources'}
         </span>
       )}
-      {reviewer && (
+      {reviewer ? (
         <span className="inline-flex items-center gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5 text-accent-emerald" aria-hidden="true" />
           Medically reviewed by <span className="text-foreground font-medium">{reviewer}</span>
         </span>
+      ) : (
+        <Link
+          href="/editorial-policy"
+          className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-accent-amber transition focus-ring rounded"
+        >
+          <ShieldAlert className="w-3.5 h-3.5 text-accent-amber" aria-hidden="true" />
+          Not independently clinician-reviewed
+        </Link>
       )}
       <Link
         href="/trust/methodology"

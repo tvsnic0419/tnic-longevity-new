@@ -24,6 +24,7 @@ import { UserFlowGuide } from './UserFlowGuide';
 import { BiomarkerInput } from './BiomarkerInput';
 import { ToolsPromoStrip } from '@/components/tools/ToolsPromoStrip';
 import { LabPartnerPanel } from './LabPartnerPanel';
+import { LabReviewContext } from './LabReviewContext';
 import { getHubContext } from '@/lib/hub-context';
 
 // 'input' is the default tab and stays a regular import. The other four are
@@ -101,6 +102,7 @@ export function LabHub() {
         title="Your Biomarkers. Your Data. Your Insights."
         description="Log lab results, visualize trends, map risks to the 12 Hallmarks of Aging, and get stack-aware recommendations — all processed locally in your browser."
         theme="rose"
+        variant="handoff"
         context={getHubContext('labs')}
       />
 
@@ -115,6 +117,8 @@ export function LabHub() {
           ]}
         />
       )}
+
+      <LabReviewContext labs={labs} selectedCount={selected.length} />
 
       <ToolsPromoStrip headline="Biomarker Impact Calculator — which interventions move your labs most" className="mb-8" />
 

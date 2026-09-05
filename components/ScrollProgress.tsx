@@ -9,7 +9,9 @@ import { navLinks } from '@/lib/nav-data';
  * where you are across the site's primary sections.
  *
  * The dots link to top-level routes, so "active" is the current route — not a
- * scroll position. (The previous version scroll-spied for in-page ids that
+ * scroll position. The rail is therefore labelled "Site sections", not
+ * "Section navigation": it moves between areas of the site, and calling it
+ * section navigation told screen-reader users it would jump within the page. (The previous version scroll-spied for in-page ids that
  * matched the route paths, which never existed on any page, so no dot ever lit
  * up.) On the homepage the Descent already renders its own in-scene chapter
  * rail on the same edge, so the route rail is suppressed there to avoid two
@@ -44,7 +46,7 @@ export function ScrollProgress() {
 
       {showRail && (
         <nav
-          aria-label="Section navigation"
+          aria-label="Site sections"
           className="hidden xl:flex fixed right-6 top-1/2 -translate-y-1/2 z-40 flex-col gap-3"
         >
           {navLinks.map((link) => {
