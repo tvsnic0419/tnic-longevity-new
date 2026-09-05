@@ -49,6 +49,7 @@ const steps: Step[] = [
 export function HomeSteps() {
   return (
     <section
+      id="protocol"
       aria-labelledby="home-steps-heading"
       className="relative border-t border-border/50 py-20 md:py-28"
     >

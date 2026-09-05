@@ -562,6 +562,23 @@ p,
   row-gap: 1rem;
 }
 
+/* When SectionProgress's mobile strip is mounted it occupies the bottom edge,
+   which BackToTop and the toast region already use. This is the single place
+   that gets moved out of its way — the strip only exists on the homepage, so
+   hardcoding an offset into those sitewide components would be wrong
+   everywhere else. The strip is ~52px; 4rem clears it with room to spare. */
+@media (max-width: 767px) {
+  body.has-section-strip {
+    padding-bottom: 3.25rem;
+  }
+  body.has-section-strip .back-to-top {
+    bottom: 4.25rem;
+  }
+  body.has-section-strip [data-sonner-toaster] {
+    --offset-bottom: 8rem;
+  }
+}
+
 .interactive {
   transition: color 0.2s, background-color 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }

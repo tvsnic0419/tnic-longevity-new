@@ -33,6 +33,7 @@ export function HomeHallmarks() {
 
   return (
     <section
+      id="mechanisms"
       aria-labelledby="home-hallmarks-heading"
       className="relative border-t border-border/50 py-20 md:py-28"
     >

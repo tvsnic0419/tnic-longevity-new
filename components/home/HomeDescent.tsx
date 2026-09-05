@@ -1,9 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  useState, useRef, useEffect, useMemo, useCallback,
-} from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { eliteInterventions } from "@/lib/elite-interventions";
 import { COMPOUND_COUNT } from "@/lib/library-modules";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
@@ -477,18 +475,8 @@ const CSS = `
 .tnic-cta.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); box-shadow: none; margin-left: 12px; }
 .tnic-cta.ghost:hover { border-color: var(--cyan); }
 
-.tnic-rail-track { position: absolute; top: 0; right: clamp(14px,2.5vw,30px); bottom: 0; width: 84px; pointer-events: none; z-index: 6; }
-.tnic-rail { position: sticky; top: 50vh; transform: translateY(-50%); display: flex; flex-direction: column; gap: 4px; pointer-events: auto; }
-@media (max-width: 720px){ .tnic-rail-track { display: none; } }
-.tnic-rail button {
-  background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 10px;
-  padding: 6px 0; color: var(--faint); justify-content: flex-end;
-}
-.tnic-rail .lbl { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; opacity: 0; transform: translateX(6px); transition: all .3s ease; }
-.tnic-rail button:hover .lbl, .tnic-rail button.on .lbl { opacity: 1; transform: none; color: var(--ink); }
-.tnic-rail .tick { width: 26px; height: 2px; background: currentColor; border-radius: 2px; transition: all .3s ease; }
-.tnic-rail button.on { color: var(--cyan); }
-.tnic-rail button.on .tick { width: 44px; box-shadow: 0 0 12px var(--cyan); }
+/* .tnic-rail* retired — the scene rail is now the shared SectionProgress,
+   mounted at page level over the full 01–06 chapter spine. */
 
 .tnic-descent[data-reduced="true"] .bar,
 .tnic-descent[data-reduced="true"] .edge.flow,
@@ -697,7 +685,10 @@ const STAR_D = "M0 -6 L1.7 -1.9 L6 -1.9 L2.6 0.7 L3.9 5 L0 2.5 L-3.9 5 L-2.6 0.7
 
 
 export function HomeDescent() {
-  const [active, setActive] = useState(0);
+  // `active` used to be React state purely to drive the old scene rail's
+  // highlight. The rail moved to SectionProgress, and nothing rendered here
+  // reads it any more — only `activeRef` does, inside the canvas loop, to lerp
+  // the ambient palette. Dropping the state also drops a re-render per scene.
   const [age, setAge] = useState(50);
   const reduced = useReducedMotion();
   // Handles onto the two canvases, so the panel shell can drive Reset / Zoom /
@@ -880,16 +871,12 @@ export function HomeDescent() {
         if (en.isIntersecting) {
           en.target.classList.add("is-in");
           const idx = Number((en.target as HTMLElement).dataset.idx);
-          setActive(idx); activeRef.current = idx;
+          activeRef.current = idx;
         }
       });
     }, { threshold: 0.45 });
     sectionRefs.forEach((s) => { if (s.current) obs.observe(s.current); });
     return () => obs.disconnect();
-  }, [sectionRefs]);
-
-  const goTo = useCallback((i: number) => {
-    sectionRefs[i]?.current?.scrollIntoView({ behavior: reducedRef.current ? "auto" : "smooth" });
   }, [sectionRefs]);
 
   // ── timeline geometry ──
@@ -943,18 +930,12 @@ export function HomeDescent() {
       <canvas ref={cursorRef} className="tnic-layer tnic-cursor" aria-hidden="true" />
       <div className="tnic-layer tnic-vignette" aria-hidden="true" />
 
-      <div className="tnic-rail-track">
-        <nav className="tnic-rail" aria-label="Descent sections">
-          {["Arrive", "Molecule", "System", "Goal", "Your path"].map((l, i) => (
-            <button key={l} className={active === i ? "on" : ""} onClick={() => goTo(i)}>
-              <span className="lbl">{l}</span><span className="tick" />
-            </button>
-          ))}
-        </nav>
-      </div>
+      {/* The scene rail used to live here, covering only these five acts. It is
+          now `SectionProgress`, mounted once at page level over the whole
+          six-chapter spine — see components/ui/SectionProgress.tsx. */}
 
       {/* ACT 0 — ARRIVE */}
-      <section ref={s0} data-idx="0" className="tnic-act tnic-hero">
+      <section ref={s0} data-idx="0" id="arrive" className="tnic-act tnic-hero">
         <p className="tnic-kicker">Evidence-Graded Longevity Library</p>
         <h1 className="tnic-h1">See what{' '}<br />you&apos;re <em>protecting</em>.</h1>
         <p className="tnic-lead">
@@ -978,7 +959,7 @@ export function HomeDescent() {
       </section>
 
       {/* ACT 1 — MOLECULE */}
-      <section ref={s1} data-idx="1" className="tnic-act">
+      <section ref={s1} data-idx="1" id="molecule" className="tnic-act">
         <p className="tnic-kicker">The molecule · rendered live</p>
         <h2 className="tnic-h2">It starts smaller{' '}<br />than you can <em>picture</em>.</h2>
         <p className="tnic-lead">
@@ -1315,7 +1296,7 @@ export function HomeDescent() {
       </section>
 
       {/* ACT 4 — YOUR PATH */}
-      <section ref={s4} data-idx="4" className="tnic-act">
+      <section ref={s4} data-idx="4" id="your-path" className="tnic-act">
         {/* Capstone backdrop — Act 3's goal curve mirrored into an ascent:
             the descent you just scrolled becomes the climb you build. Purely
             decorative; the text below carries the actual content. */}
