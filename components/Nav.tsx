@@ -298,7 +298,7 @@ export function Nav() {
               Wide screens only, so the ≥1440px nav row stays uncrowded. */}
           <span
             aria-hidden="true"
-            className="hidden xl:block border-l border-border/60 pl-2.5 font-mono text-[0.58rem] font-semibold uppercase leading-[1.25] tracking-[0.18em] text-muted-foreground"
+            className="hidden xl:block border-l border-border/60 pl-2.5 font-mono text-[0.75rem] font-semibold uppercase leading-[1.15] tracking-[0.12em] text-muted-foreground"
           >
             Cell-Health
             <br />

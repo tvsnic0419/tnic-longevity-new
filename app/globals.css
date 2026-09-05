@@ -426,11 +426,14 @@ p,
 }
 
 /* Size-only micro text — the semantic home for small SANS micro-copy (badge
-   text, chips, fine print) that isn't a mono uppercase label. Fills the gap
-   below .text-caption (12px) so components stop reaching for arbitrary px. */
+   text, chips, fine print) that isn't a mono uppercase label. Floored at 12px
+   (matching .text-caption) so no readable copy renders below the legibility
+   floor; it keeps a tighter line-height than .text-caption for dense chip and
+   meta rows, and gives components a single token to reach for instead of
+   arbitrary sub-12px px values. */
 .text-micro {
-  font-size: 0.625rem;
-  line-height: 1.4;
+  font-size: 0.75rem;
+  line-height: 1.35;
 }
 
 /* Default colors for the typography scale above, deliberately placed in
@@ -3965,30 +3968,15 @@ p,
     color-mix(in srgb, var(--color-bg-elevated) 60%, transparent);
 }
 
-.elite-section-secondary-action {
-  color: var(--color-text-secondary);
-  border: 1px solid color-mix(in srgb, var(--color-border-subtle) 86%, transparent);
-  background: color-mix(in srgb, var(--color-bg-base) 18%, transparent);
-  transition: color 0.24s ease, border-color 0.24s ease, background 0.24s ease, transform 0.24s ease;
-}
-
-@media (hover: hover) {
-  .elite-section-secondary-action:hover {
-    color: var(--accent-amber);
-    border-color: color-mix(in srgb, var(--accent-amber) 50%, transparent);
-    background: color-mix(in srgb, var(--accent-amber) 8%, transparent);
-    transform: translateY(-1px);
-  }
-}
+/* The homepage §03 section actions now use the shared .tnic-button-accent /
+   .tnic-button-outline skins (see HomeEliteInterventions.tsx); the bespoke
+   .elite-section-secondary-action skin it used to carry was retired so the
+   footer/nav/section CTAs share one documented button language. */
 
 [data-theme="light"] .elite-briefing-grid,
 [data-theme="light"] .elite-disclosure {
   background: var(--color-bg-elevated);
   box-shadow: var(--glass-shadow-mid);
-}
-
-[data-theme="light"] .elite-section-secondary-action {
-  background: color-mix(in srgb, var(--color-text-primary) 3%, var(--color-bg-elevated));
 }
 
 @media (max-width: 767px) {
@@ -3998,8 +3986,7 @@ p,
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .elite-briefing-grid > div::before,
-  .elite-section-secondary-action { transition: none; }
+  .elite-briefing-grid > div::before { transition: none; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
