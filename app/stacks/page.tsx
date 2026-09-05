@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
+import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
 import { StacksLibrary } from '@/components/stacks/StacksLibrary';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
@@ -70,7 +71,7 @@ export default function StacksPage() {
           <span className="ml-1 text-accent-violet" aria-hidden="true">→</span>
         </Link>
       </div>
-      <Suspense fallback={<div className="container-page py-20 text-muted-foreground">Loading stacks…</div>}>
+      <Suspense fallback={<SectionSkeleton height="lg" label="Loading stacks…" />}>
         <StacksLibrary />
       </Suspense>
     </>

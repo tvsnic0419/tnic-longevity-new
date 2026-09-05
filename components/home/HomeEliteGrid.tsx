@@ -133,37 +133,31 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
           </div>
         )}
 
-        {/* TNiC Score — the derived composite as the card's headline evidence
-            metric, tier-coloured, leading into the supporting micro-facts. */}
-        {tnic.score !== null && (
-          <div
-            className="mb-3 flex items-center justify-between gap-3 rounded-lg border px-3.5 py-2.5"
-            style={{
-              borderColor: `color-mix(in srgb, ${accent} 28%, transparent)`,
-              background: `color-mix(in srgb, ${accent} 7%, transparent)`,
-            }}
-          >
-            <span className="font-mono text-micro font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-              TNiC Score
-            </span>
-            <span className="flex items-baseline gap-1.5">
-              <span className="font-mono text-xl font-bold tabular-nums" style={{ color: accent }}>
+        {/* Supporting meta — score, human-study (PMID) count, and studied dose
+            in one quiet instrument strip. Deliberately lower-contrast than the
+            name + mechanism above it: a single hairline frame with divided
+            cells rather than two separate high-emphasis boxes, so the card
+            leads with what it is and the numbers read as supporting detail.
+            The score keeps its tier colour — the one meaningful accent here. */}
+        <dl className="mb-5 grid grid-cols-3 divide-x divide-border/40 rounded-lg border border-border/50 bg-white/[0.015] text-center">
+          <div className="px-2 py-2.5">
+            <dt className="mb-0.5 font-mono text-micro font-semibold uppercase tracking-[0.1em] text-muted-foreground">Score</dt>
+            {tnic.score !== null ? (
+              <dd className="font-mono text-sm font-semibold tabular-nums" style={{ color: accent }}>
                 {Math.round(tnic.score)}
-              </span>
-              <span className="font-mono text-micro text-muted-foreground">/100{band ? ` · ${band}` : ''}</span>
-            </span>
+                <span className="text-micro font-normal text-muted-foreground">/100</span>
+              </dd>
+            ) : (
+              <dd className="font-mono text-sm font-semibold text-muted-foreground">—</dd>
+            )}
+            {band && <dd className="text-micro text-muted-foreground">{band}</dd>}
           </div>
-        )}
-
-        {/* Evidence + dose micro-facts — framed and high-contrast so the
-            supporting data reads as crisp instrument readout, not fine print. */}
-        <dl className="mb-5 grid grid-cols-2 gap-x-3 gap-y-2 rounded-lg border border-border/60 bg-white/[0.025] px-3.5 py-3">
-          <div>
-            <dt className="mb-0.5 font-mono text-micro font-semibold uppercase tracking-[0.12em] text-muted-foreground">Human studies cited</dt>
-            <dd className="tnic-tabular font-mono text-base font-semibold text-foreground">{studyCount}</dd>
+          <div className="px-2 py-2.5">
+            <dt className="mb-0.5 font-mono text-micro font-semibold uppercase tracking-[0.1em] text-muted-foreground">Studies</dt>
+            <dd className="tnic-tabular font-mono text-sm font-semibold text-foreground">{studyCount}</dd>
           </div>
-          <div>
-            <dt className="mb-0.5 font-mono text-micro font-semibold uppercase tracking-[0.12em] text-muted-foreground">Studied dose</dt>
+          <div className="px-2 py-2.5">
+            <dt className="mb-0.5 font-mono text-micro font-semibold uppercase tracking-[0.1em] text-muted-foreground">Dose</dt>
             <dd className="text-sm font-semibold text-foreground">{dose}</dd>
           </div>
         </dl>
@@ -184,9 +178,13 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
           </p>
           <div className="flex flex-col gap-2">
             <div className="grid grid-cols-2 gap-2">
+              {/* The evidence action uses the cyan tonal skin (library hue),
+                  not the signature gradient — that stays reserved for the one
+                  site-wide newcomer CTA (NICO), so a grid of cards never reads
+                  as a wall of primary buttons. */}
               <Link
                 href={intervention.libraryHref}
-                className="focus-ring tnic-button-primary inline-flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-sm"
+                className="tnic-button-tonal focus-ring inline-flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-sm"
               >
                 <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
                 Read evidence
