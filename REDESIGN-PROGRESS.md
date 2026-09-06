@@ -4,6 +4,58 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-06 — Perceived-value pass 1: body typeface + /library mechanistic atlas
+
+Response to a principal-designer "make it 2–3× more valuable" brief. Applied the
+operating contract's **audit-don't-rebuild** rule: the site already clears most
+of the brief's bar (cinematic hero, Fraunces + mono, atmospheric field, tokens,
+a11y), so this pass fixes the real gaps, not the imagined ones. Branch
+`claude/library-perceived-value`.
+
+**Shipped.**
+1. **Body typeface: Inter → Hanken Grotesk** (site-wide). Inter was the one
+   generic-SaaS tell in an otherwise distinctive stack. Swapped via `next/font`
+   in `app/layout.tsx` (variable renamed `--font-inter` → `--font-hanken`), with
+   the single `--font-sans` token reference in `app/globals.css` repointed;
+   `'Inter'` literal fallbacks in `HomeDescent.tsx` / `viz/tokens.ts` updated,
+   and the `NetworkStage` canvas label font (which can't read a CSS var and so
+   never actually used the webfont) set to a neutral `system-ui` stack. Fraunces
+   display + JetBrains mono unchanged. Build confirmed the face fetches and
+   `--font-sans` resolves to it; no lingering `--font-inter`.
+2. **/library "mechanistic atlas" elevation.** The "All 12 Hallmarks" gallery
+   now reads as an editorial atlas: stronger section framing + copy that states
+   the honesty point ("every illustration is drawn from the mechanism it
+   depicts — no stock art"), STYLE_GUIDE section spacing, and a cleaner card.
+   Each hallmark illustration is **already** a self-contained titled glass card,
+   so the gallery stopped double-wrapping it (the old card repeated the hallmark
+   title beneath the illustration's own header) — the link now adds only a hover
+   lift, focus ring, and one "Open the evidence deep-dive" CTA, letting the real
+   first-party artwork be the hero.
+
+**Real-images decision (documented for the next session).** The brief asked to
+"incorporate real images." This session's egress policy **blocks external image
+hosts** (Wikimedia returned a 403 CONNECT denial; only package registries +
+Anthropic APIs are allowed), so licensed free-stock could not be sourced without
+routing around policy — which the proxy rules forbid. With that surfaced, Thomas
+chose **first-party viz only**: "real images" = the existing real mechanistic
+SVGs, elevated (above), not photography. If photographs are wanted later, the
+unblocked path is Thomas dropping licensed files into `public/images/` for a
+scrim-treated `EditorialImage` component (design already scoped in the plan).
+
+**Verified.** `npm run lint` — 0 errors (3 pre-existing `window.location`
+warnings, untouched files). `npm run typecheck` — clean. `npm run test` — 53
+files, **679 passed**. `npm run build` — compiled. Rendered `/library` with
+headless Chromium: hero + Hanken face confirmed; the atlas cards render the real
+mechanistic diagrams with a single (no longer duplicated) title.
+
+**Deferred / follow-ups.** Photographs (pending Thomas-supplied licensed assets
+or an egress allowance); the same typeface/atlas treatment could extend to other
+hubs in a later pass; label-density and accent-restraint sweeps beyond `/library`.
+
+**Rollback.** Revert the single commit on `claude/library-perceived-value`
+(`git revert <sha>`), or redeploy the previous Vercel deployment. No content,
+evidence, or data touched; font swap is the only site-wide change.
+
 ## 2026-09-04 (third pass) — NICO starter: the safety screen it claimed but never ran
 
 **The finding.** The homepage NICO starter (section 06) collected age, activity

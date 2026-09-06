@@ -101,29 +101,34 @@ export default function LibraryPage() {
         <RecommendedNextSteps context="library" />
       </div>
 
-      {/* Polished All 12 Hallmarks Visual Grid */}
-      <section className="container-page py-12 md:py-16 border-t border-[var(--color-border-subtle)]">
+      {/* All 12 Hallmarks — the mechanistic visual atlas. Each card is a real
+          first-party illustration drawn from the mechanism it depicts (no stock
+          art), linking straight into that hallmark's evidence deep-dive. */}
+      <section className="container-page py-16 md:py-24 border-t border-[var(--color-border-subtle)]">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
-            <div>
-              <div className="text-label text-[var(--accent-cyan)] mb-1.5">COMPLETE VISUAL SYSTEM</div>
-              <h2 className="heading-section">All 12 Hallmarks of Aging</h2>
-              <p className="text-body text-[var(--color-text-secondary)] max-w-2xl mt-2">
-                High-detail mechanistic visualizations. Hover to explore.
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10 md:mb-12">
+            <div className="max-w-2xl">
+              <p className="text-label text-accent-cyan mb-2">The mechanistic atlas</p>
+              <h2 className="heading-section">All 12 hallmarks, drawn from their biology</h2>
+              <p className="text-body mt-3">
+                Every illustration is rendered from the mechanism it depicts — the same
+                evidence-graded biology behind each compound module. Open any hallmark for its
+                full deep-dive.
               </p>
             </div>
-            <Link href="#content-modules" className="text-sm text-[var(--accent-cyan)] hover:underline">
-              Explore module index →
+            <Link
+              href="#content-modules"
+              className="focus-ring interactive inline-flex shrink-0 items-center gap-1.5 rounded-md text-sm font-semibold text-accent-cyan hover:text-accent-emerald"
+            >
+              Module index <span aria-hidden="true">→</span>
             </Link>
           </div>
 
           <DeferredHallmarkVisualGallery cards={visualCards} />
 
-          <div className="mt-8 text-center">
-            <p className="text-sm text-[var(--color-text-muted)]">
-              All visuals are part of TNiC’s evidence-based illustration system.
-            </p>
-          </div>
+          <p className="mt-8 text-caption text-[var(--color-text-muted)]">
+            Every illustration is drawn from the mechanism it depicts — no stock art.
+          </p>
         </div>
       </section>
 

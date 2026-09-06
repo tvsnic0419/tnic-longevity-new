@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, JetBrains_Mono, Fraunces } from 'next/font/google';
+import { Hanken_Grotesk, JetBrains_Mono, Fraunces } from 'next/font/google';
 import { Toaster } from 'sonner';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -13,11 +13,14 @@ import { AmbientLayer } from '@/components/ui/AmbientLayer';
 import { BackToTop } from '@/components/ui/BackToTop';
 import './globals.css';
 
-// One typography source of truth — the cinematic stack used by the Descent
-// scene and the viz family now drives the entire site. Self-hosted via
-// next/font (no layout-shift, no external @import), exposed as CSS variables.
-const inter = Inter({
-  variable: '--font-inter',
+// One typography source of truth — a contrast serif (Fraunces) for display, a
+// humanist grotesque (Hanken Grotesk) for text, and a technical mono
+// (JetBrains) for data/labels. Hanken replaced Inter as the body face: same
+// legibility, more character, so the text plane no longer reads as a default
+// SaaS stack. Self-hosted via next/font (no layout-shift, no external
+// @import), exposed as CSS variables.
+const hankenGrotesk = Hanken_Grotesk({
+  variable: '--font-hanken',
   subsets: ['latin'],
   display: 'swap',
 });
@@ -69,7 +72,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${inter.variable} ${jetbrainsMono.variable} ${fraunces.variable} h-full antialiased`}
+      className={`${hankenGrotesk.variable} ${jetbrainsMono.variable} ${fraunces.variable} h-full antialiased`}
     >
       <head>
         <ThemeScript />
