@@ -1,40 +1,20 @@
-# TNiC
+# TNiC — Cell-Health Library (theme preview)
 
-**Transformative Nutrition in Cell-health**
+Visual scaffold for [tnic.help](https://tnic.help): near-black / cyan / teal / ivory theme, WebGL particle field, glass cards, and the live site information architecture (Learn / Build / Track / Shop).
 
-A premium institutional platform focused on cellular resilience science, NRF2 pathways, mitochondrial health, and future high-absorption nutritional systems for healthy lifespan extension.
+Replaces the previous Aether Institute static page in this repository.
 
-## About
+## Run
 
-TNiC is building a high-credibility digital platform that educates serious audiences on the biological mechanisms of cellular defense while preparing to develop precise, mechanism-driven nutritional systems.
+```bash
+npm install
+npm run dev
+```
 
-This project is **not** a typical supplement or anti-aging site. It is designed with an institutional, scientific, and forward-looking tone — positioned as a longevity biotech communication platform.
+Open `http://localhost:8080`.
 
-## Current Status
+## Map
 
-- ✅ Fully functional single-file website (`index.html`)
-- ✅ Premium dark bio-tech design system
-- ✅ Interactive NRF2 pathway explainer
-- ✅ Cellular Defense Simulator
-- ✅ Trust & credibility elements
-- ✅ Future product vision section
-- ✅ Newsletter signup
-- ✅ Basic error handling
-
-The site is currently deployed and being actively refined.
-
-## Tech Stack
-
-- HTML5 + Tailwind CSS (via CDN)
-- Vanilla JavaScript
-- Font Awesome icons
-- Responsive & mobile-friendly
-
-> **Note:** This is currently a single-file application. A full Next.js 14 + TypeScript version is planned for future development.
-
-## Getting Started (Local)
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/YOUR-USERNAME/tnic-project.git
-   cd tnic-project
+- Primary nav: Library · Stacks · Labs · Products
+- Start: NICO Starter
+- Home spine: arrive → system → elite interventions → hallmarks → protocol → NICO
