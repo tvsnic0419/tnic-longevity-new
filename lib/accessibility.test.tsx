@@ -17,6 +17,8 @@ import { axe, toHaveNoViolations } from 'jest-axe';
 import { EvidenceBadge, EvidenceBadgeLegend } from '@/components/trust/EvidenceBadge';
 import { ProductPickCard } from '@/components/shop/ProductPickCard';
 import { productPicks } from '@/lib/product-picks';
+import { CompoundFullSpectrum } from '@/components/library/CompoundFullSpectrum';
+import { resolveCompoundProfile } from '@/lib/compound-profile';
 
 expect.extend(toHaveNoViolations);
 
@@ -42,6 +44,19 @@ describe('accessibility guardrail (axe-core)', () => {
   it('ProductPickCard (compact) has no violations', async () => {
     const pick = productPicks[0];
     const { container } = render(<ProductPickCard pick={pick} compact />);
+    expect(await axe(container)).toHaveNoViolations();
+  });
+
+  it('CompoundFullSpectrum (engine compound, with Matrix) has no violations', async () => {
+    const profile = resolveCompoundProfile('nmn')!;
+    const { container } = render(<CompoundFullSpectrum profile={profile} hasMatrix />);
+    expect(await axe(container)).toHaveNoViolations();
+  });
+
+  it('CompoundFullSpectrum (graceful degradation, no Matrix) has no violations', async () => {
+    // A library-only compound with no engine scores exercises the omit-not-fake path.
+    const profile = resolveCompoundProfile('taurine')!;
+    const { container } = render(<CompoundFullSpectrum profile={profile} hasMatrix={false} />);
     expect(await axe(container)).toHaveNoViolations();
   });
 });

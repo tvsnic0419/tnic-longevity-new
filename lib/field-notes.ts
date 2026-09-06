@@ -81,6 +81,41 @@ const NOTES: FieldNote[] = [
     compoundId: 'coq10',
     source: 'Meta-analysis · 17 RCTs, inflammation markers',
   },
+  {
+    stat: '−8.0 yrs',
+    title: 'Ca-AKG cut 8 years off a biological-age clock',
+    body: 'A 2024 Aging Cell RCT saw mean biological age fall 8.0 years on the DunedinPACE clock after Ca-AKG supplementation — echoing the 12–14% median lifespan extension it produced in mice.',
+    compoundId: 'cakg',
+    source: 'Aging Cell RCT, 2024 · DunedinPACE',
+  },
+  {
+    stat: '+1.37 kg',
+    title: 'Creatine plus training built real lean mass after 57',
+    body: 'A 22-trial meta-analysis in older adults found creatine added to resistance training produced +1.37 kg more lean tissue and greater strength than training alone — one of the best-evidenced interventions here.',
+    compoundId: 'creatine',
+    source: 'Meta-analysis · 22 RCTs · PMID 29138605',
+  },
+  {
+    stat: 'Cell RCT',
+    title: 'Spermidine improved memory in older adults',
+    body: 'Spermidine is one of the strongest dietary autophagy triggers, and a 2021 Cell RCT found wheat-germ spermidine improved memory in older adults. Tier B — a pilot human outcome, not yet a longevity endpoint.',
+    compoundId: 'spermidine',
+    source: 'Madeo et al., Cell 2021',
+  },
+  {
+    stat: 'Senolytic',
+    title: 'Fisetin cleared senescent cells and extended lifespan in mice',
+    body: 'Fisetin is the most potent senolytic flavonoid tested, clearing senescent cells and extending health- and lifespan in aged mice. Human longevity trials are underway but not yet reported — promising, not proven.',
+    compoundId: 'fisetin',
+    source: 'EBioMedicine 2018 · PMID 30279143',
+  },
+  {
+    stat: '¼ the dose',
+    title: 'Pterostilbene matches resveratrol at a quarter of the dose',
+    body: 'Human pharmacokinetics confirm 250 mg of pterostilbene reaches plasma levels resveratrol needs 1,000 mg to match — the same SIRT1-linked biology, far more efficiently absorbed.',
+    compoundId: 'pterostilbene',
+    source: 'Kapetanovic et al., 2011 · PMID 21749330',
+  },
 ];
 
 export interface ResolvedFieldNote extends FieldNote {

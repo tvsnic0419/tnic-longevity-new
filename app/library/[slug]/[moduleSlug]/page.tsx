@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import { LibraryModuleDetail } from '@/components/library/LibraryModuleDetail';
 import { CompoundStickyBar } from '@/components/library/CompoundStickyBar';
 import { CompoundIntelligenceMatrix } from '@/components/library/CompoundIntelligenceMatrix';
+import { CompoundFullSpectrum } from '@/components/library/CompoundFullSpectrum';
+import { resolveCompoundProfile } from '@/lib/compound-profile';
 import { getBuyerGuideByModuleSlug } from '@/lib/buyer-guides';
 import { getProductPick } from '@/lib/product-picks';
 import { CompoundHero, type CompoundHeroData } from '@/components/viz/CompoundHero';
@@ -90,6 +92,17 @@ export default async function LibraryModulePage({
   const engineHref = engineCompound
     ? buildEngineStackUrl([engineCompound.id])
     : undefined;
+
+  // Full-Spectrum Profile — one grounded "data package" joined from lib/data.ts,
+  // the mechanistic engine, and this module. Resolved server-side so the join
+  // ships in the initial HTML and nothing is invented (see lib/compound-profile).
+  const compoundProfile =
+    mod.category === 'compounds'
+      ? resolveCompoundProfile(mod.slug, {
+          mdxBody: mdx?.body ?? null,
+          lastReviewed: mdx?.frontmatter.last_updated,
+        })
+      : null;
 
   // Cinematic overture for compound pages — real fields joined from lib/data.ts.
   const heroCompound =
@@ -223,6 +236,9 @@ export default async function LibraryModulePage({
           stackHref={stickyStackHref}
           compoundId={mod.compoundId}
         />
+      )}
+      {compoundProfile && (
+        <CompoundFullSpectrum profile={compoundProfile} hasMatrix={Boolean(engineCompound)} />
       )}
       {engineCompound && <CompoundIntelligenceMatrix compound={engineCompound} />}
       <LibraryModuleDetail
