@@ -77,10 +77,14 @@ export function HomeEliteInterventions() {
           </div>
         </div>
 
+        {/* Section-scoped actions. The signature gradient primary is reserved
+            site-wide for the one newcomer job (NICO), so these product/shop
+            destinations use the accent + neutral-outline skins — one shared
+            pill radius with the nav and footer CTAs. */}
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Link
             href="/products"
-            className="focus-ring tnic-button-primary group inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm"
+            className="tnic-button-accent focus-ring group inline-flex min-h-[var(--space-touch)] items-center justify-center gap-2 rounded-full px-5 py-3 text-sm [--btn-accent:var(--accent-emerald)]"
           >
             See all recommended products
             <ArrowUpRight
@@ -90,7 +94,7 @@ export function HomeEliteInterventions() {
           </Link>
           <Link
             href="/shop"
-            className="elite-section-secondary-action focus-ring inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold"
+            className="tnic-button-outline focus-ring inline-flex min-h-[var(--space-touch)] items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold"
           >
             Verify a product before you buy
           </Link>

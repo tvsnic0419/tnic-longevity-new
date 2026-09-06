@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
 import { CombinationLab } from '@/components/combination-lab/CombinationLab';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
@@ -42,7 +43,7 @@ export default function CombinationLabPage() {
         primary={{ href: '#lab', label: 'Open the lab' }}
         secondary={{ href: '/stacks', label: 'Back to Stack Architect' }}
       />
-      <Suspense fallback={<div className="container-page py-20 text-muted-foreground">Loading combination lab…</div>}>
+      <Suspense fallback={<SectionSkeleton height="lg" label="Loading combination lab…" />}>
         <CombinationLab />
       </Suspense>
     </>

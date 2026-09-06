@@ -4,6 +4,67 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-05 — UI priority polish: footer, CTAs, elite cards, loading skeletons
+
+Density / duplication / CTA-consistency / loading pass. No brand, evidence,
+token, or content changes — reused existing primitives and skins throughout.
+Branch `claude/ui-priority-polish-u6e7j3`.
+
+**Shipped.**
+1. **Slimmed footer** (`components/Footer.tsx`). Collapsed the former
+   six-column link wall to a brand block + two short curated columns
+   (Hubs / Trust). The deep directory now lives one click away behind the
+   existing "View the full map" → `/site-map` link in the decision panel, which
+   was **kept** (it's a guarded high-intent surface —
+   `site-integrity.test.ts`). The affiliate/medical disclosure was folded into
+   the brand block as a compact caption instead of a standalone column. No site
+   destination was removed — only footer chrome. Raised the "the back page"
+   link off its `text-muted-foreground/45` dimming to the solid muted token
+   (sub-0.7 opacity on captions is disallowed); it stays understated but
+   legible and focusable.
+2. **Unified CTA language.** One pill radius (`rounded-full`) across nav,
+   footer, and the homepage §03 section actions. The signature gradient primary
+   is now reserved site-wide for the one newcomer job (NICO): the homepage
+   "See all recommended products" moved to `.tnic-button-accent` (emerald), its
+   sibling to `.tnic-button-outline`, and each elite card's "Read evidence"
+   from the gradient to `.tnic-button-tonal` (cyan) so a grid of cards no
+   longer reads as a wall of primaries. Retired the bespoke
+   `.elite-section-secondary-action` skin in favour of the documented
+   `.tnic-button-*` skins. `PrivacyConsentBanner` now uses the `<Button>`
+   primitive at `size="md"`, so both actions clear the 44px touch floor.
+3. **Quieter elite card meta** (`components/home/HomeEliteGrid.tsx`). Merged the
+   two high-emphasis framed boxes (TNiC Score + studies/dose) into a single
+   quiet hairline instrument strip — Score / Studies / Dose — so the card leads
+   with name + mechanism and the numbers read as supporting detail. Score keeps
+   its tier colour; the verified-pick strip and affiliate disclosure are
+   unchanged.
+4. **Branded loading skeletons.** `SectionSkeleton` is now a polite live region
+   (`role="status"` + sr-only label, decorative shimmer `aria-hidden`). Replaced
+   the bare "Loading stacks…" / "Loading combination lab…" text fallbacks
+   (`app/stacks/page.tsx`, `app/stacks/lab/page.tsx`) with it, and swapped the
+   three crude `animate-pulse bg-white/5` fallbacks on `/library` for branded
+   `.skeleton` blocks (search bar, filter bar, and a card-grid preview for the
+   compound explorer), each wrapped in a `role="status"` live region.
+5. **Micro-type floor.** Floored the `.text-micro` token at 12px (0.75rem,
+   matching `.text-caption` but tighter leading) so no readable copy renders
+   sub-12px, and bumped the nav "Cell-Health / Library" lockup from
+   `text-[0.58rem]` to `text-[0.75rem]`.
+
+**Verified.** `npm run lint` — 0 errors (3 pre-existing `window.location`
+warnings, none in touched files). `npm run typecheck` — clean. `npm run test`
+— 53 files, **677 passed**. `npm run build` — compiled successfully. SSR
+spot-check of prerendered `/library` confirmed the slimmed footer, the retained
+decision panel, and the back-page link ship in the initial HTML.
+
+**Deferred (noted in the brief, out of scope for this PR):** full `/library`
+IA rebuild / virtualized catalog; HomeDescent multi-act shortening / WebGL
+changes; `/products` "no pick yet" wall collapse; mobile ContextBar sticky
+chrome redesign.
+
+**Rollback:** revert the single squashed commit on this branch
+(`git revert <sha>`), or redeploy the previous Vercel deployment. No data or
+schema touched.
+
 ## 2026-09-04 (third pass) — NICO starter: the safety screen it claimed but never ran
 
 **The finding.** The homepage NICO starter (section 06) collected age, activity

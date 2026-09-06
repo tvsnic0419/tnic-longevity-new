@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Shield } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
 import { usePlatform } from '@/context/PlatformContext';
 
 const DISMISS_KEY = 'tnic-privacy-banner-dismissed';
@@ -46,19 +47,17 @@ export function PrivacyConsentBanner() {
                 Privacy panel
               </Link>
             </p>
+            {/* Consent controls use the Button primitive at the md size, so
+                both actions clear the 44px touch-target floor. Solid emerald
+                (theme primary, not the signature NICO gradient) for accept;
+                ghost for dismiss. */}
             <div className="flex flex-wrap gap-2 mt-3">
-              <button
-                onClick={acceptPrivacyConsent}
-                className="focus-ring interactive px-4 py-2 rounded-lg bg-accent-emerald/20 text-accent-emerald text-xs font-semibold border border-accent-emerald/30"
-              >
+              <Button variant="primary" theme="emerald" size="md" onClick={acceptPrivacyConsent}>
                 Got it
-              </button>
-              <button
-                onClick={dismissForSession}
-                className="focus-ring interactive px-4 py-2 rounded-lg text-xs font-semibold text-muted-foreground hover:text-[var(--color-text-secondary)]"
-              >
+              </Button>
+              <Button variant="ghost" size="md" onClick={dismissForSession}>
                 Dismiss
-              </button>
+              </Button>
             </div>
           </div>
         </div>

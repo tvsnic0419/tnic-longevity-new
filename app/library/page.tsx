@@ -57,7 +57,14 @@ export default function LibraryPage() {
       />
       {/* Search is the highest-intent action on a research hub, so it appears
           immediately after the overview instead of after the hallmark atlas. */}
-      <Suspense fallback={<div className="h-36 animate-pulse bg-white/5" />}>
+      <Suspense
+        fallback={
+          <div className="container-page py-8" role="status" aria-live="polite" aria-busy="true">
+            <span className="sr-only">Loading library search…</span>
+            <div className="skeleton h-14 w-full rounded-xl" aria-hidden="true" />
+          </div>
+        }
+      >
         <LibrarySearch />
       </Suspense>
 
@@ -84,7 +91,14 @@ export default function LibraryPage() {
       <div id="hallmark-atlas"><AntiAgingLibrary asPageTitle /></div>
 
       <div className="container-page pb-6">
-        <Suspense fallback={<div className="h-20 animate-pulse bg-white/5 rounded-xl" />}>
+        <Suspense
+          fallback={
+            <div role="status" aria-live="polite" aria-busy="true">
+              <span className="sr-only">Loading filters…</span>
+              <div className="skeleton h-20 w-full rounded-xl" aria-hidden="true" />
+            </div>
+          }
+        >
           <LibraryFacetFilters />
         </Suspense>
       </div>
@@ -92,7 +106,23 @@ export default function LibraryPage() {
       {/* The result surface those facet filters drive — and the clickable
           tier-count pills. Same `?tiers=`/`?hallmarks=` params, now rendered. */}
       <div className="container-page pb-12">
-        <Suspense fallback={<div className="h-40 animate-pulse bg-white/5 rounded-xl" />}>
+        <Suspense
+          fallback={
+            <div role="status" aria-live="polite" aria-busy="true">
+              <span className="sr-only">Loading compounds…</span>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-hidden="true">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="space-y-3 rounded-2xl border border-border/60 p-5">
+                    <div className="skeleton h-5 w-16 rounded-full" />
+                    <div className="skeleton h-5 w-40" />
+                    <div className="skeleton h-3 w-full" />
+                    <div className="skeleton h-3 w-5/6" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          }
+        >
           <CompoundExplorer />
         </Suspense>
       </div>
