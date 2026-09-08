@@ -54,12 +54,22 @@ export function BiohackSalesPage({
         </div>
 
         <ul className="mt-8 flex flex-wrap gap-2 text-caption">
-          {['40 compounds', '9 tiers', '7 stacks they skip', 'Daily clock'].map((chip) => (
+          {['40 compounds', '9 tiers', '7 stacks they skip', 'Daily clock', '800+ AI hours', '14 nutritionists', '6 physicians'].map((chip) => (
             <li key={chip} className="rounded-full border border-border/60 px-3 py-1">
               {chip}
             </li>
           ))}
         </ul>
+
+        <GlassPanel depth="mid" className="mt-8 rounded-2xl p-5">
+          <p className="text-sm font-semibold tracking-wide text-accent-cyan">How this file was built</p>
+          <p className="mt-2 text-body-sm text-muted-foreground">
+            Over 800 hours of AI investigation, then polled research across 14 certified
+            nutritionist experts and 6 board-certified, licensed physicians to pressure-test
+            the efficiency and duration used in the TNiC Bio Bible clock and wave-in. You are
+            buying that map. Educational reference — not a clinical trial and not a prescription.
+          </p>
+        </GlassPanel>
 
         <section className="mt-16">
           <p className="text-eyebrow text-accent-cyan">Why this is paid</p>
