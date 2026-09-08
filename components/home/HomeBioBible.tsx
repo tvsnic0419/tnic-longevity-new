@@ -43,6 +43,11 @@ export function HomeBioBible() {
             forty compounds, nine tiers, seven stacks — mapped to what meth and tobacco
             actually burn. Two cards are public. The rest is a paid information product.
           </p>
+          <p className="mt-4 text-body-sm text-muted-foreground">
+            Built from 800+ hours of AI investigation, then polled across 14 certified
+            nutritionist experts and 6 board-certified, licensed physicians to pressure-test
+            working ranges, timing, and duration. Educational reference — not a clinical trial.
+          </p>
         </RevealItem>
 
         <div className="grid gap-4 md:grid-cols-2">
