@@ -7,9 +7,9 @@ import { SITE } from '@/lib/site';
 import { BIOHACK_PRICE_USD } from '@/lib/biohack/protocol';
 
 export const metadata: Metadata = buildPageMetadata({
-  title: 'TNiC Bio Bible — Information They Do Not Want Indexed',
+  title: 'TNiC Bio Bible — Intelligence They Prefer Unindexed',
   description:
-    'Paid dual-exposure protocol: forty compounds mapped to what meth and tobacco actually destroy. Educational information product. Not medical advice.',
+    'A dual-exposure monograph: forty compounds mapped to the enzymatic and organelle lesions of methamphetamine and tobacco. Educational intelligence product. Not medical advice.',
   path: '/biohack-100',
   keywords: ['TNiC Bio Bible', 'BIOHACK 100', 'dual-exposure protocol', 'paid longevity protocol'],
 });
@@ -37,7 +37,7 @@ export default async function BiohackPage({
             '@type': 'Product',
             name: 'TNiC Bio Bible — BIOHACK 100',
             description:
-              'Paid information product: forty-compound dual-exposure longevity protocol. Educational reference only.',
+              'Paid information product: forty-compound dual-exposure longevity monograph. Educational reference only.',
             brand: { '@type': 'Brand', name: 'TNiC' },
             url: `${SITE.url}/biohack-100`,
             offers: {
