@@ -26,21 +26,23 @@ export function BiohackSalesPage({
       <div className="container-page max-w-4xl py-16 md:py-24">
         {needAccess && (
           <p className="mb-8 rounded-2xl border border-accent-amber/30 bg-accent-amber/10 px-4 py-3 text-sm text-foreground">
-            That reader is gated. Unlock the Bio Bible to open the full deck.
+            The reader is reserved to purchasers. Acquire the monograph to open the full folio.
           </p>
         )}
 
-        <p className="text-eyebrow text-accent-cyan">Paid intelligence · not a wellness brochure</p>
-        <h1 className="headline-editorial mt-4">Information they do not want indexed.</h1>
+        <p className="text-eyebrow text-accent-cyan">Paid intelligence · not a lifestyle pamphlet</p>
+        <h1 className="headline-editorial mt-4">Intelligence they prefer unindexed.</h1>
         <p className="mt-3 font-display text-3xl tracking-tight text-accent-cyan md:text-4xl">
           TNiC Bio Bible — BIOHACK 100
         </p>
-        <p className="mt-3 text-lg text-accent-amber">The 40-compound dual-exposure protocol</p>
+        <p className="mt-3 text-lg text-accent-amber">A forty-compound dual-exposure monograph</p>
         <p className="text-body mt-6 max-w-2xl">
-          Consumer longevity media sells NMN and morning sunlight. This drop maps what meth and
-          tobacco actually burn — glutathione, NAD+, membranes, cilia, methylation — and the
-          forty-card wiring diagram used to cover those holes. Mechanism-first. No brand inventory
-          to protect. Educational reference, not a prescription.
+          Conventional longevity media trades in nicotinamide mononucleotide and pastoral light.
+          This document maps the lesions methamphetamine and tobacco actually impose —
+          glutathione collapse, NAD expenditure, membrane peroxidation, mucociliary failure,
+          disordered methylation — and the forty-card architecture assembled to cover those
+          nodes. Mechanism first. No inventory to defend. An educational reference, not a
+          prescription.
         </p>
 
         <div className="mt-8 flex flex-wrap gap-3">
@@ -49,12 +51,20 @@ export function BiohackSalesPage({
             href="/biohack-100/preview"
             className="focus-ring btn-ghost-premium inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold"
           >
-            Read the two public cards
+            Inspect the public folio
           </Link>
         </div>
 
         <ul className="mt-8 flex flex-wrap gap-2 text-caption">
-          {['40 compounds', '9 tiers', '7 stacks they skip', 'Daily clock', '800+ AI hours', '14 nutritionists', '6 physicians'].map((chip) => (
+          {[
+            '40 compounds',
+            '9 tiers',
+            '7 load-bearing stacks',
+            'Circadian clock',
+            '800+ investigative hours',
+            '14 nutritionist experts',
+            '6 licensed physicians',
+          ].map((chip) => (
             <li key={chip} className="rounded-full border border-border/60 px-3 py-1">
               {chip}
             </li>
@@ -62,37 +72,40 @@ export function BiohackSalesPage({
         </ul>
 
         <GlassPanel depth="mid" className="mt-8 rounded-2xl p-5">
-          <p className="text-sm font-semibold tracking-wide text-accent-cyan">How this file was built</p>
+          <p className="text-sm font-semibold tracking-wide text-accent-cyan">Provenance</p>
           <p className="mt-2 text-body-sm text-muted-foreground">
-            Over 800 hours of AI investigation, then polled research across 14 certified
-            nutritionist experts and 6 board-certified, licensed physicians to pressure-test
-            the efficiency and duration used in the TNiC Bio Bible clock and wave-in. You are
-            buying that map. Educational reference — not a clinical trial and not a prescription.
+            More than eight hundred hours of machine-assisted literature interrogation,
+            subsequently reviewed by fourteen certified nutritionist experts and six
+            board-certified, licensed physicians. That panel examined working ranges,
+            chronobiology, and duration — the efficiency with which each node is dosed
+            and the interval over which it is held. You are acquiring that cartography.
+            Educational monograph: neither a clinical trial nor a license to prescribe.
           </p>
         </GlassPanel>
 
         <section className="mt-16">
-          <p className="text-eyebrow text-accent-cyan">Why this is paid</p>
-          <h2 className="heading-section mt-2">The free library stays polite. This file does not.</h2>
+          <p className="text-eyebrow text-accent-cyan">Why the fee exists</p>
+          <h2 className="heading-section mt-2">The library keeps its manners. This volume does not.</h2>
           <div className="mt-6 space-y-3 text-body-sm text-muted-foreground">
             <p>
-              tnic.help remains a free, PubMed-backed library. Bio Bible is a separate information
-              product: the dual-exposure map that affiliate pages and clinic brochures will not
-              publish because the customer is not a clean keto influencer.
+              tnic.help remains an open, PubMed-anchored library. Bio Bible is a distinct
+              information object: the dual-exposure map that affiliate catalogues and clinic
+              brochures decline to print, because the intended reader is not a sanitized
+              wellness archetype.
             </p>
             <p>
-              You are buying the protocol object — cards, synergy wiring, clock, off-period rules —
-              not a miracle and not medical advice.
+              Acquisition purchases the protocol itself — cards, synergistic wiring, circadian
+              clock, off-period constraints — not a panacea and not medical counsel.
             </p>
           </div>
         </section>
 
         <section className="mt-16">
           <p className="text-eyebrow text-accent-cyan">Protocol briefing</p>
-          <h2 className="heading-section mt-2">What the dual-exposure profile destroys</h2>
+          <h2 className="heading-section mt-2">What the dual-exposure profile dismantles</h2>
           <div className="mt-6 grid gap-4 md:grid-cols-2">
             <GlassPanel depth="mid" className="rounded-2xl p-5">
-              <h3 className="text-sm font-semibold tracking-wide text-accent-violet">What meth destroys</h3>
+              <h3 className="text-sm font-semibold tracking-wide text-accent-violet">Methamphetamine</h3>
               <ul className="mt-3 space-y-2 text-body-sm">
                 {BIOHACK_DAMAGE.meth.map((row) => (
                   <li key={row}>{row}</li>
@@ -100,7 +113,7 @@ export function BiohackSalesPage({
               </ul>
             </GlassPanel>
             <GlassPanel depth="mid" className="rounded-2xl p-5">
-              <h3 className="text-sm font-semibold tracking-wide text-accent-cyan">What smoking destroys</h3>
+              <h3 className="text-sm font-semibold tracking-wide text-accent-cyan">Tobacco smoke</h3>
               <ul className="mt-3 space-y-2 text-body-sm">
                 {BIOHACK_DAMAGE.smoke.map((row) => (
                   <li key={row}>{row}</li>
@@ -111,7 +124,7 @@ export function BiohackSalesPage({
         </section>
 
         <section className="mt-16">
-          <p className="text-eyebrow text-accent-cyan">Nine-tier map</p>
+          <p className="text-eyebrow text-accent-cyan">Nine-tier architecture</p>
           <div className="mt-6 overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
@@ -119,7 +132,7 @@ export function BiohackSalesPage({
                   <th className="py-2 pr-3">Tier</th>
                   <th className="py-2 pr-3">Domain</th>
                   <th className="py-2 pr-3">Cards</th>
-                  <th className="py-2">Job</th>
+                  <th className="py-2">Mandate</th>
                 </tr>
               </thead>
               <tbody>
@@ -137,57 +150,61 @@ export function BiohackSalesPage({
         </section>
 
         <section className="mt-16 space-y-4">
-          <p className="text-eyebrow text-accent-cyan">Public slice</p>
+          <p className="text-eyebrow text-accent-cyan">Public folio</p>
           <h2 className="heading-section mt-2">Cards 01–02 only</h2>
           {preview.map((card) => (
             <BiohackCardView key={card.num} card={card} />
           ))}
-          <p className="text-caption">{BIOHACK_CARDS.length - 2} cards stay behind the unlock.</p>
+          <p className="text-caption">
+            {BIOHACK_CARDS.length - 2} cards remain reserved to acquisition.
+          </p>
         </section>
 
         <section className="mt-16">
-          <p className="text-eyebrow text-accent-cyan">What you are buying</p>
+          <p className="text-eyebrow text-accent-cyan">What acquisition includes</p>
           <ul className="mt-4 space-y-2 text-body-sm">
-            <li>The full 40-card reader</li>
-            <li>Designed PDF (dark-room reference)</li>
-            <li>Seven load-bearing stacks, starting with {BIOHACK_STACKS[0].name}</li>
-            <li>Daily clock plus four-week wave-in notes</li>
-            <li>Off-period rules for Mucuna and 5-HTP — the part polite guides omit</li>
+            <li>The complete forty-card reader</li>
+            <li>Designed PDF — dark-room reference</li>
+            <li>Seven load-bearing stacks, beginning with {BIOHACK_STACKS[0].name}</li>
+            <li>Circadian clock and four-week wave-in notes</li>
+            <li>Off-period constraints for Mucuna and 5-HTP — omitted from polite guides</li>
           </ul>
         </section>
 
         <section className="mt-16">
           <GlassPanel depth="mid" className="rounded-2xl border border-accent-rose/30 p-5">
-            <p className="text-sm font-semibold tracking-wide text-accent-rose">Physician + labs</p>
+            <p className="text-sm font-semibold tracking-wide text-accent-rose">Clinical caution</p>
             <p className="mt-2 text-body-sm">
-              Educational reference only. Consult a physician. Nattokinase and high-dose omega-3
-              potentiate anticoagulants. Berberine and EGCG hit CYP and transporters. 5-HTP and
-              Mucuna are off-period only — never with MAOIs, SSRIs, or active meth use.
+              Educational reference only. Consult a physician. Nattokinase and high-dose
+              omega-3 potentiate anticoagulants. Berberine and EGCG engage CYP isoforms and
+              transporters. 5-HTP and Mucuna are off-period only — never concurrent with
+              MAOIs, SSRIs, or active methamphetamine use.
             </p>
           </GlassPanel>
         </section>
 
         <section className="mt-16">
-          <h2 className="heading-section">FAQ</h2>
+          <h2 className="heading-section">Inquiries</h2>
           <dl className="mt-6 space-y-6">
             <div>
-              <dt className="font-semibold">Is this secret medical advice?</dt>
+              <dt className="font-semibold">Is this covert medical advice?</dt>
               <dd className="mt-1 text-body-sm text-muted-foreground">
-                No. It is paid information. Dose ranges are working ranges for an educational
-                protocol, not a prescription and not a claim that the stack erases exposure.
+                No. It is purchased intelligence. Dose figures are working ranges for an
+                educational protocol — neither a prescription nor a claim that any stack
+                extinguishes exposure.
               </dd>
             </div>
             <div>
-              <dt className="font-semibold">Why isn't this in the free library?</dt>
+              <dt className="font-semibold">Why is this absent from the open library?</dt>
               <dd className="mt-1 text-body-sm text-muted-foreground">
-                The free library covers compounds and hallmarks. This is a specialized dual-exposure
-                wiring diagram. Different object. Different price.
+                The library treats compounds and hallmarks. This is a specialized
+                dual-exposure cartography. Distinct object. Distinct price.
               </dd>
             </div>
             <div>
-              <dt className="font-semibold">Do I need an account?</dt>
+              <dt className="font-semibold">Is a sitewide account required?</dt>
               <dd className="mt-1 text-body-sm text-muted-foreground">
-                No sitewide account. Checkout issues a signed cookie scoped to this product.
+                No. Checkout issues a signed cookie scoped to this product alone.
               </dd>
             </div>
           </dl>
