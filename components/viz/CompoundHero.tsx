@@ -10,11 +10,8 @@ import { AddToProtocol } from "@/components/ui/AddToProtocol";
 // CompoundHero — a "mini-Descent" overture band for every compound page.
 // Composes the shared MoleculeStage with an editorial header, evidence
 // medallion, mechanism hook, and a fact rail built entirely from real fields
-// in lib/data.ts. The cover name is decorative (aria-hidden) by default, with
-// the page's semantic <h1> living in LibraryModuleDetail below. When the page
-// passes `isPageHeading`, this band owns the <h1> instead and the detail title
-// is demoted — that keeps exactly one <h1> per page while making it the FIRST
-// heading in the DOM, ahead of the Full-Spectrum and Matrix panels.
+// in lib/data.ts. The compound's large cover name is decorative (aria-hidden)
+// — the page's semantic <h1> still lives in LibraryModuleDetail below.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type CompoundHeroData = {
@@ -29,11 +26,6 @@ export type CompoundHeroData = {
   studyCount: number;
   synergyCount: number;
   hallmarks: string[];
-};
-
-export type CompoundHeroProps = CompoundHeroData & {
-  /** Render the cover name as the page's semantic <h1> rather than decoration. */
-  isPageHeading?: boolean;
 };
 
 const LazyMoleculeStage = dynamic(
@@ -82,7 +74,7 @@ function firstSentence(text: string): string {
   return (m ? m[0] : text).trim();
 }
 
-export function CompoundHero({ isPageHeading = false, ...data }: CompoundHeroProps) {
+export function CompoundHero(data: CompoundHeroData) {
   const hue = signatureHue(data.id);
   const hueCss = `rgb(${hue[0]},${hue[1]},${hue[2]})`;
   const structured = hasGeometry(data.id);
@@ -132,11 +124,7 @@ export function CompoundHero({ isPageHeading = false, ...data }: CompoundHeroPro
 
         <div className="chero-body">
           <p className="chero-kicker">{data.pathway}</p>
-          {isPageHeading ? (
-            <h1 className="chero-name">{data.name}</h1>
-          ) : (
-            <div className="chero-name" aria-hidden="true">{data.name}</div>
-          )}
+          <div className="chero-name" aria-hidden="true">{data.name}</div>
           <div className="chero-medallion" style={{ color: tint, borderColor: tint }}>
             <span className="chero-tiermeter" aria-hidden="true">
               {[0, 1, 2].map((i) => (

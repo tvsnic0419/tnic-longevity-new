@@ -222,25 +222,11 @@ export default async function LibraryModulePage({
     ? `/stacks?stack=${mod.compoundId}&from=deep-dive`
     : undefined;
 
-  // Exactly one <h1> per page, and it must be the FIRST heading in the DOM —
-  // ahead of the Full-Spectrum and Intelligence-Matrix panels, which render
-  // between the hero and the detail body. Whichever band actually renders at
-  // the top owns the <h1>; the detail title below is demoted to match. All
-  // three are conditional, so the decision is made here, where every condition
-  // is known, rather than hardcoded into any one component.
-  const headingOwner: 'hero' | 'module-hero' | 'detail' = heroData
-    ? 'hero'
-    : moduleHeroData
-      ? 'module-hero'
-      : 'detail';
-
   return (
     <>
       <StructuredData schemas={schemas} />
-      {heroData && <CompoundHero {...heroData} isPageHeading={headingOwner === 'hero'} />}
-      {moduleHeroData && (
-        <ModuleHero {...moduleHeroData} isPageHeading={headingOwner === 'module-hero'} />
-      )}
+      {heroData && <CompoundHero {...heroData} />}
+      {moduleHeroData && <ModuleHero {...moduleHeroData} />}
       {isCompound && (stickyHasPick || stickyStackHref) && (
         <CompoundStickyBar
           name={mod.title}
@@ -266,7 +252,6 @@ export default async function LibraryModulePage({
         lastUpdated={mdx?.frontmatter.last_updated}
         author={mdx?.frontmatter.author}
         reviewer={reviewer}
-        titleAs={headingOwner === 'detail' ? 'h1' : 'h2'}
       />
     </>
   );
