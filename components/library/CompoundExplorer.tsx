@@ -186,7 +186,12 @@ export function CompoundExplorer() {
                         title={`TNiC Score ${Math.round(tnic.score)} / 100`}
                       >
                         {Math.round(tnic.score)}
-                        <span className="text-[0.85em] opacity-60">/100</span>
+                        {/* Was text-[0.85em] opacity-60 — 8.5px at a 4:1 contrast
+                            ratio against the card, which axe flags as a serious
+                            failure. The suffix is secondary to the number, so it
+                            keeps a muted token colour instead of dissolving the
+                            score colour with opacity. */}
+                        <span className="text-micro text-[var(--color-text-muted)]">/100</span>
                         <span className="sr-only"> TNiC Score</span>
                       </span>
                     )}
@@ -208,13 +213,18 @@ export function CompoundExplorer() {
                   </h3>
                 </Link>
                 <p className="mt-1 line-clamp-2 flex-1 text-xs text-muted-foreground">{m.tagline}</p>
+                {/* Chips below use real height, not an expanded hit area. They
+                    wrap, and STYLE_GUIDE records that expanding hit areas inside
+                    a tight row overlapped neighbours twice before — a tap landing
+                    on the wrong chip is worse than a small one. min-h-6 (24px)
+                    plus a 6px row gap keeps every target legal and separate. */}
                 {chips.length > 0 && (
-                  <div className="relative z-10 mt-3 flex flex-wrap gap-1">
+                  <div className="relative z-10 mt-3 flex flex-wrap gap-x-1 gap-y-1.5">
                     {chips.map((h) => (
                       <Link
                         key={h.id}
                         href={`/hallmarks/${h.slug}`}
-                        className="focus-ring rounded border border-border/60 bg-card/40 px-1.5 py-0.5 text-micro font-medium text-muted-foreground transition-colors hover:border-accent-violet/40 hover:text-accent-violet"
+                        className="focus-ring inline-flex min-h-6 items-center rounded border border-border/60 bg-card/40 px-2 py-0.5 text-micro font-medium text-muted-foreground transition-colors hover:border-accent-violet/40 hover:text-accent-violet"
                       >
                         {h.title}
                       </Link>

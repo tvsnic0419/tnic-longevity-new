@@ -174,7 +174,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="focus-ring interactive link-underline text-body-sm hover:text-accent-cyan rounded-md"
+                    className="focus-ring interactive link-underline text-body-sm hover:text-accent-cyan rounded-md inline-flex min-h-6 items-center"
                   >
                     {link.label}
                   </Link>
@@ -228,7 +228,7 @@ export function Footer() {
             <Link
               key={link.href}
               href={link.href}
-              className="focus-ring interactive link-underline text-caption hover:text-accent-cyan rounded"
+              className="focus-ring interactive link-underline text-caption hover:text-accent-cyan rounded inline-flex min-h-6 items-center"
             >
               {link.label}
             </Link>

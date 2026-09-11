@@ -92,25 +92,29 @@ export function EvidenceTierSpectrum() {
       </div>
 
       {/* Legend */}
+      {/* <dl> allows dt/dd inside a single wrapping <div>, but not two levels
+          down — the old markup nested them in `div > div`, which axe flagged as
+          two serious violations (definition-list and dlitem) and which leaves
+          screen readers without a term/description pairing at all. The bullet is
+          now positioned against the grid row rather than sitting in a flex
+          sibling, so dt and dd are direct children of the one permitted div. */}
       <dl className="mt-5 grid gap-3 sm:grid-cols-3">
         {tiers.map((t) => (
-          <div key={t.tier} className="flex gap-2.5">
+          <div key={t.tier} className="grid grid-cols-[0.625rem_1fr] gap-x-2.5">
             <span
               aria-hidden="true"
-              className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full"
+              className="col-start-1 row-start-1 mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full"
               style={{ background: t.color, boxShadow: `0 0 8px ${t.color}` }}
             />
-            <div>
-              <dt className="text-body-sm font-semibold" style={{ color: t.color }}>
-                Tier {t.tier} · {t.short}
-                <span className="ml-1.5 font-mono text-micro font-normal text-[var(--color-text-faint)]">
-                  {t.count}
-                </span>
-              </dt>
-              <dd className="mt-0.5 text-micro leading-relaxed text-[var(--color-text-muted)]">
-                {t.description}
-              </dd>
-            </div>
+            <dt className="col-start-2 row-start-1 text-body-sm font-semibold" style={{ color: t.color }}>
+              Tier {t.tier} · {t.short}
+              <span className="ml-1.5 font-mono text-micro font-normal text-[var(--color-text-faint)]">
+                {t.count}
+              </span>
+            </dt>
+            <dd className="col-start-2 row-start-2 mt-0.5 text-micro leading-relaxed text-[var(--color-text-muted)]">
+              {t.description}
+            </dd>
           </div>
         ))}
       </dl>
