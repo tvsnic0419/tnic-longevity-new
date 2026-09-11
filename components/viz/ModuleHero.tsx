@@ -10,8 +10,11 @@ import { VIZ, FONT, tierColor, signatureHue } from "./tokens";
 // same cinematic opener as the 27 stack-buildable compounds, but its fact rail
 // is built only from fields a library module actually has (evidence tier, live
 // PMID count, hallmarks) — nothing renders empty, and nothing is fabricated.
-// The large cover name is decorative (aria-hidden); the semantic <h1> still
-// lives in LibraryModuleDetail below.
+// The cover name is decorative (aria-hidden) by default, with the semantic
+// <h1> living in LibraryModuleDetail below. Pages that want this band to own
+// the <h1> — so it is the first heading in the DOM — pass `isPageHeading` and
+// demote the detail title, keeping exactly one <h1> per page. /peptides keeps
+// the default: PeptideDetail owns its own <h1>.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type ModuleHeroData = {
@@ -24,12 +27,17 @@ export type ModuleHeroData = {
   hallmarks: string[];
 };
 
+export type ModuleHeroProps = ModuleHeroData & {
+  /** Render the cover name as the page's semantic <h1> rather than decoration. */
+  isPageHeading?: boolean;
+};
+
 function firstSentence(text: string): string {
   const m = text.match(/^.*?[.!?](?=\s|$)/);
   return (m ? m[0] : text).trim();
 }
 
-export function ModuleHero(data: ModuleHeroData) {
+export function ModuleHero({ isPageHeading = false, ...data }: ModuleHeroProps) {
   const hue = signatureHue(data.id);
   const hueCss = `rgb(${hue[0]},${hue[1]},${hue[2]})`;
   const structured = hasGeometry(data.id);
@@ -67,7 +75,11 @@ export function ModuleHero(data: ModuleHeroData) {
 
         <div className="mhero-body">
           <p className="mhero-kicker">{data.kicker}</p>
-          <div className="mhero-name" aria-hidden="true">{data.title}</div>
+          {isPageHeading ? (
+            <h1 className="mhero-name">{data.title}</h1>
+          ) : (
+            <div className="mhero-name" aria-hidden="true">{data.title}</div>
+          )}
           <div className="mhero-medallion" style={{ color: tint, borderColor: tint }}>
             <span className="ring" /> Evidence Tier {data.evidenceTier}
           </div>

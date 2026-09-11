@@ -58,6 +58,7 @@ export function LibraryModuleDetail({
   lastUpdated,
   author,
   reviewer,
+  titleAs: TitleTag = 'h1',
 }: {
   module: LibraryModule;
   mdxBody: string | null;
@@ -76,6 +77,12 @@ export function LibraryModuleDetail({
   lastUpdated?: string;
   author?: string;
   reviewer?: string;
+  /**
+   * Heading level for the module title. Defaults to 'h1'. The compound page
+   * passes 'h2' when a hero band above already owns the page's <h1>, so the
+   * page has exactly one <h1> and it is the first heading in the DOM.
+   */
+  titleAs?: 'h1' | 'h2';
 }) {
   const categoryMeta = libraryCategoryMeta[module.category];
   const relatedHallmarks = hallmarkLibrary.filter((h) => module.relatedHallmarkIds.includes(h.id));
@@ -386,7 +393,7 @@ export function LibraryModuleDetail({
                     return <CategoryIcon className={`h-7 w-7 ${categoryVisual[module.category].textClass}`} />;
                   })()}
                 </span>
-                <h1 className="heading-page pt-1">{module.title}</h1>
+                <TitleTag className="heading-page pt-1">{module.title}</TitleTag>
               </div>
               <p className="text-lg text-muted-foreground mb-4">{module.tagline}</p>
               <p className="text-sm text-muted-foreground leading-relaxed">{module.summary}</p>
