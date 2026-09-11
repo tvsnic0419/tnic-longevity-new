@@ -15,6 +15,7 @@
     "typecheck": "tsc --noEmit",
     "synergy:coverage": "vitest run --reporter=verbose lib/synergy-coverage.test.ts",
     "verify:pmids": "node scripts/verify-pmids.mjs",
+    "molecules:fetch": "node scripts/fetch-molecule-geometry.mjs",
     "ci": "npm run test && npm run build"
   },
   "dependencies": {

@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import { hasGeometry, getGeometry } from "./molecule";
+import { hasGeometry, describeGeometry } from "./molecule";
 import { VIZ, FONT, tierColor, signatureHue } from "./tokens";
 import { AddToProtocol } from "@/components/ui/AddToProtocol";
 
@@ -78,7 +78,6 @@ export function CompoundHero(data: CompoundHeroData) {
   const hue = signatureHue(data.id);
   const hueCss = `rgb(${hue[0]},${hue[1]},${hue[2]})`;
   const structured = hasGeometry(data.id);
-  const geom = structured ? getGeometry(data.id) : null;
   const tint = tierColor(data.evidence);
   // Canonical evidence signal-strength encoding, shared with EvidenceTag:
   // A = 3 bars (strongest human evidence) · B = 2 · C = 1. A faithful visual
@@ -115,11 +114,7 @@ export function CompoundHero(data: CompoundHeroData) {
               {structured ? "drag · scroll to zoom" : "orbital field · illustrative"}
             </div>
           </div>
-          <p className="chero-cap">
-            {structured
-              ? `Rendered structure${geom?.label ? ` · ${geom.label}` : ""} · stylized for legibility, not a crystallographic reproduction`
-              : "Illustrative orbital motif — not the literal molecular structure. See the deep-dive below for the mechanism."}
-          </p>
+          <p className="chero-cap">{describeGeometry(data.id, data.name)}</p>
         </div>
 
         <div className="chero-body">

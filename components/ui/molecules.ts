@@ -227,10 +227,10 @@ function berberine(): Molecule {
     ...aromatic(B),
     ...aromatic(C),
     ...aromatic(D),
-    // ring fusions
-    { a: A[0], b: B[3], order: 1 },
-    { a: B[0], b: C[3], order: 1 },
-    { a: C[0], b: D[3], order: 1 },
+    // Ring fusions are implicit: the rings are spaced 2R apart, so each
+    // adjacent pair already meets at a shared vertex (A[0] IS B[3]). Drawing an
+    // explicit bond between them produced a zero-length segment — an artifact,
+    // not a bond. The tetracyclic skeleton reads the same without them.
     // methylenedioxy
     { a: A[3], b: mO1, order: 1 },
     { a: A[4], b: mO2, order: 1 },
