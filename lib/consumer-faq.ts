@@ -133,7 +133,7 @@ export const consumerFAQ = [
     id: 'faq21',
     category: 'science',
     question: 'Does NMN actually work? What does the clinical evidence show?',
-    answer: 'Yes. A 2022 GeroScience trial (PMID: 36482258) confirmed NMN safely raises blood NAD+ in adults. A 2021 Science study (PMID: 33888596) showed NMN improved muscle insulin sensitivity in prediabetic women. Tier A evidence; real effects; appropriately modest claims about what NMN can and cannot do.',
+    answer: 'Yes. A 2022 GeroScience dose-ranging trial (PMID: 36482258) confirmed NMN safely raises blood NAD+ in 80 healthy middle-aged adults at 300–900 mg/day over 60 days, with the largest effect at 600 mg. A 2021 Science study (PMID: 33888596) showed NMN improved muscle insulin sensitivity in prediabetic women. Tier A evidence; real effects; appropriately modest claims about what NMN can and cannot do.',
   },
   {
     id: 'faq22',

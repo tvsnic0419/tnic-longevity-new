@@ -16,7 +16,7 @@ const GUIDE_FAQS = [
   {
     question: 'What are the best longevity supplements backed by human trials?',
     answer:
-      'The compounds with the strongest human RCT evidence for longevity-relevant outcomes are: NMN (NAD+ restoration, Igarashi 2022), GlyNAC (glutathione restoration, Kumar 2021–2023 Baylor), Metformin (AMPK activation, population data), Berberine (AMPK), Taurine (Singh 2023 Science paper — lifespan + muscle), Spermidine (Madeo 2021 Cell — memory/autophagy), Urolithin A (mitophagy, Singh 2022 Cell Metabolism), and Sulforaphane (NRF2, multiple CKD and airway RCTs). Rapamycin has the strongest preclinical lifespan data in mammals and early human signals. All have PMID-citable human evidence.',
+      'The compounds with the strongest human RCT evidence for longevity-relevant outcomes are: NMN (NAD+ restoration, Yi 2022), GlyNAC (glutathione restoration, Kumar 2021–2023 Baylor), Metformin (AMPK activation, population data), Berberine (AMPK), Taurine (Singh 2023 Science paper — lifespan + muscle), Spermidine (Madeo 2021 Cell — memory/autophagy), Urolithin A (mitophagy, Singh 2022 Cell Metabolism), and Sulforaphane (NRF2, multiple CKD and airway RCTs). Rapamycin has the strongest preclinical lifespan data in mammals and early human signals. All have PMID-citable human evidence.',
   },
   {
     question: 'Is NMN or NR better for NAD+ supplementation?',
@@ -46,7 +46,7 @@ const GUIDE_FAQS = [
   {
     question: 'Do longevity supplements actually work in humans, or just in mice?',
     answer:
-      'Several compounds have strong human RCT data: GlyNAC (restored GSH, improved mitochondrial function in 3 Baylor RCTs); NMN (raised NAD+ 38%, improved muscle in Igarashi 2022); Taurine (Singh 2023 Science, human epidemiological signal + animal data); Spermidine (Madeo 2021 Cell, improved memory in older adults). Berberine and Metformin have large population datasets. Rapamycin has mouse lifespan data and early human signals. The key is matching the compound to a mechanism with human trial evidence — which is exactly what TNiC\'s Tier A/B system does.',
+      'Several compounds have strong human RCT data: GlyNAC (restored GSH, improved mitochondrial function in 3 Baylor RCTs); NMN (raised blood NAD+ dose-dependently over 60 days, peak effect at 600 mg/day, Yi 2022); Taurine (Singh 2023 Science, human epidemiological signal + animal data); Spermidine (Madeo 2021 Cell, improved memory in older adults). Berberine and Metformin have large population datasets. Rapamycin has mouse lifespan data and early human signals. The key is matching the compound to a mechanism with human trial evidence — which is exactly what TNiC\'s Tier A/B system does.',
   },
 ];
 
