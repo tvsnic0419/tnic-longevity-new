@@ -53,6 +53,11 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     { url: `${base}/taurine-supplement-guide`, lastModified, changeFrequency: 'weekly', priority: 0.86 },
     { url: `${base}/sulforaphane-supplement-guide`, lastModified, changeFrequency: 'weekly', priority: 0.86 },
     { url: `${base}/spermidine-supplement-guide`, lastModified, changeFrequency: 'weekly', priority: 0.86 },
+    // Harm-reduction protocols. High priority because the search intent they
+    // serve is currently answered mostly by uncited forum threads, and the
+    // smoker page carries a beta-carotene warning worth surfacing.
+    { url: `${base}/smoker-defense-stack`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${base}/stimulant-defense-stack`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/brief`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/contact`, lastModified, changeFrequency: 'monthly', priority: 0.75 },
     { url: `${base}/partnerships`, lastModified, changeFrequency: 'monthly', priority: 0.74 },
