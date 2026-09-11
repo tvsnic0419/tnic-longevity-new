@@ -211,7 +211,16 @@ export function DefenseStackGuide({ stack }: { stack: DefenseStack }) {
           <Activity className="h-5 w-5 text-accent-cyan" aria-hidden="true" />
           <h2 className="text-2xl font-bold">What to actually track</h2>
         </div>
-        <div className="mt-6 overflow-x-auto">
+        {/* Matches the pattern MdxRenderer already uses for scrollable tables:
+            a keyboard-reachable region with its own label. Without tabIndex a
+            keyboard user cannot scroll the table at all on a narrow screen,
+            which axe flags as a serious violation — and this page shipped it. */}
+        <div
+          className="mt-6 overflow-x-auto"
+          role="region"
+          tabIndex={0}
+          aria-label={`${stack.title} monitoring markers`}
+        >
           <table className="w-full min-w-[560px] text-sm">
             <thead>
               <tr className="border-b border-border text-left text-micro font-mono uppercase tracking-wider text-muted-foreground">

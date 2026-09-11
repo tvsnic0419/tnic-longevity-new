@@ -99,6 +99,13 @@ the other.
 | `.text-body-sm` | 14px / 1.6 | Card body, table cells |
 | `.text-caption` | 12px | Meta, disclaimers |
 | `.text-label` | 11px mono uppercase | Eyebrows, column headers |
+| `.text-micro` | 11px sans | Chips, badge text, stat suffixes, fine print |
+
+**11px is the floor.** `.text-micro` was 10px until an audit of the rendered
+pages (`npm run audit:ui`) found it on 753 elements of `/library` alone —
+making it, by volume, the size most of the site is actually read at. Nothing
+in the HTML type scale goes below 11px. SVG data-visualisation labels (chart
+axes, molecule atom labels) are a separate system and still render smaller.
 
 **Before:** Mixed `text-[10px]`, `text-xs`, `text-sm` with no hierarchy.  
 **After:** Seven semantic classes used consistently via `PageHeader`, `SectionShell`, cards.
@@ -125,6 +132,11 @@ in a wrapping row.
 | `.touch-target` | Controls that can simply be 44px (icon buttons, nav rows, rail steps) |
 | `.tap-expand-y` | A compact control inside a row of them — grows the hit area **vertically only** |
 | `.chip-row` | The container for a wrapping chip row. Its 16px row gap is load-bearing |
+
+**24px is the hard minimum** (WCAG 2.2 AA 2.5.8), and 44px remains the
+preference. Prefer real height (`min-h-6` on an `inline-flex items-center`
+link) over an expanded hit area in any row tight enough that growth could
+overlap a neighbour — see the two incidents recorded above.
 
 An expanded hit area that overlaps a neighbour's is worse than a small one: the
 wrong control receives the tap, silently. **This bit twice.** On the homepage
