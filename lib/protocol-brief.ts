@@ -33,11 +33,11 @@ export const protocolBriefIssues: ProtocolBriefEntry[] = [
   {
     id: 'brief-2026-06-16-nmn',
     date: '2026-06-16',
-    headline: 'NMN at 250 mg: human NAD+ restoration holds',
+    headline: 'NMN dose-response: NAD+ restoration peaks at 600 mg',
     summary:
-      'Igarashi 2022 and Liao 2021 RCTs confirm 250 mg/day raises blood NAD+ metabolites with functional signals over 12 weeks. TNiC standardizes on this dose before titration.',
+      'Yi 2022 dose-ranging RCT (80 adults, 60 days) found blood NAD+ rose with 300, 600 and 900 mg/day — largest effect at 600 mg, not the highest dose. Yoshino 2021 tested 250 mg for 10 weeks; Liao 2021 tested 300–1200 mg for 6 weeks in runners.',
     evidenceTier: 'A',
-    pmids: ['36482258', '33443990'],
+    pmids: ['36482258', '34238308'],
     libraryHrefs: [
       { label: 'NMN deep dive', href: '/library/compounds/nmn' },
       { label: 'NMN vs NR compare', href: '/library/compare/nmn-vs-nr' },

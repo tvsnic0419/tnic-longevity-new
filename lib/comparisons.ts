@@ -38,13 +38,13 @@ export const evidenceComparisons: EvidenceComparison[] = [
     category: 'compound',
     evidenceTier: 'A',
     summary:
-      'Both raise NAD+ metabolites in humans. TNiC standardizes on NMN for stack integration and Igarashi/Liao trial dosing. NR is defensible — do not combine high doses without physician oversight.',
+      'Both raise NAD+ metabolites in humans. TNiC standardizes on NMN for stack integration and published NMN trial dosing. NR is defensible — do not combine high doses without physician oversight.',
     verdict:
       'Tie on core NAD+ restoration. Choose NMN if you run TNiC stacks (SIRT1 pair, Mito Stack). Choose NR if your physician prefers NR-specific literature or you already respond well.',
     rows: [
       {
         dimension: 'Human NAD+ elevation',
-        a: 'Multiple RCTs — 250 mg/day',
+        a: 'Multiple RCTs — 250–1200 mg/day',
         b: 'Multiple RCTs — 300–1000 mg/day',
         verdict: 'tie',
         pmid: '36482258',
@@ -90,16 +90,16 @@ export const evidenceComparisons: EvidenceComparison[] = [
       },
       {
         dimension: 'NR-specific human RCT',
-        a: 'Igarashi/Liao 250 mg NMN',
+        a: 'Yoshino 250 mg NMN; Yi 300–900 mg; Liao 300–1200 mg',
         b: 'Martens 1000 mg NR',
         verdict: 'b',
-        pmid: '29514064',
+        pmid: '29599478',
         note: 'Both elevate NAD+ — dose units differ',
       },
     ],
     whenChooseA: [
       'Running TNiC SIRT1 or Mito stacks',
-      'Matching Igarashi 250 mg protocol exactly',
+      'Matching Yoshino 250 mg protocol exactly',
       'Already have NMN COA and week-4 NAD+ baseline',
     ],
     whenChooseB: [
@@ -358,7 +358,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
       {
         dimension: 'Evidence backbone',
         a: 'Kumar GlyNAC RCT + NRF2 literature',
-        b: 'Igarashi NMN RCT + AKG mouse data',
+        b: 'Yi NMN RCT + AKG mouse data',
         verdict: 'tie',
         pmid: '33783984',
       },
@@ -700,7 +700,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
       },
       {
         dimension: 'Human RCT evidence',
-        a: 'Multiple RCTs — Liao 2021, Igarashi 2022; 250–500 mg/day',
+        a: 'Multiple RCTs — Yoshino 2021, Yi 2022, Liao 2021; 250–1200 mg/day',
         b: 'Observational cohort (n=829, Kiechl 2018) + Phase II hair trial',
         verdict: 'a',
         pmid: '34631532',
@@ -882,7 +882,7 @@ export const evidenceComparisons: EvidenceComparison[] = [
       {
         dimension: 'Landmark human evidence',
         a: 'Singh 2023 (Science): human cohort taurine decline with age + pilot human supplementation markers',
-        b: 'Liao 2021, Igarashi 2022: RCTs confirming NAD+ elevation + muscle/vascular outcomes',
+        b: 'Yoshino 2021, Yi 2022, Liao 2021: RCTs confirming NAD+ elevation + muscle/aerobic outcomes',
         verdict: 'tie',
         pmid: '37289866',
         note: 'Different evidence types: taurine deficiency = population signal; NMN = controlled intervention',

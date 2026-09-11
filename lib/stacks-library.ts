@@ -251,7 +251,7 @@ export const eliteStacks: EliteStack[] = [
     ],
     biomarkers: ['nad', 'hscrp'],
     studies: [
-      { title: 'NMN supplementation elevates NAD+ levels in healthy adults', journal: 'GeroScience', year: 2022, pmid: '36482258' },
+      { title: 'The efficacy and safety of β-nicotinamide mononucleotide (NMN) supplementation in healthy middle-aged adults: a randomized, multicenter, double-blind, placebo-controlled, parallel-group, dose-dependent clinical trial', journal: 'GeroScience', year: 2022, pmid: '36482258' },
       { title: 'Resveratrol and NAD+ precursors synergize for mitochondrial health', journal: 'Cell Metab', year: 2019, pmid: '30930169' },
       { title: 'Resveratrol improves health and survival of mice on a high-calorie diet', journal: 'Nature', year: 2006, pmid: '17086191' },
     ],
@@ -313,7 +313,7 @@ export const eliteStacks: EliteStack[] = [
     studies: [
       { title: 'Alpha-ketoglutarate extends lifespan in mice', journal: 'Cell Metab', year: 2020, pmid: '32877690' },
       { title: 'AKG supplementation in middle-aged adults', journal: 'Aging Cell', year: 2024, pmid: '34847066' },
-      { title: 'NMN supplementation elevates NAD+ levels in healthy adults', journal: 'GeroScience', year: 2022, pmid: '36482258' },
+      { title: 'The efficacy and safety of β-nicotinamide mononucleotide (NMN) supplementation in healthy middle-aged adults: a randomized, multicenter, double-blind, placebo-controlled, parallel-group, dose-dependent clinical trial', journal: 'GeroScience', year: 2022, pmid: '36482258' },
     ],
     rationale:
       'Mitochondrial dysfunction is the hallmark with highest compound coverage in TNiC. This stack attacks energy crisis from three vectors: NAD+ cofactor restoration (NMN), TCA cycle intermediate replenishment (Ca-AKG), and sirtuin/AMPK-driven biogenesis (resveratrol).',
@@ -367,7 +367,7 @@ export const eliteStacks: EliteStack[] = [
     biomarkers: ['gsh', 'nad', 'hscrp', '8ohdg'],
     studies: [
       { title: 'GlyNAC supplementation improves glutathione deficiency in aging humans', journal: 'J Gerontol A', year: 2021, pmid: '33783984' },
-      { title: 'NMN supplementation elevates NAD+ levels in healthy adults', journal: 'GeroScience', year: 2022, pmid: '36482258' },
+      { title: 'The efficacy and safety of β-nicotinamide mononucleotide (NMN) supplementation in healthy middle-aged adults: a randomized, multicenter, double-blind, placebo-controlled, parallel-group, dose-dependent clinical trial', journal: 'GeroScience', year: 2022, pmid: '36482258' },
     ],
     rationale:
       'The recommended onboarding stack. Covers the two pathways most adults over 40 need: antioxidant defense (depleted glutathione) and NAD+ restoration (depleted sirtuin cofactor). Three compounds, all Tier-A, manageable cost, clear titration path.',
@@ -436,7 +436,7 @@ export const eliteStacks: EliteStack[] = [
     studies: [
       { title: 'GlyNAC supplementation improves glutathione deficiency in aging humans', journal: 'J Gerontol A', year: 2021, pmid: '33783984' },
       { title: 'Alpha-ketoglutarate extends lifespan in mice', journal: 'Cell Metab', year: 2020, pmid: '32877690' },
-      { title: 'NMN supplementation elevates NAD+ levels in healthy adults', journal: 'GeroScience', year: 2022, pmid: '36482258' },
+      { title: 'The efficacy and safety of β-nicotinamide mononucleotide (NMN) supplementation in healthy middle-aged adults: a randomized, multicenter, double-blind, placebo-controlled, parallel-group, dose-dependent clinical trial', journal: 'GeroScience', year: 2022, pmid: '36482258' },
     ],
     rationale:
       'The flagship TNiC protocol. Combines complete NRF2 defense with mitochondrial renewal, minus evening resveratrol for users who prefer a single daily window. Add resveratrol PM to reach full 6-compound coverage.',
@@ -562,7 +562,7 @@ export const eliteStacks: EliteStack[] = [
     studies: [
       { title: 'Rapamycin extends median and maximal lifespan in genetically heterogeneous mice', journal: 'Aging Cell', year: 2011, pmid: '19587680' },
       { title: 'Metformin in longevity study (TAME) protocol', journal: 'Aging Cell', year: 2019, pmid: '31012539' },
-      { title: 'NMN supplementation elevates NAD+ levels in healthy adults', journal: 'GeroScience', year: 2022, pmid: '36482258' },
+      { title: 'The efficacy and safety of β-nicotinamide mononucleotide (NMN) supplementation in healthy middle-aged adults: a randomized, multicenter, double-blind, placebo-controlled, parallel-group, dose-dependent clinical trial', journal: 'GeroScience', year: 2022, pmid: '36482258' },
     ],
     rationale:
       'Educational reference for the most discussed clinical longevity protocol. Rapamycin inhibits mTORC1 promoting autophagy; metformin activates AMPK. The OTC support stack (GlyNAC, NMN, Ca-AKG) addresses complementary hallmarks. This stack is NOT self-prescribable — included for informed physician discussions only.',
@@ -639,7 +639,7 @@ export const eliteStacks: EliteStack[] = [
     biomarkers: ['gsh', 'nad', 'hscrp', 'akg', 'oxldl', '8ohdg'],
     studies: [
       { title: 'GlyNAC supplementation improves glutathione deficiency in aging humans', journal: 'J Gerontol A', year: 2021, pmid: '33783984' },
-      { title: 'NMN supplementation elevates NAD+ levels in healthy adults', journal: 'GeroScience', year: 2022, pmid: '36482258' },
+      { title: 'The efficacy and safety of β-nicotinamide mononucleotide (NMN) supplementation in healthy middle-aged adults: a randomized, multicenter, double-blind, placebo-controlled, parallel-group, dose-dependent clinical trial', journal: 'GeroScience', year: 2022, pmid: '36482258' },
       { title: 'Alpha-ketoglutarate extends lifespan in mice', journal: 'Cell Metab', year: 2020, pmid: '32877690' },
       { title: 'Resveratrol and NAD+ precursors synergize for mitochondrial health', journal: 'Cell Metab', year: 2019, pmid: '30930169' },
     ],

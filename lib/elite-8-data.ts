@@ -70,7 +70,7 @@ export const ELITE_8_COMPOUNDS: LQCompound[] = [
     BV: 6.8,
     HP: 6.5,
     R: 2.0,
-    topStudy: 'Igarashi et al. 2022 — oral NMN raised NAD+ 38%, improved muscle function in older adults',
+    topStudy: 'Yi et al. 2022 (PMID 36482258) — dose-ranging RCT, 80 adults, 60 days: NMN raised blood NAD+ dose-dependently, peak effect at 600 mg/day',
     clock: 'Horvath DNAmAge −2.1yr avg (pilot)',
     clockConfidence: 'moderate',
     color: '#22d3ee',

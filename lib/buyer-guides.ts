@@ -42,8 +42,9 @@ export const compoundBuyerGuides: CompoundBuyerGuide[] = [
       { id: 'nad-metabolite', label: 'Optional NAD metabolite assay', detail: 'Some labs verify NMN → NAD+ conversion in vitro' },
     ],
     doseAnchors: [
-      { label: 'Igarashi RCT', dose: '250 mg/day', pmid: '36482258', note: '12 weeks, raised blood NAD+' },
-      { label: 'Liao RCT', dose: '250 mg/day', pmid: '33443990', note: '12 weeks, metabolite elevation' },
+      { label: 'Yoshino RCT', dose: '250 mg/day', pmid: '33888596', note: '10 weeks, improved muscle insulin sensitivity' },
+      { label: 'Yi dose-ranging RCT', dose: '300 / 600 / 900 mg/day', pmid: '36482258', note: '60 days, n=80 — NAD+ rose dose-dependently, peak effect at 600 mg' },
+      { label: 'Liao RCT', dose: '300 / 600 / 1200 mg/day', pmid: '34238308', note: '6 weeks, n=48 amateur runners — improved aerobic capacity' },
       { label: 'Common titration', dose: '250 → 500 mg/day', note: 'Week 12 if flat NAD+ index' },
     ],
     redFlags: [
@@ -73,7 +74,7 @@ export const compoundBuyerGuides: CompoundBuyerGuide[] = [
       { id: 'nad-proof', label: 'Optional NAD+ metabolite retest', detail: 'Week-4 blood NAD+ index to confirm response' },
     ],
     doseAnchors: [
-      { label: 'Martens RCT', dose: '1000 mg/day', pmid: '29514064', note: 'Elevated whole-blood NAD+' },
+      { label: 'Martens RCT', dose: '1000 mg/day', pmid: '29599478', note: 'Elevated whole-blood NAD+' },
       { label: 'Common consumer range', dose: '300–500 mg/day', note: 'Start mid-range; titrate at week 12' },
       { label: 'TNiC compare anchor', dose: 'See NMN vs NR table', note: 'Match one precursor — not both high-dose' },
     ],
