@@ -34,6 +34,14 @@ const ELEMENT_COLOR: Record<string, { core: RGB; hi: RGB; glow: string; glowRgb:
   // Halogens — canagliflozin carries an F, dasatinib a Cl.
   F: { core: [150, 230, 190], hi: [222, 255, 240], glow: "rgba(142,224,184,", glowRgb: [142, 224, 184] },
   Cl: { core: [140, 220, 150], hi: [216, 252, 220], glow: "rgba(132,214,142,", glowRgb: [132, 214, 142] },
+  // Mineral chelates: magnesium bisglycinate, zinc picolinate, lithium
+  // orotate, potassium iodide. Each needs a distinct core so the metal
+  // centre reads as the metal rather than as another carbon.
+  Mg: { core: [196, 214, 170], hi: [238, 248, 220], glow: "rgba(188,206,162,", glowRgb: [188, 206, 162] },
+  Zn: { core: [170, 186, 206], hi: [226, 236, 248], glow: "rgba(162,178,198,", glowRgb: [162, 178, 198] },
+  Li: { core: [224, 164, 186], hi: [252, 222, 232], glow: "rgba(216,156,178,", glowRgb: [216, 156, 178] },
+  K:  { core: [206, 172, 226], hi: [242, 226, 252], glow: "rgba(198,164,218,", glowRgb: [198, 164, 218] },
+  I:  { core: [186, 146, 226], hi: [232, 214, 250], glow: "rgba(178,138,218,", glowRgb: [178, 138, 218] },
 };
 
 /**

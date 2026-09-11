@@ -34,7 +34,7 @@ import { MOLECULE_SOURCE_BY_ID } from '@/components/viz/molecule-sources';
 
 // Structures currently shipped. Raise as coverage grows; never lower it to
 // accommodate a regression — same convention as the other floors in this repo.
-const STRUCTURE_FLOOR = 71;
+const STRUCTURE_FLOOR = 75;
 
 /**
  * The library ships more compound PAGES than lib/data.ts has structured
@@ -80,7 +80,7 @@ describe('molecule coverage', () => {
     }
   });
 
-  it('never presents a constituent or repeat unit as the compound itself', () => {
+  it('never presents a constituent, composite or repeat unit as the compound itself', () => {
     for (const c of compounds) {
       const prov = getGeometryProvenance(c.id);
       if (!prov || prov.kind === 'self') continue;
@@ -95,6 +95,28 @@ describe('molecule coverage', () => {
         caption.startsWith('Rendered structure'),
         `${c.id} is a ${prov.kind} but its caption reads as its own structure`,
       ).toBe(false);
+    }
+  });
+
+  it('every structure is one connected molecule unless it is a composite', () => {
+    // SDF encodes covalent bonds only, so a metal centre held by coordination
+    // (methylcobalamin's cobalt) arrives as separate pieces and would render as
+    // floating fragments. The fetch reconnects those; this makes sure it stays
+    // reconnected. Composites are several molecules on purpose.
+    for (const [id, g] of Object.entries(GENERATED_GEOMETRY)) {
+      const parent = Array.from({ length: g.atoms.length }, (_, i) => i);
+      const find = (x: number): number => (parent[x] === x ? x : (parent[x] = find(parent[x])));
+      for (const [a, b] of g.bonds) {
+        const ra = find(a);
+        const rb = find(b);
+        if (ra !== rb) parent[ra] = rb;
+      }
+      const fragments = new Set(g.atoms.map((_, i) => find(i))).size;
+      const expected = g.parts?.length ?? 1;
+      expect(
+        fragments,
+        `${id} renders as ${fragments} disconnected fragments, expected ${expected}`,
+      ).toBe(expected);
     }
   });
 

@@ -18,6 +18,14 @@
 //                   and implying it is the whole product would be the same
 //                   class of error as a mis-attributed citation.
 //   'repeat-unit' — a polymer. We draw the repeating unit and say so.
+//   'form'        — a mineral. Nobody swallows a bare ion; they swallow a
+//                   specific salt or chelate, and that IS a real molecule. We
+//                   draw the supplemented form and name it, because magnesium
+//                   glycinate and magnesium threonate are not the same picture.
+//   'composite'   — the product genuinely IS more than one molecule (GlyNAC is
+//                   glycine AND N-acetylcysteine). Drawing either alone would
+//                   misrepresent it, so we draw every part side by side in one
+//                   scene and the caption names them all.
 //   'none'        — proteins, enzymes, mineral ions, elements and multi-
 //                   component formulas have no informative small-molecule
 //                   structure. These keep the abstract orbital field, which
@@ -29,7 +37,13 @@
 // and IUPAC name it returned, so every structure is auditable after the fact.
 // ─────────────────────────────────────────────────────────────────────────────
 
-export type MoleculeSourceKind = 'self' | 'constituent' | 'repeat-unit' | 'none';
+export type MoleculeSourceKind =
+  | 'self'
+  | 'constituent'
+  | 'form'
+  | 'repeat-unit'
+  | 'composite'
+  | 'none';
 
 export interface MoleculeSource {
   /** Compound id in lib/data.ts. */
@@ -42,6 +56,8 @@ export interface MoleculeSource {
    * e.g. "withaferin A". The page says what it is drawing.
    */
   as?: string;
+  /** For 'composite': the molecules to draw side by side, in order. */
+  parts?: string[];
   /** Why this compound has no single structure — shown nowhere, read by humans. */
   note?: string;
 }
@@ -135,25 +151,33 @@ export const MOLECULE_SOURCES: MoleculeSource[] = [
   { id: 'krill-oil', kind: 'constituent', query: 'eicosapentaenoic acid', as: 'EPA', note: 'Phospholipid-bound omega-3 oil plus astaxanthin.' },
   { id: 'mct-oil', kind: 'constituent', query: 'octanoic acid', as: 'C8 caprylic acid', note: 'C8/C10 triglyceride blend.' },
   { id: 'pumpkin-seed-oil', kind: 'constituent', query: 'linoleic acid', as: 'linoleic acid', note: 'Fatty acid + phytosterol oil.' },
-  { id: 'selenium', kind: 'constituent', query: 'L-selenomethionine', as: 'L-selenomethionine', note: 'Supplemented as selenomethionine rather than elemental selenium.' },
+  { id: 'selenium', kind: 'form', query: 'L-selenomethionine', as: 'L-selenomethionine', note: 'Supplemented as selenomethionine rather than elemental selenium.' },
 
   // ── polymers: draw the repeating unit ──────────────────────────────────────
   { id: 'chondroitin', kind: 'repeat-unit', query: 'cid:24766', as: 'the sulfated disaccharide unit' },
   { id: 'inulin', kind: 'repeat-unit', query: '1-kestose', as: '1-kestose, an inulin-type fructan' },
 
+  // ── composites: the product is more than one molecule ─────────────────────
+  { id: 'glynac', kind: 'composite', parts: ['glycine', 'acetylcysteine'], as: 'glycine + N-acetylcysteine', note: 'Two molecules dosed together; drawing either alone would misrepresent the product.' },
+
+  // ── minerals: draw the form actually supplemented, not the bare ion ────────
+  // A mineral page that showed a lone sphere would be useless. What people
+  // swallow is a specific salt or chelate, and that IS a real molecule.
+  { id: 'magnesium', kind: 'form', query: 'magnesium bisglycinate', as: 'magnesium bisglycinate', note: 'Glycinate chelate — the form most used for absorption and tolerability. Threonate/citrate differ.' },
+  { id: 'zinc', kind: 'form', query: 'zinc picolinate', as: 'zinc picolinate', note: 'Picolinate chelate; bisglycinate and gluconate are the other common forms.' },
+  { id: 'lithium', kind: 'form', query: 'lithium orotate', as: 'lithium orotate', note: 'The low-dose nutritional form, as distinct from pharmaceutical lithium carbonate.' },
+  { id: 'iodine', kind: 'form', query: 'potassium iodide', as: 'potassium iodide', note: 'Iodide salt — the supplemented form; elemental iodine is not what is dosed.' },
+
+  // ── structural proteins: draw the characteristic repeating motif ───────────
+  { id: 'collagen-peptides', kind: 'repeat-unit', query: 'glycyl-prolyl-hydroxyproline', as: 'the Gly-Pro-Hyp triplet', note: 'Hydrolysed collagen is a peptide mixture, but every strand is built from this repeating triplet.' },
+  { id: 'uc-ii', kind: 'repeat-unit', query: 'glycyl-prolyl-hydroxyproline', as: 'the Gly-Pro-Hyp triplet', note: 'Undenatured type-II collagen — same characteristic triplet, kept in its native triple helix.' },
+
   // ── genuinely non-molecular — the orbital field is the honest answer ───────
-  { id: 'glynac', kind: 'none', note: 'Two separate molecules dosed together (glycine + N-acetylcysteine); each has its own page.' },
-  { id: 'superoxide-dismutase', kind: 'none', note: 'Metalloenzyme — a protein, not a small molecule.' },
-  { id: 'bromelain', kind: 'none', note: 'Proteolytic enzyme complex — a protein mixture.' },
-  { id: 'uc-ii', kind: 'none', note: 'Undenatured type-II collagen — a structural protein.' },
-  { id: 'pea', kind: 'none', note: 'Pea protein isolate — a protein mixture.' },
-  { id: 'turkey-tail', kind: 'none', note: 'PSK/PSP protein-bound polysaccharides — heterogeneous, no defined structure.' },
-  { id: 'magnesium', kind: 'none', note: 'Mineral ion; the counter-ion (glycinate, threonate, citrate) varies by form.' },
-  { id: 'zinc', kind: 'none', note: 'Mineral ion; form varies (picolinate, bisglycinate, gluconate).' },
-  { id: 'collagen-peptides', kind: 'none', note: 'Hydrolysed collagen — a heterogeneous peptide mixture, not one molecule.' },
-  { id: 'nattokinase', kind: 'none', note: 'Fibrinolytic enzyme — a protein.' },
-  { id: 'lithium', kind: 'none', note: 'Mineral ion; counter-ion (orotate, carbonate) varies by form.' },
-  { id: 'iodine', kind: 'none', note: 'Element/iodide ion — no informative skeleton.' },
+  { id: 'superoxide-dismutase', kind: 'none', note: 'Metalloenzyme — a folded protein of ~150 residues. No small-molecule structure represents it, and drawing its active-site metals alone would imply the enzyme is those two atoms.' },
+  { id: 'bromelain', kind: 'none', note: 'Proteolytic enzyme complex — several proteins, not one molecule.' },
+  { id: 'nattokinase', kind: 'none', note: 'Fibrinolytic serine protease — a folded protein.' },
+  { id: 'pea', kind: 'none', note: 'Pea protein isolate — a mixture of storage proteins.' },
+  { id: 'turkey-tail', kind: 'none', note: 'PSK/PSP protein-bound polysaccharides — heterogeneous by nature, with no defined repeat unit to draw.' },
   { id: 'hyaluronic-acid', kind: 'none', note: 'High-molecular-weight glycosaminoglycan. PubChem carries no repeat-unit record this pipeline could verify, and an unverified disaccharide is worse than an honest abstraction.' },
 ];
 
