@@ -1,22 +1,37 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // TNiC · viz molecule geometry
-// Real, hand-placed stylized skeletons live here. We only ship a named
-// ball-and-stick structure for a compound when we have actually laid out its
-// substitution pattern — everything else falls back to an abstract orbital
-// field (see MoleculeStage `mode="field"`). This keeps the honesty contract:
-// we never render a fabricated structure and pass it off as the literal
-// molecule. New skeletons can be added to REGISTRY over time.
 //
-// The compounds below reuse the site's own hand-verified 2D skeletal
-// structures from components/ui/molecules.ts (the same data driving the
-// ambient molecule cascade) via `fromSkeletal` — a geometric projection into
-// 3D, not a new structure. That keeps every rendered molecule traceable to a
-// structure someone on this project actually drew and checked.
+// Every compound hero that draws a molecule draws a REAL one. Structures come
+// from two places, and the lookup order below is deliberate:
+//
+//   1. The hand-laid skeletons in this file. Four compounds whose substitution
+//      patterns were placed and checked by hand and framed for this site's
+//      fixed camera. These win.
+//   2. `molecule-geometry.generated.ts` — real heavy-atom coordinates from
+//      PubChem computed conformers, fetched by
+//      `scripts/fetch-molecule-geometry.mjs` (npm run molecules:fetch). Each
+//      entry records the CID, formula and IUPAC name it came from.
+//
+// Anything in neither falls back to the abstract orbital field (MoleculeStage
+// `mode="field"`), and the caption says so in as many words.
+//
+// The honesty contract: we never render a fabricated structure and pass it off
+// as the literal molecule, and we never let one constituent of a mixture read
+// as the whole product. `molecule-sources.ts` decides which molecule each
+// compound draws and whether it is the compound itself, an extract's named
+// principal constituent, a polymer's repeat unit, or nothing at all;
+// `describeGeometry` turns that into the line under the canvas.
 // ─────────────────────────────────────────────────────────────────────────────
 
-import { MOLECULES, type Molecule as SkeletalMolecule } from "@/components/ui/molecules";
+import { GENERATED_GEOMETRY } from "./molecule-geometry.generated";
+import { MOLECULE_SOURCE_BY_ID, type MoleculeSourceKind } from "./molecule-sources";
 
-export type Atom = { x: number; y: number; z: number; el: "C" | "O" | "N" | "S" | "P" };
+// Elements actually present across the shipped structures. PubChem-sourced
+// records add Se (selenomethionine) and Co (methylcobalamin) to the
+// hand-built set; MoleculeStage falls back to the carbon palette for
+// anything it has no colour for, so adding one here is never breaking.
+export type Element = "C" | "O" | "N" | "S" | "P" | "Se" | "Co" | "F" | "Cl";
+export type Atom = { x: number; y: number; z: number; el: Element };
 export type Bond = [number, number, 1 | 2];
 export type Geometry = { atoms: Atom[]; bonds: Bond[]; formula: string; label: string };
 
@@ -140,66 +155,6 @@ function buildAstaxanthin(): Geometry {
   return { atoms, bonds, formula: "C₄₀H₅₂O₄", label: "astaxanthin — 3,3′-dihydroxy-β,β-carotene-4,4′-dione" };
 }
 
-// ── convert a hand-verified 2D skeletal structure into 3D ball-and-stick ──
-
-function elementFromLabel(text?: string): Atom["el"] {
-  if (!text) return "C"; // unlabeled vertex = implicit carbon, per skeletal-formula convention
-  if (text.includes("O")) return "O";
-  if (text.includes("N")) return "N";
-  if (text.includes("S")) return "S";
-  return "C";
-}
-
-function pointKey(p: readonly [number, number]): string {
-  return `${Math.round(p[0] * 10)},${Math.round(p[1] * 10)}`;
-}
-
-// Cheap deterministic pseudo-noise, keyed on position — gives the flat
-// skeletal drawing a subtle z-pucker so it doesn't rotate as a perfect disc.
-function pseudoNoise(x: number, y: number): number {
-  const s = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453;
-  return s - Math.floor(s);
-}
-
-const SKELETAL_SPAN = 6.2; // target 3D span, matched to buildResveratrol's scale
-
-function fromSkeletal(m: SkeletalMolecule, formula: string, label: string): Geometry {
-  const atoms: Atom[] = [];
-  const bonds: Bond[] = [];
-  const index = new Map<string, number>();
-  const labelByKey = new Map<string, string>();
-  for (const l of m.labels) labelByKey.set(pointKey(l.at), l.text);
-
-  const scale = SKELETAL_SPAN / Math.max(m.w, m.h);
-  const cx = m.w / 2, cy = m.h / 2;
-
-  function atomIndex(p: readonly [number, number]): number {
-    const key = pointKey(p);
-    const existing = index.get(key);
-    if (existing !== undefined) return existing;
-    const x = (p[0] - cx) * scale;
-    const y = -(p[1] - cy) * scale; // flip: skeletal y grows downward, 3D "up" should read up
-    const z = (pseudoNoise(p[0], p[1]) - 0.5) * 0.4;
-    const idx = atoms.length;
-    atoms.push({ x, y, z, el: elementFromLabel(labelByKey.get(key)) });
-    index.set(key, idx);
-    return idx;
-  }
-
-  for (const b of m.bonds) bonds.push([atomIndex(b.a), atomIndex(b.b), b.order]);
-  return { atoms, bonds, formula, label };
-}
-
-const skeletalById = new Map(MOLECULES.map((m) => [m.id, m]));
-
-function buildFromSkeletal(id: string, formula: string, label: string): () => Geometry {
-  return () => {
-    const m = skeletalById.get(id);
-    if (!m) throw new Error(`No skeletal structure registered for "${id}" in components/ui/molecules.ts`);
-    return fromSkeletal(m, formula, label);
-  };
-}
-
 // ── NMN (C11H15N2O8P) — nicotinamide mononucleotide. Full nucleotide, not the
 //    bare core: nicotinamide pyridinium ring → N-glycosidic bond → ribose
 //    furanose (2′,3′-OH) → 5′-phosphate. This is what distinguishes NMN from
@@ -254,36 +209,66 @@ export const REGISTRY: Record<string, () => Geometry> = {
   resveratrol: buildResveratrol,
   pterostilbene: buildPterostilbene,
   astaxanthin: buildAstaxanthin,
-  // Projected from the site's own verified skeletal structures — see the
-  // module comment above.
   nmn: buildNMN,
-  spermidine: buildFromSkeletal(
-    "spermidine",
-    "C₇H₁₉N₃",
-    "N-(3-aminopropyl)butane-1,4-diamine",
-  ),
-  sulforaphane: buildFromSkeletal(
-    "sulforaphane",
-    "C₆H₁₁NOS₂",
-    "1-isothiocyanato-4-(methylsulfinyl)butane",
-  ),
-  fisetin: buildFromSkeletal(
-    "fisetin",
-    "C₁₅H₁₀O₆",
-    "3,7,3′,4′-tetrahydroxyflavone",
-  ),
-  berberine: buildFromSkeletal(
-    "berberine",
-    "C₂₀H₁₈NO₄⁺",
-    "isoquinoline alkaloid (quaternary ammonium)",
-  ),
 };
 
+/**
+ * Hand-built skeletons win over the generated set. The four above were laid out
+ * by hand against each compound's real substitution pattern and framed for this
+ * site's camera; the PubChem batch fills in everything else. Lookup order is
+ * deliberate, not incidental.
+ */
 export function hasGeometry(id: string): boolean {
-  return id in REGISTRY;
+  return id in REGISTRY || id in GENERATED_GEOMETRY;
 }
 
 export function getGeometry(id: string): Geometry | null {
-  const b = REGISTRY[id];
-  return b ? b() : null;
+  const built = REGISTRY[id];
+  if (built) return built();
+  return GENERATED_GEOMETRY[id] ?? null;
+}
+
+/**
+ * What the page should tell the reader it is looking at. `self` means the
+ * compound is this molecule; `constituent`/`repeat-unit` mean we are drawing a
+ * named part of a mixture or polymer and must say which. Used by the hero
+ * captions so a rendered structure is never passed off as something it isn't.
+ */
+export function getGeometryProvenance(id: string): {
+  kind: MoleculeSourceKind;
+  as?: string;
+  cid?: number;
+} | null {
+  if (!hasGeometry(id)) return null;
+  const src = MOLECULE_SOURCE_BY_ID.get(id);
+  const gen = GENERATED_GEOMETRY[id];
+  // A hand-built skeleton with no source row is the compound's own molecule.
+  return { kind: src?.kind ?? 'self', as: src?.as, cid: gen?.cid };
+}
+
+/**
+ * The line printed under the molecular canvas. One helper so every hero words
+ * it identically, and so a mixture can never silently read as though its
+ * principal constituent were the whole product.
+ */
+export function describeGeometry(id: string, displayName: string): string {
+  const geom = getGeometry(id);
+  const prov = getGeometryProvenance(id);
+  if (!geom || !prov) {
+    return "Illustrative orbital motif — not the literal molecular structure. See the deep-dive below for the mechanism.";
+  }
+
+  const cid = prov.cid ? ` · PubChem CID ${prov.cid}` : "";
+  const tail = `${cid} · stylized for legibility, not a crystallographic reproduction`;
+  // The formula is the compact, genuinely informative identifier. Full IUPAC
+  // names for these molecules run past 100 characters and read as noise.
+  const formula = geom.formula ? ` · ${geom.formula}` : "";
+
+  if (prov.kind === "constituent") {
+    return `Structure shown: ${prov.as ?? geom.label} — the principal active constituent of ${displayName}, not the whole preparation${formula}${tail}`;
+  }
+  if (prov.kind === "repeat-unit") {
+    return `Structure shown: ${prov.as ?? geom.label} — ${displayName} is a polymer; this is its repeating unit${formula}${tail}`;
+  }
+  return `Rendered structure · ${geom.label}${formula}${tail}`;
 }

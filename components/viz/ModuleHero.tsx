@@ -1,7 +1,7 @@
 "use client";
 
 import { MoleculeStage } from "./MoleculeStage";
-import { hasGeometry, getGeometry } from "./molecule";
+import { hasGeometry, describeGeometry } from "./molecule";
 import { VIZ, FONT, tierColor, signatureHue } from "./tokens";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -33,7 +33,6 @@ export function ModuleHero(data: ModuleHeroData) {
   const hue = signatureHue(data.id);
   const hueCss = `rgb(${hue[0]},${hue[1]},${hue[2]})`;
   const structured = hasGeometry(data.id);
-  const geom = structured ? getGeometry(data.id) : null;
   const tint = tierColor(data.evidenceTier);
 
   // Drop the "Studies" tile when the body cites none, rather than show a hollow
@@ -58,11 +57,7 @@ export function ModuleHero(data: ModuleHeroData) {
               {structured ? "drag · scroll to zoom" : "orbital field · illustrative"}
             </div>
           </div>
-          <p className="mhero-cap">
-            {structured
-              ? `Rendered structure${geom?.label ? ` · ${geom.label}` : ""} · stylized for legibility, not a crystallographic reproduction`
-              : "Illustrative orbital motif — not the literal molecular structure. See the deep-dive below for the mechanism."}
-          </p>
+          <p className="mhero-cap">{describeGeometry(data.id, data.title)}</p>
         </div>
 
         <div className="mhero-body">
