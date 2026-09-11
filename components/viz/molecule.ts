@@ -30,7 +30,11 @@ import { MOLECULE_SOURCE_BY_ID, type MoleculeSourceKind } from "./molecule-sourc
 // records add Se (selenomethionine) and Co (methylcobalamin) to the
 // hand-built set; MoleculeStage falls back to the carbon palette for
 // anything it has no colour for, so adding one here is never breaking.
-export type Element = "C" | "O" | "N" | "S" | "P" | "Se" | "Co" | "F" | "Cl";
+export type Element =
+  | "C" | "O" | "N" | "S" | "P"
+  // Metals and halogens introduced by the PubChem set: selenomethionine,
+  // methylcobalamin, dasatinib, canagliflozin, and the mineral chelates.
+  | "Se" | "Co" | "F" | "Cl" | "Mg" | "Zn" | "Li" | "K" | "I";
 export type Atom = { x: number; y: number; z: number; el: Element };
 export type Bond = [number, number, 1 | 2];
 export type Geometry = { atoms: Atom[]; bonds: Bond[]; formula: string; label: string };
@@ -269,6 +273,12 @@ export function describeGeometry(id: string, displayName: string): string {
   }
   if (prov.kind === "repeat-unit") {
     return `Structure shown: ${prov.as ?? geom.label} — ${displayName} is a polymer; this is its repeating unit${formula}${tail}`;
+  }
+  if (prov.kind === "form") {
+    return `Structure shown: ${prov.as ?? geom.label} — the form ${displayName} is supplied as; other salts and chelates differ${formula}${tail}`;
+  }
+  if (prov.kind === "composite") {
+    return `Structure shown: ${prov.as ?? geom.label} — ${displayName} supplies these as separate molecules, drawn side by side${formula}${tail}`;
   }
   return `Rendered structure · ${geom.label}${formula}${tail}`;
 }

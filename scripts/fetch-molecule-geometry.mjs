@@ -70,7 +70,11 @@ async function readSources() {
       const r = new RegExp(`${key}:\\s*(?:'((?:[^'\\\\]|\\\\.)*)'|"((?:[^"\\\\]|\\\\.)*)")`).exec(rest);
       return r ? (r[1] ?? r[2]).replace(/\\'/g, "'") : undefined;
     };
-    out.push({ id, kind, query: grab('query'), as: grab('as') });
+    const partsRaw = /parts:\s*\[([^\]]*)\]/.exec(rest);
+    const parts = partsRaw
+      ? [...partsRaw[1].matchAll(/'((?:[^'\\]|\\.)*)'/g)].map((m) => m[1].replace(/\\'/g, "'"))
+      : undefined;
+    out.push({ id, kind, query: grab('query'), as: grab('as'), parts });
   }
   if (!out.length) throw new Error('No sources parsed — did molecule-sources.ts change shape?');
   return out;
@@ -148,8 +152,64 @@ function parseSdf(sdf) {
   return { atoms: keep, bonds };
 }
 
+const METALS = new Set(['CO', 'FE', 'MG', 'ZN', 'CA', 'CU', 'MN', 'NA', 'K', 'LI']);
+
+/** Union-find over the bond graph — how many disconnected pieces are there? */
+function fragmentsOf(atomCount, bonds) {
+  const parent = Array.from({ length: atomCount }, (_, i) => i);
+  const find = (x) => (parent[x] === x ? x : (parent[x] = find(parent[x])));
+  for (const [a, b] of bonds) {
+    const ra = find(a);
+    const rb = find(b);
+    if (ra !== rb) parent[ra] = rb;
+  }
+  const groups = new Map();
+  for (let i = 0; i < atomCount; i += 1) {
+    const r = find(i);
+    if (!groups.has(r)) groups.set(r, []);
+    groups.get(r).push(i);
+  }
+  return [...groups.values()];
+}
+
+/**
+ * SDF bond blocks encode covalent bonds only, so a metal centre held by
+ * coordination — the cobalt in methylcobalamin, bonded to four corrin nitrogens
+ * and a methyl carbon — arrives as several disconnected pieces and would render
+ * as floating fragments.
+ *
+ * Those bonds are real, just not representable in V2000. Reconnect each orphan
+ * fragment to the metal at its nearest atom. Nothing is invented: the geometry
+ * already places every atom, and this only draws the sticks the format dropped.
+ */
+function addCoordinationBonds(atoms, bonds) {
+  const metalIdx = atoms.findIndex((a) => METALS.has(a.el.toUpperCase()));
+  if (metalIdx < 0) return 0;
+
+  let added = 0;
+  // Re-evaluate after each link: joining one fragment can merge others.
+  for (let guard = 0; guard < 12; guard += 1) {
+    const frags = fragmentsOf(atoms.length, bonds);
+    if (frags.length < 2) break;
+    const home = frags.find((f) => f.includes(metalIdx));
+    const orphan = frags.find((f) => f !== home);
+    if (!home || !orphan) break;
+
+    const m = atoms[metalIdx];
+    let best = null;
+    for (const i of orphan) {
+      const d = Math.hypot(atoms[i].x - m.x, atoms[i].y - m.y, atoms[i].z - m.z);
+      if (!best || d < best.d) best = { i, d };
+    }
+    if (!best) break;
+    bonds.push([metalIdx, best.i, 1]);
+    added += 1;
+  }
+  return added;
+}
+
 /** Centre on the origin and scale to the same span as the hand-built skeletons. */
-function normalise(atoms) {
+function normalise(atoms, targetSpan = TARGET_SPAN) {
   if (!atoms.length) return;
   let minx = Infinity, maxx = -Infinity, miny = Infinity, maxy = -Infinity, minz = Infinity, maxz = -Infinity;
   for (const a of atoms) {
@@ -159,7 +219,7 @@ function normalise(atoms) {
   }
   const cx = (minx + maxx) / 2, cy = (miny + maxy) / 2, cz = (minz + maxz) / 2;
   const span = Math.max(maxx - minx, maxy - miny) || 1;
-  const s = TARGET_SPAN / span;
+  const s = targetSpan / span;
   for (const a of atoms) {
     a.x = (a.x - cx) * s;
     a.y = (a.y - cy) * s;
@@ -179,6 +239,81 @@ function jitterZ(atoms) {
 }
 
 const r3 = (n) => Math.round(n * 1000) / 1000;
+
+/**
+ * Fetch one molecule and return its raw heavy-atom skeleton plus identity.
+ * Shared by the single-structure path and the composite path below.
+ */
+async function fetchOne(query) {
+  const id = await resolve(query);
+  if (!id) return { error: `"${query}" did not resolve` };
+
+  let sdf = await pug(`/compound/cid/${id.cid}/SDF?record_type=3d`, { text: true });
+  let dims = '3d';
+  if (!sdf) {
+    await sleep(DELAY_MS);
+    sdf = await pug(`/compound/cid/${id.cid}/SDF?record_type=2d`, { text: true });
+    dims = '2d';
+  }
+  if (!sdf) return { error: `CID ${id.cid} has no SDF` };
+
+  const parsed = parseSdf(sdf);
+  if (!parsed || parsed.atoms.length < 2) return { error: 'unparseable SDF' };
+
+  const coordination = addCoordinationBonds(parsed.atoms, parsed.bonds);
+  return { ...id, dims, coordination, atoms: parsed.atoms, bonds: parsed.bonds };
+}
+
+/**
+ * Some products are not one molecule and never will be. GlyNAC is glycine AND
+ * N-acetylcysteine, dosed together; drawing either alone misrepresents it.
+ * A composite fetches each part and lays them side by side in one scene, so the
+ * page shows what the product actually contains. The caption names both.
+ */
+async function fetchComposite(parts) {
+  const fetched = [];
+  for (const q of parts) {
+    const one = await fetchOne(q);
+    if (one.error) return { error: `${q}: ${one.error}` };
+    fetched.push(one);
+    await sleep(DELAY_MS);
+  }
+
+  // Normalise each part on its own first so one large molecule can't shrink a
+  // small one into invisibility, then lay them out left to right with a gap.
+  const GAP = 1.6;
+  for (const f of fetched) normalise(f.atoms, TARGET_SPAN / fetched.length);
+
+  const atoms = [];
+  const bonds = [];
+  const widthOf = (f) => {
+    const xs = f.atoms.map((a) => a.x);
+    return Math.max(...xs) - Math.min(...xs);
+  };
+  const total = fetched.reduce((sum, f) => sum + widthOf(f), 0) + GAP * (fetched.length - 1);
+  let cursor = -total / 2;
+
+  for (const f of fetched) {
+    const w = widthOf(f);
+    const offset = atoms.length;
+    const shift = cursor + w / 2;
+    for (const a of f.atoms) atoms.push({ ...a, x: a.x + shift });
+    for (const [a, b, o] of f.bonds) bonds.push([a + offset, b + offset, o]);
+    cursor += w + GAP;
+  }
+
+  return {
+    cid: fetched[0].cid,
+    formula: fetched.map((f) => f.formula).join(' + '),
+    iupac: fetched.map((f) => f.iupac).filter(Boolean).join(' + '),
+    title: fetched.map((f) => f.title || '').filter(Boolean).join(' + '),
+    dims: fetched.every((f) => f.dims === '3d') ? '3d' : '2d',
+    coordination: fetched.reduce((n, f) => n + f.coordination, 0),
+    parts: fetched.map((f) => ({ cid: f.cid, formula: f.formula, title: f.title })),
+    atoms,
+    bonds,
+  };
+}
 
 async function main() {
   const only = process.argv.find((a) => a.startsWith('--only='))?.slice(7)?.split(',');
@@ -203,6 +338,24 @@ async function main() {
 
   for (const src of sources) {
     try {
+      if (src.kind === 'composite') {
+        const comp = await fetchComposite(src.parts ?? []);
+        if (comp.error) {
+          failures.push({ ...src, reason: comp.error });
+          process.stderr.write(`  ✗ ${src.id} — ${comp.error}\n`);
+          await sleep(DELAY_MS);
+          continue;
+        }
+        normalise(comp.atoms);
+        results.push({ ...src, ...comp, unknown: [], puckered: false });
+        process.stderr.write(
+          `  ✓ ${src.id.padEnd(22)} composite of ${src.parts.length} ` +
+            `(${comp.formula}) ${comp.atoms.length} atoms ${comp.dims}\n`,
+        );
+        await sleep(DELAY_MS);
+        continue;
+      }
+
       const id = await resolve(src.query);
       if (!id) {
         failures.push({ ...src, reason: 'name did not resolve to a CID' });
@@ -233,6 +386,7 @@ async function main() {
         continue;
       }
 
+      const coordination = addCoordinationBonds(parsed.atoms, parsed.bonds);
       normalise(parsed.atoms);
       const puckered = jitterZ(parsed.atoms);
 
@@ -246,13 +400,16 @@ async function main() {
         dims,
         puckered,
         unknown,
+        coordination,
         atoms: parsed.atoms,
         bonds: parsed.bonds,
       });
 
       process.stderr.write(
         `  ✓ ${src.id.padEnd(22)} CID ${String(id.cid).padEnd(10)} ${id.formula.padEnd(16)} ` +
-          `${parsed.atoms.length} atoms ${dims}${unknown.length ? ` [unmapped: ${unknown}]` : ''}\n`,
+          `${parsed.atoms.length} atoms ${dims}` +
+          `${coordination ? ` +${coordination} coord` : ''}` +
+          `${unknown.length ? ` [unmapped: ${unknown}]` : ''}\n`,
       );
     } catch (err) {
       failures.push({ ...src, reason: err.message });
@@ -278,6 +435,8 @@ async function main() {
   L.push('  iupac: string;');
   L.push("  /** '3d' = PubChem computed conformer; '2d' = flat layout, z-puckered for rotation. */");
   L.push("  dims: '3d' | '2d';");
+  L.push('  /** Set on composites: the individual molecules drawn side by side. */');
+  L.push('  parts?: { cid: number; formula: string; title: string }[];');
   L.push('}');
   L.push('');
   L.push('export const GENERATED_GEOMETRY: Record<string, GeneratedGeometry> = {');
@@ -289,6 +448,7 @@ async function main() {
     const bonds = r.bonds.map((b) => `[${b[0]},${b[1]},${b[2]}]`).join(',');
     L.push(`  ${JSON.stringify(r.id)}: {`);
     L.push(`    cid: ${r.cid},`);
+    if (r.parts) L.push(`    parts: ${JSON.stringify(r.parts)},`);
     L.push(`    formula: ${JSON.stringify(subscriptFormula(r.formula))},`);
     // Some records have no common title and PubChem returns the literal
     // "CID 12345" — useless in a caption, so fall back to the curated name.
