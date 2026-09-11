@@ -61,10 +61,11 @@ for (const vp of VIEWPORTS) {
     try {
       await page.goto(BASE + path, { waitUntil: 'networkidle', timeout: 45000 });
       await page.addScriptTag({ content: axeSrc });
+      // Colour-contrast needs real rendering, so run the full default ruleset.
+      // `axe` is attached to window by the injected script above; bracket access
+      // keeps this plain JS without needing a ts-comment escape hatch.
       const res = await page.evaluate(async () =>
-        // Colour-contrast needs real rendering, so run the full default ruleset.
-        // @ts-ignore
-        await window.axe.run(document, { resultTypes: ['violations'] }),
+        window['axe'].run(document, { resultTypes: ['violations'] }),
       );
       for (const v of res.violations) {
         if (!violations.has(v.id)) {
