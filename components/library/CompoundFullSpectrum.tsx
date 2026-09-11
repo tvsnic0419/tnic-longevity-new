@@ -57,7 +57,11 @@ export function CompoundFullSpectrum({
             <p className="cfs-eyebrow">
               <Sparkles className="cfs-ic" aria-hidden="true" /> Full-Spectrum Profile
             </p>
-            <h2 className="cfs-name">{profile.name}</h2>
+            {/* The compound name repeats the page <h1> verbatim (both are the
+                module title). Rendered as text, not a heading, so the deep-dive
+                keeps a single h1-first outline — the <section>'s aria-label still
+                names this region for assistive tech. */}
+            <p className="cfs-name">{profile.name}</p>
             {profile.fullName && <p className="cfs-full">{profile.fullName}</p>}
             <div className="cfs-meta">
               {profile.chemicalClass && <span className="cfs-chip">{profile.chemicalClass}</span>}
@@ -254,6 +258,8 @@ const CFS_CSS = `
   font-family: var(--font-display, Fraunces, serif); font-weight: 500;
   font-size: clamp(22px, 3vw, 30px); line-height: 1.05; letter-spacing: -0.02em;
   color: var(--color-text-primary); margin: 0;
+  /* Carried over from the global h1–h4 rule this element no longer matches. */
+  text-wrap: balance;
 }
 .cfs-full { font-size: 13px; color: var(--color-text-muted); margin: 4px 0 0; }
 .cfs-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }

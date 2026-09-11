@@ -138,6 +138,153 @@ export function LibraryModuleDetail({
         </div>
 
         <div className="grid lg:grid-cols-12 gap-10">
+          {/* DOM order is content-then-rail on purpose: the page <h1> lives in
+              this column, so emitting it before the rail keeps the deep-dive's
+              first heading its own title rather than the rail's "Module outline".
+              Visual placement is unchanged — the `order-*` utilities still put the
+              rail left on desktop and below the article on mobile. */}
+          <div className="order-1 lg:order-2 min-w-0 lg:col-span-8 space-y-8">
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+              <ModuleContextStrip module={module} />
+              <div className="flex items-start gap-4 mb-2">
+                <span
+                  className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${categoryVisual[module.category].badgeClass} ${categoryVisual[module.category].glowClass}`}
+                  aria-hidden="true"
+                >
+                  {(() => {
+                    const CategoryIcon = categoryVisual[module.category].icon;
+                    return <CategoryIcon className={`h-7 w-7 ${categoryVisual[module.category].textClass}`} />;
+                  })()}
+                </span>
+                <h1 className="heading-page pt-1">{module.title}</h1>
+              </div>
+              <p className="text-lg text-muted-foreground mb-4">{module.tagline}</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">{module.summary}</p>
+            </motion.div>
+
+            {relatedCompound ? (
+              <CompoundGlancePanel compound={relatedCompound} />
+            ) : (
+              module.category === 'compounds' && (
+                <ModuleGlancePanel module={module} studyCount={mdxStudyCount} />
+              )
+            )}
+
+            {module.requiresDisclaimer && (
+              <div className="rounded-xl p-5 border border-accent-amber/30 bg-accent-amber/5 flex gap-3">
+                <AlertTriangle className="w-5 h-5 text-accent-amber shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-semibold text-amber-200 mb-1">Prescription / educational only</p>
+                  <p className="text-sm text-muted-foreground">
+                    This module is for informed physician discussions. TNiC does not prescribe or recommend self-medication.{' '}
+                    <Link href="/trust/disclaimers" className="text-accent-cyan hover:text-accent-emerald">
+                      Read disclaimers
+                    </Link>
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Jump target for the sticky action rail's "See the verified pick".
+                Extra scroll-margin clears the fixed nav + the sticky bar. */}
+            <div id="verified-pick" aria-hidden="true" className="scroll-mt-[7.5rem]" />
+
+            {buyerGuide && (
+              <CompoundBuyerGuidePanel guide={buyerGuide} />
+            )}
+
+            {fallbackPick && (
+              <div className="gradient-border p-6 md:p-8">
+                <div className="flex items-center gap-2 mb-4">
+                  <ShoppingBag className="w-4 h-4 text-accent-emerald" aria-hidden="true" />
+                  <p className="text-micro font-mono text-accent-emerald uppercase">Verified pick</p>
+                </div>
+                <ProductPickCard pick={fallbackPick} />
+                <AffiliateDisclosure className="mt-3" />
+              </div>
+            )}
+
+            {/* Honest empty state for compounds with neither a buyer's-guide
+                checklist nor a verified pick — never a fabricated buy card,
+                just an honest note plus a real next step. Gated on
+                'compounds' for the same reason buyerGuide/fallbackPick are:
+                both are unconditionally undefined for every other category
+                (synergies/lifestyle/guides), so without this clause the box
+                would incorrectly render there too. */}
+            {!buyerGuide && !fallbackPick && module.category === 'compounds' && (
+              <div className="gradient-border p-6 md:p-8">
+                <div className="flex items-center gap-2 mb-3">
+                  <Info className="w-4 h-4 text-muted-foreground" aria-hidden="true" />
+                  <p className="text-micro font-mono text-muted-foreground uppercase">No verified pick yet</p>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  TNiC hasn&apos;t verified a manufacturer pick for {module.title} yet — picks are added
+                  only after dose-matched COA verification, not before. See what TNiC has verified on{' '}
+                  <Link href="/products" className="text-accent-cyan hover:underline">
+                    Products
+                  </Link>
+                  , or take the{' '}
+                  <Link href="/nico" className="text-accent-cyan hover:underline">
+                    NICO Starter Questionnaire
+                  </Link>{' '}
+                  for a personalized stack from compounds that are covered.
+                </p>
+              </div>
+            )}
+
+            {mdxBody ? (
+              <div
+                className="premium-card p-6 md:p-8"
+                style={{ ['--card-accent' as string]: categoryVisual[module.category].accentVar } as React.CSSProperties}
+              >
+                <div className="flex items-center gap-2 mb-4">
+                  <BookOpen className="w-4 h-4 text-accent-cyan" />
+                  <p className="text-micro font-mono text-accent-cyan uppercase">Deep dive</p>
+                </div>
+                <MdxRenderer content={mdxBody} selfHref={getModulePath(module)} />
+              </div>
+            ) : (
+              <GlassPanel depth="mid" className="rounded-xl p-8 text-center text-muted-foreground">
+                Content module in progress. Outline available in sidebar.
+              </GlassPanel>
+            )}
+
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/stacks"
+                className="focus-ring interactive tnic-button-tonal inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm"
+              >
+                Build your stack
+              </Link>
+              {engineHref && (
+                <GlassPanel depth="mid" className="glass-hover rounded-lg">
+                  <Link
+                    href={engineHref}
+                    className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-[var(--color-text-secondary)]"
+                  >
+                    See how this scores
+                  </Link>
+                </GlassPanel>
+              )}
+              <GlassPanel depth="mid" className="glass-hover rounded-lg">
+                <Link
+                  href="/labs"
+                  className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-[var(--color-text-secondary)]"
+                >
+                  Open Labs hub
+                </Link>
+              </GlassPanel>
+              <GlassPanel depth="mid" className="glass-hover rounded-lg">
+                <Link
+                  href="/trust/methodology"
+                  className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-[var(--color-text-secondary)]"
+                >
+                  Evidence methodology
+                </Link>
+              </GlassPanel>
+            </div>
+          </div>
+
           <aside className="order-2 lg:order-1 lg:col-span-4 space-y-6">
             {/* TNiC Score — the derived 0–100 composite, surfaced at the top of
                 the evidence rail. Renders nothing when no source can score the
@@ -372,148 +519,6 @@ export function LibraryModuleDetail({
               </Link>
             </GlassPanel>
           </aside>
-
-          <div className="order-1 lg:order-2 min-w-0 lg:col-span-8 space-y-8">
-            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-              <ModuleContextStrip module={module} />
-              <div className="flex items-start gap-4 mb-2">
-                <span
-                  className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${categoryVisual[module.category].badgeClass} ${categoryVisual[module.category].glowClass}`}
-                  aria-hidden="true"
-                >
-                  {(() => {
-                    const CategoryIcon = categoryVisual[module.category].icon;
-                    return <CategoryIcon className={`h-7 w-7 ${categoryVisual[module.category].textClass}`} />;
-                  })()}
-                </span>
-                <h1 className="heading-page pt-1">{module.title}</h1>
-              </div>
-              <p className="text-lg text-muted-foreground mb-4">{module.tagline}</p>
-              <p className="text-sm text-muted-foreground leading-relaxed">{module.summary}</p>
-            </motion.div>
-
-            {relatedCompound ? (
-              <CompoundGlancePanel compound={relatedCompound} />
-            ) : (
-              module.category === 'compounds' && (
-                <ModuleGlancePanel module={module} studyCount={mdxStudyCount} />
-              )
-            )}
-
-            {module.requiresDisclaimer && (
-              <div className="rounded-xl p-5 border border-accent-amber/30 bg-accent-amber/5 flex gap-3">
-                <AlertTriangle className="w-5 h-5 text-accent-amber shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-sm font-semibold text-amber-200 mb-1">Prescription / educational only</p>
-                  <p className="text-sm text-muted-foreground">
-                    This module is for informed physician discussions. TNiC does not prescribe or recommend self-medication.{' '}
-                    <Link href="/trust/disclaimers" className="text-accent-cyan hover:text-accent-emerald">
-                      Read disclaimers
-                    </Link>
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Jump target for the sticky action rail's "See the verified pick".
-                Extra scroll-margin clears the fixed nav + the sticky bar. */}
-            <div id="verified-pick" aria-hidden="true" className="scroll-mt-[7.5rem]" />
-
-            {buyerGuide && (
-              <CompoundBuyerGuidePanel guide={buyerGuide} />
-            )}
-
-            {fallbackPick && (
-              <div className="gradient-border p-6 md:p-8">
-                <div className="flex items-center gap-2 mb-4">
-                  <ShoppingBag className="w-4 h-4 text-accent-emerald" aria-hidden="true" />
-                  <p className="text-micro font-mono text-accent-emerald uppercase">Verified pick</p>
-                </div>
-                <ProductPickCard pick={fallbackPick} />
-                <AffiliateDisclosure className="mt-3" />
-              </div>
-            )}
-
-            {/* Honest empty state for compounds with neither a buyer's-guide
-                checklist nor a verified pick — never a fabricated buy card,
-                just an honest note plus a real next step. Gated on
-                'compounds' for the same reason buyerGuide/fallbackPick are:
-                both are unconditionally undefined for every other category
-                (synergies/lifestyle/guides), so without this clause the box
-                would incorrectly render there too. */}
-            {!buyerGuide && !fallbackPick && module.category === 'compounds' && (
-              <div className="gradient-border p-6 md:p-8">
-                <div className="flex items-center gap-2 mb-3">
-                  <Info className="w-4 h-4 text-muted-foreground" aria-hidden="true" />
-                  <p className="text-micro font-mono text-muted-foreground uppercase">No verified pick yet</p>
-                </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  TNiC hasn&apos;t verified a manufacturer pick for {module.title} yet — picks are added
-                  only after dose-matched COA verification, not before. See what TNiC has verified on{' '}
-                  <Link href="/products" className="text-accent-cyan hover:underline">
-                    Products
-                  </Link>
-                  , or take the{' '}
-                  <Link href="/nico" className="text-accent-cyan hover:underline">
-                    NICO Starter Questionnaire
-                  </Link>{' '}
-                  for a personalized stack from compounds that are covered.
-                </p>
-              </div>
-            )}
-
-            {mdxBody ? (
-              <div
-                className="premium-card p-6 md:p-8"
-                style={{ ['--card-accent' as string]: categoryVisual[module.category].accentVar } as React.CSSProperties}
-              >
-                <div className="flex items-center gap-2 mb-4">
-                  <BookOpen className="w-4 h-4 text-accent-cyan" />
-                  <p className="text-micro font-mono text-accent-cyan uppercase">Deep dive</p>
-                </div>
-                <MdxRenderer content={mdxBody} selfHref={getModulePath(module)} />
-              </div>
-            ) : (
-              <GlassPanel depth="mid" className="rounded-xl p-8 text-center text-muted-foreground">
-                Content module in progress. Outline available in sidebar.
-              </GlassPanel>
-            )}
-
-            <div className="flex flex-wrap gap-3">
-              <Link
-                href="/stacks"
-                className="focus-ring interactive tnic-button-tonal inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm"
-              >
-                Build your stack
-              </Link>
-              {engineHref && (
-                <GlassPanel depth="mid" className="glass-hover rounded-lg">
-                  <Link
-                    href={engineHref}
-                    className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-[var(--color-text-secondary)]"
-                  >
-                    See how this scores
-                  </Link>
-                </GlassPanel>
-              )}
-              <GlassPanel depth="mid" className="glass-hover rounded-lg">
-                <Link
-                  href="/labs"
-                  className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-[var(--color-text-secondary)]"
-                >
-                  Open Labs hub
-                </Link>
-              </GlassPanel>
-              <GlassPanel depth="mid" className="glass-hover rounded-lg">
-                <Link
-                  href="/trust/methodology"
-                  className="focus-ring interactive inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-[var(--color-text-secondary)]"
-                >
-                  Evidence methodology
-                </Link>
-              </GlassPanel>
-            </div>
-          </div>
         </div>
       </div>
     </div>
