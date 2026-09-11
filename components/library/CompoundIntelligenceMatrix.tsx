@@ -92,7 +92,10 @@ export function CompoundIntelligenceMatrix({ compound }: { compound: Compound })
         <div className="cim-head">
           <div className="cim-id">
             <p className="cim-eyebrow">Compound Intelligence Matrix</p>
-            <h2 className="cim-name">{c.full}</h2>
+            {/* Full chemical name — a restatement of the page <h1>, not a new
+                section topic. Kept out of the heading outline for the same reason
+                as CompoundFullSpectrum's; the <section> aria-label labels it. */}
+            <p className="cim-name">{c.full}</p>
             <div className="cim-meta">
               <span className="cim-chip">{c.cls}</span>
               <span className="cim-chip cim-tier" style={{ color: tInk, borderColor: `color-mix(in srgb, ${tColor} 45%, transparent)` }}>
@@ -193,6 +196,8 @@ const CIM_CSS = `
   font-family: var(--font-display, Fraunces, serif); font-weight: 500;
   font-size: clamp(22px, 3vw, 30px); line-height: 1.05; letter-spacing: -0.02em;
   color: var(--color-text-primary); margin: 0 0 12px;
+  /* Carried over from the global h1–h4 rule this element no longer matches. */
+  text-wrap: balance;
 }
 .cim-meta { display: flex; flex-wrap: wrap; gap: 8px; }
 .cim-chip {
