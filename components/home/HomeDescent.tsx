@@ -156,7 +156,7 @@ const CSS = `
 
 .tnic-kicker {
   font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase;
+  font-size: var(--type-12); letter-spacing: 0.28em; text-transform: uppercase;
   color: var(--cyan); margin: 0 0 20px;
   display: inline-flex; align-items: center; gap: 12px;
   opacity: 0; transform: translateY(14px);
@@ -199,10 +199,10 @@ const CSS = `
   transition: opacity .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .16s, transform .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .16s;
 }
 .tnic-trustline span { display: inline-flex; align-items: center; gap: 7px; }
-.tnic-trustline span::before { content: '•'; color: var(--cyan); font-size: 14px; line-height: 0; }
+.tnic-trustline span::before { content: '•'; color: var(--cyan); font-size: var(--type-14); line-height: 0; }
 .tnic-note {
   font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: 11.5px; letter-spacing: .04em; color: var(--faint);
+  font-size: var(--type-11); letter-spacing: .04em; color: var(--faint);
   margin-top: 14px;
   opacity: 0; transition: opacity 1s ease .5s;
 }
@@ -275,7 +275,7 @@ const CSS = `
 }
 .tnic-hero-badges .pill {
   display: inline-flex; align-items: center; gap: 8px;
-  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 11px;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-11);
   letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
   padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px;
   background: rgba(14,20,38,0.55); backdrop-filter: blur(6px);
@@ -333,10 +333,10 @@ const CSS = `
 .tnic-path-copy { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .tnic-path-label { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-micro); line-height: 1.2; letter-spacing: .11em; text-transform: uppercase; color: var(--faint); }
 .tnic-path.primary .tnic-path-label { color: rgba(3,7,18,.62); }
-.tnic-path-name { font-size: 14px; line-height: 1.2; font-weight: 650; }
-.tnic-path-detail { font-size: 11px; line-height: 1.35; color: var(--muted); }
+.tnic-path-name { font-size: var(--type-14); line-height: 1.2; font-weight: 650; }
+.tnic-path-detail { font-size: var(--type-11); line-height: 1.35; color: var(--muted); }
 .tnic-path.primary .tnic-path-detail { color: rgba(3,7,18,.66); }
-.tnic-path-arr { font-size: 18px; line-height: 1; color: var(--cyan); transition: transform .2s ease; }
+.tnic-path-arr { font-size: var(--type-18); line-height: 1; color: var(--cyan); transition: transform .2s ease; }
 .tnic-path.primary .tnic-path-arr { color: #030712; }
 .tnic-path:hover .tnic-path-arr { transform: translateX(3px); }
 @media (max-width: 720px) {
@@ -367,13 +367,13 @@ const CSS = `
   .tnic-path { min-height: 78px; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; padding: 11px; }
   .tnic-path-index { display: none; }
   .tnic-path-label { font-size: var(--type-micro); letter-spacing: .09em; }
-  .tnic-path-name { font-size: 13px; }
+  .tnic-path-name { font-size: var(--type-13); }
   .tnic-path-detail { font-size: var(--type-micro); line-height: 1.3; }
 }
 
 .tnic-cue {
   position: absolute; left: 50%; bottom: 34px; transform: translateX(-50%);
-  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 11px;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-11);
   letter-spacing: .22em; text-transform: uppercase; color: var(--faint);
   display: flex; flex-direction: column; align-items: center; gap: 10px;
 }
@@ -426,13 +426,13 @@ const CSS = `
 .tnic-stage-fallback__node--three { margin: -18% 0 0 -33%; background: var(--violet); box-shadow: 0 0 0 .25rem rgba(185,140,240,.08), 0 0 1.2rem rgba(185,140,240,.56); }
 .tnic-stage-fallback__core { width: 7%; aspect-ratio: 1; border: 1px solid rgba(255,255,255,.72); border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, var(--cyan) 42%, rgba(95,227,224,.12) 100%); box-shadow: 0 0 0 12px rgba(95,227,224,.06), 0 0 2.2rem rgba(95,227,224,.6); }
 .tnic-stage-fallback__label { position: absolute; left: 22px; top: 20px; display: flex; flex-direction: column; gap: 5px; color: var(--faint); font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: .16em; line-height: 1.2; text-transform: uppercase; }
-.tnic-stage-fallback__label strong { color: var(--ink); font-size: 11px; font-weight: 500; letter-spacing: .1em; }
+.tnic-stage-fallback__label strong { color: var(--ink); font-size: var(--type-11); font-weight: 500; letter-spacing: .1em; }
 .tnic-stage-placeholder { display: none; }
 @media (max-width: 720px) { .tnic-stage-fallback__label { left: 16px; top: 16px; } }
 
 .tnic-molhint {
   position: absolute; bottom: 12px; right: 14px;
-  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 11px;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-11);
   color: var(--faint); letter-spacing: .06em; pointer-events: none;
   display: flex; align-items: center; gap: 7px;
 }
@@ -445,12 +445,12 @@ const CSS = `
   opacity: 0; transform: translateY(16px);
   transition: opacity 1s ease .3s, transform 1s ease .3s;
 }
-.tnic-molcard h3 { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: 30px; font-weight: 400; margin: 0; letter-spacing: -.01em; }
-.tnic-molcard .formula { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 14px; color: var(--cyan); letter-spacing: .08em; }
+.tnic-molcard h3 { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: var(--type-30); font-weight: 400; margin: 0; letter-spacing: -.01em; }
+.tnic-molcard .formula { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-14); color: var(--cyan); letter-spacing: .08em; }
 .tnic-molcard .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; margin-top: 4px; }
 .tnic-molcard .fact { display: flex; flex-direction: column; gap: 3px; }
 .tnic-molcard .fact .k { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: .18em; text-transform: uppercase; color: var(--faint); }
-.tnic-molcard .fact .v { font-size: 15px; color: var(--ink); }
+.tnic-molcard .fact .v { font-size: var(--type-15); color: var(--ink); }
 /* The shared science panel, sized inside the Descent's two-column wraps. It
    wraps the deferred stage rather than replacing it, so the lazy-mount seam
    (DeferredCinematicStage) still governs when the canvas loads. Stage ratios
@@ -462,7 +462,7 @@ const CSS = `
 .tnic-sci .tnic-stage-mount { width: 100%; height: 100%; }
 .tnic-sci canvas { width: 100%; height: 100%; display: block; }
 
-.tnic-molcard .why { font-size: 13.5px; color: var(--muted); line-height: 1.55; max-width: 52ch; margin-top: 4px; border-top: 1px solid var(--line); padding-top: 14px; }
+.tnic-molcard .why { font-size: var(--type-13); color: var(--muted); line-height: 1.55; max-width: 52ch; margin-top: 4px; border-top: 1px solid var(--line); padding-top: 14px; }
 .tnic-molcard .cite { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-micro); color: var(--faint); letter-spacing: .1em; }
 /* Standalone actions clear the 24px control floor (STYLE_GUIDE §4). */
 .tnic-molcard .cite a { display: inline-flex; align-items: center; min-height: 24px; }
@@ -483,7 +483,7 @@ const CSS = `
 .tnic-descent .node-hit { fill: transparent; }
 .tnic-descent .node-core { transition: opacity .35s ease; }
 .tnic-descent .node-label {
-  font-family: var(--font-sans, 'Inter', system-ui, sans-serif); font-size: 14px; font-weight: 500;
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif); font-size: var(--type-14); font-weight: 500;
   fill: var(--ink); pointer-events: none; transition: opacity .35s ease, fill .35s ease;
   paint-order: stroke; stroke: rgba(5,7,16,0.9); stroke-width: 4;
 }
@@ -504,7 +504,7 @@ const CSS = `
 .tnic-search {
   flex: 1; min-width: 180px;
   background: rgba(14,20,38,0.6); border: 1px solid var(--line); color: var(--ink);
-  padding: 10px 14px; border-radius: 10px; font-family: var(--font-sans, 'Inter', system-ui, sans-serif); font-size: 14px;
+  padding: 10px 14px; border-radius: 10px; font-family: var(--font-sans, 'Inter', system-ui, sans-serif); font-size: var(--type-14);
   outline: none;
 }
 .tnic-search:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(95,227,224,0.15); }
@@ -524,29 +524,29 @@ const CSS = `
   border: 1px solid var(--line); border-radius: 18px; padding: 22px 22px 24px;
   min-height: 260px;
 }
-.tnic-readout .r-eyebrow { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--faint); display: flex; align-items: center; gap: 8px; }
+.tnic-readout .r-eyebrow { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-11); letter-spacing: .2em; text-transform: uppercase; color: var(--faint); display: flex; align-items: center; gap: 8px; }
 .tnic-readout .r-elite {
   display: inline-flex; align-items: center; gap: 5px; margin-left: 4px;
   color: var(--gold); font-weight: 500;
 }
 .tnic-readout .r-elite svg { width: 11px; height: 11px; }
-.tnic-readout .r-name { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: 30px; margin: 6px 0 2px; letter-spacing: -.01em; }
-.tnic-readout .r-role { font-size: 13.5px; color: var(--muted); margin-bottom: 12px; }
+.tnic-readout .r-name { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: var(--type-30); margin: 6px 0 2px; letter-spacing: -.01em; }
+.tnic-readout .r-role { font-size: var(--type-13); color: var(--muted); margin-bottom: 12px; }
 .tnic-readout .r-meta { display: flex; gap: 12px; margin-bottom: 12px; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: .1em; color: var(--faint); text-transform: uppercase; }
 .tnic-readout .r-meta b { color: var(--ink); font-weight: 500; letter-spacing: .04em; }
 .tnic-readout .r-link { display: flex; gap: 11px; padding: 12px 0; border-top: 1px solid var(--line); }
 .tnic-readout .r-link .r-dot { width: 9px; height: 9px; border-radius: 50%; margin-top: 5px; flex: none; box-shadow: 0 0 8px currentColor; }
-.tnic-readout .r-link .r-to { font-size: 14px; font-weight: 600; color: var(--ink); }
+.tnic-readout .r-link .r-to { font-size: var(--type-14); font-weight: 600; color: var(--ink); }
 .tnic-readout .r-link .r-tag { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: .12em; text-transform: uppercase; margin-left: 8px; }
-.tnic-readout .r-link .r-why { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin-top: 3px; }
+.tnic-readout .r-link .r-why { font-size: var(--type-12); color: var(--muted); line-height: 1.5; margin-top: 3px; }
 .tnic-readout .r-cta {
   display: inline-flex; align-items: center; gap: 8px; margin-top: 16px;
   color: var(--cyan); text-decoration: none; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+  font-size: var(--type-11); letter-spacing: .18em; text-transform: uppercase;
   border-top: 1px solid var(--line); padding-top: 14px; width: 100%;
 }
 .tnic-readout .r-cta:hover { color: var(--gold); }
-.tnic-readout .r-empty { color: var(--faint); font-size: 14px; line-height: 1.6; padding-top: 8px; }
+.tnic-readout .r-empty { color: var(--faint); font-size: var(--type-14); line-height: 1.6; padding-top: 8px; }
 
 .tnic-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 16px; }
 .tnic-legend .lg { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
@@ -556,7 +556,7 @@ const CSS = `
 .tnic-tl-head { display: flex; align-items: baseline; gap: 20px; flex-wrap: wrap; margin-bottom: 6px; }
 .tnic-age { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: clamp(48px,8vw,80px); line-height: 1; color: var(--gold); letter-spacing: -.02em; }
 .tnic-age small { font-size: .32em; color: var(--muted); font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); letter-spacing: .12em; margin-left: 8px; }
-.tnic-stage-cap { font-size: 16px; color: var(--ink); max-width: 36ch; line-height: 1.4; }
+.tnic-stage-cap { font-size: var(--type-16); color: var(--ink); max-width: 36ch; line-height: 1.4; }
 /* The age scrubber under the morbidity curve. Its box is the drag target, and
    it was 3px tall — on a phone the reader had to land a press inside a 3px band
    to move the homepage's flagship interactive. Box is now 32px (over the 24px
@@ -578,10 +578,10 @@ const CSS = `
   border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px;
   display: flex; flex-direction: column; gap: 4px;
 }
-.tnic-tl-stat b { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: 26px; color: var(--gold); letter-spacing: -.01em; }
+.tnic-tl-stat b { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: var(--type-26); color: var(--gold); letter-spacing: -.01em; }
 .tnic-tl-stat .k { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: .16em; text-transform: uppercase; color: var(--faint); }
-.tnic-tl-stat .n { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
-.tnic-honest { font-size: 13px; color: var(--faint); font-style: italic; margin-top: 14px; max-width: 60ch; line-height: 1.55; }
+.tnic-tl-stat .n { font-size: var(--type-12); color: var(--muted); line-height: 1.4; }
+.tnic-honest { font-size: var(--type-13); color: var(--faint); font-style: italic; margin-top: 14px; max-width: 60ch; line-height: 1.55; }
 .tnic-tl-toggle { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
 
 .tnic-final {
@@ -596,14 +596,14 @@ const CSS = `
   background: linear-gradient(180deg, rgba(19,26,48,0.7), rgba(14,20,38,0.7));
   border: 1px solid var(--line); border-radius: 14px;
 }
-.tnic-final-row .n { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: 28px; color: var(--cyan); width: 36px; text-align: center; flex: none; }
+.tnic-final-row .n { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: var(--type-28); color: var(--cyan); width: 36px; text-align: center; flex: none; }
 .tnic-final-row .body { flex: 1; }
-.tnic-final-row .body .t { font-size: 15px; color: var(--ink); font-weight: 500; }
-.tnic-final-row .body .s { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin-top: 2px; }
+.tnic-final-row .body .t { font-size: var(--type-15); color: var(--ink); font-weight: 500; }
+.tnic-final-row .body .s { font-size: var(--type-12); color: var(--muted); line-height: 1.5; margin-top: 2px; }
 
 .tnic-final-elites { display: flex; flex-direction: column; gap: 12px; }
 .tnic-final-elites .head {
-  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 11px; letter-spacing: .2em;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-11); letter-spacing: .2em;
   text-transform: uppercase; color: var(--faint); display: flex; justify-content: space-between; align-items: baseline;
 }
 .tnic-final-elites .head a { color: var(--cyan); text-decoration: none; letter-spacing: .18em; display: inline-flex; align-items: center; min-height: 24px; }
@@ -616,12 +616,12 @@ const CSS = `
 }
 .tnic-elite-card:hover { border-color: var(--cyan); transform: translateY(-1px); }
 .tnic-elite-card .rank {
-  font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: 22px; color: var(--gold);
+  font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: var(--type-22); color: var(--gold);
   width: 32px; text-align: center; flex: none;
 }
 .tnic-elite-card .body { flex: 1; min-width: 0; }
-.tnic-elite-card .body .name { font-size: 15px; font-weight: 600; color: var(--ink); }
-.tnic-elite-card .body .path { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.tnic-elite-card .body .name { font-size: var(--type-15); font-weight: 600; color: var(--ink); }
+.tnic-elite-card .body .path { font-size: var(--type-12); color: var(--muted); margin-top: 2px; }
 .tnic-elite-card .tier {
   font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: .18em;
   text-transform: uppercase; padding: 4px 8px; border-radius: 999px;
@@ -634,7 +634,7 @@ const CSS = `
   /* Site signature gradient (matches .btn-gradient) so the descent's actions
      read as the same primary CTA as the rest of the site. */
   background: linear-gradient(135deg, #00e0ff 0%, #34d399 50%, #6ee7b7 100%);
-  color: #030712; font-weight: 600; font-size: 15px; text-decoration: none;
+  color: #030712; font-weight: 600; font-size: var(--type-15); text-decoration: none;
   box-shadow: 0 0 32px rgba(0,224,255,0.32);
   transition: transform .2s ease, box-shadow .2s ease;
 }

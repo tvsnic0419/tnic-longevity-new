@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { getPaletteResults } from './command-palette-context';
+import { paletteIndex } from './command-palette-index';
+import { pathways } from './pathways';
 
 describe('command-palette-context', () => {
   it('returns contextual groups when query is empty', () => {
@@ -44,5 +46,28 @@ describe('command-palette-context', () => {
     expect(result.flat.some((i) => i.title.toLowerCase().includes('glynac') || i.keywords.includes('glynac'))).toBe(
       true,
     );
+  });
+  it('finds a pathway by its registry alias, not a hand-written synonym', () => {
+    const result = getPaletteResults({
+      pathname: '/',
+      query: 'NRF2',
+      stackIds: [],
+      recentModules: [],
+    });
+
+    const pathway = result.flat.find(
+      (item) => item.kind === 'pathway' && item.href === '/pathways/nrf2',
+    );
+    expect(pathway).toBeDefined();
+    expect(pathway?.title).toContain('NRF2');
+  });
+
+  it('indexes every published pathway, so none is unsearchable', () => {
+    const indexed = new Set(
+      paletteIndex.filter((i) => i.kind === 'pathway').map((i) => i.href),
+    );
+    for (const p of pathways) {
+      expect(indexed.has(`/pathways/${p.slug}`)).toBe(true);
+    }
   });
 });
