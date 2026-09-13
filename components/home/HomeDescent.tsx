@@ -455,6 +455,8 @@ const CSS = `
 
 .tnic-molcard .why { font-size: 13.5px; color: var(--muted); line-height: 1.55; max-width: 52ch; margin-top: 4px; border-top: 1px solid var(--line); padding-top: 14px; }
 .tnic-molcard .cite { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; color: var(--faint); letter-spacing: .1em; }
+/* Standalone actions clear the 24px control floor (STYLE_GUIDE §4). */
+.tnic-molcard .cite a { display: inline-flex; align-items: center; min-height: 24px; }
 
 .tnic-netwrap { display: grid; grid-template-columns: 1.5fr 1fr; gap: 28px; align-items: start; margin-top: 10px; }
 @media (max-width: 900px){ .tnic-netwrap { grid-template-columns: 1fr; } }
@@ -546,8 +548,16 @@ const CSS = `
 .tnic-age { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: clamp(48px,8vw,80px); line-height: 1; color: var(--gold); letter-spacing: -.02em; }
 .tnic-age small { font-size: .32em; color: var(--muted); font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); letter-spacing: .12em; margin-left: 8px; }
 .tnic-stage-cap { font-size: 16px; color: var(--ink); max-width: 36ch; line-height: 1.4; }
-.tnic-range { -webkit-appearance: none; appearance: none; width: 100%; height: 3px; border-radius: 3px; background: var(--line); margin: 18px 0 4px; cursor: pointer; }
-.tnic-range::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: var(--gold); border: 3px solid var(--void); box-shadow: 0 0 0 1px var(--gold), 0 0 22px rgba(240,196,106,.6); cursor: grab; }
+/* The age scrubber under the morbidity curve. Its box is the drag target, and
+   it was 3px tall — on a phone the reader had to land a press inside a 3px band
+   to move the homepage's flagship interactive. Box is now 32px (over the 24px
+   floor in STYLE_GUIDE §4 / WCAG 2.2 AA 2.5.8); the hairline track is painted
+   by the track pseudo-element so the visual is unchanged, and the top margin
+   absorbs most of the growth so the panel's rhythm holds. */
+.tnic-range { -webkit-appearance: none; appearance: none; width: 100%; height: 32px; background: transparent; margin: 4px 0 0; cursor: pointer; }
+.tnic-range::-webkit-slider-runnable-track { height: 3px; border-radius: 3px; background: var(--line); }
+.tnic-range::-moz-range-track { height: 3px; border-radius: 3px; background: var(--line); }
+.tnic-range::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; margin-top: -10.5px; border-radius: 50%; background: var(--gold); border: 3px solid var(--void); box-shadow: 0 0 0 1px var(--gold), 0 0 22px rgba(240,196,106,.6); cursor: grab; }
 .tnic-range::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: var(--gold); border: 3px solid var(--void); box-shadow: 0 0 0 1px var(--gold), 0 0 22px rgba(240,196,106,.6); cursor: grab; }
 .tnic-range:focus-visible { outline: 2px solid var(--cyan); outline-offset: 6px; }
 .tnic-tl-stats {
@@ -587,7 +597,7 @@ const CSS = `
   font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 11px; letter-spacing: .2em;
   text-transform: uppercase; color: var(--faint); display: flex; justify-content: space-between; align-items: baseline;
 }
-.tnic-final-elites .head a { color: var(--cyan); text-decoration: none; letter-spacing: .18em; }
+.tnic-final-elites .head a { color: var(--cyan); text-decoration: none; letter-spacing: .18em; display: inline-flex; align-items: center; min-height: 24px; }
 .tnic-final-elites .head a:hover { color: var(--gold); }
 .tnic-elite-card {
   display: flex; align-items: center; gap: 14px; padding: 14px 16px;

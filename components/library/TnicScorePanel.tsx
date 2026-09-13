@@ -107,7 +107,7 @@ export function TnicScorePanel({ compoundId }: { compoundId: string }) {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="focus-ring mt-4 inline-flex items-center gap-1.5 rounded text-micro font-medium text-muted-foreground hover:text-foreground"
+        className="action-link focus-ring mt-4 gap-1.5 rounded text-micro font-medium text-muted-foreground hover:text-foreground"
         aria-expanded={open}
       >
         <Info className="h-3.5 w-3.5" aria-hidden="true" />

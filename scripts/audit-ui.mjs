@@ -91,10 +91,65 @@ for (const vp of VIEWPORTS) {
             overflow.push({ tag: el.tagName.toLowerCase(), cls: (el.className || '').toString().slice(0, 70), over: Math.round(r.right - docW) });
           }
         });
+        // Tap-target sizing, split into the two groups WCAG 2.2 AA 2.5.8 treats
+        // differently. The raw count conflates them and is therefore not
+        // actionable: on /library it read 135, of which 120 were PMID and
+        // glossary links sitting inside sentences — targets the success
+        // criterion explicitly exempts ("inline: the target is in a sentence
+        // or its size is otherwise constrained by the line-height of
+        // non-target text"). Shrinking those would mean setting prose on a
+        // 24px leading. What is actionable is the standalone controls.
+        const isInlineInText = (el, rect) => {
+          if (el.tagName !== 'A') return false;
+          // The criterion's own wording: exempt when "the target is in a
+          // sentence or its size is otherwise constrained by the line-height of
+          // non-target text". An inline-level box IS line-height constrained —
+          // any inline-flex/inline-block/flex link has been given a box of its
+          // own and is a styled control, so it is not exempt.
+          if (getComputedStyle(el).display !== 'inline') return false;
+          // ...and it must fit inside its own line box — the literal test the
+          // criterion describes, and the one signal that survives every markup
+          // shape prose links appear in (wrapped in a <span>, in a table cell,
+          // in an MDX paragraph). Anything with padding of its own exceeds the
+          // line box and stays in scope.
+          //
+          // Known limitation, stated so nobody reads a pass as more than it is:
+          // a *standalone* action left as a bare inline <a> — no padding, no
+          // inline-flex — is indistinguishable from a word in a sentence by
+          // this test and will be exempted. The gate catches styled controls
+          // that shrank, which is where regressions actually come from; it is
+          // not a substitute for reaching for `.action-link` on a new action.
+          const lh = parseFloat(getComputedStyle(el).lineHeight);
+          return Number.isFinite(lh) && rect.height <= lh + 1;
+        };
+        // A control inside a <label> is hit through the label, so the label is
+        // the real target (a 14px checkbox in a 44px label is not a 14px tap).
+        const coveredByLabel = (el) => {
+          const lab = el.closest('label');
+          if (!lab || lab === el) return false;
+          const lr = lab.getBoundingClientRect();
+          return lr.height >= 24 && lr.width >= 24;
+        };
+        // A link whose ::before is stretched over its whole card (the
+        // stretched-link idiom) is hit anywhere on the card.
+        const stretched = (el) => {
+          const before = getComputedStyle(el, '::before');
+          return before.position === 'absolute' && before.inset !== 'auto' && before.content !== 'none';
+        };
         let small = 0;
+        const actionable = [];
         document.querySelectorAll('a,button,[role="button"],input,select').forEach((el) => {
           const r = el.getBoundingClientRect();
-          if (r.width > 0 && r.height > 0 && (r.height < 24 || r.width < 24)) small += 1;
+          if (!(r.width > 0 && r.height > 0)) return;
+          if (r.height >= 24 && r.width >= 24) return;
+          small += 1;
+          if (el.closest('.sr-only') || el.classList.contains('sr-only')) return;
+          if (isInlineInText(el, r) || coveredByLabel(el) || stretched(el)) return;
+          actionable.push({
+            text: (el.textContent ?? '').trim().slice(0, 34) || `<${el.tagName.toLowerCase()}>`,
+            size: `${Math.round(r.width)}x${Math.round(r.height)}`,
+            cls: (el.className || '').toString().slice(0, 60),
+          });
         });
         // Smallest rendered font actually painted on the page.
         let minFont = 99;
@@ -109,11 +164,12 @@ for (const vp of VIEWPORTS) {
           clientW: docW,
           overflow: overflow.slice(0, 6),
           smallTargets: small,
+          actionableTargets: actionable,
           minFont,
         };
       });
       layout.push({ vp: vp.name, path, ...m });
-      process.stderr.write(`  ${vp.name.padEnd(8)} ${path.padEnd(40)} axe:${res.violations.length} overflow:${m.overflow.length} smallTap:${m.smallTargets} minFont:${m.minFont}px\n`);
+      process.stderr.write(`  ${vp.name.padEnd(8)} ${path.padEnd(40)} axe:${res.violations.length} overflow:${m.overflow.length} smallTap:${m.smallTargets} (actionable:${m.actionableTargets.length}) minFont:${m.minFont}px\n`);
     } catch (err) {
       process.stderr.write(`  ✗ ${vp.name} ${path} — ${err.message.slice(0, 100)}\n`);
     }
@@ -141,7 +197,40 @@ console.log('\n=== LAYOUT ===');
 for (const l of layout) {
   const bad = l.scrollW > l.clientW + 2;
   if (bad || l.overflow.length || l.smallTargets > 0 || l.minFont < 12) {
-    console.log(`${l.vp} ${l.path}: scroll ${l.scrollW}/${l.clientW}${bad ? ' HORIZONTAL SCROLL' : ''} smallTap=${l.smallTargets} minFont=${l.minFont}px`);
+    console.log(`${l.vp} ${l.path}: scroll ${l.scrollW}/${l.clientW}${bad ? ' HORIZONTAL SCROLL' : ''} smallTap=${l.smallTargets} actionable=${l.actionableTargets.length} minFont=${l.minFont}px`);
     for (const o of l.overflow) console.log(`   overflow +${o.over}px  <${o.tag}> ${o.cls}`);
   }
+}
+
+// ── Tap-target gate ──
+// Only the actionable group gates. Inline links in running text, controls hit
+// through a ≥24px <label>, stretched-link card titles and sr-only skip links
+// are all excluded above, so anything left here is a standalone control that
+// renders under the 24px hard minimum STYLE_GUIDE §4 already mandates.
+console.log('\n=== ACTIONABLE SUB-24px CONTROLS ===');
+const offenders = new Map(); // signature -> {n, pages:Set, size, text}
+for (const l of layout) {
+  for (const a of l.actionableTargets) {
+    const key = `${a.text}|${a.cls}`;
+    if (!offenders.has(key)) offenders.set(key, { n: 0, pages: new Set(), size: a.size, text: a.text, cls: a.cls });
+    const e = offenders.get(key);
+    e.n += 1;
+    e.pages.add(`${l.vp}${l.path}`);
+  }
+}
+if (offenders.size === 0) {
+  console.log('  none');
+} else {
+  for (const [, v] of [...offenders.entries()].sort((a, b) => b[1].n - a[1].n)) {
+    console.log(`  ${String(v.n).padStart(4)}×  ${v.size.padEnd(9)} "${v.text}"`);
+    console.log(`        ${v.cls}`);
+    console.log(`        ${[...v.pages].slice(0, 4).join(', ')}${v.pages.size > 4 ? ` +${v.pages.size - 4} more` : ''}`);
+  }
+}
+const totalActionable = layout.reduce((n, l) => n + l.actionableTargets.length, 0);
+const budget = Number(process.env.MAX_SMALL_TAPS ?? 0);
+console.log(`\nactionable sub-24px controls: ${totalActionable} (budget ${budget})`);
+if (totalActionable > budget) {
+  console.error(`\n✗ tap-target gate: ${totalActionable} actionable controls under 24px, budget is ${budget}.`);
+  process.exitCode = 1;
 }

@@ -142,7 +142,7 @@ export function HallmarkDetail({
                   </div>
                   <Link
                     href="/library/compounds"
-                    className="text-xs font-semibold text-accent-cyan hover:text-accent-emerald transition shrink-0"
+                    className="action-link text-xs font-semibold text-accent-cyan hover:text-accent-emerald transition shrink-0"
                   >
                     All compounds →
                   </Link>
@@ -221,7 +221,7 @@ export function HallmarkDetail({
                   </div>
                   <Link
                     href="/pathways"
-                    className="text-xs font-semibold text-accent-violet hover:text-accent-cyan transition shrink-0"
+                    className="action-link text-xs font-semibold text-accent-violet hover:text-accent-cyan transition shrink-0"
                   >
                     All pathways →
                   </Link>
@@ -259,7 +259,7 @@ export function HallmarkDetail({
                   </div>
                   <Link
                     href="/peptides"
-                    className="text-xs font-semibold text-accent-rose hover:text-accent-cyan transition shrink-0"
+                    className="action-link text-xs font-semibold text-accent-rose hover:text-accent-cyan transition shrink-0"
                   >
                     All peptides →
                   </Link>
@@ -306,7 +306,7 @@ export function HallmarkDetail({
                 </div>
                 <Link
                   href="/library/systems"
-                  className="text-xs font-semibold text-accent-violet hover:text-accent-violet/80 transition shrink-0"
+                  className="action-link text-xs font-semibold text-accent-violet hover:text-accent-violet/80 transition shrink-0"
                 >
                   Full Systems Map →
                 </Link>

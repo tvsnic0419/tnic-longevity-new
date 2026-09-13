@@ -176,7 +176,7 @@ export function CompoundIntelligenceMatrix({ compound }: { compound: Compound })
 
         <div className="cim-foot">
           <span>Scores are TNiC’s deterministic synthesis of the cited human evidence — a comparison tool, not a medical claim.</span>
-          <Link href={pubmedUrl(c.name)} target="_blank" rel="noopener noreferrer" className="cim-pubmed focus-ring">
+          <Link href={pubmedUrl(c.name)} target="_blank" rel="noopener noreferrer" className="cim-pubmed action-link focus-ring">
             PubMed <ExternalLink className="cim-chip-ic" aria-hidden="true" />
           </Link>
         </div>

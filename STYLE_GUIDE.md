@@ -1,12 +1,14 @@
 # TNiC Design System & Style Guide
 
-> Version 1.2 · August 2026  
+> Version 1.3 · September 2026  
 > Governs typography, spacing, components, accessibility, and page patterns across tnic.help.  
 > v1.1 documents the cinematic viz family (§7, §12) that the premium hubs are built on.  
 > v1.2 corrects the drifted §2 color values, documents the signal roles, the
 > canonical tier scale, the interaction primitives (`IconButton`,
 > `SelectableChip`, `ExternalAction`, `InteractiveSciencePanel`) and the
-> hit-area rules.
+> hit-area rules.  
+> v1.3 adds §13 — the atmosphere budget, the `.action-link` control floor, and
+> the tap-target gate that enforces it.
 
 ---
 
@@ -394,6 +396,66 @@ canonical tokens in `lib/design-system.ts` `palette` / `--accent-*`.
 **Motion:** all viz honors `prefers-reduced-motion` (global
 `MotionConfig reducedMotion="user"` + per-component guards) and is
 visibility-gated via `lib/raf-visibility`.
+
+---
+
+## 13. Atmosphere budget — cinematic shell, instrument core
+
+*Added v1.3, from measuring the rendered site rather than reading the code.*
+
+The site has two visual jobs and they are not the same job.
+
+**The shell is cinematic.** The homepage descent, the hub hero bands, the
+molecule stages, the drifting `AmbientLayer` field — that is the brand, it is
+subject-grounded (real geometry, real networks), and it is deliberately
+expensive. Protect it. Nothing in this section is licence to flatten it toward
+a generic dark-SaaS look.
+
+**The core is an instrument.** A compound deep-dive is a reader's workbench:
+doses, tiers, PMIDs, biomarker ranges. Atmosphere behind a reading column is
+not atmosphere, it is noise — and it was measurably reaching the content. The
+`AmbientLayer` is `position: fixed` behind every page and page wrappers are
+transparent by design (`.canvas-scrim`), so the molecular linework painted
+*through* card bodies, through the compound buyer-guide band's body copy, and —
+on a phone, where there are no margins for it to live in — directly under the
+12-hallmark filter column on `/library`.
+
+So the field is budgeted, not removed:
+
+| Rule | How |
+|---|---|
+| A content card sits on a ground | `--card-ground` is the third background layer of `.premium-card` — 92% `--color-bg-elevated` in dark, fully opaque in light (light theme already did this; dark was the inconsistent one) |
+| A full-width content band sits on a ground | `bg-[var(--card-ground)]` beneath its own accent wash |
+| A glass moment stays glass | `.glass-deep` / `GlassPanel` are untouched — budget 1–2 per page, as before |
+| The field is tuned per viewport | Depth opacities step down ~45% under 768px, where a structure spans most of the screen instead of a fraction of it |
+| The field keeps the margins | Between cards, in page gutters, behind hero bands — full strength |
+
+**The test:** if you can read a chemical structure crossing a sentence, the
+budget is broken on that surface. Re-run `npm run audit:ui` and look at the
+page, not the code.
+
+### Control geometry
+
+Paired with the above, because they are the same idea applied to touch: the
+shell may be expressive, but **anything you touch obeys one geometry.** §4 sets
+24px as the hard floor and 44px as the preference. `npm run audit:ui` now
+enforces the floor — see below — and `.action-link` is the one class to reach
+for on a link that is an *action* rather than a word in a sentence (a
+"View NMN →" at the foot of a panel, an entry in a related-links list, a
+citation chip). It only ever grows the hit area, never the type.
+
+### The gate
+
+`npm run audit:ui` separates the two groups WCAG 2.2 AA 2.5.8 treats
+differently and **exits non-zero on the second**:
+
+- *Exempt* — links inside a sentence, controls hit through a ≥24px `<label>`,
+  stretched-link card titles, `sr-only` skip links.
+- *Actionable* — standalone controls rendering under 24px. Budget: **0**.
+
+The raw `smallTap` number conflates the two and is not actionable on its own:
+on `/library` it read 135, of which 120 were PMID and glossary links sitting in
+prose. Read the `actionable` count.
 
 ---
 

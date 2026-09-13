@@ -25,7 +25,7 @@ export function SourceCitation({ citation, compact = false, showType = true, evi
         href={link}
         target="_blank"
         rel="noopener noreferrer"
-        className="focus-ring interactive text-caption text-accent-cyan hover:text-accent-emerald inline-flex items-center gap-1 rounded"
+        className="action-link focus-ring interactive text-caption text-accent-cyan hover:text-accent-emerald inline-flex items-center gap-1 rounded"
       >
         {formatCitationShort(citation)}
         <ExternalLink className="w-3 h-3 shrink-0" aria-hidden="true" />
@@ -74,7 +74,7 @@ export function PmidLink({ pmid, label }: { pmid: string; label?: string }) {
       href={pubmedUrl(pmid)}
       target="_blank"
       rel="noopener noreferrer"
-      className="focus-ring interactive text-caption text-accent-cyan hover:text-accent-emerald inline-flex items-center gap-1 rounded"
+      className="action-link focus-ring interactive text-caption text-accent-cyan hover:text-accent-emerald inline-flex items-center gap-1 rounded"
     >
       {label ?? `PMID: ${pmid}`}
       <ExternalLink className="w-3 h-3" aria-hidden="true" />

@@ -34,7 +34,13 @@ export function CompoundBuyerGuidePanel({
       id="buyer-guide"
       aria-labelledby={`buyer-${guide.compoundId}-heading`}
       className={cn(
-        'rounded-2xl border border-accent-amber/25 bg-gradient-to-br from-accent-amber/5 via-transparent to-accent-cyan/5 overflow-hidden',
+        // The amber→cyan wash is the band's identity, but it is ~5% alpha over
+        // nothing, so the site-wide ambient molecule field painted straight
+        // through the band's body copy on all 100 compound pages. Ground it on
+        // --card-ground first (atmosphere budget, STYLE_GUIDE §13) and keep the
+        // wash on top — same colour, now on a surface.
+        'rounded-2xl border border-accent-amber/25 bg-[var(--card-ground)] overflow-hidden',
+        'bg-gradient-to-br from-accent-amber/5 via-transparent to-accent-cyan/5',
         className,
       )}
     >
@@ -59,7 +65,7 @@ export function CompoundBuyerGuidePanel({
         {guide.relatedCompareSlug && (
           <Link
             href={`/library/compare/${guide.relatedCompareSlug}`}
-            className="focus-ring text-xs font-semibold text-accent-cyan hover:underline rounded shrink-0"
+            className="focus-ring inline-flex min-h-6 items-center text-xs font-semibold text-accent-cyan hover:underline rounded shrink-0"
           >
             Compare alternatives →
           </Link>
