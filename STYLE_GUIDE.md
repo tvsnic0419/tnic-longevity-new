@@ -1,6 +1,6 @@
 # TNiC Design System & Style Guide
 
-> Version 1.10 · September 2026  
+> Version 1.11 · September 2026  
 > Governs typography, spacing, components, accessibility, and page patterns across tnic.help.  
 > v1.1 documents the cinematic viz family (§7, §12) that the premium hubs are built on.  
 > v1.2 corrects the drifted §2 color values, documents the signal roles, the
@@ -24,7 +24,8 @@
 > the quieter motion recipe so leftover fills and competing hovers read as one
 > product.  
 > v1.10 adds §20 — walk cards and the continue trail, so related destinations
-> look like neighbors instead of leftover text lists.
+> look like neighbors instead of leftover text lists.  
+> v1.11 adds §21 — homepage arrival composition, metric type, and geometry tokens.
 
 ---
 
@@ -118,6 +119,7 @@ the other.
 | `.text-caption` | 12px | Meta, disclaimers |
 | `.text-label` | 11px mono uppercase | Eyebrows, column headers |
 | `.text-micro` | 11px sans | Chips, badge text, stat suffixes, fine print |
+| `.metric-display` | Fraunces, tabular, tracking `-0.04em` | Longevity counts and instrument numbers |
 
 **Three faces, one job each.** Self-hosted via `next/font` in `app/layout.tsx`,
 exposed as CSS variables, never loaded from a runtime `@import`.
@@ -827,6 +829,50 @@ trail. Hash-link protocols (`/protocols#slug`) until they have their own routes.
 Homepage hallmark cards walk to `/library/{slug}` (the linked evidence surface),
 not the editorial twin. Compound names on editorial intervention cards walk to
 `/library/compounds/{id}`.
+
+---
+
+## 21. Homepage arrival and metric type (visual identity)
+
+*Added v1.11. Same cyan / emerald identity. The first viewport is a composed
+instrument, not a left-column dump.*
+
+**Arrival composition.** `#arrive` is a two-column grid (`.tnic-hero-grid`):
+copy left, library instrument right, three destination paths spanning beneath.
+The instrument is a 12-tick hallmark compass with NAD+ / mTOR / AMPK / NRF2
+cardinals and live counts from `COMPOUND_COUNT` / `eliteInterventions` /
+`eliteTierCounts`. It is **not** a personal longevity score — the caption
+says so. A–C meters in the first viewport use the canonical three-bar
+legend (A clinical / B emerging / C preclinical) and link to
+`/trust/methodology`.
+
+**Do not** fill the right column with orbital decoration. Do not invent a
+score. Do not put `backdrop-filter` on `.tnic-intel` — chrome is frost;
+the instrument is a grounded panel.
+
+**Geometry tokens**
+
+| Token | Value | Use |
+|---|---|---|
+| `--page-max` | `80rem` | `.container-page` and descent acts |
+| `--section-y` | `clamp(4.5rem, 7vw, 7rem)` | Homepage section padding |
+| `--metric-tracking` | `-0.04em` | `.metric-display` |
+
+**Metric type.** `.metric-display` is Fraunces, tabular lining figures, tight
+tracking. Use it for counts that should read as instruments.
+
+**Type floor on arrival.** Nothing in Act 0 HTML goes below 11px
+(`.text-micro`). Path names are 16px. The cinematic H1 caps at 76px so the
+primary CTA stays inside a 1280×800 first screen.
+
+**CTA.** The primary path uses the signature cyan→emerald gradient
+(`.btn-gradient` / `.tnic-cta`). Secondary paths are grounded panels. Nav
+secondary actions use `.tnic-button-outline`, not a nested `GlassPanel`.
+The chapter rail is hidden on `#arrive` so it does not sit on top of the
+instrument.
+
+**Motion.** Cards lift 2px. Hallmark and step cards share that recipe.
+The desktop rail fades in after the first scroll.
 
 ---
 

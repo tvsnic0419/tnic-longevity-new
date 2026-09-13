@@ -10,7 +10,6 @@ import { Logo } from '@/components/ui/Logo';
 import { SiteSearch } from '@/components/SiteSearch';
 import { COMMAND_PALETTE_EVENT } from '@/components/os/os-events';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
-import { GlassPanel } from '@/components/ui/GlassPanel';
 import { IconButton } from '@/components/ui/IconButton';
 import { cn } from '@/lib/utils';
 import { usePlatform } from '@/context/PlatformContext';
@@ -35,7 +34,7 @@ const compactPurposePaths = [
     label: 'Find a starting point',
     detail: 'Nine adjustable questions',
     icon: ClipboardList,
-    accent: 'text-accent-violet',
+    accent: 'text-accent-emerald',
   },
   {
     href: '/library',
@@ -71,6 +70,7 @@ const exploreGroups = [
   {
     label: 'Learn',
     links: [
+      { href: '/hallmarks', label: 'Hallmarks' },
       { href: '/peptides', label: 'Peptides' },
       { href: '/insights', label: 'Insights' },
       { href: '/learn', label: 'Learning hub' },
@@ -279,7 +279,7 @@ export function Nav() {
           Horizontal padding is still inherited from container-page. */}
       <div
         ref={rowRef}
-        className="relative container-page !max-w-none py-3 md:py-4 flex justify-between items-center gap-4"
+        className="relative container-page !max-w-none py-2.5 md:py-3 flex justify-between items-center gap-4"
       >
         {/* No aria-label here: it would duplicate/conflict with the Logo's
             own role="img" + aria-label below, which Lighthouse's
@@ -299,7 +299,7 @@ export function Nav() {
               Wide screens only, so the ≥1440px nav row stays uncrowded. */}
           <span
             aria-hidden="true"
-            className="hidden xl:block border-l border-border/60 pl-2.5 font-mono text-[0.58rem] font-semibold uppercase leading-[1.25] tracking-[0.18em] text-muted-foreground"
+            className="hidden xl:block border-l border-border/60 pl-2.5 font-mono text-micro font-semibold uppercase leading-[1.25] tracking-[0.18em] text-muted-foreground"
           >
             Cell-Health
             <br />
@@ -349,12 +349,12 @@ export function Nav() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -8, scale: 0.98 }}
                   transition={{ duration: 0.16, ease: 'easeOut' }}
-                  className="absolute right-0 top-[calc(100%+0.8rem)] grid w-[25rem] grid-cols-2 gap-2 rounded-2xl border border-border/80 bg-[color-mix(in_srgb,var(--color-bg-elevated)_94%,transparent)] p-3 shadow-[0_18px_50px_-18px_rgba(0,0,0,0.7)] backdrop-blur-2xl"
+                  className="absolute right-0 top-[calc(100%+0.8rem)] grid w-[25rem] grid-cols-2 gap-2 rounded-2xl border border-border/80 glass-chrome p-3 shadow-[0_18px_50px_-18px_rgba(0,0,0,0.7)]"
                   aria-label="Explore more TNiC resources"
                 >
                   {exploreGroups.map((group) => (
                     <div key={group.label} className="rounded-xl p-2">
-                      <p className="mb-2 px-2 text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+                      <p className="mb-2 px-2 text-micro font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                         {group.label}
                       </p>
                       <div className="flex flex-col gap-0.5">
@@ -385,15 +385,13 @@ export function Nav() {
               a guided start, while returning visitors resume the work they
               already began. The quieter companion keeps the alternate path one
               click away without presenting two competing primary CTAs. */}
-          <GlassPanel depth="float" className="glass-hover flex items-center rounded-full">
-            <Link
-              href={secondaryAction.href}
-              className="focus-ring inline-flex items-center gap-1.5 rounded-full py-2 px-4 text-sm font-semibold text-muted-foreground hover:text-foreground"
-            >
-              <SecondaryActionIcon className="w-4 h-4 text-accent-violet" aria-hidden="true" />
-              {secondaryAction.label}
-            </Link>
-          </GlassPanel>
+          <Link
+            href={secondaryAction.href}
+            className="focus-ring tnic-button-outline inline-flex items-center gap-1.5 rounded-full py-2 px-4 text-sm font-semibold text-muted-foreground hover:text-foreground"
+          >
+            <SecondaryActionIcon className="w-4 h-4 text-accent-cyan" aria-hidden="true" />
+            {secondaryAction.label}
+          </Link>
           {/* No `!min-h-0`: it cancelled .btn-gradient's own
               `min-height: var(--space-touch)` and landed the CTA at ~40px. */}
           <Link href={primaryAction.href} aria-label={primaryAction.ariaLabel} className="focus-ring btn-gradient text-sm !py-2.5 !px-5 rounded-full">
@@ -491,25 +489,21 @@ export function Nav() {
                 </div>
               ))}
               <div className="flex flex-col gap-2 mt-3">
-                <GlassPanel depth="float" className="glass-hover rounded-xl">
-                  <Link
-                    href={secondaryAction.href}
-                    onClick={() => setMobileOpen(false)}
-                    className="focus-ring flex items-center justify-center gap-2 rounded-xl py-3 text-center text-sm font-semibold"
-                  >
-                    <SecondaryActionIcon className="h-4 w-4 text-accent-violet" aria-hidden="true" />
-                    {secondaryAction.label}
-                  </Link>
-                </GlassPanel>
-                <GlassPanel depth="float" className="glass-hover rounded-xl">
-                  <Link
-                    href="/shop"
-                    onClick={() => setMobileOpen(false)}
-                    className="focus-ring block rounded-xl py-3 text-center text-sm font-semibold"
-                  >
-                    Verify a Product
-                  </Link>
-                </GlassPanel>
+                <Link
+                  href={secondaryAction.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="focus-ring tnic-button-outline flex items-center justify-center gap-2 rounded-xl py-3 text-center text-sm font-semibold"
+                >
+                  <SecondaryActionIcon className="h-4 w-4 text-accent-cyan" aria-hidden="true" />
+                  {secondaryAction.label}
+                </Link>
+                <Link
+                  href="/shop"
+                  onClick={() => setMobileOpen(false)}
+                  className="focus-ring tnic-button-outline block rounded-xl py-3 text-center text-sm font-semibold"
+                >
+                  Verify a Product
+                </Link>
                 <Link
                   href={primaryAction.href}
                   onClick={() => setMobileOpen(false)}

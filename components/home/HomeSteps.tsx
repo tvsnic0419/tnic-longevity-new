@@ -51,7 +51,7 @@ export function HomeSteps() {
     <section
       id="protocol"
       aria-labelledby="home-steps-heading"
-      className="relative border-t border-border/50 py-20 md:py-28"
+      className="relative border-t border-border/50 py-[var(--section-y)]"
     >
       <CellularDivider hue="var(--accent-emerald)" index="05" label="Protocol" />
       <div className="container-page">

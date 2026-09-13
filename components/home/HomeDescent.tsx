@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useRef, useEffect, useMemo } from "react";
-import { eliteInterventions } from "@/lib/elite-interventions";
+import { eliteInterventions, eliteTierCounts } from "@/lib/elite-interventions";
 import { COMPOUND_COUNT } from "@/lib/library-modules";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { DeferredMoleculeStage, DeferredNetworkStage } from "@/components/home/DeferredCinematicStage";
@@ -46,6 +46,7 @@ const CSS = `
   --panel2: #131a30;
   --line: rgba(150,170,220,0.14);
   --cyan: #5fe3e0;
+  --emerald: #34d399;
   --indigo: #8c8cf5;
   --violet: #b98cf0;
   --gold: #f0c46a;
@@ -142,7 +143,7 @@ const CSS = `
   min-height: 100svh;
   display: flex; flex-direction: column; justify-content: center;
   padding: clamp(24px, 6vw, 80px);
-  max-width: 1240px; margin: 0 auto; width: 100%;
+  max-width: 80rem; margin: 0 auto; width: 100%;
 }
 
 .tnic-kicker {
@@ -157,7 +158,7 @@ const CSS = `
 
 .tnic-h1 {
   font-family: var(--font-display, 'Fraunces', Georgia, serif); font-weight: 400;
-  font-size: clamp(44px, 9vw, 108px); line-height: 0.96;
+  font-size: clamp(40px, 6.4vw, 76px); line-height: 1.02;
   letter-spacing: -0.025em; margin: 0; color: var(--ink);
   opacity: 0; transform: translateY(22px);
   transition: opacity .58s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .04s, transform .58s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .04s;
@@ -176,7 +177,7 @@ const CSS = `
 .tnic-h2 .warm { color: var(--gold); font-style: italic; }
 
 .tnic-lead {
-  font-size: clamp(15px, 2.1vw, 19px); line-height: 1.6;
+  font-size: 1rem; line-height: 1.65;
   color: var(--muted); max-width: 52ch; margin: 22px 0 0;
   opacity: 0; transform: translateY(16px);
   transition: opacity .54s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .1s, transform .54s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .1s;
@@ -185,7 +186,7 @@ const CSS = `
   display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 18px;
   max-width: 720px; color: var(--faint);
   font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+  font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
   opacity: 0; transform: translateY(12px);
   transition: opacity .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .16s, transform .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .16s;
 }
@@ -208,13 +209,22 @@ const CSS = `
 .is-in .tnic-molcard,
 .is-in .tnic-hero-badges,
 .is-in .tnic-paths,
+.is-in .tnic-intel,
 .is-in .tnic-final { opacity: 1; transform: none; }
 
 .tnic-hero {
-  align-items: flex-start;
+  align-items: center;
   text-align: left;
   isolation: isolate;
 }
+.tnic-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+  gap: clamp(18px, 2.4vw, 36px) clamp(24px, 4vw, 64px);
+  align-items: center;
+  width: 100%;
+}
+.tnic-hero-copy { min-width: 0; }
 /* The first screen should feel atmospheric but never empty. These low-contrast
    orbital planes focus the arrival moment without suggesting an actual molecular
    structure or competing with the real render in Act 1. */
@@ -235,9 +245,9 @@ const CSS = `
   border-radius: 50%;
   box-shadow:
     0 0 0 52px color-mix(in srgb, var(--cyan) 5%, transparent),
-    0 0 0 132px color-mix(in srgb, var(--indigo) 3%, transparent),
+    0 0 0 132px color-mix(in srgb, var(--cyan) 3%, transparent),
     0 0 150px 36px color-mix(in srgb, var(--cyan) 8%, transparent);
-  opacity: .9;
+  opacity: .42;
 }
 .tnic-hero::after {
   inset: 16% 4% 14% 46%;
@@ -247,6 +257,11 @@ const CSS = `
   mask-image: radial-gradient(75% 80% at 70% 50%, #000 0%, transparent 72%);
   -webkit-mask-image: radial-gradient(75% 80% at 70% 50%, #000 0%, transparent 72%);
   opacity: .42;
+}
+@media (max-width: 900px) {
+  .tnic-hero { min-height: unset; }
+  .tnic-hero-grid { grid-template-columns: 1fr; gap: 18px; }
+  .tnic-paths { grid-column: auto; }
 }
 @media (max-width: 720px) {
   /* The global nav is fixed; reserve a deliberate arrival margin so the
@@ -269,7 +284,7 @@ const CSS = `
   font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 11px;
   letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
   padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px;
-  background: rgba(14,20,38,0.55); backdrop-filter: blur(6px);
+  background: color-mix(in srgb, var(--panel) 72%, transparent);
 }
 .tnic-hero-badges .pill b { color: var(--cyan); font-weight: 500; }
 .tnic-hero-badges .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
@@ -282,7 +297,7 @@ const CSS = `
    architecture that stays inside the first viewport. */
 .tnic-paths {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;
-  width: min(100%, 780px); margin-top: 28px;
+  width: 100%; margin-top: 4px; grid-column: 1 / -1;
   opacity: 0; transform: translateY(14px);
   transition: opacity .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .26s, transform .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .26s;
 }
@@ -317,14 +332,14 @@ const CSS = `
   .tnic-path:active { transform: translateY(0) scale(.988); transition-duration: .09s; }
   .tnic-hero-badges a.pill:active { transform: scale(.96); }
 }
-.tnic-path.primary { color: #030712; border-color: transparent; background: linear-gradient(135deg, #5fe3e0 0%, #68e5c7 52%, #b8f3d8 100%); box-shadow: 0 10px 30px -16px rgba(95,227,224,.85); }
-.tnic-path.primary:hover { border-color: transparent; background: linear-gradient(135deg, #75ebe7 0%, #77ebcf 52%, #c8f7e2 100%); box-shadow: 0 14px 36px -16px rgba(95,227,224,.95); }
-.tnic-path-index { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10px; letter-spacing: .12em; color: var(--faint); }
+.tnic-path.primary { color: #030712; border-color: transparent; background: linear-gradient(135deg, #00e0ff 0%, #34d399 50%, #6ee7b7 100%); box-shadow: 0 10px 30px -16px rgba(0,224,255,.75); }
+.tnic-path.primary:hover { border-color: transparent; background: linear-gradient(135deg, #4aebff 0%, #4adeb0 50%, #86efc5 100%); box-shadow: 0 14px 36px -16px rgba(0,224,255,.9); }
+.tnic-path-index { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 11px; letter-spacing: .12em; color: var(--faint); }
 .tnic-path.primary .tnic-path-index { color: rgba(3,7,18,.58); }
 .tnic-path-copy { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-.tnic-path-label { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 9px; line-height: 1.2; letter-spacing: .11em; text-transform: uppercase; color: var(--faint); }
+.tnic-path-label { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 11px; line-height: 1.2; letter-spacing: .11em; text-transform: uppercase; color: var(--faint); }
 .tnic-path.primary .tnic-path-label { color: rgba(3,7,18,.62); }
-.tnic-path-name { font-size: 14px; line-height: 1.2; font-weight: 650; }
+.tnic-path-name { font-size: 16px; line-height: 1.2; font-weight: 650; }
 .tnic-path-detail { font-size: 11px; line-height: 1.35; color: var(--muted); }
 .tnic-path.primary .tnic-path-detail { color: rgba(3,7,18,.66); }
 .tnic-path-arr { font-size: 18px; line-height: 1; color: var(--cyan); transition: transform .2s ease; }
@@ -344,7 +359,7 @@ const CSS = `
     min-width: 0;
     gap: 5px;
     padding: 7px 8px;
-    font-size: 8px;
+    font-size: 11px;
     letter-spacing: .09em;
     white-space: nowrap;
   }
@@ -353,13 +368,142 @@ const CSS = `
   /* One primary path earns the full row. The two supporting paths become an
      adjacent comparison, preserving every destination without a three-card
      vertical stack competing with the hero. */
-  .tnic-paths { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; max-width: 440px; margin-top: 18px; }
+  .tnic-paths { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; max-width: 440px; margin-top: 6px; }
   .tnic-path.primary { grid-column: 1 / -1; }
   .tnic-path { min-height: 78px; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; padding: 11px; }
   .tnic-path-index { display: none; }
-  .tnic-path-label { font-size: 8px; letter-spacing: .09em; }
-  .tnic-path-name { font-size: 13px; }
-  .tnic-path-detail { font-size: 10px; line-height: 1.3; }
+  .tnic-path-label { font-size: 11px; letter-spacing: .09em; }
+  .tnic-path-name { font-size: 15px; }
+  .tnic-path-detail { font-size: 11px; line-height: 1.3; }
+}
+
+/* Signature first-viewport instrument — real library counts, not a personal
+   score. A 12-tick hallmark compass with mapped-pathway cardinals. Grounded
+   (no backdrop-filter) so the page keeps its chrome-only frost budget. */
+.tnic-intel {
+  position: relative;
+  justify-self: end;
+  width: min(100%, 420px);
+  padding: 20px 20px 16px;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--cyan) 14%, transparent), transparent 58%),
+    var(--panel);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 24px 60px -28px rgba(0,0,0,.55);
+  opacity: 0; transform: translateY(18px);
+  transition: opacity .58s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .18s, transform .58s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .18s;
+}
+.tnic-intel-kicker {
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--cyan); margin: 0 0 8px;
+}
+.tnic-intel-radar {
+  position: relative;
+  width: min(100%, 300px);
+  margin: 0 auto;
+  aspect-ratio: 1;
+}
+.tnic-intel-radar svg { width: 100%; height: 100%; display: block; }
+.tnic-intel-center {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  pointer-events: none; text-align: center;
+}
+.tnic-intel-center .n {
+  font-family: var(--font-display, 'Fraunces', Georgia, serif);
+  font-size: clamp(2.4rem, 5vw, 3.15rem); font-weight: 500;
+  letter-spacing: -0.04em; line-height: 0.92; color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.tnic-intel-center .l {
+  margin-top: 6px;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint);
+}
+.tnic-intel-metrics {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px; margin-top: 12px;
+}
+.tnic-intel-metric {
+  padding: 10px 8px 9px; border-radius: 14px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel2) 78%, transparent);
+  text-align: center;
+}
+.tnic-intel-metric .n {
+  font-family: var(--font-display, 'Fraunces', Georgia, serif);
+  font-size: 1.35rem; font-weight: 500; letter-spacing: -0.03em;
+  color: var(--cyan); font-variant-numeric: tabular-nums; line-height: 1;
+}
+.tnic-intel-metric .l {
+  display: block; margin-top: 4px;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint);
+}
+.tnic-intel-grades {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px; margin-top: 10px;
+}
+.tnic-grade {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
+  padding: 9px 10px 8px; border-radius: 12px;
+  border: 1px solid var(--line); text-decoration: none;
+  background: color-mix(in srgb, var(--panel2) 70%, transparent);
+  transition: border-color .2s ease, background .2s ease;
+}
+.tnic-grade:hover { border-color: color-mix(in srgb, currentColor 45%, var(--line)); background: color-mix(in srgb, var(--panel2) 92%, transparent); }
+.tnic-grade-A { color: var(--emerald); }
+.tnic-grade-B { color: var(--cyan); }
+.tnic-grade-C { color: var(--amber); }
+.tnic-grade-meter { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
+.tnic-grade-meter i {
+  display: block; width: 3px; border-radius: 1px; background: currentColor; opacity: .18;
+}
+.tnic-grade-meter i:nth-child(1) { height: 6px; }
+.tnic-grade-meter i:nth-child(2) { height: 9px; }
+.tnic-grade-meter i:nth-child(3) { height: 12px; }
+.tnic-grade-meter i.on { opacity: 1; }
+.tnic-grade-k {
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint);
+}
+.tnic-grade-n {
+  font-family: var(--font-display, 'Fraunces', Georgia, serif);
+  font-size: 1.15rem; font-weight: 500; letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums; line-height: 1; color: inherit;
+}
+.tnic-grade-l {
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: 11px; letter-spacing: .04em; color: var(--faint);
+}
+.tnic-intel-note {
+  margin: 12px 0 0;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: 11px; letter-spacing: .04em; color: var(--faint); line-height: 1.45;
+}
+@media (max-width: 900px) {
+  .tnic-intel {
+    justify-self: stretch; width: 100%; padding: 14px; border-radius: 20px;
+    display: grid;
+    grid-template-columns: 132px minmax(0, 1fr);
+    grid-template-areas:
+      "kicker kicker"
+      "radar metrics"
+      "grades grades"
+      "note note";
+    gap: 8px 14px;
+    align-items: center;
+  }
+  .tnic-intel-kicker { grid-area: kicker; margin: 0; }
+  .tnic-intel-radar { grid-area: radar; width: 132px; margin: 0; }
+  .tnic-intel-center .n { font-size: 1.7rem; }
+  .tnic-intel-metrics { grid-area: metrics; margin-top: 0; }
+  .tnic-intel-grades { grid-area: grades; margin-top: 0; }
+  .tnic-intel-note { grid-area: note; margin-top: 2px; }
 }
 
 .tnic-cue {
@@ -663,11 +807,13 @@ const CSS = `
   .tnic-descent .tnic-h1,
   .tnic-descent .tnic-h2,
   .tnic-descent .tnic-lead,
+  .tnic-descent .tnic-trustline,
   .tnic-descent .tnic-note,
   .tnic-descent .tnic-stage,
   .tnic-descent .tnic-molcard,
   .tnic-descent .tnic-hero-badges,
   .tnic-descent .tnic-paths,
+  .tnic-descent .tnic-intel,
   .tnic-descent .tnic-final {
     opacity: 1 !important;
     transform: none !important;
@@ -681,10 +827,10 @@ const CSS = `
 
 type TierKey = "established" | "mechanistic" | "exploratory" | "caution";
 const TIER: Record<TierKey, { color: string; label: string }> = {
-  established: { color: "#5fe3e0", label: "Established" },
-  mechanistic: { color: "#8c8cf5", label: "Mechanistic" },
-  exploratory: { color: "#b98cf0", label: "Exploratory" },
-  caution:     { color: "#eaa24a", label: "Caution" },
+  established: { color: "#34d399", label: "Established" },
+  mechanistic: { color: "#5fe3e0", label: "Mechanistic" },
+  exploratory: { color: "#eaa24a", label: "Exploratory" },
+  caution:     { color: "#f08a7a", label: "Caution" },
 };
 
 // Real TNiC library compounds — the marquee nodes of the synergy graph. Every
@@ -854,6 +1000,25 @@ export function HomeDescent() {
   const s3 = useRef<HTMLElement | null>(null);
   const s4 = useRef<HTMLElement | null>(null);
   const sectionRefs = useMemo(() => [s0, s1, s2, s3, s4], []);
+  const intel = useMemo(() => {
+    const studies = eliteInterventions.reduce((n, e) => n + e.studyCount, 0);
+    const tierA = eliteTierCounts.A ?? 0;
+    const tierB = eliteTierCounts.B ?? 0;
+    const tierC = eliteTierCounts.C ?? 0;
+    const ticks = Array.from({ length: 12 }, (_, i) => {
+      const a = (i / 12) * Math.PI * 2 - Math.PI / 2;
+      return {
+        x1: 120 + Math.cos(a) * 92,
+        y1: 120 + Math.sin(a) * 92,
+        x2: 120 + Math.cos(a) * 102,
+        y2: 120 + Math.sin(a) * 102,
+        px: 120 + Math.cos(a) * 68,
+        py: 120 + Math.sin(a) * 68,
+      };
+    });
+    const poly = ticks.map((t) => `${t.px.toFixed(1)},${t.py.toFixed(1)}`).join(' ');
+    return { studies, tierA, tierB, tierC, ticks, poly };
+  }, []);
 
   useEffect(() => {
     reducedRef.current = reduced;
@@ -1079,53 +1244,125 @@ export function HomeDescent() {
 
       {/* ACT 0 — ARRIVE */}
       <section ref={s0} data-idx="0" id="arrive" className="tnic-act tnic-hero is-in">
-        <p className="tnic-kicker">Evidence-Graded Longevity Library</p>
-        <h1 className="tnic-h1">Evidence-based <em>longevity</em>,<br />without the hype.</h1>
-        <p className="tnic-lead">
-          A free, PubMed-backed library for understanding longevity supplements,
-          the 12 Hallmarks of Aging, and the evidence behind each compound —
-          before you buy or build a stack.
-        </p>
-        <div className="tnic-trustline" aria-label="TNiC trust signals">
-          <span>Human evidence graded</span>
-          <span>PubMed citations</span>
-          <span>No pay-for-placement</span>
-          <span>Free and privacy-first</span>
-        </div>
-        <div className="tnic-hero-badges">
-          <Link href="/elite-8" className="pill focus-ring"><span className="dot" /><b>{eliteInterventions.length}</b>&nbsp;elite interventions</Link>
-          <Link href="/library/compounds" className="pill focus-ring"><span className="dot" /><b>{COMPOUND_COUNT}</b>&nbsp;graded compounds</Link>
-          <Link href="/hallmarks" className="pill focus-ring"><span className="dot" /><b>12</b>&nbsp;hallmarks of aging</Link>
-          <Link href="/trust/methodology" className="pill focus-ring"><span className="dot" /><b>A–C</b>&nbsp;evidence tiers</Link>
-        </div>
-        <div className="tnic-paths" aria-label="Choose where to begin">
-          <Link href="/elite-8" className="tnic-path primary focus-ring">
-            <span className="tnic-path-index">01</span>
-            <span className="tnic-path-copy">
-              <span className="tnic-path-label">Start with confidence</span>
-              <span className="tnic-path-name">Elite Eight</span>
-              <span className="tnic-path-detail">8 dose-matched picks · cited human trials</span>
-            </span>
-            <span className="tnic-path-arr" aria-hidden="true">→</span>
-          </Link>
-          <Link href="/library" className="tnic-path focus-ring">
-            <span className="tnic-path-index">02</span>
-            <span className="tnic-path-copy">
-              <span className="tnic-path-label">Explore the science</span>
-              <span className="tnic-path-name">The Library</span>
-              <span className="tnic-path-detail">100 graded compounds · 12 hallmarks</span>
-            </span>
-            <span className="tnic-path-arr" aria-hidden="true">→</span>
-          </Link>
-          <Link href="/nico" className="tnic-path focus-ring">
-            <span className="tnic-path-index">03</span>
-            <span className="tnic-path-copy">
-              <span className="tnic-path-label">Get your starting point</span>
-              <span className="tnic-path-name">NICO Starter</span>
-              <span className="tnic-path-detail">Nine questions · adjustable stack plan</span>
-            </span>
-            <span className="tnic-path-arr" aria-hidden="true">→</span>
-          </Link>
+        <div className="tnic-hero-grid">
+          <div className="tnic-hero-copy">
+            <p className="tnic-kicker">Evidence-Graded Longevity Library</p>
+            <h1 className="tnic-h1">Evidence-based <em>longevity</em>,<br />without the hype.</h1>
+            <p className="tnic-lead">
+              A free, PubMed-backed library for understanding longevity supplements,
+              the 12 Hallmarks of Aging, and the evidence behind each compound —
+              before you buy or build a stack.
+            </p>
+            <div className="tnic-trustline" aria-label="TNiC trust signals">
+              <span>Human evidence graded</span>
+              <span>PubMed citations</span>
+              <span>No pay-for-placement</span>
+              <span>Free and privacy-first</span>
+            </div>
+          </div>
+
+          <aside className="tnic-intel" aria-label="Library instrument — live counts from the published library">
+            <p className="tnic-intel-kicker">Library instrument</p>
+            <div className="tnic-intel-radar">
+              <svg viewBox="0 0 240 240" role="img" aria-hidden="true">
+                <defs>
+                  <radialGradient id="tnic-intel-glow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="rgba(95,227,224,0.18)" />
+                    <stop offset="70%" stopColor="rgba(95,227,224,0.03)" />
+                    <stop offset="100%" stopColor="rgba(95,227,224,0)" />
+                  </radialGradient>
+                </defs>
+                <circle cx="120" cy="120" r="110" fill="url(#tnic-intel-glow)" />
+                <circle cx="120" cy="120" r="102" fill="none" stroke="rgba(150,170,220,0.16)" strokeWidth="1" />
+                <circle cx="120" cy="120" r="78" fill="none" stroke="rgba(95,227,224,0.18)" strokeWidth="1" />
+                <circle cx="120" cy="120" r="54" fill="none" stroke="rgba(150,170,220,0.12)" strokeWidth="1" />
+                <polygon points={intel.poly} fill="rgba(95,227,224,0.10)" stroke="rgba(95,227,224,0.45)" strokeWidth="1.25" />
+                {intel.ticks.map((t, i) => (
+                  <line key={i} x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2} stroke={i % 3 === 0 ? '#5fe3e0' : 'rgba(150,170,220,0.45)'} strokeWidth={i % 3 === 0 ? 2 : 1} />
+                ))}
+                <circle cx="120" cy="120" r="36" fill="none" stroke="rgba(95,227,224,0.35)" strokeWidth="1.5" />
+                <text x="120" y="22" textAnchor="middle" fill="#5fe3e0" fontSize="11" letterSpacing="1.6" fontFamily="ui-monospace, monospace">NAD+</text>
+                <text x="218" y="124" textAnchor="middle" fill="#96a0bc" fontSize="11" letterSpacing="1.4" fontFamily="ui-monospace, monospace">mTOR</text>
+                <text x="120" y="230" textAnchor="middle" fill="#34d399" fontSize="11" letterSpacing="1.6" fontFamily="ui-monospace, monospace">AMPK</text>
+                <text x="22" y="124" textAnchor="middle" fill="#96a0bc" fontSize="11" letterSpacing="1.4" fontFamily="ui-monospace, monospace">NRF2</text>
+              </svg>
+              <div className="tnic-intel-center">
+                <span className="n">{COMPOUND_COUNT}</span>
+                <span className="l">graded compounds</span>
+              </div>
+            </div>
+            <div className="tnic-intel-metrics">
+              <div className="tnic-intel-metric">
+                <span className="n">{eliteInterventions.length}</span>
+                <span className="l">Elite</span>
+              </div>
+              <div className="tnic-intel-metric">
+                <span className="n">{intel.studies}</span>
+                <span className="l">Trials cited</span>
+              </div>
+              <div className="tnic-intel-metric">
+                <span className="n">12</span>
+                <span className="l">Hallmarks</span>
+              </div>
+            </div>
+            <div className="tnic-intel-grades" role="list" aria-label="Elite-set evidence mix — A clinical, B emerging, C preclinical">
+              {([
+                ['A', 'Clinical', intel.tierA, 3],
+                ['B', 'Emerging', intel.tierB, 2],
+                ['C', 'Preclinical', intel.tierC, 1],
+              ] as const).map(([tier, label, n, filled]) => (
+                <Link
+                  key={tier}
+                  href="/trust/methodology"
+                  className={`tnic-grade tnic-grade-${tier} focus-ring`}
+                  role="listitem"
+                  aria-label={`Tier ${tier} ${label}: ${n} elite interventions. See grading methodology.`}
+                >
+                  <span className="tnic-grade-meter" aria-hidden="true">
+                    <i className={filled >= 1 ? 'on' : undefined} />
+                    <i className={filled >= 2 ? 'on' : undefined} />
+                    <i className={filled >= 3 ? 'on' : undefined} />
+                  </span>
+                  <span className="tnic-grade-k">Tier {tier}</span>
+                  <span className="tnic-grade-n">{n}</span>
+                  <span className="tnic-grade-l">{label}</span>
+                </Link>
+              ))}
+            </div>
+            <p className="tnic-intel-note">
+              12 ticks = 12 hallmarks, equally mapped. Cardinals are pathways this library covers — not a personal score.
+            </p>
+          </aside>
+
+          <div className="tnic-paths" aria-label="Choose where to begin">
+            <Link href="/elite-8" className="tnic-path primary focus-ring">
+              <span className="tnic-path-index">01</span>
+              <span className="tnic-path-copy">
+                <span className="tnic-path-label">Start with confidence</span>
+                <span className="tnic-path-name">Elite Eight</span>
+                <span className="tnic-path-detail">8 dose-matched picks · cited human trials</span>
+              </span>
+              <span className="tnic-path-arr" aria-hidden="true">→</span>
+            </Link>
+            <Link href="/library" className="tnic-path focus-ring">
+              <span className="tnic-path-index">02</span>
+              <span className="tnic-path-copy">
+                <span className="tnic-path-label">Explore the science</span>
+                <span className="tnic-path-name">The Library</span>
+                <span className="tnic-path-detail">100 graded compounds · 12 hallmarks</span>
+              </span>
+              <span className="tnic-path-arr" aria-hidden="true">→</span>
+            </Link>
+            <Link href="/nico" className="tnic-path focus-ring">
+              <span className="tnic-path-index">03</span>
+              <span className="tnic-path-copy">
+                <span className="tnic-path-label">Get your starting point</span>
+                <span className="tnic-path-name">NICO Starter</span>
+                <span className="tnic-path-detail">Nine questions · adjustable stack plan</span>
+              </span>
+              <span className="tnic-path-arr" aria-hidden="true">→</span>
+            </Link>
+          </div>
         </div>
         <div className="tnic-cue"><span className="bar" />descend</div>
       </section>

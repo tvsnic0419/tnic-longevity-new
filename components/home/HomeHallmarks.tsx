@@ -36,7 +36,7 @@ export function HomeHallmarks() {
     <section
       id="mechanisms"
       aria-labelledby="home-hallmarks-heading"
-      className="relative border-t border-border/50 py-20 md:py-28"
+      className="relative border-t border-border/50 py-[var(--section-y)]"
     >
       <CellularDivider hue="var(--accent-emerald)" index="04" label="Mechanisms" />
       <div className="container-page">
