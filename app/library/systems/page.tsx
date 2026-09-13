@@ -1,6 +1,8 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
+import { Network } from 'lucide-react';
 import { SystemsPage } from '@/components/library/SystemsPage';
+import { PageHeader } from '@/components/ui/PageHeader';
 
 export const metadata: Metadata = {
   // Absolute title so the `%s | TNiC` template doesn't double the brand.
@@ -17,8 +19,33 @@ export const metadata: Metadata = {
 
 export default function SystemsRoute() {
   return (
-    <Suspense fallback={<div className="min-h-screen canvas-scrim" aria-busy="true" />}>
-      <SystemsPage />
-    </Suspense>
+    // The page's identity is rendered HERE, on the server. <SystemsPage/> is a
+    // client component that reads ?hallmark= via useSearchParams(), which makes
+    // React bail this Suspense boundary to client-side rendering during
+    // prerender — the initial HTML carried a BAILOUT_TO_CLIENT_SIDE_RENDERING
+    // marker and an empty <main>, so this route published no heading, no prose
+    // and no content at all to a crawler or an answer engine. The interactive
+    // map stays in the island; what the page *is* no longer depends on JS.
+    // See STYLE_GUIDE §14.
+    <div className="min-h-screen canvas-scrim pt-6 md:pt-8">
+      <div className="max-w-7xl mx-auto px-6">
+        <PageHeader
+          icon={Network}
+          eyebrow="Systems Synthesis"
+          title="Hallmark Systems Map"
+          description="How do the 12 Hallmarks of Aging interact? Select a hallmark to explore its cross-system effects, molecular leverage score, shared pathways, and emergent synergies."
+          theme="violet"
+          align="left"
+          context={{
+            what: 'Cross-hallmark relationships, cascade propagation, and emergent synergy effects for all 12 Hallmarks of Aging.',
+            why: 'Targeting one hallmark always ripples. Understanding leverage points and feedback loops lets you design interventions that address multiple hallmarks simultaneously.',
+            next: 'Select any hallmark to explore its downstream cascade. High leverage-score hallmarks (mito, senescence, inflammation) affect the most downstream systems.',
+          }}
+        />
+      </div>
+      <Suspense fallback={<div className="min-h-screen" aria-busy="true" />}>
+        <SystemsPage />
+      </Suspense>
+    </div>
   );
 }

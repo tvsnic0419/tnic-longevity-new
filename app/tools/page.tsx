@@ -1,5 +1,7 @@
 import { Suspense } from 'react';
+import { Calculator } from 'lucide-react';
 import { ToolsHub } from '@/components/tools/ToolsHub';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
@@ -47,6 +49,21 @@ export default function ToolsPage() {
         primary={{ href: '/nico', label: 'Find your personalized stack' }}
         secondary={{ href: '/library', label: 'Browse the library' }}
       />
+      {/* Identity on the server, ahead of the client island — see the note in
+          app/stacks/page.tsx and STYLE_GUIDE §14. */}
+      <section className="canvas-scrim pt-6 md:pt-8">
+        <div className="container-page">
+          <PageHeader
+            icon={Calculator}
+            eyebrow="Interactive Tools"
+            title="Longevity Tools"
+            description={`${toolsRegistry.length} evidence-graded calculators that turn library knowledge into practical models. Rule-based, transparent reasoning — not generative AI.`}
+            theme="violet"
+            cinematic
+            as="h1"
+          />
+        </div>
+      </section>
       <Suspense
         fallback={
           <div className="container-page py-12">

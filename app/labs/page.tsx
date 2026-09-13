@@ -1,5 +1,9 @@
 import { Suspense } from 'react';
+import { FlaskConical } from 'lucide-react';
 import { LabHub } from '@/components/labs/LabHub';
+import { PageShell } from '@/components/ui/PageShell';
+import { PageHeader } from '@/components/ui/PageHeader';
+import { getHubContext } from '@/lib/hub-context';
 import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
@@ -55,9 +59,24 @@ export default function LabsPage() {
         primary={{ href: '/nico', label: 'Find your personalized stack' }}
         secondary={{ href: '/library', label: 'Browse the library' }}
       />
-      <Suspense fallback={<SectionSkeleton height="lg" />}>
-        <LabHub />
-      </Suspense>
+      {/* Identity on the server, ahead of the client island — see the note in
+          app/stacks/page.tsx and STYLE_GUIDE §14. LabHub calls
+          useSearchParams(), so nothing inside its boundary reaches the initial
+          HTML. */}
+      <PageShell>
+        <PageHeader
+          icon={FlaskConical}
+          eyebrow="Lab Analysis & Tracking Hub"
+          title="Your Biomarkers. Your Data. Your Insights."
+          description="Log lab results, visualize trends, map risks to the 12 Hallmarks of Aging, and get stack-aware recommendations — all processed locally in your browser."
+          theme="rose"
+          variant="handoff"
+          context={getHubContext('labs')}
+        />
+        <Suspense fallback={<SectionSkeleton height="lg" />}>
+          <LabHub />
+        </Suspense>
+      </PageShell>
     </>
   );
 }

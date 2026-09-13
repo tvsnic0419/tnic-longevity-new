@@ -1,6 +1,6 @@
 # TNiC Design System & Style Guide
 
-> Version 1.3 · September 2026  
+> Version 1.4 · September 2026  
 > Governs typography, spacing, components, accessibility, and page patterns across tnic.help.  
 > v1.1 documents the cinematic viz family (§7, §12) that the premium hubs are built on.  
 > v1.2 corrects the drifted §2 color values, documents the signal roles, the
@@ -8,7 +8,9 @@
 > `SelectableChip`, `ExternalAction`, `InteractiveSciencePanel`) and the
 > hit-area rules.  
 > v1.3 adds §13 — the atmosphere budget, the `.action-link` control floor, and
-> the tap-target gate that enforces it.
+> the tap-target gate that enforces it.  
+> v1.4 adds §14 — what a page must say before JavaScript runs, and the route
+> audit that enforces it.
 
 ---
 
@@ -456,6 +458,80 @@ differently and **exits non-zero on the second**:
 The raw `smallTap` number conflates the two and is not actionable on its own:
 on `/library` it read 135, of which 120 were PMID and glossary links sitting in
 prose. Read the `actionable` count.
+
+---
+
+## 14. What a page says before JavaScript runs
+
+*Added v1.4, from auditing the server-rendered HTML of all 227 sitemap routes.*
+
+A page's identity — its `<h1>`, its description, the prose that says what it is
+— must be in the **initial HTML**. Not after hydration. That HTML is what a
+crawler indexes, what an AI answer engine quotes, what a screen reader builds
+its document outline from, and what a reader on a slow connection sees first.
+
+### The trap
+
+`useSearchParams()` in a client component makes React **bail the enclosing
+Suspense boundary to client-side rendering** during prerender. Everything
+inside that boundary is absent from the initial HTML. The boundary is the unit
+— not the hook, not the component that calls it.
+
+This is subtle enough that it got past lint, types, 714 tests and a green build
+on seven routes at once. Measured on 2026-09-13:
+
+- `/stacks`, `/labs`, `/learn`, `/shop`, `/tools` — five top-level nav hubs —
+  shipped **no `<h1>` at all**, because the `PageHeader` that carries it lived
+  inside the island.
+- `/library/systems` and `/tools/pathway-architect` shipped an **empty
+  `<main>`** with a `BAILOUT_TO_CLIENT_SIDE_RENDERING` marker. The second had
+  no `<main>` element at all: with no Suspense boundary of its own, the bailout
+  climbed to the root and took the layout's `<main>` with it.
+- `/learn` rendered a **second `CinematicHubHero`** inside the island, under the
+  page's own, with different copy — invisible in the HTML, two stacked heroes
+  once hydrated.
+
+### The rule
+
+**Identity renders in the server page. Interactivity renders in the island.**
+
+```tsx
+// app/<hub>/page.tsx — server
+<CinematicHubHero … />          {/* hero: server */}
+<PageShell>
+  <PageHeader … />              {/* the <h1>: server */}
+  <Suspense fallback={…}>
+    <HubClientIsland />         {/* useSearchParams() lives in here */}
+  </Suspense>
+</PageShell>
+```
+
+Two corollaries worth stating, because both bit:
+
+1. **Every `useSearchParams()` island needs its own `<Suspense>`.** Without
+   one, the bailout escalates to the nearest boundary above — which may be the
+   root layout, taking `<main>` with it.
+2. **A segment `loading.tsx` is a Suspense boundary around the whole
+   segment.** On an async route it ships the skeleton *as* `<main>` and streams
+   the real content in after `</footer>`. Wrap the part that actually awaits
+   something instead; a loading state scoped to that part costs nothing.
+
+### Sitemap hygiene
+
+A sitemap entry that the page canonicalises away is a contradiction — the
+sitemap asks for indexing, the page declines it. Don't list query-parameter
+variants of a canonical page (`/tools?tab=…` were listed, all eight sharing
+`/tools`' title and canonical).
+
+### The gate
+
+`npm run audit:routes` fetches every sitemap route and checks, per route:
+status · `<title>` present and unique · description present and unique ·
+canonical present and self-referential · exactly one `<h1>` · `<main>` holds
+real text; and across routes: every internal link target resolves, and every
+route is linked from somewhere. It runs in CI after the build and **fails the
+build** on any of those. Run it before and after any change to a page shell,
+a layout, or a client island's boundary.
 
 ---
 

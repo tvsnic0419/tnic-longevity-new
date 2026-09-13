@@ -1,5 +1,10 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
+import { Layers } from 'lucide-react';
+import { PageShell } from '@/components/ui/PageShell';
+import { PageHeader } from '@/components/ui/PageHeader';
+import { getHubContext } from '@/lib/hub-context';
+import { eliteStacks } from '@/lib/stacks-library';
 import { StacksLibrary } from '@/components/stacks/StacksLibrary';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
@@ -70,9 +75,28 @@ export default function StacksPage() {
           <span className="ml-1 text-accent-violet" aria-hidden="true">→</span>
         </Link>
       </div>
-      <Suspense fallback={<div className="container-page py-20 text-muted-foreground">Loading stacks…</div>}>
-        <StacksLibrary />
-      </Suspense>
+      {/* The page's identity — <h1> included — is rendered HERE, on the server,
+          not inside <StacksLibrary/>. That component calls useSearchParams(),
+          which makes React bail its Suspense boundary to client-side rendering
+          during prerender, so anything inside it is absent from the initial
+          HTML. The header used to live in there, and the result was a hub page
+          that shipped no <h1> at all to a crawler, an answer engine, or a
+          screen reader's document outline. See STYLE_GUIDE §14. */}
+      <PageShell>
+        <PageHeader
+          icon={Layers}
+          eyebrow="Stacks & Protocols"
+          title="Stack Architect"
+          description="Pre-built evidence-graded protocols with dosing, monitoring, and cost breakdowns. Build custom stacks with real-time synergy and contraindication analysis."
+          meta={`${eliteStacks.length} elite stacks · ${compounds.length} stack-buildable compounds · Educational only`}
+          theme="violet"
+          variant="handoff"
+          context={getHubContext('stacks')}
+        />
+        <Suspense fallback={<div className="py-20 text-muted-foreground">Loading stacks…</div>}>
+          <StacksLibrary />
+        </Suspense>
+      </PageShell>
     </>
   );
 }

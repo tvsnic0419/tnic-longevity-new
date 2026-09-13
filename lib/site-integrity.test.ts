@@ -81,8 +81,13 @@ describe('site data integrity', () => {
     const contextBar = readFileSync(resolve(process.cwd(), 'components/os/ContextBar.tsx'), 'utf8');
     const decisionSteps = readFileSync(resolve(process.cwd(), 'components/ui/DecisionSteps.tsx'), 'utf8');
     const home = readFileSync(resolve(process.cwd(), 'components/home/HomeDescent.tsx'), 'utf8');
-    const labs = readFileSync(resolve(process.cwd(), 'components/labs/LabHub.tsx'), 'utf8');
-    const stacks = readFileSync(resolve(process.cwd(), 'components/stacks/StacksLibrary.tsx'), 'utf8');
+    // The labs/stacks PageHeaders moved from these client islands up into their
+    // server pages, so the <h1> ships in the initial HTML instead of being
+    // stranded behind a useSearchParams() bailout (STYLE_GUIDE §14). The
+    // assertion is unchanged — the handoff variant must still be what those two
+    // hubs use — only the file it reads it from.
+    const labs = readFileSync(resolve(process.cwd(), 'app/labs/page.tsx'), 'utf8');
+    const stacks = readFileSync(resolve(process.cwd(), 'app/stacks/page.tsx'), 'utf8');
     const pageHeader = readFileSync(resolve(process.cwd(), 'components/ui/PageHeader.tsx'), 'utf8');
     const css = readFileSync(resolve(process.cwd(), 'app/globals.css'), 'utf8');
     const foundationCss = readFileSync(resolve(process.cwd(), 'components/ui/FlagshipFoundation.module.css'), 'utf8');

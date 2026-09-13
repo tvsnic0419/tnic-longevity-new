@@ -1,7 +1,9 @@
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Scale } from 'lucide-react';
 import type { Metadata } from 'next';
 import { StructuredData } from '@/components/seo/StructuredData';
+import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { HeadToHeadCompare } from '@/components/library/HeadToHeadCompare';
 import { HeadToHeadPicker } from '@/components/library/HeadToHeadPicker';
@@ -50,10 +52,49 @@ export async function generateMetadata({
   });
 }
 
-export default async function HeadToHeadPage({ searchParams }: { searchParams: SearchParams }) {
+/**
+ * The half of the page that depends on ?a=&b=, isolated behind its own Suspense
+ * boundary so awaiting the params cannot hold up the page's identity.
+ *
+ * This route previously carried a segment `loading.tsx`. Its own doc comment
+ * explains why that pattern is wrong — a segment loading.tsx wraps the subtree
+ * in a boundary that sits inside SubPageLayout's <main>, so the skeleton ships
+ * as <main> and the real content streams in after </footer> — and then argued
+ * the cost was acceptable here because it is only one route. Measured, the
+ * failure was identical in kind: </main> closed at byte 51,087, <footer> opened
+ * at 51,100, and all 318 KB of the comparison arrived afterwards. Scoping the
+ * boundary to the part that actually awaits something keeps the loading state
+ * and puts the content back inside <main>.
+ */
+async function HeadToHeadResult({
+  searchParams,
+  options,
+}: {
+  searchParams: SearchParams;
+  options: ReturnType<typeof comparableCompounds>;
+}) {
   const params = await searchParams;
   const { a, b } = resolvePair(params.a, params.b);
   const result = buildHeadToHead(a, b);
+
+  return (
+    <>
+      <div className="mt-6">
+        <HeadToHeadPicker options={options} a={a} b={b} />
+      </div>
+
+      {result ? (
+        <HeadToHeadCompare result={result} />
+      ) : (
+        <p className="premium-card p-6 mt-8 text-body-sm text-muted-foreground">
+          Those two compounds can&apos;t be compared. Pick a different pair above.
+        </p>
+      )}
+    </>
+  );
+}
+
+export default function HeadToHeadPage({ searchParams }: { searchParams: SearchParams }) {
   const options = comparableCompounds();
 
   const schemas = [
@@ -85,17 +126,9 @@ export default async function HeadToHeadPage({ searchParams }: { searchParams: S
           align="left"
         />
 
-        <div className="mt-6">
-          <HeadToHeadPicker options={options} a={a} b={b} />
-        </div>
-
-        {result ? (
-          <HeadToHeadCompare result={result} />
-        ) : (
-          <p className="premium-card p-6 mt-8 text-body-sm text-muted-foreground">
-            Those two compounds can&apos;t be compared. Pick a different pair above.
-          </p>
-        )}
+        <Suspense fallback={<div className="mt-6"><SectionSkeleton height="lg" /></div>}>
+          <HeadToHeadResult searchParams={searchParams} options={options} />
+        </Suspense>
       </div>
     </div>
   );

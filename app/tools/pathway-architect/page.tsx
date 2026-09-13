@@ -1,4 +1,7 @@
+import { Suspense } from 'react';
+import { Network } from 'lucide-react';
 import { PathwayArchitect } from '@/components/tools/PathwayArchitect';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildBreadcrumbSchema, buildArticleSchema } from '@/lib/seo';
 import { seoRoutes } from '@/lib/seo-routes';
@@ -55,7 +58,28 @@ export default function PathwayArchitectPage() {
   return (
     <>
       <StructuredData schemas={buildPathwayArchitectSchemas()} />
-      <PathwayArchitect />
+      {/* Identity on the server. <PathwayArchitect/> reads its protocol from
+          ?c= via useSearchParams(), so its whole subtree bailed to client-side
+          rendering at prerender: this route shipped a BAILOUT marker, no <h1>,
+          and not even a <main> element in the initial HTML. See
+          STYLE_GUIDE §14. */}
+      <div className="container-page pt-10 md:pt-14">
+        <PageHeader
+          icon={Network}
+          eyebrow="Interactive Tool"
+          title="Pathway Architect"
+          description={`${COMPOUND_DB.length} evidence-graded compounds mapped to ${Object.keys(PATHWAY_LABELS).length} molecular pathways. Toggle cards to build a protocol — synergy, redundancy, and interaction cautions surface live from the same engine that powers the Compound Intelligence Engine.`}
+          theme="violet"
+          as="h1"
+        />
+      </div>
+      {/* The island needs a Suspense boundary of its own. Without one, the
+          useSearchParams() bailout has nothing nearer to bail than the root, so
+          it took app/tools/layout.tsx's <main> with it — this route rendered no
+          <main> element at all. Bounded here, the bailout stops at the tool. */}
+      <Suspense fallback={<div className="container-page py-20 text-muted-foreground" aria-busy="true">Loading the architect…</div>}>
+        <PathwayArchitect />
+      </Suspense>
     </>
   );
 }

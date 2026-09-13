@@ -17,6 +17,7 @@
     "verify:pmids": "node scripts/verify-pmids.mjs",
     "molecules:fetch": "node scripts/fetch-molecule-geometry.mjs",
     "audit:ui": "node scripts/audit-ui.mjs",
+    "audit:routes": "node scripts/audit-routes.mjs",
     "ci": "npm run test && npm run build"
   },
   "dependencies": {

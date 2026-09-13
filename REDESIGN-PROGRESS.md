@@ -4,6 +4,102 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-13 (second pass) — what the pages say before JavaScript runs
+
+**The question asked:** find the highest functional and coherence upgrade,
+implement it, ship it.
+
+**How it was found.** `audit:ui` measures nine pages in a browser. It cannot
+see a property of the whole route set — two pages claiming the same title, a
+canonical pointing elsewhere, a page with no heading. So this pass started by
+building a second instrument, `scripts/audit-routes.mjs` (`npm run
+audit:routes`), which fetches **every route in the sitemap** and reads its
+server-rendered HTML: status, title, description, canonical, `<h1>` count,
+whether `<main>` holds real text, whether every internal link resolves, and
+whether every route is linked from anywhere.
+
+First run: **25 hard failures, 8 warnings, across 234 routes.** Lint, types,
+714 tests and the build were all green at the same moment.
+
+**What it found — one root cause under almost all of it.**
+
+`useSearchParams()` in a client component makes React bail the enclosing
+Suspense boundary to client-side rendering during prerender. Everything inside
+that boundary is absent from the initial HTML. Seven routes had their page
+identity inside such a boundary:
+
+1. **Five top-level nav hubs shipped no `<h1>` at all** — `/stacks`, `/labs`,
+   `/learn`, `/shop`, `/tools`. The `PageHeader` that carries the `<h1>` lived
+   inside the client island. STYLE_GUIDE §7 documents the opposite ("the real
+   `<h1>` lives in the PageHeader") — the pattern was written down and not
+   delivered.
+2. **Two routes shipped an empty `<main>`** — `/library/systems` and
+   `/tools/pathway-architect`, both carrying the literal
+   `BAILOUT_TO_CLIENT_SIDE_RENDERING` marker CLAUDE.md §3 names as the symptom.
+   Pathway Architect had **no `<main>` element at all**: with no Suspense
+   boundary of its own the bailout climbed to the root and took the layout's
+   `<main>` with it.
+3. **`/library/compare/head-to-head` streamed its content after the footer** —
+   `</main>` closed at byte 51,087, `<footer>` opened at 51,100, and all 318 KB
+   of the comparison arrived afterwards. Cause: a segment `loading.tsx`, the
+   exact pattern PR #180 removed from 142 routes. Its own doc comment explains
+   why that is wrong and then argues the cost is acceptable here because it is
+   one route; measured, the failure is identical in kind.
+4. **`/learn` rendered two hero bands** — `LearnCenter` carried a second
+   `CinematicHubHero` under the page's own, with different copy. Invisible in
+   the HTML, two stacked heroes once the island hydrated.
+5. **Eight sitemap URLs shared one title** — `/tools` plus seven
+   `/tools?tab=…` variants, every one of them canonicalising back to `/tools`.
+   A sitemap entry the page canonicalises away is a contradiction.
+
+**Shipped.**
+
+- **Identity moved to the server page on all seven routes** — hero and
+  `PageHeader` above the `<Suspense>`, interactivity below it. Documented as
+  STYLE_GUIDE §14.
+- **`/tools/pathway-architect` got a Suspense boundary of its own**, so the
+  bailout stops at the tool instead of the root.
+- **`/library/compare/head-to-head`**: `loading.tsx` deleted, the awaiting half
+  split into `HeadToHeadResult` behind a scoped boundary. Loading state kept,
+  content back inside `<main>`.
+- **`/learn`**: duplicate hero and nested `PageShell` removed.
+- **Sitemap**: the seven `?tab=` entries dropped.
+- **`npm run audit:routes` runs in CI after the build and fails it.** This
+  class of defect is invisible to lint, types, tests and the build — all four
+  were green while five hubs published no heading.
+
+**Measured result.**
+
+| | before | after |
+|---|---|---|
+| hard failures | **25** | **0** |
+| warnings | 8 | 0 |
+| routes with no `<h1>` | 7 (14 incl. `?tab=`) | 0 |
+| routes with empty `<main>` | 3 | 0 |
+| routes with a wrong canonical | 7 | 0 |
+| duplicate-title groups | 1 (8 URLs) | 0 |
+
+Per-route, `<main>` text in the initial HTML: `/stacks` 0→3,190 chars,
+`/labs` 0→1,998, `/learn` 0→6,242, `/shop` 0→1,834, `/tools` 0→1,354,
+`/library/systems` 0→678, `/tools/pathway-architect` 0→2,085,
+`/library/compare/head-to-head` 0→679. Each now ships exactly one `<h1>`.
+
+**One guardrail was repointed, not weakened.** `site-integrity.test.ts`
+asserted `variant="handoff"` appeared in `LabHub.tsx` and `StacksLibrary.tsx`.
+That markup moved up into `app/labs/page.tsx` and `app/stacks/page.tsx`. The
+assertion is unchanged — those two hubs must still use the handoff variant —
+only the file it reads.
+
+**Not touched:** compound data, PMIDs, doses, the homepage, the atmosphere
+work from the first pass.
+
+**Checks:** `npm run lint` (0 errors, 3 pre-existing warnings) · `npm run
+typecheck` clean · `npm test` 58 files / 714 tests passed · `npm run build`
+green · `npm run audit:routes` exit 0 (0 fail, 0 warn) · `npm run audit:ui`
+exit 0 (actionable sub-24px controls: 0, axe violations: 0).
+
+**Rollback:** `git revert` the merge of this branch.
+
 ## 2026-09-13 — UI aesthetic verdict + the atmosphere budget and control floor
 
 **The question asked:** evaluate the site and decide the most scalable,
