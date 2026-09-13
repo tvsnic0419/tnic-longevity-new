@@ -157,6 +157,9 @@ export function CompoundHero(data: CompoundHeroData) {
               persistent StackDock. Renders only for stackable compounds. */}
           <div className="chero-actions">
             <AddToProtocol compoundId={data.id} name={data.name} />
+            <a href="#evidence-module" className="chero-skip focus-ring">
+              Read the evidence
+            </a>
           </div>
         </div>
       </div>
@@ -290,7 +293,13 @@ const CHERO_CSS = `
   border: 1px solid ${VIZ.line}; background: rgba(14,20,38,0.5);
 }
 
-.chero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+.chero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; align-items: center; }
+.chero-skip {
+  font-family: ${FONT.mono}; font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  color: ${VIZ.muted}; text-decoration: none; padding: 8px 4px; min-height: 44px;
+  display: inline-flex; align-items: center;
+}
+.chero-skip:hover { color: var(--hue); }
 
 @media (prefers-reduced-motion: reduce) {
   .chero-hint .dot { box-shadow: none; }

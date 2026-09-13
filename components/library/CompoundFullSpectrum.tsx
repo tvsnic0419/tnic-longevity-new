@@ -47,7 +47,7 @@ export function CompoundFullSpectrum({
   const hiddenStudies = profile.studies.length - visibleStudies.length;
 
   return (
-    <section className="container-page py-6 md:py-8" aria-label={`${profile.name} full-spectrum profile`}>
+    <section id="full-spectrum-profile" className="container-page py-6 md:py-8" aria-label={`${profile.name} full-spectrum profile`}>
       <div className="premium-card cfs" style={{ ['--card-accent' as string]: accent }}>
         <style>{CFS_CSS}</style>
 

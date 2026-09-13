@@ -1,107 +1,76 @@
-'use client';
-
-import { useCallback, useMemo } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { compoundModules } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
-import { SelectableChip } from '@/components/ui/SelectableChip';
 import { computeTnicScore } from '@/lib/tnic-score';
 import { TIER_COLOR_VAR } from '@/lib/trust';
-
-// Tier accent for the score chip — the canonical map, imported. main added a
-// local copy here; that is precisely the duplication the site-integrity guard
-// added in Phase 2 exists to catch.
-const TIER_ACCENT = TIER_COLOR_VAR;
+import { MoleculeThumb } from '@/components/viz/MoleculeThumb';
+import { CompoundExplorerFilters } from './CompoundExplorerFilters';
 import type { EvidenceTier } from '@/lib/types';
 
 /**
- * The compound grid the library's facet filters were always meant to drive.
+ * The compound grid the library's facet filters drive.
  *
- * `LibraryFacetFilters` writes `?tiers=` and `?hallmarks=` to the URL, but until
- * now nothing on the page consumed them — the chips set state that never
- * rendered a result. This is that missing surface: it reads the same two params
- * so those chips finally filter something, and it adds its own clickable
- * tier-count pills so a reader can click "8 · Tier A" and immediately see those
- * eight compounds. Counts are derived from `compoundModules` (the single source
- * of truth), so they can never drift from what's actually published.
+ * Filters write `?tiers=` and `?hallmarks=` to the URL. This surface reads
+ * those params on the server so the 100-card grid — including a unique
+ * molecule thumbnail per compound — ships in the initial HTML. The tier-count
+ * pills stay a client island so toggling a filter does not require a full
+ * module reload of the geometry data.
  *
- * Every card links to the compound's evidence module; its hallmark chips are
- * sibling links (never nested inside the card link) into the hallmark pages, so
- * the grid is a two-way junction between compounds and the mechanisms they act
- * on rather than a dead end.
+ * Every card links to the compound's evidence module; hallmark chips are
+ * sibling links (never nested inside the card link).
  */
 
 const TIER_ORDER: EvidenceTier[] = ['A', 'B', 'C'];
 
-const TIER_LABEL: Record<EvidenceTier, string> = {
-  A: 'Human RCT evidence',
-  B: 'Emerging human data',
-  C: 'Preclinical / early',
-};
-
-// number (1–12, as the facet chips emit) → hallmark id (as compounds store).
 const HALLMARK_BY_NUMBER = new Map(hallmarkLibrary.map((h) => [h.number, h]));
 const HALLMARK_BY_ID = new Map(hallmarkLibrary.map((h) => [h.id, h]));
 
-const TIER_COUNTS: Record<EvidenceTier, number> = compoundModules.reduce(
-  (acc, m) => {
-    acc[m.evidenceTier] = (acc[m.evidenceTier] ?? 0) + 1;
-    return acc;
-  },
-  { A: 0, B: 0, C: 0 } as Record<EvidenceTier, number>,
-);
+const TIER_ACCENT = TIER_COLOR_VAR;
 
-export function CompoundExplorer() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+export function parseExplorerParams(searchParams: {
+  tiers?: string;
+  hallmarks?: string;
+}): {
+  activeTiers: EvidenceTier[];
+  activeHallmarkIds: string[];
+} {
+  const activeTiers = (searchParams.tiers || '')
+    .split(',')
+    .filter(Boolean)
+    .filter((t): t is EvidenceTier => TIER_ORDER.includes(t as EvidenceTier));
 
-  const activeTiers = useMemo(
-    () =>
-      (searchParams.get('tiers') || '')
-        .split(',')
-        .filter(Boolean)
-        .filter((t): t is EvidenceTier => TIER_ORDER.includes(t as EvidenceTier)),
-    [searchParams],
-  );
+  const activeHallmarkIds = (searchParams.hallmarks || '')
+    .split(',')
+    .filter(Boolean)
+    .map(Number)
+    .map((n) => HALLMARK_BY_NUMBER.get(n)?.id)
+    .filter((id): id is string => Boolean(id));
 
-  const activeHallmarkIds = useMemo(() => {
-    const nums = (searchParams.get('hallmarks') || '').split(',').filter(Boolean).map(Number);
-    return nums.map((n) => HALLMARK_BY_NUMBER.get(n)?.id).filter((id): id is string => Boolean(id));
-  }, [searchParams]);
+  return { activeTiers, activeHallmarkIds };
+}
 
-  const filtered = useMemo(
-    () =>
-      compoundModules.filter(
-        (m) =>
-          (activeTiers.length === 0 || activeTiers.includes(m.evidenceTier)) &&
-          (activeHallmarkIds.length === 0 ||
-            m.relatedHallmarkIds.some((id) => activeHallmarkIds.includes(id))),
-      ),
-    [activeTiers, activeHallmarkIds],
-  );
-
-  const toggleTier = useCallback(
-    (tier: EvidenceTier) => {
-      const params = new URLSearchParams(searchParams.toString());
-      const next = activeTiers.includes(tier)
-        ? activeTiers.filter((t) => t !== tier)
-        : [...activeTiers, tier];
-      if (next.length) params.set('tiers', next.join(','));
-      else params.delete('tiers');
-      const qs = params.toString();
-      router.replace(qs ? `/library?${qs}` : '/library', { scroll: false });
-    },
-    [activeTiers, router, searchParams],
+export function CompoundExplorer({
+  activeTiers,
+  activeHallmarkIds,
+}: {
+  activeTiers: EvidenceTier[];
+  activeHallmarkIds: string[];
+}) {
+  const filtered = compoundModules.filter(
+    (m) =>
+      (activeTiers.length === 0 || activeTiers.includes(m.evidenceTier)) &&
+      (activeHallmarkIds.length === 0 ||
+        m.relatedHallmarkIds.some((id) => activeHallmarkIds.includes(id))),
   );
 
   const activeHallmarkTitle =
     activeHallmarkIds.length === 1 ? HALLMARK_BY_ID.get(activeHallmarkIds[0])?.title : undefined;
 
   return (
-    <section aria-labelledby="compound-explorer-heading" className="scroll-mt-24">
+    <section id="compound-explorer" aria-labelledby="compound-explorer-heading" className="scroll-mt-24">
       <div className="mb-6 flex flex-col gap-1">
         <h2 id="compound-explorer-heading" className="heading-card text-lg">
           Browse compounds by evidence tier
@@ -109,44 +78,17 @@ export function CompoundExplorer() {
         <div className="heading-accent-rule" aria-hidden="true" />
       </div>
 
-      {/* Clickable tier-count pills — the primary affordance. Each shows how many
-          compounds sit at that tier and toggles the shared `tiers` URL param, so
-          clicking "8 · Tier A" filters the grid below to exactly those eight. */}
-      <div className="chip-row items-center">
-        {TIER_ORDER.map((tier) => {
-          const isActive = activeTiers.includes(tier);
-          return (
-            <SelectableChip
-              key={tier}
-              selected={isActive}
-              onSelect={() => toggleTier(tier)}
-              label={`${TIER_COUNTS[tier]} compounds · ${TIER_LABEL[tier]}`}
-              className="px-3 py-1.5"
-            >
-              <span className="tnic-tabular font-mono text-base font-bold tabular-nums text-foreground">
-                {TIER_COUNTS[tier]}
-              </span>
-              <EvidenceTag tier={tier} size="sm" showTooltip={false} />
-            </SelectableChip>
-          );
-        })}
-        {(activeTiers.length > 0 || activeHallmarkIds.length > 0) && (
-          <Link
-            href="/library"
-            scroll={false}
-            className="focus-ring ml-1 rounded-md px-2 py-1 text-xs font-medium text-muted-foreground hover:text-accent-rose"
-          >
-            Clear
-          </Link>
-        )}
-      </div>
+      <Suspense fallback={<div className="h-10 animate-pulse rounded-lg bg-white/5" />}>
+        <CompoundExplorerFilters
+          activeTiers={activeTiers}
+          hasHallmarkFilter={activeHallmarkIds.length > 0}
+        />
+      </Suspense>
 
       <p className="mt-4 text-body-sm text-muted-foreground" aria-live="polite">
         Showing <span className="font-mono font-semibold text-foreground">{filtered.length}</span> of{' '}
         {compoundModules.length} graded compounds
-        {activeTiers.length > 0 && (
-          <> at Tier {activeTiers.slice().sort().join(', ')}</>
-        )}
+        {activeTiers.length > 0 && <> at Tier {activeTiers.slice().sort().join(', ')}</>}
         {activeHallmarkTitle && <> acting on {activeHallmarkTitle}</>}.
       </p>
 
@@ -164,73 +106,73 @@ export function CompoundExplorer() {
             const chips = m.relatedHallmarkIds
               .map((id) => HALLMARK_BY_ID.get(id))
               .filter((h): h is NonNullable<typeof h> => Boolean(h))
-              .slice(0, 3);
+              .slice(0, 2);
+            const extraChips = Math.max(0, m.relatedHallmarkIds.length - chips.length);
             const tnic = m.compoundId ? computeTnicScore(m.compoundId) : null;
             const scoreAccent = TIER_ACCENT[m.evidenceTier];
+            const thumbId = m.compoundId ?? m.slug;
             return (
               <li
                 key={m.slug}
-                className="glass glass-hover group relative flex h-full flex-col rounded-xl border border-border p-4"
+                className="glass glass-hover group relative flex h-full items-stretch gap-3 rounded-xl border border-border p-3"
               >
-                <div className="mb-2 flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-1.5">
-                    <EvidenceTag tier={m.evidenceTier} size="sm" />
-                    {tnic && tnic.score !== null && (
-                      <span
-                        className="relative z-10 inline-flex items-baseline gap-0.5 rounded-full border px-1.5 py-0.5 font-mono text-micro font-semibold tabular-nums"
-                        style={{
-                          color: scoreAccent,
-                          borderColor: `color-mix(in srgb, ${scoreAccent} 30%, transparent)`,
-                          background: `color-mix(in srgb, ${scoreAccent} 8%, transparent)`,
-                        }}
-                        title={`TNiC Score ${Math.round(tnic.score)} / 100`}
-                      >
-                        {Math.round(tnic.score)}
-                        {/* Was text-[0.85em] opacity-60 — 8.5px at a 4:1 contrast
-                            ratio against the card, which axe flags as a serious
-                            failure. The suffix is secondary to the number, so it
-                            keeps a muted token colour instead of dissolving the
-                            score colour with opacity. */}
-                        <span className="text-micro text-[var(--color-text-muted)]">/100</span>
-                        <span className="sr-only"> TNiC Score</span>
-                      </span>
-                    )}
+                <MoleculeThumb
+                  id={thumbId}
+                  className="relative z-0 h-[4.5rem] w-[4.5rem] shrink-0 overflow-hidden rounded-xl border border-border/50 bg-[color-mix(in_srgb,var(--color-bg-elevated)_80%,transparent)] text-foreground/80"
+                />
+                <div className="flex min-w-0 flex-1 flex-col">
+                  <div className="mb-1 flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-1.5">
+                      <EvidenceTag tier={m.evidenceTier} size="sm" />
+                      {tnic && tnic.score !== null && (
+                        <span
+                          className="relative z-10 inline-flex items-baseline gap-0.5 rounded-full border px-1.5 py-0.5 font-mono text-micro font-semibold tabular-nums"
+                          style={{
+                            color: scoreAccent,
+                            borderColor: `color-mix(in srgb, ${scoreAccent} 30%, transparent)`,
+                            background: `color-mix(in srgb, ${scoreAccent} 8%, transparent)`,
+                          }}
+                          title={`TNiC Score ${Math.round(tnic.score)} / 100`}
+                        >
+                          {Math.round(tnic.score)}
+                          <span className="text-micro text-[var(--color-text-muted)]">/100</span>
+                          <span className="sr-only"> TNiC Score</span>
+                        </span>
+                      )}
+                    </div>
+                    <ArrowUpRight
+                      className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent-cyan"
+                      aria-hidden="true"
+                    />
                   </div>
-                  <ArrowUpRight
-                    className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent-cyan"
-                    aria-hidden="true"
-                  />
+                  <Link
+                    href={`/library/compounds/${m.slug}`}
+                    className="focus-ring before:absolute before:inset-0 before:rounded-xl"
+                  >
+                    <h3 className="heading-card text-sm leading-snug group-hover:text-accent-cyan">
+                      {m.title}
+                    </h3>
+                  </Link>
+                  <p className="mt-0.5 line-clamp-2 flex-1 text-xs text-muted-foreground">{m.tagline}</p>
+                  {chips.length > 0 && (
+                    <div className="relative z-10 mt-2 flex flex-wrap gap-x-1 gap-y-1.5">
+                      {chips.map((h) => (
+                        <Link
+                          key={h.id}
+                          href={`/hallmarks/${h.slug}`}
+                          className="focus-ring inline-flex min-h-6 items-center rounded border border-border/60 bg-card/40 px-2 py-0.5 text-micro font-medium text-muted-foreground transition-colors hover:border-accent-violet/40 hover:text-accent-violet"
+                        >
+                          {h.title}
+                        </Link>
+                      ))}
+                      {extraChips > 0 && (
+                        <span className="inline-flex min-h-6 items-center px-1.5 text-micro text-muted-foreground">
+                          +{extraChips}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
-                {/* The card's primary link. Sits under the hallmark chips in the
-                    DOM but is stretched over the whole card via ::before, so the
-                    chips (rendered after) stay independently clickable. */}
-                <Link
-                  href={`/library/compounds/${m.slug}`}
-                  className="focus-ring before:absolute before:inset-0 before:rounded-xl"
-                >
-                  <h3 className="heading-card text-sm leading-snug group-hover:text-accent-cyan">
-                    {m.title}
-                  </h3>
-                </Link>
-                <p className="mt-1 line-clamp-2 flex-1 text-xs text-muted-foreground">{m.tagline}</p>
-                {/* Chips below use real height, not an expanded hit area. They
-                    wrap, and STYLE_GUIDE records that expanding hit areas inside
-                    a tight row overlapped neighbours twice before — a tap landing
-                    on the wrong chip is worse than a small one. min-h-6 (24px)
-                    plus a 6px row gap keeps every target legal and separate. */}
-                {chips.length > 0 && (
-                  <div className="relative z-10 mt-3 flex flex-wrap gap-x-1 gap-y-1.5">
-                    {chips.map((h) => (
-                      <Link
-                        key={h.id}
-                        href={`/hallmarks/${h.slug}`}
-                        className="focus-ring inline-flex min-h-6 items-center rounded border border-border/60 bg-card/40 px-2 py-0.5 text-micro font-medium text-muted-foreground transition-colors hover:border-accent-violet/40 hover:text-accent-violet"
-                      >
-                        {h.title}
-                      </Link>
-                    ))}
-                  </div>
-                )}
               </li>
             );
           })}

@@ -533,4 +533,35 @@ describe('site data integrity', () => {
     expect(hsts?.value).toContain('includeSubDomains');
     expect(vercel.redirects.some((r) => r.destination.startsWith('https://tnic.help'))).toBe(true);
   });
+
+  it('gives the library a molecule-first compound grid and a single identity band on deep-dives', () => {
+    // The 400% visual lever: unique geometry on every browse card (server SVG,
+    // never 100 canvases), and compound pages that stop restating the hero.
+    const thumb = readFileSync(resolve(process.cwd(), 'components/viz/MoleculeThumb.tsx'), 'utf8');
+    const explorer = readFileSync(resolve(process.cwd(), 'components/library/CompoundExplorer.tsx'), 'utf8');
+    const libraryPage = readFileSync(resolve(process.cwd(), 'app/library/page.tsx'), 'utf8');
+    const modulePage = readFileSync(resolve(process.cwd(), 'app/library/[slug]/[moduleSlug]/page.tsx'), 'utf8');
+    const detail = readFileSync(resolve(process.cwd(), 'components/library/LibraryModuleDetail.tsx'), 'utf8');
+    const hero = readFileSync(resolve(process.cwd(), 'components/viz/CompoundHero.tsx'), 'utf8');
+
+    expect(thumb).not.toContain("'use client'");
+    expect(thumb).toContain('hasGeometry');
+    expect(thumb).toContain('OrbitalThumb');
+    expect(explorer).toContain('<MoleculeThumb');
+    expect(explorer).not.toContain("'use client'");
+    expect(libraryPage).toContain('<CompoundExplorer');
+    // Compound grid is the first research surface after search, not buried
+    // under the hallmark atlas.
+    expect(libraryPage.indexOf('<CompoundExplorer')).toBeLessThan(libraryPage.indexOf('id="hallmark-atlas"'));
+    expect(libraryPage).toContain('id="hallmark-atlas"');
+    expect(detail).toContain('heroPresent');
+    expect(detail).toContain('id="evidence-module"');
+    expect(hero).toContain('#evidence-module');
+    // Evidence MDX precedes the full-spectrum appendix so the page is a
+    // narrative, not four identity bands stacked on the fold.
+    const detailIdx = modulePage.indexOf('<LibraryModuleDetail');
+    const spectrumIdx = modulePage.indexOf('<CompoundFullSpectrum');
+    expect(detailIdx).toBeGreaterThan(0);
+    expect(spectrumIdx).toBeGreaterThan(detailIdx);
+  });
 });

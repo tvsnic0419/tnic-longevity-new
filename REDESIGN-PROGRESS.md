@@ -4,6 +4,48 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-12 — Surface identity: molecule-first library + one overture per deep-dive
+
+**The finding, measured on the live site.** The homepage cinematic descent is
+already the brand. The two surfaces that do the work — `/library` browse and
+the 100 compound deep-dives — were still generic next to it.
+
+1. **Library cards had no visual identity.** PR #182 put real PubChem geometry
+   on compound *pages*. The browse grid that leads to those pages was still a
+   text card: tier chip, title, tagline, hallmark chips. 100 cards, one
+   picture. On a phone that is a CMS dump, not a library of molecules.
+2. **Compound pages said the name four times before the evidence.** Order on
+   `/library/compounds/glynac`: CompoundHero → Full-Spectrum data package →
+   Intelligence Matrix → LibraryModuleDetail (icon + h1 + tagline + summary +
+   glance panel, repeating dose/tier/hallmarks the hero already printed). The
+   MDX — the reason the page exists — started ~a viewport later. Chip soup
+   was the first impression.
+3. **`/library` buried the compound grid** under DecisionSteps, the evidence
+   spectrum, the research-queue shelf, and the 12-hallmark atlas. Search is
+   high-intent; the grid it is meant to drive was the fifth block.
+
+**Shipped.**
+
+- `MoleculeThumb` — server SVG of the same geometry MoleculeStage draws.
+  Honesty contract identical: no geometry → orbital field, never a fabricated
+  molecule. Ships in the initial HTML; the 115 KB geometry file stays off the
+  client explorer bundle.
+- Compound cards: 72px unique thumb + title + two hallmark chips. Grid is a
+  **server** component; tier pills remain a client island (`CompoundExplorerFilters`).
+- `/library` order: hero → search → facets → **compound grid** → spectrum →
+  decision path → hallmark atlas. `#hallmark-atlas` kept (palette + brief
+  deep-links).
+- Deep-dive order: hero → sticky bar → **evidence module** → full-spectrum
+  appendix → intelligence matrix. `heroPresent` suppresses the second identity
+  stack (icon, tagline, summary, glance, evidence-trace) so the semantic `<h1>`
+  is the only name restatement, and it is a section heading, not a second hero.
+  Hero gains a "Read the evidence" skip to `#evidence-module`.
+
+**Not touched:** homepage descent (CLAUDE.md §2 — already-good work), compound
+data, PMIDs, doses.
+
+**Rollback:** `git revert` the merge of this branch.
+
 ## 2026-09-04 (third pass) — NICO starter: the safety screen it claimed but never ran
 
 **The finding.** The homepage NICO starter (section 06) collected age, activity

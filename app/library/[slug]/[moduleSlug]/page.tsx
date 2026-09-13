@@ -237,10 +237,6 @@ export default async function LibraryModulePage({
           compoundId={mod.compoundId}
         />
       )}
-      {compoundProfile && (
-        <CompoundFullSpectrum profile={compoundProfile} hasMatrix={Boolean(engineCompound)} />
-      )}
-      {engineCompound && <CompoundIntelligenceMatrix compound={engineCompound} />}
       <LibraryModuleDetail
         module={mod}
         mdxBody={mdx?.body ?? null}
@@ -252,7 +248,12 @@ export default async function LibraryModulePage({
         lastUpdated={mdx?.frontmatter.last_updated}
         author={mdx?.frontmatter.author}
         reviewer={reviewer}
+        heroPresent={Boolean(heroData || moduleHeroData)}
       />
+      {compoundProfile && (
+        <CompoundFullSpectrum profile={compoundProfile} hasMatrix={Boolean(engineCompound)} />
+      )}
+      {engineCompound && <CompoundIntelligenceMatrix compound={engineCompound} />}
     </>
   );
 }
