@@ -139,7 +139,7 @@ export const seoRoutes = {
     buildPageMetadata({
       title: 'Partnerships — Work With TNiC',
       description:
-        'Selective partnership path for responsible cell-health education, research communication, product-category literacy, and technology collaborations. Commercial relationships cannot influence evidence grading.',
+        'Sponsor review path for TNiC: eight-minute walkthrough, labeled inventory, and the wall commercial relationships cannot cross. Evidence grades are not for sale.',
       path: '/partnerships',
       keywords: ['TNiC partnerships', 'longevity education sponsorship', 'cell-health collaboration', 'supplement brand education'],
     }),
