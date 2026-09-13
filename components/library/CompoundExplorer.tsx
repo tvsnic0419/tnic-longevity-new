@@ -114,7 +114,7 @@ export function CompoundExplorer({
             return (
               <li
                 key={m.slug}
-                className="glass glass-hover group relative flex h-full items-stretch gap-3 rounded-xl border border-border p-3"
+                className="card-deferred glass glass-hover group relative flex h-full items-stretch gap-3 rounded-xl border border-border p-3"
               >
                 <MoleculeThumb
                   id={thumbId}

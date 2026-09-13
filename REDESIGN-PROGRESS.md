@@ -4,6 +4,87 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-13 (fourth pass) — performance, measured properly
+
+**The question asked:** start making the site state of the art.
+
+**What that turned out to mean.** "State of the art" is not a look — the visual
+system is in good shape after the last three passes. It is whether the site's
+quality is *measured and enforced* rather than asserted. There were two
+instruments (`audit:ui` for layout/contrast/tap targets, `audit:routes` for
+structure over every route) and neither could answer "how long does this take
+to become useful, and how many bytes does it spend getting there". So this pass
+built the third one and calibrated it honestly.
+
+**The baseline, median of three runs, encoded bytes.**
+
+| route | LCP | CLS | doc | js | css | fonts | total |
+|---|---|---|---|---|---|---|---|
+| `/` | 404 ms | 0 | 69 | 714 | 50 | 186 | 1,141 KB |
+| `/library` | 640 ms | 0 | 261 | 783 | 50 | 186 | 1,402 KB |
+| `/library/compounds/nmn` | 460 ms | 0.008 | 75 | 788 | 50 | 187 | 1,207 KB |
+| `/trust` | 660 ms | 0.008 | 37 | 718 | 50 | 167 | 1,095 KB |
+| `/stacks` | 572 ms | 0.008 | 36 | 741 | 50 | 167 | 1,081 KB |
+| `/hallmarks` | 668 ms | 0.008 | 47 | 716 | 50 | 186 | 1,091 KB |
+
+LCP and CLS are comfortably inside Core Web Vitals "good". Code splitting
+works — `three`, `recharts` and `framer-motion` are all absent from a content
+page's bundle, verified by grepping the actual shipped chunks. **The site was
+in better shape than the first measurement suggested.**
+
+**Two corrections to my own numbers, both worth recording.**
+
+1. **I reported 3.5–4.8 MB transferred per page in the last session. That was
+   wrong.** Playwright's `response.body()` returns the *decoded* buffer, so I
+   was measuring uncompressed bytes against a local server. Real encoded
+   transfer is ~1.0–1.4 MB. `audit:perf` now reads
+   `request.sizes().responseBodySize` and prints the decoded total beside it so
+   the gap is visible rather than assumed.
+2. **A single run is not a measurement.** The same page on the same build
+   measured LCP 700 ms, 1356 ms and 588 ms on three consecutive loads. An
+   earlier reading of "LCP 768 → 1536 after the change" was noise, not a
+   regression, and I nearly acted on it. Every metric is now the median of
+   three runs.
+
+**What is gated and what is not.** CLS (stable to three decimals) and total
+encoded KB (< 10% run-to-run) gate. LCP is reported with its min–max range and
+only warns: it swings over 2× on a shared runner, and a CI check that fails at
+random gets switched off, which is worse than not having one.
+
+**Shipped — the one real win.** `.card-deferred` — `content-visibility: auto`
+with `contain-intrinsic-size` — on the 100-card `/library` grid, the heaviest
+page on the site. A/B'd on a single build, five runs each side, three
+independent rounds:
+
+| | longest task | total blocking |
+|---|---|---|
+| off | 329 / 359 / 310 ms | 1,026 / 1,034 / 979 ms |
+| on | **257 / 259 / 243 ms** | **792 / 867 / 783 ms** |
+
+Consistently **−22% to −28% on the longest main-thread task** and **−16% to
+−23% on total blocking time**. `domComplete` moved both ways and showed no
+signal; reported as no effect rather than dressed up.
+
+**Named and not done.** ~700–790 KB of compressed JS per page is the honest
+remaining cost, spread across ~48 chunks — many small client islands, not one
+library to delete. Reducing it means converting client components to server
+components and deferring below-fold islands: a large refactor across 54+ files
+with real regression risk, and not something to start at the end of a pass.
+That is the next genuine performance project.
+
+`audit:perf` needs a browser, so like `audit:ui` it runs locally rather than in
+CI; `audit:routes` is fetch-only, which is why that one gates the build.
+Enforcing perf in CI would mean provisioning Chromium there — a deliberate
+cost, not an oversight.
+
+**Checks:** `npm run lint` 0 errors (3 pre-existing warnings) · `npm run
+typecheck` clean · `npm test` 58 files / 714 tests · `npm run build` green ·
+`npm run audit:routes` 0 fail / 0 warn over 227 routes · `npm run audit:ui`
+0 actionable sub-24px controls, 0 axe violations · `npm run audit:perf` all
+pages within budget.
+
+**Rollback:** `git revert` the merge of this branch.
+
 ## 2026-09-13 (third pass) — the hub hero stops being a void
 
 **The question asked:** upgrade the site on multiple levels, ~30% better UI and
