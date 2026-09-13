@@ -72,12 +72,12 @@ export default function SponsorshipPolicyPage() {
         ))}
       </div>
 
-      <div className="mt-8 rounded-2xl border border-accent-amber/25 bg-accent-amber/5 p-6">
-        <p className="text-label text-accent-amber mb-3">Professional review needed before paid campaigns</p>
+      <div className="mt-8 rounded-2xl border border-accent-cyan/25 bg-accent-cyan/5 p-6">
+        <p className="text-label text-accent-cyan mb-3">Agreements before campaigns</p>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          TNiC should have counsel review sponsorship agreements, endorsement language, affiliate disclosures,
-          privacy representations, and any brand-supported content workflow before accepting paid placements.
-          Scientific claims should receive separate review when a campaign references specific outcomes.
+          Paid placements go live only after a signed agreement covering disclosure language, claim
+          boundaries, and the editorial wall. Scientific claims that mention specific outcomes are
+          reviewed against the published methodology — not against the sponsor brief.
         </p>
       </div>
     </TrustPageTemplate>

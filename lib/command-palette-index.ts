@@ -170,7 +170,7 @@ const hubPages: PaletteItem[] = [
     id: 'page-partnerships',
     kind: 'page',
     title: 'Partner With TNiC',
-    subtitle: 'Selective collaboration path',
+    subtitle: 'Sponsor review path — eight minutes',
     href: '/partnerships',
     keywords: ['partner', 'partnership', 'sponsor', 'brand', 'collaboration', 'advertising'],
   },
