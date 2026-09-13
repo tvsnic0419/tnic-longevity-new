@@ -4,7 +4,254 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-13 (eighth pass) — geometry, the type ladder, and the entity graph
+
+**The question asked:** evaluate and upgrade the UI; then, separately, finish
+the typography and apply a platform-upgrade patch.
+
+**What was actually wrong, measured rather than assumed.**
+
+- `SectionProgress` appeared from `md` (768px), but the gutter it needs is
+  `(100vw - 80rem)/2`, which is ZERO there. It overlapped page content at 16
+  of 19 scroll positions at 1280px and 15 of 19 at 1366px — the two most
+  common laptop widths — clipping Tier A badges by up to 178px. The seventh
+  pass added a fade-at-top to this rail but left the breakpoint alone.
+- The descent ran on its own column. The seventh pass had already capped
+  `.tnic-act` at 80rem, but its uniform padding clamp still put content at
+  160px on a 1440px viewport while every other section started at 104px.
+- **138 font-size declarations bypassed the type scale, in 40 distinct
+  spellings** — six ways to write ~11px, five for 13–14px, four for 15px.
+  The scale was not missing; it was being routed around, because the t-shirt
+  names had gaps at 13px and 15px and nobody wanted to round to the wrong one.
+  Below the floor, 59 of those rendered HTML text between 4px and 10.5px, and
+  on a PHONE they were smaller still (hub hero stat labels at 8.64px) — the
+  device with the least reading comfort got the least legible type.
+- **Six fluid sizes were each defined twice**, in `globals.css` AND
+  `FlagshipFoundation.module.css`, for the same selectors, with both
+  stylesheets loaded. Which won depended on CSS order, and the copies had
+  already drifted in spelling (`.7rem` vs `0.7rem`).
+- **21 routes carried under three in-body links** (counting inside `<main>`
+  only — nav and footer link everywhere by construction and mask this).
+  `/sirtuin-atlas` server-rendered 12,183 characters about SIRT1–SIRT7
+  activators, naming eight compounds that each have a deep-dive, and linked
+  to ZERO. `/pathways` printed "6 compounds · 3 hallmarks" on every card
+  while `pathway.compoundSlugs` sat right there in the data.
+
+**Shipped.**
+
+- **One content column and a measured rail rule.** Rail: labelled ≥1700px,
+  ticks-only ≥1500px, bottom strip below (the strip had stopped at `md`,
+  leaving 768–1500px with an overlapping rail and no fallback). The seventh
+  pass's fade-at-top is kept, with its breakpoint moved to match so the two
+  cannot disagree. After: 0/19 overlaps at every width.
+- **The type ladder, named by pixel size.** `--type-11` through `--type-48`,
+  with the t-shirt names kept as aliases resolving to numeric rungs so no
+  call site changes meaning. There is no judgement left in picking a rung.
+  The six duplicated clamps are now single tokens — deliberately left as
+  clamps rather than snapped onto the fixed ladder, because a hero title is
+  tuned to its own line-breaks and forcing distinct heroes onto shared rungs
+  would flatten them for tidiness rather than for a reason.
+- **Analytic numeric typography.** 72 ad-hoc `tabular-nums` declarations were
+  each setting their own size, weight and tracking. `.text-metric`,
+  `.text-metric-lg`, `.text-data`, `.text-citation`. The comment records the
+  distinction that matters: `.stat-value`/`.stat-value-hero` gradient-fill
+  their glyphs, right for a figure meant to be looked at and wrong for one
+  meant to be compared against the figure below it, because a gradient makes
+  two numbers in a column different colours.
+- **`lib/entity-graph.ts`** — one derived place to ask what an entity connects
+  to across types. It invents nothing: an unresolvable id is dropped rather
+  than turned into a link to a route that may not exist, and name matching is
+  exact-slug-or-exact-title only (fuzzy matching is how "Quercetin /
+  isoquercetin" ends up pointed at a page that is not about that thing).
+- **`EntityChips`** — each chip carries its kind as a glyph AND an accent
+  (never colour alone), and a compound chip carries its evidence tier,
+  because a link to a Tier C compound and a link to a Tier A compound are not
+  the same invitation.
+- **`lib/page-connections.ts`** for pages no registry can reach. Clusters are
+  DECLARED — a generated "related pages" block is exactly the
+  random-links-everywhere failure it would be trying to fix — but siblings
+  within a cluster are derived, so a page added to a cluster links itself
+  from every other member.
+- **Search routed through the knowledge graph.** The header box handed its
+  query to `/library?q=`, which only searches compounds; it now opens the
+  command palette pre-populated, which searches everything and labels each
+  result with the kind of thing it is. All 19 pathways indexed, keyed on the
+  pathway registry's own `aliases` field. `/library?q=` still works and still
+  backs the WebSite SearchAction.
+
+**Three new gates, so none of this drifts back.**
+
+- `audit-ui.mjs` micro-type gate (budget 0). Replaces the old `minFont`
+  probe, which its own docstring admitted was dominated by SVG.
+- `audit-routes.mjs` dead-end gate, exempting routes with almost no body text
+  (a redirect stub has nothing to link FROM, and failing it would just invite
+  padding). The floor is deliberately low: it catches pages linking to
+  NOTHING, not pages that could link to more.
+- `lib/type-scale.test.ts` gates the ladder at the SOURCE, so a bypass fails
+  the moment it is written, including in a component no audited page renders.
+
+**Deliberately not done, and why.**
+
+- Snapping the fluid display clamps onto the fixed ladder. See above.
+- Raising SVG `<text>` to the 11px floor. Inside a scaled viewBox its computed
+  size is in user units, not screen pixels, and these are molecular-diagram
+  annotations whose size is set by the bond geometry. Their accessibility
+  answer is the text fallback every visualization owes (CLAUDE.md §12).
+- Repainting the site purple. The brief asked to preserve the existing
+  palette; TNiC's is cyan/emerald/violet, and repainting would have
+  contradicted the same instruction it came with.
+
+**Measured.**
+
+```
+route audit        228 routes, fail 0, warn 0      (was 21 dead-end failures)
+in-body links      /pathways 22 -> 64, /sirtuin-atlas 0 -> 23,
+                   /stacks 3 -> 18, /labs 5 -> 18
+rendered sizes     34 -> 27 distinct at 1440px, 33 -> 26 at 390px
+raw font-sizes     138 -> 1 (the SVG exemption), gated by test
+micro-type         0 HTML text nodes under 11px   (was 198 at phone width)
+tap targets        0 actionable sub-24px
+axe                0 violations
+```
+
+**A measurement mistake worth recording.** An intermediate reading of "22
+distinct sizes" was wrong: it came from a browser pointed at a `next start`
+process running since several builds earlier, serving a stale route manifest
+against new CSS chunk names. Always start the server AFTER the build you mean
+to measure, and cross-check one number against a direct computed-style probe.
+
+## 2026-09-13 (seventh pass) — instrument material, sitewide
+
+**The question asked:** mechanical upgraded visual experience, significantly
+improve UI sitewide. Token-driven, cascading, not page-by-page restyles.
+
+**What was actually missing.** The sixth pass gave `/library` a real
+instrument and an honest identity. Everything else still arrived looking like
+a SaaS template wearing a science coat:
+
+- Inter was the body face. Same stack as Linear, Vercel, every default
+  Next.js app. The display face (Fraunces) and the data face (JetBrains)
+  were chosen; the text plane was not.
+- Eleven cinematic hubs still filled the right-hand column with the
+  decorative molecular field, even when they had a countable, derived set
+  (stacks, protocols, trust, tools, insights, products, peptides, pathways,
+  hallmarks, learn, combination lab).
+- Labs / trust / protocols still printed a literal `'12'` on the hallmark
+  rail. Peptides still said "Eight" in the PageHeader.
+- Chrome — nav, tables, inputs, selection — did not yet read as the same
+  instrument the library had become.
+
+**Deliberately not done, and why.**
+
+- Absorbing stale PR #178's full Hanken branch (library gallery restructure).
+  This pass takes the font intent only.
+- Scoring the 20 unscored compounds, or converting 100 inline molecule SVGs
+  to `<img>`. Same reasons as the sixth pass; neither is a visual-system job.
+- Restyling `/club` or `/shop` — CLAUDE.md: those keep bespoke treatments.
+- Rewriting the homepage descent. Already-good work; Hanken inherits through
+  `--font-sans` without touching the scrollytelling.
+- Putting a data figure on hubs with nothing honest to split (`/best` is nine
+  goals, `/labs` biomarkers have no category axis, `/shop` is a checklist).
+  Decorative field + caption remains the honest fallback.
+
+**Shipped.**
+
+- **Hanken Grotesk** as `--font-sans` (`--font-hanken`). Inter retired from
+  layout, globals, viz tokens, NetworkStage, HomeDescent, and the engine
+  comment. Optical sizing + kern/liga/calt on body.
+- **`HubSplitInstrument`** — shared server primitive. Counts and colours are
+  the caller's problem; the component never invents either. Compact layout
+  when a split has more than four rows; non-zero bars keep a 4px minimum so
+  small slices stay visible.
+- **Derived figures** on hallmarks (intervention A/B/C), peptides (legal
+  status), pathways (families), evidence (library wrap), stacks (elite-stack
+  grades), stacks/lab (synergy / caution / contraindication), tools (New /
+  Advanced / Core), trust (scored-set A/B/C), protocols (protocol grades),
+  insights (library mix), products (COA published vs not stated), compound
+  engine (A–D including D), supplement-guides (guides / profiles /
+  comparisons), learn (FAQ / glossary / steps).
+- **Hardcoded counts removed:** labs / trust / protocols hallmark rail now
+  `hallmarkLibrary.length`; peptides PageHeader uses `peptideLibrary.length`.
+- **Cascading chrome:** `::selection`, light-theme grain whisper, nav HUD
+  tick, sticky table headers, input inner highlight, data-figure bezel.
+- **STYLE_GUIDE v1.7 / §17.** §3 names the three faces. §7 records
+  `titleAsHeading` and the data-figure rule.
+
+**Checks.** Lint, typecheck, the test suite including the new instrument /
+Hanken / derived-count guards, and a production HTML spot-check of
+`/library`, `/hallmarks`, `/peptides`, `/pathways`, `/stacks`, `/trust`.
+
+**Rollback:** `git revert` the merge of this branch.
+
+## 2026-09-13 (sixth pass) — the library tells the truth about itself
+
+
+**The question asked:** independently determine and ship the most significant
+upgrades, rather than wait on an external patch.
+
+**What was actually missing.** Five passes today already gave the library an
+evidence table, a molecule-first grid, a two-column hero shell, and a route
+audit. The remaining hole was identity, not features. Measured against live
+HTML of `/library`:
+
+- The `<h1>` was still "The 12 Hallmarks of Aging", rendered *below* the
+  100-card compound grid, because `AntiAgingLibrary asPageTitle` owned the
+  heading and `CinematicHubHero` left `titleAsHeading` off.
+- The `<title>` and hero lead named the hallmarks as the product. The page
+  the visitor was looking at is the compound library.
+- The hero's right-hand instrument panel — built this morning so eleven hubs
+  would stop shipping 45% empty viewport — still showed the decorative
+  molecular field on the one hub that has a real, derived evidence split.
+- `/library/compare/head-to-head` (canonical, no query) shipped identity and
+  a skeleton. The default comparison (resveratrol vs pterostilbene) lived
+  behind the `searchParams` island, so the indexable address had ~675
+  characters of `<main>` text.
+- Sitemap `lastmod` was frozen at 2026-08-27, seventeen days and five
+  production merges behind.
+
+**Deliberately not done, and why.**
+
+- Scoring the 20 compounds the Evidence Table marks *Not scored*. They have
+  no `compoundId` in the structured set. Promoting them would mean inventing
+  mechanism/dose/PMID fields, which `NOTES-COMPOUND-LIBRARY.md` forbids.
+- Turning 100 inline molecule SVGs into `<img>` thumbs. It would cut `/library`
+  HTML roughly in half, and it would also stop the thumbs inheriting
+  `currentColor` across themes. Visuals were the stated priority of the
+  surrounding work; that regression is still not worth the bytes today.
+- Authoring new synergy-pair prose. Coverage is already 51/51 pair-specific
+  (`synergy-coverage` floor). The upgrade plan's 19.6% figure is stale.
+
+**Shipped.**
+
+- **Library identity.** Hero is the `<h1>` ("Every intervention, graded").
+  Title, description and lead name the `${COMPOUND_COUNT}`-compound library.
+  Hallmark atlas is the second chapter (`h2`), with its local search hidden
+  because the hub already has one. Hallmark count derived from
+  `hallmarkLibrary.length`, never a literal `12`.
+- **A real instrument in the hero.** `LibraryHeroInstrument` draws the A/B/C
+  split and the scored/unscored counts from `evidenceIndexStats()`, colours
+  from `TIER_COLOR_VAR`, and links to the Evidence Table. The hero's
+  atmospheric radial mask is skipped when a data figure is passed
+  (`.research-hero__figure-stage--data`) so labels stay readable.
+- **CollectionPage JSON-LD** on `/library`, with `numberOfItems` derived.
+- **Head-to-head canonical URL.** The Suspense fallback is now the default
+  pair's full comparison, not a skeleton. Crawlers get the duel. When the
+  island resolves to that same pair, nothing flashes. Parameterized URLs
+  still swap; they canonicalise here and are not in the sitemap.
+- **Sitemap `lastmod`** aligned to 2026-09-13.
+- **Atlas copy.** The visual-gallery chapter dropped "COMPLETE VISUAL SYSTEM"
+  / "Hover to explore" for derived hallmark count and a sentence that states
+  the honesty point (first-party mechanism drawings, no stock art).
+
+**Checks.** Run on this branch before the PR: lint, typecheck, the test
+suite including the new identity / fallback / lastmod guards, and a
+production HTML spot-check of `/library` (one `<h1>`, compounds in the
+title) and `/library/compare/head-to-head` (default pair in `<main>`).
+
+**Rollback:** `git revert` the merge of this branch.
+
 ## 2026-09-13 (fifth pass) — the Evidence Table
+
 
 **The question asked:** continue UI and coherence work, add state-of-the-art
 visual and content assets, with the goal of increasing what the site is worth.

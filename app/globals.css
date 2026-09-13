@@ -172,7 +172,7 @@
 }
 
 @theme {
-  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-sans: var(--font-hanken), system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
   --font-display: var(--font-fraunces), Georgia, 'Times New Roman', serif;
 
@@ -377,6 +377,11 @@
   --text-xs--line-height: 1.5;
   --text-sm: 0.9375rem;             /* 15px, was --type-sm 14px / Tailwind 14px */
   --text-sm--line-height: 1.6;
+
+  /* ── Geometry (v13) ── */
+  --page-max: 80rem;
+  --section-y: clamp(4.5rem, 7vw, 7rem);
+  --metric-tracking: -0.04em;
 }
 
 html {
@@ -426,10 +431,13 @@ body {
   line-height: var(--leading-body);
   /* Crisp text rendering site-wide: grayscale AA on WebKit + Firefox so
      light-on-dark type stays sharp rather than muddy, plus optimizeLegibility
-     for proper kerning/ligatures. */
+     for proper kerning/ligatures. Optical sizing + Hanken's default ligatures
+     keep the body face reading as a chosen grotesque, not a system default. */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  font-optical-sizing: auto;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
@@ -448,6 +456,16 @@ body::after {
 
 @media (prefers-reduced-motion: reduce) {
   body::after { opacity: 0; }
+}
+
+[data-theme="light"] body::after {
+  /* Grain on a light field reads as dirt, not film. Keep a whisper. */
+  opacity: 0.016;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent-cyan) 28%, transparent);
+  color: var(--color-text-primary);
 }
 
 /* ── Typography scale ──
@@ -623,6 +641,16 @@ p,
   line-height: 1.45;
 }
 
+/* Longevity metrics — display face, tight tracking, tabular figures.
+   Use for counts that should read as instruments, not body copy. */
+.metric-display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: var(--metric-tracking, -0.04em);
+  font-variant-numeric: tabular-nums lining-nums;
+  line-height: 0.95;
+}
+
 /* Default colors for the typography scale above, deliberately placed in
    Tailwind's `components` layer instead of left unlayered. Unlayered CSS
    always beats anything in `@layer utilities` regardless of source order or
@@ -657,7 +685,7 @@ p,
 /* ── Layout ── */
 .container-page {
   width: 100%;
-  max-width: 80rem;
+  max-width: var(--page-max, 80rem);
   margin-inline: auto;
   padding-inline: clamp(1rem, 4vw, 1.5rem);
 }
@@ -872,6 +900,7 @@ p,
   color: var(--color-text-primary);
   min-height: var(--space-touch);
   outline: none;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #ffffff 6%, transparent);
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -904,6 +933,19 @@ p,
   text-transform: uppercase;
   color: var(--color-text-faint);
   background: var(--color-bg-muted);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+/* Row headers. Same box as a cell, but carrying the row's identity, so it
+   reads as content rather than chrome. */
+.table-base tbody th {
+  text-align: left;
+  padding: 0.875rem 1rem;
+  border-top: 1px solid var(--color-border-subtle);
+  font-weight: 600;
+  color: var(--color-text-primary);
 }
 /* Row headers. Same box as a cell, but carrying the row's identity, so it
    reads as content rather than chrome. */
@@ -919,6 +961,10 @@ p,
   padding: 0.875rem 1rem;
   border-top: 1px solid var(--color-border-subtle);
   color: var(--color-text-secondary);
+}
+
+.table-base tbody tr {
+  transition: background-color 0.15s ease;
 }
 
 .table-base tbody tr:hover {
@@ -1000,35 +1046,35 @@ p,
       0 0 0 1px color-mix(in srgb, var(--accent-cyan) 35%, transparent),
       0 8px 48px -4px color-mix(in srgb, var(--accent-cyan) 45%, transparent),
       0 0 80px -16px color-mix(in srgb, var(--accent-cyan) 25%, transparent);
-    transform: translateY(-3px);
+    transform: translateY(-2px);
   }
   .glow-hover-emerald:hover {
     box-shadow:
       0 0 0 1px color-mix(in srgb, var(--accent-emerald) 35%, transparent),
       0 8px 48px -4px color-mix(in srgb, var(--accent-emerald) 45%, transparent),
       0 0 80px -16px color-mix(in srgb, var(--accent-emerald) 25%, transparent);
-    transform: translateY(-3px);
+    transform: translateY(-2px);
   }
   .glow-hover-violet:hover {
     box-shadow:
       0 0 0 1px color-mix(in srgb, var(--accent-violet) 35%, transparent),
       0 8px 48px -4px color-mix(in srgb, var(--accent-violet) 45%, transparent),
       0 0 80px -16px color-mix(in srgb, var(--accent-violet) 25%, transparent);
-    transform: translateY(-3px);
+    transform: translateY(-2px);
   }
   .glow-hover-amber:hover {
     box-shadow:
       0 0 0 1px color-mix(in srgb, var(--accent-amber) 35%, transparent),
       0 8px 48px -4px color-mix(in srgb, var(--accent-amber) 45%, transparent),
       0 0 80px -16px color-mix(in srgb, var(--accent-amber) 25%, transparent);
-    transform: translateY(-3px);
+    transform: translateY(-2px);
   }
   .glow-hover-rose:hover {
     box-shadow:
       0 0 0 1px color-mix(in srgb, var(--accent-rose) 35%, transparent),
       0 8px 48px -4px color-mix(in srgb, var(--accent-rose) 45%, transparent),
       0 0 80px -16px color-mix(in srgb, var(--accent-rose) 25%, transparent);
-    transform: translateY(-3px);
+    transform: translateY(-2px);
   }
 }
 
@@ -1930,6 +1976,23 @@ p,
   backdrop-filter: blur(20px) saturate(1.3);
   border-bottom: 1px solid color-mix(in srgb, var(--accent-cyan) 8%, var(--color-border-subtle));
   transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nav-glass::before {
+  /* Always-on HUD tick — a 1px cyan scan along the bottom edge so the bar
+     reads as an instrument chrome even before scroll. The scrolled state
+     keeps its own top specular (below). */
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--accent-cyan) 55%, transparent) 50%,
+    transparent
+  );
+  pointer-events: none;
 }
 
 .nav-glass-scrolled {
@@ -4283,7 +4346,7 @@ p,
   background:
     linear-gradient(135deg, color-mix(in srgb, var(--accent-cyan) 5%, transparent), transparent 42%),
     linear-gradient(315deg, color-mix(in srgb, var(--accent-emerald) 6%, transparent), transparent 48%),
-    color-mix(in srgb, var(--color-bg-elevated) 65%, transparent);
+    color-mix(in srgb, var(--card-ground) 100%, transparent);
   box-shadow: inset 0 1px 0 color-mix(in srgb, white 7%, transparent);
 }
 
@@ -4421,7 +4484,7 @@ p,
 }
 @media (hover: hover) {
   .hm-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
     border-color: color-mix(in srgb, var(--card-accent, var(--accent-cyan)) 45%, var(--color-border-subtle));
     box-shadow: var(--glass-shadow-float), 0 0 42px -22px color-mix(in srgb, var(--card-accent, var(--accent-cyan)) 62%, transparent);
   }
@@ -4565,7 +4628,7 @@ p,
 }
 @media (hover: hover) {
   .step-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
     border-color: color-mix(in srgb, var(--accent-emerald) 42%, var(--color-border-subtle));
     box-shadow: var(--glass-shadow-float), 0 0 44px -22px color-mix(in srgb, var(--accent-emerald) 58%, transparent);
   }
@@ -4929,6 +4992,19 @@ p,
   /* Fades the canvas into the panel rather than ending on a hard edge. */
   -webkit-mask-image: radial-gradient(78% 82% at 50% 46%, #000 32%, transparent 88%);
   mask-image: radial-gradient(78% 82% at 50% 46%, #000 32%, transparent 88%);
+}
+
+/* Data figures have to be fully readable — the radial mask is for atmosphere
+   (the molecular field), not for numbers and labels. Drop it, drop the forced
+   4/3, and pad so the instrument sits inside the frame instead of bleeding
+   into the caption hairline. */
+.research-hero__figure-stage--data {
+  aspect-ratio: auto;
+  min-height: 17rem;
+  -webkit-mask-image: none;
+  mask-image: none;
+  padding: 1.25rem 1.35rem 0.5rem;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #ffffff 6%, transparent);
 }
 
 .research-hero__figure-cap {
@@ -5899,4 +5975,469 @@ p,
 
 @media (prefers-reduced-motion: reduce) {
   .nico-step { transition: none; }
+}
+
+/* ============================================================================
+   Design System v10 — Sitewide Glass Material
+   ----------------------------------------------------------------------------
+   v8 Deep Glass remains the heavy layered-plane recipe (budget 1–2 true
+   backdrop-filter moments per page). v10 gives every surface the *optical
+   language* of glass so chrome, cards, inputs, overlays and the footer read
+   as one material rather than a mix of flat fills and one-off frost.
+
+   Performance: .premium-card does NOT gain backdrop-filter. The /library
+   grid is 100 cards; blur there is the thing §16 measured. Cards get the
+   glass LOOK via refractive rim + inner specular + frost wash over
+   --card-ground, so molecule linework still cannot cross a sentence (§13).
+   Chrome and overlays get the real blur.
+   ========================================================================== */
+
+:root {
+  --glass-inner-highlight: inset 0 1px 0 color-mix(in srgb, var(--glass-edge-specular) 70%, transparent);
+  --glass-inner-shade: inset 0 -1px 0 color-mix(in srgb, var(--glass-edge-shadow) 45%, transparent);
+  --glass-rim: 0 0 0 1px color-mix(in srgb, var(--glass-edge-cool) 42%, transparent);
+  --glass-chrome-blur: 22px;
+  --glass-chrome-fill: color-mix(in srgb, var(--color-bg-base) 74%, transparent);
+}
+
+[data-theme="light"] {
+  --glass-inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  --glass-inner-shade: inset 0 -1px 0 rgba(15, 23, 42, 0.06);
+  --glass-rim: 0 0 0 1px color-mix(in srgb, var(--accent-cyan) 16%, var(--color-border-subtle));
+  --glass-chrome-fill: color-mix(in srgb, var(--color-bg-elevated) 68%, transparent);
+}
+
+/* Overlay / float chrome — command palette, modal, menus, toasts. */
+.glass-chrome {
+  background: var(--glass-chrome-fill);
+  backdrop-filter: blur(var(--glass-chrome-blur)) saturate(1.45);
+  -webkit-backdrop-filter: blur(var(--glass-chrome-blur)) saturate(1.45);
+  border: 1px solid color-mix(in srgb, var(--glass-edge-cool) 38%, var(--glass-border));
+  box-shadow:
+    var(--glass-inner-highlight),
+    var(--glass-shadow-float);
+}
+
+/* Lightweight glass (.glass) — inputs, small panels, secondary buttons. */
+.glass {
+  background: color-mix(in srgb, var(--glass-bg) 88%, transparent);
+  backdrop-filter: blur(var(--glass-blur-mid)) saturate(1.28);
+  -webkit-backdrop-filter: blur(var(--glass-blur-mid)) saturate(1.28);
+  border: 1px solid color-mix(in srgb, var(--glass-edge-cool) 28%, var(--glass-border));
+  box-shadow: var(--glass-inner-highlight), var(--glass-inner-shade);
+}
+
+/* Deep Glass planes — richer refraction, same budget. Plane shadows stay
+   on .glass-plane-* so field/mid/float elevation is not flattened. */
+.glass-deep {
+  backdrop-filter: blur(var(--glass-blur, 24px)) saturate(1.42);
+  -webkit-backdrop-filter: blur(var(--glass-blur, 24px)) saturate(1.42);
+}
+.glass-plane-field {
+  box-shadow: var(--glass-inner-highlight), var(--glass-shadow-field);
+}
+.glass-plane-mid {
+  box-shadow: var(--glass-inner-highlight), var(--glass-shadow-mid);
+}
+.glass-plane-content {
+  box-shadow: var(--glass-inner-highlight), var(--glass-shadow-content);
+}
+.glass-plane-float {
+  box-shadow: var(--glass-inner-highlight), var(--glass-shadow-float);
+}
+
+/* Content cards — glass look, grounded fill. No extra blur. */
+.premium-card {
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--card-accent) 58%, transparent), transparent) 0 0 / 100% 1px no-repeat,
+    linear-gradient(180deg, color-mix(in srgb, #ffffff 7.5%, transparent), color-mix(in srgb, #ffffff 1.2%, transparent) 38%, transparent 70%),
+    var(--card-ground);
+  border-color: color-mix(in srgb, var(--glass-edge-cool) 22%, var(--color-border-subtle));
+  box-shadow:
+    var(--glass-inner-highlight),
+    var(--glass-inner-shade),
+    var(--glass-rim),
+    var(--glass-shadow-field);
+}
+.premium-card:hover {
+  border-color: color-mix(in srgb, var(--card-accent) 48%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 14%, transparent),
+    var(--glass-inner-shade),
+    0 0 0 1px color-mix(in srgb, var(--card-accent) 28%, transparent),
+    0 24px 60px -28px color-mix(in srgb, var(--card-accent) 55%, transparent),
+    var(--glass-shadow-content);
+}
+.premium-card:active {
+  transform: translateY(-2px) scale(0.992);
+}
+
+[data-theme="light"] .premium-card {
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--card-accent) 42%, transparent), transparent) 0 0 / 100% 1px no-repeat,
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.18) 46%, transparent),
+    var(--card-ground);
+  box-shadow:
+    var(--glass-inner-highlight),
+    var(--glass-rim),
+    var(--glass-shadow-mid);
+}
+
+.card-elevated {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, #ffffff 5%, transparent), transparent 42%),
+    var(--color-bg-elevated);
+  box-shadow:
+    var(--glass-inner-highlight),
+    var(--glass-shadow-mid);
+}
+
+.tnic-glass {
+  box-shadow:
+    var(--glass-inner-highlight),
+    var(--glass-shadow-mid);
+}
+
+/* Navigation — frost wash + inner catch, still opaque enough that section
+   numerals cannot collide with links if blur is defeated by a stacking context. */
+.nav-glass {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--glass-edge-specular) 14%, transparent), transparent 52%),
+    color-mix(in srgb, var(--color-bg-base) 84%, transparent);
+  backdrop-filter: blur(24px) saturate(1.55);
+  -webkit-backdrop-filter: blur(24px) saturate(1.55);
+  box-shadow: var(--glass-inner-highlight);
+}
+.nav-glass-scrolled {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--glass-edge-specular) 10%, transparent), transparent 40%),
+    color-mix(in srgb, var(--color-bg-base) 94%, transparent);
+  backdrop-filter: blur(22px) saturate(1.5);
+  -webkit-backdrop-filter: blur(22px) saturate(1.5);
+}
+
+[data-theme="light"] .nav-glass {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.55), transparent 50%),
+    color-mix(in srgb, var(--color-bg-elevated) 82%, transparent);
+}
+[data-theme="light"] .nav-glass-scrolled {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.7), transparent 46%),
+    color-mix(in srgb, var(--color-bg-elevated) 90%, transparent);
+}
+
+/* Recessed glass wells. */
+.input-base {
+  background: color-mix(in srgb, var(--glass-bg) 72%, transparent);
+  backdrop-filter: blur(12px) saturate(1.12);
+  -webkit-backdrop-filter: blur(12px) saturate(1.12);
+  border-color: color-mix(in srgb, var(--glass-edge-cool) 22%, var(--color-border-strong));
+  box-shadow:
+    var(--glass-inner-highlight),
+    inset 0 2px 8px color-mix(in srgb, var(--glass-edge-shadow) 28%, transparent);
+}
+.input-base:focus-visible {
+  border-color: color-mix(in srgb, var(--accent-cyan) 55%, transparent);
+  box-shadow:
+    var(--glass-inner-highlight),
+    0 0 0 3px color-mix(in srgb, var(--accent-cyan) 14%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--accent-cyan) 18%, transparent);
+}
+
+/* Sticky table chrome. */
+.table-base thead th {
+  background: color-mix(in srgb, var(--color-bg-elevated) 78%, transparent);
+  backdrop-filter: blur(12px) saturate(1.12);
+  -webkit-backdrop-filter: blur(12px) saturate(1.12);
+  box-shadow: var(--glass-inner-highlight);
+}
+
+/* Footer — raised glass plane, not a flat slab. */
+.footer-aurora {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 100%, color-mix(in srgb, var(--accent-cyan) 10%, transparent), transparent),
+    radial-gradient(ellipse 60% 40% at 20% 80%, color-mix(in srgb, var(--accent-violet) 6%, transparent), transparent),
+    color-mix(in srgb, var(--color-bg-elevated) 58%, transparent);
+  backdrop-filter: blur(20px) saturate(1.22);
+  -webkit-backdrop-filter: blur(20px) saturate(1.22);
+  box-shadow:
+    var(--glass-inner-highlight),
+    var(--footer-lift-shadow);
+}
+
+/* Persistent workspace cue. */
+.context-bar {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--glass-edge-specular) 8%, transparent), transparent 70%),
+    color-mix(in srgb, var(--color-bg-base) 78%, transparent);
+  backdrop-filter: blur(18px) saturate(1.35);
+  -webkit-backdrop-filter: blur(18px) saturate(1.35);
+  box-shadow: var(--glass-inner-highlight), 0 12px 30px -26px color-mix(in srgb, #000 72%, transparent);
+}
+
+/* Ghost / outline / chip — same material as the rest of the chrome. */
+.btn-ghost-premium,
+.tnic-button-outline {
+  background: color-mix(in srgb, var(--glass-bg) 70%, transparent);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  box-shadow: var(--glass-inner-highlight);
+}
+.tnic-chip {
+  backdrop-filter: blur(8px) saturate(1.1);
+  -webkit-backdrop-filter: blur(8px) saturate(1.1);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #ffffff 10%, transparent);
+}
+.tnic-button-secondary {
+  background: color-mix(in srgb, #ffffff 8%, transparent);
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  box-shadow: var(--glass-inner-highlight);
+}
+
+.stat-card-hero {
+  backdrop-filter: blur(22px) saturate(1.35);
+  -webkit-backdrop-filter: blur(22px) saturate(1.35);
+}
+
+/* Overlay dim — more of the world shows through so the glass panel reads. */
+.glass-overlay {
+  background: color-mix(in srgb, var(--color-bg-base) 52%, transparent);
+  backdrop-filter: blur(10px) saturate(1.15);
+  -webkit-backdrop-filter: blur(10px) saturate(1.15);
+}
+
+@media (max-width: 767px) {
+  .glass,
+  .glass-chrome,
+  .input-base,
+  .footer-aurora,
+  .context-bar,
+  .btn-ghost-premium,
+  .tnic-button-outline {
+    backdrop-filter: blur(10px) saturate(1.12);
+    -webkit-backdrop-filter: blur(10px) saturate(1.12);
+  }
+  .nav-glass,
+  .nav-glass-scrolled {
+    backdrop-filter: blur(14px) saturate(1.25);
+    -webkit-backdrop-filter: blur(14px) saturate(1.25);
+  }
+  .table-base thead th {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .premium-card:active { transform: none; }
+}
+
+/* ============================================================================
+   Design System v11 — Coherence
+   ----------------------------------------------------------------------------
+   Same theme. One surface ladder, one motion recipe, one well. The leftover
+   fills (bg-card/40, bg-background/25, bg-muted/10, mixed border opacities)
+   made the site feel like several products. v11 names the nested well and
+   quiets card motion so glass reads as material, not as an effect.
+   ========================================================================== */
+
+.surface-well {
+  background: color-mix(in srgb, var(--glass-bg) 48%, transparent);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--glass-inner-highlight);
+}
+[data-theme="light"] .surface-well {
+  background: color-mix(in srgb, var(--color-bg-elevated) 78%, var(--color-bg-muted));
+}
+
+/* Segmented tracks (TabBar, theme toggle) — one well, inner pills. */
+.surface-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  max-width: 100%;
+  border-radius: var(--radius-2xl);
+  background: color-mix(in srgb, var(--glass-bg) 48%, transparent);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--glass-inner-highlight);
+}
+.surface-well .surface-well {
+  background: color-mix(in srgb, var(--glass-bg) 28%, transparent);
+}
+
+/* Quieter, professional card motion. 4px lift + diagonal shine on every
+   content card was a tell; 2px lift and the static inner highlight is enough. */
+.premium-card {
+  transition:
+    transform var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    box-shadow var(--dur-fast) var(--ease-standard);
+}
+.premium-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 12%, transparent),
+    var(--glass-inner-shade),
+    0 0 0 1px color-mix(in srgb, var(--card-accent) 22%, transparent),
+    0 16px 36px -24px color-mix(in srgb, var(--card-accent) 32%, transparent),
+    var(--glass-shadow-mid);
+}
+.premium-card:active {
+  transform: translateY(-1px) scale(0.995);
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .premium-card:hover::before {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+.glass-hover { transition: transform var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard), background-color var(--dur-fast) var(--ease-standard); }
+@media (hover: hover) {
+  .glass-hover:not(.glass-deep):hover {
+    transform: translateY(-2px);
+    background: color-mix(in srgb, var(--glass-bg) 92%, var(--accent-cyan) 3%);
+    border-color: color-mix(in srgb, var(--accent-cyan) 22%, var(--glass-border));
+    box-shadow:
+      var(--glass-inner-highlight),
+      0 10px 28px -14px rgba(0, 0, 0, 0.18);
+  }
+}
+
+.interactive {
+  transition-property: color, background-color, border-color, transform, box-shadow;
+  transition-duration: var(--dur-fast);
+  transition-timing-function: var(--ease-standard);
+}
+.interactive:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.stat-instrument {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, #ffffff 5.5%, transparent), transparent 55%),
+    color-mix(in srgb, var(--glass-bg) 42%, transparent);
+  border-color: var(--color-border-subtle);
+  box-shadow: var(--glass-inner-highlight);
+  transition: background var(--dur-base) var(--ease-standard), box-shadow var(--dur-base) var(--ease-standard);
+}
+
+.heading-accent-rule {
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent-cyan) 28%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .premium-card:hover,
+  .premium-card:active,
+  .glass-hover:hover,
+  .interactive:active { transform: none; }
+}
+
+/* ============================================================================
+   Design System v12 — Walk cards
+   ----------------------------------------------------------------------------
+   Related destinations share one card, not a leftover text list. Used by
+   ContinueTrail and in-page related rails. No extra blur; nested-well fill
+   plus an accent hairline. Hover is the v11 2px lift.
+   ========================================================================== */
+
+.walk-card {
+  --walk-accent: var(--accent-cyan);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-height: 100%;
+  padding: 1.15rem 1.2rem 1.25rem;
+  border-radius: var(--radius-2xl);
+  background: color-mix(in srgb, var(--glass-bg) 48%, transparent);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--glass-inner-highlight);
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  transition:
+    transform var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    box-shadow var(--dur-fast) var(--ease-standard);
+}
+.walk-card::before {
+  content: "";
+  position: absolute;
+  inset-inline: 1.15rem;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--walk-accent), transparent);
+  opacity: 0.7;
+  pointer-events: none;
+}
+.walk-card__kicker {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--walk-accent);
+}
+.walk-card__title {
+  /* Was 1.02rem (16.32px) — a third spelling of 16px alongside `1rem` and
+     `1.05rem`. On the ladder now; `lib/type-scale.test.ts` caught it. */
+  font-size: var(--type-16);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--color-text-primary);
+}
+.walk-card__detail {
+  font-size: var(--type-14);
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.walk-card__go {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: var(--color-text-muted);
+  transition: color var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard);
+}
+@media (hover: hover) {
+  .walk-card:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--walk-accent) 38%, transparent);
+    box-shadow:
+      var(--glass-inner-highlight),
+      0 14px 32px -20px color-mix(in srgb, var(--walk-accent) 28%, transparent);
+  }
+  .walk-card:hover .walk-card__title { color: var(--walk-accent); }
+  .walk-card:hover .walk-card__go {
+    color: var(--walk-accent);
+    transform: translate(1px, -1px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .walk-card:hover { transform: none; }
+}
+
+.continue-trail {
+  margin-top: 2.5rem;
+  padding-top: 2.25rem;
+  border-top: 1px solid var(--color-border-subtle);
+}
+.continue-trail__intro { margin-bottom: 1.25rem; }
+.continue-trail__grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) {
+  .continue-trail__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .continue-trail__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }

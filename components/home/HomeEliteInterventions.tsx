@@ -25,7 +25,7 @@ export function HomeEliteInterventions() {
     <section
       id="elite-interventions"
       aria-labelledby="home-elite-heading"
-      className="relative scroll-mt-24 border-t border-border/50 py-20 md:py-28"
+      className="relative scroll-mt-24 border-t border-border/50 py-[var(--section-y)]"
     >
       <CellularDivider hue="var(--accent-emerald)" index="03" label="Interventions" />
       <div className="container-page">

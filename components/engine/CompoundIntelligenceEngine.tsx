@@ -18,7 +18,7 @@
    There are no literal colours in this file, so the engine follows the
    light/dark toggle exactly like the compound deep-dives it links out to.
    Type follows the site's three roles: Fraunces for headings, JetBrains Mono
-   for scores and labels, Inter for body.
+   for scores and labels, Hanken Grotesk for body.
 ============================================================================ */
 
 import { useEffect, useMemo, useRef, useState } from 'react';

@@ -74,15 +74,15 @@ export function LabReviewContext({ labs, selectedCount }: { labs: LabEntry[]; se
         </div>
 
         <div className="mt-5 grid gap-2 sm:grid-cols-3" aria-label="Local review context">
-          <div className="rounded-xl border border-border/65 bg-background/25 p-3.5">
+          <div className="rounded-xl surface-well p-3.5">
             <div className="flex items-center gap-2 text-muted-foreground"><FlaskConical className="h-3.5 w-3.5" aria-hidden="true" /><span className="text-micro font-mono uppercase tracking-[0.1em]">Data</span></div>
             <p className="mt-2 text-sm font-semibold text-foreground">{labs.length > 0 ? `${uniqueMarkers} marker${uniqueMarkers === 1 ? '' : 's'} · ${labs.length} reading${labs.length === 1 ? '' : 's'}` : 'No readings yet'}</p>
           </div>
-          <div className="rounded-xl border border-border/65 bg-background/25 p-3.5">
+          <div className="rounded-xl surface-well p-3.5">
             <div className="flex items-center gap-2 text-muted-foreground"><CalendarClock className="h-3.5 w-3.5" aria-hidden="true" /><span className="text-micro font-mono uppercase tracking-[0.1em]">Latest</span></div>
             <p className="mt-2 text-sm font-semibold text-foreground">{latestDate ? formatDate(latestDate) : 'Awaiting baseline'}</p>
           </div>
-          <div className="rounded-xl border border-border/65 bg-background/25 p-3.5">
+          <div className="rounded-xl surface-well p-3.5">
             <div className="flex items-center gap-2 text-muted-foreground"><Layers3 className="h-3.5 w-3.5" aria-hidden="true" /><span className="text-micro font-mono uppercase tracking-[0.1em]">Context</span></div>
             <p className="mt-2 text-sm font-semibold text-foreground">{selectedCount > 0 ? `${selectedCount} active compound${selectedCount === 1 ? '' : 's'}` : 'No active stack'}</p>
           </div>

@@ -9,7 +9,7 @@ interface DataTableProps {
 
 export function DataTable({ caption, children, className = '' }: DataTableProps) {
   return (
-    <div className={cn('scroll-region rounded-2xl border border-border bg-card/40', className)}>
+    <div className={cn('scroll-region rounded-2xl border border-border glass', className)}>
       <table className="table-base min-w-[36rem]">
         {caption && <caption className="sr-only">{caption}</caption>}
         {children}

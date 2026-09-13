@@ -79,7 +79,7 @@ export function Modal({ open, onClose, title, description, children, footer, cla
       role="presentation"
       onClick={onClose}
     >
-      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" aria-hidden="true" />
+      <div className="absolute inset-0 glass-overlay" aria-hidden="true" />
       <div
         ref={panelRef}
         role="dialog"
@@ -88,7 +88,7 @@ export function Modal({ open, onClose, title, description, children, footer, cla
         aria-describedby={description ? descId : undefined}
         tabIndex={-1}
         className={cn(
-          'relative w-full max-w-lg glass rounded-2xl border border-border shadow-2xl overflow-hidden focus:outline-none',
+          'relative w-full max-w-lg glass-deep glass-plane-float glass-chrome rounded-2xl overflow-hidden focus:outline-none',
           className,
         )}
         onClick={(e) => e.stopPropagation()}

@@ -64,6 +64,7 @@ export default function BestHubPage() {
           title="Best supplements, by goal"
           description="Start from what you want to improve. Each guide ranks the evidence-graded compounds that act on that goal's mechanisms — by strength of human evidence, not marketing — with doses, citations, and a hand-off into a personalized stack."
           theme="emerald"
+          variant="handoff"
         />
 
         <div className="mx-auto mb-8 max-w-5xl">

@@ -100,7 +100,7 @@ export function InteractiveSciencePanel({
     <div
       ref={panelRef}
       className={cn(
-        'relative flex flex-col overflow-hidden rounded-2xl border border-border/70 bg-[var(--color-bg-elevated)]',
+        'premium-card relative flex flex-col overflow-hidden rounded-2xl',
         fullscreen && 'h-full w-full rounded-none',
         className,
       )}

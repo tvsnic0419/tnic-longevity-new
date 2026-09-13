@@ -4,8 +4,12 @@ import { cn } from '@/lib/utils';
 /**
  * Deep Glass System — depth via layered planes, not blur alone.
  * See app/globals.css "Design System v8 — Deep Glass" for the token bundle
- * each plane draws from. Reserve glass for one or two moments per page —
- * most surfaces on the site should stay non-glass.
+ * each plane draws from, and v10 for the sitewide glass *material* (rim,
+ * inner specular, frost wash) that chrome and grounded cards share.
+ *
+ * Heavy backdrop-filter planes stay budgeted: one or two per page. v10 does
+ * not lift that budget — it makes every other surface speak the same optical
+ * language without paying the blur cost on 100-card grids.
  */
 export type GlassDepth = 'field' | 'mid' | 'content' | 'float';
 

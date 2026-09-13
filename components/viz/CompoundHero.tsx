@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { hasGeometry, describeGeometry } from "./molecule";
 import { VIZ, FONT, tierColor, signatureHue } from "./tokens";
 import { AddToProtocol } from "@/components/ui/AddToProtocol";
+import Link from "next/link";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CompoundHero — a "mini-Descent" overture band for every compound page.
@@ -25,7 +26,7 @@ export type CompoundHeroData = {
   bioavailability?: number;
   studyCount: number;
   synergyCount: number;
-  hallmarks: string[];
+  hallmarks: { title: string; slug: string }[];
 };
 
 const LazyMoleculeStage = dynamic(
@@ -148,7 +149,9 @@ export function CompoundHero(data: CompoundHeroData) {
             <div className="chero-hallmarks">
               <span className="lbl">Targets</span>
               {data.hallmarks.map((h) => (
-                <span className="chip" key={h}>{h}</span>
+                <Link className="chip" href={`/library/${h.slug}`} key={h.slug}>
+                  {h.title}
+                </Link>
               ))}
             </div>
           )}
@@ -291,7 +294,9 @@ const CHERO_CSS = `
 .chero-hallmarks .chip {
   font-size: var(--type-12); color: ${VIZ.muted}; padding: 5px 11px; border-radius: 999px;
   border: 1px solid ${VIZ.line}; background: rgba(14,20,38,0.5);
+  text-decoration: none;
 }
+.chero-hallmarks a.chip:hover { color: var(--hue); border-color: color-mix(in srgb, var(--hue) 45%, ${VIZ.line}); }
 
 .chero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; align-items: center; }
 .chero-skip {

@@ -14,6 +14,7 @@ import { biomarkers } from '@/lib/data';
 import { COMPOUND_COUNT } from '@/lib/library-modules';
 import { EntityChips } from '@/components/ui/EntityChips';
 import { resolveCompounds } from '@/lib/entity-graph';
+import { hallmarkLibrary } from '@/lib/hallmarks-library';
 
 export const metadata = seoRoutes.labs();
 
@@ -61,7 +62,7 @@ export default function LabsPage() {
         stats={[
           { value: String(biomarkers.length), label: 'Tracked biomarkers' },
           { value: String(COMPOUND_COUNT), label: 'Graded compounds', href: '/library/compounds' },
-          { value: '12', label: 'Hallmarks of aging', href: '/hallmarks' },
+          { value: String(hallmarkLibrary.length), label: 'Hallmarks of aging', href: '/hallmarks' },
           { value: 'A–C', label: 'Evidence tiers', href: '/trust/methodology' },
         ]}
         primary={{ href: '/nico', label: 'Find your personalized stack' }}

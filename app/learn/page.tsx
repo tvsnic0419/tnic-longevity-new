@@ -6,6 +6,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { getHubContext } from '@/lib/hub-context';
 import { LearnPageClient } from '@/components/learn/LearnPageClient';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
+import { HubSplitInstrument, HUB_ACCENT_VAR } from '@/components/viz/HubSplitInstrument';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
 import { seoRoutes } from '@/lib/seo-routes';
@@ -64,6 +65,36 @@ export default function LearnPage() {
         ]}
         primary={{ href: '/nico', label: 'Find your personalized stack' }}
         secondary={{ href: '/library', label: 'Browse the library' }}
+        figure={
+          <HubSplitInstrument
+            kicker="Learn inventory"
+            total={consumerFAQ.length + glossary.length + gettingStartedSteps.length}
+            totalLabel="entries"
+            rows={[
+              {
+                key: 'faq',
+                label: 'Answered questions',
+                count: consumerFAQ.length,
+                color: HUB_ACCENT_VAR.amber,
+              },
+              {
+                key: 'glossary',
+                label: 'Glossary terms',
+                count: glossary.length,
+                color: HUB_ACCENT_VAR.cyan,
+              },
+              {
+                key: 'steps',
+                label: 'Getting-started steps',
+                count: gettingStartedSteps.length,
+                color: HUB_ACCENT_VAR.emerald,
+              },
+            ]}
+            href="/trust/methodology"
+            hrefLabel="How evidence is graded →"
+          />
+        }
+        figureCaption="Content split · derived from the learn registries"
       />
       {/* Identity on the server, ahead of the client island — see the note in
           app/stacks/page.tsx and STYLE_GUIDE §14. LearnPageClient reads the
@@ -81,6 +112,7 @@ export default function LearnPage() {
           theme="cyan"
           context={getHubContext('learn')}
           contextVariant="compact"
+          variant="handoff"
         />
         <Suspense fallback={<div className="py-20 text-muted-foreground">Loading…</div>}>
           <LearnPageClient />

@@ -15,11 +15,17 @@ import { trackEvent } from '@/lib/analytics';
 import { ANALYTICS_EVENTS } from '@/lib/analytics-events';
 
 interface AntiAgingLibraryProps {
-  /** Use h1 when rendered as dedicated /library page */
+  /** Use h1 when this atlas IS the page. The /library hub keeps this as h2
+   *  because the compound-first hero already owns the page identity. */
   asPageTitle?: boolean;
+  /** The hub already has LibrarySearch; don't repeat a second box here. */
+  hideLocalSearch?: boolean;
 }
 
-export function AntiAgingLibrary({ asPageTitle = false }: AntiAgingLibraryProps) {
+export function AntiAgingLibrary({
+  asPageTitle = false,
+  hideLocalSearch = false,
+}: AntiAgingLibraryProps) {
   const [selected, setSelected] = useState(hallmarkLibrary[0].id);
   const [query, setQuery] = useState('');
   const { hallmarkNotes } = usePlatform();
@@ -55,7 +61,7 @@ export function AntiAgingLibrary({ asPageTitle = false }: AntiAgingLibraryProps)
           id="library-heading"
           icon={Library}
           eyebrow="Anti-Aging Library"
-          title="The 12 Hallmarks of Aging"
+          title={`The ${hallmarkLibrary.length} Hallmarks of Aging`}
           description="Each hallmark explained with visuals, evidence-ranked interventions, PubMed citations, and personal notes. Select a hallmark to explore."
           meta={notedCount > 0 ? `${notedCount} hallmark${notedCount > 1 ? 's' : ''} with personal notes saved locally` : undefined}
           theme="cyan"
@@ -82,7 +88,7 @@ export function AntiAgingLibrary({ asPageTitle = false }: AntiAgingLibraryProps)
           </Link>
         </div>
 
-        {!asPageTitle && (
+        {!asPageTitle && !hideLocalSearch && (
           <div className="relative max-w-lg mx-auto mb-8 md:mb-10">
             <label htmlFor="hallmark-search" className="sr-only">
               Search hallmarks or interventions

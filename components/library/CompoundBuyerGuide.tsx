@@ -85,7 +85,7 @@ export function CompoundBuyerGuidePanel({
             <AffiliateDisclosure />
           </>
         ) : (
-          <div className="flex items-start gap-2.5 rounded-xl border border-border/50 bg-muted/10 p-4">
+          <div className="flex items-start gap-2.5 rounded-xl surface-well p-4">
             <Info className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
             <p className="text-sm text-muted-foreground leading-relaxed">
               TNiC hasn&apos;t verified a manufacturer pick for this compound yet — picks are added

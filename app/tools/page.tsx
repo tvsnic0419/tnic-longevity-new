@@ -5,6 +5,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
+import { HubSplitInstrument, HUB_ACCENT_VAR } from '@/components/viz/HubSplitInstrument';
 import { seoRoutes } from '@/lib/seo-routes';
 import { buildBreadcrumbSchema } from '@/lib/seo';
 import { toolsRegistry } from '@/lib/registry';
@@ -35,6 +36,27 @@ function buildToolsSchemas() {
 }
 
 export default function ToolsPage() {
+  const badgeRows = [
+    {
+      key: 'new',
+      label: 'New',
+      count: toolsRegistry.filter((t) => t.badge === 'New').length,
+      color: HUB_ACCENT_VAR.cyan,
+    },
+    {
+      key: 'advanced',
+      label: 'Advanced',
+      count: toolsRegistry.filter((t) => t.badge === 'Advanced').length,
+      color: HUB_ACCENT_VAR.violet,
+    },
+    {
+      key: 'core',
+      label: 'Core',
+      count: toolsRegistry.filter((t) => !t.badge).length,
+      color: HUB_ACCENT_VAR.emerald,
+    },
+  ];
+
   return (
     <>
       <StructuredData schemas={buildToolsSchemas()} />
@@ -50,6 +72,17 @@ export default function ToolsPage() {
         ]}
         primary={{ href: '/nico', label: 'Find your personalized stack' }}
         secondary={{ href: '/library', label: 'Browse the library' }}
+        figure={
+          <HubSplitInstrument
+            kicker="Tool shelf"
+            total={toolsRegistry.length}
+            totalLabel="interactive tools"
+            rows={badgeRows}
+            href="/compound-engine"
+            hrefLabel="Open the scoring engine →"
+          />
+        }
+        figureCaption="Tool split · derived from the tools registry"
       />
       {/* Identity on the server, ahead of the client island — see the note in
           app/stacks/page.tsx and STYLE_GUIDE §14. */}
@@ -61,7 +94,7 @@ export default function ToolsPage() {
             title="Longevity Tools"
             description={`${toolsRegistry.length} evidence-graded calculators that turn library knowledge into practical models. Rule-based, transparent reasoning — not generative AI.`}
             theme="violet"
-            cinematic
+            variant="handoff"
             as="h1"
           />
         </div>

@@ -31,7 +31,7 @@ import { evidenceTagDefinitions } from '@/lib/trust';
 import { getComparisonsForCompound } from '@/lib/comparison-relations';
 import { resolveCompound as resolveEngineCompound } from '@/lib/compound-engine-data';
 import { buildEngineStackUrl } from '@/lib/stack-url';
-import { getGuideForCompound, getRelatedCompounds } from '@/lib/library-graph';
+import { getGuideForCompound, getRelatedCompounds, getProtocolsForCompound } from '@/lib/library-graph';
 import { getPathwaysForCompound } from '@/lib/pathways';
 import { seoRoutes } from '@/lib/seo-routes';
 
@@ -77,6 +77,8 @@ export default async function LibraryModulePage({
   const guide = mod.category === 'compounds' ? getGuideForCompound(mod.slug) : undefined;
   const relatedCompounds =
     mod.category === 'compounds' ? getRelatedCompounds(mod.slug) : [];
+  const usedInProtocols =
+    mod.category === 'compounds' ? getProtocolsForCompound(mod.slug) : [];
   // Pathways this compound engages — resolved server-side so the pathway
   // registry stays out of the deep-dive client bundle.
   const compoundPathways =
@@ -122,8 +124,11 @@ export default async function LibraryModulePage({
         studyCount: heroCompound.studies.length,
         synergyCount: heroCompound.synergies.length,
         hallmarks: heroCompound.hallmarks
-          .map((hid) => hallmarkLibrary.find((h) => h.id === hid)?.title ?? hid)
-          .filter(Boolean),
+          .map((hid) => {
+            const h = hallmarkLibrary.find((entry) => entry.id === hid);
+            return h ? { title: h.title, slug: h.slug } : null;
+          })
+          .filter((h): h is { title: string; slug: string } => Boolean(h)),
       }
     : null;
 
@@ -145,8 +150,11 @@ export default async function LibraryModulePage({
             (mdx?.body.match(/\bPMID:?\s*(\d{7,8})\b/g) ?? []).map((m) => m.replace(/\D/g, '')),
           ).size,
           hallmarks: mod.relatedHallmarkIds
-            .map((hid) => hallmarkLibrary.find((h) => h.id === hid)?.title)
-            .filter((t): t is string => Boolean(t)),
+            .map((hid) => {
+              const h = hallmarkLibrary.find((entry) => entry.id === hid);
+              return h ? { title: h.title, slug: h.slug } : null;
+            })
+            .filter((h): h is { title: string; slug: string } => Boolean(h)),
         }
       : null;
 
@@ -243,6 +251,7 @@ export default async function LibraryModulePage({
         comparisons={comparisons}
         guide={guide}
         relatedCompounds={relatedCompounds}
+        protocols={usedInProtocols}
         engineHref={engineHref}
         pathways={compoundPathways}
         lastUpdated={mdx?.frontmatter.last_updated}

@@ -3,6 +3,7 @@
 import { MoleculeStage } from "./MoleculeStage";
 import { hasGeometry, describeGeometry } from "./molecule";
 import { VIZ, FONT, tierColor, signatureHue } from "./tokens";
+import Link from "next/link";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ModuleHero — the overture band for "library-only" compound pages (the 28
@@ -21,7 +22,7 @@ export type ModuleHeroData = {
   summary: string;
   evidenceTier: string;
   studyCount: number;
-  hallmarks: string[];
+  hallmarks: { title: string; slug: string }[];
 };
 
 function firstSentence(text: string): string {
@@ -84,7 +85,9 @@ export function ModuleHero(data: ModuleHeroData) {
             <div className="mhero-hallmarks">
               <span className="lbl">Targets</span>
               {data.hallmarks.map((h) => (
-                <span className="chip" key={h}>{h}</span>
+                <Link className="chip" href={`/library/${h.slug}`} key={h.slug}>
+                  {h.title}
+                </Link>
               ))}
             </div>
           )}
@@ -157,7 +160,9 @@ const MHERO_CSS = `
 .mhero-hallmarks .chip {
   font-size: var(--type-12); color: ${VIZ.muted}; padding: 5px 11px; border-radius: 999px;
   border: 1px solid ${VIZ.line}; background: rgba(14,20,38,0.5);
+  text-decoration: none;
 }
+.mhero-hallmarks a.chip:hover { color: var(--hue); border-color: color-mix(in srgb, var(--hue) 45%, ${VIZ.line}); }
 
 @media (prefers-reduced-motion: reduce) {
   .mhero-hint .dot { box-shadow: none; }

@@ -76,6 +76,7 @@ export default function ShopPage() {
           theme="amber"
           context={getHubContext('shop')}
           contextVariant="compact"
+          variant="handoff"
         />
         <ProtocolShopPanel />
       {/* This page's body is a client island behind Suspense, so it

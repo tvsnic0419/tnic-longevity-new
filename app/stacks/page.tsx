@@ -8,6 +8,7 @@ import { eliteStacks } from '@/lib/stacks-library';
 import { StacksLibrary } from '@/components/stacks/StacksLibrary';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
+import { HubSplitInstrument } from '@/components/viz/HubSplitInstrument';
 import { seoRoutes } from '@/lib/seo-routes';
 import { buildHowToSchema, buildBreadcrumbSchema } from '@/lib/seo';
 import { compounds } from '@/lib/data';
@@ -16,12 +17,16 @@ import { eliteInterventions } from '@/lib/elite-interventions';
 import { stackPresets } from '@/lib/presets';
 import { EntityChips } from '@/components/ui/EntityChips';
 import { resolveCompounds, resolveHallmarks } from '@/lib/entity-graph';
+import { TIER_COLOR_VAR } from '@/lib/trust';
+import type { EvidenceTier } from '@/lib/types';
 
 // Honest stats for the hero — unique undirected synergy edges in the dataset.
 const synergyPairs = new Set<string>();
 for (const c of compounds) {
   for (const s of c.synergies) synergyPairs.add([c.id, s].sort().join('|'));
 }
+const stackByTier: Record<EvidenceTier, number> = { A: 0, B: 0, C: 0 };
+for (const s of eliteStacks) stackByTier[s.evidenceTier] += 1;
 const stackStats = [
   { value: String(Object.keys(stackPresets).length), label: 'Graded presets' },
   { value: String(COMPOUND_COUNT), label: 'Compounds' },
@@ -72,6 +77,22 @@ export default function StacksPage() {
         stats={stackStats}
         primary={{ href: '/nico', label: 'Find your personalized stack' }}
         secondary={{ href: '/library', label: 'Browse compounds' }}
+        figure={
+          <HubSplitInstrument
+            kicker="Elite stacks"
+            total={eliteStacks.length}
+            totalLabel="graded protocols"
+            rows={(['A', 'B', 'C'] as EvidenceTier[]).map((tier) => ({
+              key: tier,
+              label: `Tier ${tier}`,
+              count: stackByTier[tier],
+              color: TIER_COLOR_VAR[tier],
+            }))}
+            href="/protocols"
+            hrefLabel="Open the protocol library →"
+          />
+        }
+        figureCaption="Evidence split · derived from the elite-stack registry"
       />
       <div className="container-page mt-8">
         <Link

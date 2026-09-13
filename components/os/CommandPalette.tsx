@@ -144,13 +144,13 @@ export function CommandPalette({
       role="presentation"
       onClick={close}
     >
-      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" aria-hidden="true" />
+      <div className="absolute inset-0 glass-overlay" aria-hidden="true" />
 
       <div
         role="dialog"
         aria-modal="true"
         aria-label="Command palette"
-        className="relative w-full max-w-xl glass rounded-2xl border border-border shadow-2xl overflow-hidden"
+        className="relative w-full max-w-xl glass-deep glass-plane-float glass-chrome rounded-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-3 border-b border-border px-4 py-3">

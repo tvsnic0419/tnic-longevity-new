@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { ArrowLeft, Scale } from 'lucide-react';
 import type { Metadata } from 'next';
 import { StructuredData } from '@/components/seo/StructuredData';
-import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { HeadToHeadCompare } from '@/components/library/HeadToHeadCompare';
 import { HeadToHeadPicker } from '@/components/library/HeadToHeadPicker';
@@ -54,29 +53,15 @@ export async function generateMetadata({
   });
 }
 
-/**
- * The half of the page that depends on ?a=&b=, isolated behind its own Suspense
- * boundary so awaiting the params cannot hold up the page's identity.
- *
- * This route previously carried a segment `loading.tsx`. Its own doc comment
- * explains why that pattern is wrong — a segment loading.tsx wraps the subtree
- * in a boundary that sits inside SubPageLayout's <main>, so the skeleton ships
- * as <main> and the real content streams in after </footer> — and then argued
- * the cost was acceptable here because it is only one route. Measured, the
- * failure was identical in kind: </main> closed at byte 51,087, <footer> opened
- * at 51,100, and all 318 KB of the comparison arrived afterwards. Scoping the
- * boundary to the part that actually awaits something keeps the loading state
- * and puts the content back inside <main>.
- */
-async function HeadToHeadResult({
-  searchParams,
+function HeadToHeadBody({
+  a,
+  b,
   options,
 }: {
-  searchParams: SearchParams;
+  a: string;
+  b: string;
   options: ReturnType<typeof comparableCompounds>;
 }) {
-  const params = await searchParams;
-  const { a, b } = resolvePair(params.a, params.b);
   const result = buildHeadToHead(a, b);
 
   return (
@@ -89,11 +74,36 @@ async function HeadToHeadResult({
         <HeadToHeadCompare result={result} />
       ) : (
         <p className="premium-card p-6 mt-8 text-body-sm text-muted-foreground">
-          Those two compounds can&apos;t be compared. Pick a different pair above.
+          Those two compounds cannot be compared. Pick a different pair above.
         </p>
       )}
     </>
   );
+}
+
+/**
+ * The half of the page that depends on ?a=&b=, isolated behind its own Suspense
+ * boundary so awaiting the params cannot hold up the page's identity.
+ *
+ * The canonical URL has no query string and resolves to DEFAULT_PAIR. That
+ * comparison used to live only inside this async island, so the prerendered
+ * HTML of the indexable address was a skeleton — identity in <main>, the
+ * actual comparison absent until JS. The Suspense fallback is now the default
+ * pair itself: crawlers and anyone without JS get the real comparison, and
+ * when the island resolves to that same pair (the canonical case) nothing
+ * flashes. Parameterized URLs still swap after the params resolve; they all
+ * canonicalise back here and are not in the sitemap.
+ */
+async function HeadToHeadResult({
+  searchParams,
+  options,
+}: {
+  searchParams: SearchParams;
+  options: ReturnType<typeof comparableCompounds>;
+}) {
+  const params = await searchParams;
+  const { a, b } = resolvePair(params.a, params.b);
+  return <HeadToHeadBody a={a} b={b} options={options} />;
 }
 
 export default function HeadToHeadPage({ searchParams }: { searchParams: SearchParams }) {
@@ -128,7 +138,11 @@ export default function HeadToHeadPage({ searchParams }: { searchParams: SearchP
           align="left"
         />
 
-        <Suspense fallback={<div className="mt-6"><SectionSkeleton height="lg" /></div>}>
+        <Suspense
+          fallback={
+            <HeadToHeadBody a={DEFAULT_PAIR.a} b={DEFAULT_PAIR.b} options={options} />
+          }
+        >
           <HeadToHeadResult searchParams={searchParams} options={options} />
         </Suspense>
       {/* This page's body is a client island behind Suspense, so it

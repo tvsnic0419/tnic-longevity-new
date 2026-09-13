@@ -210,7 +210,7 @@ export function HomeNicoStarter() {
     <section
       id="personalize"
       aria-labelledby="home-nico-heading"
-      className="relative border-t border-border/50 py-20 md:py-28"
+      className="relative border-t border-border/50 py-[var(--section-y)]"
     >
       <CellularDivider hue="var(--accent-violet)" index="06" label="Personalize" />
       <div className="container-page">
@@ -482,7 +482,7 @@ export function HomeNicoStarter() {
 
                 {/* What the engine actually used — so the number above is
                     inspectable rather than asserted. */}
-                <div className="mb-6 rounded-xl border border-border/60 bg-muted/20 p-4">
+                <div className="mb-6 rounded-xl surface-well p-4">
                   <p className="mb-2 font-mono text-micro uppercase tracking-wider text-muted-foreground">
                     What NICO used
                   </p>

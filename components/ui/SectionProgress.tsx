@@ -215,7 +215,14 @@ export function SectionProgress({
         //   >= 1700px  gutter >= 210px  full rail with labels (needs ~182px)
         //   >= 1500px  gutter >= 110px  ticks only (needs ~94px)
         //   <  1500px  no room — the bottom strip takes over
-        className="pointer-events-none fixed right-[clamp(14px,2.5vw,30px)] top-1/2 z-40 hidden -translate-y-1/2 flex-col min-[1500px]:flex"
+        //
+        // The fade-at-top came from main and is kept: the rail has nothing to
+        // report before the reader has left the first section. Its breakpoint
+        // moves with the visibility rule above, so the two cannot disagree.
+        className={cn(
+          'pointer-events-none fixed right-[clamp(14px,2.5vw,30px)] top-1/2 z-40 hidden -translate-y-1/2 flex-col transition-opacity duration-300 min-[1500px]:flex',
+          active === 0 && 'min-[1500px]:opacity-0 min-[1500px]:pointer-events-none',
+        )}
       >
         {/* Panel treatment ported from the rail this replaced (main's
             HomeDescent version): a bordered, blurred plate rather than bare

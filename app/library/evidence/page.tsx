@@ -4,6 +4,7 @@ import { Table2 } from 'lucide-react';
 import { PageShell } from '@/components/ui/PageShell';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
+import { LibraryHeroInstrument } from '@/components/library/LibraryHeroInstrument';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { EvidenceIndexTable } from '@/components/library/EvidenceIndexTable';
 import { buildPageMetadata, buildBreadcrumbSchema } from '@/lib/seo';
@@ -78,6 +79,8 @@ export default function EvidenceIndexPage() {
         ]}
         primary={{ href: '#evidence-table', label: 'Open the table' }}
         secondary={{ href: '/trust/methodology', label: 'How we grade' }}
+        figure={<LibraryHeroInstrument />}
+        figureCaption="Evidence split · derived from the graded library"
       />
 
       <PageShell>

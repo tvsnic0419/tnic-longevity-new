@@ -238,7 +238,7 @@ export function HomeEliteGrid() {
       'focus-ring interactive rounded-full border px-3.5 py-1.5 font-mono text-micro font-semibold uppercase tracking-[0.12em] transition-all',
       on
         ? 'border-accent-emerald bg-accent-emerald/10 text-accent-emerald'
-        : 'border-border/70 bg-card/40 text-muted-foreground hover:border-foreground/40 hover:text-foreground',
+        : 'surface-well text-muted-foreground hover:border-foreground/40 hover:text-foreground',
     ].join(' ');
 
   return (

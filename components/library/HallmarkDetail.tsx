@@ -19,6 +19,7 @@ import { getHallmarkContext } from '@/lib/hub-context';
 import { SystemsSynthesisView } from './SystemsSynthesisView';
 import { HALLMARK_VISUALS } from '@/components/illustrations/HallmarkVisuals';
 import { ContentByline } from '@/components/trust/ContentByline';
+import { ContinueTrail, type WalkItem } from '@/components/ui/WalkCard';
 
 interface PathwayLink {
   slug: string;
@@ -54,6 +55,51 @@ export function HallmarkDetail({
   const citationCount = mdxBody
     ? new Set(mdxBody.match(/\bPMID:?\s*(\d{7,8})\b/g)?.map((m) => m.replace(/\D/g, '')) ?? []).size
     : 0;
+
+  const continueItems: WalkItem[] = [];
+  if (targetingCompounds[0]) {
+    continueItems.push({
+      href: `/library/compounds/${targetingCompounds[0].slug}`,
+      kicker: 'Top compound',
+      title: targetingCompounds[0].name,
+      detail: 'Highest-evidence compound studied against this hallmark.',
+      accent: 'emerald',
+    });
+  }
+  if (drivingPathways[0]) {
+    continueItems.push({
+      href: `/pathways/${drivingPathways[0].slug}`,
+      kicker: 'Pathway',
+      title: drivingPathways[0].name,
+      detail: drivingPathways[0].summary,
+      accent: 'violet',
+    });
+  }
+  if (guides[0]) {
+    continueItems.push({
+      href: guides[0].href,
+      kicker: 'Guide',
+      title: guides[0].label,
+      detail: 'Dosing, forms, and the evidence in one sitting.',
+      accent: 'cyan',
+    });
+  }
+  if (targetingPeptides[0]) {
+    continueItems.push({
+      href: `/peptides/${targetingPeptides[0].slug}`,
+      kicker: 'Peptide',
+      title: targetingPeptides[0].name,
+      detail: 'A peptide that targets the same hallmark.',
+      accent: 'rose',
+    });
+  }
+  continueItems.push({
+    href: '/library/systems',
+    kicker: 'Systems',
+    title: 'Cross-hallmark map',
+    detail: 'See how this mechanism sits among the other eleven.',
+    accent: 'violet',
+  });
 
   return (
     <>
@@ -313,6 +359,7 @@ export function HallmarkDetail({
               </div>
               <SystemsSynthesisView hallmarkId={hallmark.id} />
             </div>
+            <ContinueTrail items={continueItems.slice(0, 4)} />
           </div>
         </div>
       </div>
