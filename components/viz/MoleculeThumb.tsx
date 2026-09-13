@@ -44,6 +44,20 @@ function project(x: number, y: number, z: number): { x: number; y: number; z: nu
   };
 }
 
+/**
+ * Round to 2dp for SVG output.
+ *
+ * The projected coordinates are IEEE doubles, so React serialised each one at
+ * full precision — `x1="43.78637600033787"`, 18 characters to place a point on
+ * a 0–100 viewBox that renders at 72 CSS pixels. At that size 2dp is already
+ * ~700× finer than a device pixel; everything past it is invisible and paid for
+ * twice, because the RSC Flight payload re-encodes the same element tree that
+ * the HTML already carries. Measured on /library, which draws 100 of these:
+ * 3,021 KB of HTML, 897 KB of it inline <svg> and 1,533 KB of it the Flight
+ * copy of the same markup.
+ */
+const r2 = (n: number): number => Math.round(n * 100) / 100;
+
 function fit(points: Pt[], pad = 10): { pts: Pt[]; size: number } {
   let minX = Infinity;
   let maxX = -Infinity;
@@ -62,8 +76,8 @@ function fit(points: Pt[], pad = 10): { pts: Pt[]; size: number } {
   const s = inner / span;
   return {
     pts: points.map((p) => ({
-      x: 50 + (p.x - cx) * s,
-      y: 50 + (p.y - cy) * s,
+      x: r2(50 + (p.x - cx) * s),
+      y: r2(50 + (p.y - cy) * s),
       z: p.z,
       el: p.el,
     })),
@@ -99,7 +113,7 @@ function StructureThumb({ id }: { id: string }) {
     return { x: p.x, y: p.y, z: p.z, el: a.el };
   });
   const { pts, size } = fit(projected);
-  const atomR = Math.max(1.6, Math.min(3.2, 22 / Math.sqrt(pts.length)));
+  const atomR = r2(Math.max(1.6, Math.min(3.2, 22 / Math.sqrt(pts.length))));
 
   const bonds = geom.bonds
     .map(([ia, ib, order]) => {
@@ -122,24 +136,24 @@ function StructureThumb({ id }: { id: string }) {
           const dx = b.b.x - b.a.x;
           const dy = b.b.y - b.a.y;
           const len = Math.hypot(dx, dy) || 1;
-          const ox = (-dy / len) * 1.15;
-          const oy = (dx / len) * 1.15;
+          const ox = r2((-dy / len) * 1.15);
+          const oy = r2((dx / len) * 1.15);
           return (
             <g key={`b-${i}`} opacity="0.72">
               <line
-                x1={b.a.x + ox}
-                y1={b.a.y + oy}
-                x2={b.b.x + ox}
-                y2={b.b.y + oy}
+                x1={r2(b.a.x + ox)}
+                y1={r2(b.a.y + oy)}
+                x2={r2(b.b.x + ox)}
+                y2={r2(b.b.y + oy)}
                 stroke="currentColor"
                 strokeWidth="1.1"
                 strokeLinecap="round"
               />
               <line
-                x1={b.a.x - ox}
-                y1={b.a.y - oy}
-                x2={b.b.x - ox}
-                y2={b.b.y - oy}
+                x1={r2(b.a.x - ox)}
+                y1={r2(b.a.y - oy)}
+                x2={r2(b.b.x - ox)}
+                y2={r2(b.b.y - oy)}
                 stroke="currentColor"
                 strokeWidth="1.1"
                 strokeLinecap="round"
@@ -166,7 +180,7 @@ function StructureThumb({ id }: { id: string }) {
           key={`a-${a.i}`}
           cx={a.x}
           cy={a.y}
-          r={a.el === 'C' ? atomR * 0.85 : atomR}
+          r={a.el === 'C' ? r2(atomR * 0.85) : atomR}
           fill={ELEMENT_FILL[a.el]}
           opacity={a.el === 'C' ? 0.92 : 1}
         />

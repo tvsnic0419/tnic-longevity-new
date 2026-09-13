@@ -4,6 +4,81 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-13 (third pass) — the hub hero stops being a void
+
+**The question asked:** upgrade the site on multiple levels, ~30% better UI and
+functionality, visuals weighted highest.
+
+**What the screenshots showed.** Eleven hub pages, measured at 1440×900: every
+one opens with `CinematicHubHero` as a single left-aligned column, and
+**roughly 45% of the first viewport is empty**. The `MoleculeStage` field meant
+to fill it sits at 0.34 opacity behind a veil, masked toward 48%/34% — i.e.
+behind the copy, not in the gap — and reads as nothing. The component is named
+cinematic and renders dark air on the site's eleven most important arrival
+surfaces.
+
+The answer was already in the codebase. Hallmark pages pair copy with a real
+figure on the right (coverage ring, ranked interventions, biomarker chips) and
+are the best-looking thing on the site. Per CLAUDE.md §6 — does something like
+this already exist, and does it clear the bar — the hero now does the same.
+
+**Shipped — visual.**
+
+- **Two-column hero at ≥1024px.** Copy left; a framed **instrument panel**
+  right carrying the hub's molecular field at full strength, masked to fade
+  into the panel, with a mono caption naming what the visual is
+  (`Molecular field · decorative` by default — a site that grades evidence has
+  to say whether a picture is data or atmosphere). Stat rail spans both
+  columns as the composition's base. Phone and tablet unchanged; the figure is
+  `display:none` below 1024px, where the copy already fills the width.
+- **A `figure` prop** so a hub with a real data figure can pass one and caption
+  it honestly.
+- **Background field re-tuned** at ≥1024px: 0.34 → 0.26, mask moved to 26%/38%,
+  so it textures the copy column's ground instead of competing with the panel.
+- **Compound card chips pinned to the bottom** (`mt-auto`) across the 100-card
+  browse grid, so chip rows sit on one baseline per row instead of floating
+  wherever the tagline ended.
+
+Documented as STYLE_GUIDE §15, including the two traps that cost a build each:
+the stat rail spans `1 / -1`, so auto-flow drops the figure onto a third row
+unless rows are pinned; and the rail's `width: min(100%, 50rem)` base rule is
+defined later in the file, so the media-query override needs parent scoping to
+beat it (a media query adds no specificity).
+
+**Shipped — functional.**
+
+- **`/library` HTML: 3,021 KB → 2,651 KB (−12.3%).** The molecule thumbs
+  emitted IEEE-double coordinates — `x1="43.78637600033787"`, 18 characters to
+  place a point on a 0–100 viewBox that renders at 72 CSS pixels, where 2dp is
+  already ~700× finer than a device pixel. Paid for twice, because the RSC
+  Flight payload re-encodes the same element tree the HTML already carries.
+  Rounded to 2dp at the projection choke point plus the derived bond offsets
+  and atom radii. Verified pixel-identical against a before screenshot.
+
+**Measured but not fixed, stated plainly.** `/library` is still 2,651 KB —
+708 KB of inline `<svg>` and 1,344 KB of Flight payload re-encoding it. The
+only way to remove that duplication is to stop inlining 100 SVG element trees,
+i.e. serve each thumb as an `<img>` from a static route with `loading="lazy"`.
+That would likely take the page under 1 MB and lazy-load all but the visible
+thumbs — but an `<img>` cannot inherit `currentColor`, so the thumbs would stop
+adapting to light/dark theme. Given visuals were the stated priority, the
+theming regression was not worth the bytes on this pass. It is the right next
+functional move if page weight becomes the priority.
+
+**Checks:** `npm run lint` 0 errors (3 pre-existing warnings) · `npm run
+typecheck` clean · `npm test` 58 files / 714 tests · `npm run build` green ·
+`npm run audit:routes` 0 fail / 0 warn across 227 routes · `npm run audit:ui`
+0 actionable sub-24px controls, 0 axe violations. Light theme, dark theme and
+390px phone all verified by screenshot on the new hero.
+
+**One transient worth recording:** an `audit:ui` run reported a single axe
+colour-contrast violation on phone `/library`; a second run reported zero. That
+is the false positive the script's own header documents — axe measures what is
+painted at that instant, and a scroll reveal caught mid-fade composites toward
+the background.
+
+**Rollback:** `git revert` the merge of this branch.
+
 ## 2026-09-13 (second pass) — what the pages say before JavaScript runs
 
 **The question asked:** find the highest functional and coherence upgrade,

@@ -4649,6 +4649,17 @@ p,
   mask-image: radial-gradient(74% 82% at 48% 34%, #000 0%, transparent 76%);
 }
 
+/* Once the instrument panel carries the right column, the background field's
+   job changes from "fill the void" to "texture the ground". Pulled left and
+   down so it sits behind the copy instead of competing with the panel. */
+@media (min-width: 1024px) {
+  .research-hero__field {
+    opacity: 0.26;
+    -webkit-mask-image: radial-gradient(58% 78% at 26% 38%, #000 0%, transparent 78%);
+    mask-image: radial-gradient(58% 78% at 26% 38%, #000 0%, transparent 78%);
+  }
+}
+
 .research-hero__veil {
   position: absolute;
   inset: 0;
@@ -4663,6 +4674,92 @@ p,
   position: relative;
   z-index: 2;
   padding-block: clamp(5.25rem, 10vw, 8.75rem) clamp(3.5rem, 7vw, 6.5rem);
+}
+
+/* ── Hub hero composition (STYLE_GUIDE §15) ──
+   Single column on phone and tablet, where the copy already fills the width.
+   From 1024px the hero becomes two columns — copy left, instrument panel right
+   — with the stat rail spanning beneath both. Before this the hero was one left
+   column and roughly 45% of the first viewport was empty on every hub. */
+@media (min-width: 1024px) {
+  .research-hero__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
+    column-gap: clamp(2.5rem, 4vw, 4.5rem);
+    align-items: center;
+  }
+  /* Rows are pinned explicitly. The stat rail spans both columns, so leaving
+     placement to the auto-flow algorithm pushed the figure onto a third row
+     under the rail instead of beside the copy. */
+  .research-hero__copy { grid-column: 1; grid-row: 1; }
+  .research-hero__figure { grid-column: 2; grid-row: 1; }
+  /* The rail is a base to the whole hero, not a footnote to the copy. */
+  /* Scoped through the parent so the width override beats the base rule's
+     `width: min(100%, 50rem)`, which is defined later in this file — a media
+     query adds no specificity, so source order would otherwise win. The 50rem
+     cap is right for a single-column hero; spanning both columns the rail is
+     the composition's base and should run its full width. */
+  .research-hero__inner .research-hero__stats {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin-top: clamp(2.5rem, 4vw, 3.75rem);
+    width: 100%;
+  }
+}
+
+/* ── The instrument panel ──
+   Same framing language as the homepage's live-visual panels: a bordered plane
+   with an accent light-catch hairline along the top edge, real elevation, and a
+   mono caption that names what the visual is. The caption is load-bearing, not
+   decoration — a picture on a page that grades evidence has to say whether it
+   is data or atmosphere. */
+.research-hero__figure {
+  display: none;
+  position: relative;
+  border-radius: var(--radius-2xl);
+  border: 1px solid color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 22%, var(--color-border-subtle));
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 55%, transparent), transparent) 0 0 / 100% 1px no-repeat,
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.006)),
+    color-mix(in srgb, var(--color-bg-elevated) 82%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 30px 70px -40px color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 55%, transparent),
+    var(--glass-shadow-field);
+  overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .research-hero__figure { display: block; }
+}
+
+.research-hero__figure-stage {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  /* Fades the canvas into the panel rather than ending on a hard edge. */
+  -webkit-mask-image: radial-gradient(78% 82% at 50% 46%, #000 32%, transparent 88%);
+  mask-image: radial-gradient(78% 82% at 50% 46%, #000 32%, transparent 88%);
+}
+
+.research-hero__figure-cap {
+  margin: 0;
+  padding: 0.75rem 1.125rem 0.9rem;
+  border-top: 1px solid var(--color-border-subtle);
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+[data-theme="light"] .research-hero__figure {
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 42%, transparent), transparent) 0 0 / 100% 1px no-repeat,
+    var(--color-bg-elevated);
+  box-shadow: var(--glass-shadow-mid);
 }
 
 .research-hero__eyebrow {
