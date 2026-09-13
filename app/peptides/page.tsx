@@ -80,6 +80,7 @@ export default function PeptidesHubPage() {
             description={`${peptideLibrary.length} of the most-discussed longevity peptides — evidence tier, mechanism, dosing patterns reported in the literature, and the legal status of every single one, stated plainly before anything else.`}
             theme="rose"
             context={getHubContext('peptides')}
+            variant="handoff"
           />
 
         <div className="mx-auto mb-10 max-w-3xl md:mb-14">

@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { Logo } from '@/components/ui/Logo';
 import {
@@ -31,6 +32,7 @@ const hubLinks = [
   { href: '/dashboard', label: 'My Dashboard', icon: LayoutDashboard },
   { href: '/nico', label: 'NICO Starter Questionnaire', icon: HelpCircle },
   { href: '/library', label: 'Anti-Aging Library', icon: Library },
+  { href: '/hallmarks', label: '12 Hallmarks of Aging', icon: Orbit },
   { href: '/library/evidence', label: 'The Evidence Table', icon: Table2 },
   { href: '/peptides', label: 'Peptide Library', icon: Syringe },
   { href: '/pathways', label: 'Pathways', icon: Waypoints },
@@ -40,6 +42,7 @@ const hubLinks = [
   { href: '/stacks', label: 'Stacks & Protocols', icon: Layers },
   { href: '/protocols', label: 'Protocol Library', icon: Layers },
   { href: '/labs', label: 'Lab Analysis Hub', icon: FlaskConical },
+  { href: '/tools', label: 'Tools', icon: Cpu },
   { href: '/compound-engine', label: 'Compound Engine', icon: Cpu },
 ];
 
@@ -122,12 +125,13 @@ export function Footer() {
             {[
               { href: '/supplement-guides', label: 'Understand a supplement', detail: 'Mechanism, human evidence, and cautions' },
               { href: '/best', label: 'Find by goal', detail: 'Goal-led shortlists without hype' },
-              { href: '/library', label: 'Explore the library', detail: 'Compounds, hallmarks, and comparisons' },
-              { href: '/nico', label: 'Build a starting point', detail: 'A free, adjustable questionnaire' },
+              { href: '/protocols', label: 'Inspect a protocol', detail: 'Choreographed stacks, each compound with a job' },
+              { href: '/labs', label: 'Log a baseline', detail: 'Track the markers the evidence actually uses' },
             ].map((link) => (
-              <Link key={link.href} href={link.href} className="focus-ring group rounded-2xl border border-border/60 glass p-4 transition-colors hover:border-accent-cyan/40 hover:bg-accent-cyan/[0.07]">
-                <span className="block text-sm font-semibold text-foreground group-hover:text-accent-cyan">{link.label}</span>
-                <span className="mt-1 block text-caption leading-relaxed">{link.detail}</span>
+              <Link key={link.href} href={link.href} className="walk-card focus-ring group" style={{ '--walk-accent': 'var(--accent-cyan)' } as CSSProperties}>
+                <span className="walk-card__kicker">Start here</span>
+                <span className="walk-card__title">{link.label}</span>
+                <span className="walk-card__detail">{link.detail}</span>
               </Link>
             ))}
           </div>

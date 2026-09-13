@@ -92,7 +92,7 @@ export default function ToolsPage() {
             title="Longevity Tools"
             description={`${toolsRegistry.length} evidence-graded calculators that turn library knowledge into practical models. Rule-based, transparent reasoning — not generative AI.`}
             theme="violet"
-            cinematic
+            variant="handoff"
             as="h1"
           />
         </div>

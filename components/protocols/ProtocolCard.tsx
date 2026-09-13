@@ -31,7 +31,8 @@ export function ProtocolCard({ protocol }: { protocol: Protocol }) {
   const accent = ACCENT[protocol.theme];
   return (
     <article
-      className="premium-card flex h-full flex-col rounded-2xl p-6 md:p-7"
+      id={protocol.slug}
+      className="premium-card flex h-full flex-col scroll-mt-28 rounded-2xl p-6 md:p-7"
       style={{ '--card-accent': accent } as CSSProperties}
     >
       <div className="mb-4 flex items-start justify-between gap-3">
@@ -86,7 +87,7 @@ export function ProtocolCard({ protocol }: { protocol: Protocol }) {
           return (
             <Link
               key={id}
-              href={`/hallmarks/${h.slug}`}
+              href={`/library/${h.slug}`}
               className="focus-ring rounded surface-well px-1.5 py-0.5 text-micro font-medium text-muted-foreground transition-colors hover:border-accent-violet/40 hover:text-accent-violet"
             >
               {h.title}

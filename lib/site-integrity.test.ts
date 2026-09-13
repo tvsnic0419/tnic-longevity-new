@@ -658,7 +658,9 @@ describe('site data integrity', () => {
     expect(css).toContain('--glass-chrome-fill');
     expect(css).toContain('Design System v11');
     expect(css).toContain('.surface-well');
-    expect(css).toContain('.surface-track');
+    expect(css).toContain('Design System v12');
+    expect(css).toContain('.walk-card');
+    expect(css).toContain('.continue-trail');
     expect(tokens).toContain('Hanken Grotesk');
     expect(tokens).not.toContain("'Inter'");
 

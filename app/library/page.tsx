@@ -10,7 +10,7 @@ import { LibrarySearch } from '@/components/library/LibrarySearch';
 import { ToolsPromoStrip } from '@/components/tools/ToolsPromoStrip';
 import { LibraryFacetFilters } from '@/components/library/LibraryFacetFilters';
 import { CompoundExplorer, parseExplorerParams } from '@/components/library/CompoundExplorer';
-import { RecommendedNextSteps } from '@/components/ui/RecommendedNextSteps';
+import { ContinueTrail } from '@/components/ui/WalkCard';
 import { ResearchQueueShelf } from '@/components/library/ResearchQueueShelf';
 import { EvidenceTierSpectrum } from '@/components/library/EvidenceTierSpectrum';
 import { LibraryHeroInstrument } from '@/components/library/LibraryHeroInstrument';
@@ -160,7 +160,39 @@ export default async function LibraryPage({
       <div id="hallmark-atlas"><AntiAgingLibrary hideLocalSearch /></div>
 
       <div className="container-page pb-12">
-        <RecommendedNextSteps context="library" />
+        <ContinueTrail
+          title="Keep going from the library."
+          items={[
+            {
+              href: '/library/evidence',
+              kicker: 'Evidence table',
+              title: 'Sort the whole set',
+              detail: 'Every graded compound, one table — tier, hallmarks, and citations.',
+              accent: 'cyan',
+            },
+            {
+              href: '/stacks',
+              kicker: 'Stacks',
+              title: 'Open Stack Architect',
+              detail: 'Inspect coverage and interactions before you configure anything.',
+              accent: 'violet',
+            },
+            {
+              href: '/protocols',
+              kicker: 'Protocols',
+              title: 'Read a choreographed plan',
+              detail: 'Each compound has a job and a time. Not a pile of pills.',
+              accent: 'emerald',
+            },
+            {
+              href: '/labs',
+              kicker: 'Labs',
+              title: 'Log a baseline',
+              detail: 'Supplements without labs is guessing. Start with a panel.',
+              accent: 'rose',
+            },
+          ]}
+        />
       </div>
 
       {/* Hallmark visual atlas. Each card is a first-party illustration drawn

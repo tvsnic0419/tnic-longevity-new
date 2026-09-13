@@ -68,8 +68,11 @@ export default async function PeptidePage({
       (mdx?.body.match(/\bPMID:?\s*(\d{7,8})\b/g) ?? []).map((m) => m.replace(/\D/g, '')),
     ).size,
     hallmarks: peptide.relatedHallmarkIds
-      .map((hid) => hallmarkLibrary.find((h) => h.id === hid)?.title)
-      .filter((t): t is string => Boolean(t)),
+      .map((hid) => {
+        const h = hallmarkLibrary.find((entry) => entry.id === hid);
+        return h ? { title: h.title, slug: h.slug } : null;
+      })
+      .filter((h): h is { title: string; slug: string } => Boolean(h)),
   };
 
   // Derived cross-type bridges (computed server-side to keep the datasets out of
