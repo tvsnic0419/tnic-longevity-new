@@ -64,7 +64,7 @@ export function EvidenceTrace({
       <Link
         href={href}
         onClick={() => trackEvent(ANALYTICS_EVENTS.evidenceTraceOpened, { surface })}
-        className="focus-ring ml-auto inline-flex items-center gap-1 rounded text-foreground transition-colors hover:text-accent-cyan"
+        className="focus-ring ml-auto inline-flex min-h-6 items-center gap-1 rounded text-foreground transition-colors hover:text-accent-cyan"
       >
         Inspect
         <ArrowUpRight className="h-3 w-3" aria-hidden="true" />

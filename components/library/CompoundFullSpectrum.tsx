@@ -303,7 +303,7 @@ const CFS_CSS = `
 }
 .cfs-hm-on .cfs-hm-num { color: var(--card-accent); }
 .cfs-hm-on .cfs-hm-title { color: var(--color-text-primary); font-weight: 500; }
-.cfs-hm-link { text-decoration: none; }
+.cfs-hm-link { text-decoration: none; display: inline-flex; align-items: center; min-height: 1.5rem; }
 .cfs-hm-link:hover { text-decoration: underline; }
 .cfs-hm-off { opacity: 0.55; }
 .cfs-hm-off .cfs-hm-num { color: var(--color-text-faint); }

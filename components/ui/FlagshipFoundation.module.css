@@ -43,7 +43,12 @@
 :global(.context-bar__crumbs), :global(.context-bar__workspace), :global(.context-bar__crumb-list), :global(.context-bar__crumb) { display: flex; align-items: center; min-width: 0; }
 :global(.context-bar__crumbs) { gap: .45rem; } :global(.context-bar__crumb-list) { gap: .35rem; } :global(.context-bar__crumb) { gap: .35rem; min-width: 0; }
 :global(.context-bar__pin) { width: .8rem; height: .8rem; flex: none; opacity: .8; } :global(.context-bar__separator) { width: .7rem; height: .7rem; flex: none; color: var(--color-text-faint); opacity: .55; }
+/* The crumb link is a standalone control, so it clears the 24px floor
+   (STYLE_GUIDE §4 / WCAG 2.2 AA 2.5.8). The bar's own min-height is already
+   2.75rem, so a 1.5rem inline-flex row grows the target without moving the
+   bar or shifting the text baseline. */
 :global(.context-bar__crumb-link), :global(.context-bar__current) { overflow: hidden; border-radius: .25rem; font-size: .75rem; line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; }
+:global(.context-bar__crumb-link) { display: inline-flex; align-items: center; min-height: 1.5rem; }
 :global(.context-bar__crumb-link) { max-width: 9.25rem; color: var(--color-text-muted); text-decoration: none; transition: color var(--dur-fast) var(--ease-standard); } :global(.context-bar__current) { max-width: 14rem; color: var(--color-text-primary); font-weight: 650; letter-spacing: -.01em; }
 :global(.context-bar__workspace) { gap: .5rem; margin-left: auto; } :global(.context-bar__status) { color: var(--color-text-faint); font-family: var(--font-mono); font-size: .6rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
 :global(.context-bar__action) { display: inline-flex; align-items: center; gap: .35rem; min-height: 2rem; padding: .35rem .6rem .35rem .7rem; border: 1px solid currentColor; border-radius: 999px; background: color-mix(in srgb, currentColor 8%, transparent); color: var(--accent-cyan); font-size: .75rem; font-weight: 650; line-height: 1; text-decoration: none; white-space: nowrap; transition: background-color var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard); }

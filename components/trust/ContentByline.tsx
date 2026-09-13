@@ -58,7 +58,7 @@ export function ContentByline({
       ) : (
         <Link
           href="/editorial-policy"
-          className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-accent-amber transition focus-ring rounded"
+          className="inline-flex min-h-6 items-center gap-1.5 text-muted-foreground hover:text-accent-amber transition focus-ring rounded"
         >
           <ShieldAlert className="w-3.5 h-3.5 text-accent-amber" aria-hidden="true" />
           Not independently clinician-reviewed
@@ -66,7 +66,7 @@ export function ContentByline({
       )}
       <Link
         href="/trust/methodology"
-        className="inline-flex items-center gap-1.5 text-accent-cyan hover:text-accent-emerald transition focus-ring rounded"
+        className="inline-flex min-h-6 items-center gap-1.5 text-accent-cyan hover:text-accent-emerald transition focus-ring rounded"
       >
         How we grade evidence →
       </Link>

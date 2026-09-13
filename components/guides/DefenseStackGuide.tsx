@@ -27,7 +27,7 @@ function Cites({ citations }: { citations?: StackCitation[] }) {
             href={`https://pubmed.ncbi.nlm.nih.gov/${c.pmid}/`}
             target="_blank"
             rel="noopener noreferrer"
-            className="focus-ring rounded text-accent-cyan hover:underline inline-flex items-center gap-1"
+            className="action-link focus-ring rounded text-accent-cyan hover:underline gap-1"
           >
             {c.label} <ExternalLink className="h-3 w-3" aria-hidden="true" />
           </a>

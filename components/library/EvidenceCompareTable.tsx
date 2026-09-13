@@ -105,7 +105,7 @@ export function EvidenceCompareTable({ comparison }: EvidenceCompareTableProps) 
                   href={`https://pubmed.ncbi.nlm.nih.gov/${row.pmid}/`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-micro font-mono text-muted-foreground hover:text-accent-cyan inline-flex items-center gap-0.5"
+                  className="action-link text-micro font-mono text-muted-foreground hover:text-accent-cyan gap-0.5"
                 >
                   PMID <ExternalLink className="w-3 h-3" />
                 </a>

@@ -60,7 +60,7 @@ export function EvidenceTierSpectrum() {
         </div>
         <Link
           href="/trust/methodology"
-          className="focus-ring text-micro font-mono text-[var(--accent-cyan)] hover:underline"
+          className="focus-ring inline-flex min-h-6 items-center text-micro font-mono text-[var(--accent-cyan)] hover:underline"
         >
           How we grade →
         </Link>

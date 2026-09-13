@@ -4,6 +4,102 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-13 — UI aesthetic verdict + the atmosphere budget and control floor
+
+**The question asked:** evaluate the site and decide the most scalable,
+plausible, functional UI aesthetic, then implement it.
+
+**The verdict, stated plainly: the aesthetic is already right — do not
+redirect it.** Dark instrument base, cyan-explores / emerald-chooses /
+gold-ranks signal roles, Fraunces + Inter + JetBrains Mono, real PubChem
+geometry and real graded networks as the imagery. It is distinctive,
+subject-grounded, and carries none of the generic tells. Anything proposing a
+new palette or a new hero idiom here would be replacing working, considered
+work with something less specific. What was missing was not a direction — it
+was the **second half of the direction**: the system had an excellent
+*cinematic* tier and no codified *instrument* tier. Named and documented as
+**"cinematic shell, instrument core"** in the new STYLE_GUIDE §13.
+
+**What that gap actually cost, measured on the rendered site**
+(`npm run audit:ui` at 1440px and 390px, nine representative routes — not read
+off the code):
+
+1. **The ambient field was reaching the content.** `AmbientLayer` is fixed
+   behind every page and page wrappers are transparent by design
+   (`.canvas-scrim`), but `.premium-card`'s dark-theme fill was white-alpha
+   only — no ground. So the drifting skeletal linework painted *through* card
+   bodies on `/library`, through the buyer-guide band's body copy on all 100
+   compound pages, and, on a phone, straight under the 12-hallmark filter
+   column. Light theme had already solved this (it fills with
+   `--color-bg-elevated`); dark theme was the inconsistent one.
+2. **The control layer had not kept pace with the atmosphere layer.** 1,187
+   sub-24px tap targets across the nine routes. The worst were not marginal:
+   the homepage age scrubber under the morbidity curve — the flagship
+   interactive — had a **3px-tall** drag box, and `.age-slider` (the canonical
+   `Slider` primitive, plus the bio-age wizard and hallmark notes panel) had
+   **6px**. The footer shipped 28 links at 23px on every one of 431 routes.
+3. **The `smallTap` number itself was not actionable.** On `/library` it read
+   135, of which ~120 were PMID and glossary links sitting inside sentences —
+   targets WCAG 2.2 AA 2.5.8 explicitly exempts. The real number was buried.
+
+**Shipped.**
+
+- **`--card-ground`** — one token, both themes. Third background layer of
+  `.premium-card` (92% elevated in dark, opaque in light), and under the
+  compound buyer-guide band's amber→cyan wash. The field still reads faintly
+  through a card; it no longer competes with the text inside one.
+- **Phone density correction** — `.molecule-node` depth opacities step down
+  ~45% under 768px, where a structure spans most of the screen instead of a
+  fraction of it and there are no margins for it to live in. Desktop tuning
+  untouched; the field keeps full strength in gutters, between cards and
+  behind hero bands.
+- **Sliders rebuilt on track pseudo-elements** — `.age-slider` 6px → **28px**
+  box, `.tnic-range` 3px → **32px**, visual tracks unchanged. Deliberately not
+  44px: both sit in stacked rows whose neighbours are closer than that, and §4
+  records two incidents of an over-grown hit area stealing its neighbour's tap.
+- **`.action-link`** — the new system class for a link that is an *action*
+  rather than a word in a sentence. Applied across the library's panel footers,
+  related-link lists, citation rows and reference lists. Grows the hit area,
+  never the type.
+- **Point fixes** to the footer hub/resource columns, the route rail, the
+  breadcrumb bar, the reading ToC, the linked `EvidenceTag` (fixed in the
+  canonical component, so every surface that renders a linked tier inherits it),
+  `EvidenceTrace`, `ContentByline` and the buyer-guide compare link.
+- **`npm run audit:ui` is now a gate.** It separates exempt (inline-in-a-
+  sentence, hit through a ≥24px `<label>`, stretched-link card titles,
+  `sr-only`) from actionable (standalone controls under 24px) and **exits
+  non-zero** on the second. Budget 0. Its one known blind spot — a standalone
+  action left as a bare inline `<a>` — is documented in the script rather than
+  papered over.
+
+**Measured result.**
+
+| Route (phone / desktop) | sub-24px before | after |
+|---|---|---|
+| `/` | 54 / 50 | **5 / 5** |
+| `/library` | 120 / 135 | 84 / 93 |
+| `/library/compounds/nmn` | 102 / 118 | 34 / 41 |
+| `/library/compare/nmn-vs-nr` | 37 / 45 | 4 / 4 |
+| `/smoker-defense-stack` | 42 / 49 | 4 / 5 |
+| `/supplement-guides` | 36 / 44 | 7 / 9 |
+| `/trust` | 33 / 39 | 4 / 4 |
+| `/stacks` | 36 / 42 | 4 / 4 |
+| `/library/mitochondrial-dysfunction` | 83 / 102 | 24 / 35 |
+| **total** | **1,187** | **373** |
+
+Actionable sub-24px controls: **0** (gate passes). axe-core violations: **0**
+across all 18 page×viewport combinations, unchanged. The residual `smallTap`
+count is inline prose citations, which is where it should be.
+
+**Not touched:** the homepage descent, hub hero idiom, `.glass-deep` glass
+moments, desktop field tuning, compound data, PMIDs, doses.
+
+**Checks:** `npm run lint` (0 errors, 3 pre-existing warnings) · `npm run
+typecheck` clean · `npm test` 58 files / 714 tests passed · `npm run build`
+green, 431 routes · `npm run audit:ui` exit 0.
+
+**Rollback:** `git revert` the merge of this branch.
+
 ## 2026-09-12 — Surface identity: molecule-first library + one overture per deep-dive
 
 **The finding, measured on the live site.** The homepage cinematic descent is

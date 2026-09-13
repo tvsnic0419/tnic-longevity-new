@@ -326,7 +326,7 @@ export function LibraryModuleDetail({
                 {module.category === 'compounds' && (
                   <Link
                     href={`/library/compounds?tiers=${module.evidenceTier}`}
-                    className="focus-ring rounded text-xs text-muted-foreground hover:text-accent-cyan transition-colors"
+                    className="action-link focus-ring rounded text-xs text-muted-foreground hover:text-accent-cyan transition-colors"
                   >
                     See all Tier {module.evidenceTier} compounds →
                   </Link>
@@ -351,7 +351,7 @@ export function LibraryModuleDetail({
                     <li key={h.id}>
                       <Link
                         href={`/library/${h.slug}`}
-                        className="text-sm text-muted-foreground hover:text-accent-cyan transition"
+                        className="action-link text-sm text-muted-foreground hover:text-accent-cyan transition"
                       >
                         #{h.number} {h.title}
                       </Link>
@@ -369,7 +369,7 @@ export function LibraryModuleDetail({
                     <li key={p.slug}>
                       <Link
                         href={`/pathways/${p.slug}`}
-                        className="text-sm text-muted-foreground hover:text-accent-cyan transition"
+                        className="action-link text-sm text-muted-foreground hover:text-accent-cyan transition"
                       >
                         {p.name}
                       </Link>
@@ -384,7 +384,7 @@ export function LibraryModuleDetail({
                 <p className="text-micro font-mono text-accent-emerald uppercase mb-3">TNiC compound</p>
                 <p className="text-sm font-semibold text-foreground">{relatedCompound.name}</p>
                 <p className="text-xs text-muted-foreground mt-1">{relatedCompound.dose} · {relatedCompound.timing}</p>
-                <Link href="/stacks" className="text-xs text-accent-cyan hover:text-accent-emerald mt-3 inline-block">
+                <Link href="/stacks" className="action-link text-xs text-accent-cyan hover:text-accent-emerald mt-3">
                   Add to stack →
                 </Link>
               </GlassPanel>
@@ -414,7 +414,7 @@ export function LibraryModuleDetail({
                     );
                   })}
                 </ul>
-                <Link href="/stacks" className="text-xs text-accent-cyan hover:text-accent-emerald mt-4 inline-block">
+                <Link href="/stacks" className="action-link text-xs text-accent-cyan hover:text-accent-emerald mt-4">
                   Open Stack Architect →
                 </Link>
               </GlassPanel>
@@ -430,7 +430,7 @@ export function LibraryModuleDetail({
                     </li>
                   ))}
                 </ul>
-                <Link href="/stacks" className="text-xs text-accent-cyan hover:text-accent-emerald mt-3 inline-block">
+                <Link href="/stacks" className="action-link text-xs text-accent-cyan hover:text-accent-emerald mt-3">
                   Open Stack Architect →
                 </Link>
               </GlassPanel>
@@ -447,7 +447,7 @@ export function LibraryModuleDetail({
                     <li key={slug}>
                       <Link
                         href={`/library/synergies/${slug}`}
-                        className="text-sm text-muted-foreground hover:text-accent-cyan transition"
+                        className="action-link text-sm text-muted-foreground hover:text-accent-cyan transition"
                       >
                         {libraryModuleTitles[`synergies/${slug}`] ?? slug.replace(/-/g, ' ')}
                       </Link>
@@ -504,7 +504,7 @@ export function LibraryModuleDetail({
                 </ul>
                 <Link
                   href="/library/compounds"
-                  className="text-xs text-accent-cyan hover:text-accent-emerald mt-3 inline-block"
+                  className="action-link text-xs text-accent-cyan hover:text-accent-emerald mt-3"
                 >
                   All compounds →
                 </Link>

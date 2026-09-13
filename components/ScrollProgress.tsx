@@ -55,7 +55,11 @@ export function ScrollProgress() {
               <a
                 key={link.href}
                 href={link.href}
-                className="group flex items-center gap-3 justify-end"
+                // min-h-6 clears the 24px control floor (STYLE_GUIDE §4). The
+                // rail's gap-3 puts 28px between step centres, so a 24px target
+                // still leaves 4px of clearance — it cannot steal the
+                // neighbouring step's tap, which §4 records happening twice.
+                className="group flex min-h-6 items-center gap-3 justify-end"
                 title={link.label}
                 aria-current={active ? 'page' : undefined}
               >

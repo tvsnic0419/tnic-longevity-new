@@ -126,7 +126,7 @@ export default async function LibraryPage({
                 High-detail mechanistic visualizations. Hover to explore.
               </p>
             </div>
-            <Link href="#content-modules" className="text-sm text-[var(--accent-cyan)] hover:underline">
+            <Link href="#content-modules" className="action-link text-sm text-[var(--accent-cyan)] hover:underline">
               Explore module index →
             </Link>
           </div>

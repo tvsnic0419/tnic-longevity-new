@@ -90,6 +90,13 @@
   --glow-rose: 0 0 24px rgba(244, 114, 182, 0.18), 0 0 48px rgba(244, 114, 182, 0.07);
   --glow-amber: 0 0 24px rgba(251, 191, 36, 0.18), 0 0 48px rgba(251, 191, 36, 0.07);
 
+  /* ── Atmosphere budget (STYLE_GUIDE §13) ──
+     The ground a content card paints over the site-wide ambient field. The
+     field is a brand device for hero bands and page margins; behind a card
+     full of evidence it is noise. 92% lets the field stay faintly perceptible
+     through the surface without its linework reaching the text. */
+  --card-ground: color-mix(in srgb, var(--color-bg-elevated) 92%, transparent);
+
   /* Effects */
   --glass-bg: rgba(12, 20, 40, 0.62);
   --glass-border: rgba(255, 255, 255, 0.07);
@@ -151,6 +158,10 @@
   --status-optimal: #059669;
   --status-watch: #d97706;
   --status-critical: #e11d48;
+
+  /* Light theme already grounded its cards opaquely (see the .premium-card
+     parity block); this names that value so both themes read from one token. */
+  --card-ground: var(--color-bg-elevated);
 
   --glass-bg: rgba(255, 255, 255, 0.75);
   --glass-border: rgba(15, 23, 42, 0.08);
@@ -980,20 +991,45 @@ p,
 ::-webkit-scrollbar-track { background: var(--color-bg-base); }
 ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
 
-/* ── Slider ── */
+/* ── Slider ──
+   The input's border box IS the drag target: a press has to land inside it to
+   grab the thumb. This control was a 6px-tall box, so on a phone the user had
+   to hit a 6px band to move it — measured at 310×6px on /library, and it is the
+   canonical `Slider` primitive plus the bio-age wizard and the hallmark notes
+   panel, not a one-off. The visual track stays 6px; the *box* is now 28px (past
+   the 24px hard floor of STYLE_GUIDE §4 / WCAG 2.2 AA 2.5.8) with the track
+   painted by the track pseudo-element and the thumb re-centred on it.
+
+   28px rather than the preferred 44px deliberately: these sliders sit in
+   stacked rows whose neighbours are closer than 44px apart, and §4 records two
+   incidents where an over-grown hit area stole its neighbour's taps. A target
+   that is comfortably over the floor beats one that overlaps. */
 .age-slider {
   -webkit-appearance: none;
   appearance: none;
-  height: 6px;
-  background: var(--color-bg-muted);
-  border-radius: 3px;
+  height: 28px;
+  background: transparent;
   outline: none;
   cursor: pointer;
+}
+
+.age-slider::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-bg-muted);
+}
+
+.age-slider::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-bg-muted);
 }
 
 .age-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 20px; height: 20px;
+  /* centre the 20px thumb on the 6px track */
+  margin-top: -7px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--accent-cyan), var(--accent-emerald));
   cursor: pointer;
@@ -1005,6 +1041,8 @@ p,
   border: none;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--accent-cyan), var(--accent-emerald));
+  box-shadow: 0 0 16px color-mix(in srgb, var(--accent-cyan) 40%, transparent);
+  cursor: pointer;
 }
 
 /* ── Premium surfaces (Sprint 18) ── */
@@ -1488,6 +1526,21 @@ p,
      the 10px glow is imperceptible, so drop just the halo and keep the
      linework. */
   .molecule-cascade { filter: none; }
+
+  /* Phone density correction (atmosphere budget, STYLE_GUIDE §13). The depth
+     opacities above are tuned for a 1440px viewport, where a structure spans a
+     small fraction of the screen and the content column leaves real margins for
+     the field to live in. At 390px the same structure spans most of the width
+     and there are no margins — the field lands directly under chips, headings
+     and body copy, and reads as noise rather than atmosphere (measured on
+     /library, where the 12-hallmark filter column sits entirely on linework).
+     Same field, same motion, stepped down ~45% so it stays a texture. */
+  .molecule-node.depth-1 { opacity: 0.11; }
+  .molecule-node.depth-2 { opacity: 0.075; }
+  .molecule-node.depth-3 { opacity: 0.05; }
+  :root[data-theme='light'] .molecule-node.depth-1 { opacity: 0.08; }
+  :root[data-theme='light'] .molecule-node.depth-2 { opacity: 0.055; }
+  :root[data-theme='light'] .molecule-node.depth-3 { opacity: 0.035; }
 }
 
 @keyframes molecule-drift {
@@ -2027,7 +2080,11 @@ p,
 }
 
 .glossary-tooltip-link {
-  display: block;
+  /* A standalone action inside the tooltip, so it clears the 24px control
+     floor (see .action-link). flex rather than block for the centred row. */
+  display: flex;
+  align-items: center;
+  min-height: 1.5rem;
   margin-top: 0.375rem;
   color: var(--accent-cyan);
   font-weight: 600;
@@ -3426,10 +3483,21 @@ p,
   border: 1px solid var(--color-border-subtle);
   /* Fill + the accent top light-catch hairline as a 1px background layer. The
      hairline moved off the ::before pseudo (now the elite-card shine sweep)
-     into the background so one card keeps both signature tells. */
+     into the background so one card keeps both signature tells.
+
+     The third layer is the card's *ground* (atmosphere budget, §13). Until it
+     existed the dark-theme fill was white-alpha only, so the fixed ambient
+     molecule field painted straight through every content card — measurably so
+     on /library, where skeletal linework crossed card bodies and the text
+     inside them. Light theme had already solved this the same way (it fills
+     with --color-bg-elevated, see the parity block below); dark theme was the
+     inconsistent one. Kept at 92% rather than opaque so the field still reads
+     faintly through the surface and cards keep their sense of sitting *in* the
+     atmosphere — it just stops competing with the content. */
   background:
     linear-gradient(90deg, transparent, color-mix(in srgb, var(--card-accent) 55%, transparent), transparent) 0 0 / 100% 1px no-repeat,
-    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.006));
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.006)),
+    var(--card-ground);
   /* Resting depth — the lightest elevation plane so cards read as engineered
      surfaces sitting on the page rather than flat outlines, plus an inset
      top-highlight for a crisp lit edge. The hover state lifts to a full accent
@@ -3525,7 +3593,7 @@ p,
 [data-theme="light"] .premium-card {
   background:
     linear-gradient(90deg, transparent, color-mix(in srgb, var(--card-accent) 42%, transparent), transparent) 0 0 / 100% 1px no-repeat,
-    var(--color-bg-elevated);
+    var(--card-ground);
   box-shadow: var(--glass-shadow-mid);
 }
 /* A white sheen is invisible on the light base — the shine uses a faint accent
@@ -3584,6 +3652,24 @@ p,
 .link-underline:hover,
 .link-underline:focus-visible {
   background-size: 100% 1px;
+}
+
+/* ── .action-link — the standalone-link control floor ──
+   WCAG 2.2 AA 2.5.8 exempts a link sitting inside a sentence, because its size
+   is constrained by the line-height of the prose around it. It does NOT exempt
+   a link standing on its own: a "View NMN →" at the foot of a panel, an entry
+   in a related-links list, a citation chip in a chip row. Those are controls,
+   and STYLE_GUIDE §4 already puts the hard minimum at 24px.
+
+   Measured on the rendered site (`npm run audit:ui`), the site had ~150 of
+   them rendering at 16–20px, concentrated in the library's panel footers,
+   related-link lists and citation rows — the densest, most-tapped surfaces it
+   has. This is the one class to reach for on any link that is an action rather
+   than a word in a sentence; it only ever grows the hit area, never the type. */
+.action-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
 }
 
 /* Long-form editorial wrapper. Enhances links, list markers and emphasis

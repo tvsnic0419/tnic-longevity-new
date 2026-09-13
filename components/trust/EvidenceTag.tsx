@@ -96,7 +96,11 @@ export function EvidenceTag({
     'inline-flex items-center rounded-md border bg-[var(--color-bg-muted)] font-mono font-bold leading-none',
     meta.shell,
     spec.chip,
-    href && 'focus-ring cursor-pointer transition hover:brightness-110',
+    // A tier badge is a label until it carries an href — then it is a control,
+    // and a control has to clear the 24px floor (STYLE_GUIDE §4, WCAG 2.2 AA
+    // 2.5.8). The `sm` chip rendered at 22px on the homepage elite cards, which
+    // is where a linked badge most often appears.
+    href && 'focus-ring min-h-6 cursor-pointer transition hover:brightness-110',
     className,
   );
 

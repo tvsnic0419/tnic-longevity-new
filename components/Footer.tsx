@@ -154,7 +154,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="focus-ring interactive link-underline flex items-center gap-2 text-body-sm hover:text-accent-cyan rounded-md"
+                    className="focus-ring interactive link-underline flex min-h-6 items-center gap-2 text-body-sm hover:text-accent-cyan rounded-md"
                   >
                     <link.icon className="w-4 h-4 shrink-0" aria-hidden="true" />
                     {link.label}
@@ -190,7 +190,7 @@ export function Footer() {
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="focus-ring interactive link-underline flex items-center gap-2 text-body-sm hover:text-accent-cyan rounded-md"
+                    className="focus-ring interactive link-underline flex min-h-6 items-center gap-2 text-body-sm hover:text-accent-cyan rounded-md"
                   >
                     <link.icon className="w-4 h-4 shrink-0" aria-hidden="true" />
                     {link.label}
@@ -241,7 +241,7 @@ export function Footer() {
             navigating by keyboard or screen reader can still find it. */}
         <Link
           href="/sheepeople"
-          className="focus-ring link-underline mb-4 inline-block rounded text-caption text-muted-foreground/45 transition-colors hover:text-accent-cyan"
+          className="focus-ring link-underline mb-4 inline-flex min-h-6 items-center rounded text-caption text-muted-foreground/45 transition-colors hover:text-accent-cyan"
         >
           the back page
         </Link>
