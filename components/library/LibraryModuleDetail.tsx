@@ -146,7 +146,7 @@ export function LibraryModuleDetail({
             className="max-w-2xl"
           />
         )}
-        <div className="mb-8 mt-3 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border/60 bg-background/20 p-3.5 max-w-2xl">
+        <div className="mb-8 mt-3 flex flex-wrap items-center justify-between gap-3 rounded-xl surface-well p-3.5 max-w-2xl">
           <p className="text-caption text-muted-foreground">Keep this evidence module in your private research queue.</p>
           <ResearchQueueButton module={module} href={getModulePath(module)} />
         </div>

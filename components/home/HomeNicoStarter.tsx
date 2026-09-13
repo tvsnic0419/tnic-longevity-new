@@ -482,7 +482,7 @@ export function HomeNicoStarter() {
 
                 {/* What the engine actually used — so the number above is
                     inspectable rather than asserted. */}
-                <div className="mb-6 rounded-xl border border-border/60 bg-muted/20 p-4">
+                <div className="mb-6 rounded-xl surface-well p-4">
                   <p className="mb-2 font-mono text-micro uppercase tracking-wider text-muted-foreground">
                     What NICO used
                   </p>

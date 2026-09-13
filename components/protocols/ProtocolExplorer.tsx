@@ -123,9 +123,9 @@ export function ProtocolExplorer() {
                 </div>
                 <p className="mt-2 text-caption leading-relaxed text-muted-foreground">{protocol.goal}</p>
                 <dl className="mt-4 grid grid-cols-3 gap-2">
-                  <div className="rounded-lg border border-border/60 bg-background/25 p-2.5"><dt className="text-micro font-mono uppercase tracking-[0.08em] text-muted-foreground">Compounds</dt><dd className="mt-1 text-sm font-semibold">{protocol.steps.length}</dd></div>
-                  <div className="rounded-lg border border-border/60 bg-background/25 p-2.5"><dt className="text-micro font-mono uppercase tracking-[0.08em] text-muted-foreground">Timing</dt><dd className="mt-1 text-sm font-semibold">{timingSummary(protocol)}</dd></div>
-                  <div className="rounded-lg border border-border/60 bg-background/25 p-2.5"><dt className="text-micro font-mono uppercase tracking-[0.08em] text-muted-foreground">Targets</dt><dd className="mt-1 text-sm font-semibold">{protocol.hallmarkIds.length} hallmarks</dd></div>
+                  <div className="rounded-lg surface-well p-2.5"><dt className="text-micro font-mono uppercase tracking-[0.08em] text-muted-foreground">Compounds</dt><dd className="mt-1 text-sm font-semibold">{protocol.steps.length}</dd></div>
+                  <div className="rounded-lg surface-well p-2.5"><dt className="text-micro font-mono uppercase tracking-[0.08em] text-muted-foreground">Timing</dt><dd className="mt-1 text-sm font-semibold">{timingSummary(protocol)}</dd></div>
+                  <div className="rounded-lg surface-well p-2.5"><dt className="text-micro font-mono uppercase tracking-[0.08em] text-muted-foreground">Targets</dt><dd className="mt-1 text-sm font-semibold">{protocol.hallmarkIds.length} hallmarks</dd></div>
                 </dl>
                 <div className="mt-4 flex flex-wrap gap-3">
                   {protocol.moduleHref && <Link href={protocol.moduleHref} className="focus-ring text-xs font-semibold text-accent-violet hover:underline">Read evidence →</Link>}
@@ -169,7 +169,7 @@ export function ProtocolExplorer() {
         </div>
       )}
 
-      <div className="mt-8 flex flex-col gap-3 rounded-2xl border border-border/70 bg-background/25 p-5 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mt-8 flex flex-col gap-3 rounded-2xl surface-well p-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-sm font-semibold">Want a workspace for your own decision process?</p>
           <p className="mt-1 text-caption text-muted-foreground">The Stack Architect adds and removes compounds, then surfaces coverage and interaction checks for inspection.</p>

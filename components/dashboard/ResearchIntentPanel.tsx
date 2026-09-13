@@ -122,15 +122,15 @@ export function ResearchIntentPanel() {
         </div>
 
         <div className="mt-4 grid gap-2 sm:grid-cols-3" aria-label="Research continuation options">
-          <Link href="/library" className="focus-ring interactive rounded-xl border border-border/65 bg-background/25 p-3 text-sm font-semibold text-foreground transition-colors hover:border-accent-cyan/35 hover:bg-accent-cyan/[0.04]">
+          <Link href="/library" className="focus-ring interactive rounded-xl surface-well p-3 text-sm font-semibold text-foreground transition-colors hover:border-accent-cyan/35 hover:bg-accent-cyan/[0.04]">
             <span className="text-micro font-mono uppercase tracking-[0.1em] text-accent-cyan">Explore</span>
             <span className="mt-1.5 flex items-center justify-between gap-2">Follow a hallmark <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" /></span>
           </Link>
-          <Link href="/library/systems" className="focus-ring interactive rounded-xl border border-border/65 bg-background/25 p-3 text-sm font-semibold text-foreground transition-colors hover:border-accent-violet/35 hover:bg-accent-violet/[0.04]">
+          <Link href="/library/systems" className="focus-ring interactive rounded-xl surface-well p-3 text-sm font-semibold text-foreground transition-colors hover:border-accent-violet/35 hover:bg-accent-violet/[0.04]">
             <span className="text-micro font-mono uppercase tracking-[0.1em] text-accent-violet">Connect</span>
             <span className="mt-1.5 flex items-center justify-between gap-2">Map the biology <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" /></span>
           </Link>
-          <Link href="/library#research-queue" className="focus-ring interactive rounded-xl border border-border/65 bg-background/25 p-3 text-sm font-semibold text-foreground transition-colors hover:border-accent-emerald/35 hover:bg-accent-emerald/[0.04]">
+          <Link href="/library#research-queue" className="focus-ring interactive rounded-xl surface-well p-3 text-sm font-semibold text-foreground transition-colors hover:border-accent-emerald/35 hover:bg-accent-emerald/[0.04]">
             <span className="text-micro font-mono uppercase tracking-[0.1em] text-accent-emerald">Review</span>
             <span className="mt-1.5 flex items-center justify-between gap-2">{queue.length > 0 ? `${queue.length} saved item${queue.length === 1 ? '' : 's'}` : 'Build a research queue'} <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" /></span>
           </Link>

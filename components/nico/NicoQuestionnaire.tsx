@@ -104,7 +104,7 @@ function ScaleButtons({
 
 function StatTile({ value, label }: { value: string; label: string }) {
   return (
-    <div className="rounded-xl border border-border/60 bg-card/40 p-4 text-center">
+    <div className="rounded-xl surface-well p-4 text-center">
       <p className="text-2xl font-black font-mono text-accent-emerald mb-1">{value}</p>
       <p className="text-micro text-muted-foreground uppercase tracking-wide">{label}</p>
     </div>
@@ -217,7 +217,7 @@ export function NicoQuestionnaire() {
             first decision. This clarifies what the visitor gets before asking
             for any personal context. */}
         {step === 0 && (
-          <div className="mb-6 grid grid-cols-3 overflow-hidden rounded-2xl border border-border/70 bg-card/40">
+          <div className="mb-6 grid grid-cols-3 overflow-hidden rounded-2xl surface-well">
             <div className="border-r border-border/60 px-3 py-3 text-center">
               <p className="text-[0.5625rem] font-mono font-semibold uppercase tracking-[0.1em] text-accent-emerald">Goal-led</p>
               <p className="mt-1 text-xs font-medium text-foreground">Starts with you</p>
@@ -493,15 +493,15 @@ export function NicoQuestionnaire() {
                 </button>
                 {researchRouteOpen && (
                   <div className="mt-3 grid gap-2 sm:grid-cols-3">
-                    <Link href={`/library/compounds/${result.compounds[0]?.id ?? ''}`} className="focus-ring rounded-lg border border-border/65 bg-background/25 p-3 text-xs font-semibold text-foreground transition-colors hover:border-accent-cyan/35 hover:text-accent-cyan">
+                    <Link href={`/library/compounds/${result.compounds[0]?.id ?? ''}`} className="focus-ring rounded-lg surface-well p-3 text-xs font-semibold text-foreground transition-colors hover:border-accent-cyan/35 hover:text-accent-cyan">
                       <span className="text-micro font-mono uppercase tracking-[0.1em] text-accent-cyan">Inspect</span>
                       <span className="mt-1.5 block">Read the lead compound</span>
                     </Link>
-                    <Link href={`/library/systems?hallmark=${result.compounds[0]?.hallmarks[0] ?? ''}`} className="focus-ring rounded-lg border border-border/65 bg-background/25 p-3 text-xs font-semibold text-foreground transition-colors hover:border-accent-violet/35 hover:text-accent-violet">
+                    <Link href={`/library/systems?hallmark=${result.compounds[0]?.hallmarks[0] ?? ''}`} className="focus-ring rounded-lg surface-well p-3 text-xs font-semibold text-foreground transition-colors hover:border-accent-violet/35 hover:text-accent-violet">
                       <span className="text-micro font-mono uppercase tracking-[0.1em] text-accent-violet">Connect</span>
                       <span className="mt-1.5 block">Map a hallmark pathway</span>
                     </Link>
-                    <Link href="/labs?mode=single" className="focus-ring rounded-lg border border-border/65 bg-background/25 p-3 text-xs font-semibold text-foreground transition-colors hover:border-accent-emerald/35 hover:text-accent-emerald">
+                    <Link href="/labs?mode=single" className="focus-ring rounded-lg surface-well p-3 text-xs font-semibold text-foreground transition-colors hover:border-accent-emerald/35 hover:text-accent-emerald">
                       <span className="text-micro font-mono uppercase tracking-[0.1em] text-accent-emerald">Review</span>
                       <span className="mt-1.5 block">Log a starting reference</span>
                     </Link>
@@ -554,7 +554,7 @@ export function NicoQuestionnaire() {
             computing a stack — so the visitor committed blind. Read back from
             the current answers; nothing here is stored or invented. */}
         {!isResult && step === STEP_IDS.length - 2 && (
-          <div className="mt-6 rounded-xl border border-border/60 bg-card/40 px-4 py-3">
+          <div className="mt-6 rounded-xl surface-well px-4 py-3">
             <p className="text-label mb-2 text-muted-foreground">Your answers</p>
             <dl className="grid gap-1.5 text-sm sm:grid-cols-2">
               <div className="flex flex-wrap gap-x-2">

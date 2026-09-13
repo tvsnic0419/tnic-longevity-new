@@ -373,14 +373,14 @@ function SirtuinDetail({ id }: { id: SirtuinId }) {
           <div>
             <div className="mb-2 flex items-center gap-3">
               <span className="font-mono text-4xl font-black" style={{ color: sirtuin.color }}>{sirtuin.id}</span>
-              <span className="rounded-full border border-border/70 bg-muted/20 px-3 py-1 text-xs text-muted-foreground">{sirtuin.location}</span>
+              <span className="rounded-full surface-well px-3 py-1 text-xs text-muted-foreground">{sirtuin.location}</span>
             </div>
             <h3 className="text-xl font-semibold">{sirtuin.shorthand}</h3>
           </div>
           <div className="grid grid-cols-3 gap-2 text-center md:min-w-[250px]">
-            <div className="rounded-xl border border-border/60 bg-muted/10 p-3"><p className="font-mono text-xl font-black">{candidates.length}</p><p className="text-micro uppercase tracking-wider text-muted-foreground">mapped</p></div>
-            <div className="rounded-xl border border-border/60 bg-muted/10 p-3"><p className="font-mono text-xl font-black text-accent-emerald">{direct.length}</p><p className="text-micro uppercase tracking-wider text-muted-foreground">direct</p></div>
-            <div className="rounded-xl border border-border/60 bg-muted/10 p-3"><p className="font-mono text-xl font-black text-accent-cyan">{human.length}</p><p className="text-micro uppercase tracking-wider text-muted-foreground">human-stage</p></div>
+            <div className="rounded-xl surface-well p-3"><p className="font-mono text-xl font-black">{candidates.length}</p><p className="text-micro uppercase tracking-wider text-muted-foreground">mapped</p></div>
+            <div className="rounded-xl surface-well p-3"><p className="font-mono text-xl font-black text-accent-emerald">{direct.length}</p><p className="text-micro uppercase tracking-wider text-muted-foreground">direct</p></div>
+            <div className="rounded-xl surface-well p-3"><p className="font-mono text-xl font-black text-accent-cyan">{human.length}</p><p className="text-micro uppercase tracking-wider text-muted-foreground">human-stage</p></div>
           </div>
         </div>
 
@@ -416,7 +416,7 @@ function SirtuinDetail({ id }: { id: SirtuinId }) {
               .map((candidate) => {
                 const targets = candidate.targets.filter((item) => item.sirtuin === id);
                 return (
-                  <div key={candidate.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border/60 bg-muted/10 px-3 py-2.5">
+                  <div key={candidate.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl surface-well px-3 py-2.5">
                     <div className="min-w-0"><p className="truncate text-xs font-semibold">{candidate.name}</p><p className="text-micro text-muted-foreground">Score {candidate.score} · {EVIDENCE_STAGE_META[candidate.evidenceStage].label}</p></div>
                     <div className="flex items-center gap-1.5">
                       {targets.map((target, index) => <ModeBadge key={`${target.mode}-${index}`} mode={target.mode} compact />)}
@@ -482,7 +482,7 @@ function CandidateCard({
             <button
               type="button"
               onClick={() => setExpanded((value) => !value)}
-              className="focus-ring inline-flex min-h-10 items-center gap-2 rounded-xl border border-border/70 bg-muted/10 px-3 text-xs font-semibold text-muted-foreground hover:text-foreground"
+              className="focus-ring inline-flex min-h-10 items-center gap-2 rounded-xl surface-well px-3 text-xs font-semibold text-muted-foreground hover:text-foreground"
               aria-expanded={expanded}
             >
               Evidence
@@ -521,7 +521,7 @@ function CandidateCard({
               </div>
               <div className="mt-4 grid gap-2 sm:grid-cols-2">
                 {candidate.targets.map((target, index) => (
-                  <div key={`${candidate.id}-${target.sirtuin}-${target.mode}-${index}`} className="rounded-xl border border-border/60 bg-muted/10 p-3">
+                  <div key={`${candidate.id}-${target.sirtuin}-${target.mode}-${index}`} className="rounded-xl surface-well p-3">
                     <div className="flex items-center justify-between gap-2">
                       <span className="font-mono text-xs font-bold">{target.sirtuin}</span>
                       <div className="flex items-center gap-1.5"><ModeBadge mode={target.mode} compact /><span className={`h-2 w-2 rounded-full ${confidenceDot[target.confidence]}`} /></div>
@@ -635,7 +635,7 @@ function EvidenceMaturityLadder() {
           const meta = EVIDENCE_STAGE_META[stage];
           const count = SIRTUIN_CANDIDATES.filter((candidate) => candidate.evidenceStage === stage).length;
           return (
-            <div key={stage} className="relative rounded-2xl border border-border/60 bg-muted/[0.07] p-4">
+            <div key={stage} className="relative rounded-2xl surface-well p-4">
               <div className="relative z-10 mb-4 flex h-8 w-8 items-center justify-center rounded-full border border-border/70 bg-background font-mono text-xs font-black">{String(index + 1).padStart(2, '0')}</div>
               <StageBadge stage={stage} compact />
               <p className="mt-3 text-sm font-semibold">{meta.label}</p>
@@ -760,7 +760,7 @@ export function SirtuinAtlas() {
           <p className="mt-2 max-w-3xl text-body">Search, filter, sort, inspect, and compare. Scores rank confidence in the claimed <em>sirtuin mechanism</em>, not overall longevity benefit, safety, or product quality.</p>
         </div>
 
-        <div className="mb-5 rounded-2xl border border-border/60 bg-muted/[0.07] p-3 md:p-4">
+        <div className="mb-5 rounded-2xl surface-well p-3 md:p-4">
           <div className="grid gap-3 lg:grid-cols-[1.4fr_auto_auto_auto]">
             <label className="relative block">
               <span className="sr-only">Search sirtuin candidates</span>
@@ -774,7 +774,7 @@ export function SirtuinAtlas() {
               {query && <button type="button" onClick={() => setQuery('')} className="focus-ring absolute right-2 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-lg text-muted-foreground hover:text-foreground" aria-label="Clear search"><X className="h-3.5 w-3.5" /></button>}
             </label>
 
-            <div className="flex min-h-11 items-center gap-1 rounded-xl border border-border/70 bg-background/40 p-1" role="group" aria-label="Filter candidate availability">
+            <div className="flex min-h-11 items-center gap-1 rounded-xl surface-well p-1" role="group" aria-label="Filter candidate availability">
               {(['consumer', 'rx', 'research', 'all'] as const).map((item) => (
                 <button key={item} type="button" onClick={() => setAvailability(item)} className={`focus-ring rounded-lg px-3 py-2 text-micro font-semibold capitalize ${availability === item ? 'bg-accent-cyan/15 text-accent-cyan' : 'text-muted-foreground hover:text-foreground'}`}>
                   {item === 'all' ? 'All' : item === 'rx' ? 'Rx' : item}
@@ -785,7 +785,7 @@ export function SirtuinAtlas() {
             <label className="relative">
               <span className="sr-only">Filter by target mode</span>
               <SlidersHorizontal className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
-              <select value={modeFilter} onChange={(event) => setModeFilter(event.target.value as 'all' | TargetMode)} className="focus-ring min-h-11 appearance-none rounded-xl border border-border/70 bg-background/40 pl-9 pr-8 text-xs font-semibold outline-none">
+              <select value={modeFilter} onChange={(event) => setModeFilter(event.target.value as 'all' | TargetMode)} className="focus-ring min-h-11 appearance-none rounded-xl surface-well pl-9 pr-8 text-xs font-semibold outline-none">
                 <option value="all">All modes</option>
                 <option value="direct">Direct</option>
                 <option value="nad">NAD+ support</option>
@@ -797,7 +797,7 @@ export function SirtuinAtlas() {
             <label className="relative">
               <span className="sr-only">Sort candidates</span>
               <ArrowUpDown className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
-              <select value={sortBy} onChange={(event) => setSortBy(event.target.value as 'score' | 'coverage' | 'name')} className="focus-ring min-h-11 appearance-none rounded-xl border border-border/70 bg-background/40 pl-9 pr-8 text-xs font-semibold outline-none">
+              <select value={sortBy} onChange={(event) => setSortBy(event.target.value as 'score' | 'coverage' | 'name')} className="focus-ring min-h-11 appearance-none rounded-xl surface-well pl-9 pr-8 text-xs font-semibold outline-none">
                 <option value="score">Evidence score</option>
                 <option value="coverage">Target coverage</option>
                 <option value="name">Name</option>
@@ -876,7 +876,7 @@ export function SirtuinAtlas() {
         </div>
       </section>
 
-      <section aria-labelledby="sources-title" className="relative overflow-hidden rounded-[2rem] border border-border/60 bg-muted/10 p-6 md:p-8">
+      <section aria-labelledby="sources-title" className="relative overflow-hidden rounded-[2rem] surface-well p-6 md:p-8">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_100%_0%,rgba(34,211,238,0.07),transparent_36%)]" />
         <div className="relative">
           <div className="flex items-center justify-between gap-3">

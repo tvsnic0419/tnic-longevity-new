@@ -563,7 +563,7 @@ export function LabGraph({ nodes, relationships, selectedPairKey, onSelectRelati
           doesn't want (or can't use) the interaction. Matches
           StackNetworkGraph.tsx's established idiom. */}
       {visibleEdges.length > 0 && (
-        <div className="mt-4 scroll-region rounded-2xl border border-border/70 bg-card/30">
+        <div className="mt-4 scroll-region rounded-2xl surface-well">
           <table className="w-full border-collapse text-left">
             <caption className="sr-only">
               All {visibleEdges.length} relationships in this stack&apos;s network, with type, status,

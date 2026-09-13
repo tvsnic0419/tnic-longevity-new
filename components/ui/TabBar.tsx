@@ -35,7 +35,7 @@ export function TabBar<T extends string>({
     <div
       role="tablist"
       aria-label={ariaLabel}
-      className={cn('flex gap-2 overflow-x-auto scroll-region pb-1 -mx-1 px-1', className)}
+      className={cn('surface-track overflow-x-auto scroll-region', className)}
     >
       {tabs.map((tab) => {
         const isActive = active === tab.id;
@@ -52,7 +52,7 @@ export function TabBar<T extends string>({
               'focus-ring interactive shrink-0 flex items-center gap-2 px-4 py-3 min-h-[var(--space-touch)] rounded-xl text-sm font-semibold',
               isActive
                 ? `${t.bgSolid} text-primary-foreground`
-                : 'glass text-muted-foreground hover:text-foreground',
+                : 'text-muted-foreground hover:text-foreground hover:bg-white/[0.04]',
             )}
           >
             {Icon && <Icon className="w-4 h-4" aria-hidden="true" />}

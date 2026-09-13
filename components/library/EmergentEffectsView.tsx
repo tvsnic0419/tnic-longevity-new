@@ -141,7 +141,7 @@ export function EmergentEffectsView({ hallmarkId, compoundId, showAll = false, c
         Emergent effects arise when targeting <span className="text-foreground font-semibold">multiple hallmarks simultaneously</span> — the combined intervention produces benefits greater than the sum of individual effects.
       </p>
       {showAll && (
-        <div className="rounded-2xl border border-border/50 bg-card/30 p-4 overflow-x-auto">
+        <div className="rounded-2xl surface-well p-4 overflow-x-auto">
           <p className="text-micro font-mono text-muted-foreground uppercase mb-3">Compound Synergy Network</p>
           <SynergyNetworkVisual className="w-full max-w-[540px] mx-auto" />
         </div>

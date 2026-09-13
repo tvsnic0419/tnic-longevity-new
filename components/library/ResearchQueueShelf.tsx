@@ -70,7 +70,7 @@ export function ResearchQueueShelf() {
           {queue.length > 0 ? (
             <div className="mt-5 grid gap-2 md:grid-cols-3">
               {queue.slice(0, 3).map((entry) => (
-                <div key={entry.slug} className="group relative rounded-xl border border-border/70 bg-background/25 p-4 transition-colors hover:border-accent-cyan/35 hover:bg-accent-cyan/[0.04]">
+                <div key={entry.slug} className="group relative rounded-xl surface-well p-4 transition-colors hover:border-accent-cyan/35 hover:bg-accent-cyan/[0.04]">
                   <Link href={entry.href} className="focus-ring block pr-7">
                     <p className="text-micro font-mono uppercase tracking-[0.1em] text-accent-cyan">{categoryLabel[entry.category]}</p>
                     <p className="mt-2 text-sm font-semibold leading-snug text-foreground group-hover:text-accent-cyan">{entry.title}</p>
@@ -82,7 +82,7 @@ export function ResearchQueueShelf() {
                     aria-pressed={compareSlugs.includes(entry.slug)}
                     className={compareSlugs.includes(entry.slug)
                       ? 'focus-ring mt-3 inline-flex items-center gap-1.5 rounded-lg border border-accent-violet/40 bg-accent-violet/10 px-2 py-1 text-micro font-semibold text-accent-violet'
-                      : 'focus-ring mt-3 inline-flex items-center gap-1.5 rounded-lg border border-border/70 bg-background/30 px-2 py-1 text-micro font-semibold text-muted-foreground hover:border-accent-violet/35 hover:text-accent-violet'}
+                      : 'focus-ring mt-3 inline-flex items-center gap-1.5 rounded-lg surface-well px-2 py-1 text-micro font-semibold text-muted-foreground hover:border-accent-violet/35 hover:text-accent-violet'}
                   >
                     <ArrowLeftRight className="h-3 w-3" aria-hidden="true" />
                     {compareSlugs.includes(entry.slug) ? 'Selected' : 'Compare'}
@@ -128,7 +128,7 @@ export function ResearchQueueShelf() {
                     <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
                   </Link>
                 ) : (
-                  <div className="mt-3 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border/70 bg-background/20 px-3 py-2.5">
+                  <div className="mt-3 flex flex-wrap items-center justify-between gap-3 rounded-lg surface-well px-3 py-2.5">
                     <p className="text-caption text-muted-foreground">No authored head-to-head exists for this pair yet. Browse the neutral comparison library instead.</p>
                     <Link href="/library/compare" className="focus-ring shrink-0 text-xs font-semibold text-accent-violet hover:text-foreground">Browse comparisons <ArrowRight className="inline h-3.5 w-3.5" aria-hidden="true" /></Link>
                   </div>

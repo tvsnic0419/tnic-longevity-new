@@ -225,7 +225,7 @@ export function ProductsHub() {
         ]}
       />
 
-      <section className="mb-8 rounded-2xl border border-border/70 bg-background/20 p-4 md:p-5" aria-labelledby="verified-pick-filter-title">
+      <section className="mb-8 rounded-2xl surface-well p-4 md:p-5" aria-labelledby="verified-pick-filter-title">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <div className="flex items-center gap-2">
@@ -294,7 +294,7 @@ export function ProductsHub() {
       )}
 
       {libraryOnlyCompounds.length > 0 && (
-        <details className="mb-14 rounded-2xl border border-border/70 bg-background/15 p-5">
+        <details className="mb-14 rounded-2xl surface-well p-5">
           <summary className="focus-ring cursor-pointer list-none rounded-lg text-lg font-bold text-foreground marker:content-none">
             <span className="inline-flex items-center gap-2">
               Evidence modules — no verified pick yet

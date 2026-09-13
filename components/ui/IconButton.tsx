@@ -48,7 +48,7 @@ const iconStyles: Record<IconButtonSize, string> = {
 const variantStyles: Record<IconButtonVariant, string> = {
   quiet: 'text-muted-foreground hover:text-accent-cyan',
   surface:
-    'border border-border/70 bg-card/80 text-foreground backdrop-blur hover:border-accent-cyan/50 hover:text-accent-cyan',
+    'glass text-foreground hover:border-accent-cyan/50 hover:text-accent-cyan',
 };
 
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(function IconButton(

@@ -161,7 +161,7 @@ export function DefenseStackGuide({ stack }: { stack: DefenseStack }) {
 
               <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{item.rationale}</p>
 
-              <p className="mt-3 rounded-lg border border-border/60 bg-background/30 p-3 text-caption leading-relaxed text-muted-foreground">
+              <p className="mt-3 rounded-lg surface-well p-3 text-caption leading-relaxed text-muted-foreground">
                 <span className="font-semibold text-foreground">Why this grade: </span>
                 {item.tierNote}
               </p>
