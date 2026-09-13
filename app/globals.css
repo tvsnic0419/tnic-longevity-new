@@ -274,10 +274,82 @@
   /* ── Typography scale (modular, minor third ~1.25) ──
      Three roles only: DISPLAY (3xl–6xl), BODY (sm–lg), LABEL (xs mono).
      Hand-picked clamp curves are fluid from mobile → 1440px. */
-  --type-xs:   0.75rem;                                  /* 12px — captions, eyebrows */
-  --type-sm:   0.875rem;                                 /* 14px — body small */
-  --type-base: 1rem;                                     /* 16px — body */
-  --type-lg:   1.125rem;                                 /* 18px — body emphasis */
+  /* The floor of the scale. Nothing that is HTML text may render below this.
+     An audit of eight rendered pages found 59 separate declarations between
+     4px and 10.5px — eyebrows, stat labels, chips, numerals — and on a PHONE
+     they were smaller still (hero stat labels bottomed out at 8.64px), so the
+     device with the least reading comfort was being given the least legible
+     type. Every one of them now resolves here. 11px, not 10px, for the reason
+     already recorded on `.text-micro` below: it is the size most of the dense
+     pages are actually read at, and it matches `.text-label`, so the two
+     smallest steps in the scale agree instead of sitting 1px apart.
+     `scripts/audit-ui.mjs` gates this; see the micro-type check there.
+     SVG <text> inside a scaled viewBox is deliberately exempt — those are
+     molecular-diagram annotations whose size is set by the geometry, and
+     their accessibility answer is the text fallback required by every
+     visualization, not a font-size floor. */
+  /* ── The fixed rungs, named by their pixel size ─────────────────────────
+     An audit of every font-size in the codebase found 138 declarations that
+     bypassed this scale entirely, in FORTY distinct spellings: six different
+     ways to write ~11px (11px, 0.6875rem, .6875rem, …), five for 13–14px
+     (13px, 13.5px, 14px, 0.8125rem, 0.875rem), four for 15px (15px,
+     0.9375rem, .9375rem, 0.95rem), three for 16px (1rem, 1.02rem, 1.05rem),
+     and one-offs at 1.9rem, 1.55rem, 0.76rem and 12.5px. The scale was not
+     missing — it was being routed around, one component at a time, because
+     the t-shirt names had gaps at 13px and 15px and nobody wanted to round.
+
+     So the fixed part of the ladder is now named by what it IS. There is no
+     judgement call left in picking `--type-13` over `--type-14`, and no way
+     to write a size that looks like it might be on the scale but is not.
+     The t-shirt names below are kept as aliases so no existing call site
+     changes meaning; the fluid steps keep their t-shirt names, because a
+     `clamp()` genuinely has no single pixel size to be named after. */
+  --type-11: 0.6875rem;  /* absolute floor — see the note above */
+  --type-12: 0.75rem;
+  --type-13: 0.8125rem;
+  --type-14: 0.875rem;
+  --type-15: 0.9375rem;
+  --type-16: 1rem;
+  --type-17: 1.0625rem;
+  --type-18: 1.125rem;
+  --type-20: 1.25rem;
+  --type-22: 1.375rem;
+  --type-24: 1.5rem;
+  --type-26: 1.625rem;
+  --type-28: 1.75rem;
+  --type-30: 1.875rem;
+  --type-32: 2rem;
+  --type-36: 2.25rem;
+  --type-48: 3rem;
+
+  /* Aliases. Every one of these resolves to a rung above, so the two naming
+     schemes can never disagree. */
+  --type-micro: var(--type-11);                          /* 11px — absolute floor */
+  --type-xs:   var(--type-12);                           /* 12px — captions, eyebrows */
+  --type-sm:   var(--type-14);                           /* 14px — body small */
+  --type-base: var(--type-16);                           /* 16px — body */
+  --type-lg:   var(--type-18);                           /* 18px — body emphasis */
+  /* ── Fluid display sizes, named ──────────────────────────────────────────
+     These six clamps were each written TWICE — once here and once in
+     `components/ui/FlagshipFoundation.module.css` — for the same selectors,
+     and both stylesheets are loaded (the module is imported by CinematicHubHero,
+     PageHeader, DecisionSteps and ContextBar). Which definition won depended on
+     CSS order, and the two copies had already drifted in spelling (`.7rem` here,
+     `0.7rem` there). Edit one and the hero silently changes size only on the
+     pages where the other loses.
+
+     They are tokens now, referenced from both files, so there is one value and
+     it has a name. Left as clamps rather than snapped onto the fixed ladder
+     above on purpose: a hero title is tuned to its own line-breaks, and forcing
+     several distinct heroes onto shared rungs would flatten them into one
+     size for tidiness rather than for a reason. */
+  --type-hero-title:      clamp(2.7rem, 6vw, 5.6rem);
+  --type-hero-title-sm:   clamp(2.4rem, 12vw, 3.4rem);   /* phone override */
+  --type-hero-lead:       clamp(1rem, 1vw + 0.7rem, 1.1875rem);
+  --type-hero-stat:       clamp(1.55rem, 2.8vw, 2.25rem);
+  --type-handoff-title:   clamp(1.75rem, 3vw, 2.5rem);
+  --type-switchboard:     clamp(1.55rem, 2.4vw, 2.15rem);
+
   --type-xl:   clamp(1.25rem, 0.5vw + 1.125rem, 1.5rem); /* lede */
   --type-2xl:  clamp(1.5rem,  1vw + 1.25rem,  2rem);    /* card titles */
   --type-3xl:  clamp(1.875rem, 2vw + 1.25rem, 2.5rem);  /* section heads */
@@ -355,7 +427,7 @@ body {
   font-family: var(--font-sans);
   background: var(--color-bg-base);
   color: var(--color-text-primary);
-  font-size: 1rem;
+  font-size: var(--type-16);
   line-height: var(--leading-body);
   /* Crisp text rendering site-wide: grayscale AA on WebKit + Firefox so
      light-on-dark type stays sharp rather than muddy, plus optimizeLegibility
@@ -451,7 +523,7 @@ p,
 }
 
 .heading-card {
-  font-size: 1rem;
+  font-size: var(--type-16);
   font-weight: 600;
   line-height: 1.35;
 }
@@ -471,26 +543,86 @@ p,
 }
 
 .text-body {
-  font-size: 1rem;
+  font-size: var(--type-16);
   line-height: var(--leading-body);
 }
 
 .text-body-sm {
-  font-size: 0.875rem;
+  font-size: var(--type-14);
   line-height: 1.6;
 }
 
 .text-caption {
-  font-size: 0.75rem;
+  font-size: var(--type-12);
   line-height: 1.5;
 }
 
 .text-label {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--type-11);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+/* ── Numeric and scientific typography ───────────────────────────────────────
+   Numbers are most of what this site asks a reader to compare, and until now
+   there was no style for one. An audit found 72 ad-hoc `tabular-nums`
+   declarations across components, each pairing it with its own size, weight
+   and tracking — the numbers were being set 72 times rather than once.
+
+   Two families, and the distinction matters:
+
+     .stat-value / .stat-value-hero  are DECORATIVE. They gradient-fill the
+       glyphs, which is right for a hero figure that exists to be looked at,
+       and wrong for a figure that exists to be compared against the one below
+       it — a gradient makes two numbers in a column different colours.
+
+     .text-metric / .text-metric-lg / .text-data are ANALYTIC. Flat colour,
+       tabular figures so digits align in a column, and slightly tightened
+       tracking so a long number does not sprawl. Reach for these by default;
+       reach for the gradient pair only when the number is the visual subject.
+
+   `font-variant-numeric: tabular-nums` is the whole point of the analytic
+   family: proportional digits make a 1 narrower than a 7, so a column of
+   figures fails to line up and a number that updates in place jitters. */
+.text-metric {
+  font-size: var(--type-20);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-primary);
+}
+
+.text-metric-lg {
+  font-family: var(--font-display);
+  font-size: var(--type-32);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-primary);
+}
+
+/* Scientific data in running text or a table cell: doses, sample sizes, ranges,
+   p-values. Inherits its size so it can sit inside a table row or a paragraph
+   without breaking the line, and only fixes the things that make figures
+   readable — tabular alignment and the mono face. */
+.text-data {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1, 'zero' 1;
+  letter-spacing: -0.01em;
+}
+
+/* A reference. Kept quiet on purpose: a citation earns trust by being present
+   and checkable, not by competing with the claim it supports. */
+.text-citation {
+  font-size: var(--type-12);
+  line-height: 1.5;
+  color: var(--color-text-faint);
+  font-variant-numeric: tabular-nums;
 }
 
 /* Size-only micro text — the semantic home for small SANS micro-copy (badge
@@ -505,7 +637,7 @@ p,
    two smallest steps in the scale now agree instead of sitting 1px apart for
    no reason. This is the single highest-leverage line in this file. */
 .text-micro {
-  font-size: 0.6875rem;
+  font-size: var(--type-11);
   line-height: 1.45;
 }
 
@@ -606,6 +738,30 @@ p,
 /* A wrapping row of compact chips. The 16px row gap is load-bearing, not
    taste: 28px chip + 16px = a 44px pitch, exactly the expanded hit height, so
    neighbouring rows can never steal each other's taps. */
+/* Stretched link — the card idiom. A card whose title is the link, with the
+   link's ::before stretched over the whole card so the entire surface
+   navigates, while other links inside the card stay separately clickable by
+   sitting on a higher stacking layer.
+
+   Defined once here because the site had grown two ad-hoc spellings of it
+   (`after:absolute after:inset-0 after:content-['']` in BestLeaderboard,
+   `before:absolute before:inset-0 before:rounded-xl` in CompoundExplorer).
+   ::before rather than ::after, because that is the pseudo
+   `scripts/audit-ui.mjs` inspects to exempt a stretched card title from the
+   24px tap-target floor — the title is hit through the card, so its own text
+   box is not the real target.
+
+   Requires `position: relative` on the card (`.premium-card` sets it) and
+   `position: relative; z-index: 1` on anything inside the card that must stay
+   independently clickable. */
+.stretched-link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+}
+
 .chip-row {
   display: flex;
   flex-wrap: wrap;
@@ -740,7 +896,7 @@ p,
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-lg);
   padding: 0.75rem 1rem;
-  font-size: 0.875rem;
+  font-size: var(--type-14);
   color: var(--color-text-primary);
   min-height: var(--space-touch);
   outline: none;
@@ -758,7 +914,7 @@ p,
 /* ── Tables ── */
 .table-base {
   width: 100%;
-  font-size: 0.875rem;
+  font-size: var(--type-14);
   border-collapse: collapse;
 }
 
@@ -771,7 +927,7 @@ p,
   text-align: left;
   padding: 0.75rem 1rem;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--type-11);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -781,6 +937,15 @@ p,
   top: 0;
   z-index: 1;
   border-bottom: 1px solid var(--color-border-subtle);
+}
+/* Row headers. Same box as a cell, but carrying the row's identity, so it
+   reads as content rather than chrome. */
+.table-base tbody th {
+  text-align: left;
+  padding: 0.875rem 1rem;
+  border-top: 1px solid var(--color-border-subtle);
+  font-weight: 600;
+  color: var(--color-text-primary);
 }
 /* Row headers. Same box as a cell, but carrying the row's identity, so it
    reads as content rather than chrome. */
@@ -1261,7 +1426,7 @@ p,
 
 .context-rail-label {
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -1341,7 +1506,7 @@ p,
 
 .os-card-number {
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 700;
   letter-spacing: 0.08em;
   color: var(--color-text-faint);
@@ -1475,7 +1640,7 @@ p,
   gap: 9px;
   white-space: nowrap;
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: var(--type-micro);
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-text-faint);
@@ -1744,7 +1909,7 @@ p,
   padding: 1rem 1.75rem;
   min-height: var(--space-touch);
   border-radius: 1rem;
-  font-size: 0.9375rem;
+  font-size: var(--type-15);
   overflow: hidden;
 }
 
@@ -1782,7 +1947,7 @@ p,
   min-height: var(--space-touch);
   border-radius: 1rem;
   font-weight: 500;
-  font-size: 0.9375rem;
+  font-size: var(--type-15);
   background: color-mix(in srgb, var(--glass-bg) 90%, transparent);
   backdrop-filter: blur(20px);
   border: 1px solid color-mix(in srgb, var(--accent-cyan) 20%, var(--color-border-subtle));
@@ -1997,7 +2162,7 @@ p,
   gap: 0.625rem;
   padding: 0 1.75rem;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--type-11);
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -2085,7 +2250,7 @@ p,
 
 .constellation-node-num {
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 800;
 }
 
@@ -2125,7 +2290,7 @@ p,
   backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow-float);
-  font-size: 0.75rem;
+  font-size: var(--type-12);
   line-height: 1.4;
   font-weight: 400;
   font-style: normal;
@@ -2257,7 +2422,7 @@ p,
   background: color-mix(in srgb, var(--accent-emerald) 12%, transparent);
   border: 1px solid color-mix(in srgb, var(--accent-emerald) 30%, transparent);
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -2342,7 +2507,7 @@ p,
 
 .platform-hud-value {
   font-family: var(--font-mono);
-  font-size: 1.25rem;
+  font-size: var(--type-20);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   background: linear-gradient(135deg, var(--color-text-primary) 0%, var(--accent-cyan) 100%);
@@ -2356,7 +2521,7 @@ p,
 
 .platform-hud-label {
   font-family: var(--font-mono);
-  font-size: 0.5625rem;
+  font-size: var(--type-micro);
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -2367,7 +2532,7 @@ p,
 /* ── Data readout (terminal/HUD style) ── */
 .data-readout {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--type-11);
   letter-spacing: 0.05em;
   color: var(--accent-cyan);
   opacity: 0.75;
@@ -2438,7 +2603,7 @@ p,
   border-left: 2px solid var(--accent-cyan);
   background: color-mix(in srgb, var(--accent-cyan) 6%, transparent);
   border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
-  font-size: 1rem;
+  font-size: var(--type-16);
   line-height: 1.6;
 }
 
@@ -2483,7 +2648,7 @@ p,
   padding: 0.25rem 0.75rem;
   border-radius: 0.5rem;
   font-family: var(--font-mono);
-  font-size: 0.5625rem;
+  font-size: var(--type-micro);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -2492,7 +2657,7 @@ p,
 /* ── Eyebrow section label ── */
 .text-eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--type-11);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -2562,7 +2727,7 @@ p,
 
 .research-strip-value {
   font-family: var(--font-mono);
-  font-size: 1.125rem;
+  font-size: var(--type-18);
   font-weight: 800;
   color: var(--accent-cyan);
   font-variant-numeric: tabular-nums;
@@ -2570,7 +2735,7 @@ p,
 
 .research-strip-label {
   font-family: var(--font-mono);
-  font-size: 0.5625rem;
+  font-size: var(--type-micro);
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -2585,7 +2750,7 @@ p,
   padding: 0.25rem 0.625rem;
   border-radius: 0.375rem;
   font-family: var(--font-mono);
-  font-size: 0.5rem;
+  font-size: var(--type-micro);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -2671,7 +2836,7 @@ p,
   padding: 0.25rem 0.625rem;
   border-radius: 9999px;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--type-11);
   font-weight: 600;
   background: color-mix(in srgb, var(--glass-bg) 90%, transparent);
   border: 1px solid var(--color-border-subtle);
@@ -2720,7 +2885,7 @@ p,
   height: 1.75rem;
   border-radius: 50%;
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 800;
   background: color-mix(in srgb, var(--accent-cyan) 12%, transparent);
   border: 1px solid color-mix(in srgb, var(--accent-cyan) 25%, transparent);
@@ -2874,7 +3039,7 @@ p,
   padding: 0.375rem 0.875rem;
   border-radius: 9999px;
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -4049,7 +4214,7 @@ p,
   gap: 0.45rem;
   flex: none;
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 600;
   letter-spacing: 0.12em;
   line-height: 1;
@@ -4213,7 +4378,7 @@ p,
   display: block;
   margin-bottom: 0.45rem;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--type-micro);
   font-weight: 600;
   letter-spacing: 0.14em;
   line-height: 1.25;
@@ -4234,7 +4399,7 @@ p,
 .elite-briefing-grid p {
   margin: 0.45rem 0 0;
   max-width: 29ch;
-  font-size: 0.8125rem;
+  font-size: var(--type-13);
   line-height: 1.5;
   color: var(--color-text-muted);
 }
@@ -4335,7 +4500,7 @@ p,
 }
 .hm-card__num {
   font-family: var(--font-display);
-  font-size: 1.9rem;
+  font-size: var(--type-30);
   line-height: 0.9;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
@@ -4343,7 +4508,7 @@ p,
 }
 .hm-card__title {
   font-family: var(--font-display);
-  font-size: 1.02rem;
+  font-size: var(--type-16);
   font-weight: 500;
   line-height: 1.15;
   letter-spacing: -0.01em;
@@ -4366,7 +4531,7 @@ p,
   border-top: 1px solid color-mix(in srgb, var(--color-border-subtle) 70%, transparent);
 }
 .hm-row__name {
-  font-size: 0.8125rem;
+  font-size: var(--type-13);
   line-height: 1.25;
   color: var(--color-text-secondary);
   overflow: hidden;
@@ -4387,7 +4552,7 @@ p,
   height: 1.375rem;
   border-radius: 0.375rem;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--type-11);
   font-weight: 700;
   line-height: 1;
 }
@@ -4400,7 +4565,7 @@ p,
   align-items: center;
   gap: 0.35rem;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--type-micro);
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -4486,7 +4651,7 @@ p,
 }
 .step-card__num {
   font-family: var(--font-display);
-  font-size: 3rem;
+  font-size: var(--type-48);
   line-height: 0.8;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
@@ -4494,7 +4659,7 @@ p,
 }
 .step-card__eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--type-micro);
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -4503,7 +4668,7 @@ p,
 }
 .step-card__title {
   font-family: var(--font-display);
-  font-size: 1.2rem;
+  font-size: var(--type-20);
   font-weight: 500;
   line-height: 1.12;
   letter-spacing: -0.01em;
@@ -4511,7 +4676,7 @@ p,
   margin-bottom: 0.55rem;
 }
 .step-card__desc {
-  font-size: 0.875rem;
+  font-size: var(--type-14);
   line-height: 1.55;
   color: var(--color-text-secondary);
   margin-bottom: 1.15rem;
@@ -4521,7 +4686,7 @@ p,
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.875rem;
+  font-size: var(--type-14);
   font-weight: 600;
   color: var(--accent-emerald);
 }
@@ -4563,7 +4728,7 @@ p,
   padding: 1.1rem 1.5rem;
   border-bottom: 1px solid color-mix(in srgb, var(--accent-violet) 14%, var(--color-border-subtle));
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -4592,7 +4757,7 @@ p,
   border: 1px solid var(--color-border-subtle);
   background: color-mix(in srgb, var(--color-bg-base) 45%, transparent);
   color: var(--color-text-secondary);
-  font-size: 0.875rem;
+  font-size: var(--type-14);
   font-weight: 600;
   text-align: center;
   transition: border-color 0.25s var(--ease-standard), background-color 0.25s var(--ease-standard), color 0.25s var(--ease-standard), box-shadow 0.25s var(--ease-standard);
@@ -4649,7 +4814,7 @@ p,
 .compound-bar__id { display: flex; align-items: center; gap: 0.65rem; min-width: 0; }
 .compound-bar__name {
   font-family: var(--font-display);
-  font-size: 1.05rem;
+  font-size: var(--type-17);
   font-weight: 500;
   letter-spacing: -0.01em;
   color: var(--color-text-primary);
@@ -4660,7 +4825,7 @@ p,
 .compound-bar__path {
   flex: none;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--type-micro);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-text-faint);
@@ -4668,7 +4833,7 @@ p,
 }
 .compound-bar__cta { display: flex; align-items: center; gap: 0.65rem; flex: none; }
 .compound-bar__secondary {
-  font-size: 0.8125rem;
+  font-size: var(--type-13);
   font-weight: 600;
   color: var(--color-text-secondary);
   white-space: nowrap;
@@ -4682,7 +4847,7 @@ p,
   gap: 0.45rem;
   padding: 0.55rem 0.95rem;
   border-radius: 0.7rem;
-  font-size: 0.8125rem;
+  font-size: var(--type-13);
   font-weight: 650;
   white-space: nowrap;
   color: #03100c;
@@ -4698,7 +4863,7 @@ p,
 }
 @media (max-width: 640px) {
   .compound-bar__path { display: none; }
-  .compound-bar__name { font-size: 0.95rem; max-width: 44vw; }
+  .compound-bar__name { font-size: var(--type-15); max-width: 44vw; }
   .compound-bar__secondary { display: none; }
   .compound-bar__primary { padding: 0.5rem 0.8rem; }
 }
@@ -4848,7 +5013,7 @@ p,
   border-top: 1px solid var(--color-border-subtle);
   color: var(--color-text-faint);
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 600;
   letter-spacing: 0.18em;
   line-height: 1.4;
@@ -4869,7 +5034,7 @@ p,
   margin: 0 0 1.125rem;
   color: var(--research-hero-accent, var(--accent-cyan));
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--type-11);
   font-weight: 600;
   letter-spacing: 0.2em;
   line-height: 1.4;
@@ -4889,7 +5054,7 @@ p,
   margin: 0;
   color: var(--color-text-primary);
   font-family: var(--font-display);
-  font-size: clamp(2.7rem, 6vw, 5.6rem);
+  font-size: var(--type-hero-title);
   font-weight: 450;
   letter-spacing: -0.042em;
   line-height: 0.98;
@@ -4905,7 +5070,7 @@ p,
   max-width: 58ch;
   margin: 1.35rem 0 0;
   color: var(--color-text-secondary);
-  font-size: clamp(1rem, 1vw + 0.7rem, 1.1875rem);
+  font-size: var(--type-hero-lead);
   line-height: 1.65;
   text-wrap: pretty;
 }
@@ -4956,7 +5121,7 @@ p,
   grid-row: 1 / span 2;
   color: color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 72%, var(--color-text-faint));
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 600;
   letter-spacing: 0.08em;
 }
@@ -4965,7 +5130,7 @@ p,
   min-width: 0;
   color: var(--research-hero-accent, var(--accent-cyan));
   font-family: var(--font-display);
-  font-size: clamp(1.55rem, 2.8vw, 2.25rem);
+  font-size: var(--type-hero-stat);
   font-weight: 520;
   letter-spacing: -0.04em;
   line-height: 1;
@@ -4978,7 +5143,7 @@ p,
   overflow: hidden;
   color: var(--color-text-muted);
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--type-micro);
   font-weight: 600;
   letter-spacing: 0.115em;
   line-height: 1.35;
@@ -4990,7 +5155,7 @@ p,
 .research-hero__stat-arrow {
   align-self: center;
   color: var(--research-hero-accent, var(--accent-cyan));
-  font-size: 1rem;
+  font-size: var(--type-16);
   opacity: 0;
   transform: translateX(-0.25rem);
   transition: transform var(--dur-fast) var(--ease-standard), opacity var(--dur-fast) var(--ease-standard);
@@ -5029,7 +5194,7 @@ p,
   min-height: 3rem;
   padding: 0.8rem 1.2rem;
   border-radius: 0.875rem;
-  font-size: 0.9375rem;
+  font-size: var(--type-15);
   font-weight: 650;
   text-decoration: none;
   transition: transform var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard), background-color var(--dur-fast) var(--ease-standard);
@@ -5077,13 +5242,13 @@ p,
 
 @media (max-width: 40rem) {
   .research-hero__inner { padding-block: 4.25rem 3.25rem; }
-  .research-hero__title { font-size: clamp(2.4rem, 12vw, 3.4rem); }
-  .research-hero__lead { margin-top: 1.1rem; font-size: 1rem; }
+  .research-hero__title { font-size: var(--type-hero-title-sm); }
+  .research-hero__lead { margin-top: 1.1rem; font-size: var(--type-16); }
   .research-hero__stats { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 1.5rem; }
   .research-hero__stat { padding: 0.85rem 0.8rem; column-gap: 0.45rem; }
   .research-hero__stat::before { right: 0.75rem; left: 0.75rem; }
-  .research-hero__stat-value { font-size: 1.55rem; }
-  .research-hero__stat-label { font-size: 0.54rem; letter-spacing: 0.08em; }
+  .research-hero__stat-value { font-size: var(--type-24); }
+  .research-hero__stat-label { font-size: var(--type-micro); letter-spacing: 0.08em; }
   .research-hero__actions { display: grid; grid-template-columns: 1fr; gap: 0.625rem; margin-top: 1.5rem; }
   .research-hero__action { width: 100%; min-height: 2.875rem; }
 }
@@ -5135,7 +5300,7 @@ p,
 .context-bar__current {
   overflow: hidden;
   border-radius: 0.25rem;
-  font-size: 0.75rem;
+  font-size: var(--type-12);
   line-height: 1.25;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -5164,7 +5329,7 @@ p,
 .context-bar__status {
   color: var(--color-text-faint);
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--type-micro);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -5181,7 +5346,7 @@ p,
   border-radius: 999px;
   background: color-mix(in srgb, currentColor 8%, transparent);
   color: var(--accent-cyan);
-  font-size: 0.75rem;
+  font-size: var(--type-12);
   font-weight: 650;
   line-height: 1;
   text-decoration: none;
@@ -5262,7 +5427,7 @@ p,
   margin: 0;
   color: var(--decision-accent, var(--accent-cyan));
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 650;
   letter-spacing: 0.14em;
   line-height: 1.4;
@@ -5274,7 +5439,7 @@ p,
   margin: 0.45rem 0 0;
   color: var(--color-text-primary);
   font-family: var(--font-display);
-  font-size: clamp(1.55rem, 2.4vw, 2.15rem);
+  font-size: var(--type-switchboard);
   font-weight: 500;
   letter-spacing: -0.03em;
   line-height: 1.06;
@@ -5285,7 +5450,7 @@ p,
   max-width: 64ch;
   margin: 0.65rem 0 0;
   color: var(--color-text-secondary);
-  font-size: 0.9375rem;
+  font-size: var(--type-15);
   line-height: 1.6;
   text-wrap: pretty;
 }
@@ -5340,7 +5505,7 @@ p,
 .decision-switchboard__number {
   color: color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 72%, var(--color-text-faint));
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--type-micro);
   font-weight: 650;
   letter-spacing: 0.08em;
 }
@@ -5365,15 +5530,15 @@ p,
   color: var(--decision-accent, var(--accent-cyan));
   background: color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 9%, transparent);
   font-family: var(--font-mono);
-  font-size: 0.53rem;
+  font-size: var(--type-micro);
   font-weight: 700;
   letter-spacing: 0.08em;
   line-height: 1;
   text-transform: uppercase;
 }
 .decision-switchboard__copy { display: block; min-width: 0; margin-top: 0.95rem; }
-.decision-switchboard__step-title { display: block; color: var(--color-text-primary); font-size: 0.9rem; font-weight: 675; line-height: 1.3; }
-.decision-switchboard__step-detail { display: block; margin-top: 0.32rem; color: var(--color-text-muted); font-size: 0.76rem; line-height: 1.55; }
+.decision-switchboard__step-title { display: block; color: var(--color-text-primary); font-size: var(--type-14); font-weight: 675; line-height: 1.3; }
+.decision-switchboard__step-detail { display: block; margin-top: 0.32rem; color: var(--color-text-muted); font-size: var(--type-12); line-height: 1.55; }
 .decision-switchboard__action {
   display: inline-flex;
   align-items: center;
@@ -5382,7 +5547,7 @@ p,
   padding-top: 1rem;
   color: var(--decision-accent, var(--accent-cyan));
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: var(--type-micro);
   font-weight: 700;
   letter-spacing: 0.09em;
   line-height: 1.2;
@@ -5494,7 +5659,7 @@ p,
 .action-card__featured-label,
 .action-card__footer {
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 650;
   letter-spacing: 0.11em;
   line-height: 1.2;
@@ -5536,7 +5701,7 @@ p,
   display: block;
   margin-top: 0.58rem;
   color: var(--color-text-muted);
-  font-size: 0.78rem;
+  font-size: var(--type-12);
   line-height: 1.55;
 }
 .action-card__footer {
@@ -5641,7 +5806,7 @@ p,
   margin: 0.6rem 0 0;
   color: var(--color-text-primary);
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-size: var(--type-handoff-title);
   font-weight: 520;
   letter-spacing: -0.035em;
   line-height: 1.04;
@@ -5652,7 +5817,7 @@ p,
   max-width: 62ch;
   margin: 0.7rem 0 0;
   color: var(--color-text-secondary);
-  font-size: 0.9375rem;
+  font-size: var(--type-15);
   line-height: 1.62;
   text-wrap: pretty;
 }
@@ -5706,7 +5871,7 @@ p,
   backdrop-filter: blur(18px) saturate(1.2);
   box-shadow: 0 14px 34px -20px rgba(0, 0, 0, 0.6);
   color: var(--color-foreground);
-  font-size: 0.8125rem;
+  font-size: var(--type-13);
   line-height: 1.2;
   /* Colour-only hover, and deliberately NO transform: this is a fixed control
      the reader must be able to hit first time. A hover lift (or .interactive's
@@ -5779,7 +5944,7 @@ p,
   padding: 0.4rem 0.5rem 0.55rem;
   border-bottom: 2px solid var(--color-border-subtle);
   color: var(--color-text-secondary);
-  font-size: 0.75rem;
+  font-size: var(--type-12);
   font-weight: 600;
   letter-spacing: 0.02em;
   transition: color 0.25s var(--ease-standard), border-color 0.25s var(--ease-standard);
@@ -5793,7 +5958,7 @@ p,
   border-radius: 999px;
   border: 1px solid currentColor;
   font-family: var(--font-mono, ui-monospace), monospace;
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   line-height: 1;
 }
 .nico-step.is-done {
@@ -6218,13 +6383,15 @@ p,
   color: var(--walk-accent);
 }
 .walk-card__title {
-  font-size: 1.02rem;
+  /* Was 1.02rem (16.32px) — a third spelling of 16px alongside `1rem` and
+     `1.05rem`. On the ladder now; `lib/type-scale.test.ts` caught it. */
+  font-size: var(--type-16);
   font-weight: 600;
   line-height: 1.3;
   color: var(--color-text-primary);
 }
 .walk-card__detail {
-  font-size: 0.875rem;
+  font-size: var(--type-14);
   line-height: 1.5;
   color: var(--color-text-secondary);
   display: -webkit-box;

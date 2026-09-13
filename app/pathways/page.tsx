@@ -8,6 +8,8 @@ import { SynergyNetworkGraph } from '@/components/ui/SynergyNetworkGraph';
 import { PathwayFamilies } from '@/components/library/PathwayFamilies';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema } from '@/lib/seo';
+import { EntityChips } from '@/components/ui/EntityChips';
+import { pathwayNeighbours } from '@/lib/entity-graph';
 import {
   pathways,
   pathwayCategoryMeta,
@@ -114,24 +116,38 @@ export default function PathwaysHubPage() {
                 <p className="text-body-sm max-w-3xl">{meta.description}</p>
               </div>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {items.map((p) => (
-                  <Link
-                    key={p.slug}
-                    href={`/pathways/${p.slug}`}
-                    style={{ ['--card-accent' as string]: `var(--accent-${meta.theme})` }}
-                    className="premium-card focus-ring group h-full p-5"
-                  >
-                    <div className="mb-2 flex items-center justify-between gap-3">
-                      <h3 className={`heading-card text-base ${themeAccent[meta.theme] ?? ''}`}>{p.name}</h3>
-                      <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition group-hover:translate-x-0.5 group-hover:[color:var(--card-accent)]" aria-hidden="true" />
+                {items.map((p) => {
+                  // The card used to be one big <Link> that printed
+                  // "6 compounds · 3 hallmarks" as dead text — the graph edges
+                  // were right there in the data and rendered as a count. It is
+                  // now a container with a stretched-link title (the site's
+                  // established idiom, see audit-ui.mjs's `stretched` check), so
+                  // the whole card still navigates to the pathway while the
+                  // compounds and hallmarks it engages are real, separately
+                  // clickable links sitting above that layer.
+                  const n = pathwayNeighbours(p.slug);
+                  return (
+                    <div
+                      key={p.slug}
+                      style={{ ['--card-accent' as string]: `var(--accent-${meta.theme})` }}
+                      className="premium-card group relative h-full p-5"
+                    >
+                      <div className="mb-2 flex items-center justify-between gap-3">
+                        <h3 className={`heading-card text-base ${themeAccent[meta.theme] ?? ''}`}>
+                          <Link href={`/pathways/${p.slug}`} className="focus-ring stretched-link rounded">
+                            {p.name}
+                          </Link>
+                        </h3>
+                        <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition group-hover:translate-x-0.5 group-hover:[color:var(--card-accent)]" aria-hidden="true" />
+                      </div>
+                      <p className="text-body-sm text-muted-foreground">{p.summary}</p>
+                      <div className="relative z-[1] mt-4 space-y-3 border-t border-border/40 pt-4">
+                        <EntityChips label="Engaged by" entities={n.compounds} max={4} moreHref={`/pathways/${p.slug}`} />
+                        <EntityChips label="Acts on" entities={n.hallmarks} max={3} moreHref={`/pathways/${p.slug}`} />
+                      </div>
                     </div>
-                    <p className="text-body-sm flex-1 text-muted-foreground">{p.summary}</p>
-                    <p className="text-caption mt-3 text-muted-foreground">
-                      {p.compoundSlugs.length} compound{p.compoundSlugs.length === 1 ? '' : 's'} ·{' '}
-                      {p.hallmarkIds.length} hallmark{p.hallmarkIds.length === 1 ? '' : 's'}
-                    </p>
-                  </Link>
-                ))}
+                  );
+                })}
               </div>
             </section>
           );

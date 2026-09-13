@@ -53,6 +53,7 @@ function buildSchemas() {
 export default function SponsorshipPolicyPage() {
   return (
     <TrustPageTemplate
+      path="/trust/sponsorship"
       icon={ShieldCheck}
       eyebrow="Trust · Sponsorship"
       title="Sponsorship & Advertising Principles"

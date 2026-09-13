@@ -7,6 +7,8 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { HeadToHeadCompare } from '@/components/library/HeadToHeadCompare';
 import { HeadToHeadPicker } from '@/components/library/HeadToHeadPicker';
 import { buildBreadcrumbSchema, buildPageMetadata } from '@/lib/seo';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
 import {
   DEFAULT_PAIR,
   buildHeadToHead,
@@ -143,6 +145,12 @@ export default function HeadToHeadPage({ searchParams }: { searchParams: SearchP
         >
           <HeadToHeadResult searchParams={searchParams} options={options} />
         </Suspense>
+      {/* This page's body is a client island behind Suspense, so it
+          server-rendered almost no in-body links — a reader arriving from
+          search, and every crawler, saw a shell that connected to nothing. */}
+      <div className="container-page">
+        <PageConnections cluster={clusterFrom('explore', '/library/compare/head-to-head')} accent="cyan" id="explore-connections" />
+      </div>
       </div>
     </div>
   );

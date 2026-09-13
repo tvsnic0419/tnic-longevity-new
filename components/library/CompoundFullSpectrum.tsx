@@ -251,7 +251,7 @@ const CFS_CSS = `
 .cfs-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 20px; }
 .cfs-eyebrow {
   display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--font-mono, ui-monospace, monospace); font-size: 11px; letter-spacing: 0.2em;
+  font-family: var(--font-mono, ui-monospace, monospace); font-size: var(--type-11); letter-spacing: 0.2em;
   text-transform: uppercase; color: var(--color-text-muted); margin: 0 0 8px;
 }
 .cfs-name {
@@ -261,23 +261,23 @@ const CFS_CSS = `
   /* Carried over from the global h1–h4 rule this element no longer matches. */
   text-wrap: balance;
 }
-.cfs-full { font-size: 13px; color: var(--color-text-muted); margin: 4px 0 0; }
+.cfs-full { font-size: var(--type-13); color: var(--color-text-muted); margin: 4px 0 0; }
 .cfs-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 .cfs-chip {
   display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--font-mono, ui-monospace, monospace); font-size: 11px;
+  font-family: var(--font-mono, ui-monospace, monospace); font-size: var(--type-11);
   color: var(--color-text-secondary); padding: 4px 10px; border-radius: 999px;
   border: 1px solid var(--color-border-subtle); background: var(--color-bg-muted);
 }
 .cfs-chip-tier { padding: 2px 6px; }
 .cfs-chip-rct { color: var(--accent-emerald); border-color: color-mix(in srgb, var(--accent-emerald) 40%, transparent); }
 
-.cfs-summary { font-size: 14px; line-height: 1.6; color: var(--color-text-secondary); margin: 18px 0 0; max-width: 68ch; }
+.cfs-summary { font-size: var(--type-14); line-height: 1.6; color: var(--color-text-secondary); margin: 18px 0 0; max-width: 68ch; }
 
 .cfs-block { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--color-border-subtle); }
 .cfs-block-label {
   display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--font-mono, ui-monospace, monospace); font-size: 10.5px; letter-spacing: 0.14em;
+  font-family: var(--font-mono, ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: 0.14em;
   text-transform: uppercase; color: var(--color-text-faint); margin: 0 0 12px;
 }
 
@@ -293,10 +293,10 @@ const CFS_CSS = `
   border: 1px solid var(--color-border-subtle); background: var(--color-bg-muted);
 }
 .cfs-hm-num {
-  font-family: var(--font-mono, ui-monospace, monospace); font-size: 10px; font-weight: 600;
+  font-family: var(--font-mono, ui-monospace, monospace); font-size: var(--type-micro); font-weight: 600;
   letter-spacing: 0.04em; flex: 0 0 auto;
 }
-.cfs-hm-title { font-size: 12.5px; line-height: 1.25; }
+.cfs-hm-title { font-size: var(--type-12); line-height: 1.25; }
 .cfs-hm-on {
   border-color: color-mix(in srgb, var(--card-accent) 45%, transparent);
   background: color-mix(in srgb, var(--card-accent) 10%, transparent);
@@ -311,7 +311,7 @@ const CFS_CSS = `
 
 .cfs-tags { display: flex; flex-wrap: wrap; gap: 7px; }
 .cfs-tag {
-  display: inline-flex; align-items: center; gap: 6px; font-size: 12px;
+  display: inline-flex; align-items: center; gap: 6px; font-size: var(--type-12);
   color: var(--color-text-secondary); padding: 5px 11px; border-radius: 999px;
   border: 1px solid var(--color-border-subtle); background: var(--color-bg-muted); text-decoration: none;
 }
@@ -323,15 +323,15 @@ const CFS_CSS = `
 .cfs-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 0; }
 @media (max-width: 560px) { .cfs-facts { grid-template-columns: 1fr; } }
 .cfs-fact dt {
-  font-family: var(--font-mono, ui-monospace, monospace); font-size: 10px; letter-spacing: 0.1em;
+  font-family: var(--font-mono, ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: 0.1em;
   text-transform: uppercase; color: var(--color-text-faint); margin-bottom: 5px;
 }
-.cfs-fact dd { margin: 0; font-size: 14px; color: var(--color-text-secondary); display: flex; flex-direction: column; gap: 2px; }
-.cfs-fact-num { font-family: var(--font-mono, ui-monospace, monospace); font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums; }
-.cfs-fact-note { font-size: 11px; color: var(--color-text-faint); }
-.cfs-xref { margin: 12px 0 0; font-size: 11.5px; line-height: 1.5; color: var(--color-text-faint); }
+.cfs-fact dd { margin: 0; font-size: var(--type-14); color: var(--color-text-secondary); display: flex; flex-direction: column; gap: 2px; }
+.cfs-fact-num { font-family: var(--font-mono, ui-monospace, monospace); font-size: var(--type-20); font-weight: 600; font-variant-numeric: tabular-nums; }
+.cfs-fact-note { font-size: var(--type-11); color: var(--color-text-faint); }
+.cfs-xref { margin: 12px 0 0; font-size: var(--type-11); line-height: 1.5; color: var(--color-text-faint); }
 
-.cfs-prose { margin: 0; font-size: 13.5px; line-height: 1.65; color: var(--color-text-secondary); max-width: 72ch; }
+.cfs-prose { margin: 0; font-size: var(--type-13); line-height: 1.65; color: var(--color-text-secondary); max-width: 72ch; }
 
 .cfs-studies { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
 .cfs-study {
@@ -340,17 +340,17 @@ const CFS_CSS = `
   border: 1px solid var(--color-border-subtle); background: var(--color-bg-muted);
 }
 .cfs-study:hover { border-color: color-mix(in srgb, var(--accent-cyan) 35%, transparent); }
-.cfs-study-title { font-size: 13px; line-height: 1.35; color: var(--color-text-primary); }
+.cfs-study-title { font-size: var(--type-13); line-height: 1.35; color: var(--color-text-primary); }
 .cfs-study-meta {
   display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--font-mono, ui-monospace, monospace); font-size: 11px; color: var(--accent-cyan);
+  font-family: var(--font-mono, ui-monospace, monospace); font-size: var(--type-11); color: var(--accent-cyan);
 }
-.cfs-more { margin: 10px 0 0; font-size: 12px; color: var(--color-text-faint); }
+.cfs-more { margin: 10px 0 0; font-size: var(--type-12); color: var(--color-text-faint); }
 
 .cfs-foot {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
   margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--color-border-subtle);
-  font-size: 11.5px; line-height: 1.5; color: var(--color-text-faint);
+  font-size: var(--type-11); line-height: 1.5; color: var(--color-text-faint);
 }
 .cfs-reviewed { white-space: nowrap; }
 `;

@@ -1,5 +1,7 @@
 import { compoundModules } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
+import { resolveHallmarks } from './entity-graph';
+import type { GraphEntity } from './entity-graph';
 import { computeTnicScore, type TnicScoreConfidence, type TnicScoreSource } from '@/lib/tnic-score';
 import type { EvidenceTier } from '@/lib/types';
 
@@ -31,6 +33,14 @@ export interface EvidenceRow {
   /** Why the score is what it is — shown verbatim, never paraphrased. */
   methodologyNote: string | null;
   hallmarkTitles: string[];
+  /**
+   * The same hallmarks as linkable entities. The table printed the titles as
+   * dead text while the ids sat one map lookup away from a real route — the
+   * row named the mechanism and then refused to take the reader to it.
+   * Parallel to `hallmarkTitles` rather than replacing it, because the filter
+   * facets match on title and `evidence-index.test.ts` guards that.
+   */
+  hallmarks: GraphEntity[];
   href: string;
 }
 
@@ -54,6 +64,7 @@ function buildRows(): EvidenceRow[] {
       hallmarkTitles: m.relatedHallmarkIds
         .map((id) => hallmarkTitleById.get(id))
         .filter((t): t is string => Boolean(t)),
+      hallmarks: resolveHallmarks(m.relatedHallmarkIds),
       href: `/library/compounds/${m.slug}`,
     };
   });

@@ -12,6 +12,8 @@ import { buildBreadcrumbSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
 import { biomarkers } from '@/lib/data';
 import { COMPOUND_COUNT } from '@/lib/library-modules';
+import { EntityChips } from '@/components/ui/EntityChips';
+import { resolveCompounds } from '@/lib/entity-graph';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 
 export const metadata = seoRoutes.labs();
@@ -43,6 +45,12 @@ function buildLabsSchemas() {
 }
 
 export default function LabsPage() {
+  // Derived from each biomarker's own `compounds` edge, dropping any that has
+  // no deep-dive behind it, and any marker left with nothing to link.
+  const biomarkerLinks = biomarkers
+    .map((b) => ({ id: b.id, name: b.name, compounds: resolveCompounds(b.compounds) }))
+    .filter((b) => b.compounds.length > 0);
+
   return (
     <>
       <StructuredData schemas={buildLabsSchemas()} />
@@ -77,6 +85,33 @@ export default function LabsPage() {
         <Suspense fallback={<SectionSkeleton height="lg" />}>
           <LabHub />
         </Suspense>
+
+        {/* The Lab Hub is a client island behind Suspense — deliberately, since
+            it processes lab data locally in the browser — so this hub
+            server-rendered five in-body links in total and a reader arriving
+            from search saw a biomarker tracker that named no interventions.
+            Each biomarker below carries its own `compounds` edge in the data;
+            this renders that edge. Biomarkers have no page of their own, so
+            they are group labels rather than links — naming a route that does
+            not exist would be worse than naming none. */}
+        <section aria-labelledby="labs-graph-heading" className="mt-14">
+          <div className="premium-card p-5 md:p-7">
+            <p className="text-label mb-2 text-accent-rose">From a marker to an intervention</p>
+            <h2 id="labs-graph-heading" className="heading-section mb-2 text-xl md:text-2xl">
+              What the library has studied against each biomarker.
+            </h2>
+            <p className="text-body-sm mb-6 max-w-3xl text-muted-foreground">
+              A number on a panel is only useful if you can act on it. These are the compounds
+              with a full evidence module behind them for each marker the hub tracks — read the
+              evidence before changing anything.
+            </p>
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {biomarkerLinks.map((b) => (
+                <EntityChips key={b.id} label={b.name} entities={b.compounds} />
+              ))}
+            </div>
+          </div>
+        </section>
       </PageShell>
     </>
   );

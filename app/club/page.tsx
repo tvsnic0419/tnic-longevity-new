@@ -5,6 +5,8 @@ import { JoinClub } from '@/components/club/JoinClub';
 import { CLUB_PLEDGE, CLUB_MANIFESTO } from '@/lib/club';
 import { buildPageMetadata } from '@/lib/seo';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'The 150-Year Club — Commit to Maximum Healthspan',
@@ -80,6 +82,12 @@ export default function ClubPage() {
             </Link>
           </div>
         </div>
+      </div>
+      {/* This page's body is a client island, so it server-rendered almost no
+          in-body links — a reader arriving from search, and every crawler, saw
+          a shell that connected to nothing. */}
+      <div className="container-page">
+        <PageConnections cluster={clusterFrom('explore', '/club')} accent="amber" id="explore-connections" />
       </div>
       </div>
     </SubPageLayout>

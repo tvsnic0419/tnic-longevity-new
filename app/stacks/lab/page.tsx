@@ -8,6 +8,8 @@ import { seoRoutes } from '@/lib/seo-routes';
 import { COMPOUND_COUNT } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { stackInteractions, type InteractionType } from '@/lib/stack-analysis';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
 
 // Honest stats for the hero — counted from the real dataset, never invented.
 const labStats = [
@@ -69,6 +71,12 @@ export default function CombinationLabPage() {
       <Suspense fallback={<div className="container-page py-20 text-muted-foreground">Loading combination lab…</div>}>
         <CombinationLab />
       </Suspense>
+      {/* This page's body is a client island behind Suspense, so it
+          server-rendered almost no in-body links — a reader arriving from
+          search, and every crawler, saw a shell that connected to nothing. */}
+      <div className="container-page">
+        <PageConnections cluster={clusterFrom('explore', '/stacks/lab')} accent="violet" id="explore-connections" />
+      </div>
     </>
   );
 }

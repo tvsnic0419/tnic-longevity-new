@@ -10,6 +10,7 @@ export const metadata = seoRoutes.trustUpdates();
 export default function UpdatesPage() {
   return (
     <TrustPageTemplate
+      path="/trust/updates"
       icon={History}
       eyebrow="Trust · Changelog"
       title="Update History"

@@ -10,6 +10,8 @@ import { seoRoutes } from '@/lib/seo-routes';
 import { buildBreadcrumbSchema } from '@/lib/seo';
 import { toolsRegistry } from '@/lib/registry';
 import { SITE } from '@/lib/site';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
 
 export const metadata = seoRoutes.tools();
 
@@ -106,6 +108,12 @@ export default function ToolsPage() {
       >
         <ToolsHub />
       </Suspense>
+      {/* This page's body is a client island behind Suspense, so it
+          server-rendered almost no in-body links — a reader arriving from
+          search, and every crawler, saw a shell that connected to nothing. */}
+      <div className="container-page">
+        <PageConnections cluster={clusterFrom('explore', '/tools')} accent="cyan" id="explore-connections" />
+      </div>
     </>
   );
 }

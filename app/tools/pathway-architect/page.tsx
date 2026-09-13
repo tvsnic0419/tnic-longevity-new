@@ -7,6 +7,8 @@ import { buildBreadcrumbSchema, buildArticleSchema } from '@/lib/seo';
 import { seoRoutes } from '@/lib/seo-routes';
 import { COMPOUND_DB, PATHWAY_LABELS } from '@/lib/compound-engine-data';
 import { SITE } from '@/lib/site';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
 
 export const metadata = seoRoutes.pathwayArchitect();
 
@@ -80,6 +82,12 @@ export default function PathwayArchitectPage() {
       <Suspense fallback={<div className="container-page py-20 text-muted-foreground" aria-busy="true">Loading the architect…</div>}>
         <PathwayArchitect />
       </Suspense>
+      {/* This page's body is a client island behind Suspense, so it
+          server-rendered almost no in-body links — a reader arriving from
+          search, and every crawler, saw a shell that connected to nothing. */}
+      <div className="container-page">
+        <PageConnections cluster={clusterFrom('explore', '/tools/pathway-architect')} accent="emerald" id="explore-connections" />
+      </div>
     </>
   );
 }

@@ -21,9 +21,12 @@
  *    reported an emerald label at 1.49:1 whose real computed colour was
  *    rgb(52,211,153) at opacity 1, comfortably passing. Confirm any contrast
  *    hit against getComputedStyle before changing a token.
- *  - `minFont` is dominated by SVG data-visualisation labels (chart axes,
- *    molecule atom labels), which are a different system from the HTML type
- *    scale. Read the histogram, not just the minimum.
+ *  - `minFont` used to be dominated by SVG data-visualisation labels (chart
+ *    axes, molecule atom labels), which are a different system from the HTML
+ *    type scale. The micro-type probe now excludes SVG entirely and reports
+ *    every HTML text node under the scale's 11px floor by class and by page,
+ *    so `micro:` in the per-page line is directly actionable; `minFont` is
+ *    retained only as a coarse signal.
  */
 import { chromium } from 'playwright-core';
 import fs from 'node:fs/promises';
@@ -152,13 +155,36 @@ for (const vp of VIEWPORTS) {
             cls: (el.className || '').toString().slice(0, 60),
           });
         });
-        // Smallest rendered font actually painted on the page.
+        // ── Micro-type probe ──
+        // Every HTML text node rendering below the scale's floor
+        // (--type-micro, 11px). SVG <text> is deliberately excluded: inside a
+        // scaled viewBox its computed font-size is in user units, not screen
+        // px, and these are molecular-diagram annotations whose size is set by
+        // the geometry — their accessibility answer is the text fallback every
+        // visualization owes, not a type floor.
+        const FLOOR = 10.95; // 11px, with room for sub-pixel rounding
         let minFont = 99;
+        const microType = [];
         document.querySelectorAll('body *').forEach((el) => {
-          if (!el.textContent?.trim()) return;
-          if (el.children.length) return;
-          const fs = parseFloat(getComputedStyle(el).fontSize);
-          if (fs && fs < minFont) minFont = fs;
+          if (el instanceof SVGElement) return;
+          // Only elements holding their own text, so a wrapper is not blamed
+          // for a child's size.
+          let own = '';
+          for (const n of el.childNodes) if (n.nodeType === 3) own += n.textContent;
+          own = own.trim();
+          if (own.length < 2) return;
+          const cs = getComputedStyle(el);
+          if (cs.display === 'none' || cs.visibility === 'hidden') return;
+          if (el.closest('.sr-only') || el.classList.contains('sr-only')) return;
+          const px = parseFloat(cs.fontSize);
+          if (!px) return;
+          if (px < minFont) minFont = px;
+          if (px >= FLOOR) return;
+          microType.push({
+            px: Math.round(px * 100) / 100,
+            cls: (el.className?.toString?.() || `<${el.tagName.toLowerCase()}>`).slice(0, 64),
+            text: own.slice(0, 30),
+          });
         });
         return {
           scrollW: document.documentElement.scrollWidth,
@@ -167,10 +193,11 @@ for (const vp of VIEWPORTS) {
           smallTargets: small,
           actionableTargets: actionable,
           minFont,
+          microType,
         };
       });
       layout.push({ vp: vp.name, path, ...m });
-      process.stderr.write(`  ${vp.name.padEnd(8)} ${path.padEnd(40)} axe:${res.violations.length} overflow:${m.overflow.length} smallTap:${m.smallTargets} (actionable:${m.actionableTargets.length}) minFont:${m.minFont}px\n`);
+      process.stderr.write(`  ${vp.name.padEnd(8)} ${path.padEnd(40)} axe:${res.violations.length} overflow:${m.overflow.length} smallTap:${m.smallTargets} (actionable:${m.actionableTargets.length}) minFont:${m.minFont}px micro:${m.microType.length}\n`);
     } catch (err) {
       process.stderr.write(`  ✗ ${vp.name} ${path} — ${err.message.slice(0, 100)}\n`);
     }
@@ -233,5 +260,41 @@ const budget = Number(process.env.MAX_SMALL_TAPS ?? 0);
 console.log(`\nactionable sub-24px controls: ${totalActionable} (budget ${budget})`);
 if (totalActionable > budget) {
   console.error(`\n✗ tap-target gate: ${totalActionable} actionable controls under 24px, budget is ${budget}.`);
+  process.exitCode = 1;
+}
+
+// ── Micro-type gate ──
+// The type scale bottoms out at --type-micro (11px), and globals.css records
+// why: 11px is the size the dense pages are actually read at, and it matches
+// `.text-label` so the two smallest steps agree. An audit of eight rendered
+// pages once found 59 declarations between 4px and 10.5px — and on a PHONE
+// they were smaller still (hero stat labels at 8.64px), handing the device
+// with the least reading comfort the least legible type. This gate is what
+// stops that drifting back one component at a time.
+console.log('\n=== HTML TEXT BELOW THE 11px FLOOR ===');
+const micro = new Map(); // signature -> {n, px, cls, text, pages:Set}
+for (const l of layout) {
+  for (const t of l.microType ?? []) {
+    const key = `${t.px}|${t.cls}`;
+    if (!micro.has(key)) micro.set(key, { n: 0, px: t.px, cls: t.cls, text: t.text, pages: new Set() });
+    const e = micro.get(key);
+    e.n += 1;
+    e.pages.add(`${l.vp}${l.path}`);
+  }
+}
+if (micro.size === 0) {
+  console.log('  none');
+} else {
+  for (const [, v] of [...micro.entries()].sort((a, b) => a[1].px - b[1].px)) {
+    console.log(`  ${String(v.n).padStart(4)}×  ${String(v.px).padStart(6)}px  "${v.text}"`);
+    console.log(`        ${v.cls}`);
+    console.log(`        ${[...v.pages].slice(0, 4).join(', ')}${v.pages.size > 4 ? ` +${v.pages.size - 4} more` : ''}`);
+  }
+}
+const totalMicro = layout.reduce((n, l) => n + (l.microType?.length ?? 0), 0);
+const microBudget = Number(process.env.MAX_MICRO_TYPE ?? 0);
+console.log(`\nHTML text below 11px: ${totalMicro} (budget ${microBudget})`);
+if (totalMicro > microBudget) {
+  console.error(`\n✗ micro-type gate: ${totalMicro} HTML text nodes under 11px, budget is ${microBudget}.`);
   process.exitCode = 1;
 }

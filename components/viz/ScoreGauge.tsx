@@ -112,12 +112,18 @@ export function ScoreGauge({
         <span
           style={{
             fontFamily: 'var(--font-mono, ui-monospace, monospace)',
-            fontSize: 8.5,
-            letterSpacing: '0.14em',
+            // The scale's floor (11px), not the 8.5px this used to set. The
+            // tracking came down from 0.14em to 0.08em to match `.text-label`,
+            // which is what buys the extra size back inside the dial; the
+            // caption now wraps to two lines here rather than one, which the
+            // ring's interior has room for (40px numeral + 2 x 16px).
+            fontSize: 'var(--type-micro)',
+            letterSpacing: '0.08em',
+            lineHeight: 1.25,
             textTransform: 'uppercase',
             color: 'var(--color-text-faint)',
             marginTop: 4,
-            maxWidth: size * 0.8,
+            maxWidth: size * 0.86,
           }}
         >
           {caption}

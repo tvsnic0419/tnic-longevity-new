@@ -296,7 +296,12 @@ export function Nav() {
           {/* Brand descriptor from the site wordmark. Decorative (aria-hidden)
               and kept OUTSIDE the logo link so it can't create a
               label-content-name-mismatch with the link's accessible name.
-              Wide screens only, so the ≥1440px nav row stays uncrowded. */}
+              Wide screens only, so the ≥1440px nav row stays uncrowded.
+              Set at the scale's floor (--type-micro, 11px) rather than the
+              0.58rem/9.28px it used to carry — it was the last HTML text on
+              the site under the floor. The tracking came down from 0.18em to
+              0.1em to pay for the extra size, so the lockup's width is
+              unchanged and the nav row does not crowd. */}
           <span
             aria-hidden="true"
             className="hidden xl:block border-l border-border/60 pl-2.5 font-mono text-micro font-semibold uppercase leading-[1.25] tracking-[0.18em] text-muted-foreground"

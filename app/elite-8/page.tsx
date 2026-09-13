@@ -5,6 +5,8 @@ import { buildBreadcrumbSchema, buildArticleSchema } from '@/lib/seo';
 import { seoRoutes } from '@/lib/seo-routes';
 import { getScoredCompounds } from '@/lib/elite-8-data';
 import { SITE } from '@/lib/site';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
 
 export const metadata = seoRoutes.elite8();
 
@@ -48,6 +50,12 @@ export default function Elite8Page() {
     <SubPageLayout hideContextBar>
       <StructuredData schemas={schemas} />
       <Elite8Hub />
+      {/* This page's body is a client island behind Suspense, so it
+          server-rendered almost no in-body links — a reader arriving from
+          search, and every crawler, saw a shell that connected to nothing. */}
+      <div className="container-page">
+        <PageConnections cluster={clusterFrom('explore', '/elite-8')} accent="amber" id="explore-connections" />
+      </div>
     </SubPageLayout>
   );
 }

@@ -8,6 +8,8 @@ import { COMPOUND_COUNT } from '@/lib/library-modules';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildPageMetadata, buildBreadcrumbSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
 
 export const metadata = buildPageMetadata({
   title: 'Protocol Shop — Stack-Filtered Buyer Verification',
@@ -77,6 +79,12 @@ export default function ShopPage() {
           variant="handoff"
         />
         <ProtocolShopPanel />
+      {/* This page's body is a client island behind Suspense, so it
+          server-rendered almost no in-body links — a reader arriving from
+          search, and every crawler, saw a shell that connected to nothing. */}
+      <div className="container-page">
+        <PageConnections cluster={clusterFrom('explore', '/shop')} accent="amber" id="explore-connections" />
+      </div>
       </div>
     </>
   );

@@ -120,15 +120,15 @@ const MHERO_CSS = `
 }
 .mhero-hint {
   position: absolute; bottom: 12px; right: 14px;
-  font-family: ${FONT.mono}; font-size: 11px; color: ${VIZ.faint}; letter-spacing: .06em;
+  font-family: ${FONT.mono}; font-size: var(--type-11); color: ${VIZ.faint}; letter-spacing: .06em;
   display: flex; align-items: center; gap: 7px; pointer-events: none;
 }
 .mhero-hint .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--hue); box-shadow: 0 0 10px var(--hue); }
-.mhero-cap { font-family: ${FONT.mono}; font-size: 11px; color: ${VIZ.faint}; letter-spacing: .03em; line-height: 1.5; margin: 0; }
+.mhero-cap { font-family: ${FONT.mono}; font-size: var(--type-11); color: ${VIZ.faint}; letter-spacing: .03em; line-height: 1.5; margin: 0; }
 
 .mhero-body { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
 .mhero-kicker {
-  font-family: ${FONT.mono}; font-size: 12px; letter-spacing: .26em; text-transform: uppercase;
+  font-family: ${FONT.mono}; font-size: var(--type-12); letter-spacing: .26em; text-transform: uppercase;
   color: var(--hue); margin: 0; display: inline-flex; align-items: center; gap: 12px;
 }
 .mhero-kicker::before { content: ''; width: 26px; height: 1px; background: var(--hue); opacity: .6; }
@@ -139,7 +139,7 @@ const MHERO_CSS = `
 }
 .mhero-medallion {
   display: inline-flex; align-items: center; gap: 9px; align-self: flex-start;
-  font-family: ${FONT.mono}; font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+  font-family: ${FONT.mono}; font-size: var(--type-11); letter-spacing: .18em; text-transform: uppercase;
   padding: 7px 14px; border: 1px solid; border-radius: 999px;
 }
 .mhero-medallion .ring { width: 8px; height: 8px; border-radius: 50%; background: currentColor; box-shadow: 0 0 10px currentColor; }
@@ -152,13 +152,13 @@ const MHERO_CSS = `
   background: linear-gradient(180deg, rgba(19,26,48,0.7), rgba(14,20,38,0.7));
   border: 1px solid ${VIZ.line}; border-radius: 12px;
 }
-.mhero-fact .k { font-family: ${FONT.mono}; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: ${VIZ.faint}; }
-.mhero-fact .v { font-size: 14px; color: ${VIZ.ink}; font-weight: 500; }
+.mhero-fact .k { font-family: ${FONT.mono}; font-size: var(--type-micro); letter-spacing: .16em; text-transform: uppercase; color: ${VIZ.faint}; }
+.mhero-fact .v { font-size: var(--type-14); color: ${VIZ.ink}; font-weight: 500; }
 
 .mhero-hallmarks { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 6px; }
-.mhero-hallmarks .lbl { font-family: ${FONT.mono}; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: ${VIZ.faint}; margin-right: 4px; }
+.mhero-hallmarks .lbl { font-family: ${FONT.mono}; font-size: var(--type-micro); letter-spacing: .16em; text-transform: uppercase; color: ${VIZ.faint}; margin-right: 4px; }
 .mhero-hallmarks .chip {
-  font-size: 12px; color: ${VIZ.muted}; padding: 5px 11px; border-radius: 999px;
+  font-size: var(--type-12); color: ${VIZ.muted}; padding: 5px 11px; border-radius: 999px;
   border: 1px solid ${VIZ.line}; background: rgba(14,20,38,0.5);
   text-decoration: none;
 }

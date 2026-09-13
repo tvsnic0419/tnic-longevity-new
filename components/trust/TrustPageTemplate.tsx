@@ -7,6 +7,8 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { DisclaimerInline } from './DisclaimerBanner';
 import { getTrustPageContext, type TrustPageKey } from '@/lib/hub-context';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom, type ClusterId } from '@/lib/page-connections';
 
 interface TrustPageTemplateProps {
   icon: LucideIcon;
@@ -28,6 +30,25 @@ interface TrustPageTemplateProps {
    * never on a /trust child, which would double the chrome).
    */
   standalone?: boolean;
+  /**
+   * This page's own route. Required to render the connections rail, because
+   * the rail excludes the page you are already on by href.
+   *
+   * A route audit found every page using this template sitting at one or two
+   * in-body links despite carrying real prose — /trust/methodology explained
+   * the entire grading ladder across 4,860 characters and linked to nothing,
+   * /trust/updates ran to 14,367 characters with two links. These are exactly
+   * the pages a sceptical reader arrives on, and they were the site's biggest
+   * dead ends.
+   */
+  path?: string;
+  /**
+   * Which cluster of siblings to offer. Defaults to the trust cluster; the
+   * legal/data pages (privacy, health-data, terms) pass `policy`, because a
+   * reader asking "what do you do with my data" wants the other policies, not
+   * the grading methodology.
+   */
+  cluster?: ClusterId;
 }
 
 /** Reusable template for /trust sub-pages */
@@ -42,6 +63,8 @@ export function TrustPageTemplate({
   showBackLink = true,
   disclaimer = 'TNiC is educational only — not medical advice. Consult your physician before starting any protocol.',
   standalone = false,
+  path,
+  cluster = 'trust',
 }: TrustPageTemplateProps) {
   const body = (
     <PageShell>
@@ -64,6 +87,13 @@ export function TrustPageTemplate({
         context={pageKey ? getTrustPageContext(pageKey) : undefined}
       />
       <div className="prose-tnic max-w-4xl">{children}</div>
+      {path && (
+        <PageConnections
+          cluster={clusterFrom(cluster, path)}
+          accent={cluster === 'policy' ? 'amber' : 'emerald'}
+          id="trust-connections"
+        />
+      )}
       <DisclaimerInline text={disclaimer} />
     </PageShell>
   );

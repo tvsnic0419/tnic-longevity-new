@@ -232,11 +232,27 @@ export function EvidenceIndexTable({
                   </span>
                 </td>
                 <td className="align-top">
-                  {r.hallmarkTitles.length === 0 ? (
+                  {/* The hallmark names used to sit here as a joined string:
+                      the row named the mechanism and then refused to take the
+                      reader to it. They are links now — the ids were always
+                      one lookup from a real route. Kept as text-sized inline
+                      links rather than chips so a hundred rows stay a table
+                      and not a wall of pills. */}
+                  {r.hallmarks.length === 0 ? (
                     <span className="text-caption text-muted-foreground">—</span>
                   ) : (
                     <span className="text-caption text-muted-foreground">
-                      {r.hallmarkTitles.join(' · ')}
+                      {r.hallmarks.map((h, i) => (
+                        <span key={h.key}>
+                          {i > 0 && <span aria-hidden="true"> · </span>}
+                          <Link
+                            href={h.href}
+                            className="focus-ring rounded underline-offset-2 transition-colors hover:text-accent-violet hover:underline"
+                          >
+                            {h.label}
+                          </Link>
+                        </span>
+                      ))}
                     </span>
                   )}
                 </td>

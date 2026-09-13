@@ -141,7 +141,10 @@ export function SectionProgress({
                 The plate now reserves room for them, so they stay on one line. */}
             <span
               className={cn(
-                'text-label pointer-events-none w-[92px] shrink-0 truncate text-right transition-opacity duration-300',
+                // Hidden below 1700px: the label column is what makes the
+                // rail ~152px wide, and under that width it reaches past the
+                // gutter onto the content. The tick alone still shows position.
+                'text-label pointer-events-none w-[92px] shrink-0 truncate text-right transition-opacity duration-300 max-[1699px]:hidden',
                 // main's rail kept labels legible at rest (opacity .54) rather
                 // than hiding them until hover; that reads better and is kept.
                 state === 'active'
@@ -202,9 +205,23 @@ export function SectionProgress({
         // page content for no benefit.
         // gap-0 keeps the step pitch at exactly 44px — the step height — so
         // neighbouring hit areas tile without overlapping.
+        // Visibility is a measured rule, not a guess. `.container-page` caps at
+        // 80rem (1280px), so the gutter this rail can occupy without landing on
+        // content is (100vw - 1280) / 2. It used to appear from `md` (768px),
+        // where that gutter is ZERO — and it overlapped page content at 16 of
+        // 19 scroll positions at 1280px and 15 of 19 at 1366px, the two most
+        // common laptop widths, clipping Tier A badges by up to 178px.
+        //
+        //   >= 1700px  gutter >= 210px  full rail with labels (needs ~182px)
+        //   >= 1500px  gutter >= 110px  ticks only (needs ~94px)
+        //   <  1500px  no room — the bottom strip takes over
+        //
+        // The fade-at-top came from main and is kept: the rail has nothing to
+        // report before the reader has left the first section. Its breakpoint
+        // moves with the visibility rule above, so the two cannot disagree.
         className={cn(
-          'pointer-events-none fixed right-[clamp(14px,2.5vw,30px)] top-1/2 z-40 hidden -translate-y-1/2 flex-col transition-opacity duration-300 md:flex',
-          active === 0 && 'md:opacity-0 md:pointer-events-none',
+          'pointer-events-none fixed right-[clamp(14px,2.5vw,30px)] top-1/2 z-40 hidden -translate-y-1/2 flex-col transition-opacity duration-300 min-[1500px]:flex',
+          active === 0 && 'min-[1500px]:opacity-0 min-[1500px]:pointer-events-none',
         )}
       >
         {/* Panel treatment ported from the rail this replaced (main's
@@ -220,7 +237,9 @@ export function SectionProgress({
       {/* Mobile: a horizontally scrollable strip, rather than nothing at all. */}
       <nav
         aria-label={ariaLabel}
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-border/60 bg-[var(--color-bg-base)]/90 backdrop-blur md:hidden"
+        // Was `md:hidden`, which left 768-1500px with an overlapping rail and
+        // no fallback. It now covers exactly the range the rail cannot.
+        className="fixed inset-x-0 bottom-0 z-40 border-t border-border/60 bg-[var(--color-bg-base)]/90 backdrop-blur min-[1500px]:hidden"
       >
         <div
           ref={stripRef}

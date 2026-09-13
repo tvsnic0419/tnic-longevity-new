@@ -17,6 +17,8 @@ import { buildArticleSchema, buildBreadcrumbSchema } from '@/lib/seo';
 import { seoRoutes } from '@/lib/seo-routes';
 import { SITE } from '@/lib/site';
 import { platformStats } from '@/lib/platform-stats';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
 import {
   SPONSOR_SLOT_CATALOG,
   getActiveSponsor,
@@ -296,6 +298,7 @@ export default function PartnershipsPage() {
 
       {/* Live sponsor placement — renders only when inventory is sold. */}
       <SponsorSlot slot="partnerships" className="mt-8" />
+      <PageConnections cluster={clusterFrom('about', '/partnerships')} accent="cyan" id="about-connections" />
       </PageShell>
     </SubPageLayout>
   );
