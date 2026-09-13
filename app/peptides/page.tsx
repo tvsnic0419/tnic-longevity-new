@@ -8,6 +8,8 @@ import { EvidenceTagLegend } from '@/components/trust/EvidenceTag';
 import { PeptideLandscape } from '@/components/peptides/PeptideLandscape';
 import { peptideCategoryMeta, peptideLibrary, getPeptidesByCategory } from '@/lib/peptides-library';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
+import { HubSplitInstrument } from '@/components/viz/HubSplitInstrument';
+import type { PeptideLegalStatus } from '@/lib/types';
 import { disclaimers } from '@/lib/trust';
 import { getHubContext } from '@/lib/hub-context';
 import { seoRoutes } from '@/lib/seo-routes';
@@ -17,6 +19,18 @@ export const metadata: Metadata = seoRoutes.peptidesHub();
 
 const categoryOrder: PeptideCategory[] = ['repair', 'metabolic', 'immune', 'growth-axis', 'mitochondrial'];
 
+const LEGAL_ORDER: PeptideLegalStatus[] = [
+  'fda-approved-rx',
+  'compounding-restricted',
+  'research-use-only',
+];
+
+const LEGAL_META: Record<PeptideLegalStatus, { label: string; color: string }> = {
+  'fda-approved-rx': { label: 'FDA-approved Rx', color: 'var(--status-optimal)' },
+  'compounding-restricted': { label: 'Compounding restricted', color: 'var(--status-watch)' },
+  'research-use-only': { label: 'Research-use only', color: 'var(--status-critical)' },
+};
+
 /**
  * Server-rendered like the homepage — every peptide name/tagline/category is
  * real crawlable markup, not a client-only shell. No interactive filtering
@@ -24,6 +38,12 @@ const categoryOrder: PeptideCategory[] = ['repair', 'metabolic', 'immune', 'grow
  */
 export default function PeptidesHubPage() {
   const legalDisclaimer = disclaimers.find((d) => d.id === 'peptides-legal-status')!;
+  const legalCounts = LEGAL_ORDER.map((status) => ({
+    key: status,
+    label: LEGAL_META[status].label,
+    count: peptideLibrary.filter((p) => p.legalStatus === status).length,
+    color: LEGAL_META[status].color,
+  }));
 
   return (
     <>
@@ -31,7 +51,7 @@ export default function PeptidesHubPage() {
         hue="rose"
         kicker="Peptide Library"
         title={<>The peptide <em>frontier</em>.</>}
-        lead="Eight of the most-discussed longevity peptides — evidence tier, mechanism, and the legal status of every one, stated plainly before anything else."
+        lead={`${peptideLibrary.length} of the most-discussed longevity peptides — evidence tier, mechanism, and the legal status of every one, stated plainly before anything else.`}
         stats={[
           { value: String(peptideLibrary.length), label: 'Peptides covered' },
           { value: String(categoryOrder.length), label: 'Mechanistic classes' },
@@ -39,6 +59,17 @@ export default function PeptidesHubPage() {
         ]}
         primary={{ href: '/nico', label: 'Find your personalized stack' }}
         secondary={{ href: '/library', label: 'Browse the library' }}
+        figure={
+          <HubSplitInstrument
+            kicker="Legal status"
+            total={peptideLibrary.length}
+            totalLabel="peptides"
+            rows={legalCounts}
+            href="/trust/disclaimers"
+            hrefLabel="Read the legal note →"
+          />
+        }
+        figureCaption="Legal status · derived from the peptide registry"
       />
       <div className="py-8 md:py-10">
         <div className="container-page">
@@ -46,10 +77,10 @@ export default function PeptidesHubPage() {
             icon={Syringe}
             eyebrow="Peptide Library"
             title="Anti-aging peptides, graded honestly."
-          description="Eight of the most-discussed longevity peptides — evidence tier, mechanism, dosing patterns reported in the literature, and the legal status of every single one, stated plainly before anything else."
-          theme="rose"
-          context={getHubContext('peptides')}
-        />
+            description={`${peptideLibrary.length} of the most-discussed longevity peptides — evidence tier, mechanism, dosing patterns reported in the literature, and the legal status of every single one, stated plainly before anything else.`}
+            theme="rose"
+            context={getHubContext('peptides')}
+          />
 
         <div className="mx-auto mb-10 max-w-3xl md:mb-14">
           <DisclaimerBanner disclaimer={legalDisclaimer} showAppliesTo />

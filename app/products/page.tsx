@@ -1,6 +1,7 @@
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { ProductsHub } from '@/components/shop/ProductsHub';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
+import { HubSplitInstrument } from '@/components/viz/HubSplitInstrument';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { seoRoutes } from '@/lib/seo-routes';
 import { buildProductListSchema, buildBreadcrumbSchema } from '@/lib/seo';
@@ -38,6 +39,7 @@ export default function ProductsPage() {
   const hallmarksAddressed = new Set(
     picks.flatMap((p) => compounds.find((c) => c.id === p.compoundId)?.hallmarks ?? []),
   ).size;
+  const coaPublished = picks.filter((p) => p.thirdPartyTested).length;
 
   return (
     <SubPageLayout hideContextBar>
@@ -54,6 +56,30 @@ export default function ProductsPage() {
         ]}
         primary={{ href: '/shop', label: 'Open the Protocol Shop' }}
         secondary={{ href: '/library', label: 'Browse the library' }}
+        figure={
+          <HubSplitInstrument
+            kicker="Verification"
+            total={picks.length}
+            totalLabel="verified picks"
+            rows={[
+              {
+                key: 'coa',
+                label: 'COA published',
+                count: coaPublished,
+                color: 'var(--status-optimal)',
+              },
+              {
+                key: 'unstated',
+                label: 'Not stated',
+                count: picks.length - coaPublished,
+                color: 'var(--color-text-faint)',
+              },
+            ]}
+            href="/shop"
+            hrefLabel="Buyer checklists →"
+          />
+        }
+        figureCaption="COA split · derived from the pick registry, never inferred"
       />
       <ProductsHub />
     </SubPageLayout>

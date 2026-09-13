@@ -187,7 +187,7 @@ export const NetworkStage = forwardRef<StageHandle, {
         // clutter, and the far side stays clean artwork.
         if (depth < 0.5) {
           ctx.fillStyle = `rgba(230,240,255,${(0.85 - depth * 1.4) * a})`;
-          ctx.font = `500 ${Math.round(11 * p.persp)}px 'Inter', system-ui, sans-serif`;
+          ctx.font = `500 ${Math.round(11 * p.persp)}px system-ui, sans-serif`;
           ctx.textAlign = "center"; ctx.textBaseline = "middle";
           ctx.fillText(n.name, p.sx, p.sy - rad - 8 * p.persp);
         }

@@ -13,6 +13,7 @@ import { RevealItem } from '@/components/ui/RevealItem';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
+import { HubSplitInstrument, HUB_ACCENT_VAR } from '@/components/viz/HubSplitInstrument';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Longevity Supplement Guides 2026 — Evidence-Based Deep Dives',
@@ -173,6 +174,36 @@ export default function SupplementGuidesPage() {
           ]}
           primary={{ href: '/longevity-supplements-guide', label: 'Start with the Master Guide' }}
           secondary={{ href: '/library', label: 'Compound library' }}
+          figure={
+            <HubSplitInstrument
+              kicker="Reading surfaces"
+              total={SUPPLEMENT_GUIDES.length + compoundDeepDives.length + comparisons.length}
+              totalLabel="linked entries"
+              rows={[
+                {
+                  key: 'guides',
+                  label: 'In-depth guides',
+                  count: SUPPLEMENT_GUIDES.length,
+                  color: HUB_ACCENT_VAR.cyan,
+                },
+                {
+                  key: 'dives',
+                  label: 'Compound profiles',
+                  count: compoundDeepDives.length,
+                  color: HUB_ACCENT_VAR.emerald,
+                },
+                {
+                  key: 'compare',
+                  label: 'Head-to-head',
+                  count: comparisons.length,
+                  color: HUB_ACCENT_VAR.violet,
+                },
+              ]}
+              href="/longevity-supplements-guide"
+              hrefLabel="Start with the Master Guide →"
+            />
+          }
+          figureCaption="Reading split · derived from the guides listed on this page"
         />
 
         {/* Semantic page title */}

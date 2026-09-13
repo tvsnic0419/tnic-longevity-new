@@ -1,10 +1,14 @@
 import { Compass, Scale, Wand2 } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
+import { HubSplitInstrument } from '@/components/viz/HubSplitInstrument';
 import { ProtocolExplorer } from '@/components/protocols/ProtocolExplorer';
 import { DecisionSteps } from '@/components/ui/DecisionSteps';
 import { buildPageMetadata } from '@/lib/seo';
 import { protocols } from '@/lib/protocols';
+import { hallmarkLibrary } from '@/lib/hallmarks-library';
+import { TIER_COLOR_VAR } from '@/lib/trust';
+import type { EvidenceTier } from '@/lib/types';
 
 export const metadata = buildPageMetadata({
   title: 'Protocol Library — Evidence-Based Longevity Stacks',
@@ -22,6 +26,9 @@ export const metadata = buildPageMetadata({
 });
 
 export default function ProtocolsPage() {
+  const protocolByTier: Record<EvidenceTier, number> = { A: 0, B: 0, C: 0 };
+  for (const p of protocols) protocolByTier[p.evidence] += 1;
+
   return (
     <SubPageLayout>
       <CinematicHubHero
@@ -35,10 +42,26 @@ export default function ProtocolsPage() {
           { value: String(protocols.length), label: 'Protocols' },
           { value: 'A–C', label: 'Evidence-graded', href: '/trust/methodology' },
           { value: 'AM/PM', label: 'Timed choreography' },
-          { value: '12', label: 'Hallmarks covered', href: '/hallmarks' },
+          { value: String(hallmarkLibrary.length), label: 'Hallmarks covered', href: '/hallmarks' },
         ]}
         primary={{ href: '/stacks', label: 'Build your own in Stack Architect' }}
         secondary={{ href: '/library', label: 'Browse compounds' }}
+        figure={
+          <HubSplitInstrument
+            kicker="Protocol grades"
+            total={protocols.length}
+            totalLabel="curated stacks"
+            rows={(['A', 'B', 'C'] as EvidenceTier[]).map((tier) => ({
+              key: tier,
+              label: `Tier ${tier}`,
+              count: protocolByTier[tier],
+              color: TIER_COLOR_VAR[tier],
+            }))}
+            href="/stacks"
+            hrefLabel="Build your own →"
+          />
+        }
+        figureCaption="Evidence split · derived from the protocol registry"
       />
 
       <div className="container-page pb-20">

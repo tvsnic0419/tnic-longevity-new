@@ -1,6 +1,6 @@
 # TNiC Design System & Style Guide
 
-> Version 1.6 · September 2026  
+> Version 1.7 · September 2026  
 > Governs typography, spacing, components, accessibility, and page patterns across tnic.help.  
 > v1.1 documents the cinematic viz family (§7, §12) that the premium hubs are built on.  
 > v1.2 corrects the drifted §2 color values, documents the signal roles, the
@@ -14,7 +14,10 @@
 > v1.5 adds §15 — the hub hero's two-column composition and its instrument
 > panel.  
 > v1.6 adds §16 — the measured performance baseline, what is gated versus only
-> reported, and `.card-deferred`.
+> reported, and `.card-deferred`.  
+> v1.7 adds §17 — Hanken Grotesk as the body face, `HubSplitInstrument` as the
+> hub-hero data figure, and the HUD / table / selection tokens that travel
+> with them.
 
 ---
 
@@ -108,6 +111,19 @@ the other.
 | `.text-caption` | 12px | Meta, disclaimers |
 | `.text-label` | 11px mono uppercase | Eyebrows, column headers |
 | `.text-micro` | 11px sans | Chips, badge text, stat suffixes, fine print |
+
+**Three faces, one job each.** Self-hosted via `next/font` in `app/layout.tsx`,
+exposed as CSS variables, never loaded from a runtime `@import`.
+
+| Role | Face | Token |
+|------|------|-------|
+| Display | Fraunces | `--font-display` / `--font-fraunces` |
+| Body | Hanken Grotesk | `--font-sans` / `--font-hanken` |
+| Data | JetBrains Mono | `--font-mono` / `--font-jetbrains-mono` |
+
+Hanken replaced Inter as the body face in v1.7. Same small-size legibility,
+more character, so the text plane no longer reads as a default SaaS stack.
+`--font-inter` is retired; do not reintroduce it.
 
 **11px is the floor.** `.text-micro` was 10px until an audit of the rendered
 pages (`npm run audit:ui`) found it on 753 elements of `/library` alone —
@@ -221,18 +237,24 @@ semantic title beneath it:
 
 ```
 SubPageLayout (folder layout.tsx → Nav + ContextBar + Footer)
-  └─ CinematicHubHero   (decorative: molecular field + hero title + derived stat rail + CTAs)
-  └─ PageHeader as="h1" (the single semantic <h1> — hero title is a non-heading <p>)
+  └─ CinematicHubHero   (hero title + derived stat rail + CTAs + instrument panel)
+  └─ PageHeader         (the <h1> *unless* the hero took it via titleAsHeading)
   └─ content grid (.premium-card / GlassPanel)
 ```
 
-- **One `<h1>` per page.** `CinematicHubHero`'s `hh-title` is intentionally a
-  decorative `<p>`; the real `<h1>` lives in the `PageHeader` (or a
-  title-bearing content component) directly below it.
+- **One `<h1>` per page.** Default: `CinematicHubHero`'s title is a decorative
+  `<p>` and the real `<h1>` lives in the `PageHeader` below. Exception: hubs
+  whose cover *is* the identity (`/library`, `/protocols`, `/insights`, and
+  any other page that passes `titleAsHeading`) put the `<h1>` in the hero and
+  must not render a second one.
 - **Hero accent = the page's `PageHeader` theme**, so hero and header read as one unit.
 - **Stats are derived, never literals** — pass values joined from the live
   registries (`COMPOUND_COUNT`, `hallmarkLibrary.length`, `citationRegistry.length`, …)
   so a hero can never drift below what's published. See `lib/platform-stats.ts`.
+- **The right-hand panel is a data figure when the hub has a countable set.**
+  Pass `figure={<HubSplitInstrument … />}` (or a thin wrapper like
+  `LibraryHeroInstrument`) and caption it as derived. The decorative molecular
+  field is the fallback for hubs with nothing to count, not the default. See §17.
 
 ### Interior / utility hub pages
 
@@ -663,6 +685,64 @@ Reach for it on any list long enough that most of it is off-screen. Set
 `contain-intrinsic-size` to the measured item height: getting it wrong costs
 scroll-position accuracy, not layout stability, because the value is only used
 while the item is skipped.
+
+---
+
+## 17. Instrument material — type, figure, chrome
+
+*Added v1.7, from treating the whole site as one instrument rather than restyling pages.*
+
+The sixth-pass library instrument was a one-off. Eleven other hubs still filled
+the right column with the decorative molecular field even when they had a
+countable, derived set. Inter was still the body face. The chrome (nav, tables,
+inputs, selection) did not yet read as the same instrument the library had
+become. This section is the contract for that pass.
+
+### Body face
+
+`--font-sans` resolves to `--font-hanken` (Hanken Grotesk), then system-ui.
+`--font-inter` is gone. Canvas labels in `NetworkStage` use `system-ui`, not
+Inter. Viz token `FONT.sans` names Hanken Grotesk as the fallback.
+
+Body text sets `font-optical-sizing: auto` and
+`font-feature-settings: "kern" 1, "liga" 1, "calt" 1`. Do not add a fourth
+face, and do not load Inter "just for the engine" — the Compound Intelligence
+surface follows the same three roles.
+
+### Hub-hero data figure
+
+`HubSplitInstrument` (`components/viz/HubSplitInstrument.tsx`) is the shared
+primitive. It is a server component. It never invents a number and never
+hardcodes a colour: the caller passes `total`, `rows[].count`, and
+`rows[].color` from a live registry (`TIER_COLOR_VAR`, `HUB_ACCENT_VAR`, or a
+status token). A thin wrapper (`LibraryHeroInstrument`) is allowed when a
+page wants a named view over a specific stats helper; it must still render
+`HubSplitInstrument`.
+
+A hub with a countable set **must** pass `figure` and a caption that says the
+split is derived. A hub with nothing to count keeps the molecular field and
+captions it as decorative — that is the honest fallback, not a hole.
+
+Do not put a heading inside the instrument. The page `<h1>` lives in the hero
+title (when `titleAsHeading`) or in the `PageHeader` beside it.
+
+### HUD / table / selection tokens
+
+These are sitewide, not per-page:
+
+| Token / rule | Job |
+|---|---|
+| `::selection` | Cyan 28% mix on `--color-text-primary` |
+| `[data-theme="light"] body::after` | Grain opacity 0.016 — film, not dirt |
+| `.nav-glass::before` | Always-on 1px cyan HUD tick along the bottom edge |
+| `.nav-glass-scrolled::before` | Top specular; wins over the tick when scrolled |
+| `.input-base` | Inset 1px highlight so fields read as recessed instrument wells |
+| `.table-base thead th` | Sticky header + bottom hairline |
+| `.research-hero__figure-stage--data` | Inset bezel; no atmospheric mask (labels stay readable) |
+
+Do not add more glass, more glow, or a second grain overlay. The atmosphere
+budget in §13 still holds; this section only names the chrome that was
+missing from it.
 
 ---
 

@@ -619,4 +619,75 @@ describe('site data integrity', () => {
     expect(page).toContain('<HeadToHeadCompare');
     expect(page).not.toContain('SectionSkeleton');
   });
+
+  it('the hub instrument is a shared derived split, and the body face is Hanken', () => {
+    // v1.7: Inter was the last generic-SaaS tell; the remaining cinematic hubs
+    // still filled the right column with atmosphere even when they had a
+    // countable set. The library instrument became HubSplitInstrument so every
+    // hub with something to count passes a derived figure, not a one-off.
+    const instrument = readFileSync(
+      resolve(process.cwd(), 'components/viz/HubSplitInstrument.tsx'),
+      'utf8',
+    );
+    const libraryInstrument = readFileSync(
+      resolve(process.cwd(), 'components/library/LibraryHeroInstrument.tsx'),
+      'utf8',
+    );
+    const layout = readFileSync(resolve(process.cwd(), 'app/layout.tsx'), 'utf8');
+    const css = readFileSync(resolve(process.cwd(), 'app/globals.css'), 'utf8');
+    const tokens = readFileSync(resolve(process.cwd(), 'components/viz/tokens.ts'), 'utf8');
+
+    expect(instrument).not.toContain("'use client'");
+    expect(instrument).toContain('HubSplitRow');
+    expect(instrument).toContain('HUB_ACCENT_VAR');
+    expect(libraryInstrument).toContain('HubSplitInstrument');
+    expect(libraryInstrument).toContain('evidenceIndexStats');
+    expect(libraryInstrument).not.toContain("'use client'");
+
+    expect(layout).toContain('Hanken_Grotesk');
+    expect(layout).toContain('--font-hanken');
+    expect(layout).not.toContain('--font-inter');
+    expect(layout).not.toContain('Inter(');
+    expect(css).toContain('--font-hanken');
+    expect(css).toContain('::selection');
+    expect(css).toContain('.nav-glass::before');
+    expect(css).toContain('font-optical-sizing: auto');
+    expect(tokens).toContain('Hanken Grotesk');
+    expect(tokens).not.toContain("'Inter'");
+
+    const hubsWithFigure = [
+      'app/hallmarks/page.tsx',
+      'app/peptides/page.tsx',
+      'app/pathways/page.tsx',
+      'app/library/evidence/page.tsx',
+      'app/stacks/page.tsx',
+      'app/stacks/lab/page.tsx',
+      'app/tools/page.tsx',
+      'app/trust/page.tsx',
+      'app/protocols/page.tsx',
+      'app/insights/page.tsx',
+      'app/products/page.tsx',
+      'app/compound-engine/page.tsx',
+      'app/supplement-guides/page.tsx',
+      'app/learn/page.tsx',
+    ];
+    for (const rel of hubsWithFigure) {
+      const src = readFileSync(resolve(process.cwd(), rel), 'utf8');
+      expect(src, `${rel} must pass a derived figure`).toContain('figure=');
+      expect(src, `${rel} must use HubSplitInstrument or LibraryHeroInstrument`).toMatch(
+        /HubSplitInstrument|LibraryHeroInstrument/,
+      );
+    }
+
+    // Hallmark-count rails that used to be a literal "12".
+    for (const rel of ['app/labs/page.tsx', 'app/trust/page.tsx', 'app/protocols/page.tsx']) {
+      const src = readFileSync(resolve(process.cwd(), rel), 'utf8');
+      expect(src, `${rel} must derive hallmark count`).toContain('hallmarkLibrary.length');
+      expect(src, `${rel} must not hardcode a hallmark rail of 12`).not.toMatch(/value: '12'/);
+    }
+
+    const peptides = readFileSync(resolve(process.cwd(), 'app/peptides/page.tsx'), 'utf8');
+    expect(peptides).toContain('peptideLibrary.length');
+    expect(peptides).not.toMatch(/Eight of the most-discussed/);
+  });
 });

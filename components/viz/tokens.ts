@@ -104,6 +104,6 @@ export const EASE = {
  */
 export const FONT = {
   display: "var(--font-display, 'Fraunces', Georgia, serif)",
-  sans: "var(--font-sans, 'Inter', system-ui, sans-serif)",
+  sans: "var(--font-sans, 'Hanken Grotesk', system-ui, sans-serif)",
   mono: "var(--font-mono, 'JetBrains Mono', ui-monospace, monospace)",
 } as const;
