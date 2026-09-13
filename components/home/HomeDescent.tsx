@@ -194,7 +194,7 @@ const CSS = `
   display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 18px;
   max-width: 720px; color: var(--faint);
   font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+  font-size: var(--type-micro); letter-spacing: .08em; text-transform: uppercase;
   opacity: 0; transform: translateY(12px);
   transition: opacity .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .16s, transform .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .16s;
 }
@@ -328,10 +328,10 @@ const CSS = `
 }
 .tnic-path.primary { color: #030712; border-color: transparent; background: linear-gradient(135deg, #5fe3e0 0%, #68e5c7 52%, #b8f3d8 100%); box-shadow: 0 10px 30px -16px rgba(95,227,224,.85); }
 .tnic-path.primary:hover { border-color: transparent; background: linear-gradient(135deg, #75ebe7 0%, #77ebcf 52%, #c8f7e2 100%); box-shadow: 0 14px 36px -16px rgba(95,227,224,.95); }
-.tnic-path-index { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10px; letter-spacing: .12em; color: var(--faint); }
+.tnic-path-index { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: .12em; color: var(--faint); }
 .tnic-path.primary .tnic-path-index { color: rgba(3,7,18,.58); }
 .tnic-path-copy { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-.tnic-path-label { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 9px; line-height: 1.2; letter-spacing: .11em; text-transform: uppercase; color: var(--faint); }
+.tnic-path-label { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-micro); line-height: 1.2; letter-spacing: .11em; text-transform: uppercase; color: var(--faint); }
 .tnic-path.primary .tnic-path-label { color: rgba(3,7,18,.62); }
 .tnic-path-name { font-size: 14px; line-height: 1.2; font-weight: 650; }
 .tnic-path-detail { font-size: 11px; line-height: 1.35; color: var(--muted); }
@@ -353,7 +353,7 @@ const CSS = `
     min-width: 0;
     gap: 5px;
     padding: 7px 8px;
-    font-size: 8px;
+    font-size: var(--type-micro);
     letter-spacing: .09em;
     white-space: nowrap;
   }
@@ -366,9 +366,9 @@ const CSS = `
   .tnic-path.primary { grid-column: 1 / -1; }
   .tnic-path { min-height: 78px; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; padding: 11px; }
   .tnic-path-index { display: none; }
-  .tnic-path-label { font-size: 8px; letter-spacing: .09em; }
+  .tnic-path-label { font-size: var(--type-micro); letter-spacing: .09em; }
   .tnic-path-name { font-size: 13px; }
-  .tnic-path-detail { font-size: 10px; line-height: 1.3; }
+  .tnic-path-detail { font-size: var(--type-micro); line-height: 1.3; }
 }
 
 .tnic-cue {
@@ -425,7 +425,7 @@ const CSS = `
 .tnic-stage-fallback__node--two { margin: 20% 0 0 -25%; background: var(--gold); box-shadow: 0 0 0 .25rem rgba(240,196,106,.08), 0 0 1.2rem rgba(240,196,106,.56); }
 .tnic-stage-fallback__node--three { margin: -18% 0 0 -33%; background: var(--violet); box-shadow: 0 0 0 .25rem rgba(185,140,240,.08), 0 0 1.2rem rgba(185,140,240,.56); }
 .tnic-stage-fallback__core { width: 7%; aspect-ratio: 1; border: 1px solid rgba(255,255,255,.72); border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, var(--cyan) 42%, rgba(95,227,224,.12) 100%); box-shadow: 0 0 0 12px rgba(95,227,224,.06), 0 0 2.2rem rgba(95,227,224,.6); }
-.tnic-stage-fallback__label { position: absolute; left: 22px; top: 20px; display: flex; flex-direction: column; gap: 5px; color: var(--faint); font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 9px; letter-spacing: .16em; line-height: 1.2; text-transform: uppercase; }
+.tnic-stage-fallback__label { position: absolute; left: 22px; top: 20px; display: flex; flex-direction: column; gap: 5px; color: var(--faint); font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: .16em; line-height: 1.2; text-transform: uppercase; }
 .tnic-stage-fallback__label strong { color: var(--ink); font-size: 11px; font-weight: 500; letter-spacing: .1em; }
 .tnic-stage-placeholder { display: none; }
 @media (max-width: 720px) { .tnic-stage-fallback__label { left: 16px; top: 16px; } }
@@ -449,7 +449,7 @@ const CSS = `
 .tnic-molcard .formula { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 14px; color: var(--cyan); letter-spacing: .08em; }
 .tnic-molcard .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; margin-top: 4px; }
 .tnic-molcard .fact { display: flex; flex-direction: column; gap: 3px; }
-.tnic-molcard .fact .k { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--faint); }
+.tnic-molcard .fact .k { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: .18em; text-transform: uppercase; color: var(--faint); }
 .tnic-molcard .fact .v { font-size: 15px; color: var(--ink); }
 /* The shared science panel, sized inside the Descent's two-column wraps. It
    wraps the deferred stage rather than replacing it, so the lazy-mount seam
@@ -463,7 +463,7 @@ const CSS = `
 .tnic-sci canvas { width: 100%; height: 100%; display: block; }
 
 .tnic-molcard .why { font-size: 13.5px; color: var(--muted); line-height: 1.55; max-width: 52ch; margin-top: 4px; border-top: 1px solid var(--line); padding-top: 14px; }
-.tnic-molcard .cite { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; color: var(--faint); letter-spacing: .1em; }
+.tnic-molcard .cite { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-micro); color: var(--faint); letter-spacing: .1em; }
 /* Standalone actions clear the 24px control floor (STYLE_GUIDE §4). */
 .tnic-molcard .cite a { display: inline-flex; align-items: center; min-height: 24px; }
 
@@ -512,7 +512,7 @@ const CSS = `
 .tnic-chip {
   display: inline-flex; align-items: center; gap: 7px; padding: 8px 12px;
   background: rgba(14,20,38,0.6); border: 1px solid var(--line); color: var(--muted);
-  border-radius: 999px; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px;
+  border-radius: 999px; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-micro);
   letter-spacing: .14em; text-transform: uppercase; cursor: pointer; transition: all .2s ease;
 }
 .tnic-chip.on { color: var(--ink); border-color: currentColor; background: rgba(255,255,255,0.03); }
@@ -532,12 +532,12 @@ const CSS = `
 .tnic-readout .r-elite svg { width: 11px; height: 11px; }
 .tnic-readout .r-name { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: 30px; margin: 6px 0 2px; letter-spacing: -.01em; }
 .tnic-readout .r-role { font-size: 13.5px; color: var(--muted); margin-bottom: 12px; }
-.tnic-readout .r-meta { display: flex; gap: 12px; margin-bottom: 12px; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; letter-spacing: .1em; color: var(--faint); text-transform: uppercase; }
+.tnic-readout .r-meta { display: flex; gap: 12px; margin-bottom: 12px; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: .1em; color: var(--faint); text-transform: uppercase; }
 .tnic-readout .r-meta b { color: var(--ink); font-weight: 500; letter-spacing: .04em; }
 .tnic-readout .r-link { display: flex; gap: 11px; padding: 12px 0; border-top: 1px solid var(--line); }
 .tnic-readout .r-link .r-dot { width: 9px; height: 9px; border-radius: 50%; margin-top: 5px; flex: none; box-shadow: 0 0 8px currentColor; }
 .tnic-readout .r-link .r-to { font-size: 14px; font-weight: 600; color: var(--ink); }
-.tnic-readout .r-link .r-tag { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; margin-left: 8px; }
+.tnic-readout .r-link .r-tag { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: .12em; text-transform: uppercase; margin-left: 8px; }
 .tnic-readout .r-link .r-why { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin-top: 3px; }
 .tnic-readout .r-cta {
   display: inline-flex; align-items: center; gap: 8px; margin-top: 16px;
@@ -549,7 +549,7 @@ const CSS = `
 .tnic-readout .r-empty { color: var(--faint); font-size: 14px; line-height: 1.6; padding-top: 8px; }
 
 .tnic-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 16px; }
-.tnic-legend .lg { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
+.tnic-legend .lg { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
 .tnic-legend .lg .sw { width: 10px; height: 10px; border-radius: 50%; }
 
 .tnic-tl { margin-top: 8px; }
@@ -579,7 +579,7 @@ const CSS = `
   display: flex; flex-direction: column; gap: 4px;
 }
 .tnic-tl-stat b { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: 26px; color: var(--gold); letter-spacing: -.01em; }
-.tnic-tl-stat .k { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); }
+.tnic-tl-stat .k { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: .16em; text-transform: uppercase; color: var(--faint); }
 .tnic-tl-stat .n { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
 .tnic-honest { font-size: 13px; color: var(--faint); font-style: italic; margin-top: 14px; max-width: 60ch; line-height: 1.55; }
 .tnic-tl-toggle { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
@@ -623,7 +623,7 @@ const CSS = `
 .tnic-elite-card .body .name { font-size: 15px; font-weight: 600; color: var(--ink); }
 .tnic-elite-card .body .path { font-size: 12px; color: var(--muted); margin-top: 2px; }
 .tnic-elite-card .tier {
-  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10px; letter-spacing: .18em;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: .18em;
   text-transform: uppercase; padding: 4px 8px; border-radius: 999px;
   border: 1px solid currentColor;
 }

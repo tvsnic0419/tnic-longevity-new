@@ -277,7 +277,7 @@ const CFS_CSS = `
 .cfs-block { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--color-border-subtle); }
 .cfs-block-label {
   display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--font-mono, ui-monospace, monospace); font-size: 10.5px; letter-spacing: 0.14em;
+  font-family: var(--font-mono, ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: 0.14em;
   text-transform: uppercase; color: var(--color-text-faint); margin: 0 0 12px;
 }
 
@@ -293,7 +293,7 @@ const CFS_CSS = `
   border: 1px solid var(--color-border-subtle); background: var(--color-bg-muted);
 }
 .cfs-hm-num {
-  font-family: var(--font-mono, ui-monospace, monospace); font-size: 10px; font-weight: 600;
+  font-family: var(--font-mono, ui-monospace, monospace); font-size: var(--type-micro); font-weight: 600;
   letter-spacing: 0.04em; flex: 0 0 auto;
 }
 .cfs-hm-title { font-size: 12.5px; line-height: 1.25; }
@@ -323,7 +323,7 @@ const CFS_CSS = `
 .cfs-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 0; }
 @media (max-width: 560px) { .cfs-facts { grid-template-columns: 1fr; } }
 .cfs-fact dt {
-  font-family: var(--font-mono, ui-monospace, monospace); font-size: 10px; letter-spacing: 0.1em;
+  font-family: var(--font-mono, ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: 0.1em;
   text-transform: uppercase; color: var(--color-text-faint); margin-bottom: 5px;
 }
 .cfs-fact dd { margin: 0; font-size: 14px; color: var(--color-text-secondary); display: flex; flex-direction: column; gap: 2px; }

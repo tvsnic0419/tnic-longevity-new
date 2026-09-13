@@ -226,7 +226,7 @@ const CIM_CSS = `
 .cim-cover { display: grid; grid-template-columns: 1fr; gap: 18px; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--color-border-subtle); }
 .cim-cover-label {
   display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--font-mono, ui-monospace, monospace); font-size: 10.5px; letter-spacing: 0.14em;
+  font-family: var(--font-mono, ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: 0.14em;
   text-transform: uppercase; color: var(--color-text-faint); margin: 0 0 10px;
 }
 .cim-tags { display: flex; flex-wrap: wrap; gap: 7px; }
@@ -242,7 +242,7 @@ const CIM_CSS = `
 .cim-hallmark-tags { flex: 1 1 200px; align-content: flex-start; }
 @media (max-width: 560px) { .cim-radial { margin-inline: auto; } .cim-hallmarks { justify-content: center; } }
 .cim-tag-short {
-  font-family: var(--font-mono, ui-monospace, monospace); font-size: 9px; letter-spacing: 0.08em;
+  font-family: var(--font-mono, ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: 0.08em;
   color: var(--color-text-faint); background: var(--color-bg-base); padding: 2px 5px; border-radius: 5px;
 }
 

@@ -275,7 +275,7 @@ const CHERO_CSS = `
 @media (hover: hover) {
   .chero-fact:hover { border-color: color-mix(in srgb, var(--hue) 32%, ${VIZ.line}); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 12px 26px -16px color-mix(in srgb, var(--hue) 50%, transparent); }
 }
-.chero-fact .k { font-family: ${FONT.mono}; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: ${VIZ.faint}; }
+.chero-fact .k { font-family: ${FONT.mono}; font-size: var(--type-micro); letter-spacing: .16em; text-transform: uppercase; color: ${VIZ.faint}; }
 .chero-fact .v { font-size: 14px; color: ${VIZ.ink}; font-weight: 500; font-variant-numeric: tabular-nums; }
 .chero-fact .chero-meter {
   position: relative; height: 3px; margin-top: 3px; border-radius: 999px;
@@ -287,7 +287,7 @@ const CHERO_CSS = `
 }
 
 .chero-hallmarks { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 6px; }
-.chero-hallmarks .lbl { font-family: ${FONT.mono}; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: ${VIZ.faint}; margin-right: 4px; }
+.chero-hallmarks .lbl { font-family: ${FONT.mono}; font-size: var(--type-micro); letter-spacing: .16em; text-transform: uppercase; color: ${VIZ.faint}; margin-right: 4px; }
 .chero-hallmarks .chip {
   font-size: 12px; color: ${VIZ.muted}; padding: 5px 11px; border-radius: 999px;
   border: 1px solid ${VIZ.line}; background: rgba(14,20,38,0.5);

@@ -149,11 +149,11 @@ const MHERO_CSS = `
   background: linear-gradient(180deg, rgba(19,26,48,0.7), rgba(14,20,38,0.7));
   border: 1px solid ${VIZ.line}; border-radius: 12px;
 }
-.mhero-fact .k { font-family: ${FONT.mono}; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: ${VIZ.faint}; }
+.mhero-fact .k { font-family: ${FONT.mono}; font-size: var(--type-micro); letter-spacing: .16em; text-transform: uppercase; color: ${VIZ.faint}; }
 .mhero-fact .v { font-size: 14px; color: ${VIZ.ink}; font-weight: 500; }
 
 .mhero-hallmarks { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 6px; }
-.mhero-hallmarks .lbl { font-family: ${FONT.mono}; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: ${VIZ.faint}; margin-right: 4px; }
+.mhero-hallmarks .lbl { font-family: ${FONT.mono}; font-size: var(--type-micro); letter-spacing: .16em; text-transform: uppercase; color: ${VIZ.faint}; margin-right: 4px; }
 .mhero-hallmarks .chip {
   font-size: 12px; color: ${VIZ.muted}; padding: 5px 11px; border-radius: 999px;
   border: 1px solid ${VIZ.line}; background: rgba(14,20,38,0.5);
