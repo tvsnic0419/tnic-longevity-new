@@ -733,7 +733,12 @@ p,
   border-collapse: collapse;
 }
 
-.table-base th {
+/* Column headers. Scoped to `thead` on purpose: the mono/uppercase/faint
+   treatment is what a COLUMN label should look like, and applying it to every
+   `th` made row headers — the accessible way to label a data row — render as
+   uppercase mono labels too. Three tables in this repo had each worked around
+   that locally with their own overrides before it was fixed here. */
+.table-base thead th {
   text-align: left;
   padding: 0.75rem 1rem;
   font-family: var(--font-mono);
@@ -743,6 +748,15 @@ p,
   text-transform: uppercase;
   color: var(--color-text-faint);
   background: var(--color-bg-muted);
+}
+/* Row headers. Same box as a cell, but carrying the row's identity, so it
+   reads as content rather than chrome. */
+.table-base tbody th {
+  text-align: left;
+  padding: 0.875rem 1rem;
+  border-top: 1px solid var(--color-border-subtle);
+  font-weight: 600;
+  color: var(--color-text-primary);
 }
 
 .table-base td {

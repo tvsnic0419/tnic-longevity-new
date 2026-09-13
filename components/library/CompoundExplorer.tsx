@@ -71,11 +71,22 @@ export function CompoundExplorer({
 
   return (
     <section id="compound-explorer" aria-labelledby="compound-explorer-heading" className="scroll-mt-24">
-      <div className="mb-6 flex flex-col gap-1">
-        <h2 id="compound-explorer-heading" className="heading-card text-lg">
-          Browse compounds by evidence tier
-        </h2>
-        <div className="heading-accent-rule" aria-hidden="true" />
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
+        <div className="flex flex-col gap-1">
+          <h2 id="compound-explorer-heading" className="heading-card text-lg">
+            Browse compounds by evidence tier
+          </h2>
+          <div className="heading-accent-rule" aria-hidden="true" />
+        </div>
+        {/* Cards are the browsing surface; the table is the comparing surface.
+            Offered here because this is the point where a reader stops browsing
+            and starts wanting every grade next to every other one. */}
+        <Link
+          href="/library/evidence"
+          className="action-link focus-ring rounded text-body-sm font-semibold text-accent-cyan hover:underline"
+        >
+          See all {compoundModules.length} in one table →
+        </Link>
       </div>
 
       <Suspense fallback={<div className="h-10 animate-pulse rounded-lg bg-white/5" />}>
