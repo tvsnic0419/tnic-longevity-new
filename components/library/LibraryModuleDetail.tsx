@@ -6,7 +6,7 @@ import { ArrowLeft, BookOpen, Layers, FlaskConical, HeartPulse, AlertTriangle, S
 import Link from 'next/link';
 import type { LibraryModule, LibraryModuleCategory } from '@/lib/library-modules';
 import type { ComparisonLink } from '@/lib/comparison-relations';
-import type { GuideLink, RelatedCompoundLink } from '@/lib/library-graph';
+import type { GuideLink, RelatedCompoundLink, ProtocolLink } from '@/lib/library-graph';
 import { getModulePath, libraryCategoryMeta } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { compounds } from '@/lib/data';
@@ -30,6 +30,7 @@ import { EvidenceTrace } from '@/components/trust/EvidenceTrace';
 import { AffiliateDisclosure } from '@/components/trust/AffiliateDisclosure';
 import { ResearchQueueButton } from './ResearchQueueButton';
 import { libraryModuleTitles } from '@/lib/breadcrumb-titles';
+import { ContinueTrail, type WalkItem } from '@/components/ui/WalkCard';
 
 /**
  * Category -> icon + full static Tailwind class strings. Deliberately not
@@ -53,6 +54,7 @@ export function LibraryModuleDetail({
   comparisons = [],
   guide,
   relatedCompounds = [],
+  protocols = [],
   engineHref,
   pathways = [],
   lastUpdated,
@@ -65,6 +67,7 @@ export function LibraryModuleDetail({
   comparisons?: ComparisonLink[];
   guide?: GuideLink;
   relatedCompounds?: RelatedCompoundLink[];
+  protocols?: ProtocolLink[];
   /** Molecular pathways this compound engages (server-resolved). */
   pathways?: { slug: string; name: string }[];
   /**
@@ -91,6 +94,67 @@ export function LibraryModuleDetail({
   const synergyCompounds = module.synergyCompoundIds
     ?.map((id) => compounds.find((c) => c.id === id))
     .filter(Boolean) ?? [];
+  const continueItems: WalkItem[] = [];
+  if (relatedCompounds[0]) {
+    continueItems.push({
+      href: `/library/compounds/${relatedCompounds[0].slug}`,
+      kicker: 'Related compound',
+      title: relatedCompounds[0].name,
+      detail: `Shares ${relatedCompounds[0].shared} hallmark${relatedCompounds[0].shared === 1 ? '' : 's'} with ${module.title}.`,
+      accent: 'emerald',
+    });
+  }
+  if (relatedHallmarks[0]) {
+    continueItems.push({
+      href: `/library/${relatedHallmarks[0].slug}`,
+      kicker: 'Hallmark',
+      title: relatedHallmarks[0].title,
+      detail: 'The aging mechanism this module is studied against.',
+      accent: 'violet',
+    });
+  }
+  if (protocols[0]) {
+    continueItems.push({
+      href: `/protocols#${protocols[0].slug}`,
+      kicker: 'Protocol',
+      title: protocols[0].name,
+      detail: protocols[0].goal,
+      accent: 'cyan',
+    });
+  } else if (module.category === 'compounds') {
+    continueItems.push({
+      href: '/stacks',
+      kicker: 'Stacks',
+      title: 'Open Stack Architect',
+      detail: 'Inspect coverage and interactions before you configure anything.',
+      accent: 'cyan',
+    });
+  }
+  if (guide) {
+    continueItems.push({
+      href: guide.href,
+      kicker: 'Guide',
+      title: guide.label,
+      detail: 'Dosing, forms, and the evidence in one sitting.',
+      accent: 'emerald',
+    });
+  } else if (pathways[0]) {
+    continueItems.push({
+      href: `/pathways/${pathways[0].slug}`,
+      kicker: 'Pathway',
+      title: pathways[0].name,
+      detail: 'The mechanistic layer between this compound and the hallmark.',
+      accent: 'violet',
+    });
+  } else {
+    continueItems.push({
+      href: '/labs',
+      kicker: 'Labs',
+      title: 'Track a baseline',
+      detail: 'Log the markers this module is actually studied against.',
+      accent: 'rose',
+    });
+  }
   const buyerGuide =
     module.category === 'compounds' ? getBuyerGuideByModuleSlug(module.slug) : undefined;
   // A compound can have a verified pick without a full authored buyer guide
@@ -425,8 +489,13 @@ export function LibraryModuleDetail({
                 <p className="text-micro font-mono text-accent-emerald uppercase mb-3">Stack compounds</p>
                 <ul className="space-y-2">
                   {synergyCompounds.map((c) => (
-                    <li key={c!.id} className="text-sm text-muted-foreground">
-                      {c!.name}
+                    <li key={c!.id}>
+                      <Link
+                        href={`/library/compounds/${c!.id}`}
+                        className="action-link text-sm text-muted-foreground hover:text-accent-cyan transition"
+                      >
+                        {c!.name}
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -478,6 +547,36 @@ export function LibraryModuleDetail({
                     </li>
                   ))}
                 </ul>
+              </GlassPanel>
+            )}
+
+            {protocols.length > 0 && (
+              <GlassPanel depth="mid" className="rounded-xl p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <Layers className="w-4 h-4 text-accent-violet" />
+                  <p className="text-micro font-mono text-accent-violet uppercase">Used in these protocols</p>
+                </div>
+                <ul className="space-y-2.5">
+                  {protocols.map((protocol) => (
+                    <li key={protocol.slug}>
+                      <Link
+                        href={`/protocols#${protocol.slug}`}
+                        className="focus-ring interactive group flex items-center justify-between gap-2 rounded-md"
+                      >
+                        <span className="text-sm text-muted-foreground group-hover:text-accent-violet transition truncate">
+                          {protocol.name}
+                        </span>
+                        <EvidenceTag tier={protocol.evidence} size="sm" className="shrink-0" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href="/protocols"
+                  className="action-link text-xs text-accent-violet hover:text-accent-cyan mt-3"
+                >
+                  All protocols →
+                </Link>
               </GlassPanel>
             )}
 
@@ -540,6 +639,7 @@ export function LibraryModuleDetail({
             </GlassPanel>
           </aside>
         </div>
+        <ContinueTrail items={continueItems.slice(0, 4)} />
       </div>
     </div>
   );

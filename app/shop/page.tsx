@@ -74,6 +74,7 @@ export default function ShopPage() {
           theme="amber"
           context={getHubContext('shop')}
           contextVariant="compact"
+          variant="handoff"
         />
         <ProtocolShopPanel />
       </div>

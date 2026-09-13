@@ -215,6 +215,7 @@ export default function SupplementGuidesPage() {
               title="Longevity Supplement Guides"
               description="Mechanism, key human-trial data, dosing protocol, and honest cautions for each major longevity compound — structured around the 12 Hallmarks of Aging."
               theme="cyan"
+              variant="handoff"
             />
           </div>
         </section>

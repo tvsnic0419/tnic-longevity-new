@@ -39,10 +39,10 @@ const steps: Step[] = [
   {
     num: '03',
     icon: ShieldCheck,
-    title: 'Decide what’s worth it',
-    desc: 'Use the buyer checklist to verify a product before you spend — and take your questions to a clinician before you start.',
-    cta: 'Open the buyer checklist',
-    href: '/shop',
+    title: 'Inspect a protocol',
+    desc: 'See how compounds are choreographed as a system — each with a job and a time — then open Stack Architect if you want to configure your own.',
+    cta: 'Open the protocol library',
+    href: '/protocols',
   },
 ];
 

@@ -117,6 +117,7 @@ export default function HallmarksIndexPage() {
             title="The 12 Hallmarks of Aging"
             description="First systematized by López-Otín et al. (2013, updated 2023), the hallmarks are the molecular and cellular mechanisms that cause organisms to age. Understanding them is the prerequisite for any rational anti-aging protocol."
             theme="emerald"
+            variant="handoff"
           />
         </div>
       </section>

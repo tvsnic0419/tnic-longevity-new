@@ -93,6 +93,7 @@ export default function PathwaysHubPage() {
           title="How compounds actually move a hallmark."
           description="The mechanistic layer between what you take and what ages — the pathways (PINK1/Parkin, SIRT3, NRF2, AMPK, mTOR, NAD⁺ …) that compounds engage. Each pathway links to the hallmarks it acts on and every compound that targets it."
           theme="violet"
+          variant="handoff"
         />
 
         <PathwayFamilies className="mb-12" />

@@ -12,6 +12,8 @@ import { PeptideLegalBadge, getPeptideLegalStatusMeta } from './PeptideLegalBadg
 import { PeptideContextStrip } from './PeptideContextStrip';
 import { MdxRenderer } from '@/components/library/MdxRenderer';
 import { ContentByline } from '@/components/trust/ContentByline';
+import { GlassPanel } from '@/components/ui/GlassPanel';
+import { ContinueTrail, type WalkItem } from '@/components/ui/WalkCard';
 
 /** ThemeAccent -> full static Tailwind class strings — see the identical
  * note in LibraryModuleDetail.tsx on why these can't be interpolated. */
@@ -49,6 +51,50 @@ export function PeptideDetail({
   const citationCount = mdxBody
     ? new Set(mdxBody.match(/\bPMID:?\s*(\d{7,8})\b/g)?.map((m) => m.replace(/\D/g, '')) ?? []).size
     : 0;
+  const continueItems: WalkItem[] = [];
+  if (relatedCompounds[0]) {
+    continueItems.push({
+      href: `/library/compounds/${relatedCompounds[0].slug}`,
+      kicker: 'Shared target',
+      title: relatedCompounds[0].name,
+      detail: 'An evidence-graded compound that acts on the same hallmarks.',
+      accent: 'emerald',
+    });
+  }
+  if (relatedHallmarks[0]) {
+    continueItems.push({
+      href: `/library/${relatedHallmarks[0].slug}`,
+      kicker: 'Hallmark',
+      title: relatedHallmarks[0].title,
+      detail: 'The aging mechanism this peptide is studied against.',
+      accent: 'violet',
+    });
+  }
+  if (relatedPeptides[0]) {
+    continueItems.push({
+      href: `/peptides/${relatedPeptides[0].slug}`,
+      kicker: 'Related peptide',
+      title: relatedPeptides[0].name,
+      detail: 'Another peptide in the same research neighborhood.',
+      accent: 'rose',
+    });
+  }
+  if (relatedPathways[0]) {
+    continueItems.push({
+      href: `/pathways/${relatedPathways[0].slug}`,
+      kicker: 'Pathway',
+      title: relatedPathways[0].name,
+      detail: 'The mechanistic layer this peptide is discussed against.',
+      accent: 'amber',
+    });
+  }
+  continueItems.push({
+    href: '/peptides',
+    kicker: 'Library',
+    title: 'All peptides',
+    detail: 'Evidence tier and legal status, stated before anything else.',
+    accent: 'cyan',
+  });
 
   return (
     <div className="min-h-screen canvas-scrim text-foreground pt-6 md:pt-8 pb-20">
@@ -88,16 +134,16 @@ export function PeptideDetail({
               </ol>
             </div>
 
-            <div className="glass rounded-xl p-5">
+            <GlassPanel depth="mid" className="rounded-xl p-5">
               <div className="flex items-center gap-2 mb-3">
                 <Syringe className="w-4 h-4 text-accent-cyan" />
                 <p className="text-micro font-mono text-accent-cyan uppercase">Administration</p>
               </div>
               <p className="text-sm text-muted-foreground">{peptide.administrationRoute}</p>
-            </div>
+            </GlassPanel>
 
             {relatedHallmarks.length > 0 && (
-              <div className="glass rounded-xl p-5">
+              <GlassPanel depth="mid" className="rounded-xl p-5">
                 <p className="text-micro font-mono text-accent-violet uppercase mb-3">Related hallmarks</p>
                 <ul className="space-y-2">
                   {relatedHallmarks.map((h) => (
@@ -111,11 +157,11 @@ export function PeptideDetail({
                     </li>
                   ))}
                 </ul>
-              </div>
+              </GlassPanel>
             )}
 
             {relatedPeptides.length > 0 && (
-              <div className="glass rounded-xl p-5">
+              <GlassPanel depth="mid" className="rounded-xl p-5">
                 <p className="text-micro font-mono text-accent-emerald uppercase mb-3">Related peptides</p>
                 <ul className="space-y-2">
                   {relatedPeptides.map((p) => (
@@ -129,11 +175,11 @@ export function PeptideDetail({
                     </li>
                   ))}
                 </ul>
-              </div>
+              </GlassPanel>
             )}
 
             {relatedCompounds.length > 0 && (
-              <div className="glass rounded-xl p-5">
+              <GlassPanel depth="mid" className="rounded-xl p-5">
                 <p className="text-micro font-mono text-accent-cyan uppercase mb-1">
                   Compounds sharing its targets
                 </p>
@@ -153,11 +199,11 @@ export function PeptideDetail({
                     </li>
                   ))}
                 </ul>
-              </div>
+              </GlassPanel>
             )}
 
             {relatedPathways.length > 0 && (
-              <div className="glass rounded-xl p-5">
+              <GlassPanel depth="mid" className="rounded-xl p-5">
                 <p className="text-micro font-mono text-accent-amber uppercase mb-3">Pathways engaged</p>
                 <ul className="space-y-2">
                   {relatedPathways.map((p) => (
@@ -171,12 +217,13 @@ export function PeptideDetail({
                     </li>
                   ))}
                 </ul>
-              </div>
+              </GlassPanel>
             )}
 
+            <GlassPanel depth="mid" className="glass-hover rounded-xl">
             <Link
               href="/trust/disclaimers"
-              className="focus-ring interactive flex items-center gap-3 glass glass-hover rounded-xl p-4"
+              className="focus-ring interactive flex items-center gap-3 glass-hover rounded-xl p-4"
             >
               <Scale className="w-5 h-5 text-accent-rose shrink-0" />
               <div>
@@ -184,10 +231,12 @@ export function PeptideDetail({
                 <p className="text-xs text-muted-foreground">Read before sourcing anything</p>
               </div>
             </Link>
+            </GlassPanel>
 
+            <GlassPanel depth="mid" className="glass-hover rounded-xl">
             <Link
               href="/labs"
-              className="focus-ring interactive flex items-center gap-3 glass glass-hover rounded-xl p-4"
+              className="focus-ring interactive flex items-center gap-3 p-4"
             >
               <FlaskConical className="w-5 h-5 text-accent-cyan shrink-0" />
               <div>
@@ -195,6 +244,7 @@ export function PeptideDetail({
                 <p className="text-xs text-muted-foreground">Track biomarkers alongside any protocol</p>
               </div>
             </Link>
+            </GlassPanel>
           </aside>
 
           <div className="order-1 lg:order-2 min-w-0 lg:col-span-8 space-y-8">
@@ -264,6 +314,7 @@ export function PeptideDetail({
             </div>
           </div>
         </div>
+        <ContinueTrail items={continueItems.slice(0, 4)} />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 # TNiC Design System & Style Guide
 
-> Version 1.9 · September 2026  
+> Version 1.10 · September 2026  
 > Governs typography, spacing, components, accessibility, and page patterns across tnic.help.  
 > v1.1 documents the cinematic viz family (§7, §12) that the premium hubs are built on.  
 > v1.2 corrects the drifted §2 color values, documents the signal roles, the
@@ -22,7 +22,9 @@
 > glass-look, overlays share `.glass-chrome`.  
 > v1.9 adds §19 — the surface ladder (`.surface-well` / `.surface-track`) and
 > the quieter motion recipe so leftover fills and competing hovers read as one
-> product.
+> product.  
+> v1.10 adds §20 — walk cards and the continue trail, so related destinations
+> look like neighbors instead of leftover text lists.
 
 ---
 
@@ -801,6 +803,30 @@ Effects are the material catching light, not a second animation language.
 
 `Field` controls use `.input-base`. `TabBar` is a segmented track. Icon-only
 surface buttons use `.glass`.
+
+---
+
+## 20. Walk cards (related destinations)
+
+*Added v1.10. Same theme. Neighbors look like neighbors.*
+
+A compound, hallmark, peptide, protocol, or hub page that ends without a
+walkable next destination is a dead end. Do not hand-roll a third next-steps
+system (`RecommendedNextSteps` is retired). Use:
+
+| Primitive | Job |
+|---|---|
+| `WalkCard` | One related destination — kicker, title, one-line why |
+| `ContinueTrail` | 3–4 walk cards at the close of a deep-dive or hub |
+| `DecisionSteps` | Hub orientation at the *top* of a workbench |
+| `getProtocolsForCompound` | Reverse edge: compound → the protocol it belongs to |
+
+Related rails in a sidebar can stay compact lists. The page *close* is the
+trail. Hash-link protocols (`/protocols#slug`) until they have their own routes.
+
+Homepage hallmark cards walk to `/library/{slug}` (the linked evidence surface),
+not the editorial twin. Compound names on editorial intervention cards walk to
+`/library/compounds/{id}`.
 
 ---
 

@@ -81,7 +81,7 @@ export function HomeHallmarks() {
             return (
               <RevealItem key={h.id} index={i}>
                 <Link
-                  href={`/hallmarks/${h.slug}`}
+                  href={`/library/${h.slug}`}
                   className="hm-card focus-ring group"
                   style={{ '--card-accent': ACCENT_VAR[theme] ?? 'var(--accent-cyan)' } as CSSProperties}
                 >

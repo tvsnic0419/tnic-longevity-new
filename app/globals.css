@@ -6155,3 +6155,107 @@ p,
   .glass-hover:hover,
   .interactive:active { transform: none; }
 }
+
+/* ============================================================================
+   Design System v12 — Walk cards
+   ----------------------------------------------------------------------------
+   Related destinations share one card, not a leftover text list. Used by
+   ContinueTrail and in-page related rails. No extra blur; nested-well fill
+   plus an accent hairline. Hover is the v11 2px lift.
+   ========================================================================== */
+
+.walk-card {
+  --walk-accent: var(--accent-cyan);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-height: 100%;
+  padding: 1.15rem 1.2rem 1.25rem;
+  border-radius: var(--radius-2xl);
+  background: color-mix(in srgb, var(--glass-bg) 48%, transparent);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--glass-inner-highlight);
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  transition:
+    transform var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    box-shadow var(--dur-fast) var(--ease-standard);
+}
+.walk-card::before {
+  content: "";
+  position: absolute;
+  inset-inline: 1.15rem;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--walk-accent), transparent);
+  opacity: 0.7;
+  pointer-events: none;
+}
+.walk-card__kicker {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--walk-accent);
+}
+.walk-card__title {
+  font-size: 1.02rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--color-text-primary);
+}
+.walk-card__detail {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.walk-card__go {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: var(--color-text-muted);
+  transition: color var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard);
+}
+@media (hover: hover) {
+  .walk-card:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--walk-accent) 38%, transparent);
+    box-shadow:
+      var(--glass-inner-highlight),
+      0 14px 32px -20px color-mix(in srgb, var(--walk-accent) 28%, transparent);
+  }
+  .walk-card:hover .walk-card__title { color: var(--walk-accent); }
+  .walk-card:hover .walk-card__go {
+    color: var(--walk-accent);
+    transform: translate(1px, -1px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .walk-card:hover { transform: none; }
+}
+
+.continue-trail {
+  margin-top: 2.5rem;
+  padding-top: 2.25rem;
+  border-top: 1px solid var(--color-border-subtle);
+}
+.continue-trail__intro { margin-bottom: 1.25rem; }
+.continue-trail__grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) {
+  .continue-trail__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .continue-trail__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}

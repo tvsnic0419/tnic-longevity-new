@@ -110,6 +110,7 @@ export default function LearnPage() {
           theme="cyan"
           context={getHubContext('learn')}
           contextVariant="compact"
+          variant="handoff"
         />
         <Suspense fallback={<div className="py-20 text-muted-foreground">Loading…</div>}>
           <LearnPageClient />
