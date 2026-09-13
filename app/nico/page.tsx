@@ -4,6 +4,8 @@ import { StructuredData } from '@/components/seo/StructuredData';
 import { buildBreadcrumbSchema } from '@/lib/seo';
 import { seoRoutes } from '@/lib/seo-routes';
 import { SITE } from '@/lib/site';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
 
 export const metadata = seoRoutes.nico();
 
@@ -40,6 +42,12 @@ export default function NicoPage() {
     <SubPageLayout hideContextBar>
       <StructuredData schemas={buildNicoSchemas()} />
       <NicoQuestionnaire />
+      {/* This page's body is a client island, so it server-rendered no
+          in-body links at all — a reader arriving from search, and every
+          crawler, saw a shell that connected to nothing. */}
+      <div className="container-page">
+        <PageConnections cluster={clusterFrom('explore', '/nico')} accent="emerald" id="explore-connections" />
+      </div>
     </SubPageLayout>
   );
 }

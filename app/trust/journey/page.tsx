@@ -12,6 +12,7 @@ export const metadata = seoRoutes.trustJourney();
 export default function JourneyPage() {
   return (
     <TrustPageTemplate
+      path="/trust/journey"
       icon={Route}
       eyebrow="Trust · Journey"
       title="Personal Journey Timeline"

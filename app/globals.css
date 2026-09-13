@@ -593,6 +593,30 @@ p,
 /* A wrapping row of compact chips. The 16px row gap is load-bearing, not
    taste: 28px chip + 16px = a 44px pitch, exactly the expanded hit height, so
    neighbouring rows can never steal each other's taps. */
+/* Stretched link — the card idiom. A card whose title is the link, with the
+   link's ::before stretched over the whole card so the entire surface
+   navigates, while other links inside the card stay separately clickable by
+   sitting on a higher stacking layer.
+
+   Defined once here because the site had grown two ad-hoc spellings of it
+   (`after:absolute after:inset-0 after:content-['']` in BestLeaderboard,
+   `before:absolute before:inset-0 before:rounded-xl` in CompoundExplorer).
+   ::before rather than ::after, because that is the pseudo
+   `scripts/audit-ui.mjs` inspects to exempt a stretched card title from the
+   24px tap-target floor — the title is hit through the card, so its own text
+   box is not the real target.
+
+   Requires `position: relative` on the card (`.premium-card` sets it) and
+   `position: relative; z-index: 1` on anything inside the card that must stay
+   independently clickable. */
+.stretched-link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+}
+
 .chip-row {
   display: flex;
   flex-wrap: wrap;

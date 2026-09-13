@@ -31,6 +31,7 @@ function buildMethodologySchemas() {
 export default function MethodologyPage() {
   return (
     <TrustPageTemplate
+      path="/trust/methodology"
       icon={FileText}
       eyebrow="Trust · Methodology"
       title="TNiC Methodology"

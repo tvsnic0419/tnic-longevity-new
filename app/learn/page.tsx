@@ -11,6 +11,8 @@ import { buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
 import { seoRoutes } from '@/lib/seo-routes';
 import { gettingStartedSteps, consumerFAQ, glossary } from '@/lib/data';
 import { SITE } from '@/lib/site';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
 
 export const metadata = seoRoutes.learn();
 
@@ -83,6 +85,12 @@ export default function LearnPage() {
         <Suspense fallback={<div className="py-20 text-muted-foreground">Loading…</div>}>
           <LearnPageClient />
         </Suspense>
+      {/* This page's body is a client island behind Suspense, so it
+          server-rendered almost no in-body links — a reader arriving from
+          search, and every crawler, saw a shell that connected to nothing. */}
+      <div className="container-page">
+        <PageConnections cluster={clusterFrom('explore', '/learn')} accent="cyan" id="explore-connections" />
+      </div>
       </PageShell>
     </SubPageLayout>
   );

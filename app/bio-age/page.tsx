@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Activity } from 'lucide-react';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { BioAgeWizard } from '@/components/bio-age/BioAgeWizard';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
 
 export const metadata: Metadata = {
   // Absolute title so the `%s | TNiC` template doesn't double the brand.
@@ -63,6 +65,12 @@ export default function BioAgePage() {
               </div>
             ))}
           </div>
+      </div>
+      {/* This page's body is a client island, so it server-rendered no in-body
+          links at all — a reader arriving from search, and every crawler, saw
+          a shell that connected to nothing. */}
+      <div className="container-page">
+        <PageConnections cluster={clusterFrom('explore', '/bio-age')} accent="violet" id="explore-connections" />
       </div>
     </div>
   );

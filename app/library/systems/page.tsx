@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 import { Network } from 'lucide-react';
 import { SystemsPage } from '@/components/library/SystemsPage';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
 
 export const metadata: Metadata = {
   // Absolute title so the `%s | TNiC` template doesn't double the brand.
@@ -46,6 +48,12 @@ export default function SystemsRoute() {
       <Suspense fallback={<div className="min-h-screen" aria-busy="true" />}>
         <SystemsPage />
       </Suspense>
+      {/* This page's body is a client island, so it server-rendered no
+          in-body links at all — a reader arriving from search, and every
+          crawler, saw a shell that connected to nothing. */}
+      <div className="container-page">
+        <PageConnections cluster={clusterFrom('explore', '/library/systems')} accent="violet" id="explore-connections" />
+      </div>
     </div>
   );
 }

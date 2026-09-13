@@ -14,6 +14,8 @@ import { compounds } from '@/lib/data';
 import { COMPOUND_COUNT } from '@/lib/library-modules';
 import { eliteInterventions } from '@/lib/elite-interventions';
 import { stackPresets } from '@/lib/presets';
+import { EntityChips } from '@/components/ui/EntityChips';
+import { resolveCompounds, resolveHallmarks } from '@/lib/entity-graph';
 
 // Honest stats for the hero — unique undirected synergy edges in the dataset.
 const synergyPairs = new Set<string>();
@@ -44,6 +46,15 @@ const stackHowTo = buildHowToSchema({
 });
 
 export default function StacksPage() {
+  // Derived from the published stacks, so the rail cannot claim coverage the
+  // library does not have.
+  const stackCompounds = resolveCompounds([
+    ...new Set(eliteStacks.flatMap((st) => st.compoundIds)),
+  ]);
+  const stackHallmarks = resolveHallmarks([
+    ...new Set(eliteStacks.flatMap((st) => st.hallmarkCoverage)),
+  ]);
+
   return (
     <>
       <StructuredData schemas={[
@@ -96,6 +107,32 @@ export default function StacksPage() {
         <Suspense fallback={<div className="py-20 text-muted-foreground">Loading stacks…</div>}>
           <StacksLibrary />
         </Suspense>
+
+        {/* The stack library itself is a client island behind Suspense, so
+            everything it links to is invisible to a crawler and to anyone who
+            lands here before it hydrates — this hub server-rendered three
+            in-body links in total. These are the compounds and hallmarks the
+            published stacks actually name, resolved from `eliteStacks` rather
+            than hand-listed, so the page reaches its own contents in the
+            initial HTML. */}
+        <section aria-labelledby="stacks-graph-heading" className="mt-14">
+          <div className="premium-card p-5 md:p-7">
+            <p className="text-label mb-2 text-accent-violet">What these stacks are built from</p>
+            <h2 id="stacks-graph-heading" className="heading-section mb-2 text-xl md:text-2xl">
+              Every stack is a set of compounds and the hallmarks they cover.
+            </h2>
+            <p className="text-body-sm mb-6 max-w-3xl text-muted-foreground">
+              Read the evidence for any single component before assembling it into a protocol.
+            </p>
+            <div className="grid gap-5 md:grid-cols-2">
+              <EntityChips
+                label="Compounds in the published stacks"
+                entities={stackCompounds}
+              />
+              <EntityChips label="Hallmarks these stacks cover" entities={stackHallmarks} />
+            </div>
+          </div>
+        </section>
       </PageShell>
     </>
   );

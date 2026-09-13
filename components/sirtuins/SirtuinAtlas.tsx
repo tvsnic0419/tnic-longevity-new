@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Activity,
@@ -44,6 +45,7 @@ import {
   type SirtuinId,
   type TargetMode,
 } from '@/lib/sirtuin-atlas-data';
+import { compoundEntityByNameOrSlug } from '@/lib/entity-graph';
 
 const modeStyles: Record<TargetMode, string> = {
   direct: 'border-accent-emerald/35 bg-accent-emerald/10 text-accent-emerald',
@@ -417,7 +419,7 @@ function SirtuinDetail({ id }: { id: SirtuinId }) {
                 const targets = candidate.targets.filter((item) => item.sirtuin === id);
                 return (
                   <div key={candidate.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border/60 bg-muted/10 px-3 py-2.5">
-                    <div className="min-w-0"><p className="truncate text-xs font-semibold">{candidate.name}</p><p className="text-micro text-muted-foreground">Score {candidate.score} · {EVIDENCE_STAGE_META[candidate.evidenceStage].label}</p></div>
+                    <div className="min-w-0"><p className="truncate text-xs font-semibold"><CandidateName candidate={candidate} /></p><p className="text-micro text-muted-foreground">Score {candidate.score} · {EVIDENCE_STAGE_META[candidate.evidenceStage].label}</p></div>
                     <div className="flex items-center gap-1.5">
                       {targets.map((target, index) => <ModeBadge key={`${target.mode}-${index}`} mode={target.mode} compact />)}
                       <span className={`h-2 w-2 rounded-full ${confidenceDot[targets[0]?.confidence ?? 'low']}`} title={`${targets[0]?.confidence ?? 'low'} confidence`} />
@@ -458,7 +460,7 @@ function CandidateCard({
           <EvidenceRing value={candidate.score} />
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
-              <h3 className="text-lg font-semibold leading-tight">{candidate.name}</h3>
+              <h3 className="text-lg font-semibold leading-tight"><CandidateName candidate={candidate} /></h3>
               <AvailabilityBadge availability={candidate.availability} />
               <StageBadge stage={candidate.evidenceStage} compact />
             </div>
@@ -593,7 +595,7 @@ function CompareConsole({ candidates, onRemove }: { candidates: SirtuinCandidate
           <div key={candidate.id} className="rounded-2xl border border-white/[0.08] bg-black/15 p-5">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <div className="flex flex-wrap items-center gap-2"><h3 className="text-lg font-semibold">{candidate.name}</h3><StageBadge stage={candidate.evidenceStage} compact /></div>
+                <div className="flex flex-wrap items-center gap-2"><h3 className="text-lg font-semibold"><CandidateName candidate={candidate} /></h3><StageBadge stage={candidate.evidenceStage} compact /></div>
                 <p className="mt-1 text-xs text-muted-foreground">{candidate.category}</p>
               </div>
               <button type="button" onClick={() => onRemove(candidate.id)} className="focus-ring grid h-9 w-9 place-items-center rounded-xl border border-border/60 text-muted-foreground hover:text-foreground" aria-label={`Remove ${candidate.name} from comparison`}><X className="h-4 w-4" /></button>
@@ -646,6 +648,42 @@ function EvidenceMaturityLadder() {
         })}
       </div>
     </section>
+  );
+}
+
+/**
+ * A candidate's name, linked to its compound deep-dive when it has one.
+ *
+ * The atlas server-rendered 12,183 characters about SIRT1–SIRT7 activators and
+ * zero in-body links of any kind — a complete dead end, and the worst example
+ * on the site of a page holding its relationships and rendering them as text.
+ * Eight of the fourteen candidates here carry ids that ARE compound slugs (nr,
+ * nmn, resveratrol, curcumin, berberine, pterostilbene, metformin, quercetin);
+ * the other six are research tool compounds (SRT2104, MDL-800, UBCS039, the
+ * dihydropyridines, plus honokiol and cyanidin) with no deep-dive, and those
+ * correctly stay as plain text.
+ *
+ * Resolution is `compoundEntityByNameOrSlug`, which matches on exact slug or
+ * exact title only. Nothing here is hand-mapped, so a compound joining the
+ * library links itself, and one leaving it stops linking rather than 404ing.
+ */
+function CandidateName({
+  candidate,
+  className = '',
+}: {
+  candidate: SirtuinCandidate;
+  className?: string;
+}) {
+  const entity = compoundEntityByNameOrSlug(candidate.id);
+  if (!entity) return <span className={className}>{candidate.name}</span>;
+  return (
+    <Link
+      href={entity.href}
+      className={`focus-ring rounded underline-offset-4 transition-colors hover:text-accent-cyan hover:underline ${className}`}
+    >
+      {candidate.name}
+      <span className="sr-only"> — open the {entity.label} deep-dive</span>
+    </Link>
   );
 }
 
@@ -849,7 +887,7 @@ export function SirtuinAtlas() {
             <tbody>
               {SIRTUIN_CANDIDATES.map((candidate) => (
                 <tr key={candidate.id} className="border-t border-border/50 transition-colors hover:bg-white/[0.018]">
-                  <th scope="row" className="sticky left-0 z-10 bg-background/95 px-4 py-3 text-left font-medium"><div>{candidate.name}</div><div className="mt-0.5 text-micro font-normal text-muted-foreground">{candidate.availability}</div></th>
+                  <th scope="row" className="sticky left-0 z-10 bg-background/95 px-4 py-3 text-left font-medium"><div><CandidateName candidate={candidate} /></div><div className="mt-0.5 text-micro font-normal text-muted-foreground">{candidate.availability}</div></th>
                   <td className="px-3 py-3 text-center"><StageBadge stage={candidate.evidenceStage} compact /></td>
                   {SIRTUINS.map((sirtuin) => <td key={sirtuin.id} className="px-3 py-3 text-center"><MatrixCell candidate={candidate} sirtuin={sirtuin.id} /></td>)}
                 </tr>

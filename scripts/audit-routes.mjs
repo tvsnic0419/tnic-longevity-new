@@ -95,7 +95,15 @@ const pages = await pool(routes, async (path) => {
     m[1].replace(/<[^>]+>/g, '').trim(),
   );
   const mainMatch = r.html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/);
-  const mainText = mainMatch ? mainMatch[1].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim() : '';
+  const mainHtml = mainMatch ? mainMatch[1] : '';
+  const mainText = mainHtml.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  // Links inside <main> ONLY. The nav and footer link to most of the site by
+  // construction, so counting them would make every page look perfectly
+  // connected and the dead-end gate below would never fire.
+  const mainLinks = [...mainHtml.matchAll(/href="(\/[^"#?]*)/g)]
+    .map((m) => m[1])
+    .filter((h) => !NOT_A_PAGE.test(h))
+    .map((h) => (h.length > 1 && h.endsWith('/') ? h.slice(0, -1) : h));
   // Internal link targets, normalised: drop hash and query, keep the path.
   const links = [...body.matchAll(/href="(\/[^"#?]*)/g)]
     .map((m) => m[1])
@@ -110,6 +118,7 @@ const pages = await pool(routes, async (path) => {
     h1s,
     mainChars: mainText.length,
     links: [...new Set(links)],
+    mainLinks: [...new Set(mainLinks)],
   };
 });
 
@@ -195,7 +204,32 @@ const render = (label, list, cap) => {
   }
 };
 
-render('FAIL', fail, 12);
+// ── Dead-end gate ───────────────────────────────────────────────────────────
+// A page a reader can enter and not leave, except back through the nav, is a
+// dead end. The site had real ones: /sirtuin-atlas server-rendered 12,183
+// characters about SIRT1–SIRT7 activators — naming eight compounds that each
+// have a full deep-dive — with ZERO in-body links of any kind, and /pathways
+// printed "6 compounds · 3 hallmarks" on every card while linking to none of
+// them. Both held the edges in data and rendered them as text.
+//
+// Counted inside <main> only, so the nav and footer (which link to most of the
+// site by construction) cannot mask a page that connects to nothing. The floor
+// is deliberately low — this catches pages that link to nothing, not pages that
+// could link to more; judgement about "enough" belongs in review, not a gate.
+// A route with almost no body text is exempt: a redirect stub or a bare tool
+// shell has nothing to link FROM, and failing it would just invite padding.
+const DEAD_END_MIN = Number(process.env.MIN_BODY_LINKS ?? 3);
+const DEAD_END_MIN_CHARS = 600;
+const deadEnds = pages
+  .filter((p) => p.ok && p.mainChars >= DEAD_END_MIN_CHARS)
+  .map((p) => ({ path: p.path, n: (p.mainLinks ?? []).filter((l) => l !== p.path).length, chars: p.mainChars }))
+  .filter((p) => p.n < DEAD_END_MIN)
+  .sort((a, b) => a.n - b.n);
+for (const d of deadEnds) {
+  push(fail, 'dead end', `${d.path} — ${d.n} in-body link(s) across ${d.chars} chars of content (min ${DEAD_END_MIN})`);
+}
+
+render('FAIL', fail, 40);
 render('WARN', warn, 10);
 
 console.log(`\nroutes audited: ${pages.length} · internal link targets checked: ${unknownTargets.length}`);
