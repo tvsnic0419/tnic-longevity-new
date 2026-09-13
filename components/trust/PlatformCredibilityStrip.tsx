@@ -17,9 +17,9 @@ interface Stat {
 const ACCENTS = [
   'var(--accent-cyan)',
   'var(--accent-emerald)',
-  'var(--accent-violet)',
-  'var(--accent-rose)',
-  'var(--accent-amber)',
+  'var(--accent-cyan)',
+  'var(--accent-emerald)',
+  'var(--signal-elite)',
   'var(--accent-cyan)',
 ];
 
@@ -48,14 +48,14 @@ export function PlatformCredibilityStrip({
           return (
             <div
               key={s.label}
-              className="relative overflow-hidden rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-bg-muted)] p-4"
+              className="relative overflow-hidden rounded-xl surface-well p-4"
             >
               <span
                 aria-hidden="true"
                 className="absolute inset-x-0 top-0 h-0.5"
                 style={{ background: accent }}
               />
-              <div className="font-display text-2xl font-semibold tabular-nums" style={{ color: accent }}>
+              <div className="metric-display text-2xl sm:text-3xl" style={{ color: accent }}>
                 {s.value}
               </div>
               <div className="mt-1 text-body-sm font-medium text-foreground">{s.label}</div>

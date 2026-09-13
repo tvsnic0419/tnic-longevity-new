@@ -117,6 +117,12 @@ describe('site data integrity', () => {
     expect(home).toContain('grid-template-columns: repeat(2, minmax(0, 1fr));');
     expect(home).toContain('tnic-path primary focus-ring');
     expect(home).toContain('.tnic-descent .tnic-paths');
+    expect(home).toContain('tnic-hero-grid');
+    expect(home).toContain('tnic-intel');
+    expect(home).toContain('tnic-intel-grades');
+    expect(css).toContain('.metric-display');
+    expect(css).toContain('--page-max');
+    expect(css).toContain('--section-y');
   });
 
   it('every statically-routable app page is present in the sitemap', () => {

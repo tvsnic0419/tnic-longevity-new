@@ -202,7 +202,10 @@ export function SectionProgress({
         // page content for no benefit.
         // gap-0 keeps the step pitch at exactly 44px — the step height — so
         // neighbouring hit areas tile without overlapping.
-        className="pointer-events-none fixed right-[clamp(14px,2.5vw,30px)] top-1/2 z-40 hidden -translate-y-1/2 flex-col md:flex"
+        className={cn(
+          'pointer-events-none fixed right-[clamp(14px,2.5vw,30px)] top-1/2 z-40 hidden -translate-y-1/2 flex-col transition-opacity duration-300 md:flex',
+          active === 0 && 'md:opacity-0 md:pointer-events-none',
+        )}
       >
         {/* Panel treatment ported from the rail this replaced (main's
             HomeDescent version): a bordered, blurred plate rather than bare

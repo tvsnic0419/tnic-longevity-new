@@ -210,7 +210,7 @@ export function HomeNicoStarter() {
     <section
       id="personalize"
       aria-labelledby="home-nico-heading"
-      className="relative border-t border-border/50 py-20 md:py-28"
+      className="relative border-t border-border/50 py-[var(--section-y)]"
     >
       <CellularDivider hue="var(--accent-violet)" index="06" label="Personalize" />
       <div className="container-page">
