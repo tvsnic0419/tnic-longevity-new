@@ -137,12 +137,21 @@ const CSS = `
   50%      { transform: translate3d(2.5%, 0, 0) scale(1.06); opacity: 1; }
 }
 
+/* The descent's content column, aligned to the page's canonical container.
+   It used to set its own max-width: 1240px with a uniform clamp(24px,6vw,80px)
+   padding, which put its content left edge at 180px on a 1440px viewport while
+   every section below it started at 104px - so the column jumped 76px sideways
+   and grew wider halfway down the page as the reader scrolled. Horizontal
+   geometry now matches .container-page exactly (80rem, the same padding
+   clamp); the generous VERTICAL padding is kept, because the full-height
+   cinematic acts need the breathing room and it costs no alignment.
+   NOTE: this is a JS template literal - no backticks in these comments. */
 .tnic-act {
   position: relative; z-index: 3;
   min-height: 100svh;
   display: flex; flex-direction: column; justify-content: center;
-  padding: clamp(24px, 6vw, 80px);
-  max-width: 1240px; margin: 0 auto; width: 100%;
+  padding: clamp(24px, 6vw, 80px) clamp(1rem, 4vw, 1.5rem);
+  max-width: 80rem; margin: 0 auto; width: 100%;
 }
 
 .tnic-kicker {
