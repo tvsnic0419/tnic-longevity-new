@@ -8,7 +8,7 @@ import { LifestylePillarsHub } from '@/components/library/LifestylePillarsHub';
 import { LibrarySearch } from '@/components/library/LibrarySearch';
 import { ToolsPromoStrip } from '@/components/tools/ToolsPromoStrip';
 import { LibraryFacetFilters } from '@/components/library/LibraryFacetFilters';
-import { CompoundExplorer } from '@/components/library/CompoundExplorer';
+import { CompoundExplorer, parseExplorerParams } from '@/components/library/CompoundExplorer';
 import { RecommendedNextSteps } from '@/components/ui/RecommendedNextSteps';
 import { ResearchQueueShelf } from '@/components/library/ResearchQueueShelf';
 import { EvidenceTierSpectrum } from '@/components/library/EvidenceTierSpectrum';
@@ -38,7 +38,22 @@ const visualCards: HallmarkVisualCard[] = hallmarkLibrary.map(({ id, title, slug
   href: `/library/${slug}`,
 }));
 
-export default function LibraryPage() {
+function paramString(value: string | string[] | undefined): string {
+  if (Array.isArray(value)) return value[0] ?? '';
+  return value ?? '';
+}
+
+export default async function LibraryPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tiers?: string | string[]; hallmarks?: string | string[] }>;
+}) {
+  const sp = await searchParams;
+  const { activeTiers, activeHallmarkIds } = parseExplorerParams({
+    tiers: paramString(sp.tiers),
+    hallmarks: paramString(sp.hallmarks),
+  });
+
   return (
     <>
       <CinematicHubHero
@@ -56,10 +71,25 @@ export default function LibraryPage() {
         secondary={{ href: '/stacks', label: 'Open the Stack Architect' }}
       />
       {/* Search is the highest-intent action on a research hub, so it appears
-          immediately after the overview instead of after the hallmark atlas. */}
+          immediately after the overview. The compound grid follows — the job
+          most visitors came to do — instead of sitting under the hallmark atlas. */}
       <Suspense fallback={<div className="h-36 animate-pulse bg-white/5" />}>
         <LibrarySearch />
       </Suspense>
+
+      <div className="container-page pb-2 pt-8">
+        <Suspense fallback={<div className="h-20 animate-pulse bg-white/5 rounded-xl" />}>
+          <LibraryFacetFilters />
+        </Suspense>
+      </div>
+
+      <div className="container-page pb-12">
+        <CompoundExplorer activeTiers={activeTiers} activeHallmarkIds={activeHallmarkIds} />
+      </div>
+
+      <div className="container-page">
+        <EvidenceTierSpectrum />
+      </div>
 
       <div className="container-page pt-8">
         <DecisionSteps
@@ -76,26 +106,10 @@ export default function LibraryPage() {
           ]}
         />
       </div>
-      <div className="container-page pb-2">
-        <EvidenceTierSpectrum />
-      </div>
+
       <ResearchQueueShelf />
       {/* Lead with the page title and context, then the tools to act on it */}
       <div id="hallmark-atlas"><AntiAgingLibrary asPageTitle /></div>
-
-      <div className="container-page pb-6">
-        <Suspense fallback={<div className="h-20 animate-pulse bg-white/5 rounded-xl" />}>
-          <LibraryFacetFilters />
-        </Suspense>
-      </div>
-
-      {/* The result surface those facet filters drive — and the clickable
-          tier-count pills. Same `?tiers=`/`?hallmarks=` params, now rendered. */}
-      <div className="container-page pb-12">
-        <Suspense fallback={<div className="h-40 animate-pulse bg-white/5 rounded-xl" />}>
-          <CompoundExplorer />
-        </Suspense>
-      </div>
 
       <div className="container-page pb-12">
         <RecommendedNextSteps context="library" />

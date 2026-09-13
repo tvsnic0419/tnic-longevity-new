@@ -58,6 +58,7 @@ export function LibraryModuleDetail({
   lastUpdated,
   author,
   reviewer,
+  heroPresent = false,
 }: {
   module: LibraryModule;
   mdxBody: string | null;
@@ -76,6 +77,13 @@ export function LibraryModuleDetail({
   lastUpdated?: string;
   author?: string;
   reviewer?: string;
+  /**
+   * When a cinematic CompoundHero / ModuleHero already named the compound,
+   * skip the second identity stack (icon + tagline + summary + glance panel)
+   * so the page reads as overture → evidence instead of overture → overture.
+   * The semantic <h1> still renders — the hero title is aria-hidden.
+   */
+  heroPresent?: boolean;
 }) {
   const categoryMeta = libraryCategoryMeta[module.category];
   const relatedHallmarks = hallmarkLibrary.filter((h) => module.relatedHallmarkIds.includes(h.id));
@@ -111,10 +119,14 @@ export function LibraryModuleDetail({
   }, [module]);
 
   return (
-    <div className="min-h-screen canvas-scrim text-foreground pt-6 md:pt-8 pb-20">
+    <div
+      id="evidence-module"
+      data-hero-present={heroPresent ? 'true' : 'false'}
+      className="min-h-screen canvas-scrim text-foreground pt-6 md:pt-8 pb-20"
+    >
       <div className="max-w-7xl mx-auto px-6">
         <Link
-          href="/library#content-modules"
+          href="/library#compound-explorer"
           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-accent-cyan transition mb-4"
         >
           <ArrowLeft className="w-4 h-4" /> Back to Library
@@ -126,12 +138,14 @@ export function LibraryModuleDetail({
           citationCount={citationCount}
           className="mb-4"
         />
-        <EvidenceTrace
-          tier={module.evidenceTier}
-          sourceCount={citationCount}
-          reviewedLabel={lastUpdated ? `Updated ${lastUpdated}` : 'Methodology published'}
-          className="max-w-2xl"
-        />
+        {!heroPresent && (
+          <EvidenceTrace
+            tier={module.evidenceTier}
+            sourceCount={citationCount}
+            reviewedLabel={lastUpdated ? `Updated ${lastUpdated}` : 'Methodology published'}
+            className="max-w-2xl"
+          />
+        )}
         <div className="mb-8 mt-3 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border/60 bg-background/20 p-3.5 max-w-2xl">
           <p className="text-caption text-muted-foreground">Keep this evidence module in your private research queue.</p>
           <ResearchQueueButton module={module} href={getModulePath(module)} />
@@ -145,30 +159,36 @@ export function LibraryModuleDetail({
               rail left on desktop and below the article on mobile. */}
           <div className="order-1 lg:order-2 min-w-0 lg:col-span-8 space-y-8">
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-              <ModuleContextStrip module={module} />
-              <div className="flex items-start gap-4 mb-2">
-                <span
-                  className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${categoryVisual[module.category].badgeClass} ${categoryVisual[module.category].glowClass}`}
-                  aria-hidden="true"
-                >
-                  {(() => {
-                    const CategoryIcon = categoryVisual[module.category].icon;
-                    return <CategoryIcon className={`h-7 w-7 ${categoryVisual[module.category].textClass}`} />;
-                  })()}
-                </span>
-                <h1 className="heading-page pt-1">{module.title}</h1>
-              </div>
-              <p className="text-lg text-muted-foreground mb-4">{module.tagline}</p>
-              <p className="text-sm text-muted-foreground leading-relaxed">{module.summary}</p>
+              {!heroPresent && <ModuleContextStrip module={module} />}
+              {heroPresent ? (
+                <h1 className="heading-section">{module.title}</h1>
+              ) : (
+                <>
+                  <div className="flex items-start gap-4 mb-2">
+                    <span
+                      className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${categoryVisual[module.category].badgeClass} ${categoryVisual[module.category].glowClass}`}
+                      aria-hidden="true"
+                    >
+                      {(() => {
+                        const CategoryIcon = categoryVisual[module.category].icon;
+                        return <CategoryIcon className={`h-7 w-7 ${categoryVisual[module.category].textClass}`} />;
+                      })()}
+                    </span>
+                    <h1 className="heading-page pt-1">{module.title}</h1>
+                  </div>
+                  <p className="text-lg text-muted-foreground mb-4">{module.tagline}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{module.summary}</p>
+                </>
+              )}
             </motion.div>
 
-            {relatedCompound ? (
+            {!heroPresent && (relatedCompound ? (
               <CompoundGlancePanel compound={relatedCompound} />
             ) : (
               module.category === 'compounds' && (
                 <ModuleGlancePanel module={module} studyCount={mdxStudyCount} />
               )
-            )}
+            ))}
 
             {module.requiresDisclaimer && (
               <div className="rounded-xl p-5 border border-accent-amber/30 bg-accent-amber/5 flex gap-3">

@@ -379,6 +379,7 @@ alone is what created the earlier "two-tier" unevenness.
 | `viz/tokens.ts` | Single source of truth for the cinematic palette/glow/stroke/type (`VIZ`, `FONT`, `HUES`, `tierColor`, `signatureHue`). Every viz surface draws from here. |
 | `CinematicHubHero` | Reusable hub opening band — full-bleed `MoleculeStage` field, Fraunces headline, derived stat rail, gradient CTAs, keyed to a hub hue. |
 | `MoleculeStage` | Shared canvas renderer: `mode="molecule"` (real ball-and-stick geometry) or `mode="field"` (abstract orbital field when no structure exists — never fabricate a molecule). |
+| `MoleculeThumb` | Server-rendered SVG of the same geometry, for browse cards. Unique per compound; orbital fallback when `hasGeometry` is false. Never a canvas, never a client import of the geometry file. |
 | `NetworkStage` | Network sibling of `MoleculeStage` — the synergy graph as a rotating 3D artwork. |
 | `CompoundHero` / `ModuleHero` | Per-compound overture bands built only from real `lib/data.ts` / library fields. |
 | `ui/CellularDivider` | Numbered, hue-keyed section seam between homepage sections. |
