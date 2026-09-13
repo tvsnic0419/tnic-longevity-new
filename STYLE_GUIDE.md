@@ -1,6 +1,6 @@
 # TNiC Design System & Style Guide
 
-> Version 1.5 · September 2026  
+> Version 1.6 · September 2026  
 > Governs typography, spacing, components, accessibility, and page patterns across tnic.help.  
 > v1.1 documents the cinematic viz family (§7, §12) that the premium hubs are built on.  
 > v1.2 corrects the drifted §2 color values, documents the signal roles, the
@@ -12,7 +12,9 @@
 > v1.4 adds §14 — what a page must say before JavaScript runs, and the route
 > audit that enforces it.  
 > v1.5 adds §15 — the hub hero's two-column composition and its instrument
-> panel.
+> panel.  
+> v1.6 adds §16 — the measured performance baseline, what is gated versus only
+> reported, and `.card-deferred`.
 
 ---
 
@@ -590,6 +592,77 @@ say whether a picture is data or atmosphere — the default reads
 With the panel carrying the right column, the background field's job changes
 from "fill the void" to "texture the ground": at ≥1024px it drops to 0.26 and
 its mask moves left, behind the copy, so it no longer competes with the panel.
+
+---
+
+## 16. Performance: the numbers, and what they're worth
+
+*Added v1.6, from measuring the site in a real browser rather than asserting.*
+
+### The baseline
+
+Median of three runs per page, encoded (on-the-wire) bytes:
+
+| route | LCP | CLS | doc | js | css | fonts | total |
+|---|---|---|---|---|---|---|---|
+| `/` | 404 ms | 0 | 69 | 714 | 50 | 186 | 1,141 KB |
+| `/library` | 640 ms | 0 | 261 | 783 | 50 | 186 | 1,402 KB |
+| `/library/compounds/nmn` | 460 ms | 0.008 | 75 | 788 | 50 | 187 | 1,207 KB |
+| `/trust` | 660 ms | 0.008 | 37 | 718 | 50 | 167 | 1,095 KB |
+| `/stacks` | 572 ms | 0.008 | 36 | 741 | 50 | 167 | 1,081 KB |
+| `/hallmarks` | 668 ms | 0.008 | 47 | 716 | 50 | 186 | 1,091 KB |
+
+LCP and CLS are comfortably inside Core Web Vitals "good" (2,500 ms / 0.1).
+Code splitting works: `three`, `recharts` and `framer-motion` are all absent
+from a content page's bundle. The honest remaining cost is **~700–790 KB of
+compressed JavaScript per page**, spread across ~48 chunks rather than
+concentrated in one library — many small client islands, not one villain.
+
+### Encoded vs decoded — the trap that sent one pass after the wrong thing
+
+`response.body()` in Playwright returns the **decoded** buffer. Measuring that
+reported `/trust` at ~2,250 KB of script when production transfers ~456 KB of
+it compressed — a ~4× overstatement, easily enough to justify an optimisation
+that was never needed. `audit:perf` reads
+`request.sizes().responseBodySize` (encoded) and prints the decoded total
+alongside it, so the gap is visible instead of assumed. A local `next start`
+that does not compress makes both columns equal; calibrate against production.
+
+### What is gated, and what is only reported
+
+| metric | treatment | why |
+|---|---|---|
+| CLS | **gated** ≤ 0.1 | stable to 3 decimal places across runs |
+| total encoded KB | **gated** ≤ 1,700 | varies < 10% run to run |
+| LCP | reported, with min–max | swings > 2× on a shared runner — 588 ms to 1,356 ms for the same build |
+
+A gate on a number that noisy fails builds at random, and a CI check that cries
+wolf gets switched off — which is worse than not having one. Breaching the LCP
+target prints a warning so a real regression is still visible.
+
+`audit:perf` needs a browser, so like `audit:ui` it runs locally rather than in
+CI (`audit:routes` is fetch-only, which is why that one gates the build).
+
+### Long, uniform grids: `.card-deferred`
+
+`content-visibility: auto` plus `contain-intrinsic-size` lets the browser skip
+layout, style and paint for list items outside the viewport. Applied to the
+100-card `/library` grid — the heaviest page on the site — and A/B'd on one
+build, five runs each side:
+
+| | longest task | total blocking |
+|---|---|---|
+| off | 329 / 359 / 310 ms | 1,026 / 1,034 / 979 ms |
+| on | **257 / 259 / 243 ms** | **792 / 867 / 783 ms** |
+
+Consistently −22% to −28% on the longest main-thread task and −16% to −23% on
+total blocking time, across three independent rounds. `domComplete` moved in
+both directions and showed no signal.
+
+Reach for it on any list long enough that most of it is off-screen. Set
+`contain-intrinsic-size` to the measured item height: getting it wrong costs
+scroll-position accuracy, not layout stability, because the value is only used
+while the item is skipped.
 
 ---
 

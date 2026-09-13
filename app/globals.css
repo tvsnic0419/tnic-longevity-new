@@ -3654,6 +3654,25 @@ p,
   background-size: 100% 1px;
 }
 
+/* ── .card-deferred — off-screen render deferral ──
+   For long, uniform grids. `content-visibility: auto` lets the browser skip
+   layout, style and paint for items outside the viewport until they approach
+   it, and `contain-intrinsic-size` supplies the height to reserve meanwhile so
+   the scrollbar stays honest and nothing shifts when an item is realised.
+
+   Applied to the /library browse grid, which renders 100 compound cards in one
+   list — each with an inline SVG molecule — and is the single heaviest page on
+   the site (260 KB transferred, 4.7 MB decoded). Only the ~9 cards near the
+   viewport cost anything to render on arrival.
+
+   The intrinsic height is the measured card height at the 3-up desktop
+   breakpoint. Getting it wrong costs scroll-position accuracy, not layout
+   stability, because the value is only used while the item is skipped. */
+.card-deferred {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 7.5rem;
+}
+
 /* ── .action-link — the standalone-link control floor ──
    WCAG 2.2 AA 2.5.8 exempts a link sitting inside a sentence, because its size
    is constrained by the line-height of the prose around it. It does NOT exempt
