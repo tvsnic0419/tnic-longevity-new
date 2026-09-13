@@ -1,5 +1,13 @@
 import Link from 'next/link';
-import { ArrowRight, Building2, CheckCircle2, Handshake, ShieldCheck, Sparkles } from 'lucide-react';
+import {
+  ArrowRight,
+  Building2,
+  CheckCircle2,
+  Handshake,
+  ListOrdered,
+  ShieldCheck,
+  Sparkles,
+} from 'lucide-react';
 import { PageShell } from '@/components/ui/PageShell';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -9,6 +17,11 @@ import { buildArticleSchema, buildBreadcrumbSchema } from '@/lib/seo';
 import { seoRoutes } from '@/lib/seo-routes';
 import { SITE } from '@/lib/site';
 import { platformStats } from '@/lib/platform-stats';
+import {
+  SPONSOR_SLOT_CATALOG,
+  getActiveSponsor,
+  type SponsorSlotId,
+} from '@/lib/sponsors';
 
 export const metadata = seoRoutes.partnerships();
 
@@ -32,6 +45,51 @@ const conversationStarters = [
   'Product-category buyer education with COA and label-literacy standards',
   'Lab, biomarker, or technology integrations reviewed through privacy and evidence constraints',
 ];
+
+/**
+ * The eight-minute path a serious reviewer should walk. Every stop is a live
+ * page; none of the copy here invents a grade, a dose, or a PMID.
+ */
+const reviewWalkthrough = [
+  {
+    n: '01',
+    title: 'Home',
+    href: '/',
+    why: 'The thesis: evidence-graded longevity without hype. If the first screen does not feel independent, stop.',
+  },
+  {
+    n: '02',
+    title: 'Library',
+    href: '/library',
+    why: 'The product. Every intervention is graded A–C from human evidence, not from a sponsor brief.',
+  },
+  {
+    n: '03',
+    title: 'Evidence table',
+    href: '/library/evidence',
+    why: 'The index of the library — sortable, derived from the same registries the deep-dives publish.',
+  },
+  {
+    n: '04',
+    title: 'A Tier A deep-dive (GlyNAC)',
+    href: '/library/compounds/glynac',
+    why: 'What a full evidence module looks like: trials, dose, uncertainty, PMIDs. This is the standard a placement sits beside, not inside.',
+  },
+  {
+    n: '05',
+    title: 'Methodology',
+    href: '/trust/methodology',
+    why: 'How a grade is assigned, and what would change one. Commercial relationships are not on that list.',
+  },
+  {
+    n: '06',
+    title: 'Sponsorship principles',
+    href: '/trust/sponsorship',
+    why: 'The wall: what money can fund, and what it cannot buy.',
+  },
+] as const;
+
+const slotIds = Object.keys(SPONSOR_SLOT_CATALOG) as SponsorSlotId[];
 
 function buildSchemas() {
   return [
@@ -60,6 +118,11 @@ export default function PartnershipsPage() {
         description="TNiC is open to selective collaborations with organizations that respect scientific nuance, user trust, and clear commercial disclosure."
         theme="cyan"
         align="left"
+        context={{
+          what: 'A disclosed placement beside an independent evidence library — never inside a grade.',
+          why: 'Serious brands need a partner that will not look like pay-to-win. That wall is the product.',
+          next: 'Walk the six review stops, then send a concise note.',
+        }}
       />
 
       {/* Platform by the numbers — real scale + rigor a sponsor is evaluating,
@@ -83,6 +146,79 @@ export default function PartnershipsPage() {
           Every compound, pathway, and hallmark is graded A–C by strength of human evidence, with
           traceable PubMed citations — the editorial standard sponsors are evaluated against, not exempt from.
         </p>
+      </section>
+
+      <section aria-labelledby="review-path" className="mb-8">
+        <div className="mb-5 flex items-start gap-3">
+          <ListOrdered className="mt-1 h-5 w-5 shrink-0 text-accent-cyan" aria-hidden="true" />
+          <div>
+            <h2 id="review-path" className="heading-section">
+              Eight-minute review path
+            </h2>
+            <p className="mt-2 max-w-2xl text-body-sm leading-relaxed text-muted-foreground">
+              Send a reviewer here, then these six stops, in order. Each page is live. None of them
+              are a pitch deck.
+            </p>
+          </div>
+        </div>
+        <ol className="grid gap-3 md:grid-cols-2">
+          {reviewWalkthrough.map((stop) => (
+            <li key={stop.href} className="glass rounded-xl p-5">
+              <p className="font-mono text-xs uppercase tracking-wide text-accent-cyan">{stop.n}</p>
+              <Link
+                href={stop.href}
+                className="focus-ring mt-2 inline-flex items-center gap-2 rounded text-sm font-semibold text-foreground hover:text-accent-cyan"
+              >
+                {stop.title}
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{stop.why}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section aria-labelledby="inventory" className="mb-8">
+        <h2 id="inventory" className="heading-section mb-2">
+          Labeled inventory
+        </h2>
+        <p className="mb-4 max-w-2xl text-body-sm leading-relaxed text-muted-foreground">
+          Four surfaces. Empty slots render nothing — no vacant ad boxes, no layout shift.
+          A filled slot is marked Sponsored and links to the published principles.
+        </p>
+        <div className="grid gap-3 md:grid-cols-2">
+          {slotIds.map((id) => {
+            const slot = SPONSOR_SLOT_CATALOG[id];
+            const sold = getActiveSponsor(id);
+            return (
+              <article key={id} className="card-elevated rounded-xl p-5">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-semibold text-foreground">{slot.label}</p>
+                    <p className="text-caption text-muted-foreground">{slot.surface}</p>
+                  </div>
+                  <p
+                    className={
+                      sold
+                        ? 'text-caption shrink-0 rounded-full bg-accent-amber/15 px-2 py-1 text-accent-amber'
+                        : 'text-caption shrink-0 rounded-full bg-accent-emerald/15 px-2 py-1 text-accent-emerald'
+                    }
+                  >
+                    {sold ? `Live · ${sold.name}` : 'Open'}
+                  </p>
+                </div>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{slot.intent}</p>
+                <Link
+                  href={slot.href}
+                  className="focus-ring mt-3 inline-flex items-center gap-2 rounded text-sm font-semibold text-accent-cyan hover:underline"
+                >
+                  View surface
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+              </article>
+            );
+          })}
+        </div>
       </section>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)]">
@@ -146,7 +282,8 @@ export default function PartnershipsPage() {
           <p className="text-label mb-3">Start a serious conversation</p>
           <p className="text-sm text-muted-foreground leading-relaxed mb-5">
             Use a concise note: organization, proposed collaboration, what audience value it creates, and any
-            compliance constraints your team needs TNiC to understand.
+            compliance constraints your team needs TNiC to understand. This page is the public brief — send it as the
+            first link.
           </p>
           <a
             href={`mailto:${SITE.contactEmail}?subject=${encodeURIComponent('[TNiC partnerships] Collaboration inquiry')}`}
@@ -163,4 +300,3 @@ export default function PartnershipsPage() {
     </SubPageLayout>
   );
 }
-
