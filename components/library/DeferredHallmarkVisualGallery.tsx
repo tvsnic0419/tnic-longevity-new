@@ -141,17 +141,19 @@ export function DeferredHallmarkVisualGallery({ cards }: { cards: readonly Hallm
           <Link
             key={card.id}
             href={card.href}
-            className="focus-ring group block rounded-2xl transition-transform hover:scale-[1.01]"
+            aria-label={`${card.title} — open the evidence deep-dive`}
+            className="focus-ring group block h-full rounded-2xl transition-transform hover:-translate-y-0.5"
           >
-            <div className="h-full overflow-hidden rounded-2xl border border-[var(--color-border-subtle)] bg-[var(--color-surface-1)] transition-colors group-hover:border-[var(--accent-cyan)]/30">
-              <div className="p-4">{isNearViewport ? <Visual showLabels interactive={false} /> : <VisualPlaceholder index={index} />}</div>
-              <div className="border-t border-[var(--color-border-subtle)] px-4 pb-4 pt-2">
-                <div className="text-sm font-medium text-[var(--color-text-primary)] transition-colors group-hover:text-[var(--accent-cyan)]">
-                  {card.title}
-                </div>
-                <p className="mt-1 text-caption text-[var(--color-text-muted)]">Open the evidence deep-dive</p>
-              </div>
-            </div>
+            {/* Each illustration is already a self-contained, titled glass card
+                (its own "HALLMARK NN · <title>" header + caption), so the gallery
+                does NOT re-title it — that would double the name. The link adds a
+                consistent hover lift, focus ring, and one clear deep-dive CTA;
+                the real mechanistic artwork stays the hero of the card. */}
+            {isNearViewport ? <Visual showLabels interactive={false} /> : <VisualPlaceholder index={index} />}
+            <span className="mt-2 flex items-center justify-center gap-1.5 text-caption font-semibold uppercase tracking-[0.1em] text-accent-cyan/80 transition-colors group-hover:text-accent-cyan">
+              Open the evidence deep-dive
+              <span aria-hidden="true" className="transition-transform group-hover:translate-x-0.5">→</span>
+            </span>
           </Link>
         );
       })}

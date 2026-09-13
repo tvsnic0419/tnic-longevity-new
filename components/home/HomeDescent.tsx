@@ -59,7 +59,7 @@ const CSS = `
   background:
     radial-gradient(140% 60% at 50% 0%, var(--void2) 0%, var(--void) 45%, var(--void3) 100%);
   color: var(--ink);
-  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  font-family: var(--font-sans, 'Hanken Grotesk', system-ui, sans-serif);
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
   isolation: isolate;
@@ -472,7 +472,7 @@ const CSS = `
 .tnic-descent .node-hit { fill: transparent; }
 .tnic-descent .node-core { transition: opacity .35s ease; }
 .tnic-descent .node-label {
-  font-family: var(--font-sans, 'Inter', system-ui, sans-serif); font-size: 14px; font-weight: 500;
+  font-family: var(--font-sans, 'Hanken Grotesk', system-ui, sans-serif); font-size: 14px; font-weight: 500;
   fill: var(--ink); pointer-events: none; transition: opacity .35s ease, fill .35s ease;
   paint-order: stroke; stroke: rgba(5,7,16,0.9); stroke-width: 4;
 }
@@ -493,7 +493,7 @@ const CSS = `
 .tnic-search {
   flex: 1; min-width: 180px;
   background: rgba(14,20,38,0.6); border: 1px solid var(--line); color: var(--ink);
-  padding: 10px 14px; border-radius: 10px; font-family: var(--font-sans, 'Inter', system-ui, sans-serif); font-size: 14px;
+  padding: 10px 14px; border-radius: 10px; font-family: var(--font-sans, 'Hanken Grotesk', system-ui, sans-serif); font-size: 14px;
   outline: none;
 }
 .tnic-search:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(95,227,224,0.15); }
