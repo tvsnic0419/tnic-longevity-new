@@ -4,6 +4,9 @@ import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { citationRegistry } from '@/lib/trust';
 import { ArrowRight, Dna, FlaskConical } from 'lucide-react';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
+import { HubSplitInstrument } from '@/components/viz/HubSplitInstrument';
+import { TIER_COLOR_VAR } from '@/lib/trust';
+import type { EvidenceTier } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { RevealItem } from '@/components/ui/RevealItem';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
@@ -63,13 +66,17 @@ export default function HallmarksIndexPage() {
       .map((i) => i.compoundId as string),
   ).size;
 
+  const interventions = hallmarkLibrary.flatMap((h) => h.interventions);
+  const interventionByTier: Record<EvidenceTier, number> = { A: 0, B: 0, C: 0 };
+  for (const i of interventions) interventionByTier[i.evidence] += 1;
+
   return (
     <>
       <CinematicHubHero
         hue="emerald"
         kicker="Longevity Science"
         title={<>The molecular <em>causes</em> of aging.</>}
-        lead="Twelve cellular mechanisms drive how we age — each paired here with the PMID-cited interventions that move it. This is the map every rational protocol is built on."
+        lead={`${hallmarkLibrary.length} cellular mechanisms drive how we age — each paired here with the PMID-cited interventions that move it. This is the map every rational protocol is built on.`}
         stats={[
           { value: String(hallmarkLibrary.length), label: 'Hallmarks mapped' },
           { value: String(citationRegistry.length), label: 'PMID citations', href: '/trust' },
@@ -77,6 +84,28 @@ export default function HallmarksIndexPage() {
         ]}
         primary={{ href: '/stacks', label: 'Build my stack' }}
         secondary={{ href: '/library', label: 'Interactive library' }}
+        figure={
+          <HubSplitInstrument
+            kicker="Cited interventions"
+            total={interventions.length}
+            totalLabel={`across ${hallmarkLibrary.length} hallmarks`}
+            rows={(['A', 'B', 'C'] as EvidenceTier[]).map((tier) => ({
+              key: tier,
+              label: `Tier ${tier}`,
+              count: interventionByTier[tier],
+              color: TIER_COLOR_VAR[tier],
+            }))}
+            footer={
+              <>
+                <span className="font-mono font-semibold text-foreground">{tierABCompounds}</span> unique
+                Tier A/B compounds
+              </>
+            }
+            href="/library"
+            hrefLabel="Open the library →"
+          />
+        }
+        figureCaption="Intervention split · derived from the hallmark registry"
       />
 
       {/* Semantic page title + framework attribution */}

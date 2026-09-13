@@ -4,7 +4,71 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-13 (seventh pass) — instrument material, sitewide
+
+**The question asked:** mechanical upgraded visual experience, significantly
+improve UI sitewide. Token-driven, cascading, not page-by-page restyles.
+
+**What was actually missing.** The sixth pass gave `/library` a real
+instrument and an honest identity. Everything else still arrived looking like
+a SaaS template wearing a science coat:
+
+- Inter was the body face. Same stack as Linear, Vercel, every default
+  Next.js app. The display face (Fraunces) and the data face (JetBrains)
+  were chosen; the text plane was not.
+- Eleven cinematic hubs still filled the right-hand column with the
+  decorative molecular field, even when they had a countable, derived set
+  (stacks, protocols, trust, tools, insights, products, peptides, pathways,
+  hallmarks, learn, combination lab).
+- Labs / trust / protocols still printed a literal `'12'` on the hallmark
+  rail. Peptides still said "Eight" in the PageHeader.
+- Chrome — nav, tables, inputs, selection — did not yet read as the same
+  instrument the library had become.
+
+**Deliberately not done, and why.**
+
+- Absorbing stale PR #178's full Hanken branch (library gallery restructure).
+  This pass takes the font intent only.
+- Scoring the 20 unscored compounds, or converting 100 inline molecule SVGs
+  to `<img>`. Same reasons as the sixth pass; neither is a visual-system job.
+- Restyling `/club` or `/shop` — CLAUDE.md: those keep bespoke treatments.
+- Rewriting the homepage descent. Already-good work; Hanken inherits through
+  `--font-sans` without touching the scrollytelling.
+- Putting a data figure on hubs with nothing honest to split (`/best` is nine
+  goals, `/labs` biomarkers have no category axis, `/shop` is a checklist).
+  Decorative field + caption remains the honest fallback.
+
+**Shipped.**
+
+- **Hanken Grotesk** as `--font-sans` (`--font-hanken`). Inter retired from
+  layout, globals, viz tokens, NetworkStage, HomeDescent, and the engine
+  comment. Optical sizing + kern/liga/calt on body.
+- **`HubSplitInstrument`** — shared server primitive. Counts and colours are
+  the caller's problem; the component never invents either. Compact layout
+  when a split has more than four rows; non-zero bars keep a 4px minimum so
+  small slices stay visible.
+- **Derived figures** on hallmarks (intervention A/B/C), peptides (legal
+  status), pathways (families), evidence (library wrap), stacks (elite-stack
+  grades), stacks/lab (synergy / caution / contraindication), tools (New /
+  Advanced / Core), trust (scored-set A/B/C), protocols (protocol grades),
+  insights (library mix), products (COA published vs not stated), compound
+  engine (A–D including D), supplement-guides (guides / profiles /
+  comparisons), learn (FAQ / glossary / steps).
+- **Hardcoded counts removed:** labs / trust / protocols hallmark rail now
+  `hallmarkLibrary.length`; peptides PageHeader uses `peptideLibrary.length`.
+- **Cascading chrome:** `::selection`, light-theme grain whisper, nav HUD
+  tick, sticky table headers, input inner highlight, data-figure bezel.
+- **STYLE_GUIDE v1.7 / §17.** §3 names the three faces. §7 records
+  `titleAsHeading` and the data-figure rule.
+
+**Checks.** Lint, typecheck, the test suite including the new instrument /
+Hanken / derived-count guards, and a production HTML spot-check of
+`/library`, `/hallmarks`, `/peptides`, `/pathways`, `/stacks`, `/trust`.
+
+**Rollback:** `git revert` the merge of this branch.
+
 ## 2026-09-13 (sixth pass) — the library tells the truth about itself
+
 
 **The question asked:** independently determine and ship the most significant
 upgrades, rather than wait on an external patch.

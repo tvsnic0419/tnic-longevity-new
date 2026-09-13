@@ -7,6 +7,9 @@ import { seoRoutes } from '@/lib/seo-routes';
 import { COMPOUND_DB, DEFAULT_WEIGHTS, HALLMARKS } from '@/lib/compound-engine-data';
 import { SITE } from '@/lib/site';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
+import { HubSplitInstrument } from '@/components/viz/HubSplitInstrument';
+import { TIER_COLOR_VAR } from '@/lib/trust';
+import type { EvidenceTier } from '@/lib/types';
 
 export const metadata = seoRoutes.compoundEngine();
 
@@ -55,6 +58,11 @@ function buildEngineSchemas() {
 }
 
 export default function CompoundEnginePage() {
+  const engineTiers = ['A', 'B', 'C', 'D'] as const;
+  const engineByTier = Object.fromEntries(
+    engineTiers.map((tier) => [tier, COMPOUND_DB.filter((c) => c.tier === tier).length]),
+  ) as Record<(typeof engineTiers)[number], number>;
+
   // Same shell as the sibling tool routes (/tools, /stacks, /labs) so the
   // breadcrumb and next action are here, but without the ContextBar's stack
   // readout: the engine scores compounds against its own curated hallmark
@@ -76,6 +84,25 @@ export default function CompoundEnginePage() {
         ]}
         primary={{ href: '/library', label: 'Browse the compound library' }}
         secondary={{ href: '/tools', label: 'All interactive tools' }}
+        figure={
+          <HubSplitInstrument
+            kicker="Engine catalog"
+            total={COMPOUND_DB.length}
+            totalLabel="scored compounds"
+            rows={engineTiers.map((tier) => ({
+              key: tier,
+              label: `Tier ${tier}`,
+              count: engineByTier[tier],
+              color:
+                tier === 'D'
+                  ? 'var(--color-text-faint)'
+                  : TIER_COLOR_VAR[tier as EvidenceTier],
+            }))}
+            href="/library/evidence"
+            hrefLabel="Open the evidence table →"
+          />
+        }
+        figureCaption="Tier split · derived from the engine catalog, including D"
       />
       <CompoundIntelligenceEngine />
       {/* Server-rendered reference: ships the scoring model, the full curated

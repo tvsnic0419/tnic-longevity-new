@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
+import { HubSplitInstrument } from '@/components/viz/HubSplitInstrument';
 import { InsightsCharts } from '@/components/insights/InsightsCharts';
 import { ConnectionMatrix } from '@/components/insights/ConnectionMatrix';
 import { FieldNotes } from '@/components/insights/FieldNotes';
@@ -13,6 +14,7 @@ import {
   LIBRARY_HALLMARK_COVERAGE,
   LIBRARY_TIER_SPLIT,
 } from '@/lib/insights-library';
+import { TIER_COLOR_VAR } from '@/lib/trust';
 
 export const metadata = buildPageMetadata({
   title: 'Longevity by the Numbers — The Library as Data',
@@ -65,6 +67,22 @@ export default function InsightsPage() {
         ]}
         primary={{ href: '/library', label: 'Open the library' }}
         secondary={{ href: '/hallmarks', label: 'The 12 hallmarks' }}
+        figure={
+          <HubSplitInstrument
+            kicker="Library mix"
+            total={LIBRARY_COMPOUND_COUNT}
+            totalLabel="compound deep-dives"
+            rows={LIBRARY_TIER_SPLIT.map((slice) => ({
+              key: slice.tier,
+              label: `Tier ${slice.tier}`,
+              count: slice.count,
+              color: TIER_COLOR_VAR[slice.tier],
+            }))}
+            href="/library/evidence"
+            hrefLabel="Open the evidence table →"
+          />
+        }
+        figureCaption="Evidence split · derived from every compound deep-dive"
       />
 
       <div className="container-page pb-20">

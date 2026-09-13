@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Waypoints, ArrowRight } from 'lucide-react';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
+import { HubSplitInstrument, HUB_ACCENT_VAR } from '@/components/viz/HubSplitInstrument';
 import { SynergyNetworkGraph } from '@/components/ui/SynergyNetworkGraph';
 import { PathwayFamilies } from '@/components/library/PathwayFamilies';
 import { StructuredData } from '@/components/seo/StructuredData';
@@ -59,6 +60,22 @@ export default function PathwaysHubPage() {
         ]}
         primary={{ href: '/library', label: 'Browse the library' }}
         secondary={{ href: '/stacks', label: 'Open the Stack Architect' }}
+        figure={
+          <HubSplitInstrument
+            kicker="Mechanistic families"
+            total={pathways.length}
+            totalLabel="pathways"
+            rows={pathwayCategoryOrder.map((cat) => ({
+              key: cat,
+              label: pathwayCategoryMeta[cat].label,
+              count: getPathwaysByCategory(cat).length,
+              color: HUB_ACCENT_VAR[pathwayCategoryMeta[cat].theme] ?? 'var(--accent-cyan)',
+            }))}
+            href="/sirtuin-atlas"
+            hrefLabel="Open the sirtuin atlas →"
+          />
+        }
+        figureCaption="Pathway families · derived from the pathway registry"
       />
       <div className="py-8 md:py-10">
       <StructuredData
