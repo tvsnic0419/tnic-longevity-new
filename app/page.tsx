@@ -30,13 +30,13 @@ import { eliteInterventions } from '@/lib/elite-interventions';
  *   client islands within this server shell.
  */
 
-const HOME_TITLE = 'TNiC — Evidence-Graded Longevity Supplements & Anti-Aging Library';
+const HOME_TITLE = 'TNiC — Longevity Intelligence OS';
 
 export const metadata = {
   ...buildPageMetadata({
     title: HOME_TITLE,
     description:
-      'Elite anti-aging interventions — GlyNAC, NAD⁺, Ca-AKG, NRF2 and more — graded by the strength of human evidence, each paired with one verified product to buy well. Plus a free, PubMed-backed library of the 12 hallmarks of aging. No pay-for-placement.',
+      'Every compound, pathway, and hallmark in one connected scientific model. TNiC grades human evidence, maps mechanisms, and links products and stacks back to the papers. No pay-for-placement.',
     path: '',
   }),
   // Absolute title so the `%s | TNiC` template doesn't double the brand name.
