@@ -27,3 +27,22 @@ jobs:
       - run: npm run build
         env:
           NEXT_PUBLIC_SITE_URL: https://tnic.help
+
+      # Structural audit over the server-rendered HTML of every route in the
+      # sitemap. This catches the class of defect that is invisible to every
+      # other check here: lint, types, tests and the build all passed green
+      # while /library/systems and /tools/pathway-architect published an empty
+      # <main>, five top-level hubs shipped no <h1> at all, and eight sitemap
+      # URLs shared one title while canonicalising away. Nothing short of
+      # fetching the rendered routes and reading them finds that.
+      - name: Route audit (structure, canonicals, links)
+        env:
+          NEXT_PUBLIC_SITE_URL: https://tnic.help
+        run: |
+          npx next start -p 3212 &
+          for i in $(seq 1 60); do
+            curl -sf -o /dev/null http://127.0.0.1:3212/ && break
+            sleep 2
+          done
+          curl -sf -o /dev/null http://127.0.0.1:3212/ || { echo "server did not come up"; exit 1; }
+          BASE=http://127.0.0.1:3212 npm run audit:routes

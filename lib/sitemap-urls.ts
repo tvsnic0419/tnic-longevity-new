@@ -5,7 +5,6 @@ import { peptideLibrary } from '@/lib/peptides-library';
 import { getAllPathwaySlugs } from '@/lib/pathways';
 import { getAllComparisonSlugs } from '@/lib/comparisons';
 import { getAllBestForSlugs } from '@/lib/best-for';
-import { toolsRegistry } from '@/lib/registry';
 import { SITE } from '@/lib/site';
 
 // Keep the sitemap's default freshness aligned with the current editorial release.
@@ -37,6 +36,13 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     { url: `${base}/stacks/lab`, lastModified, changeFrequency: 'weekly', priority: 0.82 },
     { url: `${base}/protocols`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/labs`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
+    // /tools only. The seven `/tools?tab=…` variants used to be listed here as
+    // separate entries; they are the same page with a client-side tab
+    // preselected, they all carry /tools' <title> and description, and they all
+    // declare rel=canonical → /tools. A sitemap entry that the page itself
+    // canonicalises away is a contradiction — the sitemap asks for indexing and
+    // the page declines it — and eight URLs sharing one title is how a site
+    // teaches a crawler that its titles mean nothing.
     { url: `${base}/tools`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/elite-8`, lastModified, changeFrequency: 'monthly', priority: 0.88 },
     { url: `${base}/compound-engine`, lastModified, changeFrequency: 'monthly', priority: 0.82 },
@@ -120,13 +126,6 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     priority: 0.85,
   }));
 
-  const toolTabRoutes = toolsRegistry.map((t) => ({
-    url: `${base}${t.href}`,
-    lastModified,
-    changeFrequency: 'weekly' as const,
-    priority: 0.82,
-  }));
-
   const bestForRoutes = getAllBestForSlugs().map((slug) => ({
     url: `${base}/best/${slug}`,
     lastModified,
@@ -137,7 +136,6 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
   return [
     ...coreRoutes,
     ...bestForRoutes,
-    ...toolTabRoutes,
     ...hallmarkRoutes,
     ...compareRoutes,
     ...moduleRoutes,

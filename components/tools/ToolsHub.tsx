@@ -14,7 +14,6 @@ import {
   Wand2,
   FlaskConical,
   TrendingUp,
-  Calculator,
   Cpu,
   Network,
   BarChart3,
@@ -23,7 +22,6 @@ import {
   ArrowRight,
   type LucideIcon,
 } from 'lucide-react';
-import { PageHeader } from '@/components/ui/PageHeader';
 import { TabBar } from '@/components/ui/TabBar';
 import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
 import { GlassPanel } from '@/components/ui/GlassPanel';
@@ -162,17 +160,8 @@ export function ToolsHub() {
   const activeTool = toolsRegistry.find((t) => t.id === active)!;
 
   return (
-    <section className="canvas-scrim min-h-screen pt-6 md:pt-8 pb-20">
+    <section className="canvas-scrim min-h-screen pb-20">
       <div className="container-page">
-        <PageHeader
-          icon={Calculator}
-          eyebrow="Interactive Tools"
-          title="Longevity Tools"
-          description={`${toolsRegistry.length} evidence-graded calculators that turn library knowledge into practical models. Rule-based, transparent reasoning — not generative AI.`}
-          theme="violet"
-          cinematic
-          as="h1"
-        />
 
         <ContextRail
           {...getToolContext(active)}

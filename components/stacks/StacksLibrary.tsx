@@ -5,19 +5,15 @@ import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { Cpu, Layers, Wrench, Table2, BookOpen, ShoppingBag, Sparkles } from 'lucide-react';
+import { Cpu, Wrench, Table2, BookOpen, ShoppingBag, Sparkles } from 'lucide-react';
 import { eliteStacks } from '@/lib/stacks-library';
-import { compounds } from '@/lib/data';
 import { usePlatform } from '@/context/PlatformContext';
 import { buildEngineStackUrl, buildShopStackUrl, parseStackParam } from '@/lib/stack-url';
-import { PageShell } from '@/components/ui/PageShell';
-import { PageHeader } from '@/components/ui/PageHeader';
 import { TabBar } from '@/components/ui/TabBar';
 import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
 import { DynamicStackBuilder } from './DynamicStackBuilder';
 import { EliteStackCard } from './EliteStackCard';
 import { ToolsPromoStrip } from '@/components/tools/ToolsPromoStrip';
-import { getHubContext } from '@/lib/hub-context';
 import { StackStartCompass } from './StackStartCompass';
 
 // Only ever rendered behind the "Compare" tab — lazy so its compound-data
@@ -74,17 +70,7 @@ export function StacksLibrary() {
   }, [hasIncomingStack]);
 
   return (
-    <PageShell>
-      <PageHeader
-        icon={Layers}
-        eyebrow="Stacks & Protocols"
-        title="Stack Architect"
-        description="Pre-built evidence-graded protocols with dosing, monitoring, and cost breakdowns. Build custom stacks with real-time synergy and contraindication analysis."
-        meta={`${eliteStacks.length} elite stacks · ${compounds.length} stack-buildable compounds · Educational only`}
-        theme="violet"
-        variant="handoff"
-        context={getHubContext('stacks')}
-      />
+    <>
 
       {sourceLabel && (
         <div className="mb-6 flex flex-wrap items-center gap-3 rounded-xl border border-accent-violet/25 bg-accent-violet/5 px-4 py-3">
@@ -228,6 +214,6 @@ export function StacksLibrary() {
           </button>
         </section>
       )}
-    </PageShell>
+    </>
   );
 }

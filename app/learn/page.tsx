@@ -1,5 +1,9 @@
 import { Suspense } from 'react';
+import { BookOpen } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
+import { PageShell } from '@/components/ui/PageShell';
+import { PageHeader } from '@/components/ui/PageHeader';
+import { getHubContext } from '@/lib/hub-context';
 import { LearnPageClient } from '@/components/learn/LearnPageClient';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { StructuredData } from '@/components/seo/StructuredData';
@@ -59,9 +63,27 @@ export default function LearnPage() {
         primary={{ href: '/nico', label: 'Find your personalized stack' }}
         secondary={{ href: '/library', label: 'Browse the library' }}
       />
-      <Suspense fallback={<div className="container-page py-20 text-muted-foreground">Loading…</div>}>
-        <LearnPageClient />
-      </Suspense>
+      {/* Identity on the server, ahead of the client island — see the note in
+          app/stacks/page.tsx and STYLE_GUIDE §14. LearnPageClient reads the
+          ?tab= param, so nothing below it reached the initial HTML.
+          LearnCenter also rendered a SECOND CinematicHubHero of its own under
+          this page's, with different copy — visible as two stacked hero bands
+          once the island hydrated. The page's hero is the canonical one; the
+          duplicate is gone. */}
+      <PageShell className="bg-background">
+        <PageHeader
+          icon={BookOpen}
+          eyebrow="Learn"
+          title="Learn Before You Stack"
+          description="Intelligent consumers ask hard questions. TNiC answers them openly — from first-time basics to supplement industry red flags."
+          theme="cyan"
+          context={getHubContext('learn')}
+          contextVariant="compact"
+        />
+        <Suspense fallback={<div className="py-20 text-muted-foreground">Loading…</div>}>
+          <LearnPageClient />
+        </Suspense>
+      </PageShell>
     </SubPageLayout>
   );
 }
