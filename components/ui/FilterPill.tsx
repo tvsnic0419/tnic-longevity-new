@@ -12,19 +12,19 @@ interface FilterPillProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 
 const toneStyles: Record<FilterPillTone, { active: string; idle: string }> = {
   cyan: {
     active: 'border-accent-cyan/55 bg-accent-cyan/10 text-accent-cyan shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]',
-    idle: 'border-border/80 bg-background/25 text-muted-foreground hover:border-accent-cyan/35 hover:text-foreground',
+    idle: 'border-border/80 glass text-muted-foreground hover:border-accent-cyan/35 hover:text-foreground',
   },
   emerald: {
     active: 'border-accent-emerald/55 bg-accent-emerald/10 text-accent-emerald shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]',
-    idle: 'border-border/80 bg-background/25 text-muted-foreground hover:border-accent-emerald/35 hover:text-foreground',
+    idle: 'border-border/80 glass text-muted-foreground hover:border-accent-emerald/35 hover:text-foreground',
   },
   violet: {
     active: 'border-accent-violet/55 bg-accent-violet/10 text-accent-violet shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]',
-    idle: 'border-border/80 bg-background/25 text-muted-foreground hover:border-accent-violet/35 hover:text-foreground',
+    idle: 'border-border/80 glass text-muted-foreground hover:border-accent-violet/35 hover:text-foreground',
   },
   amber: {
     active: 'border-accent-amber/55 bg-accent-amber/10 text-accent-amber shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]',
-    idle: 'border-border/80 bg-background/25 text-muted-foreground hover:border-accent-amber/35 hover:text-foreground',
+    idle: 'border-border/80 glass text-muted-foreground hover:border-accent-amber/35 hover:text-foreground',
   },
 };
 

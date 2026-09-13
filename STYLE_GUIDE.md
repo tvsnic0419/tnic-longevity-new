@@ -1,6 +1,6 @@
 # TNiC Design System & Style Guide
 
-> Version 1.7 · September 2026  
+> Version 1.8 · September 2026  
 > Governs typography, spacing, components, accessibility, and page patterns across tnic.help.  
 > v1.1 documents the cinematic viz family (§7, §12) that the premium hubs are built on.  
 > v1.2 corrects the drifted §2 color values, documents the signal roles, the
@@ -17,7 +17,9 @@
 > reported, and `.card-deferred`.  
 > v1.7 adds §17 — Hanken Grotesk as the body face, `HubSplitInstrument` as the
 > hub-hero data figure, and the HUD / table / selection tokens that travel
-> with them.
+> with them.  
+> v1.8 adds §18 — sitewide glass material: chrome is frost, cards are grounded
+> glass-look, overlays share `.glass-chrome`.
 
 ---
 
@@ -740,9 +742,37 @@ These are sitewide, not per-page:
 | `.table-base thead th` | Sticky header + bottom hairline |
 | `.research-hero__figure-stage--data` | Inset bezel; no atmospheric mask (labels stay readable) |
 
-Do not add more glass, more glow, or a second grain overlay. The atmosphere
+Do not add more glow or a second grain overlay. The atmosphere
 budget in §13 still holds; this section only names the chrome that was
 missing from it.
+
+---
+
+## 18. Sitewide glass material
+
+*Added v1.8. Chrome is glass. Content is grounded glass-look.*
+
+The v8 Deep Glass budget (1–2 true `backdrop-filter` planes per page via
+`GlassPanel`) still holds. What was missing was a shared *material* so the
+rest of the site did not read as flat fills sitting next to those planes.
+
+| Surface | Material | Blur? |
+|---|---|---|
+| Nav, context bar, footer, overlays, command palette, modal, toasts | Frosted glass (`.nav-glass`, `.glass-chrome`, `.glass-overlay`) | Yes — chrome only |
+| Inputs, chips, ghost/outline buttons, filter pills | Lightweight glass (`.glass`, `.input-base`) | Yes — small area |
+| `.premium-card` / `.card-elevated` | Refractive rim + inner specular + frost *wash* over `--card-ground` | **No** — library grid is 100 cards |
+| `GlassPanel` / `.glass-deep` | Layered Deep Glass planes (v8) | Yes — budget 1–2 / page |
+
+Tokens that travel with this: `--glass-inner-highlight`, `--glass-inner-shade`,
+`--glass-rim`, `--glass-chrome-blur`, `--glass-chrome-fill`. Light theme gets
+a white frost wash instead of a dark one.
+
+**The test is still §13:** if you can read a chemical structure crossing a
+sentence, the card ground has been punctured. Do not "fix" that by putting
+`backdrop-filter` on `.premium-card`.
+
+Phone budget: chrome blur halves under 768px; sticky table headers drop blur
+entirely. `prefers-reduced-motion` still kills card lift.
 
 ---
 

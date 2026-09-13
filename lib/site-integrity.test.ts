@@ -652,6 +652,10 @@ describe('site data integrity', () => {
     expect(css).toContain('::selection');
     expect(css).toContain('.nav-glass::before');
     expect(css).toContain('font-optical-sizing: auto');
+    expect(css).toContain('Design System v10');
+    expect(css).toContain('.glass-chrome');
+    expect(css).toContain('--glass-inner-highlight');
+    expect(css).toContain('--glass-chrome-fill');
     expect(tokens).toContain('Hanken Grotesk');
     expect(tokens).not.toContain("'Inter'");
 
