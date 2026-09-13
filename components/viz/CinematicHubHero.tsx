@@ -150,7 +150,7 @@ export function CinematicHubHero({
             the brand's own artwork instead of dark air. A hub can pass a real
             data figure via `figure` when it has one. */}
         <div className="research-hero__figure" aria-hidden={figure ? undefined : true}>
-          <div className="research-hero__figure-stage">
+          <div className={`research-hero__figure-stage${figure ? ' research-hero__figure-stage--data' : ''}`}>
             {figure ?? <MoleculeStage hue={rgb} interactive={false} />}
           </div>
           <p className="research-hero__figure-cap">{figureCaption}</p>
