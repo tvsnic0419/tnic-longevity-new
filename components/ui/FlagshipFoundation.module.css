@@ -38,7 +38,7 @@
 :global(.research-hero__action-arrow) { transition: transform var(--dur-fast) var(--ease-standard); }
 
 /* ── Workspace cue ──────────────────────────────────────────────────────── */
-:global(.context-bar) { border-bottom: 1px solid color-mix(in srgb, var(--color-text-primary) 7%, transparent); background: color-mix(in srgb, var(--color-bg-base) 88%, transparent); box-shadow: 0 12px 30px -26px color-mix(in srgb, #000 72%, transparent); -webkit-backdrop-filter: blur(16px) saturate(1.15); backdrop-filter: blur(16px) saturate(1.15); }
+:global(.context-bar) { border-bottom: 1px solid color-mix(in srgb, var(--color-text-primary) 7%, transparent); background: linear-gradient(180deg, color-mix(in srgb, var(--glass-edge-specular) 8%, transparent), transparent 70%), color-mix(in srgb, var(--color-bg-base) 78%, transparent); box-shadow: var(--glass-inner-highlight), 0 12px 30px -26px color-mix(in srgb, #000 72%, transparent); -webkit-backdrop-filter: blur(18px) saturate(1.35); backdrop-filter: blur(18px) saturate(1.35); }
 :global(.context-bar__inner) { display: flex; align-items: center; gap: 1rem; min-height: 2.75rem; padding-block: .4rem; }
 :global(.context-bar__crumbs), :global(.context-bar__workspace), :global(.context-bar__crumb-list), :global(.context-bar__crumb) { display: flex; align-items: center; min-width: 0; }
 :global(.context-bar__crumbs) { gap: .45rem; } :global(.context-bar__crumb-list) { gap: .35rem; } :global(.context-bar__crumb) { gap: .35rem; min-width: 0; }

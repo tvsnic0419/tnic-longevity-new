@@ -125,7 +125,7 @@ export function Footer() {
               { href: '/library', label: 'Explore the library', detail: 'Compounds, hallmarks, and comparisons' },
               { href: '/nico', label: 'Build a starting point', detail: 'A free, adjustable questionnaire' },
             ].map((link) => (
-              <Link key={link.href} href={link.href} className="focus-ring group rounded-2xl border border-border/60 bg-background/25 p-4 transition-colors hover:border-accent-cyan/40 hover:bg-accent-cyan/[0.07]">
+              <Link key={link.href} href={link.href} className="focus-ring group rounded-2xl border border-border/60 glass p-4 transition-colors hover:border-accent-cyan/40 hover:bg-accent-cyan/[0.07]">
                 <span className="block text-sm font-semibold text-foreground group-hover:text-accent-cyan">{link.label}</span>
                 <span className="mt-1 block text-caption leading-relaxed">{link.detail}</span>
               </Link>

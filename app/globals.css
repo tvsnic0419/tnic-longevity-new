@@ -5796,3 +5796,260 @@ p,
 @media (prefers-reduced-motion: reduce) {
   .nico-step { transition: none; }
 }
+
+/* ============================================================================
+   Design System v10 — Sitewide Glass Material
+   ----------------------------------------------------------------------------
+   v8 Deep Glass remains the heavy layered-plane recipe (budget 1–2 true
+   backdrop-filter moments per page). v10 gives every surface the *optical
+   language* of glass so chrome, cards, inputs, overlays and the footer read
+   as one material rather than a mix of flat fills and one-off frost.
+
+   Performance: .premium-card does NOT gain backdrop-filter. The /library
+   grid is 100 cards; blur there is the thing §16 measured. Cards get the
+   glass LOOK via refractive rim + inner specular + frost wash over
+   --card-ground, so molecule linework still cannot cross a sentence (§13).
+   Chrome and overlays get the real blur.
+   ========================================================================== */
+
+:root {
+  --glass-inner-highlight: inset 0 1px 0 color-mix(in srgb, var(--glass-edge-specular) 70%, transparent);
+  --glass-inner-shade: inset 0 -1px 0 color-mix(in srgb, var(--glass-edge-shadow) 45%, transparent);
+  --glass-rim: 0 0 0 1px color-mix(in srgb, var(--glass-edge-cool) 42%, transparent);
+  --glass-chrome-blur: 22px;
+  --glass-chrome-fill: color-mix(in srgb, var(--color-bg-base) 74%, transparent);
+}
+
+[data-theme="light"] {
+  --glass-inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  --glass-inner-shade: inset 0 -1px 0 rgba(15, 23, 42, 0.06);
+  --glass-rim: 0 0 0 1px color-mix(in srgb, var(--accent-cyan) 16%, var(--color-border-subtle));
+  --glass-chrome-fill: color-mix(in srgb, var(--color-bg-elevated) 68%, transparent);
+}
+
+/* Overlay / float chrome — command palette, modal, menus, toasts. */
+.glass-chrome {
+  background: var(--glass-chrome-fill);
+  backdrop-filter: blur(var(--glass-chrome-blur)) saturate(1.45);
+  -webkit-backdrop-filter: blur(var(--glass-chrome-blur)) saturate(1.45);
+  border: 1px solid color-mix(in srgb, var(--glass-edge-cool) 38%, var(--glass-border));
+  box-shadow:
+    var(--glass-inner-highlight),
+    var(--glass-shadow-float);
+}
+
+/* Lightweight glass (.glass) — inputs, small panels, secondary buttons. */
+.glass {
+  background: color-mix(in srgb, var(--glass-bg) 88%, transparent);
+  backdrop-filter: blur(var(--glass-blur-mid)) saturate(1.28);
+  -webkit-backdrop-filter: blur(var(--glass-blur-mid)) saturate(1.28);
+  border: 1px solid color-mix(in srgb, var(--glass-edge-cool) 28%, var(--glass-border));
+  box-shadow: var(--glass-inner-highlight), var(--glass-inner-shade);
+}
+
+/* Deep Glass planes — richer refraction, same budget. Plane shadows stay
+   on .glass-plane-* so field/mid/float elevation is not flattened. */
+.glass-deep {
+  backdrop-filter: blur(var(--glass-blur, 24px)) saturate(1.42);
+  -webkit-backdrop-filter: blur(var(--glass-blur, 24px)) saturate(1.42);
+}
+.glass-plane-field {
+  box-shadow: var(--glass-inner-highlight), var(--glass-shadow-field);
+}
+.glass-plane-mid {
+  box-shadow: var(--glass-inner-highlight), var(--glass-shadow-mid);
+}
+.glass-plane-content {
+  box-shadow: var(--glass-inner-highlight), var(--glass-shadow-content);
+}
+.glass-plane-float {
+  box-shadow: var(--glass-inner-highlight), var(--glass-shadow-float);
+}
+
+/* Content cards — glass look, grounded fill. No extra blur. */
+.premium-card {
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--card-accent) 58%, transparent), transparent) 0 0 / 100% 1px no-repeat,
+    linear-gradient(180deg, color-mix(in srgb, #ffffff 7.5%, transparent), color-mix(in srgb, #ffffff 1.2%, transparent) 38%, transparent 70%),
+    var(--card-ground);
+  border-color: color-mix(in srgb, var(--glass-edge-cool) 22%, var(--color-border-subtle));
+  box-shadow:
+    var(--glass-inner-highlight),
+    var(--glass-inner-shade),
+    var(--glass-rim),
+    var(--glass-shadow-field);
+}
+.premium-card:hover {
+  border-color: color-mix(in srgb, var(--card-accent) 48%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 14%, transparent),
+    var(--glass-inner-shade),
+    0 0 0 1px color-mix(in srgb, var(--card-accent) 28%, transparent),
+    0 24px 60px -28px color-mix(in srgb, var(--card-accent) 55%, transparent),
+    var(--glass-shadow-content);
+}
+.premium-card:active {
+  transform: translateY(-2px) scale(0.992);
+}
+
+[data-theme="light"] .premium-card {
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--card-accent) 42%, transparent), transparent) 0 0 / 100% 1px no-repeat,
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.18) 46%, transparent),
+    var(--card-ground);
+  box-shadow:
+    var(--glass-inner-highlight),
+    var(--glass-rim),
+    var(--glass-shadow-mid);
+}
+
+.card-elevated {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, #ffffff 5%, transparent), transparent 42%),
+    var(--color-bg-elevated);
+  box-shadow:
+    var(--glass-inner-highlight),
+    var(--glass-shadow-mid);
+}
+
+.tnic-glass {
+  box-shadow:
+    var(--glass-inner-highlight),
+    var(--glass-shadow-mid);
+}
+
+/* Navigation — frost wash + inner catch, still opaque enough that section
+   numerals cannot collide with links if blur is defeated by a stacking context. */
+.nav-glass {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--glass-edge-specular) 14%, transparent), transparent 52%),
+    color-mix(in srgb, var(--color-bg-base) 84%, transparent);
+  backdrop-filter: blur(24px) saturate(1.55);
+  -webkit-backdrop-filter: blur(24px) saturate(1.55);
+  box-shadow: var(--glass-inner-highlight);
+}
+.nav-glass-scrolled {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--glass-edge-specular) 10%, transparent), transparent 40%),
+    color-mix(in srgb, var(--color-bg-base) 94%, transparent);
+  backdrop-filter: blur(22px) saturate(1.5);
+  -webkit-backdrop-filter: blur(22px) saturate(1.5);
+}
+
+[data-theme="light"] .nav-glass {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.55), transparent 50%),
+    color-mix(in srgb, var(--color-bg-elevated) 82%, transparent);
+}
+[data-theme="light"] .nav-glass-scrolled {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.7), transparent 46%),
+    color-mix(in srgb, var(--color-bg-elevated) 90%, transparent);
+}
+
+/* Recessed glass wells. */
+.input-base {
+  background: color-mix(in srgb, var(--glass-bg) 72%, transparent);
+  backdrop-filter: blur(12px) saturate(1.12);
+  -webkit-backdrop-filter: blur(12px) saturate(1.12);
+  border-color: color-mix(in srgb, var(--glass-edge-cool) 22%, var(--color-border-strong));
+  box-shadow:
+    var(--glass-inner-highlight),
+    inset 0 2px 8px color-mix(in srgb, var(--glass-edge-shadow) 28%, transparent);
+}
+.input-base:focus-visible {
+  border-color: color-mix(in srgb, var(--accent-cyan) 55%, transparent);
+  box-shadow:
+    var(--glass-inner-highlight),
+    0 0 0 3px color-mix(in srgb, var(--accent-cyan) 14%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--accent-cyan) 18%, transparent);
+}
+
+/* Sticky table chrome. */
+.table-base thead th {
+  background: color-mix(in srgb, var(--color-bg-elevated) 78%, transparent);
+  backdrop-filter: blur(12px) saturate(1.12);
+  -webkit-backdrop-filter: blur(12px) saturate(1.12);
+  box-shadow: var(--glass-inner-highlight);
+}
+
+/* Footer — raised glass plane, not a flat slab. */
+.footer-aurora {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 100%, color-mix(in srgb, var(--accent-cyan) 10%, transparent), transparent),
+    radial-gradient(ellipse 60% 40% at 20% 80%, color-mix(in srgb, var(--accent-violet) 6%, transparent), transparent),
+    color-mix(in srgb, var(--color-bg-elevated) 58%, transparent);
+  backdrop-filter: blur(20px) saturate(1.22);
+  -webkit-backdrop-filter: blur(20px) saturate(1.22);
+  box-shadow:
+    var(--glass-inner-highlight),
+    var(--footer-lift-shadow);
+}
+
+/* Persistent workspace cue. */
+.context-bar {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--glass-edge-specular) 8%, transparent), transparent 70%),
+    color-mix(in srgb, var(--color-bg-base) 78%, transparent);
+  backdrop-filter: blur(18px) saturate(1.35);
+  -webkit-backdrop-filter: blur(18px) saturate(1.35);
+  box-shadow: var(--glass-inner-highlight), 0 12px 30px -26px color-mix(in srgb, #000 72%, transparent);
+}
+
+/* Ghost / outline / chip — same material as the rest of the chrome. */
+.btn-ghost-premium,
+.tnic-button-outline {
+  background: color-mix(in srgb, var(--glass-bg) 70%, transparent);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  box-shadow: var(--glass-inner-highlight);
+}
+.tnic-chip {
+  backdrop-filter: blur(8px) saturate(1.1);
+  -webkit-backdrop-filter: blur(8px) saturate(1.1);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #ffffff 10%, transparent);
+}
+.tnic-button-secondary {
+  background: color-mix(in srgb, #ffffff 8%, transparent);
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  box-shadow: var(--glass-inner-highlight);
+}
+
+.stat-card-hero {
+  backdrop-filter: blur(22px) saturate(1.35);
+  -webkit-backdrop-filter: blur(22px) saturate(1.35);
+}
+
+/* Overlay dim — more of the world shows through so the glass panel reads. */
+.glass-overlay {
+  background: color-mix(in srgb, var(--color-bg-base) 52%, transparent);
+  backdrop-filter: blur(10px) saturate(1.15);
+  -webkit-backdrop-filter: blur(10px) saturate(1.15);
+}
+
+@media (max-width: 767px) {
+  .glass,
+  .glass-chrome,
+  .input-base,
+  .footer-aurora,
+  .context-bar,
+  .btn-ghost-premium,
+  .tnic-button-outline {
+    backdrop-filter: blur(10px) saturate(1.12);
+    -webkit-backdrop-filter: blur(10px) saturate(1.12);
+  }
+  .nav-glass,
+  .nav-glass-scrolled {
+    backdrop-filter: blur(14px) saturate(1.25);
+    -webkit-backdrop-filter: blur(14px) saturate(1.25);
+  }
+  .table-base thead th {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .premium-card:active { transform: none; }
+}

@@ -94,11 +94,13 @@ export default function RootLayout({
           offset={{ bottom: '5rem' }}
           theme="dark"
           toastOptions={{
+            className: 'glass-chrome',
             style: {
-              background: 'rgba(17, 24, 39, 0.95)',
-              border: '1px solid rgba(255,255,255,0.08)',
-              color: '#f8fafc',
-              backdropFilter: 'blur(20px)',
+              background: 'var(--glass-chrome-fill)',
+              border: '1px solid color-mix(in srgb, var(--glass-edge-cool) 38%, var(--glass-border))',
+              color: 'var(--color-text-primary)',
+              backdropFilter: 'blur(var(--glass-chrome-blur)) saturate(1.35)',
+              boxShadow: 'var(--glass-inner-highlight), var(--glass-shadow-float)',
             },
           }}
         />
