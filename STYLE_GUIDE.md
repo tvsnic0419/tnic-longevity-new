@@ -1,6 +1,6 @@
 # TNiC Design System & Style Guide
 
-> Version 1.4 · September 2026  
+> Version 1.5 · September 2026  
 > Governs typography, spacing, components, accessibility, and page patterns across tnic.help.  
 > v1.1 documents the cinematic viz family (§7, §12) that the premium hubs are built on.  
 > v1.2 corrects the drifted §2 color values, documents the signal roles, the
@@ -10,7 +10,9 @@
 > v1.3 adds §13 — the atmosphere budget, the `.action-link` control floor, and
 > the tap-target gate that enforces it.  
 > v1.4 adds §14 — what a page must say before JavaScript runs, and the route
-> audit that enforces it.
+> audit that enforces it.  
+> v1.5 adds §15 — the hub hero's two-column composition and its instrument
+> panel.
 
 ---
 
@@ -532,6 +534,62 @@ real text; and across routes: every internal link target resolves, and every
 route is linked from somewhere. It runs in CI after the build and **fails the
 build** on any of those. Run it before and after any change to a page shell,
 a layout, or a client island's boundary.
+
+---
+
+## 15. Hub hero composition
+
+*Added v1.5, from measuring the rendered hero at 1440×900 on all eleven hubs.*
+
+`CinematicHubHero` was a single left-aligned column — eyebrow, title, lead,
+stat rail, actions — with roughly **45% of the first viewport left empty** on
+every hub. The `MoleculeStage` field that was meant to occupy it sat at 0.34
+opacity behind a veil, masked toward the centre (i.e. behind the copy), and
+read as nothing. The component was named cinematic and rendered a void.
+
+The site already had the answer. Hallmark pages pair their copy with a real
+figure on the right — coverage ring, ranked interventions, biomarker chips —
+and are the strongest visual on the site. The hero now does the same thing.
+
+### The composition
+
+```
+< 1024px   one column (unchanged — the copy already fills the width)
+
+≥ 1024px   ┌──────────────────────┬─────────────────────┐
+           │ eyebrow              │                     │
+           │ title                │   instrument panel  │   row 1
+           │ lead                 │   + mono caption    │
+           │ actions              │                     │
+           ├──────────────────────┴─────────────────────┤
+           │ stat rail — spans both columns              │   row 2
+           └─────────────────────────────────────────────┘
+```
+
+Rows are **pinned explicitly** (`grid-row: 1` / `grid-row: 2`). The stat rail
+spans `1 / -1`, so leaving placement to auto-flow drops the figure onto a third
+row under the rail instead of beside the copy.
+
+The rail's `width: min(100%, 50rem)` cap is right for a single-column hero and
+wrong when it spans both, so the override is scoped through the parent
+(`.research-hero__inner .research-hero__stats`) — a media query adds no
+specificity, and the base rule is defined later in the file.
+
+### The panel
+
+Same framing language as the homepage's live-visual panels: bordered plane,
+accent light-catch hairline along the top edge, real elevation, canvas masked
+so it fades into the panel rather than ending on a hard edge, and a **mono
+caption that names what the visual is**.
+
+The caption is load-bearing, not decoration. A site that grades evidence has to
+say whether a picture is data or atmosphere — the default reads
+`Molecular field · decorative`. A hub with a real data figure passes it via the
+`figure` prop and captions it accordingly.
+
+With the panel carrying the right column, the background field's job changes
+from "fill the void" to "texture the ground": at ≥1024px it drops to 0.26 and
+its mask moves left, behind the copy, so it no longer competes with the panel.
 
 ---
 

@@ -153,9 +153,9 @@ export function CompoundExplorer({
                       {m.title}
                     </h3>
                   </Link>
-                  <p className="mt-0.5 line-clamp-2 flex-1 text-xs text-muted-foreground">{m.tagline}</p>
+                  <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">{m.tagline}</p>
                   {chips.length > 0 && (
-                    <div className="relative z-10 mt-2 flex flex-wrap gap-x-1 gap-y-1.5">
+                    <div className="relative z-10 mt-auto pt-2 flex flex-wrap gap-x-1 gap-y-1.5">
                       {chips.map((h) => (
                         <Link
                           key={h.id}
