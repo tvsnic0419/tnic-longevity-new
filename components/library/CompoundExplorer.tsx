@@ -171,7 +171,7 @@ export function CompoundExplorer({
                         <Link
                           key={h.id}
                           href={`/hallmarks/${h.slug}`}
-                          className="focus-ring inline-flex min-h-6 items-center rounded border border-border/60 bg-card/40 px-2 py-0.5 text-micro font-medium text-muted-foreground transition-colors hover:border-accent-violet/40 hover:text-accent-violet"
+                          className="focus-ring inline-flex min-h-6 items-center rounded surface-well px-2 py-0.5 text-micro font-medium text-muted-foreground transition-colors hover:border-accent-violet/40 hover:text-accent-violet"
                         >
                           {h.title}
                         </Link>

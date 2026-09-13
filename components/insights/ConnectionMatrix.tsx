@@ -32,7 +32,7 @@ export function ConnectionMatrix() {
         </span>
       </div>
 
-      <div className="scroll-region rounded-2xl border border-border/70 bg-card/30">
+      <div className="scroll-region rounded-2xl surface-well">
         <table className="w-full border-collapse text-left">
           <caption className="sr-only">
             Fully-graded compounds (rows, with their pathway and evidence tier) mapped to the twelve

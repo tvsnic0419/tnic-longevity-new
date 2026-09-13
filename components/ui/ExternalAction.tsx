@@ -41,7 +41,7 @@ const variantStyles: Record<ExternalActionVariant, string> = {
   solid:
     'inline-flex items-center justify-center gap-1.5 rounded-xl bg-accent-emerald/15 px-4 py-2.5 text-sm font-semibold text-accent-emerald transition-colors hover:bg-accent-emerald/25 min-h-[var(--space-touch)]',
   outline:
-    'inline-flex items-center justify-center gap-1.5 rounded-xl border border-border/70 px-4 py-2.5 text-sm font-semibold text-[var(--color-text-secondary)] transition-colors hover:border-accent-cyan/40 hover:text-accent-cyan min-h-[var(--space-touch)]',
+    'inline-flex items-center justify-center gap-1.5 rounded-xl surface-well px-4 py-2.5 text-sm font-semibold text-[var(--color-text-secondary)] transition-colors hover:border-accent-cyan/40 hover:text-accent-cyan min-h-[var(--space-touch)]',
   inline: 'inline-flex items-center gap-1 text-xs text-accent-emerald',
 };
 

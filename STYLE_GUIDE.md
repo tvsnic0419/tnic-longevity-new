@@ -1,6 +1,6 @@
 # TNiC Design System & Style Guide
 
-> Version 1.8 · September 2026  
+> Version 1.9 · September 2026  
 > Governs typography, spacing, components, accessibility, and page patterns across tnic.help.  
 > v1.1 documents the cinematic viz family (§7, §12) that the premium hubs are built on.  
 > v1.2 corrects the drifted §2 color values, documents the signal roles, the
@@ -19,7 +19,10 @@
 > hub-hero data figure, and the HUD / table / selection tokens that travel
 > with them.  
 > v1.8 adds §18 — sitewide glass material: chrome is frost, cards are grounded
-> glass-look, overlays share `.glass-chrome`.
+> glass-look, overlays share `.glass-chrome`.  
+> v1.9 adds §19 — the surface ladder (`.surface-well` / `.surface-track`) and
+> the quieter motion recipe so leftover fills and competing hovers read as one
+> product.
 
 ---
 
@@ -773,6 +776,31 @@ sentence, the card ground has been punctured. Do not "fix" that by putting
 
 Phone budget: chrome blur halves under 768px; sticky table headers drop blur
 entirely. `prefers-reduced-motion` still kills card lift.
+
+---
+
+## 19. Surface ladder and motion (coherence)
+
+*Added v1.9. Same theme. One product, not several fills.*
+
+| Layer | Class | Use |
+|---|---|---|
+| Page | `--color-bg-base` + ambient field | The canvas |
+| Nested well | `.surface-well` | Chips, inset panels, filter groups, compact tiles. **No blur.** |
+| Segmented track | `.surface-track` | TabBar, theme toggle — one well, inner pills |
+| Content card | `.premium-card` | Browse cards, accordions, science panels. Grounded glass-look |
+| Chrome | `.nav-glass` / `.glass-chrome` | Nav, overlays, footer. Real frost |
+
+Do not invent a fourth fill (`bg-card/40`, `bg-background/25`, `bg-muted/10`,
+mixed `border-border/60–80`). Reach for `.surface-well`. Nested wells step
+down in fill so they still read as inset.
+
+**Motion is one recipe.** `--dur-fast` / `--ease-standard`. Cards lift 2px,
+not 4. No diagonal shine sweep. Press is `scale(0.98)` via `.interactive`.
+Effects are the material catching light, not a second animation language.
+
+`Field` controls use `.input-base`. `TabBar` is a segmented track. Icon-only
+surface buttons use `.glass`.
 
 ---
 

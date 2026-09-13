@@ -6,7 +6,7 @@ import type { ReactNode } from 'react';
  * the border/background/padding. Spread onto the control's className.
  */
 export const fieldControlClass =
-  'w-full rounded-xl border border-border bg-card px-4 py-3 text-sm focus-ring';
+  'input-base';
 
 interface FieldProps {
   /** Must match the control's id so the label associates with it. */

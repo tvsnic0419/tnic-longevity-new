@@ -443,7 +443,7 @@ export function SynergyNetworkGraph() {
           The graph above only surfaces edge data on hover — this table gives
           the same data to anyone who doesn't want the interaction (or can't
           use it), matching ConnectionMatrix.tsx's established idiom. */}
-      <div className="mt-6 scroll-region rounded-2xl border border-border/70 bg-card/30">
+      <div className="mt-6 scroll-region rounded-2xl surface-well">
         <table className="w-full border-collapse text-left">
           <caption className="sr-only">
             All {EDGES.length} synergy connections in this network, with strength and mechanism.

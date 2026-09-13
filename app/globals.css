@@ -6053,3 +6053,105 @@ p,
 @media (prefers-reduced-motion: reduce) {
   .premium-card:active { transform: none; }
 }
+
+/* ============================================================================
+   Design System v11 — Coherence
+   ----------------------------------------------------------------------------
+   Same theme. One surface ladder, one motion recipe, one well. The leftover
+   fills (bg-card/40, bg-background/25, bg-muted/10, mixed border opacities)
+   made the site feel like several products. v11 names the nested well and
+   quiets card motion so glass reads as material, not as an effect.
+   ========================================================================== */
+
+.surface-well {
+  background: color-mix(in srgb, var(--glass-bg) 48%, transparent);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--glass-inner-highlight);
+}
+[data-theme="light"] .surface-well {
+  background: color-mix(in srgb, var(--color-bg-elevated) 78%, var(--color-bg-muted));
+}
+
+/* Segmented tracks (TabBar, theme toggle) — one well, inner pills. */
+.surface-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  max-width: 100%;
+  border-radius: var(--radius-2xl);
+  background: color-mix(in srgb, var(--glass-bg) 48%, transparent);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--glass-inner-highlight);
+}
+.surface-well .surface-well {
+  background: color-mix(in srgb, var(--glass-bg) 28%, transparent);
+}
+
+/* Quieter, professional card motion. 4px lift + diagonal shine on every
+   content card was a tell; 2px lift and the static inner highlight is enough. */
+.premium-card {
+  transition:
+    transform var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    box-shadow var(--dur-fast) var(--ease-standard);
+}
+.premium-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 12%, transparent),
+    var(--glass-inner-shade),
+    0 0 0 1px color-mix(in srgb, var(--card-accent) 22%, transparent),
+    0 16px 36px -24px color-mix(in srgb, var(--card-accent) 32%, transparent),
+    var(--glass-shadow-mid);
+}
+.premium-card:active {
+  transform: translateY(-1px) scale(0.995);
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .premium-card:hover::before {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+.glass-hover { transition: transform var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard), background-color var(--dur-fast) var(--ease-standard); }
+@media (hover: hover) {
+  .glass-hover:not(.glass-deep):hover {
+    transform: translateY(-2px);
+    background: color-mix(in srgb, var(--glass-bg) 92%, var(--accent-cyan) 3%);
+    border-color: color-mix(in srgb, var(--accent-cyan) 22%, var(--glass-border));
+    box-shadow:
+      var(--glass-inner-highlight),
+      0 10px 28px -14px rgba(0, 0, 0, 0.18);
+  }
+}
+
+.interactive {
+  transition-property: color, background-color, border-color, transform, box-shadow;
+  transition-duration: var(--dur-fast);
+  transition-timing-function: var(--ease-standard);
+}
+.interactive:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.stat-instrument {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, #ffffff 5.5%, transparent), transparent 55%),
+    color-mix(in srgb, var(--glass-bg) 42%, transparent);
+  border-color: var(--color-border-subtle);
+  box-shadow: var(--glass-inner-highlight);
+  transition: background var(--dur-base) var(--ease-standard), box-shadow var(--dur-base) var(--ease-standard);
+}
+
+.heading-accent-rule {
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent-cyan) 28%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .premium-card:hover,
+  .premium-card:active,
+  .glass-hover:hover,
+  .interactive:active { transform: none; }
+}

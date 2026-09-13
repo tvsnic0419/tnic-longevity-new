@@ -48,7 +48,7 @@ export function EvidenceTrace({
 
   return (
     <div
-      className={`flex flex-wrap items-center gap-x-2 gap-y-1.5 rounded-lg border border-border/65 bg-background/30 px-3 py-2 text-micro font-mono ${className}`}
+      className={`flex flex-wrap items-center gap-x-2 gap-y-1.5 rounded-lg surface-well px-3 py-2 text-micro font-mono ${className}`}
       aria-label={`Evidence trace: Tier ${tier}, ${meta.label}, ${sourceLabel}`}
     >
       <FileCheck2 className={`h-3.5 w-3.5 shrink-0 ${meta.tone}`} aria-hidden="true" />

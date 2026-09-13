@@ -97,7 +97,7 @@ export function SelectableChip({
           shapeStyles[shape],
           selected
             ? 'border-[var(--surface-selected-border)] bg-[var(--surface-selected)] text-accent-emerald'
-            : 'border-border/70 glass text-muted-foreground hover:border-foreground/40 hover:text-foreground',
+            : 'surface-well text-muted-foreground hover:border-foreground/40 hover:text-foreground',
           selected && accent && 'text-[var(--selected-accent)]',
           inert && 'cursor-not-allowed opacity-40',
           className,

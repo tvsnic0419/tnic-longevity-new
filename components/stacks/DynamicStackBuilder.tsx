@@ -118,7 +118,7 @@ export function DynamicStackBuilder() {
                 </div>
               </GlassPanel>
 
-              <p className="rounded-xl border border-border/60 bg-card/35 px-4 py-3 text-caption leading-relaxed text-muted-foreground">
+              <p className="rounded-xl surface-well px-4 py-3 text-caption leading-relaxed text-muted-foreground">
                 Your selected compounds, scoring, and interaction context stay visible here while you review the buyer checklist.
               </p>
             </motion.div>

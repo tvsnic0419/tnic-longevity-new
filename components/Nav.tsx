@@ -441,7 +441,7 @@ export function Nav() {
             )}
           >
             <div className="container-page py-4 flex flex-col gap-1">
-              <section className="mb-3 rounded-2xl border border-border/70 bg-background/20 p-3" aria-labelledby="quick-purpose-title">
+              <section className="mb-3 rounded-2xl surface-well p-3" aria-labelledby="quick-purpose-title">
                 <div className="mb-2 flex items-center justify-between gap-3 px-1">
                   <p id="quick-purpose-title" className="text-label text-accent-cyan">START WITH A PURPOSE</p>
                   <span className="text-micro font-mono uppercase tracking-[0.1em] text-muted-foreground">Choose a task</span>
@@ -454,7 +454,7 @@ export function Nav() {
                         key={path.href}
                         href={path.href}
                         onClick={() => setMobileOpen(false)}
-                        className="focus-ring group rounded-xl border border-border/60 bg-background/20 p-3 transition-colors hover:border-accent-cyan/35 hover:bg-accent-cyan/[0.045] last:col-span-2"
+                        className="focus-ring group rounded-xl surface-well p-3 transition-colors hover:border-accent-cyan/35 hover:bg-accent-cyan/[0.045] last:col-span-2"
                       >
                         <Icon className={cn('h-3.5 w-3.5', path.accent)} aria-hidden="true" />
                         <p className="mt-2 text-xs font-semibold leading-snug text-foreground group-hover:text-accent-cyan">{path.label}</p>
