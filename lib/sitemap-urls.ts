@@ -29,6 +29,10 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     // addresses that all canonicalize back here, so they are deliberately not
     // enumerated — listing them would be doorway-page spam, not coverage.
     { url: `${base}/library/compare/head-to-head`, lastModified, changeFrequency: 'monthly', priority: 0.84 },
+    // The whole graded library as one table. High priority: it is the index
+    // over every compound deep-dive, so it is the page a crawler should reach
+    // earliest to find the other hundred.
+    { url: `${base}/library/evidence`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/insights`, lastModified, changeFrequency: 'weekly', priority: 0.86 },
     { url: `${base}/learn`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/faq`, lastModified, changeFrequency: 'monthly', priority: 0.85 },

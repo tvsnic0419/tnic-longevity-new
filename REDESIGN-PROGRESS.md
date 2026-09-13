@@ -4,6 +4,90 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-13 (fifth pass) — the Evidence Table
+
+**The question asked:** continue UI and coherence work, add state-of-the-art
+visual and content assets, with the goal of increasing what the site is worth.
+
+**What was actually missing.** The route survey says the content architecture
+is dense — 100 compound deep-dives, 19 pathways, 18 comparisons, 9 goal pages,
+8 peptides. The gap was not more pages. It was that **the library had no index
+of itself**: 100 compounds browsable as cards, and no single view where every
+grade sits beside every other one. A reader who wants to compare the whole set
+had nowhere to go, and a crawler had no single hub linking to all 100 deep-dives.
+
+Two things were deliberately NOT built, and the reasoning matters:
+
+- **More comparison pages.** The head-to-head engine can compare any pair of
+  the 81 comparable compounds — thousands of permutations. Generating them
+  would be a doorway-page pattern that Google penalises and that would dilute
+  the 17 genuinely authored comparisons. Page count is not value.
+- **Anything authored.** Per `NOTES-COMPOUND-LIBRARY.md`, no mechanism text,
+  dose or PMID may be invented. Every field in the new page is read from a
+  registry that already publishes it on the compound's own page.
+
+**Shipped — `/library/evidence`, "The Evidence Table".**
+
+Every graded compound as one sortable, filterable row: tier, composite TNiC
+Score, score confidence, hallmark coverage, linked to its deep-dive.
+
+- **`lib/evidence-index.ts`** — a derived view, not a data file.
+  `compoundModules` for identity and tier, `computeTnicScore` for the composite
+  and its provenance, `hallmarkLibrary` for mechanism labels. Headline counts
+  are computed from the rows themselves, so a figure on the page cannot drift
+  from the table under it.
+- **It ships the gaps.** 20 of the 100 have no computable score. They stay in
+  the table marked *Not scored* rather than being dropped or given a filler
+  number — a table of 80 calling itself the library would be a quieter lie than
+  a missing row. An honesty panel in front of the table states that 57 of the
+  80 composites rest on a canonical record at **limited** confidence, and that
+  the tier — not the score — is the claim the site stands behind.
+- **Server-rendered.** A plain `useState` client component, deliberately not a
+  `useSearchParams()` one, so all 100 rows are in the initial HTML (§14).
+  Verified: 100 compound links, 101 `<tr>`, no bailout over the table.
+- Described to answer engines as a **`Dataset`**, with `variableMeasured`
+  naming each column, rather than as an Article.
+- Linked from the footer, from the compound explorer on `/library` at the point
+  a reader stops browsing and starts comparing, and added to the sitemap at
+  priority 0.9 — it is the index a crawler should reach earliest to find the
+  other hundred.
+- **8 guardrail tests** asserting the table says what the deep-dives say: same
+  tier, same score or null, no invented confidence, every row links to a real
+  module, only real hallmark names, counts derived from rows.
+
+**A design-system bug the build surfaced.** `.table-base th` styled *every*
+`th` as a column header — mono, uppercase, faint — so row headers, the
+accessible way to label a data row, rendered as uppercase mono labels.
+Three existing tables (`HeadToHeadCompare`, `SirtuinAtlas`, `ConnectionMatrix`)
+had each worked around it locally with their own overrides. Now scoped: `thead
+th` keeps the column treatment, `tbody th` gets a real row-header treatment.
+Fixed once, for every table.
+
+**A guardrail caught me.** The first version declared its own tier→colour map.
+`site-integrity.test.ts` failed it — that map is canonical in `lib/trust.ts`
+and must not be re-declared. It was right; the component now imports
+`TIER_COLOR_VAR`.
+
+**Measured.** `/library/evidence`: LCP 708 ms, CLS 0.008, doc 55 KB, total
+1,113 KB encoded — lighter than `/library` despite 100 rows, because rows are
+text rather than inline SVG. axe violations 0, actionable sub-24px controls 0,
+at desktop and 390px. Route audit 228 routes, 0 fail, 0 warn.
+
+**Why this should matter commercially, stated as a hypothesis rather than a
+promise.** One page now links to all 100 deep-dives, which strengthens the
+crawl graph over the library's most valuable pages; a sortable evidence table
+is the kind of reference people cite and link to; and it routes comparison
+intent toward deep-dives that carry verified product picks. Whether that moves
+traffic or revenue is measurable in Search Console and analytics over weeks —
+it is not something this session can claim to have achieved.
+
+**Checks:** `npm run lint` 0 errors (3 pre-existing warnings) · `npm run
+typecheck` clean · `npm test` 58 files → **722 tests** (8 new) · `npm run
+build` green · `npm run audit:routes` 228 routes, 0 fail / 0 warn ·
+`npm run audit:ui` 0 actionable / 0 axe · `npm run audit:perf` within budget.
+
+**Rollback:** `git revert` the merge of this branch.
+
 ## 2026-09-13 (fourth pass) — performance, measured properly
 
 **The question asked:** start making the site state of the art.

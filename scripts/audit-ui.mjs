@@ -39,6 +39,7 @@ const PAGES = [
   '/trust',
   '/stacks',
   '/library/mitochondrial-dysfunction',
+  '/library/evidence',
 ];
 const VIEWPORTS = [
   { name: 'desktop', width: 1440, height: 900 },

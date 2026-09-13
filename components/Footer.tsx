@@ -17,6 +17,7 @@ import {
   BarChart3,
   Sparkles,
   ArrowRight,
+  Table2,
 } from 'lucide-react';
 import { POPULAR_GUIDE_LINKS } from '@/lib/index-priority';
 import { citationRegistry } from '@/lib/trust';
@@ -30,6 +31,7 @@ const hubLinks = [
   { href: '/dashboard', label: 'My Dashboard', icon: LayoutDashboard },
   { href: '/nico', label: 'NICO Starter Questionnaire', icon: HelpCircle },
   { href: '/library', label: 'Anti-Aging Library', icon: Library },
+  { href: '/library/evidence', label: 'The Evidence Table', icon: Table2 },
   { href: '/peptides', label: 'Peptide Library', icon: Syringe },
   { href: '/pathways', label: 'Pathways', icon: Waypoints },
   { href: '/sirtuin-atlas', label: 'Sirtuin Atlas', icon: Orbit },
