@@ -10,7 +10,7 @@ import { SITE } from '@/lib/site';
 // Keep the sitemap's default freshness aligned with the current editorial release.
 // Authenticated or utility-only surfaces are excluded below so crawl equity stays
 // concentrated on public, search-intent pages.
-export const DEFAULT_SITEMAP_LAST_MODIFIED = new Date('2026-08-27T00:00:00.000Z');
+export const DEFAULT_SITEMAP_LAST_MODIFIED = new Date('2026-09-13T00:00:00.000Z');
 
 export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED): MetadataRoute.Sitemap {
   const base = SITE.url;

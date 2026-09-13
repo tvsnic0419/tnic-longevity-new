@@ -4,7 +4,74 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-13 (sixth pass) — the library tells the truth about itself
+
+**The question asked:** independently determine and ship the most significant
+upgrades, rather than wait on an external patch.
+
+**What was actually missing.** Five passes today already gave the library an
+evidence table, a molecule-first grid, a two-column hero shell, and a route
+audit. The remaining hole was identity, not features. Measured against live
+HTML of `/library`:
+
+- The `<h1>` was still "The 12 Hallmarks of Aging", rendered *below* the
+  100-card compound grid, because `AntiAgingLibrary asPageTitle` owned the
+  heading and `CinematicHubHero` left `titleAsHeading` off.
+- The `<title>` and hero lead named the hallmarks as the product. The page
+  the visitor was looking at is the compound library.
+- The hero's right-hand instrument panel — built this morning so eleven hubs
+  would stop shipping 45% empty viewport — still showed the decorative
+  molecular field on the one hub that has a real, derived evidence split.
+- `/library/compare/head-to-head` (canonical, no query) shipped identity and
+  a skeleton. The default comparison (resveratrol vs pterostilbene) lived
+  behind the `searchParams` island, so the indexable address had ~675
+  characters of `<main>` text.
+- Sitemap `lastmod` was frozen at 2026-08-27, seventeen days and five
+  production merges behind.
+
+**Deliberately not done, and why.**
+
+- Scoring the 20 compounds the Evidence Table marks *Not scored*. They have
+  no `compoundId` in the structured set. Promoting them would mean inventing
+  mechanism/dose/PMID fields, which `NOTES-COMPOUND-LIBRARY.md` forbids.
+- Turning 100 inline molecule SVGs into `<img>` thumbs. It would cut `/library`
+  HTML roughly in half, and it would also stop the thumbs inheriting
+  `currentColor` across themes. Visuals were the stated priority of the
+  surrounding work; that regression is still not worth the bytes today.
+- Authoring new synergy-pair prose. Coverage is already 51/51 pair-specific
+  (`synergy-coverage` floor). The upgrade plan's 19.6% figure is stale.
+
+**Shipped.**
+
+- **Library identity.** Hero is the `<h1>` ("Every intervention, graded").
+  Title, description and lead name the `${COMPOUND_COUNT}`-compound library.
+  Hallmark atlas is the second chapter (`h2`), with its local search hidden
+  because the hub already has one. Hallmark count derived from
+  `hallmarkLibrary.length`, never a literal `12`.
+- **A real instrument in the hero.** `LibraryHeroInstrument` draws the A/B/C
+  split and the scored/unscored counts from `evidenceIndexStats()`, colours
+  from `TIER_COLOR_VAR`, and links to the Evidence Table. The hero's
+  atmospheric radial mask is skipped when a data figure is passed
+  (`.research-hero__figure-stage--data`) so labels stay readable.
+- **CollectionPage JSON-LD** on `/library`, with `numberOfItems` derived.
+- **Head-to-head canonical URL.** The Suspense fallback is now the default
+  pair's full comparison, not a skeleton. Crawlers get the duel. When the
+  island resolves to that same pair, nothing flashes. Parameterized URLs
+  still swap; they canonicalise here and are not in the sitemap.
+- **Sitemap `lastmod`** aligned to 2026-09-13.
+- **Atlas copy.** The visual-gallery chapter dropped "COMPLETE VISUAL SYSTEM"
+  / "Hover to explore" for derived hallmark count and a sentence that states
+  the honesty point (first-party mechanism drawings, no stock art).
+
+**Checks.** Run on this branch before the PR: lint, typecheck, the test
+suite including the new identity / fallback / lastmod guards, and a
+production HTML spot-check of `/library` (one `<h1>`, compounds in the
+title) and `/library/compare/head-to-head` (default pair in `<main>`).
+
+**Rollback:** `git revert` the merge of this branch.
+
 ## 2026-09-13 (fifth pass) — the Evidence Table
+
 
 **The question asked:** continue UI and coherence work, add state-of-the-art
 visual and content assets, with the goal of increasing what the site is worth.

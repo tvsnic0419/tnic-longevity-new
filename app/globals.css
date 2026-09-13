@@ -4775,6 +4775,18 @@ p,
   mask-image: radial-gradient(78% 82% at 50% 46%, #000 32%, transparent 88%);
 }
 
+/* Data figures have to be fully readable — the radial mask is for atmosphere
+   (the molecular field), not for numbers and labels. Drop it, drop the forced
+   4/3, and pad so the instrument sits inside the frame instead of bleeding
+   into the caption hairline. */
+.research-hero__figure-stage--data {
+  aspect-ratio: auto;
+  min-height: 17rem;
+  -webkit-mask-image: none;
+  mask-image: none;
+  padding: 1.25rem 1.35rem 0.5rem;
+}
+
 .research-hero__figure-cap {
   margin: 0;
   padding: 0.75rem 1.125rem 0.9rem;
