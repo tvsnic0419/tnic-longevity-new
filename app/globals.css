@@ -2044,17 +2044,57 @@ p,
 .brand-mark {
   display: inline-flex;
   align-items: center;
+  /* Requested: a luminous cyan ring enclosing the whole lockup, emblem and
+     wordmark together. Built in CSS rather than burned into the PNG so it stays
+     a crisp 1.5px at every size and every pixel ratio — baked into the raster it
+     would soften as the mark scales down, which is the opposite of the sharp
+     edge asked for.
+
+     Pill radius, not a rounded rectangle: the lockup is roughly 2:1, so a full
+     radius gives the oval the brief describes and reads as deliberate chrome
+     rather than as a focus rectangle.
+
+     The glow is three static layers — a hairline border, an outer bloom, and a
+     faint inner wash. Static, not pulsing: an animated mark in fixed chrome is
+     motion the reader cannot dismiss, and it would need a reduced-motion
+     escape hatch for something that adds nothing. */
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  border: 1.5px solid color-mix(in srgb, var(--accent-cyan) 85%, transparent);
+  box-shadow:
+    0 0 14px -2px color-mix(in srgb, var(--accent-cyan) 55%, transparent),
+    0 0 30px -6px color-mix(in srgb, var(--accent-cyan) 30%, transparent),
+    inset 0 0 12px -4px color-mix(in srgb, var(--accent-cyan) 35%, transparent);
 }
 
 [data-theme='light'] .brand-mark {
-  /* Literal, not var(--color-bg-base): that token is light here, and the plate's
-     whole job is to re-create the dark ground the artwork was rendered against. */
+  /* The wordmark's silver faces run to near-white, so on the light base the
+     mark is near-white on near-white. Recoloring is not available to us — the
+     metal gradient IS the mark — so the light theme gives it back the dark
+     ground it was lit for. Literal, not var(--color-bg-base): that token is
+     light here, and re-creating the dark field is the whole point.
+     The cyan ring above carries over unchanged; only the fill is added. */
   background: #020811;
-  border-radius: 0.625rem;
-  padding: 0.3rem 0.5rem;
+  /* A cyan bloom spreads convincingly into a dark field and barely registers
+     against a light one, so the light theme trades glow for definition: the
+     border goes to full strength and the outer layers tighten into a discrete
+     halo rather than a soft falloff. Same ring, carried at equal prominence. */
+  border-color: var(--accent-cyan);
   box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--accent-cyan) 22%, transparent),
-    0 6px 20px -12px rgb(2 8 17 / 0.55);
+    0 0 0 2.5px color-mix(in srgb, var(--accent-cyan) 26%, transparent),
+    0 0 16px -1px color-mix(in srgb, var(--accent-cyan) 60%, transparent),
+    0 6px 20px -12px rgb(2 8 17 / 0.55),
+    inset 0 0 12px -4px color-mix(in srgb, var(--accent-cyan) 30%, transparent);
+}
+
+/* The mark now wears a cyan ring at rest, so the default cyan focus ring would
+   land as "slightly more cyan" — not a state change a keyboard user can see.
+   The logo link therefore takes a distinct focus treatment: a white outline,
+   pushed further out so it reads as a separate ring around the brand ring. */
+.brand-link:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 5px;
+  box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent-cyan) 22%, transparent);
 }
 
 /* ── Scroll progress glow ── */

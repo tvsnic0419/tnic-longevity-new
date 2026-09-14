@@ -289,7 +289,7 @@ export function Nav() {
         <div ref={logoRef} className="flex items-center gap-2.5 shrink-0">
           <Link
             href="/"
-            className="focus-ring interactive flex items-center rounded-xl group transition-transform hover:scale-[1.02]"
+            className="focus-ring brand-link interactive flex items-center rounded-full group transition-transform hover:scale-[1.02]"
           >
             <Logo
               variant="lockup"

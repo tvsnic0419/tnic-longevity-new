@@ -35,7 +35,7 @@ const ASSETS = {
  * about 32px, and the emblem's strand turns to mush below about 28px.
  */
 const heightClass: Record<NonNullable<LogoProps['size']>, string> = {
-  nav: 'h-9 md:h-11',
+  nav: 'h-8 md:h-10',
   sm: 'h-8',
   md: 'h-12 md:h-14',
   lg: 'h-16 md:h-20',
