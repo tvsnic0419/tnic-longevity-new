@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { DepthBarChart } from '@/components/ui/DepthBarChart';
 
 /**
  * Smoke-test the diligence bar instrument: renders without throw and exposes
- * an accessible chart surface. Full Recharts layout is measured in jsdom loosely.
+ * a chart surface. Full Recharts layout is measured loosely in jsdom.
  */
 describe('DepthBarChart', () => {
   it('renders with sample ranking data', () => {
@@ -22,7 +22,6 @@ describe('DepthBarChart', () => {
     );
 
     expect(container.querySelector('.depth-bar-chart')).toBeTruthy();
-    // Recharts mounts an svg (or role=application wrapper depending on version)
     const svg = container.querySelector('svg');
     expect(svg || container.querySelector('[class*="recharts"]')).toBeTruthy();
   });

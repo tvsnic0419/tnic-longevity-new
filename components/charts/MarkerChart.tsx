@@ -1,4 +1,7 @@
 'use client';
+/* eslint-disable react-hooks/set-state-in-effect --
+   prefers-reduced-motion can only be read client-side (matchMedia). Initial
+   setState after mount is intentional and not derivable during SSR. */
 
 import { useId, useEffect, useState } from 'react';
 import { biomarkers } from '@/lib/data';
@@ -93,7 +96,6 @@ export function MarkerChart({ markerId, entries, height = 120 }: MarkerChartProp
         <VizBarGroundShadow id={groundId} />
       </defs>
 
-      {/* Micro-grid ticks — instrument chrome */}
       {[0.25, 0.5, 0.75].map((t) => {
         const y = pad + chartH * (1 - t);
         return (
@@ -145,7 +147,6 @@ export function MarkerChart({ markerId, entries, height = 120 }: MarkerChartProp
         );
       })}
 
-      {/* Volumetric latest-value column — grounds the reading as an instrument */}
       <ellipse
         cx={barX + barW / 2}
         cy={baseY + 1}
@@ -174,7 +175,6 @@ export function MarkerChart({ markerId, entries, height = 120 }: MarkerChartProp
           style={{ pointerEvents: 'none' }}
         />
       )}
-      {/* Top specular cap */}
       <rect
         x={barX + 1}
         y={barTop}
