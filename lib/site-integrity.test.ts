@@ -70,7 +70,10 @@ describe('site data integrity', () => {
     expect(home).toContain('No pay-for-placement');
     expect(cards).toContain('Read evidence');
     expect(cards).toContain('after evidence review');
-    expect(footer).toContain('Start with the question you actually have.');
+    // Footer manifesto after Phase 1 uplift — keep CTAs + independence claim pinned.
+    expect(footer).toContain('Independent longevity intelligence');
+    expect(footer).toContain('Start the NICO Questionnaire');
+    expect(footer).toContain('Explore the evidence library');
     expect(guideHub).toContain("title: 'Longevity Supplement Guides 2026 — Evidence-Based Deep Dives'");
   });
 
