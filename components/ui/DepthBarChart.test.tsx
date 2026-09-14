@@ -1,3 +1,4 @@
+/** @vitest-environment jsdom */
 import { describe, expect, it } from 'vitest';
 import { render } from '@testing-library/react';
 import { DepthBarChart } from '@/components/ui/DepthBarChart';
@@ -27,7 +28,7 @@ describe('DepthBarChart', () => {
   });
 
   it('accepts vertical layout without crashing', () => {
-    render(
+    const { container } = render(
       <DepthBarChart
         layout="vertical"
         data={[
@@ -37,6 +38,6 @@ describe('DepthBarChart', () => {
         valueLabel="Priority"
       />,
     );
-    expect(document.body.textContent).toBeTruthy();
+    expect(container.querySelector('.depth-bar-chart')).toBeTruthy();
   });
 });
