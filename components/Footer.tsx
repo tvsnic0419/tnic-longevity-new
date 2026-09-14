@@ -142,7 +142,7 @@ export function Footer() {
             {/* No aria-label here — see the matching comment in Nav.tsx. */}
             <Link
               href="/"
-              className="focus-ring inline-flex items-center mb-4 rounded-xl group transition-transform hover:scale-[1.02]"
+              className="focus-ring brand-link inline-flex items-center mb-4 rounded-full group transition-transform hover:scale-[1.02]"
             >
               <Logo variant="lockup" size="md" alt="TNiC – Transformative Nutrition in Cell-Health · Home" />
             </Link>
