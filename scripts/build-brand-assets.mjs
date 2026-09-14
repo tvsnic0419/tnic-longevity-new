@@ -68,6 +68,29 @@ const TARGETS = [
   { name: 'tnic-emblem.png', boxes: [EMBLEM], width: 400 },
 ];
 
+/** The brand's dark ground. App icons are opaque — platforms composite them on
+ *  arbitrary wallpapers, so a transparent icon is at the mercy of the backdrop. */
+const PLATE = { r: 2, g: 8, b: 17, alpha: 1 };
+
+/**
+ * Icon set. `inset` is the emblem's height as a fraction of the canvas.
+ *
+ * `radius` is the corner rounding as a fraction of canvas width; `null` means
+ * full-bleed square, which is what a maskable icon must be — the platform
+ * applies its own mask and will crop to an inscribed circle on some launchers.
+ * That is why the maskable variant is inset much further: everything outside
+ * the middle ~80% is treated as losable.
+ */
+const ICONS = [
+  { file: 'public/icon-192.png', size: 192, inset: 0.72, radius: 0.22 },
+  { file: 'public/icon-512.png', size: 512, inset: 0.72, radius: 0.22 },
+  { file: 'public/icon-maskable-512.png', size: 512, inset: 0.56, radius: null },
+  { file: 'app/icon.png', size: 512, inset: 0.72, radius: 0.22 },
+];
+
+/** Sizes packed into favicon.ico. 16/32 are what browsers actually request. */
+const FAVICON_SIZES = [16, 32, 48];
+
 const within = (box, x, y) => x >= box.x0 && x <= box.x1 && y >= box.y0 && y <= box.y1;
 
 async function loadSource() {
@@ -112,17 +135,74 @@ async function render({ boxes, width: targetWidth }, src) {
 
 const sha = (buf) => createHash('sha256').update(buf).digest('hex').slice(0, 12);
 
+/**
+ * Compose one app icon: the emblem centred on the brand plate, optionally with
+ * rounded corners. The emblem is sized by height (it is taller than it is wide)
+ * so `inset` means the same thing regardless of the mark's aspect.
+ */
+async function renderIcon(emblemPng, { size, inset, radius }) {
+  const mark = await sharp(emblemPng)
+    .resize({ height: Math.round(size * inset), fit: 'inside', kernel: 'lanczos3' })
+    .toBuffer();
+  const markMeta = await sharp(mark).metadata();
+
+  let plate = sharp({ create: { width: size, height: size, channels: 4, background: PLATE } })
+    .composite([
+      {
+        input: mark,
+        top: Math.round((size - markMeta.height) / 2),
+        left: Math.round((size - markMeta.width) / 2),
+      },
+    ]);
+
+  if (radius !== null) {
+    const r = Math.round(size * radius);
+    const mask = Buffer.from(
+      `<svg width="${size}" height="${size}"><rect width="${size}" height="${size}" rx="${r}" ry="${r}" fill="#fff"/></svg>`,
+    );
+    plate = sharp(await plate.png().toBuffer()).composite([{ input: mask, blend: 'dest-in' }]);
+  }
+
+  return plate.png({ compressionLevel: 9, effort: 10 }).toBuffer();
+}
+
+/**
+ * Pack PNGs into an .ico. The format allows PNG-encoded entries outright
+ * (Vista+), which every browser in scope reads, so there is no need to emit
+ * legacy BMP/DIB bitmaps.
+ */
+function packIco(pngs) {
+  const header = Buffer.alloc(6);
+  header.writeUInt16LE(0, 0); // reserved
+  header.writeUInt16LE(1, 2); // type: icon
+  header.writeUInt16LE(pngs.length, 4);
+
+  let offset = 6 + pngs.length * 16;
+  const entries = pngs.map(({ size, buf }) => {
+    const e = Buffer.alloc(16);
+    e.writeUInt8(size >= 256 ? 0 : size, 0); // 0 encodes 256
+    e.writeUInt8(size >= 256 ? 0 : size, 1);
+    e.writeUInt8(0, 2); // palette count
+    e.writeUInt8(0, 3); // reserved
+    e.writeUInt16LE(1, 4); // colour planes
+    e.writeUInt16LE(32, 6); // bits per pixel
+    e.writeUInt32LE(buf.length, 8);
+    e.writeUInt32LE(offset, 12);
+    offset += buf.length;
+    return e;
+  });
+
+  return Buffer.concat([header, ...entries, ...pngs.map((p) => p.buf)]);
+}
+
 async function main() {
   const check = process.argv.includes('--check');
   const src = await loadSource();
   let drift = false;
 
-  for (const target of TARGETS) {
-    const buf = await render(target, src);
-    const dest = path.join(OUT_DIR, target.name);
-    const meta = await sharp(buf).metadata();
-    const label = `${target.name.padEnd(18)} ${meta.width}×${meta.height}  ${(buf.length / 1024).toFixed(0)}KB  ${sha(buf)}`;
-
+  const emit = async (relPath, buf, note = '') => {
+    const dest = path.join(ROOT, relPath);
+    const label = `${relPath.padEnd(30)} ${(buf.length / 1024).toFixed(0)}KB  ${sha(buf)}${note}`;
     if (check) {
       const current = existsSync(dest) ? await readFile(dest) : null;
       const same = current && current.equals(buf);
@@ -132,7 +212,28 @@ async function main() {
       await writeFile(dest, buf);
       console.log(`wrote  ${label}`);
     }
+  };
+
+  let emblemPng = null;
+  for (const target of TARGETS) {
+    const buf = await render(target, src);
+    const meta = await sharp(buf).metadata();
+    if (target.name === 'tnic-emblem.png') emblemPng = buf;
+    await emit(path.relative(ROOT, path.join(OUT_DIR, target.name)), buf, `  ${meta.width}×${meta.height}`);
   }
+
+  // App icons, all cut from the same emblem so tab, launcher and header agree.
+  for (const icon of ICONS) {
+    await emit(icon.file, await renderIcon(emblemPng, icon), `  ${icon.size}×${icon.size}`);
+  }
+
+  const faviconPngs = await Promise.all(
+    FAVICON_SIZES.map(async (size) => ({
+      size,
+      buf: await renderIcon(emblemPng, { size, inset: 0.82, radius: 0.18 }),
+    })),
+  );
+  await emit('app/favicon.ico', packIco(faviconPngs), `  ${FAVICON_SIZES.join('/')}`);
 
   if (check && drift) {
     console.error('\nCommitted brand assets differ from the script output.');
