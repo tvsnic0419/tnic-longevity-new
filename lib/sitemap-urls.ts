@@ -33,6 +33,10 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     // over every compound deep-dive, so it is the page a crawler should reach
     // earliest to find the other hundred.
     { url: `${base}/library/evidence`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
+    // Every study the library cites, as one dataset. Sits just under the
+    // evidence table: same index role, one level deeper — that table indexes the
+    // compounds, this one indexes the literature behind them.
+    { url: `${base}/library/trials`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/insights`, lastModified, changeFrequency: 'weekly', priority: 0.86 },
     { url: `${base}/learn`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/faq`, lastModified, changeFrequency: 'monthly', priority: 0.85 },

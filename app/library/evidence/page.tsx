@@ -130,6 +130,9 @@ export default function EvidenceIndexPage() {
         </section>
 
         <div className="mt-10 flex flex-wrap gap-3">
+          <Link href="/library/trials" className="tnic-button-outline focus-ring">
+            The Trial Index — every study cited
+          </Link>
           <Link href="/library" className="tnic-button-outline focus-ring">
             Browse the library as cards
           </Link>
