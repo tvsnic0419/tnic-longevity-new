@@ -1,120 +1,83 @@
-import type { SVGProps } from 'react';
+import Image from 'next/image';
 
 interface LogoProps {
+  /**
+   * `lockup` — emblem + NIC wordmark. The default site mark.
+   * `emblem` — emblem alone, for widths too tight for the wordmark.
+   */
   variant?: 'emblem' | 'lockup';
   size?: 'nav' | 'sm' | 'md' | 'lg' | 'hero';
   className?: string;
+  /** Set on the nav instance: the mark is above the fold on every route. */
   priority?: boolean;
   alt?: string;
 }
 
-/** Crisp vector lockup sizing: emblem tile + wordmark type scale, per size. */
-const lockupScale: Record<
-  NonNullable<LogoProps['size']>,
-  { tile: string; letter: string; word: string; gap: string }
-> = {
-  nav:  { tile: 'w-8 h-8',   letter: 'text-base', word: 'text-xl',                    gap: 'gap-2' },
-  sm:   { tile: 'w-7 h-7',   letter: 'text-sm',   word: 'text-lg',                    gap: 'gap-2' },
-  md:   { tile: 'w-9 h-9',   letter: 'text-lg',   word: 'text-2xl',                   gap: 'gap-2.5' },
-  lg:   { tile: 'w-11 h-11', letter: 'text-xl',   word: 'text-3xl',                   gap: 'gap-3' },
-  hero: { tile: 'w-12 h-12', letter: 'text-2xl',  word: 'text-4xl md:text-5xl',       gap: 'gap-3' },
+/**
+ * The mark is rendered artwork (brushed metal, neon strand, leaves), not type
+ * plus a shape, so it ships as a raster cut from the master render rather than
+ * being redrawn as SVG — redrawing it would lose the material that makes it the
+ * logo. `scripts/build-brand-assets.mjs` derives both files from
+ * `public/brand/tnic-transformative-lockup.png` and documents the method.
+ *
+ * Intrinsic sizes below are the real pixel dimensions of those files; they set
+ * the aspect ratio that reserves layout space, and the rendered box is driven by
+ * height alone (`w-auto`) so the two variants stay proportional at every size.
+ */
+const ASSETS = {
+  lockup: { src: '/brand/tnic-lockup.png', width: 760, height: 382 },
+  emblem: { src: '/brand/tnic-emblem.png', width: 400, height: 431 },
+} as const;
+
+/**
+ * Height ladder, in the same order as the rest of the type scale. The nav step
+ * is deliberately the smallest: the wordmark's counters start to fill in below
+ * about 32px, and the emblem's strand turns to mush below about 28px.
+ */
+const heightClass: Record<NonNullable<LogoProps['size']>, string> = {
+  nav: 'h-9 md:h-11',
+  sm: 'h-8',
+  md: 'h-12 md:h-14',
+  lg: 'h-16 md:h-20',
+  hero: 'h-20 md:h-24',
 };
 
-function EmblemSvg(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 80 80" fill="none" aria-hidden="true" {...props}>
-      <defs>
-        <linearGradient id="tnic-c" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#67f3ff" />
-          <stop offset="100%" stopColor="#22d3ee" />
-        </linearGradient>
-        <linearGradient id="tnic-e" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#6ee7b7" />
-          <stop offset="100%" stopColor="#34d399" />
-        </linearGradient>
-        <filter id="tnic-glow" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="1" result="blur" />
-          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-        </filter>
-      </defs>
-
-      {/* Disc — visibly different from nav background */}
-      <circle cx="40" cy="40" r="39" fill="#0e2040" />
-      {/* Bright cyan ring */}
-      <circle cx="40" cy="40" r="37.5" stroke="#22d3ee" strokeWidth="3" />
-
-      {/* Strand 1 — cyan */}
-      <path
-        d="M 26 13 C 58 21, 58 32, 26 40 C 58 48, 58 59, 26 67"
-        stroke="url(#tnic-c)" strokeWidth="4" strokeLinecap="round" fill="none"
-        filter="url(#tnic-glow)"
-      />
-      {/* Strand 2 — emerald (mirror) */}
-      <path
-        d="M 54 13 C 22 21, 22 32, 54 40 C 22 48, 22 59, 54 67"
-        stroke="url(#tnic-e)" strokeWidth="4" strokeLinecap="round" fill="none"
-        filter="url(#tnic-glow)"
-      />
-
-      {/* Base-pair rungs */}
-      <line x1="26" y1="26.5" x2="54" y2="26.5" stroke="#22d3ee" strokeWidth="2" strokeLinecap="round" />
-      <line x1="26" y1="40"   x2="54" y2="40"   stroke="#34d399" strokeWidth="2" strokeLinecap="round" />
-      <line x1="26" y1="53.5" x2="54" y2="53.5" stroke="#22d3ee" strokeWidth="2" strokeLinecap="round" />
-
-      {/* Center node */}
-      <circle cx="40" cy="40" r="3.5" fill="#22d3ee" />
-    </svg>
-  );
-}
-
-const emblemSizeClass: Record<NonNullable<LogoProps['size']>, string> = {
-  nav:  'w-12 h-12',
-  sm:   'w-8 h-8',
-  md:   'w-12 h-12',
-  lg:   'w-16 h-16 md:w-20 md:h-20',
-  hero: 'w-20 h-20',
+/**
+ * Widths requested from the image optimizer. The mark is small and detailed, so
+ * these are set at roughly 2× the largest rendered box for each step rather than
+ * left to the default responsive ladder, which would over-fetch.
+ */
+const sizesAttr: Record<NonNullable<LogoProps['size']>, string> = {
+  nav: '160px',
+  sm: '128px',
+  md: '224px',
+  lg: '320px',
+  hero: '384px',
 };
 
 export function Logo({
-  variant = 'emblem',
+  variant = 'lockup',
   size = 'md',
   className = '',
+  priority = false,
   alt,
 }: LogoProps) {
-  const altText = alt || (variant === 'lockup' ? 'TNiC – Transformative Nutrition in Cell-Health' : 'TNiC emblem');
-
-  if (variant === 'lockup') {
-    const s = lockupScale[size];
-    return (
-      <div
-        className={`inline-flex items-center ${s.gap} ${className}`}
-        role="img"
-        aria-label={altText}
-      >
-        <span
-          className={`${s.tile} shrink-0 rounded-xl bg-gradient-to-br from-[var(--accent-cyan)] to-[var(--accent-emerald)] flex items-center justify-center shadow-lg shadow-[color:var(--accent-cyan)]/20`}
-          aria-hidden="true"
-        >
-          <span className={`font-bold leading-none text-[#020811] ${s.letter}`}>T</span>
-        </span>
-        <span
-          className={`font-semibold leading-none tracking-tighter text-[var(--color-text-primary)] ${s.word}`}
-          aria-hidden="true"
-        >
-          TN<span className="text-[var(--accent-cyan)]">i</span>C
-        </span>
-      </div>
-    );
-  }
+  const asset = ASSETS[variant];
+  const altText = alt || 'TNiC – Transformative Nutrition in Cell-Health';
 
   return (
-    <div
-      className={`inline-flex items-center justify-center logo-glow rounded-xl ${className}`}
-      role="img"
-      aria-label={altText}
-    >
-      <EmblemSvg className={emblemSizeClass[size]} />
-    </div>
+    <span className={`brand-mark ${className}`}>
+      <Image
+        src={asset.src}
+        alt={altText}
+        width={asset.width}
+        height={asset.height}
+        sizes={sizesAttr[size]}
+        quality={90}
+        priority={priority}
+        className={`w-auto ${heightClass[size]}`}
+      />
+    </span>
   );
 }
 

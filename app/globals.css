@@ -2030,11 +2030,31 @@ p,
   pointer-events: none;
 }
 
-.logo-glow {
+/* ── Brand mark ──
+   The TNiC lockup is rendered artwork built for a dark field: brushed-silver
+   letterforms whose lightest faces run to near-white, and a strand that reads
+   by its own bloom. On the dark theme it sits directly on the chrome, which is
+   the surface it was lit for.
+
+   On the light theme those same silver faces land near-white on near-white and
+   the mark all but disappears. Recoloring is not an option — the metal gradient
+   IS the mark — so the light theme instead gives it back the field it needs: a
+   small dark plate, the same base tone as the dark theme's chrome. The plate is
+   scoped to the light theme only; the dark theme keeps the mark free-floating. */
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+}
+
+[data-theme='light'] .brand-mark {
+  /* Literal, not var(--color-bg-base): that token is light here, and the plate's
+     whole job is to re-create the dark ground the artwork was rendered against. */
+  background: #020811;
+  border-radius: 0.625rem;
+  padding: 0.3rem 0.5rem;
   box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--accent-cyan) 40%, transparent),
-    0 0 28px color-mix(in srgb, var(--accent-cyan) 50%, transparent),
-    0 0 56px color-mix(in srgb, var(--accent-cyan) 18%, transparent);
+    0 0 0 1px color-mix(in srgb, var(--accent-cyan) 22%, transparent),
+    0 6px 20px -12px rgb(2 8 17 / 0.55);
 }
 
 /* ── Scroll progress glow ── */
