@@ -7,12 +7,26 @@ This file is the **source of truth** for Copilot UI upgrades. Keep phases checke
 
 ---
 
+## Agent rules (mandatory)
+
+When asked to run this playbook:
+
+1. **Do not ask clarifying questions.** Do not present menus like “What would you like me to do first?”
+2. Find the **first unchecked** phase in **Phase checklist** below and start implementing it immediately.
+3. If Phase 1 is unchecked → do Phase 1 only. If Phase 1 is checked and Phase 2 is not → do Phase 2 only.
+4. Create the branch named in that phase, implement exactly, verify, update docs, open a PR to `main`, then reply with the **PR URL only** (plus a 5-bullet summary).
+5. Never start a later phase in the same run.
+
+---
+
 ## Reusable Copilot prompt (copy-paste every time)
 
 Use this **exact** prompt in GitHub Copilot Chat, Copilot coding agent, or a new issue assigned to Copilot:
 
 ```text
-Read docs/COPILOT-UI-UPGRADE.md and implement the next unchecked phase exactly as written.
+EXECUTE NOW — no questions, no menus, no “what should I do first?”
+
+Read docs/COPILOT-UI-UPGRADE.md and implement the first unchecked phase exactly as written.
 
 Rules:
 - Do not rebrand or invent evidence/data
@@ -21,18 +35,28 @@ Rules:
 - Create the branch named in that phase, commit in logical chunks, open a PR to main
 - Run: npm run lint && npm run typecheck && npm run test && npm run build
 - Update REDESIGN-PROGRESS.md and check off the phase in docs/COPILOT-UI-UPGRADE.md in the same PR
+- When done, reply with the PR URL and a short summary — nothing else
 ```
 
-That one prompt is enough for every future run. After Phase 1 and 2 are done, add a new `### Phase N` section below and say the same prompt again.
+That one prompt is enough for every future run. After Phase 1 and 2 are done, add a new phase section below and say the same prompt again.
+
+### If Copilot stalls with a menu, paste this force-start
+
+```text
+1 — start the first unchecked phase now. No more questions. Create the branch from docs/COPILOT-UI-UPGRADE.md, implement that phase exactly, run lint/typecheck/test/build, update REDESIGN-PROGRESS.md, check off the phase, open PR to main, reply with the PR URL.
+```
 
 ---
 
 ## How to start (human, ~30 seconds)
 
-1. Open the repo on GitHub → **Issues** → **New issue** (or open Copilot Chat in the repo).
+1. Open the repo on GitHub → **Issues** → **New issue** (or open Copilot Chat / Copilot coding agent in the repo).
 2. Paste the **Reusable Copilot prompt** above.
 3. Assign **Copilot** / start Copilot coding agent if available on your plan.
-4. Review the PR, merge, then run the same prompt again for the next phase.
+4. If it asks what to do, paste the **force-start** block.
+5. Review the PR, merge, then run the same prompt again for the next phase.
+
+**Issue shortcuts:** Phase 1 → #204 · Phase 2 → #205
 
 ---
 
