@@ -3,14 +3,15 @@
 import { CartesianGrid } from 'recharts';
 
 /**
- * Shared chart aesthetics — one luminous instrument system across the site.
- * Depth bars, glassy tooltips, clean axes. Import these instead of restyling
- * each chart inline.
+ * Shared chart aesthetics so every recharts surface on the site reads as one
+ * system: clean axes (no heavy axis/tick lines), a subtle dashed horizontal
+ * grid, and one branded glassy tooltip. Import these instead of restyling each
+ * chart inline.
  */
 
 export const axisTick = {
   fill: 'var(--color-text-muted)',
-  fontSize: 12,
+  fontSize: 11,
   fontFamily: 'var(--font-mono)',
 } as const;
 
@@ -34,18 +35,15 @@ export function ChartGrid() {
 }
 
 /** Hover cursor line for line/area charts. */
-export const chartCursor = {
-  stroke: 'var(--accent-cyan)',
-  strokeOpacity: 0.3,
-  strokeWidth: 1,
-} as const;
+export const chartCursor = { stroke: 'var(--accent-cyan)', strokeOpacity: 0.3, strokeWidth: 1 } as const;
 
 /** Hover cursor fill for bar charts. */
-export const barCursor = { fill: 'var(--accent-cyan)', fillOpacity: 0.08 } as const;
+export const barCursor = { fill: 'var(--accent-cyan)', fillOpacity: 0.06 } as const;
 
 /**
  * Active dot for <Line>/<Area> — a larger point ringed in the surface color so
- * the hovered value lifts crisply off the line.
+ * the hovered value lifts crisply off the line. Recharts fills it with the
+ * series color automatically. `<Line ... activeDot={chartActiveDot} />`
  */
 export const chartActiveDot = {
   r: 5,
@@ -54,7 +52,9 @@ export const chartActiveDot = {
 } as const;
 
 /**
- * Vertical area-fill gradient for recharts <Area>.
+ * Reusable vertical area-fill gradient for recharts. Drop a <defs> child into
+ * the chart, render this with a unique id, and reference it as
+ * `fill={`url(#${id})`}` on an <Area>. Keeps every filled area on one recipe.
  */
 export function ChartAreaGradient({
   id,
@@ -75,11 +75,10 @@ export function ChartAreaGradient({
 }
 
 /**
- * Volumetric column fill — light from the upper-left, darker body, luminous
- * top lip. Reference as `fill={`url(#${id})`}` on a <Bar>/<Cell>.
- * Pair with ChartBarSideHighlight for a 3D instrument reading.
+ * Volumetric bar fill for Recharts <Bar fill={`url(#${id})`} />.
+ * Lit top → saturated mid → shadowed base. Pair with ChartBarSpecular.
  */
-export function ChartDepthBarGradient({
+export function ChartBarDepth({
   id,
   color = 'var(--accent-cyan)',
 }: {
@@ -88,61 +87,34 @@ export function ChartDepthBarGradient({
 }) {
   return (
     <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stopColor="#ffffff" stopOpacity={0.42} />
-      <stop offset="12%" stopColor={color} stopOpacity={1} />
-      <stop offset="55%" stopColor={color} stopOpacity={0.92} />
-      <stop offset="100%" stopColor={color} stopOpacity={0.55} />
+      <stop offset="0%" stopColor="#ffffff" stopOpacity={0.4} />
+      <stop offset="16%" stopColor={color} stopOpacity={1} />
+      <stop offset="70%" stopColor={color} stopOpacity={0.9} />
+      <stop offset="100%" stopColor={color} stopOpacity={0.52} />
     </linearGradient>
   );
 }
 
-/** Soft horizontal sheen across a column — sells depth without fake perspective. */
-export function ChartBarSideHighlight({
-  id,
-  color = 'var(--accent-cyan)',
-}: {
-  id: string;
-  color?: string;
-}) {
+/** Horizontal specular edge for Recharts bars — second Bar with this fill. */
+export function ChartBarSpecular({ id }: { id: string }) {
   return (
     <linearGradient id={id} x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stopColor="#ffffff" stopOpacity={0.28} />
-      <stop offset="35%" stopColor={color} stopOpacity={0} />
-      <stop offset="100%" stopColor="#000000" stopOpacity={0.22} />
+      <stop offset="0%" stopColor="#ffffff" stopOpacity={0.5} />
+      <stop offset="28%" stopColor="#ffffff" stopOpacity={0.1} />
+      <stop offset="100%" stopColor="#ffffff" stopOpacity={0} />
     </linearGradient>
   );
 }
 
-/** Drop both depth defs for a named series (e.g. score → score-depth + score-side). */
-export function ChartDepthBarDefs({
-  id,
-  color = 'var(--accent-cyan)',
-}: {
-  id: string;
-  color?: string;
-}) {
-  return (
-    <>
-      <ChartDepthBarGradient id={`${id}-depth`} color={color} />
-      <ChartBarSideHighlight id={`${id}-side`} color={color} />
-      <filter id={`${id}-glow`} x="-40%" y="-40%" width="180%" height="180%">
-        <feGaussianBlur stdDeviation="2.2" result="blur" />
-        <feMerge>
-          <feMergeNode in="blur" />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
-      </filter>
-    </>
-  );
-}
-
+/* Branded tooltip styling for charts that rely on recharts `formatter` /
+   `labelFormatter` (where a custom content component can't be used). Matches
+   the <ChartTooltip> look so every tooltip on the site is identical. */
 export const tooltipContentStyle = {
-  background: 'rgba(8, 15, 28, 0.96)',
-  border: '1px solid rgba(0, 224, 255, 0.28)',
-  borderRadius: 14,
-  padding: '12px 14px',
-  boxShadow:
-    '0 18px 40px -16px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255,255,255,0.06)',
+  background: 'rgba(8, 15, 28, 0.94)',
+  border: '1px solid rgba(0, 224, 255, 0.22)',
+  borderRadius: 12,
+  padding: '10px 12px',
+  boxShadow: '0 14px 34px -14px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255,255,255,0.08)',
   fontFamily: 'var(--font-mono)',
   fontSize: 12,
 } as const;
@@ -153,8 +125,8 @@ export const tooltipLabelStyle = {
   color: 'var(--color-text-muted)',
   fontSize: 11,
   textTransform: 'uppercase',
-  letterSpacing: '0.08em',
-  marginBottom: 6,
+  letterSpacing: '0.06em',
+  marginBottom: 4,
 } as const;
 
 interface TooltipPayloadItem {
@@ -179,26 +151,25 @@ export function ChartTooltip({
   return (
     <div
       style={{
-        background: 'rgba(8, 15, 28, 0.96)',
-        border: '1px solid rgba(0, 224, 255, 0.28)',
-        borderRadius: 14,
-        padding: '12px 14px',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        boxShadow:
-          '0 18px 40px -16px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255,255,255,0.06)',
+        background: 'rgba(8, 15, 28, 0.94)',
+        border: '1px solid rgba(0, 224, 255, 0.22)',
+        borderRadius: 12,
+        padding: '10px 12px',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        boxShadow: '0 14px 34px -14px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255,255,255,0.08)',
         fontFamily: 'var(--font-mono)',
         fontSize: 12,
-        minWidth: 132,
+        minWidth: 120,
       }}
     >
       {label != null && label !== '' && (
         <div
           style={{
             color: 'var(--color-text-muted)',
-            marginBottom: 8,
+            marginBottom: 6,
             textTransform: 'uppercase',
-            letterSpacing: '0.08em',
+            letterSpacing: '0.06em',
             fontSize: 11,
           }}
         >
@@ -212,23 +183,16 @@ export function ChartTooltip({
         >
           <span
             style={{
-              width: 9,
-              height: 9,
+              width: 8,
+              height: 8,
               borderRadius: 9999,
               background: p.color || p.stroke || 'var(--accent-cyan)',
               flexShrink: 0,
-              boxShadow: `0 0 10px ${p.color || p.stroke || 'var(--accent-cyan)'}`,
+              boxShadow: `0 0 8px ${p.color || p.stroke || 'var(--accent-cyan)'}`,
             }}
           />
           <span style={{ color: 'var(--color-text-secondary)' }}>{p.name}</span>
-          <span
-            style={{
-              marginLeft: 'auto',
-              fontWeight: 700,
-              color: 'var(--color-text-primary)',
-              fontVariantNumeric: 'tabular-nums',
-            }}
-          >
+          <span style={{ marginLeft: 'auto', fontWeight: 700, color: 'var(--color-text-primary)' }}>
             {p.value}
             {p.unit ?? ''}
           </span>
