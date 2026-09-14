@@ -1,17 +1,6 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  Cell,
-  Legend,
-} from 'recharts';
-import { ChartGrid, axisProps, barCursor, tooltipContentStyle, tooltipItemStyle, tooltipLabelStyle } from '@/components/ui/ChartKit';
 import Link from 'next/link';
 import { ArrowRight, Pill, HeartPulse } from 'lucide-react';
 import { biomarkers } from '@/lib/data';
@@ -23,6 +12,7 @@ import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Select } from '@/components/ui/Select';
 import { Badge } from '@/components/ui/Badge';
+import { DepthBarChart } from '@/components/ui/DepthBarChart';
 import { ToolDisclaimer } from './ToolDisclaimer';
 
 const impactColor = (label: string) => {
@@ -44,9 +34,11 @@ export function BiomarkerImpactTool() {
       .map((i) => ({
         name: i.name.length > 22 ? `${i.name.slice(0, 20)}…` : i.name,
         fullName: i.name,
-        score: i.impactScore,
-        type: i.category,
-        label: i.impactLabel,
+        value: i.impactScore,
+        color:
+          i.category === 'lifestyle'
+            ? 'var(--accent-cyan)'
+            : impactColor(i.impactLabel),
       }));
   }, [result]);
 
@@ -142,37 +134,12 @@ export function BiomarkerImpactTool() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={280}>
-                <BarChart data={chartData} margin={{ bottom: 48, left: 8, right: 8 }}>
-                  <ChartGrid />
-                  <XAxis
-                    dataKey="name"
-                    {...axisProps}
-                    angle={-35}
-                    textAnchor="end"
-                    height={60}
-                  />
-                  <YAxis domain={[0, 100]} {...axisProps} />
-                  <Tooltip
-                    contentStyle={tooltipContentStyle}
-                    itemStyle={tooltipItemStyle}
-                    labelStyle={tooltipLabelStyle}
-                    cursor={barCursor}
-                    formatter={(v) => [`${v}`, 'Impact score']}
-                    labelFormatter={(_, payload) => payload?.[0]?.payload?.fullName ?? ''}
-                  />
-                  <Legend />
-                  <Bar dataKey="score" name="Impact score" radius={[4, 4, 0, 0]}>
-                    {chartData.map((entry, i) => (
-                      <Cell
-                        key={i}
-                        fill={entry.type === 'lifestyle' ? 'var(--accent-cyan)' : impactColor(entry.label)}
-                        fillOpacity={entry.type === 'lifestyle' ? 0.7 : 1}
-                      />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+              <DepthBarChart
+                data={chartData}
+                height={300}
+                valueLabel="Impact score"
+                max={100}
+              />
             </CardContent>
           </Card>
 

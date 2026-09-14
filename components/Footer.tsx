@@ -1,26 +1,20 @@
-import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { Logo } from '@/components/ui/Logo';
 import {
-  Cpu,
   Shield,
   BookOpen,
-  Layers,
-  FlaskConical,
   Library,
   LayoutDashboard,
   HelpCircle,
-  GraduationCap,
   Rocket,
-  Syringe,
-  Waypoints,
-  Orbit,
-  BarChart3,
+  FlaskConical,
+  Layers,
   Sparkles,
   ArrowRight,
-  Table2,
+  ClipboardList,
+  ShoppingBag,
+  Orbit,
 } from 'lucide-react';
-import { POPULAR_GUIDE_LINKS } from '@/lib/index-priority';
 import { citationRegistry } from '@/lib/trust';
 import { compoundTierCount } from '@/lib/compound-core';
 import { FooterBriefSubscribe } from '@/components/brief/FooterBriefSubscribe';
@@ -28,42 +22,29 @@ import { FooterBriefSubscribe } from '@/components/brief/FooterBriefSubscribe';
 const tierACount = compoundTierCount('A');
 const tierBCount = compoundTierCount('B');
 
-const hubLinks = [
-  { href: '/dashboard', label: 'My Dashboard', icon: LayoutDashboard },
-  { href: '/nico', label: 'NICO Starter Questionnaire', icon: HelpCircle },
-  { href: '/library', label: 'Anti-Aging Library', icon: Library },
-  { href: '/hallmarks', label: '12 Hallmarks of Aging', icon: Orbit },
-  { href: '/library/evidence', label: 'The Evidence Table', icon: Table2 },
-  { href: '/library/trials', label: 'The Trial Index', icon: FlaskConical },
-  { href: '/peptides', label: 'Peptide Library', icon: Syringe },
-  { href: '/pathways', label: 'Pathways', icon: Waypoints },
-  { href: '/sirtuin-atlas', label: 'Sirtuin Atlas', icon: Orbit },
-  { href: '/learn', label: 'Learn Hub', icon: GraduationCap },
-  { href: '/insights', label: 'Longevity by the Numbers', icon: BarChart3 },
-  { href: '/stacks', label: 'Stacks & Protocols', icon: Layers },
-  { href: '/protocols', label: 'Protocol Library', icon: Layers },
-  { href: '/labs', label: 'Lab Analysis Hub', icon: FlaskConical },
-  { href: '/tools', label: 'Tools', icon: Cpu },
-  { href: '/compound-engine', label: 'Compound Engine', icon: Cpu },
+const startLinks = [
+  { href: '/nico', label: 'NICO Starter', icon: ClipboardList },
+  { href: '/library', label: 'Evidence library', icon: Library },
+  { href: '/elite-8', label: 'Elite 8', icon: Rocket },
+  { href: '/stacks', label: 'Stack Architect', icon: Layers },
+  { href: '/labs', label: 'Lab Analysis', icon: FlaskConical },
 ];
 
-const resourceLinks = [
-  { href: '/best', label: 'Best Supplements by Goal', icon: Rocket },
-  { href: '/elite-8', label: 'Elite 8 Compounds', icon: Rocket },
-  { href: '/products', label: 'Products', icon: BookOpen },
-  { href: '/shop', label: 'Protocol Shop', icon: BookOpen },
-  { href: '/faq', label: 'FAQ', icon: HelpCircle },
-  { href: '/about', label: 'About / Founder', icon: HelpCircle },
-  { href: '/club', label: '150-Year Club', icon: Rocket },
+const hubLinks = [
+  { href: '/dashboard', label: 'My Dashboard', icon: LayoutDashboard },
+  { href: '/hallmarks', label: '12 Hallmarks', icon: Orbit },
+  { href: '/products', label: 'Verified products', icon: ShoppingBag },
+  { href: '/shop', label: 'Verify before you buy', icon: ShoppingBag },
+  { href: '/protocols', label: 'Protocols', icon: Layers },
+];
+
+const trustLinks = [
   { href: '/trust', label: 'Trust & Transparency', icon: Shield },
   { href: '/trust/methodology', label: 'Methodology', icon: BookOpen },
   { href: '/trust/disclaimers', label: 'Disclaimers', icon: BookOpen },
-  { href: '/trust/sponsorship', label: 'Sponsorship Principles', icon: Shield },
   { href: '/editorial-policy', label: 'Editorial Policy', icon: BookOpen },
-  { href: '/corrections', label: 'Corrections', icon: BookOpen },
-  { href: '/partnerships', label: 'Partnerships', icon: Rocket },
+  { href: '/about', label: 'About / Founder', icon: HelpCircle },
   { href: '/contact', label: 'Contact', icon: HelpCircle },
-  { href: '/site-map', label: 'Site Map', icon: BookOpen },
 ];
 
 const legalLinks = [
@@ -72,6 +53,41 @@ const legalLinks = [
   { href: '/health-data', label: 'Health Data' },
   { href: '/trust/disclaimers', label: 'Disclaimers' },
 ];
+
+function FooterColumn({
+  title,
+  links,
+}: {
+  title: string;
+  links: { href: string; label: string; icon: typeof Shield }[];
+}) {
+  return (
+    <details className="group border-b border-border/40 pb-3 md:border-0 md:pb-0 open:pb-3 md:open:pb-0" open>
+      <summary className="text-label mb-3 flex cursor-pointer list-none items-center justify-between gap-2 md:pointer-events-none md:cursor-default [&::-webkit-details-marker]:hidden">
+        {title}
+        <span
+          aria-hidden="true"
+          className="text-muted-foreground transition-transform group-open:rotate-180 md:hidden"
+        >
+          ▾
+        </span>
+      </summary>
+      <ul className="space-y-3">
+        {links.map((link) => (
+          <li key={link.href}>
+            <Link
+              href={link.href}
+              className="focus-ring interactive link-underline flex min-h-6 items-center gap-2 text-body-sm hover:text-accent-cyan rounded-md"
+            >
+              <link.icon className="w-4 h-4 shrink-0" aria-hidden="true" />
+              {link.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </details>
+  );
+}
 
 export function Footer() {
   return (
@@ -86,14 +102,10 @@ export function Footer() {
             No supplement inventory to move. No user health data sales model.
             Just cell-health research made easier to inspect, question, and apply responsibly.
           </p>
-          {/* Closing conversion beat — the footer's one action moment, so the
-              long scroll ends in a next step rather than a wall of links.
-              Semantic color: emerald primary = advance (the questionnaire),
-              cyan secondary = explore (the library). */}
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <Link
               href="/nico"
-              className="tnic-button-primary focus-ring group inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm"
+              className="tnic-button-primary focus-ring group inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm min-h-[var(--space-touch)]"
             >
               <Sparkles className="h-4 w-4" aria-hidden="true" />
               Start the NICO Questionnaire
@@ -101,7 +113,7 @@ export function Footer() {
             </Link>
             <Link
               href="/library"
-              className="tnic-button-secondary focus-ring inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm"
+              className="tnic-button-outline focus-ring inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold min-h-[var(--space-touch)]"
             >
               <Library className="h-4 w-4" aria-hidden="true" />
               Explore the evidence library
@@ -111,36 +123,8 @@ export function Footer() {
 
         <FooterBriefSubscribe />
 
-        <section className="mb-12 rounded-3xl border border-accent-cyan/20 bg-accent-cyan/[0.045] p-5 md:p-6" aria-labelledby="footer-start-heading">
-          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-            <div className="max-w-xl">
-              <p className="text-label mb-2 text-accent-cyan">Choose your next step</p>
-              <h2 id="footer-start-heading" className="font-display text-2xl tracking-tight text-foreground md:text-3xl">Start with the question you actually have.</h2>
-              <p className="mt-2 text-body-sm">Use the shortest path to the evidence, comparison, or starting point you need.</p>
-            </div>
-            <Link href="/site-map" className="focus-ring inline-flex shrink-0 items-center gap-2 rounded-xl border border-border/70 px-4 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-accent-cyan/50 hover:text-accent-cyan">
-              View the full map <span aria-hidden="true">→</span>
-            </Link>
-          </div>
-          <div className="mt-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              { href: '/supplement-guides', label: 'Understand a supplement', detail: 'Mechanism, human evidence, and cautions' },
-              { href: '/best', label: 'Find by goal', detail: 'Goal-led shortlists without hype' },
-              { href: '/protocols', label: 'Inspect a protocol', detail: 'Choreographed stacks, each compound with a job' },
-              { href: '/labs', label: 'Log a baseline', detail: 'Track the markers the evidence actually uses' },
-            ].map((link) => (
-              <Link key={link.href} href={link.href} className="walk-card focus-ring group" style={{ '--walk-accent': 'var(--accent-cyan)' } as CSSProperties}>
-                <span className="walk-card__kicker">Start here</span>
-                <span className="walk-card__title">{link.label}</span>
-                <span className="walk-card__detail">{link.detail}</span>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-6 gap-8 lg:gap-10 mb-10">
-          <div className="sm:col-span-2 lg:col-span-1">
-            {/* No aria-label here — see the matching comment in Nav.tsx. */}
+        <div className="mb-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div>
             <Link
               href="/"
               className="focus-ring brand-link inline-flex items-center mb-4 rounded-full group transition-transform hover:scale-[1.02]"
@@ -148,89 +132,43 @@ export function Footer() {
               <Logo variant="lockup" size="md" alt="TNiC – Transformative Nutrition in Cell-Health · Home" />
             </Link>
             <p className="text-label mb-3 text-muted-foreground">Cell-Health Library</p>
-            <p className="text-body-sm max-w-xs">
+            <p className="text-body-sm max-w-xs mb-4">
               Independent longevity intelligence. Evidence-graded compounds,
               transparent methodology, and consumer safety at the center of every recommendation.
             </p>
+            <Link
+              href="/site-map"
+              className="focus-ring interactive link-underline inline-flex min-h-6 items-center gap-1.5 text-sm font-semibold text-accent-cyan rounded-md"
+            >
+              Full site map <span aria-hidden="true">→</span>
+            </Link>
           </div>
 
-          <div>
-            <p className="text-label mb-4">Hubs</p>
-            <ul className="space-y-3">
-              {hubLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="focus-ring interactive link-underline flex min-h-6 items-center gap-2 text-body-sm hover:text-accent-cyan rounded-md"
-                  >
-                    <link.icon className="w-4 h-4 shrink-0" aria-hidden="true" />
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Popular Guides runs ~2× the link count of its sibling columns,
-              so it takes two grid tracks and flows its own list into two
-              sub-columns — no single towering tail unbalancing the footer. */}
-          <div className="lg:col-span-2">
-            <p className="text-label mb-4">Popular Guides</p>
-            <ul className="space-y-3 lg:grid lg:grid-cols-2 lg:gap-x-6 lg:gap-y-3 lg:space-y-0">
-              {POPULAR_GUIDE_LINKS.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="focus-ring interactive link-underline text-body-sm hover:text-accent-cyan rounded-md inline-flex min-h-6 items-center"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <p className="text-label mb-4">Resources</p>
-            <ul className="space-y-3">
-              {resourceLinks.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="focus-ring interactive link-underline flex min-h-6 items-center gap-2 text-body-sm hover:text-accent-cyan rounded-md"
-                  >
-                    <link.icon className="w-4 h-4 shrink-0" aria-hidden="true" />
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <p className="text-label mb-4">Important Notice</p>
-            <p className="text-body-sm mb-3">
-              TNiC is educational — not a medical provider. Biological age
-              and biomarker projections are modeled estimates, not lab diagnostics.
-            </p>
-            <p className="text-caption mb-3">
-              TNiC does not sell supplements. Verified product links may carry an
-              affiliate token at no extra cost to you — commission never influences
-              which products are listed or their evidence tier.
-            </p>
-            <p className="text-caption">
-              Consult a physician before starting any protocol.{' '}
-              <Link href="/privacy" className="text-accent-cyan link-underline focus-ring rounded">
-                Privacy
-              </Link>{' '}·{' '}
-              <Link href="/trust/disclaimers" className="text-accent-cyan link-underline focus-ring rounded">
-                Disclaimers
-              </Link>
-            </p>
-          </div>
+          <FooterColumn title="Start" links={startLinks} />
+          <FooterColumn title="Hubs" links={hubLinks} />
+          <FooterColumn title="Trust" links={trustLinks} />
         </div>
 
-        <nav aria-label="Legal" className="pt-6 flex flex-wrap gap-x-5 gap-y-2 mb-4">
+        <section
+          className="mb-8 rounded-2xl border border-border/60 bg-white/[0.02] p-4 md:p-5"
+          aria-labelledby="footer-notice-heading"
+        >
+          <h2 id="footer-notice-heading" className="text-label mb-2 text-muted-foreground">
+            Important notice
+          </h2>
+          <p className="text-body-sm mb-2">
+            TNiC is educational — not a medical provider. Biological age
+            and biomarker projections are modeled estimates, not lab diagnostics.
+          </p>
+          <p className="text-caption">
+            TNiC does not sell supplements. Verified product links may carry an
+            affiliate token at no extra cost to you — commission never influences
+            which products are listed or their evidence tier. Consult a physician
+            before starting any protocol.
+          </p>
+        </section>
+
+        <nav aria-label="Legal" className="pt-2 flex flex-wrap gap-x-5 gap-y-2 mb-4">
           {legalLinks.map((link) => (
             <Link
               key={link.href}
@@ -242,13 +180,10 @@ export function Footer() {
           ))}
         </nav>
 
-        {/* The back page — a quiet, unlisted harm-reduction cheat sheet. Kept
-            deliberately understated (muted, no icon) so it reads as an aside,
-            not a promoted feature, but it's real focusable text so anyone
-            navigating by keyboard or screen reader can still find it. */}
+        {/* Quiet harm-reduction aside — readable contrast, not a promoted feature. */}
         <Link
           href="/sheepeople"
-          className="focus-ring link-underline mb-4 inline-flex min-h-6 items-center rounded text-caption text-muted-foreground/45 transition-colors hover:text-accent-cyan"
+          className="focus-ring link-underline mb-4 inline-flex min-h-6 items-center rounded text-caption text-muted-foreground transition-colors hover:text-accent-cyan"
         >
           the back page
         </Link>

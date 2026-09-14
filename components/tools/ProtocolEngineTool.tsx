@@ -2,16 +2,7 @@
 
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  Cell,
-} from 'recharts';
-import { axisProps, barCursor, tooltipContentStyle, tooltipItemStyle, tooltipLabelStyle } from '@/components/ui/ChartKit';
+import { DepthBarChart } from '@/components/ui/DepthBarChart';
 import { Sun, Moon, Brain, Sparkles, ChevronRight, FlaskConical, Check } from 'lucide-react';
 import Link from 'next/link';
 import { usePlatform } from '@/context/PlatformContext';
@@ -59,8 +50,9 @@ export function ProtocolEngineTool() {
 
   const chartData = result.hallmarkPriorities.map((h) => ({
     name: `#${h.number}`,
-    score: h.score,
-    title: h.title,
+    value: h.score,
+    fullName: h.title,
+    color: 'var(--accent-violet)',
   }));
 
   return (
@@ -327,25 +319,14 @@ export function ProtocolEngineTool() {
                 <CardTitle className="text-base">Hallmark priorities</CardTitle>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={180}>
-                  <BarChart data={chartData} layout="vertical" margin={{ left: 8 }}>
-                    <XAxis type="number" domain={[0, 100]} hide />
-                    <YAxis type="category" dataKey="name" {...axisProps} width={28} />
-                    <Tooltip
-                      contentStyle={tooltipContentStyle}
-                      itemStyle={tooltipItemStyle}
-                      labelStyle={tooltipLabelStyle}
-                      cursor={barCursor}
-                      formatter={(v) => [`${v}`, 'Priority']}
-                      labelFormatter={(_, payload) => payload?.[0]?.payload?.title ?? ''}
-                    />
-                    <Bar dataKey="score" radius={[0, 4, 4, 0]}>
-                      {chartData.map((_, i) => (
-                        <Cell key={i} fill="var(--accent-violet)" fillOpacity={0.7 - i * 0.08} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
+                <DepthBarChart
+                  layout="vertical"
+                  data={chartData}
+                  height={180}
+                  valueLabel="Priority"
+                  max={100}
+                  color="var(--accent-violet)"
+                />
               </CardContent>
             </Card>
 
