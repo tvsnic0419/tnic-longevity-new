@@ -34,6 +34,7 @@ const hubLinks = [
   { href: '/library', label: 'Anti-Aging Library', icon: Library },
   { href: '/hallmarks', label: '12 Hallmarks of Aging', icon: Orbit },
   { href: '/library/evidence', label: 'The Evidence Table', icon: Table2 },
+  { href: '/library/trials', label: 'The Trial Index', icon: FlaskConical },
   { href: '/peptides', label: 'Peptide Library', icon: Syringe },
   { href: '/pathways', label: 'Pathways', icon: Waypoints },
   { href: '/sirtuin-atlas', label: 'Sirtuin Atlas', icon: Orbit },

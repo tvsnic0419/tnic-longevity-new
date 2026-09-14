@@ -4,6 +4,76 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-14 (ninth pass) — the Trial Index: the cited literature, as data
+
+**The question asked:** identify and ship the highest-value content upgrade.
+
+**What was actually there, counted rather than assumed.**
+
+The top item under *Explicitly deferred* was the evidence-module field audit.
+Running it structurally across all 100 deep-dives (H2 frequency, then table
+shape) found the real gap, and it was not a missing section:
+
+- **87 of 100 deep-dives carry an authored evidence table** — `Study | Design |
+  N | Duration | Key outcomes | Tier`, in 17 header variants — totalling **363
+  study rows, 301 of them PMID-cited**. Sample sizes, durations, populations and
+  reported outcomes, all authored, all real.
+- **None of it existed as data.** `/library/evidence` (#191) indexes the
+  *compounds*; the literature behind them was reachable only by opening 87 pages
+  one at a time. `lib/data.ts` is not a substitute: its 276 `StudyRef`s are
+  title/journal/year/PMID only — no design, no N, no duration, no outcome.
+- So the library could not answer the question it is best equipped to answer:
+  which human trials, in whom, for how long, finding what.
+
+**Shipped — `/library/trials`, the Trial Index.**
+
+- **`lib/trial-index.ts`** — types, parser and classifiers, all pure. Maps the 17
+  header shapes onto one schema; an unrecognised header is ignored rather than
+  guessed into a field, so a new shape degrades to missing data, not wrong data.
+  A column the source never had stays `null` and renders as an em-dash.
+- **`lib/trial-index.server.ts`** — the `fs` half. Split out because the client
+  table imports the types module, and a `fs` import anywhere in that graph fails
+  the Turbopack client build (it did, once, exactly that way).
+- **Nothing is authored.** Every cell is verbatim from the compound's own table.
+  `lib/trial-index.test.ts` proves it rather than asserting it: for all 363 rows
+  it re-reads the source `.mdx` and fails if any published string is not present
+  in the file the row names. 17 tests total.
+- **Two derived fields, both conservative.** `designClass` and `evidenceBase` sit
+  *beside* the verbatim design text, never replacing it, and fall back to
+  `unclassified`/`unclear` rather than guessing. A design naming both people and
+  animals classifies as `mixed` — "multi-species + human association" is a real
+  authored design and calling it human evidence would be the exact overclaim this
+  library exists to avoid. Result: 264 human, 34 preclinical, 6 mixed, 59 not
+  stated. The 59 are labelled, not quietly counted as human.
+- **The gap is on the page.** The 11 compounds with no evidence table are named,
+  linked and explained, not omitted — a gap you can see is a review queue.
+- **`TrialHeroInstrument`**, not `LibraryHeroInstrument`: that one is bound to
+  `evidenceIndexStats()` and would have put 100 graded *compounds* beside a
+  headline counting 363 study *rows*, under a caption claiming it came from the
+  cited literature. Same primitive, honest numbers. Human takes violet rather
+  than the emerald that means Tier A — a human trial is not automatically strong
+  evidence, and borrowing the tier palette would have said it was.
+
+**Caught by the repo's own gates, not by eye.**
+
+- `audit:ui` failed the tap-target budget: short compound links ("Zinc") measured
+  23×24px against a budget of 0. Fixed by making the control genuinely 24px —
+  not `.tap-expand-y`, whose own note warns against expanding a control whose
+  neighbours sit within 44px, and these share a line with the PMID link.
+- Turbopack failed the first build on `Can't resolve 'fs'`, which is what forced
+  the pure/server split above. The split is better structure, so it stayed.
+
+**Verified:** 766 tests (63 files) · lint 0 errors · typecheck clean · build ok ·
+`audit:ui` 0 sub-24px controls, 0 text under 11px, no horizontal scroll at 390px ·
+`audit:routes` 229 routes, 0 fail 0 warn · 363 `<tr>` present in the
+server-rendered HTML (the rows are crawlable, not client-only).
+
+**Still deferred:** the *field-by-field* half of the evidence-module audit — this
+pass did the structural audit and shipped the extraction. Filling a genuinely
+missing field on a specific compound still requires extraction from that
+compound's own authored content, per `NOTES-COMPOUND-LIBRARY.md`, and is not
+something to batch.
+
 ## 2026-09-13 (eighth pass) — geometry, the type ladder, and the entity graph
 
 **The question asked:** evaluate and upgrade the UI; then, separately, finish
