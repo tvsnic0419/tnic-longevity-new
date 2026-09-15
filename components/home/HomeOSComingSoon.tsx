@@ -6,12 +6,24 @@ import { RevealItem } from '@/components/ui/RevealItem';
 /**
  * Longevity OS — coming-soon teaser.
  *
- * RESERVED, NOT MOUNTED. Per owner direction (2026-07): the Longevity OS name
- * is reserved for future brand expansion and should NOT be marketed yet. This
- * full teaser band is intentionally not rendered on the homepage — the only
- * live mention is a quiet line in the footer. Keep this component ready to drop
- * back into app/page.tsx when it's time to promote the OS; do not add hype
- * copy or fabricated launch dates/capabilities in the meantime.
+ * RESERVED, NOT MOUNTED — and still so after the 2026-09 slogan decision below.
+ *
+ * Per owner direction (2026-07): the Longevity OS name is reserved for future
+ * brand expansion and should NOT be marketed yet. This full teaser band is
+ * intentionally not rendered on the homepage. Keep this component ready to drop
+ * back into app/page.tsx when it's time to promote the OS; do not add hype copy
+ * or fabricated launch dates/capabilities in the meantime.
+ *
+ * 2026-09 — owner narrowed, did not lift, that reservation. "The Longevity
+ * Intelligence OS" is now the company SLOGAN (`SITE.slogan`), carried in the
+ * hero kicker, the footer, the homepage description and the Organization
+ * JSON-LD. TNiC itself still stands for Transformative Nutrition in Cell-Health;
+ * the slogan sits beside that, it does not replace it.
+ *
+ * The distinction this file exists to protect is unchanged: the slogan names the
+ * evidence system that ALREADY EXISTS — the library, the hallmark and pathway
+ * graph, the trial index. THIS component describes a personal workspace that
+ * does not exist yet. Shipping the slogan is not permission to mount this band.
  */
 
 const osFeatures = [

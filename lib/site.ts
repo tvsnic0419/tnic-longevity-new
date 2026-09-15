@@ -25,7 +25,24 @@ export const SOCIAL_PROFILES = [
 export const SITE = {
   name: 'TNiC',
   fullName: 'TNiC — Transformative Nutrition in Cell-Health',
+  /**
+   * What the name stands for. TNiC is, and has always been, Transformative
+   * Nutrition in Cell-Health — this is the brand's meaning, not a strapline,
+   * and it is what the nav descriptor and the logo's accessible name carry.
+   */
   tagline: 'Transformative Nutrition in Cell-Health',
+  /**
+   * The positioning line, distinct from `tagline` above. It describes what the
+   * platform IS — a connected, queryable model over the evidence: 100 compound
+   * deep-dives, 12 hallmarks, the pathway graph and 363 indexed study rows, all
+   * cross-linked and derived rather than asserted.
+   *
+   * Deliberately NOT a claim about the unshipped personal workspace. See the
+   * note in `components/home/HomeOSComingSoon.tsx`: the Longevity OS *product*
+   * is still reserved and unmounted. This slogan names the system that already
+   * exists; it must not be used to imply software that does not.
+   */
+  slogan: 'The Longevity Intelligence OS',
   url: resolveSiteUrl(),
   locale: 'en_US',
   twitter: '@tnic_help',

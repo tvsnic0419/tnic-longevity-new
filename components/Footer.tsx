@@ -133,8 +133,8 @@ export function Footer() {
             </Link>
             <p className="text-label mb-3 text-muted-foreground">Cell-Health Library</p>
             <p className="text-body-sm max-w-xs mb-4">
-              Independent longevity intelligence. Evidence-graded compounds,
-              transparent methodology, and consumer safety at the center of every recommendation.
+              The Longevity Intelligence OS. Independent and evidence-graded —
+              transparent methodology and consumer safety at the center of every recommendation.
             </p>
             <Link
               href="/site-map"
