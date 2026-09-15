@@ -86,8 +86,9 @@ export default function ClubPage() {
       {/* This page's body is a client island, so it server-rendered almost no
           in-body links — a reader arriving from search, and every crawler, saw
           a shell that connected to nothing. */}
-      <div className="container-page">
-        <PageConnections cluster={clusterFrom('explore', '/club')} accent="amber" id="explore-connections" />
+      <div className="container-page pb-16">
+        <PageConnections cluster={clusterFrom('start', '/club')} accent="emerald" id="club-start-connections" />
+        <PageConnections cluster={clusterFrom('explore', '/club')} accent="amber" id="club-explore-connections" className="mt-6" />
       </div>
       </div>
     </SubPageLayout>
