@@ -149,19 +149,35 @@ export function StacksLibrary() {
         )}
       </div>
 
-      <TabBar
-        tabs={tabs}
-        active={tab}
-        onChange={(id) => {
-          setSelectedTab(id);
-          if (id === 'builder') {
-            setTimeout(() => document.getElementById('stack-builder')?.scrollIntoView({ behavior: 'smooth' }), 100);
-          }
-        }}
-        theme="violet"
-        ariaLabel="Stacks library sections"
-        className="mb-8 justify-center sm:justify-start"
-      />
+      <div className="sticky top-[calc(var(--nav-h,3.5rem)+0.5rem)] z-30 mb-8 -mx-1 rounded-2xl border border-border/50 bg-background/85 px-2 py-2 backdrop-blur-md supports-[backdrop-filter]:bg-background/70">
+        <div className="mb-2 flex justify-end sm:hidden">
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedTab('builder');
+              setTimeout(() => document.getElementById('stack-builder')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+            }}
+            className="focus-ring inline-flex min-h-[var(--space-touch)] items-center gap-1.5 rounded-full bg-accent-violet px-3 text-caption font-bold text-black"
+          >
+            <Wrench className="h-3.5 w-3.5" aria-hidden="true" />
+            Clone & Customize
+          </button>
+        </div>
+        <TabBar
+          tabs={tabs}
+          active={tab}
+          onChange={(id) => {
+            setSelectedTab(id);
+            if (id === 'builder') {
+              setTimeout(() => document.getElementById('stack-builder')?.scrollIntoView({ behavior: 'smooth' }), 100);
+            }
+          }}
+          theme="violet"
+          ariaLabel="Stacks library sections"
+          equalWidth
+          className="justify-stretch"
+        />
+      </div>
 
       <motion.div
         key={tab}
