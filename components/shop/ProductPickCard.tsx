@@ -128,7 +128,7 @@ function ProductImage({
 export function ProductPickCard({ pick, compact, className }: ProductPickCardProps) {
   return (
     <div
-      className={`premium-card overflow-hidden ${
+      className={`premium-card shop-pick-card h-full overflow-hidden ${
         compact ? 'p-3' : 'p-4'
       } ${className ?? ''}`}
     >
