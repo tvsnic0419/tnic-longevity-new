@@ -29,3 +29,12 @@
 - `HomeInstrumentStrip.test.tsx` — bezel + standby chrome
 - `ToolInstrumentPreview.test.tsx` — instrument-module class
 - `ToolEmptyState.test.tsx` — premium empty
+
+## Site-wide expansion (same PR)
+
+- `PageHeader` handoff/default: `.hub-instrument-hero` + theme `data-hub-accent`
+- `CinematicHubHero`: research-hero specular instrument language (CSS)
+- `Elite8Hub` hero + ranked cards: instrument language
+- `DashboardInstrumentPanel`: instrument bezel
+- Shop/product cards: decision-surface classes
+- globals: site-wide depth package (nav/footer/charts/ranked rows/empty states)

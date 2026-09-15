@@ -43,17 +43,18 @@ export function ToolEmptyState({
     <div
       role="status"
       className={cn(
-        'premium-card relative overflow-hidden rounded-2xl border bg-gradient-to-br to-transparent p-8 md:p-10 text-center',
+        'tool-empty-state instrument-module premium-card relative overflow-hidden rounded-2xl border bg-gradient-to-br to-transparent p-8 md:p-10 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_28px_60px_-32px_rgba(0,0,0,0.55)]',
         accent,
         className,
       )}
     >
-      <div className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" aria-hidden="true" />
-      <div className="mx-auto mb-5 grid max-w-sm grid-cols-3 gap-2 opacity-60" aria-hidden="true">
+      <div className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" aria-hidden="true" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_60%_at_50%_0%,rgba(255,255,255,0.06),transparent_55%)]" aria-hidden="true" />
+      <div className="relative mx-auto mb-5 grid max-w-sm grid-cols-3 gap-2.5 opacity-70" aria-hidden="true">
         {[0, 1, 2].map((i) => (
-          <div key={i} className="space-y-2 rounded-xl border border-border/50 p-3">
+          <div key={i} className="space-y-2 rounded-xl border border-border/55 bg-white/[0.03] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
             <div className="skeleton h-2 w-10 rounded-full" />
-            <div className="skeleton h-8 w-full rounded-lg" />
+            <div className="skeleton h-10 w-full rounded-lg" />
             <div className="skeleton h-2 w-16" />
           </div>
         ))}

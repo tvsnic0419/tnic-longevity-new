@@ -4,18 +4,19 @@ import { render, screen } from '@testing-library/react';
 import { ToolEmptyState } from '@/components/ui/ToolEmptyState';
 
 describe('ToolEmptyState', () => {
-  it('renders skeleton chrome + CTA', () => {
+  it('renders premium empty chrome with CTA', () => {
     const { container } = render(
       <ToolEmptyState
-        title="Nothing here"
-        detail="Add data to continue."
-        ctaLabel="Go labs"
-        ctaHref="/labs"
-        theme="rose"
+        title="No stack selected"
+        detail="Add compounds to see synergy readouts."
+        ctaLabel="Open simulator"
+        ctaHref="/tools?tab=simulator"
+        theme="violet"
       />,
     );
     expect(screen.getByRole('status')).toBeTruthy();
-    expect(container.querySelectorAll('.skeleton').length).toBeGreaterThan(0);
-    expect(screen.getByRole('link', { name: /go labs/i })).toBeTruthy();
+    expect(container.querySelector('.tool-empty-state')).toBeTruthy();
+    expect(container.querySelector('.instrument-module')).toBeTruthy();
+    expect(screen.getByRole('link', { name: /open simulator/i })).toBeTruthy();
   });
 });
