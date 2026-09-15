@@ -184,10 +184,14 @@ export const NetworkStage = forwardRef<StageHandle, {
         ctx.beginPath(); ctx.arc(p.sx, p.sy, rad, Math.PI * 0.15, Math.PI * 0.85); ctx.stroke();
 
         // Label the front-facing nodes only, faded by depth — legible without
-        // clutter, and the far side stays clean artwork.
-        if (depth < 0.5) {
+        // clutter, and the far side stays clean artwork. On narrow canvases
+        // (~390px phones) full labels collide; keep elite + nearest nodes only.
+        const narrow = w < 420;
+        const labelDepth = narrow ? 0.3 : 0.5;
+        if (depth < labelDepth && (!narrow || n.elite || depth < 0.18)) {
           ctx.fillStyle = `rgba(230,240,255,${(0.85 - depth * 1.4) * a})`;
-          ctx.font = `500 ${Math.round(11 * p.persp)}px system-ui, sans-serif`;
+          const fontPx = Math.round((narrow ? 10 : 11) * p.persp);
+          ctx.font = `500 ${fontPx}px system-ui, sans-serif`;
           ctx.textAlign = "center"; ctx.textBaseline = "middle";
           ctx.fillText(n.name, p.sx, p.sy - rad - 8 * p.persp);
         }
