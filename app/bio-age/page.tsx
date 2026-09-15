@@ -4,13 +4,12 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { BioAgeWizard } from '@/components/bio-age/BioAgeWizard';
 import { PageConnections } from '@/components/ui/PageConnections';
 import { clusterFrom } from '@/lib/page-connections';
+import { ContinueTrail } from '@/components/ui/WalkCard';
 
 export const metadata: Metadata = {
-  // Absolute title so the `%s | TNiC` template doesn't double the brand.
   title: { absolute: 'Biological Age Calculator | TNiC Longevity' },
   description:
     'Estimate your biological age across 5 domains — Metabolic, Inflammatory, Hormonal, Mitochondrial, and Lifestyle — and get a personalized anti-aging compound protocol.',
-  // Self-canonical (was inheriting the homepage root canonical).
   alternates: { canonical: '/bio-age' },
   openGraph: {
     title: 'Biological Age Calculator | TNiC Longevity',
@@ -22,7 +21,6 @@ export default function BioAgePage() {
   return (
     <div className="pb-24">
       <div className="container-page py-12">
-          {/* Header */}
           <PageHeader
             icon={Activity}
             eyebrow="Biological Age Engine · v2"
@@ -51,7 +49,6 @@ export default function BioAgePage() {
 
           <BioAgeWizard />
 
-          {/* Science callout */}
           <div className="max-w-2xl mx-auto mt-12 grid sm:grid-cols-3 gap-4 text-center">
             {[
               { label: 'Scoring algorithm', value: 'Levine et al. 2018', sub: 'Aging Cell — PhenoAge methodology' },
@@ -66,11 +63,18 @@ export default function BioAgePage() {
             ))}
           </div>
       </div>
-      {/* This page's body is a client island, so it server-rendered no in-body
-          links at all — a reader arriving from search, and every crawler, saw
-          a shell that connected to nothing. */}
-      <div className="container-page">
-        <PageConnections cluster={clusterFrom('explore', '/bio-age')} accent="violet" id="explore-connections" />
+      <div className="container-page pb-16">
+        <ContinueTrail
+          title="After your bio-age estimate."
+          items={[
+            { href: '/nico', kicker: 'Start', title: 'Start with NICO', detail: 'Turn lifestyle signals into a starter stack.', accent: 'emerald' },
+            { href: '/labs', kicker: 'Track', title: 'Log labs', detail: 'Educational bio-age is not a panel — measure markers next.', accent: 'rose' },
+            { href: '/tools?tab=healthspan', kicker: 'Tools', title: 'Healthspan estimator', detail: 'Project score changes from stack + lifestyle.', accent: 'violet' },
+            { href: '/stacks', kicker: 'Decide', title: 'Open Stack Architect', detail: 'Build the protocol you will retest against.', accent: 'cyan' },
+          ]}
+        />
+        <PageConnections cluster={clusterFrom('start', '/bio-age')} accent="emerald" id="bio-age-start-connections" />
+        <PageConnections cluster={clusterFrom('decide', '/bio-age')} accent="violet" id="bio-age-decide-connections" className="mt-6" />
       </div>
     </div>
   );
