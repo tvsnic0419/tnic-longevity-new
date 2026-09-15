@@ -1,0 +1,111 @@
+/* === THOMAS BRIEF: symmetry · ambience · calm stickiness === */
+/* Equal-height grids + aligned gutters sitewide */
+.tools-shelf-grid,
+.elite8-instrument-row,
+.premium-card-grid,
+[data-symmetric-grid] {
+  align-items: stretch;
+}
+
+.tools-shelf-grid > *,
+.elite8-instrument-row > * {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.tools-shelf-card,
+.shop-pick-card,
+.elite-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Keep paired instrument modules equal height without breaking col spans */
+[data-symmetric-grid] > .instrument-module {
+  min-height: 100%;
+}
+
+/* Quiet section rhythm — consistent breathing room */
+.canvas-scrim > .container-page > section,
+.canvas-scrim > .container-page > .glass-panel,
+section.hub-instrument-hero + * {
+  scroll-margin-top: 5.5rem;
+}
+
+/* Luminous dark glass ambience — TNiC material, not generic SaaS */
+.instrument-bezel,
+.instrument-module,
+.tools-shelf-card,
+.shop-pick-card,
+.hub-instrument-hero {
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,0.045) 0%, transparent 42%),
+    radial-gradient(120% 80% at 50% -10%, color-mix(in srgb, var(--accent-cyan) 8%, transparent), transparent 55%);
+}
+
+.instrument-bezel {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    inset 0 0 0 1px rgba(255,255,255,0.04),
+    0 28px 64px -36px rgba(0,0,0,0.72);
+}
+
+/* Health-calm hierarchy: softer secondary text, hopeful primary accents */
+.hub-instrument-hero p.text-muted-foreground,
+.tools-shelf-card .text-muted-foreground,
+.site-footer .text-muted-foreground {
+  color: color-mix(in srgb, var(--muted-foreground) 92%, var(--accent-cyan));
+}
+
+/* Mirrored instrument panels when paired */
+.instrument-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: stretch;
+}
+
+@media (max-width: 767px) {
+  .instrument-pair {
+    grid-template-columns: 1fr;
+  }
+}
+
+.instrument-pair > .instrument-module,
+.instrument-pair > .instrument-bezel {
+  min-height: 100%;
+}
+
+/* Restrained primary accents — cyan/emerald lead; hub colors label-only */
+.tools-shelf-card:not(.tools-shelf-card--active) {
+  border-color: color-mix(in srgb, var(--border) 80%, transparent);
+}
+
+.tools-shelf-card--active {
+  border-color: color-mix(in srgb, var(--card-accent, var(--accent-cyan)) 50%, transparent);
+}
+
+/* Aesthetic stickiness — micro specular on hover (motion-safe) */
+@media (prefers-reduced-motion: no-preference) {
+  .tools-shelf-card:hover,
+  .shop-pick-card:hover,
+  .elite-card:hover {
+    transform: translateY(-2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tools-shelf-card:hover,
+  .shop-pick-card:hover,
+  .elite-card:hover {
+    transform: none;
+  }
+}
+
+/* Featured tool panels — equal rhythm gutters (ToolsHub GlassPanel stack) */
+.canvas-scrim .container-page > .glass-panel,
+.canvas-scrim .container-page > [class*="GlassPanel"] {
+  margin-bottom: 2rem;
+}
