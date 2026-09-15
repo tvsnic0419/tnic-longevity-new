@@ -98,7 +98,6 @@ function GaugeInstrument({ color, value }: { color: string; value: number }) {
   const start = Math.PI * 0.85;
   const end = Math.PI * 0.15;
   const t = Math.max(0, Math.min(1, value / 100));
-  const angle = start + (end - start + 2 * Math.PI) * t;
   const arc = (a0: number, a1: number) => {
     const x0 = cx + r * Math.cos(a0);
     const y0 = cy + r * Math.sin(a0);
@@ -288,7 +287,7 @@ export function ToolInstrumentPreview({
         className="pointer-events-none absolute inset-x-3 top-1.5 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"
       />
       {body}
-      <p className="mt-1 text-[10px] font-mono uppercase tracking-[0.12em] text-muted-foreground/80">
+      <p className="mt-1 text-label font-mono uppercase tracking-[0.12em] text-muted-foreground/80">
         {CAPTION[toolId]} · demo
       </p>
     </div>
