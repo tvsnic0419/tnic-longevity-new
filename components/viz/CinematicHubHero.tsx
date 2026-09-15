@@ -73,8 +73,9 @@ export function CinematicHubHero({
 
   return (
     <section
-      className={`${styles.foundation} research-hero`}
+      className={`${styles.foundation} research-hero hub-instrument-hero`}
       style={{ '--research-hero-accent': hueCss } as React.CSSProperties}
+      data-hub-accent={hue === 'indigo' ? 'violet' : hue === 'gold' ? 'amber' : hue === 'teal' ? 'emerald' : hue}
     >
       {/* Decorative molecular field; all content remains readable without it. */}
       <div className="research-hero__field" aria-hidden="true">
