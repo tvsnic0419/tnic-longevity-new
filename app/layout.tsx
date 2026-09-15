@@ -12,6 +12,7 @@ import { buildRootMetadata } from '@/lib/seo';
 import { AmbientLayer } from '@/components/ui/AmbientLayer';
 import { BackToTop } from '@/components/ui/BackToTop';
 import './globals.css';
+import './instrument-depth.css';
 
 // One typography source of truth — a contrast serif (Fraunces) for display, a
 // humanist grotesque (Hanken Grotesk) for text, and a technical mono
