@@ -1254,12 +1254,17 @@ export function HomeDescent() {
       <section ref={s0} data-idx="0" id="arrive" className="tnic-act tnic-hero is-in">
         <div className="tnic-hero-grid">
           <div className="tnic-hero-copy">
-            <p className="tnic-kicker">The Longevity Intelligence OS</p>
+            <p className="tnic-kicker">The Longevity OS</p>
             <h1 className="tnic-h1">Evidence-based <em>longevity</em>,<br />without the hype.</h1>
+            {/* Names the system directly. With the kicker now reading "The
+                Longevity OS", the lead has to land OS as a method you learn —
+                grading, hallmarks, the trial under each claim — or a reader
+                arrives expecting an app to sign into. Same length, same voice,
+                same keywords as the line it replaces. */}
             <p className="tnic-lead">
-              A free, PubMed-backed library for understanding longevity supplements,
-              the 12 Hallmarks of Aging, and the evidence behind each compound —
-              before you buy or build a stack.
+              A free, PubMed-backed system for longevity decisions: how the evidence
+              is graded, what the 12 Hallmarks of Aging are, and which trial sits
+              under each compound — before you buy or build a stack.
             </p>
             <div className="tnic-trustline" aria-label="TNiC trust signals">
               <span>Human evidence graded</span>

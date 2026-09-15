@@ -38,7 +38,7 @@ export const metadata = {
   ...buildPageMetadata({
     title: HOME_TITLE,
     description:
-      'The Longevity Intelligence OS — elite anti-aging interventions like GlyNAC, NAD⁺, Ca-AKG and NRF2, graded by the strength of human evidence and each paired with one verified product to buy well. Plus a free, PubMed-backed library of the 12 hallmarks of aging and every study behind it. No pay-for-placement.',
+      'The Longevity OS — learn the system, not just the supplement list: how interventions are graded on human evidence, what the 12 hallmarks of aging are and which compounds act on each, and how to read the trial behind any claim. GlyNAC, NAD⁺, Ca-AKG, NRF2 and 96 more, each paired with one verified product. Free, PubMed-backed, no pay-for-placement.',
     path: '',
   }),
   // Absolute title so the `%s | TNiC` template doesn't double the brand name.

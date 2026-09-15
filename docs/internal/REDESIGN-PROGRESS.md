@@ -4,7 +4,37 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
-## 2026-09-15 — "The Longevity Intelligence OS" as slogan, not as rename
+## 2026-09-15 — "The Longevity OS" as slogan: a method, not an app
+
+**Refined same day, after the first pass shipped as "The Longevity Intelligence
+OS".** The owner cut it to **"The Longevity OS"** and — more importantly — said
+what it means:
+
+> ready to market it, but not because of the lab push. Because they can come to
+> the website and learn the operating system — the system of using the
+> interventions, the system of knowing what the hallmarks are.
+
+So **OS = method, not software.** Not an app a reader signs into; the system they
+learn: tiers A–C on human evidence, the twelve hallmarks and which compounds act
+on each, how a stack is assembled, which trial sits under a claim. That reframe
+resolves the tension the earlier pass had to write around — the site is not
+promising an unbuilt product, it is naming the one it already has.
+
+Copy now carries the method reading rather than leaving it to inference. The hero
+lead was rewritten (same length, same voice, same keywords) from "a free,
+PubMed-backed library for understanding…" to "a free, PubMed-backed **system for
+longevity decisions**: how the evidence is graded, what the 12 Hallmarks of Aging
+are, and which trial sits under each compound." With the kicker reading "The
+Longevity OS", a lead that says *library* leaves "OS" to be read as an app.
+
+**Unresolved and deliberately not decided here — a name collision.**
+`HomeOSComingSoon.tsx` uses "Longevity OS" for a personal cell-health WORKSPACE:
+dashboard, stack simulation, private lab logs. That is a different product from
+the method the slogan names, wearing the same name. Mounting that band as-is
+would tell a reader the OS is something to log into — the exact reading the
+slogan is written to avoid — and would market an unbuilt app. The workspace needs
+its own name; it is a feature *inside* the Longevity OS, not the Longevity OS.
+Recorded in that file, owner's call, still unmounted.
 
 **Owner decision, verbatim in intent:** TNiC is and always was *Transformative
 Nutrition in Cell-Health*. "Longevity Intelligence OS" has a ring to it, so it

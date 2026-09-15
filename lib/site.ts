@@ -32,17 +32,23 @@ export const SITE = {
    */
   tagline: 'Transformative Nutrition in Cell-Health',
   /**
-   * The positioning line, distinct from `tagline` above. It describes what the
-   * platform IS — a connected, queryable model over the evidence: 100 compound
-   * deep-dives, 12 hallmarks, the pathway graph and 363 indexed study rows, all
-   * cross-linked and derived rather than asserted.
+   * The positioning line, distinct from `tagline` above.
    *
-   * Deliberately NOT a claim about the unshipped personal workspace. See the
-   * note in `components/home/HomeOSComingSoon.tsx`: the Longevity OS *product*
-   * is still reserved and unmounted. This slogan names the system that already
-   * exists; it must not be used to imply software that does not.
+   * "OS" here means a METHOD, not an application. What the site teaches is a
+   * system for thinking about longevity: how interventions are graded (tiers
+   * A–C on human evidence), what the twelve hallmarks are and which compounds
+   * act on each, how a stack is assembled and verified, and which trial sits
+   * under every claim. A reader does not log into the Longevity OS — they learn
+   * it, and the library, hallmark graph, pathway map and trial index are the
+   * parts they learn it from.
+   *
+   * That distinction is load-bearing. Copy carrying this slogan must make the
+   * method reading obvious from its surroundings; the moment it reads as "an app
+   * you sign into," it is promising software that does not exist. See the note
+   * in `components/home/HomeOSComingSoon.tsx` for the naming collision this
+   * creates with the unshipped personal workspace.
    */
-  slogan: 'The Longevity Intelligence OS',
+  slogan: 'The Longevity OS',
   url: resolveSiteUrl(),
   locale: 'en_US',
   twitter: '@tnic_help',
