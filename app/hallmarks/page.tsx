@@ -85,6 +85,7 @@ export default function HallmarksIndexPage() {
         primary={{ href: '/stacks', label: 'Build my stack' }}
         secondary={{ href: '/library', label: 'Interactive library' }}
         figure={
+          <div className="library-instrument-shell h-full" style={{ ['--hub-accent' as string]: 'var(--accent-emerald)' }}>
           <HubSplitInstrument
             kicker="Cited interventions"
             total={interventions.length}
@@ -104,6 +105,7 @@ export default function HallmarksIndexPage() {
             href="/library"
             hrefLabel="Open the library →"
           />
+          </div>
         }
         figureCaption="Intervention split · derived from the hallmark registry"
       />
@@ -134,7 +136,7 @@ export default function HallmarksIndexPage() {
               The complete molecular map of aging.
             </h2>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 items-stretch">
               {hallmarkLibrary.map((h, i) => {
                 const hasEditorial = EDITORIAL_SLUGS.has(h.slug);
                 const topIntervention = [...h.interventions].sort((a, b) => a.rank - b.rank)[0];
@@ -147,7 +149,7 @@ export default function HallmarksIndexPage() {
                       // implicitly while its children used `flex-1` / `mt-auto`,
                       // which were therefore inert — the footer links were never
                       // bottom-pinned as the markup intended. Made explicit.
-                      className="premium-card flex h-full flex-col p-5"
+                      className="premium-card hallmarks-grid-card flex h-full flex-col p-5"
                       style={{ ['--card-accent' as string]: colorVar }}
                     >
                       {/* Header — icon + ghost index carry the hallmark's own
@@ -188,7 +190,7 @@ export default function HallmarksIndexPage() {
                             style={{ width: `${h.coverage}%`, ['--card-accent' as string]: coverageColor }}
                           />
                         </div>
-                        <p className="mt-1 text-micro text-muted-foreground">TNiC coverage</p>
+                        <p className="mt-1 text-label text-muted-foreground normal-case tracking-normal">TNiC coverage</p>
                       </div>
 
                       {/* Biomarkers */}
@@ -241,7 +243,7 @@ export default function HallmarksIndexPage() {
         {/* López-Otín attribution */}
         <section className="py-12 border-t border-border/50 bg-card/10">
           <div className="container-page max-w-3xl text-center">
-            <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-3">Scientific Foundation</p>
+            <p className="text-label text-muted-foreground mb-3">Scientific Foundation</p>
             <p className="text-sm text-muted-foreground leading-relaxed mb-4">
               The hallmarks framework was first published in{' '}
               <a href="https://pubmed.ncbi.nlm.nih.gov/22768836/" target="_blank" rel="noopener noreferrer" className="text-accent-emerald underline underline-offset-2 decoration-accent-emerald/50 hover:decoration-accent-emerald">
@@ -268,11 +270,11 @@ export default function HallmarksIndexPage() {
               The Stack Architect shows hallmark coverage for every compound combination in real time —
               so you know exactly which aging mechanisms your protocol addresses.
             </p>
-            <div className="flex flex-wrap justify-center gap-3">
-              <Link href="/stacks" className="focus-ring group inline-flex items-center gap-2 tnic-button-accent [--btn-accent:var(--accent-emerald)] rounded-xl px-6 py-3 text-sm">
+            <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
+              <Link href="/stacks" className="focus-ring group inline-flex items-center justify-center gap-2 tnic-button-accent [--btn-accent:var(--accent-emerald)] rounded-xl px-6 py-3 text-sm min-w-[12rem]">
                 Stack Architect <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
-              <Link href="/bio-age" className="tnic-button-outline focus-ring inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-medium">
+              <Link href="/bio-age" className="tnic-button-outline focus-ring inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-medium min-w-[12rem]">
                 Calculate Bio Age
               </Link>
             </div>
