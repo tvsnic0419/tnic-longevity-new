@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 import { BookmarkPlus, Compass, Layers3 } from 'lucide-react';
-import Link from 'next/link';
 import { buildPageMetadata, buildBreadcrumbSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
 import { AntiAgingLibrary } from '@/components/library/AntiAgingLibrary';
