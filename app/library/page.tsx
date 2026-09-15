@@ -23,6 +23,8 @@ import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { COMPOUND_COUNT } from '@/lib/library-modules';
 import { evidenceIndexStats } from '@/lib/evidence-index';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
 
 const indexStats = evidenceIndexStats();
 
@@ -111,7 +113,7 @@ export default async function LibraryPage({
           { value: String(indexStats.scored), label: 'With a TNiC Score', href: '/library/evidence' },
           { value: 'A–C', label: 'Evidence tiers', href: '/trust/methodology' },
         ]}
-        primary={{ href: '/nico', label: 'Find your personalized stack' }}
+        primary={{ href: '/nico', label: 'Start with NICO' }}
         secondary={{ href: '/library/evidence', label: 'Open the Evidence Table' }}
         figure={<LibraryHeroInstrument />}
         figureCaption="Evidence split · derived from the graded library"
@@ -170,18 +172,32 @@ export default async function LibraryPage({
               accent: 'cyan',
             },
             {
+              href: '/elite-8',
+              kicker: 'Shortlist',
+              title: 'Elite 8 rankings',
+              detail: 'Dose-matched picks ranked by Longevity Quotient.',
+              accent: 'amber',
+            },
+            {
               href: '/stacks',
-              kicker: 'Stacks',
+              kicker: 'Decide',
               title: 'Open Stack Architect',
               detail: 'Inspect coverage and interactions before you configure anything.',
               accent: 'violet',
+            },
+            {
+              href: '/shop',
+              kicker: 'Verify',
+              title: 'Verify stack',
+              detail: 'COA checklists once you know which compounds you want.',
+              accent: 'emerald',
             },
             {
               href: '/protocols',
               kicker: 'Protocols',
               title: 'Read a choreographed plan',
               detail: 'Each compound has a job and a time. Not a pile of pills.',
-              accent: 'emerald',
+              accent: 'violet',
             },
             {
               href: '/labs',
@@ -192,6 +208,9 @@ export default async function LibraryPage({
             },
           ]}
         />
+        <PageConnections cluster={clusterFrom('explore', '/library')} accent="cyan" id="library-explore-connections" />
+        <PageConnections cluster={clusterFrom('decide', '/library')} accent="violet" id="library-decide-connections" className="mt-6" />
+        <PageConnections cluster={clusterFrom('start', '/library')} accent="emerald" id="library-start-connections" className="mt-6" />
       </div>
 
       {/* Density: one browse surface above the fold. Synergies / lifestyle /

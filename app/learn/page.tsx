@@ -14,6 +14,7 @@ import { gettingStartedSteps, consumerFAQ, glossary } from '@/lib/data';
 import { SITE } from '@/lib/site';
 import { PageConnections } from '@/components/ui/PageConnections';
 import { clusterFrom } from '@/lib/page-connections';
+import { ContinueTrail } from '@/components/ui/WalkCard';
 
 export const metadata = seoRoutes.learn();
 
@@ -63,8 +64,8 @@ export default function LearnPage() {
           { value: String(glossary.length), label: 'Glossary terms' },
           { value: String(gettingStartedSteps.length), label: 'Getting-started steps' },
         ]}
-        primary={{ href: '/nico', label: 'Find your personalized stack' }}
-        secondary={{ href: '/library', label: 'Browse the library' }}
+        primary={{ href: '/nico', label: 'Start with NICO' }}
+        secondary={{ href: '/library', label: 'Explore library' }}
         figure={
           <HubSplitInstrument
             kicker="Learn inventory"
@@ -120,8 +121,18 @@ export default function LearnPage() {
       {/* This page's body is a client island behind Suspense, so it
           server-rendered almost no in-body links — a reader arriving from
           search, and every crawler, saw a shell that connected to nothing. */}
-      <div className="container-page">
-        <PageConnections cluster={clusterFrom('explore', '/learn')} accent="cyan" id="explore-connections" />
+      <div className="container-page pb-16">
+        <ContinueTrail
+          title="From Learn into the product."
+          items={[
+            { href: '/nico', kicker: 'Start', title: 'Start with NICO', detail: 'Questionnaire → personalized stack handoff.', accent: 'emerald' },
+            { href: '/library', kicker: 'Explore', title: 'Explore the library', detail: 'Graded compounds and hallmark deep-dives.', accent: 'cyan' },
+            { href: '/stacks', kicker: 'Decide', title: 'Open Stack Architect', detail: 'Build once you understand the rails.', accent: 'violet' },
+            { href: '/trust', kicker: 'Trust', title: 'How we grade', detail: 'Tier criteria and commercial boundaries.', accent: 'amber' },
+          ]}
+        />
+        <PageConnections cluster={clusterFrom('start', '/learn')} accent="emerald" id="learn-start-connections" />
+        <PageConnections cluster={clusterFrom('explore', '/learn')} accent="cyan" id="learn-explore-connections" className="mt-6" />
       </div>
       </PageShell>
     </SubPageLayout>

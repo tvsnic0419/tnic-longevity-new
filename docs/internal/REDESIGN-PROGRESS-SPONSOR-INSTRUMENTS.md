@@ -24,3 +24,13 @@ Extends merged **PR #206** (Phase 1 chrome + DepthBarChart / BiologicalAgeGauge 
 - `docs/COPILOT-UI-UPGRADE.md` Phase 1 (#206) + Phase 2 checked
 - Smoke tests for instrument widgets + overture gate
 - Integrity pins: 338 site/content integrity tests green locally
+
+
+## Follow-on — audit coherence + interlink (2026-09-15)
+
+Branch `fix/audit-coherence-interlink` (not the sponsor-instruments branch):
+
+- Start / Explore / Decide / Verify `page-connections` clusters
+- PageConnections + ContinueTrail on major hubs previously missing rails
+- CTA language unified; RecommendedNextSteps + Elite-8 palette bugs fixed
+- See `docs/internal/AUDIT-COHERENCE-INTERLINK.md`

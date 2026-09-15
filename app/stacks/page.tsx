@@ -19,6 +19,9 @@ import { EntityChips } from '@/components/ui/EntityChips';
 import { resolveCompounds, resolveHallmarks } from '@/lib/entity-graph';
 import { TIER_COLOR_VAR } from '@/lib/trust';
 import type { EvidenceTier } from '@/lib/types';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
+import { ContinueTrail } from '@/components/ui/WalkCard';
 
 // Honest stats for the hero — unique undirected synergy edges in the dataset.
 const synergyPairs = new Set<string>();
@@ -75,8 +78,8 @@ export default function StacksPage() {
         title={<>Build the stack the <em>evidence</em> would build.</>}
         lead="Presets graded on human trials, live synergy scoring, contraindication flags, and a protocol you can export — assembled from the same dataset that powers every compound module."
         stats={stackStats}
-        primary={{ href: '/nico', label: 'Find your personalized stack' }}
-        secondary={{ href: '/library', label: 'Browse compounds' }}
+        primary={{ href: '/nico', label: 'Start with NICO' }}
+        secondary={{ href: '/library', label: 'Explore library' }}
         figure={
           <HubSplitInstrument
             kicker="Elite stacks"
@@ -154,6 +157,18 @@ export default function StacksPage() {
             </div>
           </div>
         </section>
+
+        <ContinueTrail
+          title="After you assemble a stack."
+          items={[
+            { href: '/shop', kicker: 'Verify', title: 'Verify stack', detail: 'Buyer checklists filtered to your active compounds.', accent: 'amber' },
+            { href: '/tools?tab=simulator', kicker: 'Tools', title: 'Simulate synergies', detail: 'Rule-based interaction checks before you commit.', accent: 'cyan' },
+            { href: '/labs', kicker: 'Track', title: 'Log baseline labs', detail: 'Know whether the protocol is moving markers.', accent: 'rose' },
+            { href: '/protocols', kicker: 'Explore', title: 'Browse choreographed protocols', detail: 'Compare against authored timing plans.', accent: 'violet' },
+          ]}
+        />
+        <PageConnections cluster={clusterFrom('decide', '/stacks')} accent="violet" id="stacks-connections" />
+        <PageConnections cluster={clusterFrom('verify', '/stacks')} accent="amber" id="stacks-verify-connections" className="mt-6" />
       </PageShell>
     </>
   );

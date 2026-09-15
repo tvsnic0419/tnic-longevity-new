@@ -12,6 +12,7 @@ import { toolsRegistry } from '@/lib/registry';
 import { SITE } from '@/lib/site';
 import { PageConnections } from '@/components/ui/PageConnections';
 import { clusterFrom } from '@/lib/page-connections';
+import { ContinueTrail } from '@/components/ui/WalkCard';
 
 export const metadata = seoRoutes.tools();
 
@@ -70,8 +71,8 @@ export default function ToolsPage() {
           { value: 'Free', label: 'No account needed' },
           { value: 'Local-first', label: 'Private by default' },
         ]}
-        primary={{ href: '/nico', label: 'Find your personalized stack' }}
-        secondary={{ href: '/library', label: 'Browse the library' }}
+        primary={{ href: '/nico', label: 'Start with NICO' }}
+        secondary={{ href: '/library', label: 'Explore library' }}
         figure={
           <HubSplitInstrument
             kicker="Tool shelf"
@@ -111,8 +112,19 @@ export default function ToolsPage() {
       {/* This page's body is a client island behind Suspense, so it
           server-rendered almost no in-body links — a reader arriving from
           search, and every crawler, saw a shell that connected to nothing. */}
-      <div className="container-page">
-        <PageConnections cluster={clusterFrom('explore', '/tools')} accent="cyan" id="explore-connections" />
+      <div className="container-page pb-16">
+        <ContinueTrail
+          title="After you run a tool."
+          items={[
+            { href: '/stacks', kicker: 'Decide', title: 'Load results in Architect', detail: 'Turn a simulation into a shareable stack URL.', accent: 'violet' },
+            { href: '/labs', kicker: 'Track', title: 'Import labs for forecasts', detail: 'Biomarker tools need a baseline panel.', accent: 'rose' },
+            { href: '/shop', kicker: 'Verify', title: 'Verify stack', detail: 'Check forms and COAs before you buy.', accent: 'amber' },
+            { href: '/elite-8', kicker: 'Rank', title: 'Elite 8 LQ', detail: 'Head-to-head Longevity Quotient ranking.', accent: 'emerald' },
+          ]}
+        />
+        <PageConnections cluster={clusterFrom('decide', '/tools')} accent="violet" id="tools-decide-connections" />
+        <PageConnections cluster={clusterFrom('explore', '/tools')} accent="cyan" id="tools-explore-connections" className="mt-6" />
+        <PageConnections cluster={clusterFrom('verify', '/tools')} accent="amber" id="tools-verify-connections" className="mt-6" />
       </div>
     </>
   );

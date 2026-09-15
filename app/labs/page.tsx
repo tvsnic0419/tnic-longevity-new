@@ -15,6 +15,9 @@ import { COMPOUND_COUNT } from '@/lib/library-modules';
 import { EntityChips } from '@/components/ui/EntityChips';
 import { resolveCompounds } from '@/lib/entity-graph';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
+import { ContinueTrail } from '@/components/ui/WalkCard';
 
 export const metadata = seoRoutes.labs();
 
@@ -65,8 +68,8 @@ export default function LabsPage() {
           { value: String(hallmarkLibrary.length), label: 'Hallmarks of aging', href: '/hallmarks' },
           { value: 'A–C', label: 'Evidence tiers', href: '/trust/methodology' },
         ]}
-        primary={{ href: '/nico', label: 'Find your personalized stack' }}
-        secondary={{ href: '/library', label: 'Browse the library' }}
+        primary={{ href: '/nico', label: 'Start with NICO' }}
+        secondary={{ href: '/library', label: 'Explore library' }}
       />
       {/* Identity on the server, ahead of the client island — see the note in
           app/stacks/page.tsx and STYLE_GUIDE §14. LabHub calls
@@ -112,6 +115,18 @@ export default function LabsPage() {
             </div>
           </div>
         </section>
+
+        <ContinueTrail
+          title="After you log a panel."
+          items={[
+            { href: '/stacks', kicker: 'Decide', title: 'Adjust stack from labs', detail: 'Map markers back to compounds in Stack Architect.', accent: 'violet' },
+            { href: '/shop', kicker: 'Verify', title: 'Verify stack', detail: 'COA checklists for the compounds you are evaluating.', accent: 'amber' },
+            { href: '/tools?tab=impact', kicker: 'Tools', title: 'Biomarker impact ranking', detail: 'See which levers likely move each marker most.', accent: 'cyan' },
+            { href: '/nico', kicker: 'Start', title: 'Start with NICO', detail: 'If you still need a first personalized stack.', accent: 'emerald' },
+          ]}
+        />
+        <PageConnections cluster={clusterFrom('verify', '/labs')} accent="rose" id="labs-connections" />
+        <PageConnections cluster={clusterFrom('decide', '/labs')} accent="violet" id="labs-decide-connections" className="mt-6" />
       </PageShell>
     </>
   );

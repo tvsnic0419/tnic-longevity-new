@@ -5,6 +5,7 @@ import { SystemsPage } from '@/components/library/SystemsPage';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PageConnections } from '@/components/ui/PageConnections';
 import { clusterFrom } from '@/lib/page-connections';
+import { ContinueTrail } from '@/components/ui/WalkCard';
 
 export const metadata: Metadata = {
   // Absolute title so the `%s | TNiC` template doesn't double the brand.
@@ -51,8 +52,18 @@ export default function SystemsRoute() {
       {/* This page's body is a client island, so it server-rendered no
           in-body links at all — a reader arriving from search, and every
           crawler, saw a shell that connected to nothing. */}
-      <div className="container-page">
-        <PageConnections cluster={clusterFrom('explore', '/library/systems')} accent="violet" id="explore-connections" />
+      <div className="container-page pb-16">
+        <ContinueTrail
+          title="From the systems map."
+          items={[
+            { href: '/library', kicker: 'Explore', title: 'Back to the library', detail: 'Compound grid and hallmark atlas.', accent: 'cyan' },
+            { href: '/pathways', kicker: 'Mechanisms', title: 'Pathway deep-dives', detail: 'NRF2, mTOR, SIRT1 and the rest.', accent: 'violet' },
+            { href: '/stacks', kicker: 'Decide', title: 'Open Stack Architect', detail: 'Build coverage across connected systems.', accent: 'emerald' },
+            { href: '/nico', kicker: 'Start', title: 'Start with NICO', detail: 'Personalize which systems to prioritize.', accent: 'amber' },
+          ]}
+        />
+        <PageConnections cluster={clusterFrom('explore', '/library/systems')} accent="violet" id="systems-explore-connections" />
+        <PageConnections cluster={clusterFrom('decide', '/library/systems')} accent="emerald" id="systems-decide-connections" className="mt-6" />
       </div>
     </div>
   );

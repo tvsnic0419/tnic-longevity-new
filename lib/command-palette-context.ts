@@ -54,7 +54,8 @@ function getPageContextItems(pathname: string): PaletteItem[] {
   if (pathname.startsWith('/stacks')) {
     return [
       item('ctx-stacks-sim', 'Simulate current stack', { href: '/tools?tab=simulator', kind: 'tool' }),
-      item('ctx-stacks-shop', 'Verify picks at Shop', { href: '/shop', kind: 'page' }),
+      item('ctx-stacks-shop', 'Verify stack', { href: '/shop', kind: 'page' }),
+      item('ctx-stacks-nico', 'Start with NICO', { href: '/nico', kind: 'page' }),
       item('ctx-stacks-labs', 'Log labs for stack markers', { href: '/labs?tab=input', kind: 'page' }),
     ];
   }
@@ -68,6 +69,8 @@ function getPageContextItems(pathname: string): PaletteItem[] {
   if (pathname.startsWith('/tools')) {
     return [
       item('ctx-tools-elite8', 'Elite 8 Longevity Quotient', { href: '/elite-8', kind: 'tool' }),
+      item('ctx-tools-nico', 'Start with NICO', { href: '/nico', kind: 'page' }),
+      item('ctx-tools-shop', 'Verify stack', { href: '/shop', kind: 'page' }),
       item('ctx-tools-protocol', 'Build phased protocol', { href: '/tools?tab=protocol', kind: 'tool' }),
       item('ctx-tools-stacks', 'Load stack in Architect', { href: '/stacks', kind: 'page' }),
       item('ctx-tools-labs', 'Import labs for forecasts', { href: '/labs', kind: 'page' }),
@@ -75,8 +78,10 @@ function getPageContextItems(pathname: string): PaletteItem[] {
   }
   if (pathname.startsWith('/elite-8')) {
     return [
-      item('ctx-elite8-compare', 'Head-to-head comparison', { href: '/elite-8', kind: 'tool' }),
-      item('ctx-elite8-library', 'Compound evidence modules', { href: '/library', kind: 'page' }),
+      item('ctx-elite8-compare', 'Head-to-head comparison', { href: '/library/compare', kind: 'page' }),
+      item('ctx-elite8-library', 'Explore the library', { href: '/library', kind: 'page' }),
+      item('ctx-elite8-stacks', 'Load Elite picks in Stack Architect', { href: '/stacks', kind: 'page' }),
+      item('ctx-elite8-shop', 'Verify stack', { href: '/shop', kind: 'page' }),
       item('ctx-elite8-trust', 'Evidence tier methodology', { href: '/trust/methodology', kind: 'page' }),
     ];
   }
@@ -90,21 +95,50 @@ function getPageContextItems(pathname: string): PaletteItem[] {
   if (pathname.startsWith('/library')) {
     return [
       item('ctx-lib-compare', 'Evidence comparisons', { href: '/library/compare', kind: 'page' }),
-      item('ctx-lib-quiz', 'NICO Starter Questionnaire', { href: '/nico', kind: 'page' }),
+      item('ctx-lib-quiz', 'Start with NICO', { href: '/nico', kind: 'page' }),
+      item('ctx-lib-elite', 'Elite 8 rankings', { href: '/elite-8', kind: 'page' }),
+      item('ctx-lib-shop', 'Verify stack', { href: '/shop', kind: 'page' }),
       item('ctx-lib-delivery', 'Delivery systems guide', { href: '/library/delivery-systems', kind: 'page' }),
     ];
   }
   if (pathname.startsWith('/shop')) {
     return [
       item('ctx-shop-stacks', 'Edit stack in Architect', { href: '/stacks', kind: 'page' }),
+      item('ctx-shop-products', 'Verified product catalog', { href: '/products', kind: 'page' }),
+      item('ctx-shop-labs', 'Log labs after purchase', { href: '/labs', kind: 'page' }),
       item('ctx-shop-compare', 'Compare before buying', { href: '/library/compare', kind: 'page' }),
       item('ctx-shop-trust', 'COA verification methodology', { href: '/trust/methodology', kind: 'page' }),
     ];
   }
+  if (pathname.startsWith('/hallmarks')) {
+    return [
+      item('ctx-hallmarks-library', 'Explore the library', { href: '/library', kind: 'page' }),
+      item('ctx-hallmarks-stacks', 'Build coverage in Stack Architect', { href: '/stacks', kind: 'page' }),
+      item('ctx-hallmarks-nico', 'Start with NICO', { href: '/nico', kind: 'page' }),
+      item('ctx-hallmarks-labs', 'Log hallmark-linked biomarkers', { href: '/labs', kind: 'page' }),
+    ];
+  }
+  if (pathname.startsWith('/protocols')) {
+    return [
+      item('ctx-protocols-stacks', 'Customize in Stack Architect', { href: '/stacks', kind: 'page' }),
+      item('ctx-protocols-shop', 'Verify stack', { href: '/shop', kind: 'page' }),
+      item('ctx-protocols-library', 'Explore the library', { href: '/library', kind: 'page' }),
+      item('ctx-protocols-nico', 'Start with NICO', { href: '/nico', kind: 'page' }),
+    ];
+  }
+  if (pathname.startsWith('/nico')) {
+    return [
+      item('ctx-nico-stacks', 'Load stack in Architect', { href: '/stacks', kind: 'page' }),
+      item('ctx-nico-library', 'Explore the library', { href: '/library', kind: 'page' }),
+      item('ctx-nico-shop', 'Verify stack', { href: '/shop', kind: 'page' }),
+      item('ctx-nico-labs', 'Log baseline labs', { href: '/labs?tab=input', kind: 'page' }),
+    ];
+  }
   if (pathname.startsWith('/products')) {
     return [
-      item('ctx-products-shop', 'Stack-filtered verification', { href: '/shop', kind: 'page' }),
-      item('ctx-products-library', 'Compound evidence modules', { href: '/library', kind: 'page' }),
+      item('ctx-products-shop', 'Verify stack', { href: '/shop', kind: 'page' }),
+      item('ctx-products-library', 'Explore the library', { href: '/library', kind: 'page' }),
+      item('ctx-products-stacks', 'Open Stack Architect', { href: '/stacks', kind: 'page' }),
       item('ctx-products-brief', 'Subscribe to Protocol Brief', { href: '/brief#brief-subscribe', kind: 'page' }),
     ];
   }
@@ -124,16 +158,18 @@ function getPageContextItems(pathname: string): PaletteItem[] {
   }
   if (pathname === '/' || pathname === '') {
     return [
-      item('ctx-home-quiz', 'Take NICO Starter Questionnaire', { href: '/nico', kind: 'page' }),
-      item('ctx-home-products', 'Verified product catalog', { href: '/products', kind: 'page' }),
-      item('ctx-home-dashboard', 'Open your OS dashboard', { href: '/dashboard', kind: 'page' }),
-      item('ctx-home-research', 'Research Intel feed', { href: '/brief', kind: 'page' }),
+      item('ctx-home-quiz', 'Start with NICO', { href: '/nico', kind: 'page' }),
+      item('ctx-home-library', 'Explore the library', { href: '/library', kind: 'page' }),
+      item('ctx-home-elite', 'Elite 8 rankings', { href: '/elite-8', kind: 'page' }),
+      item('ctx-home-stacks', 'Open Stack Architect', { href: '/stacks', kind: 'page' }),
+      item('ctx-home-shop', 'Verify stack', { href: '/shop', kind: 'page' }),
     ];
   }
   return [
     item('ctx-default-dashboard', 'My Longevity OS', { href: '/dashboard', kind: 'page' }),
     item('ctx-default-library', 'Anti-Aging Library', { href: '/library', kind: 'page' }),
-    item('ctx-default-quiz', 'NICO Starter Questionnaire', { href: '/nico', kind: 'page' }),
+    item('ctx-default-quiz', 'Start with NICO', { href: '/nico', kind: 'page' }),
+    item('ctx-default-shop', 'Verify stack', { href: '/shop', kind: 'page' }),
   ];
 }
 
