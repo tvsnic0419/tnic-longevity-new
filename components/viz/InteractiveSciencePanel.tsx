@@ -119,40 +119,62 @@ export function InteractiveSciencePanel({
         </div>
 
         {hasControls && (
-          <div className="flex shrink-0 items-center gap-0.5">
-            <IconButton
-              icon={ZoomOut}
-              label={`Zoom out of ${title}`}
-              size="sm"
-              onClick={() => {
-                handle()?.zoomBy(1 / 1.2);
-                setTouched(true);
-              }}
-            />
-            <IconButton
-              icon={ZoomIn}
-              label={`Zoom into ${title}`}
-              size="sm"
-              onClick={() => {
-                handle()?.zoomBy(1.2);
-                setTouched(true);
-              }}
-            />
-            <IconButton
-              icon={RotateCcw}
-              label={`Reset the ${title} view`}
-              size="sm"
-              onClick={() => {
-                handle()?.reset();
-                setTouched(true);
-              }}
-            />
-            <IconButton
-              icon={fullscreen ? Minimize2 : Maximize2}
-              label={fullscreen ? `Exit full screen` : `Open ${title} full screen`}
-              size="sm"
-              onClick={toggleFullscreen}
-            />
+          <div
+            className="flex shrink-0 items-end gap-0.5"
+            role="toolbar"
+            aria-label={`${title} view controls`}
+          >
+            {(
+              [
+                {
+                  icon: ZoomOut,
+                  label: `Zoom out of ${title}`,
+                  short: 'Out',
+                  onClick: () => {
+                    handle()?.zoomBy(1 / 1.2);
+                    setTouched(true);
+                  },
+                },
+                {
+                  icon: ZoomIn,
+                  label: `Zoom into ${title}`,
+                  short: 'In',
+                  onClick: () => {
+                    handle()?.zoomBy(1.2);
+                    setTouched(true);
+                  },
+                },
+                {
+                  icon: RotateCcw,
+                  label: `Reset the ${title} view`,
+                  short: 'Reset',
+                  onClick: () => {
+                    handle()?.reset();
+                    setTouched(true);
+                  },
+                },
+                {
+                  icon: fullscreen ? Minimize2 : Maximize2,
+                  label: fullscreen ? `Exit full screen` : `Open ${title} full screen`,
+                  short: fullscreen ? 'Exit' : 'Full',
+                  onClick: toggleFullscreen,
+                },
+              ] as const
+            ).map((ctrl) => (
+              <div key={ctrl.short} className="flex flex-col items-center gap-0.5">
+                <IconButton
+                  icon={ctrl.icon}
+                  label={ctrl.label}
+                  size="sm"
+                  onClick={ctrl.onClick}
+                />
+                {/* Visible caption on phones — aria-label alone left the icon
+                    row looking unlabeled in the mobile graph chrome. */}
+                <span className="font-mono text-micro uppercase tracking-wider text-muted-foreground sm:sr-only" aria-hidden="true">
+                  {ctrl.short}
+                </span>
+              </div>
+            ))}
           </div>
         )}
       </div>
