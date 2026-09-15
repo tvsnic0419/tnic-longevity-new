@@ -75,7 +75,7 @@ Everything else is secondary. Hub accents (cyan/violet/rose) = labels/borders on
 ## Phase checklist
 
 - [x] **Phase 1** — Chrome & CTA polish + instrument charts (**PR #206** merged; instruments extended in `ui/sponsor-instruments`)
-- [x] **Phase 2** — Density & time-to-value (`ui/sponsor-instruments`) — library browse disclosure, HomeDescent Acts 1–3 collapsed, mobile ContextBar + stacks equal tabs + labs tile balance
+- [x] **Phase 2** — Density & time-to-value (`ui/sponsor-instruments`) — library browse disclosure, HomeDescent Acts 1–3 via `HomeSystemOvertureGate`, mobile ContextBar + stacks equal tabs + labs tile balance
 
 ---
 
@@ -87,6 +87,7 @@ Shipped on `ui/sponsor-instruments` after PR #206:
 - DepthBarChart wired through Protocol Engine, Healthspan, Biomarker dashboard, Stack Simulator, Biomarker Impact, SynergyScorePanel
 - Homepage + dashboard instrument strips (BiologicalAgeGauge + derived rankings)
 - Premium `ToolEmptyState` skeletons for empty tool surfaces
+- `HomeSystemOvertureGate` collapses Acts 1–3 (`#molecule`/`#system`/`#goal`) behind Explore the system (hero portal)
 
 ## Phase 1 — Chrome & CTA polish
 
