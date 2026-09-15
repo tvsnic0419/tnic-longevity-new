@@ -1,4 +1,9 @@
 'use client';
+/* eslint-disable react-hooks/set-state-in-effect --
+   The mount/URL-driven effect(s) below set state from client-only sources
+   (localStorage, window, or URL search params) or trigger entrance animations.
+   These cannot run during SSR, so the initial setState is intentional and not a
+   value derivable during render. Reviewed 2026-09-15; safe to keep. */
 
 import { useLayoutEffect, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
