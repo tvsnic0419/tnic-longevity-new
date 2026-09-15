@@ -24,6 +24,7 @@ import { ContextRail } from '@/components/ui/ContextRail';
 import { ResearchPassport } from '@/components/dashboard/ResearchPassport';
 import { ResearchIntentPanel } from '@/components/dashboard/ResearchIntentPanel';
 import { ClubCabinet } from '@/components/dashboard/ClubCabinet';
+import { DashboardInstrumentPanel } from '@/components/dashboard/DashboardInstrumentPanel';
 import { getHubContext } from '@/lib/hub-context';
 
 function formatDaysAgo(dateStr: string): string {
@@ -124,6 +125,10 @@ export function Dashboard() {
       )}
 
       <DashboardFocusDeck />
+
+      <div className="mb-6 lg:mb-8">
+        <DashboardInstrumentPanel />
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         <div id="dashboard-status" className="lg:col-span-1">
