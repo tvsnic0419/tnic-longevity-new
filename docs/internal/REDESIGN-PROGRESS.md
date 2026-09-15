@@ -4,6 +4,47 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-15 — "The Longevity Intelligence OS" as slogan, not as rename
+
+**Owner decision, verbatim in intent:** TNiC is and always was *Transformative
+Nutrition in Cell-Health*. "Longevity Intelligence OS" has a ring to it, so it
+becomes a **slogan** alongside the name — not a replacement for it.
+
+This settles PR #200, which proposed retitling the homepage to "TNiC — Longevity
+Intelligence OS" and rewriting the meta description. That PR was **not merged**:
+it swapped the keyword-bearing `<title>` on a revenue-generating page for a
+brand-only one, and by its own description it was a partial slice with follow-ups
+still pending in the same branch. The good half of it — the credibility strip's
+census framing — is carried here instead.
+
+**Where the slogan lives now.** `SITE.slogan` is the single source; `SITE.tagline`
+keeps the brand's actual meaning, and the two are documented as distinct so
+neither gets used for the other.
+
+- Hero kicker, above the H1 (which is untouched — it works, per §8)
+- Footer brand paragraph
+- Homepage meta description, leading, with every compound keyword kept
+- Organization JSON-LD `slogan` — schema.org carries the property natively, so
+  the positioning is machine-readable rather than rendered-copy-only
+
+**What was deliberately NOT changed.** `HOME_TITLE` — the homepage `<title>` is
+the highest-value SEO surface on the site and already carries the terms that earn
+the traffic. The nav descriptor stays "Cell-Health Library": that is what TNiC
+stands for, and the owner decision was explicit that the name's meaning is not
+up for replacement.
+
+**The 2026-07 reservation was narrowed, not lifted.** `HomeOSComingSoon.tsx`
+records an owner direction that the Longevity OS name "should NOT be marketed
+yet" — attached to an unmounted teaser for a personal workspace that does not
+exist. The slogan names the evidence system that DOES exist (library, hallmark
+and pathway graph, trial index); the product teaser stays unmounted. That
+component's note now states both halves so a future session cannot read the old
+directive as either stale or as permission to mount the band.
+
+**Verified:** 766 tests · lint 0 errors · typecheck clean · build ok · homepage
+`<title>` unchanged, H1 unchanged, slogan present in hero/footer/description/
+JSON-LD, OS teaser absent from the rendered homepage.
+
 ## 2026-09-14 (ninth pass) — the Trial Index: the cited literature, as data
 
 **The question asked:** identify and ship the highest-value content upgrade.

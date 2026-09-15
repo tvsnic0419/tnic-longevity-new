@@ -1254,7 +1254,7 @@ export function HomeDescent() {
       <section ref={s0} data-idx="0" id="arrive" className="tnic-act tnic-hero is-in">
         <div className="tnic-hero-grid">
           <div className="tnic-hero-copy">
-            <p className="tnic-kicker">Evidence-Graded Longevity Library</p>
+            <p className="tnic-kicker">The Longevity Intelligence OS</p>
             <h1 className="tnic-h1">Evidence-based <em>longevity</em>,<br />without the hype.</h1>
             <p className="tnic-lead">
               A free, PubMed-backed library for understanding longevity supplements,

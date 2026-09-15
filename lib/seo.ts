@@ -128,6 +128,10 @@ export function buildOrganizationSchema() {
     alternateName: SITE.fullName,
     url: SITE.url,
     logo: `${SITE.url}/icon-512.png`,
+    // schema.org/Organization carries `slogan` natively, so the positioning
+    // line is machine-readable to an answer engine rather than living only in
+    // rendered copy. `alternateName` already states what TNiC stands for.
+    slogan: SITE.slogan,
     description: 'Independent educational longevity platform — not a medical provider or supplement retailer.',
     knowsAbout: [
       'Hallmarks of aging',
