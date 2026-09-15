@@ -20,8 +20,7 @@ describe('HomeInstrumentStrip', () => {
     const standby = container.querySelector('.bio-age-standby');
     expect(standby).toBeTruthy();
     expect(standby?.textContent).toMatch(/standby/i);
-    expect(standby?.textContent).toMatch(/--\\.-/);
-    // Gauge center must not render a lone em-dash placeholder
+    expect(standby?.textContent).toMatch(/--\.-/);
     expect(standby?.textContent ?? '').not.toContain('—');
   });
 });

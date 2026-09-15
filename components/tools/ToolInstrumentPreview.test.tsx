@@ -8,6 +8,7 @@ describe('ToolInstrumentPreview', () => {
   it.each(toolsRegistry.map((t) => t.id))('renders mini instrument for %s', (id) => {
     const { container } = render(<ToolInstrumentPreview toolId={id} />);
     expect(container.querySelector('.tool-instrument-preview')).toBeTruthy();
+    expect(container.querySelector('.instrument-module')).toBeTruthy();
     expect(container.querySelector('svg')).toBeTruthy();
     expect(container.textContent).toMatch(/demo/i);
   });
