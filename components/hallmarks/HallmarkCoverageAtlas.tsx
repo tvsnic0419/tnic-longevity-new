@@ -40,7 +40,7 @@ export function HallmarkCoverageAtlas({ className = '' }: { className?: string }
         <p className="font-mono text-micro text-[var(--color-text-faint)]">Documented interventions per mechanism</p>
       </div>
 
-      <ul className="mt-5 grid gap-x-8 gap-y-2.5 lg:grid-cols-2">
+      <ul className="mt-5 grid gap-x-8 gap-y-2.5 pe-10 sm:pe-0 lg:grid-cols-2">
         {rows.map((r) => {
           const pct = (r.count / peak) * 100;
           return (
@@ -52,7 +52,7 @@ export function HallmarkCoverageAtlas({ className = '' }: { className?: string }
                 <span className="w-6 shrink-0 text-right font-mono text-micro text-[var(--color-text-faint)]">
                   {String(r.number).padStart(2, '0')}
                 </span>
-                <span className="w-40 shrink-0 truncate text-body-sm text-[var(--color-text-secondary)] transition-colors group-hover:text-foreground">
+                <span className="min-w-0 flex-1 text-body-sm leading-snug text-[var(--color-text-secondary)] transition-colors group-hover:text-foreground sm:flex-none sm:w-40 sm:shrink-0">
                   {r.title}
                 </span>
                 <span className="relative h-2 flex-1 overflow-hidden rounded-full bg-[var(--color-bg-muted)]" aria-hidden="true">
