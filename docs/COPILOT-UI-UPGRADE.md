@@ -74,10 +74,19 @@ Everything else is secondary. Hub accents (cyan/violet/rose) = labels/borders on
 
 ## Phase checklist
 
-- [ ] **Phase 1** — Chrome & CTA polish (`ui/copilot-polish`)
-- [ ] **Phase 2** — Density & time-to-value (`ui/copilot-density`) — start only after Phase 1 is on `main`
+- [x] **Phase 1** — Chrome & CTA polish + instrument charts (**PR #206** merged; instruments extended in `ui/sponsor-instruments`)
+- [x] **Phase 2** — Density & time-to-value (`ui/sponsor-instruments`) — library browse disclosure, HomeDescent Acts 1–3 collapsed, mobile ContextBar + stacks equal tabs + labs tile balance
 
 ---
+
+## Instruments extension (sponsor-grade)
+
+Shipped on `ui/sponsor-instruments` after PR #206:
+
+- ToolsHub mini instruments per tool card (gauge / spark / depth / network)
+- DepthBarChart wired through Protocol Engine, Healthspan, Biomarker dashboard, Stack Simulator, Biomarker Impact, SynergyScorePanel
+- Homepage + dashboard instrument strips (BiologicalAgeGauge + derived rankings)
+- Premium `ToolEmptyState` skeletons for empty tool surfaces
 
 ## Phase 1 — Chrome & CTA polish
 

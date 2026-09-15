@@ -97,7 +97,7 @@ export function UserFlowGuide({ currentStep = 1 }: UserFlowGuideProps) {
       </div>
 
       {/* Step cards */}
-      <div className="grid sm:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         {steps.map((s) => {
           const Icon = s.icon;
           const isDone = currentStep > s.step;
@@ -105,7 +105,7 @@ export function UserFlowGuide({ currentStep = 1 }: UserFlowGuideProps) {
           return (
             <div
               key={s.step}
-              className="rounded-xl p-3 transition-all duration-300"
+              className={`rounded-xl p-3 transition-all duration-300${s.step === 5 ? ' col-span-2 sm:col-span-1 lg:col-span-1 max-sm:col-span-2' : ''}`}
               style={{
                 background: isCurrent
                   ? 'color-mix(in srgb, var(--accent-rose) 8%, transparent)'
