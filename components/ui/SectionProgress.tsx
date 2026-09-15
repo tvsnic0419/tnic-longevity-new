@@ -239,7 +239,7 @@ export function SectionProgress({
         aria-label={ariaLabel}
         // Was `md:hidden`, which left 768-1500px with an overlapping rail and
         // no fallback. It now covers exactly the range the rail cannot.
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-border/60 bg-[var(--color-bg-base)]/90 backdrop-blur min-[1500px]:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 border-t border-border/60 bg-[var(--color-bg-base)]/90 backdrop-blur min-[1500px]:hidden pb-[env(safe-area-inset-bottom,0px)]"
       >
         <div
           ref={stripRef}
