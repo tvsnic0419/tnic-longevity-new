@@ -171,7 +171,7 @@ export function ToolsHub() {
           className="mb-8 max-w-4xl mx-auto"
         />
 
-        <section className="card-floating card-shine relative mb-8 overflow-hidden rounded-2xl p-5 md:p-6" aria-labelledby="tool-concierge-title">
+        <section className="instrument-bezel card-floating card-shine relative mb-8 overflow-hidden rounded-2xl p-5 md:p-6" aria-labelledby="tool-concierge-title">
           <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-accent-violet/15 blur-3xl" aria-hidden="true" />
           <div className="relative">
             <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
@@ -182,7 +182,7 @@ export function ToolsHub() {
               </div>
               <p className="text-micro font-mono uppercase tracking-[0.12em] text-muted-foreground">Rule-based · inspectable</p>
             </div>
-            <div className="mt-5 grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="mt-5 grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4 items-stretch" data-symmetric-grid>
               {decisionRoutes.map((route) => {
                 const Icon = route.icon;
                 const tones = decisionToneClasses[route.tone];
@@ -193,7 +193,7 @@ export function ToolsHub() {
                     <ArrowRight className={`mt-0.5 h-4 w-4 shrink-0 ${tones.text} transition-transform group-hover:translate-x-0.5`} aria-hidden="true" />
                   </>
                 );
-                const className = `focus-ring group flex min-h-32 items-start gap-3 rounded-xl border p-3.5 text-left transition-colors ${tones.border} ${tones.surface}`;
+                const className = `focus-ring group flex h-full min-h-32 items-start gap-3 rounded-xl border p-3.5 text-left transition-colors ${tones.border} ${tones.surface}`;
                 return route.toolId ? (
                   <button key={route.title} type="button" onClick={() => onTabChange(route.toolId!)} className={className}>{content}</button>
                 ) : (
@@ -280,8 +280,8 @@ export function ToolsHub() {
           </Link>
         </GlassPanel>
 
-        {/* Visual tool picker grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
+        {/* Visual tool picker grid — equal-weight instrument modules */}
+        <div className="tools-shelf-grid grid grid-cols-2 md:grid-cols-3 gap-3.5 mb-8">
           {toolsRegistry.map((t, i) => {
             const Icon = tabIcons[t.id];
             const accent = toolAccents[t.id];
@@ -290,22 +290,30 @@ export function ToolsHub() {
               <RevealCard
                 key={t.id}
                 index={i}
-                className={`h-full rounded-xl${isActive ? '' : ' glass-hover'}`}
+                className={`h-full rounded-2xl${isActive ? '' : ' glass-hover'}`}
               >
                 <button
                   type="button"
                   onClick={() => onTabChange(t.id)}
-                  className={`focus-ring group h-full w-full text-left rounded-xl p-4 premium-card border transition-all duration-200 ${
+                  className={`focus-ring tools-shelf-card group h-full w-full text-left rounded-2xl p-4 premium-card border transition-all duration-250 ${
                     isActive
-                      ? 'border-opacity-60 shadow-lg'
-                      : 'border-border/40'
+                      ? 'tools-shelf-card--active border-opacity-70 shadow-xl'
+                      : 'border-border/45'
                   }`}
-                  style={isActive ? { borderColor: `color-mix(in srgb, ${accent} 40%, transparent)` } : {}}
+                  style={{
+                    ['--card-accent' as string]: accent,
+                    ...(isActive
+                      ? {
+                          borderColor: `color-mix(in srgb, ${accent} 55%, transparent)`,
+                          boxShadow: `inset 0 1px 0 rgba(255,255,255,0.1), 0 22px 48px -24px color-mix(in srgb, ${accent} 55%, transparent)`,
+                        }
+                      : {}),
+                  }}
                 >
                   <div className="flex items-start justify-between gap-2 mb-3">
                     <div
-                      className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-                      style={{ background: `color-mix(in srgb, ${accent} 14%, transparent)` }}
+                      className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]"
+                      style={{ background: `color-mix(in srgb, ${accent} 18%, transparent)` }}
                     >
                       <Icon
                         className="w-4.5 h-4.5"
@@ -315,20 +323,20 @@ export function ToolsHub() {
                     </div>
                     {t.badge && (
                       <span
-                        className="text-micro font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-full border"
-                        style={{ color: accent, borderColor: `color-mix(in srgb, ${accent} 30%, transparent)`, background: `color-mix(in srgb, ${accent} 10%, transparent)` }}
+                        className="tools-shelf-badge text-micro font-semibold uppercase tracking-[0.12em] px-2 py-0.5 rounded-full border shadow-[0_0_18px_-6px_currentColor]"
+                        style={{ color: accent, borderColor: `color-mix(in srgb, ${accent} 40%, transparent)`, background: `color-mix(in srgb, ${accent} 14%, transparent)` }}
                       >
                         {t.badge}
                       </span>
                     )}
                   </div>
-                  <p className="font-semibold text-sm leading-tight" style={isActive ? { color: accent } : {}}>
+                  <p className="font-semibold text-sm leading-tight tracking-tight" style={isActive ? { color: accent } : {}}>
                     {t.label}
                   </p>
-                  <p className="text-micro text-muted-foreground mt-0.5 leading-snug line-clamp-2">
+                  <p className="text-micro text-muted-foreground mt-1 leading-snug line-clamp-2 min-h-[2.2em]">
                     {t.shortLabel}
                   </p>
-                  <div className="mt-3 pointer-events-none">
+                  <div className="mt-3.5 pointer-events-none">
                     <ToolInstrumentPreview toolId={t.id} />
                   </div>
                 </button>
