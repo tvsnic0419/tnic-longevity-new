@@ -9,6 +9,7 @@ import { COMPOUND_DB, PATHWAY_LABELS } from '@/lib/compound-engine-data';
 import { SITE } from '@/lib/site';
 import { PageConnections } from '@/components/ui/PageConnections';
 import { clusterFrom } from '@/lib/page-connections';
+import { ContinueTrail } from '@/components/ui/WalkCard';
 
 export const metadata = seoRoutes.pathwayArchitect();
 
@@ -85,8 +86,18 @@ export default function PathwayArchitectPage() {
       {/* This page's body is a client island behind Suspense, so it
           server-rendered almost no in-body links — a reader arriving from
           search, and every crawler, saw a shell that connected to nothing. */}
-      <div className="container-page">
-        <PageConnections cluster={clusterFrom('explore', '/tools/pathway-architect')} accent="emerald" id="explore-connections" />
+      <div className="container-page pb-16">
+        <ContinueTrail
+          title="From Pathway Architect."
+          items={[
+            { href: '/pathways', kicker: 'Explore', title: 'Pathway library', detail: 'Mechanism pages for every actor you mapped.', accent: 'cyan' },
+            { href: '/tools', kicker: 'Tools', title: 'All longevity tools', detail: 'Simulator, protocol engine, and forecasts.', accent: 'violet' },
+            { href: '/stacks', kicker: 'Decide', title: 'Open Stack Architect', detail: 'Turn pathway coverage into a stack.', accent: 'emerald' },
+            { href: '/shop', kicker: 'Verify', title: 'Verify stack', detail: 'COA checklists once compounds are chosen.', accent: 'amber' },
+          ]}
+        />
+        <PageConnections cluster={clusterFrom('decide', '/tools/pathway-architect')} accent="emerald" id="pathway-architect-decide-connections" />
+        <PageConnections cluster={clusterFrom('explore', '/tools/pathway-architect')} accent="cyan" id="pathway-architect-explore-connections" className="mt-6" />
       </div>
     </>
   );

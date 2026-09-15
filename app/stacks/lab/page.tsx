@@ -10,6 +10,7 @@ import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { stackInteractions, type InteractionType } from '@/lib/stack-analysis';
 import { PageConnections } from '@/components/ui/PageConnections';
 import { clusterFrom } from '@/lib/page-connections';
+import { ContinueTrail } from '@/components/ui/WalkCard';
 
 // Honest stats for the hero — counted from the real dataset, never invented.
 const labStats = [
@@ -74,8 +75,18 @@ export default function CombinationLabPage() {
       {/* This page's body is a client island behind Suspense, so it
           server-rendered almost no in-body links — a reader arriving from
           search, and every crawler, saw a shell that connected to nothing. */}
-      <div className="container-page">
-        <PageConnections cluster={clusterFrom('explore', '/stacks/lab')} accent="violet" id="explore-connections" />
+      <div className="container-page pb-16">
+        <ContinueTrail
+          title="From Combination Lab."
+          items={[
+            { href: '/stacks', kicker: 'Decide', title: 'Back to Stack Architect', detail: 'Load the scored set into the main builder.', accent: 'violet' },
+            { href: '/tools?tab=simulator', kicker: 'Tools', title: 'Run Stack Simulator', detail: 'Pair-level synergy and risk on the same set.', accent: 'cyan' },
+            { href: '/shop', kicker: 'Verify', title: 'Verify stack', detail: 'Buyer checklists for the compounds you kept.', accent: 'amber' },
+            { href: '/library', kicker: 'Explore', title: 'Explore the library', detail: 'Evidence modules for every compound in the lab.', accent: 'emerald' },
+          ]}
+        />
+        <PageConnections cluster={clusterFrom('decide', '/stacks/lab')} accent="violet" id="stacks-lab-decide-connections" />
+        <PageConnections cluster={clusterFrom('verify', '/stacks/lab')} accent="amber" id="stacks-lab-verify-connections" className="mt-6" />
       </div>
     </>
   );

@@ -9,6 +9,9 @@ import { protocols } from '@/lib/protocols';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { TIER_COLOR_VAR } from '@/lib/trust';
 import type { EvidenceTier } from '@/lib/types';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
+import { ContinueTrail } from '@/components/ui/WalkCard';
 
 export const metadata = buildPageMetadata({
   title: 'Protocol Library — Evidence-Based Longevity Stacks',
@@ -44,8 +47,8 @@ export default function ProtocolsPage() {
           { value: 'AM/PM', label: 'Timed choreography' },
           { value: String(hallmarkLibrary.length), label: 'Hallmarks covered', href: '/hallmarks' },
         ]}
-        primary={{ href: '/stacks', label: 'Build your own in Stack Architect' }}
-        secondary={{ href: '/library', label: 'Browse compounds' }}
+        primary={{ href: '/nico', label: 'Start with NICO' }}
+        secondary={{ href: '/library', label: 'Explore library' }}
         figure={
           <HubSplitInstrument
             kicker="Protocol grades"
@@ -80,6 +83,18 @@ export default function ProtocolsPage() {
         <div id="protocol-explorer">
           <ProtocolExplorer />
         </div>
+
+        <ContinueTrail
+          title="From a curated protocol."
+          items={[
+            { href: '/stacks', kicker: 'Decide', title: 'Customize in Stack Architect', detail: 'Inspect coverage and interactions on your own configuration.', accent: 'violet' },
+            { href: '/shop', kicker: 'Verify', title: 'Verify stack', detail: 'COA demands for every compound in the plan.', accent: 'amber' },
+            { href: '/library', kicker: 'Explore', title: 'Explore the library', detail: 'Read the evidence module behind each compound.', accent: 'cyan' },
+            { href: '/labs', kicker: 'Track', title: 'Log baseline labs', detail: 'Know what the protocol is meant to move.', accent: 'rose' },
+          ]}
+        />
+        <PageConnections cluster={clusterFrom('decide', '/protocols')} accent="violet" id="protocols-connections" />
+        <PageConnections cluster={clusterFrom('verify', '/protocols')} accent="amber" id="protocols-verify-connections" className="mt-6" />
       </div>
     </SubPageLayout>
   );

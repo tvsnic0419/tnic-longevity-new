@@ -10,6 +10,7 @@ import { buildPageMetadata, buildBreadcrumbSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
 import { PageConnections } from '@/components/ui/PageConnections';
 import { clusterFrom } from '@/lib/page-connections';
+import { ContinueTrail } from '@/components/ui/WalkCard';
 
 export const metadata = buildPageMetadata({
   title: 'Protocol Shop — Stack-Filtered Buyer Verification',
@@ -63,8 +64,8 @@ export default function ShopPage() {
           { value: String(COMPOUND_COUNT), label: 'Compounds covered' },
           { value: 'COA-first', label: 'Verification standard' },
         ]}
-        primary={{ href: '/stacks', label: 'Build a stack to filter' }}
-        secondary={{ href: '/products', label: 'See product picks' }}
+        primary={{ href: '/stacks', label: 'Open Stack Architect' }}
+        secondary={{ href: '/products', label: 'Verified products' }}
       />
       <div className="container-page pt-10 md:pt-12 lg:pt-14 pb-16 md:pb-20 lg:pb-24 max-w-4xl">
         <StructuredData schemas={buildShopSchemas()} />
@@ -79,12 +80,22 @@ export default function ShopPage() {
           variant="handoff"
         />
         <ProtocolShopPanel />
-      {/* This page's body is a client island behind Suspense, so it
-          server-rendered almost no in-body links — a reader arriving from
-          search, and every crawler, saw a shell that connected to nothing. */}
-      <div className="container-page">
-        <PageConnections cluster={clusterFrom('explore', '/shop')} accent="amber" id="explore-connections" />
       </div>
+      {/* Client island above hydrates the checklist; these rails stay in the
+          initial HTML so crawlers and pre-hydrate readers still get a path. */}
+      <div className="container-page pb-16">
+        <ContinueTrail
+          title="After you verify."
+          items={[
+            { href: '/products', kicker: 'Catalog', title: 'Verified product picks', detail: 'One dose-matched manufacturer pick per compound.', accent: 'emerald' },
+            { href: '/stacks', kicker: 'Decide', title: 'Edit stack in Architect', detail: 'Adjust compounds, then return with ?stack=.', accent: 'violet' },
+            { href: '/labs', kicker: 'Track', title: 'Log baseline labs', detail: 'Confirm the protocol is moving the right markers.', accent: 'rose' },
+            { href: '/library', kicker: 'Explore', title: 'Explore the library', detail: 'Re-read evidence before a large reorder.', accent: 'cyan' },
+          ]}
+        />
+        <PageConnections cluster={clusterFrom('verify', '/shop')} accent="amber" id="shop-verify-connections" />
+        <PageConnections cluster={clusterFrom('decide', '/shop')} accent="violet" id="shop-decide-connections" className="mt-6" />
+        <PageConnections cluster={clusterFrom('explore', '/shop')} accent="cyan" id="shop-explore-connections" className="mt-6" />
       </div>
     </>
   );

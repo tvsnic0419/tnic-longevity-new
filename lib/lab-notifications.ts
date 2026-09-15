@@ -43,7 +43,9 @@ export function showLabOrderNotification(orderId: string, entryCount: number): v
 
   notification.onclick = () => {
     window.focus();
-    window.location.href = '/labs#lab-partner-oauth';
+    // Absolute URL: @next/next/no-location-assign-relative-destination bans relative href assigns.
+    // Notification handlers sit outside the React tree, so useRouter() is unavailable.
+    window.location.assign(new URL('/labs#lab-partner-oauth', window.location.origin).href);
     notification.close();
   };
 }

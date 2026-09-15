@@ -31,6 +31,7 @@ import { toolsRegistry, type ToolId } from '@/lib/registry';
 import { ToolDisclaimer } from './ToolDisclaimer';
 import { ContextRail } from '@/components/ui/ContextRail';
 import { getToolContext } from '@/lib/hub-context';
+import { ToolInstrumentPreview } from './ToolInstrumentPreview';
 
 const StackSimulatorTool = dynamic(
   () => import('./StackSimulatorTool').then((m) => ({ default: m.StackSimulatorTool })),
@@ -294,7 +295,7 @@ export function ToolsHub() {
                 <button
                   type="button"
                   onClick={() => onTabChange(t.id)}
-                  className={`focus-ring group h-full w-full text-left rounded-xl p-4 border transition-all duration-200 ${
+                  className={`focus-ring group h-full w-full text-left rounded-xl p-4 premium-card border transition-all duration-200 ${
                     isActive
                       ? 'border-opacity-60 shadow-lg'
                       : 'border-border/40'
@@ -327,6 +328,9 @@ export function ToolsHub() {
                   <p className="text-micro text-muted-foreground mt-0.5 leading-snug line-clamp-2">
                     {t.shortLabel}
                   </p>
+                  <div className="mt-3 pointer-events-none">
+                    <ToolInstrumentPreview toolId={t.id} />
+                  </div>
                 </button>
               </RevealCard>
             );

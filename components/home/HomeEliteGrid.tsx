@@ -200,6 +200,20 @@ function EliteCard({ intervention }: { intervention: (typeof eliteInterventions)
                 {inStack ? 'In protocol' : 'Add to protocol'}
               </button>
             </div>
+            <div className="grid grid-cols-2 gap-2">
+              <Link
+                href={`/stacks?stack=${intervention.compoundId}`}
+                className="focus-ring tnic-button-outline inline-flex items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-xs font-semibold"
+              >
+                Open in stacks
+              </Link>
+              <Link
+                href={`/shop?stack=${intervention.compoundId}`}
+                className="focus-ring tnic-button-outline inline-flex items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-xs font-semibold"
+              >
+                Verify stack
+              </Link>
+            </div>
             <a
               href={intervention.goHref}
               target="_blank"
