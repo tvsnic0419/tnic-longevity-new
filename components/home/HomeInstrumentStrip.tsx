@@ -81,7 +81,7 @@ export function HomeInstrumentStrip() {
           </p>
         </div>
 
-        <div className="grid gap-5 lg:grid-cols-12">
+        <div className="grid gap-5 lg:grid-cols-12 items-stretch" data-symmetric-grid>
           <div className="instrument-module lg:col-span-4 rounded-2xl border border-accent-rose/25 bg-gradient-to-b from-accent-rose/[0.10] via-accent-rose/[0.03] to-transparent p-4 md:p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_18px_40px_-28px_rgba(244,63,94,0.45)]">
             <BiologicalAgeGauge
               chronoAge={chronoAge}
