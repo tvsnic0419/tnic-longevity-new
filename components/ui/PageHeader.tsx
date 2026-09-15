@@ -106,11 +106,12 @@ export function PageHeader({
       <header
         className={cn(
           `${styles.foundation} section-header-mesh relative isolate overflow-hidden mb-10 md:mb-12`,
-          'page-header page-header--instrument rounded-3xl border px-6 py-12 md:px-10 md:py-16',
+          'page-header page-header--instrument hub-instrument-hero rounded-3xl border px-6 py-12 md:px-10 md:py-16',
           t.border,
           alignClass,
           align === 'center' ? 'max-w-4xl' : 'max-w-5xl',
         )}
+        data-hub-accent={theme}
       >
         <div
           className="hub-hero-field"
