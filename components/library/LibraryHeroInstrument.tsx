@@ -14,24 +14,26 @@ const ORDER: EvidenceTier[] = ['A', 'B', 'C'];
 export function LibraryHeroInstrument() {
   const stats = evidenceIndexStats();
   return (
-    <HubSplitInstrument
-      kicker="Evidence split"
-      total={stats.total}
-      totalLabel="graded"
-      rows={ORDER.map((tier) => ({
-        key: tier,
-        label: `${tier} · ${evidenceTagDefinitions[tier].short}`,
-        count: stats.byTier[tier],
-        color: TIER_COLOR_VAR[tier],
-      }))}
-      footer={
-        <>
-          <span className="font-mono font-semibold text-foreground">{stats.scored}</span> scored ·{' '}
-          <span className="font-mono font-semibold text-foreground">{stats.unscored}</span> not scored
-        </>
-      }
-      href="/library/evidence"
-      hrefLabel="Open the table →"
-    />
+    <div className="library-instrument-shell h-full">
+      <HubSplitInstrument
+        kicker="Evidence split"
+        total={stats.total}
+        totalLabel="graded"
+        rows={ORDER.map((tier) => ({
+          key: tier,
+          label: `${tier} · ${evidenceTagDefinitions[tier].short}`,
+          count: stats.byTier[tier],
+          color: TIER_COLOR_VAR[tier],
+        }))}
+        footer={
+          <>
+            <span className="font-mono font-semibold text-foreground">{stats.scored}</span> scored ·{' '}
+            <span className="font-mono font-semibold text-foreground">{stats.unscored}</span> not scored
+          </>
+        }
+        href="/library/evidence"
+        hrefLabel="Open the table →"
+      />
+    </div>
   );
 }
