@@ -13,6 +13,7 @@ import { AmbientLayer } from '@/components/ui/AmbientLayer';
 import { BackToTop } from '@/components/ui/BackToTop';
 import './globals.css';
 import './instrument-depth.css';
+import './elite-library-hallmarks-depth.css';
 import './instrument-symmetry.css';
 
 // One typography source of truth — a contrast serif (Fraunces) for display, a
@@ -65,7 +66,7 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
+default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
