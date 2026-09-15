@@ -277,17 +277,23 @@ export function ToolInstrumentPreview({
   return (
     <div
       className={cn(
-        'tool-instrument-preview relative overflow-hidden rounded-xl border border-border/50 bg-gradient-to-br from-white/[0.04] to-transparent p-2.5',
+        'tool-instrument-preview instrument-module relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-white/[0.07] via-white/[0.02] to-transparent p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_12px_28px_-18px_rgba(0,0,0,0.55)]',
         className,
       )}
+      style={{ ['--module-accent' as string]: color }}
       aria-label={`${CAPTION[toolId]} — educational preview, not a clinical reading`}
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-3 top-1.5 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"
+        className="pointer-events-none absolute inset-x-3 top-1.5 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent"
       />
-      {body}
-      <p className="mt-1 text-label font-mono uppercase tracking-[0.12em] text-muted-foreground/80">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-6 -top-8 h-20 w-20 rounded-full opacity-40 blur-2xl"
+        style={{ background: `color-mix(in srgb, ${color} 55%, transparent)` }}
+      />
+      <div className="relative">{body}</div>
+      <p className="relative mt-1.5 text-label font-mono uppercase tracking-[0.14em] text-muted-foreground/90">
         {CAPTION[toolId]} · demo
       </p>
     </div>
