@@ -81,6 +81,7 @@ export function PageHeader({
       {!isHandoff && (
         <div
           className={`heading-accent-rule mb-5 ${align === 'center' ? 'is-center' : ''}`}
+          style={{ '--rule-accent': t.cssVar } as CSSProperties}
           aria-hidden="true"
         />
       )}

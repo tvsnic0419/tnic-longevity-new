@@ -10,7 +10,7 @@ export type ThemeAccent = 'cyan' | 'emerald' | 'amber' | 'violet' | 'rose';
 export const palette = {
   dark: {
     base: '#020811',
-    elevated: '#080f1c',
+    elevated: '#0b1424',
     cyan: '#00e0ff',
     emerald: '#34d399',
     violet: '#c084fc',
