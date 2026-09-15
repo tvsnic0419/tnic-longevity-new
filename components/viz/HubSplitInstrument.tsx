@@ -54,10 +54,10 @@ export function HubSplitInstrument({
   return (
     <div className={`flex h-full min-h-[16rem] flex-col justify-between p-1 ${compact ? 'gap-3' : 'gap-5'}`}>
       <div>
-        <p className="text-label text-[var(--color-text-faint)]">{kicker}</p>
+        <p className="text-label text-muted-foreground">{kicker}</p>
         <p className="mt-1 font-mono text-2xl font-semibold tabular-nums tracking-tight text-foreground">
           {total}
-          <span className="ml-2 text-micro font-medium uppercase tracking-[0.18em] text-[var(--color-text-faint)]">
+          <span className="ml-2 text-micro font-medium uppercase tracking-[0.14em] text-muted-foreground">
             {totalLabel}
           </span>
         </p>
@@ -72,7 +72,7 @@ export function HubSplitInstrument({
                 <span className="text-body-sm font-semibold" style={{ color: row.color }}>
                   {row.label}
                 </span>
-                <span className="font-mono text-micro tabular-nums text-[var(--color-text-faint)]">
+                <span className="font-mono text-micro tabular-nums text-muted-foreground">
                   {row.count}
                 </span>
               </div>
