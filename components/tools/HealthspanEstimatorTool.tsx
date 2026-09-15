@@ -10,6 +10,8 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { ChartGrid, ChartTooltip, axisProps, chartCursor, chartActiveDot } from '@/components/ui/ChartKit';
+import { DepthBarChart } from '@/components/ui/DepthBarChart';
+import { BiologicalAgeGauge } from '@/components/ui/BiologicalAgeGauge';
 import { TrendingUp, TrendingDown, Activity, Scan } from 'lucide-react';
 import Link from 'next/link';
 import { usePlatform } from '@/context/PlatformContext';
@@ -17,7 +19,6 @@ import { estimateHealthspan } from '@/lib/tools/healthspan-estimator';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Slider } from '@/components/ui/Slider';
 import { Badge } from '@/components/ui/Badge';
-import { Progress } from '@/components/ui/Progress';
 import { Button } from '@/components/ui/Button';
 import { ToolDisclaimer } from './ToolDisclaimer';
 
@@ -93,28 +94,35 @@ export function HealthspanEstimatorTool() {
             <CardHeader>
               <CardTitle className="text-base">Projection drivers</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
-              {estimate.drivers.map((d) => (
-                <div key={d.label}>
-                  <div className="flex justify-between text-xs mb-1">
-                    <span className="text-muted-foreground">{d.label}</span>
-                    <span className={d.direction === 'positive' ? 'text-accent-emerald' : 'text-accent-amber'}>
-                      {d.impact}
-                    </span>
-                  </div>
-                  <Progress
-                    value={d.impact}
-                    color={d.direction === 'positive' ? 'emerald' : 'amber'}
-                    showValue={false}
-                  />
-                </div>
-              ))}
+            <CardContent>
+              <DepthBarChart
+                layout="vertical"
+                data={estimate.drivers.map((d) => ({
+                  name: d.label.length > 16 ? `${d.label.slice(0, 14)}…` : d.label,
+                  fullName: d.label,
+                  value: d.impact,
+                  color: d.direction === 'positive' ? 'var(--accent-emerald)' : 'var(--accent-amber)',
+                }))}
+                height={Math.max(160, estimate.drivers.length * 36)}
+                valueLabel="Driver impact"
+                max={100}
+                color="var(--accent-emerald)"
+              />
             </CardContent>
           </Card>
         </div>
 
         <div className="lg:col-span-8 space-y-5">
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            <Card elevated className="text-center sm:col-span-2 xl:col-span-1 flex flex-col items-center justify-center py-4">
+              <BiologicalAgeGauge
+                chronoAge={estimate.chronologicalAge}
+                bioAge={estimate.biologicalAge}
+                defenseScore={estimate.currentHealthspanScore}
+                scanned
+                size="sm"
+              />
+            </Card>
             <Card elevated className="text-center">
               <p className="text-label text-accent-cyan mb-1">Healthspan score</p>
               <p className="text-4xl font-bold text-foreground">{estimate.currentHealthspanScore}</p>
