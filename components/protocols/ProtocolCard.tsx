@@ -32,7 +32,7 @@ export function ProtocolCard({ protocol }: { protocol: Protocol }) {
   return (
     <article
       id={protocol.slug}
-      className="premium-card flex h-full flex-col scroll-mt-28 rounded-2xl p-6 md:p-7"
+      className="protocol-card premium-card instrument-module flex h-full flex-col scroll-mt-28 rounded-2xl p-6 md:p-7"
       style={{ '--card-accent': accent } as CSSProperties}
     >
       <div className="mb-4 flex items-start justify-between gap-3">
