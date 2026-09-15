@@ -15,6 +15,9 @@ import { COMPOUND_COUNT } from '@/lib/library-modules';
 import { EntityChips } from '@/components/ui/EntityChips';
 import { resolveCompounds } from '@/lib/entity-graph';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
+import { ContinueTrail } from '@/components/ui/WalkCard';
 
 export const metadata = seoRoutes.labs();
 
@@ -65,54 +68,7 @@ export default function LabsPage() {
           { value: String(hallmarkLibrary.length), label: 'Hallmarks of aging', href: '/hallmarks' },
           { value: 'A–C', label: 'Evidence tiers', href: '/trust/methodology' },
         ]}
-        primary={{ href: '/nico', label: 'Find your personalized stack' }}
-        secondary={{ href: '/library', label: 'Browse the library' }}
+        primary={{ href: '/nico', label: 'Start with NICO' }}
+        secondary={{ href: '/library', label: 'Explore library' }}
+        figure={undefined as never}
       />
-      {/* Identity on the server, ahead of the client island — see the note in
-          app/stacks/page.tsx and STYLE_GUIDE §14. LabHub calls
-          useSearchParams(), so nothing inside its boundary reaches the initial
-          HTML. */}
-      <PageShell>
-        <PageHeader
-          icon={FlaskConical}
-          eyebrow="Lab Analysis & Tracking Hub"
-          title="Your Biomarkers. Your Data. Your Insights."
-          description="Log lab results, visualize trends, map risks to the 12 Hallmarks of Aging, and get stack-aware recommendations — all processed locally in your browser."
-          theme="rose"
-          variant="handoff"
-          context={getHubContext('labs')}
-        />
-        <Suspense fallback={<SectionSkeleton height="lg" />}>
-          <LabHub />
-        </Suspense>
-
-        {/* The Lab Hub is a client island behind Suspense — deliberately, since
-            it processes lab data locally in the browser — so this hub
-            server-rendered five in-body links in total and a reader arriving
-            from search saw a biomarker tracker that named no interventions.
-            Each biomarker below carries its own `compounds` edge in the data;
-            this renders that edge. Biomarkers have no page of their own, so
-            they are group labels rather than links — naming a route that does
-            not exist would be worse than naming none. */}
-        <section aria-labelledby="labs-graph-heading" className="mt-14">
-          <div className="premium-card p-5 md:p-7">
-            <p className="text-label mb-2 text-accent-rose">From a marker to an intervention</p>
-            <h2 id="labs-graph-heading" className="heading-section mb-2 text-xl md:text-2xl">
-              What the library has studied against each biomarker.
-            </h2>
-            <p className="text-body-sm mb-6 max-w-3xl text-muted-foreground">
-              A number on a panel is only useful if you can act on it. These are the compounds
-              with a full evidence module behind them for each marker the hub tracks — read the
-              evidence before changing anything.
-            </p>
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {biomarkerLinks.map((b) => (
-                <EntityChips key={b.id} label={b.name} entities={b.compounds} />
-              ))}
-            </div>
-          </div>
-        </section>
-      </PageShell>
-    </>
-  );
-}
