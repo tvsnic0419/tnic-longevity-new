@@ -12,6 +12,8 @@ import {
   ComposedChart,
 } from 'recharts';
 import { ChartGrid, ChartTooltip, axisProps, chartCursor, chartActiveDot, ChartAreaGradient } from '@/components/ui/ChartKit';
+import { DepthBarChart } from '@/components/ui/DepthBarChart';
+import { ToolEmptyState } from '@/components/ui/ToolEmptyState';
 import Link from 'next/link';
 import {
   TrendingUp,
@@ -321,43 +323,58 @@ export function BiomarkerDashboardTool() {
               <Card>
                 <CardHeader>
                   <CardTitle className="text-base">Ranked intervention scenarios</CardTitle>
+                  <CardDescription>
+                    Impact scores from the dashboard model — illustrative, not clinical efficacy guarantees.
+                  </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-3">
-                  {dashboard.forecasts.map((f) => (
-                    <div
-                      key={f.id}
-                      className={cn(
-                        'rounded-xl p-4 border',
-                        f.category === 'baseline' ? 'border-border bg-muted/20' : 'border-border',
-                      )}
-                    >
-                      <div className="flex justify-between items-start gap-2">
-                        <div>
-                          <p className="text-sm font-semibold text-foreground">{f.interventionName}</p>
-                          <p className="text-xs text-muted-foreground mt-0.5">
-                            Expected Δ {f.expectedDelta > 0 ? '+' : ''}
-                            {f.expectedDelta} over {f.timeframeWeeks} weeks
-                          </p>
-                        </div>
-                        {f.category !== 'baseline' && (
-                          <Badge variant="info">{f.impactScore}</Badge>
+                <CardContent className="space-y-4">
+                  <DepthBarChart
+                    layout="vertical"
+                    data={dashboard.forecasts
+                      .filter((f) => f.category !== 'baseline')
+                      .map((f) => ({
+                        name: f.interventionName.length > 18 ? `${f.interventionName.slice(0, 16)}…` : f.interventionName,
+                        fullName: `${f.interventionName} · Δ ${f.expectedDelta > 0 ? '+' : ''}${f.expectedDelta} / ${f.timeframeWeeks}w`,
+                        value: f.impactScore,
+                        color: 'var(--accent-violet)',
+                      }))}
+                    height={Math.max(180, dashboard.forecasts.filter((f) => f.category !== 'baseline').length * 36)}
+                    valueLabel="Impact score"
+                    max={100}
+                    color="var(--accent-violet)"
+                  />
+                  <ul className="space-y-2">
+                    {dashboard.forecasts.map((f) => (
+                      <li
+                        key={f.id}
+                        className={cn(
+                          'rounded-xl p-3 border text-sm',
+                          f.category === 'baseline' ? 'border-border bg-muted/20' : 'border-border/60',
                         )}
-                      </div>
-                    </div>
-                  ))}
+                      >
+                        <div className="flex justify-between gap-2">
+                          <span className="font-semibold">{f.interventionName}</span>
+                          {f.category !== 'baseline' && <Badge variant="info">{f.impactScore}</Badge>}
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                          Expected Δ {f.expectedDelta > 0 ? '+' : ''}
+                          {f.expectedDelta} over {f.timeframeWeeks} weeks
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
                 </CardContent>
               </Card>
             </>
           ) : (
-            <Card className="p-12 text-center">
-              <p className="text-muted-foreground">
-                Log lab entries in the{' '}
-                <Link href="/labs" className="text-accent-cyan">
-                  Labs hub
-                </Link>{' '}
-                or load demo data to see trends and forecasts.
-              </p>
-            </Card>
+            <ToolEmptyState
+              icon={FlaskConical}
+              theme="amber"
+              title="No marker series yet"
+              detail="Log lab entries in the Labs hub or load demo data to light trend and forecast instruments."
+              ctaLabel="Open Labs hub"
+              ctaHref="/labs"
+            />
           )}
         </div>
       </div>
