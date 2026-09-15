@@ -6,24 +6,31 @@ import { RevealItem } from '@/components/ui/RevealItem';
 /**
  * Longevity OS — coming-soon teaser.
  *
- * RESERVED, NOT MOUNTED — and still so after the 2026-09 slogan decision below.
+ * RESERVED, NOT MOUNTED. ⚠️ NAME COLLISION — READ BEFORE MOUNTING OR RENAMING.
  *
- * Per owner direction (2026-07): the Longevity OS name is reserved for future
- * brand expansion and should NOT be marketed yet. This full teaser band is
- * intentionally not rendered on the homepage. Keep this component ready to drop
- * back into app/page.tsx when it's time to promote the OS; do not add hype copy
- * or fabricated launch dates/capabilities in the meantime.
+ * Original direction (2026-07): the Longevity OS name is reserved for future
+ * brand expansion and should NOT be marketed yet. This teaser band is therefore
+ * not rendered on the homepage. Do not add hype copy or fabricated launch
+ * dates/capabilities.
  *
- * 2026-09 — owner narrowed, did not lift, that reservation. "The Longevity
- * Intelligence OS" is now the company SLOGAN (`SITE.slogan`), carried in the
- * hero kicker, the footer, the homepage description and the Organization
- * JSON-LD. TNiC itself still stands for Transformative Nutrition in Cell-Health;
- * the slogan sits beside that, it does not replace it.
+ * 2026-09-15 — the owner released the name, for a different meaning than this
+ * file assumes. "The Longevity OS" is now the company slogan (`SITE.slogan`),
+ * and it names a METHOD: the system a reader learns on the site — how evidence
+ * is graded A–C, what the twelve hallmarks are and which compounds act on each,
+ * how a stack is assembled, which trial sits under a claim. Explicitly NOT the
+ * lab-tracking push, and explicitly not software you sign into.
  *
- * The distinction this file exists to protect is unchanged: the slogan names the
- * evidence system that ALREADY EXISTS — the library, the hallmark and pathway
- * graph, the trial index. THIS component describes a personal workspace that
- * does not exist yet. Shipping the slogan is not permission to mount this band.
+ * Which leaves one unresolved conflict, recorded here rather than decided
+ * unilaterally: THIS component uses "Longevity OS" for a personal cell-health
+ * WORKSPACE — an app, with a dashboard, stack simulation and private lab logs.
+ * Those are two different products wearing one name. Mounting this band as-is
+ * would tell a reader the OS is a thing they log into, which is exactly the
+ * reading the slogan is written to avoid, and would market an unbuilt app.
+ *
+ * So before this is ever mounted, the workspace needs its own name — it is a
+ * feature INSIDE the Longevity OS, not the Longevity OS itself. Until that
+ * decision is made by the owner, this stays unmounted and the slogan keeps the
+ * name.
  */
 
 const osFeatures = [
