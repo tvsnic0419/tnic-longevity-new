@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="TNiC organizes longevity compounds, pathways, trials, and protocols into one evidence-graded research system.">
+  <title>TNiC — Longevity Intelligence</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2307111f'/%3E%3Cpath d='M18 17h28M32 17v30M21 24c7 3 15 3 22 0M21 40c7-3 15-3 22 0' fill='none' stroke='%2349ead7' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='32' r='5' fill='%23a991ff'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <div class="site-shell">
+    <aside class="side-rail" aria-label="Primary navigation">
+      <a class="brand" href="#top" aria-label="TNiC home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" role="img"><path d="M14 10h20M24 10v28M16 17c5 3 11 3 16 0M16 31c5-3 11-3 16 0"/><circle cx="24" cy="24" r="3"/></svg>
+        </span>
+        <span><strong>TNiC</strong><small>Longevity intelligence</small></span>
+      </a>
+
+      <nav class="rail-nav">
+        <a class="active" href="#research" aria-current="page">
+          <span class="nav-icon" aria-hidden="true">⌁</span>
+          <span>Research</span>
+        </a>
+        <a href="#compounds">
+          <span class="nav-icon" aria-hidden="true">◫</span>
+          <span>Compounds</span>
+          <span class="nav-count">100</span>
+        </a>
+        <a href="#systems">
+          <span class="nav-icon" aria-hidden="true">◎</span>
+          <span>Systems</span>
+          <span class="nav-count">12</span>
+        </a>
+        <a href="#matrix">
+          <span class="nav-icon" aria-hidden="true">⇄</span>
+          <span>Compare</span>
+        </a>
+        <button class="rail-button" id="openProtocolRail" type="button">
+          <span class="nav-icon" aria-hidden="true">＋</span>
+          <span>My protocol</span>
+          <span class="protocol-count" data-protocol-count>0</span>
+        </button>
+      </nav>
+
+      <div class="rail-footer">
+        <div class="quality-seal">
+          <span class="seal-pulse" aria-hidden="true"></span>
+          <span><strong>Evidence standard</strong><small>Human data prioritized</small></span>
+        </div>
+        <a href="#method">How grading works <span aria-hidden="true">↗</span></a>
+      </div>
+    </aside>
+
+    <div class="main-column">
+      <header class="topbar" id="top">
+        <button class="mobile-menu" id="mobileMenu" type="button" aria-label="Open navigation" aria-expanded="false">☰</button>
+        <div class="context-line">
+          <span class="live-dot" aria-hidden="true"></span>
+          <span>Evidence index</span>
+          <span class="divider">/</span>
+          <strong>September 2026</strong>
+        </div>
+        <div class="top-actions">
+          <button class="icon-button" id="focusSearch" type="button" aria-label="Focus search">⌕</button>
+          <button class="protocol-button" id="openProtocolTop" type="button">
+            <span>My protocol</span>
+            <span class="protocol-count" data-protocol-count>0</span>
+          </button>
+        </div>
+      </header>
+
+      <main id="main">
+        <section class="hero-workbench" id="research" aria-labelledby="page-title">
+          <div class="hero-copy">
+            <p class="eyebrow"><span>01</span> Longevity decision system</p>
+            <h1 id="page-title">Find what holds up.<br><em>See how it connects.</em></h1>
+            <p class="hero-intro">Explore compounds through human evidence, biological pathways, studied doses, and stack interactions—before a product enters the picture.</p>
+          </div>
+
+          <div class="evidence-snapshot" aria-label="Library summary">
+            <div class="snapshot-visual" aria-hidden="true">
+              <svg viewBox="0 0 180 180">
+                <circle cx="90" cy="90" r="70" class="orbit orbit-1"/>
+                <circle cx="90" cy="90" r="50" class="orbit orbit-2"/>
+                <circle cx="90" cy="90" r="30" class="orbit orbit-3"/>
+                <path d="M90 20A70 70 0 0 1 154 118" class="arc arc-a"/>
+                <path d="M44 143A70 70 0 0 1 28 59" class="arc arc-b"/>
+                <circle cx="90" cy="20" r="4" class="point point-a"/>
+                <circle cx="154" cy="118" r="4" class="point point-b"/>
+              </svg>
+              <div class="snapshot-core"><strong>100</strong><span>graded<br>compounds</span></div>
+            </div>
+            <div class="snapshot-stats">
+              <div><strong>12</strong><span>aging<br>hallmarks</span></div>
+              <div><strong>30</strong><span>linked<br>citations</span></div>
+              <div><strong>8</strong><span>elite<br>picks</span></div>
+            </div>
+          </div>
+
+          <div class="search-workspace">
+            <div class="search-row">
+              <label class="search-box" for="compoundSearch">
+                <span aria-hidden="true">⌕</span>
+                <input id="compoundSearch" type="search" placeholder="Search a compound, pathway, or outcome" autocomplete="off">
+                <kbd>⌘ K</kbd>
+              </label>
+              <button class="primary-action" id="browseAll" type="button">Browse library <span aria-hidden="true">↗</span></button>
+            </div>
+
+            <div class="quick-filters" aria-label="Filter compounds">
+              <span>Evidence lens</span>
+              <button class="filter-chip active" type="button" data-filter="all" aria-pressed="true">All evidence</button>
+              <button class="filter-chip" type="button" data-filter="A" aria-pressed="false"><i class="tier-dot tier-a"></i> Tier A</button>
+              <button class="filter-chip" type="button" data-filter="B" aria-pressed="false"><i class="tier-dot tier-b"></i> Tier B</button>
+              <button class="filter-chip" type="button" data-filter="mitochondria" aria-pressed="false">Mitochondria</button>
+              <button class="filter-chip" type="button" data-filter="inflammation" aria-pressed="false">Inflammation</button>
+              <button class="filter-chip" type="button" data-filter="epigenetics" aria-pressed="false">Epigenetics</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="decision-grid" aria-label="Research paths">
+          <article class="route-card route-featured">
+            <div class="route-head">
+              <span class="route-index">01</span>
+              <span class="route-label">Start here</span>
+              <span class="route-arrow" aria-hidden="true">↗</span>
+            </div>
+            <div class="route-graphic" aria-hidden="true">
+              <div class="signal-ring ring-one"></div>
+              <div class="signal-ring ring-two"></div>
+              <div class="signal-ring ring-three"></div>
+              <span class="signal-node n1"></span><span class="signal-node n2"></span><span class="signal-node n3"></span>
+              <strong>8</strong><small>top interventions</small>
+            </div>
+            <div>
+              <h2>Evidence-first shortlist</h2>
+              <p>Eight interventions with the cleanest balance of human evidence, biological fit, and dose clarity.</p>
+              <a href="#compounds">Inspect the Elite Eight <span aria-hidden="true">→</span></a>
+            </div>
+          </article>
+
+          <article class="route-card">
+            <div class="route-head">
+              <span class="route-index">02</span>
+              <span class="route-label">Explore by biology</span>
+              <span class="route-arrow" aria-hidden="true">↗</span>
+            </div>
+            <div class="pathway-mini" aria-hidden="true">
+              <span>NRF2</span><i></i><span>AMPK</span><i></i><span>SIRT1</span>
+            </div>
+            <div>
+              <h2>Twelve aging systems</h2>
+              <p>Move from a hallmark to its strongest evidence-backed levers instead of starting with a bottle.</p>
+              <a href="#systems">Open the systems map <span aria-hidden="true">→</span></a>
+            </div>
+          </article>
+
+          <article class="route-card">
+            <div class="route-head">
+              <span class="route-index">03</span>
+              <span class="route-label">Build with context</span>
+              <span class="route-arrow" aria-hidden="true">↗</span>
+            </div>
+            <div class="stack-mini" aria-hidden="true">
+              <div><span>GlyNAC</span><b>Core</b></div>
+              <div><span>NMN</span><b>NAD+</b></div>
+              <div><span>Ca-AKG</span><b>TCA</b></div>
+            </div>
+            <div>
+              <h2>Protocol workspace</h2>
+              <p>Collect candidates, spot duplicated mechanisms, and keep the evidence beside every decision.</p>
+              <button class="text-action" id="openProtocolCard" type="button">Open protocol builder <span aria-hidden="true">→</span></button>
+            </div>
+          </article>
+        </section>
+
+        <section class="section-block" id="compounds" aria-labelledby="compound-title">
+          <header class="section-header">
+            <div>
+              <p class="eyebrow"><span>02</span> Evidence leaders</p>
+              <h2 id="compound-title">The shortlist, with the receipts.</h2>
+            </div>
+            <div class="section-meta">
+              <span><i class="tier-dot tier-a"></i> 4 clinical leaders</span>
+              <span><i class="tier-dot tier-b"></i> 4 emerging leaders</span>
+            </div>
+          </header>
+
+          <div class="compound-toolbar">
+            <p id="resultStatus" aria-live="polite">Showing 6 highlighted compounds</p>
+            <div class="view-toggle" role="group" aria-label="Change compound view">
+              <button type="button" class="active" data-view="grid" aria-pressed="true" aria-label="Grid view">▦</button>
+              <button type="button" data-view="list" aria-pressed="false" aria-label="List view">☷</button>
+            </div>
+          </div>
+
+          <div class="compound-grid" id="compoundGrid">
+            <article class="compound-card" data-name="GlyNAC" data-tier="A" data-tags="mitochondria inflammation proteostasis glutathione redox">
+              <div class="compound-topline">
+                <span class="rank">01</span><span class="tier-badge a">Tier A</span><button class="save-button" type="button" aria-label="Save GlyNAC">☆</button>
+              </div>
+              <div class="compound-identity">
+                <div class="molecule-icon" aria-hidden="true"><span></span><i></i><b></b></div>
+                <div><p>Glutathione synthesis</p><h3>GlyNAC</h3></div>
+              </div>
+              <p class="compound-summary">Pairs glycine and N-acetylcysteine to support glutathione synthesis and cellular redox balance.</p>
+              <div class="evidence-strip"><span><b style="width:88%"></b></span><strong>Strong human signal</strong></div>
+              <dl class="compound-data"><div><dt>Human studies</dt><dd>2 linked</dd></div><div><dt>Studied dose</dt><dd>600 + 600 mg</dd></div><div><dt>Primary system</dt><dd>Redox</dd></div></dl>
+              <div class="compound-actions"><button class="inspect-button" type="button" data-inspect="GlyNAC">Inspect evidence</button><button class="add-button" type="button" data-add="GlyNAC" aria-label="Add GlyNAC to protocol">＋</button></div>
+            </article>
+
+            <article class="compound-card" data-name="NMN" data-tier="A" data-tags="mitochondria epigenetics dna nad sirtuins">
+              <div class="compound-topline">
+                <span class="rank">02</span><span class="tier-badge a">Tier A</span><button class="save-button" type="button" aria-label="Save NMN">☆</button>
+              </div>
+              <div class="compound-identity">
+                <div class="molecule-icon variant-two" aria-hidden="true"><span></span><i></i><b></b></div>
+                <div><p>NAD+ restoration</p><h3>NMN</h3></div>
+              </div>
+              <p class="compound-summary">A direct NAD+ precursor studied for age-related changes in cellular energy and metabolic signaling.</p>
+              <div class="evidence-strip"><span><b style="width:85%"></b></span><strong>Strong human signal</strong></div>
+              <dl class="compound-data"><div><dt>Human studies</dt><dd>3 linked</dd></div><div><dt>Studied dose</dt><dd>250–500 mg</dd></div><div><dt>Primary system</dt><dd>NAD+</dd></div></dl>
+              <div class="compound-actions"><button class="inspect-button" type="button" data-inspect="NMN">Inspect evidence</button><button class="add-button" type="button" data-add="NMN" aria-label="Add NMN to protocol">＋</button></div>
+            </article>
+
+            <article class="compound-card" data-name="Ca-AKG" data-tier="A" data-tags="mitochondria epigenetics stem cells tca energy">
+              <div class="compound-topline">
+                <span class="rank">03</span><span class="tier-badge a">Tier A</span><button class="save-button" type="button" aria-label="Save Ca-AKG">☆</button>
+              </div>
+              <div class="compound-identity">
+                <div class="molecule-icon variant-three" aria-hidden="true"><span></span><i></i><b></b></div>
+                <div><p>TCA cycle support</p><h3>Ca-AKG</h3></div>
+              </div>
+              <p class="compound-summary">Alpha-ketoglutarate salt connecting cellular energy metabolism with epigenetic enzyme activity.</p>
+              <div class="evidence-strip"><span><b style="width:81%"></b></span><strong>Strong human signal</strong></div>
+              <dl class="compound-data"><div><dt>Human studies</dt><dd>2 linked</dd></div><div><dt>Studied dose</dt><dd>1–2 g</dd></div><div><dt>Primary system</dt><dd>TCA cycle</dd></div></dl>
+              <div class="compound-actions"><button class="inspect-button" type="button" data-inspect="Ca-AKG">Inspect evidence</button><button class="add-button" type="button" data-add="Ca-AKG" aria-label="Add Ca-AKG to protocol">＋</button></div>
+            </article>
+
+            <article class="compound-card" data-name="Sulforaphane" data-tier="A" data-tags="inflammation dna proteostasis nrf2 detoxification">
+              <div class="compound-topline">
+                <span class="rank">04</span><span class="tier-badge a">Tier A</span><button class="save-button" type="button" aria-label="Save Sulforaphane">☆</button>
+              </div>
+              <div class="compound-identity">
+                <div class="molecule-icon variant-four" aria-hidden="true"><span></span><i></i><b></b></div>
+                <div><p>NRF2 activation</p><h3>Sulforaphane</h3></div>
+              </div>
+              <p class="compound-summary">An isothiocyanate studied for activation of the NRF2 cellular-defense response.</p>
+              <div class="evidence-strip"><span><b style="width:83%"></b></span><strong>Strong human signal</strong></div>
+              <dl class="compound-data"><div><dt>Human studies</dt><dd>2 linked</dd></div><div><dt>Studied dose</dt><dd>10–35 mg GR</dd></div><div><dt>Primary system</dt><dd>NRF2</dd></div></dl>
+              <div class="compound-actions"><button class="inspect-button" type="button" data-inspect="Sulforaphane">Inspect evidence</button><button class="add-button" type="button" data-add="Sulforaphane" aria-label="Add Sulforaphane to protocol">＋</button></div>
+            </article>
+
+            <article class="compound-card" data-name="Spermidine" data-tier="B" data-tags="autophagy epigenetics senescence proteostasis">
+              <div class="compound-topline">
+                <span class="rank">05</span><span class="tier-badge b">Tier B</span><button class="save-button" type="button" aria-label="Save Spermidine">☆</button>
+              </div>
+              <div class="compound-identity">
+                <div class="molecule-icon variant-five" aria-hidden="true"><span></span><i></i><b></b></div>
+                <div><p>Autophagy signaling</p><h3>Spermidine</h3></div>
+              </div>
+              <p class="compound-summary">A natural polyamine investigated for autophagy, cardiovascular aging, and cellular maintenance.</p>
+              <div class="evidence-strip emerging"><span><b style="width:69%"></b></span><strong>Emerging human signal</strong></div>
+              <dl class="compound-data"><div><dt>Human studies</dt><dd>2 linked</dd></div><div><dt>Studied dose</dt><dd>1–6 mg</dd></div><div><dt>Primary system</dt><dd>Autophagy</dd></div></dl>
+              <div class="compound-actions"><button class="inspect-button" type="button" data-inspect="Spermidine">Inspect evidence</button><button class="add-button" type="button" data-add="Spermidine" aria-label="Add Spermidine to protocol">＋</button></div>
+            </article>
+
+            <article class="compound-card" data-name="Taurine" data-tier="B" data-tags="mitochondria inflammation dna osmolyte metabolic">
+              <div class="compound-topline">
+                <span class="rank">06</span><span class="tier-badge b">Tier B</span><button class="save-button" type="button" aria-label="Save Taurine">☆</button>
+              </div>
+              <div class="compound-identity">
+                <div class="molecule-icon variant-six" aria-hidden="true"><span></span><i></i><b></b></div>
+                <div><p>Mitochondrial buffer</p><h3>Taurine</h3></div>
+              </div>
+              <p class="compound-summary">A conditionally essential amino sulfonic acid involved in osmoregulation and mitochondrial function.</p>
+              <div class="evidence-strip emerging"><span><b style="width:66%"></b></span><strong>Emerging human signal</strong></div>
+              <dl class="compound-data"><div><dt>Human studies</dt><dd>1 linked</dd></div><div><dt>Studied dose</dt><dd>1–3 g</dd></div><div><dt>Primary system</dt><dd>Mitochondria</dd></div></dl>
+              <div class="compound-actions"><button class="inspect-button" type="button" data-inspect="Taurine">Inspect evidence</button><button class="add-button" type="button" data-add="Taurine" aria-label="Add Taurine to protocol">＋</button></div>
+            </article>
+          </div>
+
+          <div class="empty-state" id="emptyState" hidden>
+            <span aria-hidden="true">⌕</span>
+            <h3>No compounds match that lens.</h3>
+            <p>Try a compound name, pathway, or a broader evidence filter.</p>
+            <button type="button" id="clearSearch">Clear filters</button>
+          </div>
+        </section>
+
+        <section class="systems-section" id="systems" aria-labelledby="systems-title">
+          <header class="section-header systems-header">
+            <div>
+              <p class="eyebrow"><span>03</span> Systems map</p>
+              <h2 id="systems-title">Start with the biology.<br><em>Then choose the lever.</em></h2>
+            </div>
+            <p>Each system opens into its leading compounds, lifestyle levers, and clinical evidence. The map makes overlaps visible before you stack interventions.</p>
+          </header>
+
+          <div class="systems-workspace">
+            <div class="system-tabs" role="tablist" aria-label="Hallmarks of aging">
+              <button role="tab" aria-selected="true" aria-controls="systemPanel" data-system="mitochondria">01 <span>Mitochondrial dysfunction</span><b>A</b></button>
+              <button role="tab" aria-selected="false" aria-controls="systemPanel" data-system="epigenetics">02 <span>Epigenetic alterations</span><b>A</b></button>
+              <button role="tab" aria-selected="false" aria-controls="systemPanel" data-system="proteostasis">03 <span>Loss of proteostasis</span><b>A</b></button>
+              <button role="tab" aria-selected="false" aria-controls="systemPanel" data-system="autophagy">04 <span>Disabled autophagy</span><b>B</b></button>
+              <button role="tab" aria-selected="false" aria-controls="systemPanel" data-system="inflammation">05 <span>Chronic inflammation</span><b>A</b></button>
+              <button role="tab" aria-selected="false" aria-controls="systemPanel" data-system="senescence">06 <span>Cellular senescence</span><b>B</b></button>
+            </div>
+
+            <div class="system-panel" id="systemPanel" role="tabpanel" tabindex="0">
+              <div class="system-panel-head"><span id="systemNumber">01 / 12</span><span class="system-grade">Evidence ceiling <b id="systemGrade">Tier A</b></span></div>
+              <div class="system-orbit" aria-hidden="true">
+                <svg viewBox="0 0 300 300">
+                  <circle cx="150" cy="150" r="108"/>
+                  <circle cx="150" cy="150" r="77"/>
+                  <circle cx="150" cy="150" r="45"/>
+                  <path d="M150 42A108 108 0 0 1 253 181"/>
+                  <path d="M54 200A108 108 0 0 1 81 67"/>
+                </svg>
+                <div><strong id="systemCode">ATP</strong><span id="systemSignal">energy signal</span></div>
+                <small class="orbit-label l1">NAD+</small><small class="orbit-label l2">AMPK</small><small class="orbit-label l3">TCA</small>
+              </div>
+              <div class="system-copy">
+                <p class="system-kicker" id="systemKicker">ENERGY · QUALITY CONTROL · SIGNALING</p>
+                <h3 id="systemName">Mitochondrial dysfunction</h3>
+                <p id="systemDescription">Mitochondria lose efficiency with age, affecting energy production, oxidative balance, and signals that coordinate cellular repair.</p>
+              </div>
+              <div class="system-levers" id="systemLevers">
+                <div><span>01</span><strong>NMN</strong><small>NAD+ precursor</small></div>
+                <div><span>02</span><strong>Ca-AKG</strong><small>TCA support</small></div>
+                <div><span>03</span><strong>Taurine</strong><small>Osmotic balance</small></div>
+              </div>
+              <button class="panel-action" id="filterSystem" type="button">See all mapped interventions <span aria-hidden="true">→</span></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="matrix-section" id="matrix" aria-labelledby="matrix-title">
+          <header class="section-header">
+            <div>
+              <p class="eyebrow"><span>04</span> Decision matrix</p>
+              <h2 id="matrix-title">Compare the signal, not the marketing.</h2>
+            </div>
+            <p class="matrix-intro">One scan shows where the evidence is mature, what dose has actually been studied, and which systems overlap.</p>
+          </header>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Intervention</th><th>Evidence</th><th>Human data</th><th>Primary pathway</th><th>Studied range</th><th>TNiC signal</th><th><span class="sr-only">Action</span></th></tr></thead>
+              <tbody>
+                <tr><td><strong>GlyNAC</strong><small>Glutathione synthesis</small></td><td><span class="tier-badge a">Tier A</span></td><td>2 linked trials</td><td>GSH / redox</td><td>600 + 600 mg</td><td><span class="matrix-score"><i style="width:88%"></i></span> 88</td><td><button data-add="GlyNAC" aria-label="Add GlyNAC to protocol">＋</button></td></tr>
+                <tr><td><strong>NMN</strong><small>NAD+ restoration</small></td><td><span class="tier-badge a">Tier A</span></td><td>3 linked trials</td><td>NAD+ / SIRT1</td><td>250–500 mg</td><td><span class="matrix-score"><i style="width:85%"></i></span> 85</td><td><button data-add="NMN" aria-label="Add NMN to protocol">＋</button></td></tr>
+                <tr><td><strong>Sulforaphane</strong><small>Cellular defense</small></td><td><span class="tier-badge a">Tier A</span></td><td>2 linked trials</td><td>NRF2</td><td>10–35 mg GR</td><td><span class="matrix-score"><i style="width:83%"></i></span> 83</td><td><button data-add="Sulforaphane" aria-label="Add Sulforaphane to protocol">＋</button></td></tr>
+                <tr><td><strong>Spermidine</strong><small>Autophagy signaling</small></td><td><span class="tier-badge b">Tier B</span></td><td>2 linked trials</td><td>Autophagy</td><td>1–6 mg</td><td><span class="matrix-score amber"><i style="width:69%"></i></span> 69</td><td><button data-add="Spermidine" aria-label="Add Spermidine to protocol">＋</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="method-section" id="method" aria-labelledby="method-title">
+          <div>
+            <p class="eyebrow"><span>05</span> Transparent by design</p>
+            <h2 id="method-title">Every recommendation should show its work.</h2>
+          </div>
+          <div class="method-steps">
+            <article><span>01</span><h3>Human evidence first</h3><p>Randomized trials and clinically relevant outcomes lead the grade; mechanistic promise cannot substitute for them.</p></article>
+            <article><span>02</span><h3>Dose matched</h3><p>Products are evaluated against studied forms and amounts, not just the ingredient printed on the front.</p></article>
+            <article><span>03</span><h3>Conflicts visible</h3><p>Overlap, interaction, and redundancy stay beside the benefits so a stack can be judged as a system.</p></article>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <a class="footer-brand" href="#top"><strong>TNiC</strong><span>The longevity intelligence system</span></a>
+        <p>Educational information only. Not medical advice or a substitute for clinical care.</p>
+        <nav aria-label="Footer navigation"><a href="#method">Method</a><a href="#systems">Hallmarks</a><a href="#compounds">Compounds</a></nav>
+      </footer>
+    </div>
+  </div>
+
+  <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+  <aside class="protocol-drawer" id="protocolDrawer" aria-labelledby="protocolTitle" aria-hidden="true">
+    <header>
+      <div><p class="eyebrow"><span>Workspace</span></p><h2 id="protocolTitle">My protocol</h2></div>
+      <button id="closeProtocol" type="button" aria-label="Close protocol builder">×</button>
+    </header>
+    <div class="drawer-summary"><div><strong data-protocol-count>0</strong><span>candidates</span></div><div><strong id="pathwayCount">0</strong><span>pathways</span></div><div><strong id="tierACount">0</strong><span>Tier A</span></div></div>
+    <div class="protocol-list" id="protocolList">
+      <div class="protocol-empty"><span aria-hidden="true">＋</span><h3>Build a research shortlist.</h3><p>Add a compound to compare evidence and pathway coverage here.</p></div>
+    </div>
+    <div class="drawer-note"><span aria-hidden="true">i</span><p>This workspace organizes research candidates. It does not calculate a personal dose or replace a clinician.</p></div>
+    <button class="drawer-primary" id="reviewProtocol" type="button" disabled>Review protocol <span aria-hidden="true">→</span></button>
+  </aside>
+
+  <div class="detail-backdrop" id="detailBackdrop" hidden></div>
+  <dialog class="evidence-dialog" id="evidenceDialog" aria-labelledby="dialogTitle">
+    <button class="dialog-close" id="closeDialog" type="button" aria-label="Close evidence detail">×</button>
+    <p class="eyebrow"><span>Evidence brief</span></p>
+    <h2 id="dialogTitle">Compound</h2>
+    <p id="dialogSummary"></p>
+    <div class="dialog-grid"><div><span>Evidence</span><strong id="dialogTier">Tier A</strong></div><div><span>Human studies</span><strong id="dialogStudies">—</strong></div><div><span>Studied dose</span><strong id="dialogDose">—</strong></div></div>
+    <div class="dialog-callout"><strong>Decision note</strong><p>Evidence strength, dose match, individual risk, and interaction burden should be considered together.</p></div>
+    <button class="drawer-primary" id="dialogAdd" type="button">Add to protocol <span aria-hidden="true">＋</span></button>
+  </dialog>
+
+  <nav class="mobile-dock" aria-label="Mobile navigation">
+    <a class="active" href="#research"><span>⌁</span>Research</a>
+    <a href="#compounds"><span>◫</span>Library</a>
+    <a href="#systems"><span>◎</span>Systems</a>
+    <button id="openProtocolMobile" type="button"><span>＋</span>Protocol <b data-protocol-count>0</b></button>
+  </nav>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="./app.js"></script>
+</body>
+</html>
