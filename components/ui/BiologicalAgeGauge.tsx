@@ -216,7 +216,7 @@ export function BiologicalAgeGauge({
             animate={{ strokeDashoffset: scanned ? bioOffset : arcLen * 0.7 }}
             transition={{ duration: 1.4, ease: [0.4, 0, 0.2, 1] }}
             filter="url(#bio-gauge-glow)"
-            opacity={scanned ? 1 : 0.35}
+            opacity={scanned ? 1 : 0.55}
           />
 
           {/* Glowing leading edge of the bio-age arc */}
@@ -254,7 +254,14 @@ export function BiologicalAgeGauge({
               <CountUp value={animatedBio} duration={1.2} />
             </p>
           ) : (
-            <p className={cn('font-bold font-mono text-muted-foreground', s.fontSize)}>—</p>
+            <div className="bio-age-standby flex flex-col items-center gap-0.5" aria-hidden="true">
+              <p className={cn('font-bold font-mono tracking-tight text-accent-cyan/80', s.fontSize)}>
+                <span className="bio-age-standby-digits">--.-</span>
+              </p>
+              <span className="rounded-full border border-accent-cyan/30 bg-accent-cyan/10 px-2 py-0.5 font-mono text-[0.625rem] uppercase tracking-[0.16em] text-accent-cyan">
+                Standby · run scan
+              </span>
+            </div>
           )}
           <p className={cn('text-caption font-mono mt-1', s.label)}>
             Chrono {chronoAge}
