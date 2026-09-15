@@ -3,6 +3,9 @@ import { StructuredData } from '@/components/seo/StructuredData';
 import { seoRoutes } from '@/lib/seo-routes';
 import { buildBreadcrumbSchema } from '@/lib/seo';
 import { SITE } from '@/lib/site';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
+import { ContinueTrail } from '@/components/ui/WalkCard';
 
 export const metadata = seoRoutes.dashboard();
 
@@ -37,6 +40,19 @@ export default function DashboardPage() {
     <>
       <StructuredData schemas={buildDashboardSchemas()} />
       <Dashboard />
+      <div className="container-page pb-16">
+        <ContinueTrail
+          title="Continue from your OS."
+          items={[
+            { href: '/nico', kicker: 'Start', title: 'Start with NICO', detail: 'Refresh a personalized starter when goals change.', accent: 'emerald' },
+            { href: '/stacks', kicker: 'Decide', title: 'Open Stack Architect', detail: 'Edit the protocol your dashboard is tracking.', accent: 'violet' },
+            { href: '/labs', kicker: 'Track', title: 'Log labs', detail: 'Baseline and retest the markers that matter.', accent: 'rose' },
+            { href: '/shop', kicker: 'Verify', title: 'Verify stack', detail: 'COA checklists for the compounds you are running.', accent: 'amber' },
+          ]}
+        />
+        <PageConnections cluster={clusterFrom('start', '/dashboard')} accent="emerald" id="dashboard-connections" />
+        <PageConnections cluster={clusterFrom('verify', '/dashboard')} accent="amber" id="dashboard-verify-connections" className="mt-6" />
+      </div>
     </>
   );
 }
