@@ -3,6 +3,7 @@ import { Footer } from '@/components/Footer';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { SectionProgress } from '@/components/ui/SectionProgress';
 import { HomeDescent } from '@/components/home/HomeDescent';
+import { HomeInstrumentStrip } from '@/components/home/HomeInstrumentStrip';
 import { HomeCredibilityStrip } from '@/components/home/HomeCredibilityStrip';
 import { HomeEliteInterventions } from '@/components/home/HomeEliteInterventions';
 import { HomeHallmarks } from '@/components/home/HomeHallmarks';
@@ -91,6 +92,7 @@ export default function HomePage() {
       <Nav />
       <main id="main-content" tabIndex={-1}>
         <HomeDescent />
+        <HomeInstrumentStrip />
         <HomeCredibilityStrip />
         <HomeEliteInterventions />
         <HomeHallmarks />

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import { ArrowRight, ChevronRight, MapPin } from 'lucide-react';
 import { usePlatform } from '@/context/PlatformContext';
 import { accentForRoute, getRouteContext } from '@/lib/route-context';
@@ -90,6 +91,8 @@ export function ContextBar({ hideStackReadout = false }: ContextBarProps = {}) {
     pathname,
   });
 
+  const [workspaceOpen, setWorkspaceOpen] = useState(false);
+
   if (!route.hub && route.breadcrumbs.length === 0) return null;
 
   const crumbs = route.breadcrumbs;
@@ -121,15 +124,29 @@ export function ContextBar({ hideStackReadout = false }: ContextBarProps = {}) {
         )}
 
         <div className="context-bar__workspace">
-          {selected.length > 0 && !hideStackReadout && <ContextBarStackReadout />}
-          <span className="context-bar__status">{next.message}</span>
-          <Link
-            href={next.href}
-            className={cn('context-bar__action focus-ring', theme.text)}
+          <button
+            type="button"
+            className="context-bar__mobile-toggle focus-ring md:hidden"
+            aria-expanded={workspaceOpen}
+            onClick={() => setWorkspaceOpen((v) => !v)}
           >
-            <span>{next.label}</span>
-            <ArrowRight className="context-bar__action-arrow" aria-hidden="true" />
-          </Link>
+            Your workspace
+            <ChevronRight
+              className={cn('context-bar__action-arrow transition-transform', workspaceOpen && 'rotate-90')}
+              aria-hidden="true"
+            />
+          </button>
+          <div className={cn('context-bar__workspace-body', workspaceOpen ? 'is-open' : '')}>
+            {selected.length > 0 && !hideStackReadout && <ContextBarStackReadout />}
+            <span className="context-bar__status">{next.message}</span>
+            <Link
+              href={next.href}
+              className={cn('context-bar__action focus-ring', theme.text)}
+            >
+              <span>{next.label}</span>
+              <ArrowRight className="context-bar__action-arrow" aria-hidden="true" />
+            </Link>
+          </div>
         </div>
       </div>
     </aside>
