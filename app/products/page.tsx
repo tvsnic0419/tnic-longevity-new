@@ -7,6 +7,9 @@ import { seoRoutes } from '@/lib/seo-routes';
 import { buildProductListSchema, buildBreadcrumbSchema } from '@/lib/seo';
 import { PRODUCT_PICKS } from '@/lib/product-picks';
 import { compounds } from '@/lib/data';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
+import { ContinueTrail } from '@/components/ui/WalkCard';
 
 export const metadata = seoRoutes.products();
 
@@ -54,8 +57,8 @@ export default function ProductsPage() {
           { value: String(brands), label: 'Independent brands' },
           { value: String(hallmarksAddressed), label: 'Hallmarks addressed', href: '/hallmarks' },
         ]}
-        primary={{ href: '/shop', label: 'Open the Protocol Shop' }}
-        secondary={{ href: '/library', label: 'Browse the library' }}
+        primary={{ href: '/shop', label: 'Verify stack' }}
+        secondary={{ href: '/library', label: 'Explore library' }}
         figure={
           <HubSplitInstrument
             kicker="Verification"
@@ -82,6 +85,19 @@ export default function ProductsPage() {
         figureCaption="COA split · derived from the pick registry, never inferred"
       />
       <ProductsHub />
+      <div className="container-page pb-16">
+        <ContinueTrail
+          title="From a verified pick."
+          items={[
+            { href: '/library', kicker: 'Explore', title: 'Read the compound module', detail: 'PMID-graded evidence before you commit spend.', accent: 'cyan' },
+            { href: '/stacks', kicker: 'Decide', title: 'Open Stack Architect', detail: 'See how this pick sits with the rest of a protocol.', accent: 'violet' },
+            { href: '/shop', kicker: 'Verify', title: 'Verify stack', detail: 'Buyer checklist filtered to your active compounds.', accent: 'amber' },
+            { href: '/labs', kicker: 'Track', title: 'Log baseline labs', detail: 'Supplements without labs is guessing.', accent: 'rose' },
+          ]}
+        />
+        <PageConnections cluster={clusterFrom('verify', '/products')} accent="emerald" id="products-connections" />
+        <PageConnections cluster={clusterFrom('explore', '/products')} accent="cyan" id="products-explore-connections" className="mt-6" />
+      </div>
     </SubPageLayout>
   );
 }
