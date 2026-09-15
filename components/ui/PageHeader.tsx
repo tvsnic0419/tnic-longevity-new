@@ -106,7 +106,7 @@ export function PageHeader({
       <header
         className={cn(
           `${styles.foundation} section-header-mesh relative isolate overflow-hidden mb-10 md:mb-12`,
-          'rounded-3xl border px-6 py-12 md:px-10 md:py-16',
+          'page-header page-header--instrument rounded-3xl border px-6 py-12 md:px-10 md:py-16',
           t.border,
           alignClass,
           align === 'center' ? 'max-w-4xl' : 'max-w-5xl',
@@ -125,7 +125,15 @@ export function PageHeader({
   }
 
   return (
-    <header className={cn(styles.foundation, 'mb-10 md:mb-12 max-w-4xl', alignClass, isHandoff ? 'page-header--handoff' : 'section-header-mesh relative')}>
+    <header
+      className={cn(
+        styles.foundation,
+        'page-header page-header--instrument mb-10 md:mb-12 max-w-4xl',
+        alignClass,
+        isHandoff ? 'page-header--handoff hub-instrument-hero' : 'section-header-mesh relative',
+      )}
+      data-hub-accent={theme}
+    >
       {inner}
     </header>
   );
