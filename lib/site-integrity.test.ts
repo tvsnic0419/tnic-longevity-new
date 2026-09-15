@@ -149,7 +149,12 @@ describe('site data integrity', () => {
     // it must be excluded from the "every page must be sitemapped" guarantee.
     // The authenticated dashboard is also intentionally excluded: it is a
     // private utility surface, not an organic landing page.
-    const UNLISTED_BY_DESIGN = new Set(['/sheepeople', '/dashboard']);
+    // /bio-bible/download is the Stripe post-payment delivery gate. It carries
+    // robots noindex (buildPageMetadata({ noIndex: true })) and is reachable
+    // only by a verified checkout session id, so sitemapping it would both
+    // leak a receipt surface into search and advertise an address that serves
+    // nothing without a paid session.
+    const UNLISTED_BY_DESIGN = new Set(['/sheepeople', '/dashboard', '/bio-bible/download']);
 
     const staticRoutes = collectStaticPageRoutes(resolve(process.cwd(), 'app'));
     const sitemapPaths = new Set(buildSitemapEntries().map((e) => new URL(e.url).pathname));

@@ -36,6 +36,7 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     { url: `${base}/stacks`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/stacks/lab`, lastModified, changeFrequency: 'weekly', priority: 0.82 },
     { url: `${base}/protocols`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
+    { url: `${base}/biohack-100`, lastModified, changeFrequency: 'monthly', priority: 0.86 },
     { url: `${base}/labs`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/tools`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/elite-8`, lastModified, changeFrequency: 'monthly', priority: 0.88 },
