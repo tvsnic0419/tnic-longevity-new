@@ -191,7 +191,14 @@ function LabPartnerOAuthFlowInner() {
   }, [searchParams, exchangeCode]);
 
   const connect = () => {
-    window.location.href = `/api/labs/partner/oauth/start?partner=${selectedPartner}`;
+    // Absolute URL: @next/next/no-location-assign-relative-destination bans relative href assigns.
+    // Full navigation is required so the OAuth start route can 302 to the partner IdP.
+    window.location.assign(
+      new URL(
+        `/api/labs/partner/oauth/start?partner=${encodeURIComponent(selectedPartner)}`,
+        window.location.origin,
+      ).href,
+    );
   };
 
   const disconnect = () => {

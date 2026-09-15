@@ -13,6 +13,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Select } from '@/components/ui/Select';
 import { Badge } from '@/components/ui/Badge';
 import { DepthBarChart } from '@/components/ui/DepthBarChart';
+import { ToolEmptyState } from '@/components/ui/ToolEmptyState';
 import { ToolDisclaimer } from './ToolDisclaimer';
 
 const impactColor = (label: string) => {
@@ -178,7 +179,12 @@ export function BiomarkerImpactTool() {
               </CardHeader>
               <CardContent>
                 {result.lifestyleModifiers.length === 0 ? (
-                  <p className="text-body-sm">No lifestyle modifiers mapped for this marker yet.</p>
+                  <ToolEmptyState
+                    theme="cyan"
+                    title="No lifestyle modifiers mapped"
+                    detail="This marker does not yet have lifestyle levers in the impact model. Compound interventions still rank above."
+                    className="!p-5"
+                  />
                 ) : (
                   <ul className="space-y-3">
                     {result.lifestyleModifiers.map((i) => (

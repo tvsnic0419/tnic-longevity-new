@@ -3,9 +3,11 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import type { StackAnalysis } from '@/lib/stack-analysis';
+import { synergyPairMatrix } from '@/lib/stack-analysis';
 import { cn } from '@/lib/utils';
 import { LongevityGaugeArc } from '@/components/ui/LongevityGaugeArc';
 import { HallmarkCoverageRing } from '@/components/ui/HallmarkCoverageRing';
+import { DepthBarChart } from '@/components/ui/DepthBarChart';
 
 const gaugeColor = (score: number) =>
   score >= 75
@@ -98,6 +100,33 @@ export function SynergyScorePanel({ score, analysis, verdict, className = '' }: 
           />
         </div>
       </div>
+
+      {analysis.synergies.length > 0 && (
+        <div className="mt-5">
+          <p className="text-micro font-mono uppercase tracking-[0.12em] text-muted-foreground mb-2">
+            Pair synergies · instrument
+          </p>
+          <DepthBarChart
+            layout="vertical"
+            data={analysis.synergies.slice(0, 5).map((s, i) => {
+              const pair =
+                synergyPairMatrix[s.from]?.[s.to] ??
+                synergyPairMatrix[s.to]?.[s.from] ??
+                7;
+              return {
+                name: s.label.length > 22 ? `${s.label.slice(0, 20)}…` : s.label,
+                fullName: `${s.label} · pair score ${pair}/10`,
+                value: pair * 10,
+                color: i === 0 ? 'var(--accent-emerald)' : 'var(--accent-violet)',
+              };
+            })}
+            height={Math.min(200, 48 + analysis.synergies.slice(0, 5).length * 32)}
+            valueLabel="Synergy weight"
+            max={100}
+            color="var(--accent-violet)"
+          />
+        </div>
+      )}
 
       {/* Verdict */}
       {verdict && (

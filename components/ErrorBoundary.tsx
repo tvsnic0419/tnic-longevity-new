@@ -91,7 +91,9 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
     } catch {
       /* ignore */
     }
-    window.location.href = '/';
+    // Absolute URL: @next/next/no-location-assign-relative-destination bans relative href assigns.
+    // Class component recovery path has no App Router hook access.
+    window.location.assign(new URL('/', window.location.origin).href);
   };
 
   render() {
