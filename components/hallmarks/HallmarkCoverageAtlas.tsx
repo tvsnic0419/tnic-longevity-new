@@ -26,36 +26,36 @@ export function HallmarkCoverageAtlas({ className = '' }: { className?: string }
 
   return (
     <section
-      className={`premium-card p-5 sm:p-7 ${className}`}
+      className={`premium-card hallmarks-instrument-panel p-5 sm:p-7 ${className}`}
       style={{ ['--card-accent' as string]: 'var(--accent-emerald)' }}
       aria-label={`Hallmark coverage atlas: ${totalInterventions} documented interventions across ${rows.length} hallmarks`}
     >
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <div>
-          <p className="text-label text-[var(--color-text-faint)]">Coverage atlas</p>
+          <p className="text-label text-accent-emerald">Coverage atlas</p>
           <h2 className="heading-card mt-1 text-foreground">
             {totalInterventions} interventions, ranked across {rows.length} hallmarks
           </h2>
         </div>
-        <p className="font-mono text-micro text-[var(--color-text-faint)]">Documented interventions per mechanism</p>
+        <p className="font-mono text-micro text-muted-foreground">Documented interventions per mechanism</p>
       </div>
 
-      <ul className="mt-5 grid gap-x-8 gap-y-2.5 lg:grid-cols-2">
+      <ul className="mt-5 grid gap-x-8 gap-y-3 pe-10 sm:pe-0 lg:grid-cols-2 lg:gap-x-10">
         {rows.map((r) => {
           const pct = (r.count / peak) * 100;
           return (
             <li key={r.slug}>
               <Link
                 href={`/hallmarks/${r.slug}`}
-                className="focus-ring group flex items-center gap-3 rounded-lg py-1"
+                className="focus-ring group grid grid-cols-[1.5rem_minmax(0,1fr)_minmax(3rem,1fr)_1.5rem] items-center gap-x-3 rounded-lg py-1.5 sm:grid-cols-[1.5rem_10rem_minmax(0,1fr)_1.5rem]"
               >
                 <span className="w-6 shrink-0 text-right font-mono text-micro text-[var(--color-text-faint)]">
                   {String(r.number).padStart(2, '0')}
                 </span>
-                <span className="w-40 shrink-0 truncate text-body-sm text-[var(--color-text-secondary)] transition-colors group-hover:text-foreground">
+                <span className="min-w-0 text-body-sm leading-snug text-[var(--color-text-secondary)] transition-colors group-hover:text-foreground">
                   {r.title}
                 </span>
-                <span className="relative h-2 flex-1 overflow-hidden rounded-full bg-[var(--color-bg-muted)]" aria-hidden="true">
+                <span className="relative h-2 w-full overflow-hidden rounded-full bg-[var(--color-bg-muted)]" aria-hidden="true">
                   <span
                     className="absolute inset-y-0 left-0 rounded-full"
                     style={{
