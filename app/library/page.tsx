@@ -195,38 +195,42 @@ export default async function LibraryPage({
         />
       </div>
 
-      {/* Hallmark visual atlas. Each card is a first-party illustration drawn
-          from the mechanism it depicts — no stock art — linking into that
-          hallmark's evidence deep-dive. */}
-      <section className="container-page py-12 md:py-16 border-t border-[var(--color-border-subtle)]">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
-            <div className="max-w-2xl">
+      {/* Density: one browse surface above the fold. Synergies / lifestyle /
+          visual atlas / module index live behind a single disclosure so the
+          compound grid stays the primary research path. */}
+      <section id="browse-modules" className="container-page py-10 md:py-14 border-t border-[var(--color-border-subtle)]">
+        <details className="premium-card rounded-2xl border border-border/60 p-5 md:p-7 group">
+          <summary className="focus-ring cursor-pointer list-none marker:content-none">
+            <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="text-label text-accent-cyan mb-1">Browse modules</p>
+                <h2 className="heading-section text-xl md:text-2xl">Hallmark atlas, lifestyle, synergies & tools</h2>
+                <p className="mt-1 max-w-2xl text-body-sm text-muted-foreground">
+                  Keep the compound grid as the primary surface. Open this panel when you want the
+                  mechanistic atlas, lifestyle pillars, or module index.
+                </p>
+              </div>
+              <span className="text-sm font-semibold text-accent-cyan group-open:hidden">Expand →</span>
+              <span className="text-sm font-semibold text-accent-cyan hidden group-open:inline">Collapse ↑</span>
+            </div>
+          </summary>
+          <div className="mt-8 space-y-12">
+            <div>
               <p className="text-label text-accent-cyan mb-1.5">The mechanistic atlas</p>
-              <h2 className="heading-section">All {hallmarkLibrary.length} hallmarks, drawn from their biology</h2>
-              <p className="text-body text-[var(--color-text-secondary)] mt-2">
-                Every illustration is rendered from the mechanism it depicts — the same
-                evidence-graded biology behind each compound module.
+              <h3 className="text-lg font-bold mb-4">All {hallmarkLibrary.length} hallmarks, drawn from their biology</h3>
+              <DeferredHallmarkVisualGallery cards={visualCards} />
+              <p className="mt-6 text-caption text-[var(--color-text-muted)]">
+                Every illustration is drawn from the mechanism it depicts — no stock art.
               </p>
             </div>
-            <Link href="#content-modules" className="action-link text-sm text-accent-cyan hover:underline">
-              Module index →
-            </Link>
+            <LifestylePillarsHub />
+            <div>
+              <ToolsPromoStrip headline="Simulate stacks, build protocols, and project healthspan from library modules" />
+            </div>
+            <LibraryModulesHub />
           </div>
-
-          <DeferredHallmarkVisualGallery cards={visualCards} />
-
-          <p className="mt-8 text-caption text-[var(--color-text-muted)]">
-            Every illustration is drawn from the mechanism it depicts — no stock art.
-          </p>
-        </div>
+        </details>
       </section>
-
-      <LifestylePillarsHub />
-      <div className="container-page py-8">
-        <ToolsPromoStrip headline="Simulate stacks, build protocols, and project healthspan from library modules" />
-      </div>
-      <LibraryModulesHub />
     </>
   );
 }
