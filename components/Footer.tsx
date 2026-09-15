@@ -91,7 +91,7 @@ function FooterColumn({
 
 export function Footer() {
   return (
-    <footer className="relative py-14 md:py-20 footer-aurora border-t border-border/50" role="contentinfo">
+    <footer data-site-footer className="site-footer relative py-14 md:py-20 footer-aurora border-t border-border/50" role="contentinfo">
       <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent-cyan/50 to-transparent" />
       <div className="container-page">
         <div className="mb-12 md:mb-16 text-center border-b border-border/40 pb-10 md:pb-14">

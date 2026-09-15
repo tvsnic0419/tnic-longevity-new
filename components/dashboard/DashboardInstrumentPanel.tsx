@@ -46,7 +46,7 @@ export function DashboardInstrumentPanel() {
   const defense = profile.scanned ? defenseProfile.defenseScore : 0;
 
   return (
-    <Card variant="elevated" className="overflow-hidden">
+    <Card variant="elevated" className="instrument-bezel overflow-hidden border-accent-emerald/25">
       <CardHeader>
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
@@ -76,8 +76,8 @@ export function DashboardInstrumentPanel() {
             ctaHref="/stacks"
           />
         ) : (
-          <div className="grid gap-6 lg:grid-cols-12">
-            <div className="lg:col-span-4 rounded-2xl border border-border/50 bg-gradient-to-b from-accent-rose/[0.06] to-transparent p-4">
+          <div className="grid gap-5 lg:grid-cols-12 items-stretch" data-symmetric-grid>
+            <div className="lg:col-span-4 rounded-2xl border border-border/50 bg-gradient-to-b from-accent-rose/[0.06] to-transparent p-4 instrument-module">
               <BiologicalAgeGauge
                 chronoAge={chrono}
                 bioAge={bio}
@@ -96,7 +96,7 @@ export function DashboardInstrumentPanel() {
                 </button>
               )}
             </div>
-            <div className="lg:col-span-8 rounded-2xl border border-border/50 bg-gradient-to-b from-accent-violet/[0.05] to-transparent p-4">
+            <div className="lg:col-span-8 rounded-2xl border border-border/50 bg-gradient-to-b from-accent-violet/[0.05] to-transparent p-4 instrument-module">
               {hallmarkBars.length > 0 ? (
                 <>
                   <p className="text-label text-accent-violet mb-1">
