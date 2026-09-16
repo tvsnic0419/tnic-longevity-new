@@ -34,7 +34,7 @@ export function StatTile({ icon: Icon, label, accent = 'cyan', children }: StatT
       className="stat-instrument surface-well rounded-xl p-4"
       style={{ '--flair-accent': t.cssVar } as CSSProperties}
     >
-      <div className="flex items-center gap-1.5 text-label text-muted-foreground">
+      <div className="flex items-start gap-1.5 text-label text-muted-foreground whitespace-normal break-words">
         <Icon className={`h-3.5 w-3.5 ${t.text}`} aria-hidden="true" />
         {label}
       </div>
