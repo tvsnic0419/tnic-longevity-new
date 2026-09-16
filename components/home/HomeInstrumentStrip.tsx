@@ -4,7 +4,6 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { BiologicalAgeGauge } from '@/components/ui/BiologicalAgeGauge';
-import { DepthBarChart } from '@/components/ui/DepthBarChart';
 import { getScoredCompounds } from '@/lib/elite-8-data';
 import { DERIVED_STATS } from '@/lib/derived-stats';
 import { eliteTierCounts } from '@/lib/elite-interventions';
@@ -15,16 +14,17 @@ import { eliteTierCounts } from '@/lib/elite-interventions';
  * Educational demo scan only; labeled as such.
  */
 export function HomeInstrumentStrip() {
-  const ranked = useMemo(() => getScoredCompounds().slice(0, 5), []);
-  const chartData = useMemo(
+  // All eight, not an arbitrary top five: the module is the Elite *8*.
+  const ranked = useMemo(
     () =>
-      ranked.map((c) => ({
+      getScoredCompounds().map((c) => ({
+        id: c.id,
         name: c.name,
-        fullName: `${c.full} · modeled LQ`,
-        value: Math.round(c.score),
-        color: c.color,
+        full: c.full,
+        category: c.category,
+        score: Math.round(c.score),
       })),
-    [ranked],
+    [],
   );
 
   const [chronoAge, setChronoAge] = useState(42);
@@ -97,7 +97,7 @@ export function HomeInstrumentStrip() {
               <div>
                 <p className="text-label text-accent-cyan">Elite 8 · modeled LQ</p>
                 <p className="text-caption text-muted-foreground">
-                  Top 5 by published dimension weights — educational ranking
+                  All eight, by published dimension weights — educational ranking
                 </p>
               </div>
               {/* `.action-link` is the documented standalone-link control floor
@@ -111,13 +111,52 @@ export function HomeInstrumentStrip() {
                 Full ranking <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
               </Link>
             </div>
-            <DepthBarChart
-              data={chartData}
-              height={220}
-              valueLabel="Modeled LQ"
-              max={100}
-              color="var(--accent-cyan)"
-            />
+            {/* A ranked readout, not a bar chart.
+
+                It was a vertical Recharts bar chart: eight compound names
+                rotated -28° along the bottom axis — the least legible way to
+                print a word — in a 220px box inside a ~500px column, leaving
+                roughly 280px of dead panel beneath it, with a different
+                decorative hue per bar. Two of those hues are the Tier C and
+                Tier A tokens, so a Tier A compound could be drawn amber on the
+                site whose whole spine is that a colour means a grade.
+
+                Turning it horizontal fixed the labels and the dead space and
+                exposed the real problem: these eight modeled scores cluster
+                between 66 and 73, so on a 0–100 axis every bar is the same
+                length. STYLE_GUIDE and the repo's own viz rules say a
+                visualisation earns its place only if it changes a decision
+                faster than text does — eight identical bars change nothing.
+
+                So the number leads and the meter supports it. The axis stays
+                anchored at 0: truncating it would make a 7-point spread look
+                decisive, which is the kind of overstatement this library
+                exists to avoid. */}
+            <ol className="lq-rank">
+              {ranked.map((c, i) => (
+                <li key={c.id} className="lq-rank__row">
+                  <span className="lq-rank__pos" aria-hidden="true">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <span className="lq-rank__body">
+                    <span className="lq-rank__head">
+                      <span className="lq-rank__name">{c.name}</span>
+                      <span className="lq-rank__score">
+                        {c.score}
+                        <span className="lq-rank__of">/100</span>
+                      </span>
+                    </span>
+                    <span className="lq-rank__meter" aria-hidden="true">
+                      <span className="lq-rank__fill" style={{ width: `${c.score}%` }} />
+                    </span>
+                    <span className="lq-rank__cat">{c.category}</span>
+                  </span>
+                  <span className="sr-only">
+                    {`Rank ${i + 1}: ${c.full}, modeled LQ ${c.score} out of 100.`}
+                  </span>
+                </li>
+              ))}
+            </ol>
           </div>
         </div>
       </div>

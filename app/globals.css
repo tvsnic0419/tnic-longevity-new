@@ -2881,6 +2881,93 @@ p,
   }
 }
 
+/* ── .lq-rank — the homepage Elite 8 modeled-LQ readout ──────────────────────
+   Same family as HubSplitInstrument: a label row, a value in metric type, and
+   a thin meter under it. The value leads because the eight scores cluster in a
+   7-point band and the meter alone cannot separate them; the meter stays
+   anchored at 0 so the band is not exaggerated into a story the data does not
+   support. One accent — rank is carried by order and by the leading numeral,
+   never by hue. */
+.lq-rank {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.lq-rank__row {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  align-items: start;
+  gap: 0 0.75rem;
+  padding: 0.6rem 0;
+  border-top: 1px solid var(--color-border-subtle);
+}
+.lq-rank__row:first-child { border-top: 0; }
+.lq-rank__pos {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  padding-top: 0.15rem;
+  color: var(--color-text-faint);
+  font-variant-numeric: tabular-nums;
+}
+.lq-rank__body { min-width: 0; display: block; }
+.lq-rank__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.lq-rank__name {
+  font-size: var(--type-15);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--color-text-primary);
+  overflow-wrap: anywhere;
+}
+.lq-rank__score {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--type-15);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--accent-cyan);
+  font-variant-numeric: tabular-nums;
+}
+.lq-rank__of {
+  margin-left: 0.15rem;
+  font-size: var(--type-11);
+  font-weight: 500;
+  color: var(--color-text-faint);
+}
+.lq-rank__meter {
+  display: block;
+  height: 3px;
+  margin-top: 0.4rem;
+  border-radius: 999px;
+  background: var(--color-bg-muted);
+  overflow: hidden;
+}
+.lq-rank__fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent-cyan) 55%, transparent), var(--accent-cyan));
+}
+.lq-rank__cat {
+  display: block;
+  margin-top: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: var(--type-11);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  overflow-wrap: anywhere;
+}
+
 /* ── Footer manifesto ── */
 .footer-manifesto {
   font-size: clamp(1.25rem, 2.5vw, 1.875rem);

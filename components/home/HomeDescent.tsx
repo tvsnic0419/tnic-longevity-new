@@ -276,6 +276,19 @@ const CSS = `
   .tnic-hero { min-height: unset; }
   .tnic-hero-grid { grid-template-columns: 1fr; gap: 18px; }
   .tnic-paths { grid-column: auto; }
+
+  /* Action before proof, on phones only.
+
+     Stacked in DOM order the arrival read: headline, lead, badges, then a
+     600px instrument panel, and only then something to click. Measured at
+     390x844 the first call to action sat at y=1142 — one and a third screens
+     down. The instrument is the proof that the claim is real, and proof can
+     live below the fold; the three paths are the whole point of the screen and
+     cannot. Desktop is untouched: there the panel is the second column, so the
+     paths already land inside the first viewport beside it. */
+  .tnic-hero-copy { order: 1; }
+  .tnic-paths { order: 2; }
+  .tnic-intel { order: 3; }
 }
 @media (max-width: 720px) {
   /* The global nav is fixed; reserve a deliberate arrival margin so the
@@ -1073,11 +1086,23 @@ export function HomeDescent({ libraryTiers }: { libraryTiers: LibraryTierSplit }
     const ctx = cv.getContext("2d"); if (!ctx) return;
     let w = 0, h = 0;
     const dpr = cappedDpr();
+    // Particle COUNT was fixed while the canvas is fluid, so density scaled
+    // inversely with the viewport: the 130/60/22 calibrated against a 1440x900
+    // desktop became roughly 3.9x denser on a 390x844 phone, and the bokeh
+    // stopped being atmosphere behind the hero and started sitting on top of
+    // the lead paragraph. Scaling by area keeps the look the same at every
+    // width, and costs a phone far fewer glow blits plus a much cheaper O(n^2)
+    // link pass on the mid layer.
+    const REFERENCE_AREA = 1440 * 900;
+    const density = Math.max(
+      0.35,
+      Math.min(1, (window.innerWidth * window.innerHeight) / REFERENCE_AREA),
+    );
     const layers = [
       { n: 130, sp: 0.00012, dxr: 0.00008, rMin: 0.3, rMax: 1.2, alpha: 0.55 },
       { n: 60,  sp: 0.00020, dxr: 0.00014, rMin: 0.8, rMax: 2.2, alpha: 0.75 },
       { n: 22,  sp: 0.00028, dxr: 0.00020, rMin: 1.8, rMax: 3.6, alpha: 0.85 },
-    ];
+    ].map(l => ({ ...l, n: Math.max(6, Math.round(l.n * density)) }));
     const P = layers.map(l => Array.from({ length: l.n }, () => ({
       x: Math.random(), y: Math.random(),
       r: Math.random() * (l.rMax - l.rMin) + l.rMin,
