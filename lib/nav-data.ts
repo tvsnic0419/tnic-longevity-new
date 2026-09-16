@@ -1,64 +1,93 @@
 // Primary-navigation config, split out of lib/data.ts so the always-mounted
-// shell (Nav, ScrollProgress) doesn't drag the full compound data layer into
-// every page's client bundle. lib/data.ts re-exports both for back-compat.
+// shell (Nav, ScrollProgress, Footer) doesn't drag the full compound data
+// layer into every page's client bundle. lib/data.ts re-exports both for
+// back-compat.
+//
+// One list. Every chrome surface reads from here. Do not re-declare destinations
+// in Nav.tsx or Footer.tsx — that is how Library/Learn/Shop/Products drifted.
 
-export const navLinks = [
-  { href: '/products', label: 'Products', mod: 'MOD-PRD-16' },
+export type NavLink = {
+  href: string;
+  label: string;
+  mod?: string;
+};
+
+export type NavGroup = {
+  label: string;
+  links: readonly NavLink[];
+};
+
+/** Desktop header row — four jobs, then Explore. */
+export const desktopPrimaryLinks: readonly NavLink[] = [
   { href: '/library', label: 'Library', mod: 'MOD-LIB-13' },
-  // No separate "Compounds" nav item: /library/compounds duplicates the
-  // CompoundExplorer section already embedded on /library (same dataset,
-  // same tier filter). The route stays — it's load-bearing for every
-  // /library/compounds/<slug> deep-dive — just not double-billed in nav.
-  { href: '/peptides', label: 'Peptides', mod: 'MOD-PEP-15' },
-  { href: '/sirtuin-atlas', label: 'Sirtuins', mod: 'MOD-SIRT-01' },
-  { href: '/learn', label: 'Learn', mod: 'MOD-LRN-09' },
   { href: '/stacks', label: 'Stacks', mod: 'MOD-ARC-04' },
   { href: '/labs', label: 'Labs', mod: 'MOD-LAB-11' },
-  { href: '/tools', label: 'Tools', mod: 'MOD-TOL-14' },
-  // Single-noun label to match the rest of the bar and keep the row from
-  // wrapping at lg — the full "Compound Engine" name is used in the footer,
-  // the breadcrumb, and every cross-link card, where there is room for it.
-  { href: '/compound-engine', label: 'Engine', mod: 'MOD-ENG-18' },
+  { href: '/products', label: 'Products', mod: 'MOD-PRD-16' },
 ];
 
 /**
- * The same destinations as `navLinks`, grouped by intent so the primary nav
- * reads as three-to-four labeled clusters instead of nine undifferentiated
- * links — a newcomer can tell reference (Learn) from builders (Build) from
- * personal data (Track) from buying (Shop). Consumed by the Nav for both the
- * desktop row (divider between groups) and the mobile drawer (labeled sections).
+ * Drawer + footer taxonomy. Learn / Build / Track / Shop.
+ * "Learn" the hub is labelled "Start here" so it does not collide with the
+ * cluster name or with Library.
  */
-export const navGroups = [
+export const navGroups: readonly NavGroup[] = [
   {
     label: 'Learn',
     links: [
       { href: '/library', label: 'Library' },
+      { href: '/hallmarks', label: 'Hallmarks' },
       { href: '/peptides', label: 'Peptides' },
       { href: '/sirtuin-atlas', label: 'Sirtuins' },
       { href: '/insights', label: 'Insights' },
-      { href: '/learn', label: 'Learn' },
+      { href: '/learn', label: 'Start here' },
     ],
   },
   {
     label: 'Build',
     links: [
       { href: '/stacks', label: 'Stacks' },
-      // Combination Lab (/stacks/lab) is deliberately NOT here. It rendered as
-      // "Lab" four items away from "Labs" (/labs, biomarker tracking) in the
-      // same bar — two near-identical labels for unrelated things. It is a
-      // sub-page of Stacks, promoted at the top of the /stacks hub and in the
-      // sitemap, so it loses nothing by staying out of the top-level row.
       { href: '/protocols', label: 'Protocols' },
       { href: '/tools', label: 'Tools' },
       { href: '/compound-engine', label: 'Engine' },
+      { href: '/biohack-100', label: 'Bio Bible' },
     ],
   },
   {
     label: 'Track',
-    links: [{ href: '/labs', label: 'Labs' }],
+    links: [
+      { href: '/labs', label: 'Labs' },
+      { href: '/dashboard', label: 'Dashboard' },
+    ],
   },
   {
     label: 'Shop',
-    links: [{ href: '/products', label: 'Products' }],
+    links: [
+      { href: '/products', label: 'Verified products' },
+      { href: '/shop', label: 'Verify a buy' },
+    ],
   },
-] as const;
+];
+
+/** Desktop Explore panel — secondary Learn + Build only (Track/Shop already in the bar). */
+export const exploreGroups: readonly NavGroup[] = navGroups.filter(
+  (group) => group.label === 'Learn' || group.label === 'Build',
+);
+
+/**
+ * Scroll-rail + legacy consumers. Same destinations as the desktop bar so the
+ * right-rail dots match what the header already promises.
+ */
+export const navLinks: readonly NavLink[] = desktopPrimaryLinks;
+
+export function flattenNavGroups(groups: readonly NavGroup[] = navGroups): NavLink[] {
+  const seen = new Set<string>();
+  const out: NavLink[] = [];
+  for (const group of groups) {
+    for (const link of group.links) {
+      if (seen.has(link.href)) continue;
+      seen.add(link.href);
+      out.push(link);
+    }
+  }
+  return out;
+}
