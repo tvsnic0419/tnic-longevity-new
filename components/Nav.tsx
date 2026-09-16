@@ -80,6 +80,7 @@ const exploreGroups = [
     label: 'Build',
     links: [
       { href: '/protocols', label: 'Protocols' },
+      { href: '/biohack-100', label: 'Bio Bible' },
       { href: '/tools', label: 'Tools' },
       { href: '/compound-engine', label: 'Compound engine' },
     ],
