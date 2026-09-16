@@ -50,7 +50,7 @@ export const LQ_DIMENSIONS: {
   { key: 'SF', label: 'Safety Profile', w: LQ_WEIGHTS.SF, desc: 'Tolerability, adverse event rate' },
   { key: 'BV', label: 'Bioavailability', w: LQ_WEIGHTS.BV, desc: 'Absorption, delivery, formulation quality' },
   { key: 'HP', label: 'Human Population Data', w: LQ_WEIGHTS.HP, desc: 'Observational cohort / epidemiological signal' },
-  { key: 'R', label: 'Risk Penalty', w: LQ_WEIGHTS.R, desc: 'Adverse events, drug interactions (subtracted)', penalty: true },
+  { key: 'R', label: 'Risk Penalty', w: LQ_WEIGHTS.R, desc: 'Adverse events, drug interactions', penalty: true },
 ];
 
 export const RX_COMPOUND_IDS = ['rapamycin', 'metformin', 'senolytics'] as const;
