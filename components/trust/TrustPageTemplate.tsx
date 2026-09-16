@@ -67,7 +67,7 @@ export function TrustPageTemplate({
   cluster = 'trust',
 }: TrustPageTemplateProps) {
   const body = (
-    <PageShell>
+    <PageShell measure="reading">
       {showBackLink && (
         <Link
           href="/trust"

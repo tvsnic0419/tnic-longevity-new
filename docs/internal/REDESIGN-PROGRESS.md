@@ -2049,6 +2049,96 @@ texts).
   `@axe-core/playwright` as a devDependency (repo already has `playwright-core`
   for the Chromium binary).
 
+---
+
+## Visual pass — v14 "lit ground" (branch `claude/ui-design-visual-pass-sa6c4p`)
+
+*Method: built the site, served it, and screenshotted `/`, `/library`,
+`/hallmarks`, `/hallmarks/cellular-senescence`, `/stacks`,
+`/library/compounds/spermidine` and `/trust/methodology` at 1440×900 and
+390×844 in both themes — before and after. Everything below was found by
+looking at a render, not by reading the stylesheet.*
+
+### What was found
+
+1. **The page ground was a flat slab.** `--color-bg-base` edge to edge on every
+   route that is not the homepage or a hero band, with the only relief being the
+   fixed `.ambient-layer`, which is corner-masked and effectively invisible on
+   the dense hubs. `/library` and `/hallmarks` rendered as content floating on
+   unlit black.
+2. **The elevated plane was not a plane.** `--color-bg-elevated` `#080f1c` is a
+   ~3% luminance step over `#020811` — under the threshold at which a dark
+   surface reads as raised. Every card, panel, table header and popover resolves
+   to it (directly or via `--card-ground` / `--glass-fill-*` / `--glass-bg`), so
+   the whole surface ladder was compressed into nearly one tone.
+3. **`.page-header__eyebrow` had no base definition** — only the `--handoff`
+   modifier did. The element is a `<div>`, so on every page using PageHeader's
+   default variant the eyebrow rendered as a *block*: a `.card-ultra` pill
+   stretched to the full width of its `max-w-4xl` header. On
+   `/trust/methodology` that is a 900px capsule around the words "TRUST ·
+   METHODOLOGY". Affected the whole trust/legal/utility set.
+4. **Long-form pages were composed hard-left.** `TrustPageTemplate` caps its
+   content at `max-w-4xl` (56rem) but sat inside the 80rem hub container, so at
+   1440px the column hugged the left edge with 24rem of empty page beside it.
+5. **The molecular field crossed running text.** §13 already states the rule
+   ("the field keeps the margins"), and `--card-ground` enforces it for cards —
+   but nothing enforced it for prose. A benzene ring sat behind the second line
+   of `/trust/methodology`'s page description.
+6. **The homepage compass cardinals were struck through by their own dial.**
+   The four `<text>` nodes sat at x=22 / x=218 inside a 240 viewBox whose outer
+   ring runs r=102 (x=18…222), so the ring stroke and the 12 hallmark ticks ran
+   *through* "NRF2" and "mTOR" — on the site's signature first-viewport
+   instrument. And as SVG text they scaled with the viewBox: 11px in a 240-unit
+   box displayed at 132px on a phone is ~6px, half the §3 floor.
+7. **`.heading-accent-rule` ignored the accent system.** Gradient and glow both
+   hardcoded cyan→emerald, so a rose hallmark page, a violet `/stacks` and an
+   amber warning band printed the same cyan dash under headers whose every other
+   element obeyed the per-hub accent.
+8. **`npm run audit:ui` was red.** One `aria-allowed-role` violation
+   (`<a role="listitem">` in the homepage tier-mix list — `listitem` is not an
+   allowed role for an anchor, so AT got a list whose items were not items) and
+   one actionable sub-24px control ("Full ranking", 87×20).
+
+### What changed
+
+| # | Change | Where |
+|---|---|---|
+| 1 | Four ground tokens (`--ground-key` / `-fill` / `-counter` / `-falloff`) composing a lit field, painted on `body` with `background-attachment: fixed`. Both themes define all four | `app/globals.css` |
+| 2 | `--color-bg-elevated` `#080f1c` → `#0b1424`; `--glass-bg` / `--color-bg-surface` tracked. JS mirror updated | `app/globals.css`, `lib/design-system.ts` |
+| 3 | `.page-header__eyebrow` base definition — `inline-flex` | `app/globals.css` |
+| 4 | `PageShell` gains `measure="reading"` → `.container-page--reading` (66rem); TrustPageTemplate uses it | `components/ui/PageShell.tsx`, `components/trust/TrustPageTemplate.tsx`, `app/globals.css` |
+| 5 | `.molecule-cascade` masked out of the centre column ≥1024px. Composition, not dimming — depth opacities untouched | `app/globals.css` |
+| 6 | Compass cardinals become HTML spans in the dial's padding, holding `--type-11` at every size; hidden with their explanatory clause in the compact layout | `components/home/HomeDescent.tsx` |
+| 7 | `.heading-accent-rule` reads `--rule-accent`; PageHeader and SectionShell pass `themes[theme].cssVar` | `app/globals.css`, `components/ui/PageHeader.tsx`, `components/SectionShell.tsx` |
+| 8 | Tier-mix list becomes real `<ul>`/`<li>` markup; "Full ranking" gets `min-h-6` | `components/home/HomeDescent.tsx`, `components/home/HomeInstrumentStrip.tsx` |
+
+Documented as STYLE_GUIDE §22 (guide bumped to v1.12).
+
+### Verified
+
+- `npm run typecheck` — clean.
+- `npm run lint` — 0 errors, 0 warnings.
+- `npm test` — 71 files, 784 tests, all passing. No guardrail test was touched
+  or weakened.
+- `npm run build` — clean.
+- `npm run audit:ui` against a production build, 11 routes × {1440×900,
+  390×844}: **0 axe violations on all 22 combinations** (was 1 rule across 2
+  pages), **0 actionable sub-24px controls** (was 2, budget 0 — the gate was
+  red before this pass), **0 HTML text below the 11px floor**.
+- Light theme screenshotted alongside dark on every sampled page; the ground
+  composition, the reading measure and the eyebrow fix all read correctly there.
+
+### Deliberately not done
+
+- **Elite-card CTA stack.** `HomeEliteInterventions` cards carry five actions
+  ("Read evidence", "Add to protocol", "Open in stacks", "Verify stack",
+  "Verify on <brand>"). That is the CTA redundancy the operating rules' §8.3
+  asks about, but resolving it removes or merges working destinations — an IA
+  decision, not a visual one. Flagged, not executed.
+- **Hub-hero top band.** ~140px of padding above the eyebrow on every
+  `CinematicHubHero`. It read as void on a flat ground; with the lit ground it
+  reads as atmosphere, so it was left alone rather than tuned on a hunch.
+
 ## Open questions for Thomas
 
 *(none blocking right now)*

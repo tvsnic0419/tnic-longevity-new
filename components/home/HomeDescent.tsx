@@ -414,8 +414,26 @@ const CSS = `
   width: min(100%, 300px);
   margin: 0 auto;
   aspect-ratio: 1;
+  /* Room for the HTML cardinal ring outside the graphic. The dial itself is
+     inset by this much, so the labels never sit over the outer ring or ticks. */
+  padding: 30px;
 }
 .tnic-intel-radar svg { width: 100%; height: 100%; display: block; }
+.tnic-intel-cardinals { position: absolute; inset: 0; pointer-events: none; }
+.tnic-intel-cardinals .c {
+  position: absolute;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: var(--type-11);
+  font-weight: 600;
+  letter-spacing: .14em;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--faint);
+}
+.tnic-intel-cardinals .n { top: 0; left: 50%; transform: translateX(-50%); }
+.tnic-intel-cardinals .s { bottom: 0; left: 50%; transform: translateX(-50%); }
+.tnic-intel-cardinals .e { top: 50%; right: 0; transform: translateY(-50%); }
+.tnic-intel-cardinals .w { top: 50%; left: 0; transform: translateY(-50%); }
 .tnic-intel-center {
   position: absolute; inset: 0;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -455,7 +473,10 @@ const CSS = `
 .tnic-intel-grades {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px; margin-top: 10px;
+  padding: 0; list-style: none;
 }
+.tnic-intel-grade-cell { display: flex; min-width: 0; }
+.tnic-intel-grade-cell > .tnic-grade { flex: 1 1 auto; min-width: 0; }
 .tnic-grade {
   display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
   padding: 9px 10px 8px; border-radius: 12px;
@@ -507,7 +528,12 @@ const CSS = `
     align-items: center;
   }
   .tnic-intel-kicker { grid-area: kicker; margin: 0; }
-  .tnic-intel-radar { grid-area: radar; width: 132px; margin: 0; }
+  /* Compact layout: 132px leaves no room for a label ring, and the note
+     below the dial already names what the cardinals are. Drop the padding,
+     hide the labels, keep the dial. */
+  .tnic-intel-radar { grid-area: radar; width: 132px; margin: 0; padding: 0; }
+  .tnic-intel-cardinals { display: none; }
+  .tnic-intel-note-cardinals { display: none; }
   .tnic-intel-center .n { font-size: var(--type-28); }
   .tnic-intel-metrics { grid-area: metrics; margin-top: 0; }
   .tnic-intel-grades { grid-area: grades; margin-top: 0; }
@@ -1294,11 +1320,25 @@ export function HomeDescent() {
                   <line key={i} x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2} stroke={i % 3 === 0 ? '#5fe3e0' : 'rgba(150,170,220,0.45)'} strokeWidth={i % 3 === 0 ? 2 : 1} />
                 ))}
                 <circle cx="120" cy="120" r="36" fill="none" stroke="rgba(95,227,224,0.35)" strokeWidth="1.5" />
-                <text x="120" y="22" textAnchor="middle" fill="#5fe3e0" fontSize="11" letterSpacing="1.6" fontFamily="ui-monospace, monospace">NAD+</text>
-                <text x="218" y="124" textAnchor="middle" fill="#96a0bc" fontSize="11" letterSpacing="1.4" fontFamily="ui-monospace, monospace">mTOR</text>
-                <text x="120" y="230" textAnchor="middle" fill="#34d399" fontSize="11" letterSpacing="1.6" fontFamily="ui-monospace, monospace">AMPK</text>
-                <text x="22" y="124" textAnchor="middle" fill="#96a0bc" fontSize="11" letterSpacing="1.4" fontFamily="ui-monospace, monospace">NRF2</text>
               </svg>
+              {/* Cardinals as HTML, not SVG <text>.
+                  They were four <text> nodes at x=22 / x=218 inside a 240 viewBox
+                  whose outer ring runs r=102 — i.e. from x=18 to x=222. The ring
+                  stroke and the 12 hallmark ticks therefore ran straight THROUGH
+                  "NRF2" and "mTOR", which rendered as struck-out text on the
+                  site's signature first-viewport instrument. And because SVG text
+                  scales with the viewBox, the same labels were set at 11px in a
+                  240-unit box displayed 132px wide on a phone — about 6px, half
+                  the style guide's stated floor, on the device with the least
+                  reading comfort.
+                  As HTML they sit in the ring's own padding (outside the graphic,
+                  so nothing can cross them) and hold --type-11 at every size. */}
+              <div className="tnic-intel-cardinals" aria-hidden="true">
+                <span className="c n" style={{ color: 'var(--cyan)' }}>NAD+</span>
+                <span className="c e">mTOR</span>
+                <span className="c s" style={{ color: 'var(--emerald)' }}>AMPK</span>
+                <span className="c w">NRF2</span>
+              </div>
               <div className="tnic-intel-center">
                 <span className="n">{COMPOUND_COUNT}</span>
                 <span className="l">graded compounds</span>
@@ -1318,32 +1358,44 @@ export function HomeDescent() {
                 <span className="l">Hallmarks</span>
               </div>
             </div>
-            <div className="tnic-intel-grades" role="list" aria-label="Elite-set evidence mix — A clinical, B emerging, C preclinical">
+            {/* Real list semantics, not ARIA over the wrong element. This was a
+                <div role="list"> whose children were <a role="listitem">, which
+                axe flags (aria-allowed-role): `listitem` is not an allowed role
+                for an anchor, so assistive tech got a list whose items were not
+                items. A <ul>/<li> carrying the links says the same thing with
+                markup that is actually valid. The <li> takes the grid cell so
+                the three-column layout is unchanged. */}
+            <ul className="tnic-intel-grades" aria-label="Elite-set evidence mix — A clinical, B emerging, C preclinical">
               {([
                 ['A', 'Clinical', intel.tierA, 3],
                 ['B', 'Emerging', intel.tierB, 2],
                 ['C', 'Preclinical', intel.tierC, 1],
               ] as const).map(([tier, label, n, filled]) => (
-                <Link
-                  key={tier}
-                  href="/trust/methodology"
-                  className={`tnic-grade tnic-grade-${tier} focus-ring`}
-                  role="listitem"
-                  aria-label={`Tier ${tier} ${label}: ${n} elite interventions. See grading methodology.`}
-                >
-                  <span className="tnic-grade-meter" aria-hidden="true">
-                    <i className={filled >= 1 ? 'on' : undefined} />
-                    <i className={filled >= 2 ? 'on' : undefined} />
-                    <i className={filled >= 3 ? 'on' : undefined} />
-                  </span>
-                  <span className="tnic-grade-k">Tier {tier}</span>
-                  <span className="tnic-grade-n">{n}</span>
-                  <span className="tnic-grade-l">{label}</span>
-                </Link>
+                <li key={tier} className="tnic-intel-grade-cell">
+                  <Link
+                    href="/trust/methodology"
+                    className={`tnic-grade tnic-grade-${tier} focus-ring`}
+                    aria-label={`Tier ${tier} ${label}: ${n} elite interventions. See grading methodology.`}
+                  >
+                    <span className="tnic-grade-meter" aria-hidden="true">
+                      <i className={filled >= 1 ? 'on' : undefined} />
+                      <i className={filled >= 2 ? 'on' : undefined} />
+                      <i className={filled >= 3 ? 'on' : undefined} />
+                    </span>
+                    <span className="tnic-grade-k">Tier {tier}</span>
+                    <span className="tnic-grade-n">{n}</span>
+                    <span className="tnic-grade-l">{label}</span>
+                  </Link>
+                </li>
               ))}
-            </div>
+            </ul>
             <p className="tnic-intel-note">
-              12 ticks = 12 hallmarks, equally mapped. Cardinals are pathways this library covers — not a personal score.
+              12 ticks = 12 hallmarks, equally mapped.{' '}
+              {/* The cardinal ring is hidden in the compact layout (no room for
+                  it beside a 132px dial), so the sentence explaining it goes
+                  with it rather than describing something not on screen. */}
+              <span className="tnic-intel-note-cardinals">Cardinals are pathways this library covers — </span>
+              not a personal score.
             </p>
           </aside>
 

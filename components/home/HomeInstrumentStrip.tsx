@@ -102,7 +102,13 @@ export function HomeInstrumentStrip() {
               </div>
               <Link
                 href="/elite-8"
-                className="focus-ring inline-flex items-center gap-1 text-xs font-semibold text-accent-cyan shrink-0"
+                /* min-h-6 is the STYLE_GUIDE §4 floor for a standalone control
+                   (WCAG 2.2 AA 2.5.8). Rendered, this link measured 87x20 — the
+                   only actionable sub-24px control left on the audited set, and
+                   the one thing keeping `npm run audit:ui` red. Real height, not
+                   an expanded hit area: it sits alone at the end of its row, so
+                   there is no neighbour for a grown target to steal taps from. */
+                className="focus-ring inline-flex min-h-6 items-center gap-1 text-xs font-semibold text-accent-cyan shrink-0"
               >
                 Full ranking <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
               </Link>
