@@ -100,9 +100,13 @@ export function HomeInstrumentStrip() {
                   Top 5 by published dimension weights — educational ranking
                 </p>
               </div>
+              {/* `.action-link` is the documented standalone-link control floor
+                  (STYLE_GUIDE §13). Without it this rendered 87×20 and was the
+                  single control failing `audit:ui`'s 24px tap-target gate,
+                  whose budget is 0. */}
               <Link
                 href="/elite-8"
-                className="focus-ring inline-flex items-center gap-1 text-xs font-semibold text-accent-cyan shrink-0"
+                className="action-link focus-ring gap-1 text-xs font-semibold text-accent-cyan shrink-0"
               >
                 Full ranking <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
               </Link>

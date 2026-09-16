@@ -1,6 +1,6 @@
 # TNiC Design System & Style Guide
 
-> Version 1.11 · September 2026  
+> Version 1.12 · September 2026  
 > Governs typography, spacing, components, accessibility, and page patterns across tnic.help.  
 > v1.1 documents the cinematic viz family (§7, §12) that the premium hubs are built on.  
 > v1.2 corrects the drifted §2 color values, documents the signal roles, the
@@ -26,6 +26,8 @@
 > v1.10 adds §20 — walk cards and the continue trail, so related destinations
 > look like neighbors instead of leftover text lists.  
 > v1.11 adds §21 — homepage arrival composition, metric type, and geometry tokens.
+> v1.12 adds §22 — the population label rule, data-vs-atmosphere at mobile
+> widths, and the opacity floor that scroll-scrubbed reveals must hold.
 
 ---
 
@@ -873,6 +875,82 @@ instrument.
 
 **Motion.** Cards lift 2px. Hallmark and step cards share that recipe.
 The desktop rail fades in after the first scroll.
+
+---
+
+## 22. Instruments: population, viewport, and the reveal floor
+
+Three rules that each came from a measured defect, not a preference.
+
+### 22.1 Every count names its population, visibly
+
+`lib/derived-stats.ts` already states the doctrine — the codebase has more
+than one compound population on purpose — but it only binds the surfaces that
+import from it. A hand-assembled instrument can still put two populations in
+one panel.
+
+The homepage's `.tnic-intel` did exactly that: a dial reading
+**100 graded compounds** with **Tier A 4 · B 4 · C 0** beneath it. Those were
+the Elite Eight's counts, and the word "elite" appeared only in an
+`aria-label`. A sighted reader had one available reading — *4 of the 100 are
+Tier A* — and it contradicted `/library` and `/library/evidence`, which both
+publish **10 · 71 · 19** from `evidenceIndexStats()`.
+
+**The rule:** where an instrument shows a count, the population is named in
+rendered text, not only to assistive tech. `.tnic-intel-split-cap` is that
+label for the homepage instrument; `HubSplitInstrument`'s `totalLabel` is it
+for the hubs. If two populations must appear in one panel, each is captioned.
+
+An `aria-label` is not a substitute for a visible label. It gives screen-reader
+users the truth and leaves everyone else with the contradiction.
+
+### 22.2 Atmosphere is desktop-optional; data is not
+
+`.research-hero__figure` is `display: none` below 1024px, which is right for
+what it originally held — the decorative molecular field, correctly dropped on
+a phone.
+
+Sixteen hubs now pass a real derived figure through `CinematicHubHero`'s
+`figure` prop, and the same rule was withholding the most credibility-bearing
+number on each of them from every mobile reader. `--data` splits the two:
+
+| Class | Below 1024px | At 1024px+ |
+|---|---|---|
+| `.research-hero__figure` (atmosphere) | hidden | beside the copy, `center` |
+| `.research-hero__figure--data` | rendered, ordered between copy and stat rail | beside the copy, `stretch` |
+
+**The rule:** a figure that carries a number renders at every width. A figure
+that carries mood does not have to.
+
+**Symmetry corollary.** A data panel is one of the composition's two halves, so
+it runs the height of the half it is paired with (`align-self: stretch`, with
+the flex chain carried through to the instrument, which is already written as
+`h-full` + `justify-between`). Measured on `/library` at 1440×900, the copy
+column ran 501px against a 333px centred panel. The decorative field is
+excluded and keeps `center` — it is a fixed 4/3 canvas and stretching distorts
+the artwork.
+
+### 22.3 Scroll-scrubbed reveals hold an opacity floor of 0.78
+
+`animation-timeline: view()` does not *play* an animation, it *scrubs* one. A
+section the reader stops on mid-range holds whatever opacity that scroll
+position maps to, for as long as they sit there — so fading from 0 is not a
+transient, it is text rendered at arbitrary partial opacity while being read.
+
+`audit:ui` measured it on `/library/mitochondrial-dysfunction`: walk-card
+kickers composited to `#73529d` (3.23:1) and `#208163` (4.13:1), both under
+WCAG AA, from tokens that are 7.4:1 and 10.2:1 at full strength.
+
+`section-reveal-scrubbed` therefore starts at `opacity: 0.78` — the worst case
+worked back from the accent tokens, where violet on `--color-bg-base` holds
+4.5:1 down to roughly 0.75. The 40px rise is untouched and is what actually
+reads as the reveal.
+
+Time-based reveals (`.section-fade-in-up`, `section-reveal`) keep fading from
+0: they self-complete in 0.7s and never park.
+
+**The rule:** if an animation's timeline is scroll, every frame it can hold must
+independently pass contrast. Treat scrubbed keyframes as static states.
 
 ---
 

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useRef, useEffect, useMemo } from "react";
-import { eliteInterventions, eliteTierCounts } from "@/lib/elite-interventions";
+import { eliteInterventions } from "@/lib/elite-interventions";
 import { COMPOUND_COUNT } from "@/lib/library-modules";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { DeferredMoleculeStage, DeferredNetworkStage } from "@/components/home/DeferredCinematicStage";
@@ -227,7 +227,13 @@ const CSS = `
 }
 .tnic-hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+  /* The instrument column is capped at the instrument's own width instead of a
+     free 0.85fr. At 1440 that track measured 499px while .tnic-intel is
+     min(100%, 420px) pinned to its end — so 79px of the column was dead air
+     on the INNER side, and the gap the reader saw between the headline and the
+     panel was 143px, not the 64px the gap declares. Capping the track makes the
+     declared gap the real one and lets the copy take the width back. */
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 420px);
   gap: clamp(18px, 2.4vw, 36px) clamp(24px, 4vw, 64px);
   align-items: center;
   width: 100%;
@@ -390,8 +396,8 @@ const CSS = `
    (no backdrop-filter) so the page keeps its chrome-only frost budget. */
 .tnic-intel {
   position: relative;
-  justify-self: end;
-  width: min(100%, 420px);
+  justify-self: stretch;
+  width: 100%;
   padding: 20px 20px 16px;
   border-radius: 24px;
   border: 1px solid var(--line);
@@ -452,11 +458,19 @@ const CSS = `
   font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
   font-size: var(--type-11); letter-spacing: .12em; text-transform: uppercase; color: var(--faint);
 }
+.tnic-intel-split-cap {
+  margin: 12px 0 6px;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: var(--type-11); letter-spacing: .12em; text-transform: uppercase;
+  color: var(--faint);
+}
 .tnic-intel-grades {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px; margin-top: 10px;
+  gap: 8px; margin: 0; padding: 0; list-style: none;
 }
+.tnic-intel-grades > li { display: flex; margin: 0; }
 .tnic-grade {
+  flex: 1 1 auto;
   display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
   padding: 9px 10px 8px; border-radius: 12px;
   border: 1px solid var(--line); text-decoration: none;
@@ -493,23 +507,34 @@ const CSS = `
   font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
   font-size: var(--type-11); letter-spacing: .04em; color: var(--faint); line-height: 1.45;
 }
+/* Below 900px the panel stacks. It used to put a 132px radar beside the metric
+   tiles, and that width is the reason the dial was unreadable on a phone: the
+   SVG is a 240-unit viewBox, so its 11px cardinal labels rendered at
+   11 × 132/240 ≈ 6px — under the type scale's 11px floor by nearly half, and
+   visibly garbled in a 390px screenshot. (The audit:ui micro-type probe
+   excludes SVG by design, so nothing caught it.) Stacking gives the radar a
+   240px column — 1:1 with its own viewBox, so the labels render at the 11px
+   they are specified at — and hands the three metric tiles the full width,
+   which also stops the Trials-cited and Hallmarks tiles from cramping. */
 @media (max-width: 900px) {
   .tnic-intel {
-    justify-self: stretch; width: 100%; padding: 14px; border-radius: 20px;
+    justify-self: stretch; width: 100%; padding: 16px 14px; border-radius: 20px;
     display: grid;
-    grid-template-columns: 132px minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
-      "kicker kicker"
-      "radar metrics"
-      "grades grades"
-      "note note";
-    gap: 8px 14px;
-    align-items: center;
+      "kicker"
+      "radar"
+      "metrics"
+      "splitcap"
+      "grades"
+      "note";
+    gap: 10px;
   }
   .tnic-intel-kicker { grid-area: kicker; margin: 0; }
-  .tnic-intel-radar { grid-area: radar; width: 132px; margin: 0; }
-  .tnic-intel-center .n { font-size: var(--type-28); }
+  .tnic-intel-radar { grid-area: radar; width: min(100%, 240px); margin: 2px auto 0; }
+  .tnic-intel-center .n { font-size: clamp(2.2rem, 11vw, 2.75rem); }
   .tnic-intel-metrics { grid-area: metrics; margin-top: 0; }
+  .tnic-intel-split-cap { grid-area: splitcap; margin: 2px 0 0; }
   .tnic-intel-grades { grid-area: grades; margin-top: 0; }
   .tnic-intel-note { grid-area: note; margin-top: 2px; }
 }
@@ -984,7 +1009,20 @@ function interp(pts: Array<[number, number]>, x: number): number {
 const STAR_D = "M0 -6 L1.7 -1.9 L6 -1.9 L2.6 0.7 L3.9 5 L0 2.5 L-3.9 5 L-2.6 0.7 L-6 -1.9 L-1.7 -1.9 Z";
 
 
-export function HomeDescent() {
+/**
+ * The library-wide A/B/C split, computed on the server and handed in as a
+ * prop.
+ *
+ * It is a prop rather than an import because `lib/evidence-index` pulls
+ * `compoundModules`, `hallmarks-library`, `tnic-score` and `entity-graph`
+ * behind it — fine on the server, a large addition to a homepage client
+ * bundle that is already the heaviest on the site. `lib/derived-stats` says
+ * the same thing in its own header: prefer computing on the server and
+ * passing values as props.
+ */
+export type LibraryTierSplit = { total: number; A: number; B: number; C: number };
+
+export function HomeDescent({ libraryTiers }: { libraryTiers: LibraryTierSplit }) {
   // `active` was React state purely to drive the old scene rail's highlight.
   // The rail moved to SectionProgress and nothing rendered here reads it now —
   // only `activeRef`, inside the canvas loop, to lerp the ambient palette.
@@ -1010,9 +1048,6 @@ export function HomeDescent() {
   const sectionRefs = useMemo(() => [s0, s1, s2, s3, s4], []);
   const intel = useMemo(() => {
     const studies = eliteInterventions.reduce((n, e) => n + e.studyCount, 0);
-    const tierA = eliteTierCounts.A ?? 0;
-    const tierB = eliteTierCounts.B ?? 0;
-    const tierC = eliteTierCounts.C ?? 0;
     const ticks = Array.from({ length: 12 }, (_, i) => {
       const a = (i / 12) * Math.PI * 2 - Math.PI / 2;
       return {
@@ -1025,7 +1060,7 @@ export function HomeDescent() {
       };
     });
     const poly = ticks.map((t) => `${t.px.toFixed(1)},${t.py.toFixed(1)}`).join(' ');
-    return { studies, tierA, tierB, tierC, ticks, poly };
+    return { studies, ticks, poly };
   }, []);
 
   useEffect(() => {
@@ -1277,7 +1312,7 @@ export function HomeDescent() {
           <aside className="tnic-intel" aria-label="Library instrument — live counts from the published library">
             <p className="tnic-intel-kicker">Library instrument</p>
             <div className="tnic-intel-radar">
-              <svg viewBox="0 0 240 240" role="img" aria-hidden="true">
+              <svg viewBox="-18 -18 276 276" role="img" aria-hidden="true">
                 <defs>
                   <radialGradient id="tnic-intel-glow" cx="50%" cy="50%" r="50%">
                     <stop offset="0%" stopColor="rgba(95,227,224,0.18)" />
@@ -1294,10 +1329,18 @@ export function HomeDescent() {
                   <line key={i} x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2} stroke={i % 3 === 0 ? '#5fe3e0' : 'rgba(150,170,220,0.45)'} strokeWidth={i % 3 === 0 ? 2 : 1} />
                 ))}
                 <circle cx="120" cy="120" r="36" fill="none" stroke="rgba(95,227,224,0.35)" strokeWidth="1.5" />
-                <text x="120" y="22" textAnchor="middle" fill="#5fe3e0" fontSize="11" letterSpacing="1.6" fontFamily="ui-monospace, monospace">NAD+</text>
-                <text x="218" y="124" textAnchor="middle" fill="#96a0bc" fontSize="11" letterSpacing="1.4" fontFamily="ui-monospace, monospace">mTOR</text>
-                <text x="120" y="230" textAnchor="middle" fill="#34d399" fontSize="11" letterSpacing="1.6" fontFamily="ui-monospace, monospace">AMPK</text>
-                <text x="22" y="124" textAnchor="middle" fill="#96a0bc" fontSize="11" letterSpacing="1.4" fontFamily="ui-monospace, monospace">NRF2</text>
+                {/* Cardinals sit OUTSIDE the tick band, not in it. The four
+                    emphasised ticks span r=92..102 and these labels were
+                    placed at r=98 — dead centre of that band — so at 1440px
+                    each of NAD+, mTOR, AMPK and NRF2 had its own tick drawn
+                    straight through the glyphs. The viewBox is padded by 18
+                    user units on every side (geometry still centred on
+                    120,120, untouched) so the labels can move out past r=110
+                    and clear the ticks with room for their ascenders. */}
+                <text x="120" y="8" textAnchor="middle" fill="#5fe3e0" fontSize="11" letterSpacing="1.6" fontFamily="ui-monospace, monospace">NAD+</text>
+                <text x="240" y="124" textAnchor="middle" fill="#96a0bc" fontSize="11" letterSpacing="1.4" fontFamily="ui-monospace, monospace">mTOR</text>
+                <text x="120" y="240" textAnchor="middle" fill="#34d399" fontSize="11" letterSpacing="1.6" fontFamily="ui-monospace, monospace">AMPK</text>
+                <text x="0" y="124" textAnchor="middle" fill="#96a0bc" fontSize="11" letterSpacing="1.4" fontFamily="ui-monospace, monospace">NRF2</text>
               </svg>
               <div className="tnic-intel-center">
                 <span className="n">{COMPOUND_COUNT}</span>
@@ -1318,30 +1361,45 @@ export function HomeDescent() {
                 <span className="l">Hallmarks</span>
               </div>
             </div>
-            <div className="tnic-intel-grades" role="list" aria-label="Elite-set evidence mix — A clinical, B emerging, C preclinical">
+            {/* The population is named ON the block, not only in an aria-label.
+                This row used to print the Elite Eight's tier mix (A 4 · B 4 ·
+                C 0) directly beneath a dial reading "100 graded compounds",
+                with "elite" said only to screen readers. A sighted reader had
+                exactly one available reading — 4 of the 100 are Tier A — and
+                it contradicted /library and /library/evidence, which both
+                publish 10 · 71 · 19 from `evidenceIndexStats()`. Two numbers
+                under one label on one site is the credibility failure this
+                library exists to avoid, so the row now shows the library-wide
+                split (the population the dial actually headlines, same source
+                as both other surfaces) and says so on the caption. The elite
+                set keeps its own count in the metrics row above. */}
+            <p className="tnic-intel-split-cap">
+              Evidence mix · all {libraryTiers.total} graded
+            </p>
+            <ul className="tnic-intel-grades" aria-label={`Evidence mix across all ${libraryTiers.total} graded compounds — A clinical, B emerging, C preclinical`}>
               {([
-                ['A', 'Clinical', intel.tierA, 3],
-                ['B', 'Emerging', intel.tierB, 2],
-                ['C', 'Preclinical', intel.tierC, 1],
+                ['A', 'Clinical', libraryTiers.A, 3],
+                ['B', 'Emerging', libraryTiers.B, 2],
+                ['C', 'Preclinical', libraryTiers.C, 1],
               ] as const).map(([tier, label, n, filled]) => (
-                <Link
-                  key={tier}
-                  href="/trust/methodology"
-                  className={`tnic-grade tnic-grade-${tier} focus-ring`}
-                  role="listitem"
-                  aria-label={`Tier ${tier} ${label}: ${n} elite interventions. See grading methodology.`}
-                >
-                  <span className="tnic-grade-meter" aria-hidden="true">
-                    <i className={filled >= 1 ? 'on' : undefined} />
-                    <i className={filled >= 2 ? 'on' : undefined} />
-                    <i className={filled >= 3 ? 'on' : undefined} />
-                  </span>
-                  <span className="tnic-grade-k">Tier {tier}</span>
-                  <span className="tnic-grade-n">{n}</span>
-                  <span className="tnic-grade-l">{label}</span>
-                </Link>
+                <li key={tier}>
+                  <Link
+                    href="/library/evidence"
+                    className={`tnic-grade tnic-grade-${tier} focus-ring`}
+                    aria-label={`Tier ${tier} ${label}: ${n} of ${libraryTiers.total} graded compounds. Open the evidence table.`}
+                  >
+                    <span className="tnic-grade-meter" aria-hidden="true">
+                      <i className={filled >= 1 ? 'on' : undefined} />
+                      <i className={filled >= 2 ? 'on' : undefined} />
+                      <i className={filled >= 3 ? 'on' : undefined} />
+                    </span>
+                    <span className="tnic-grade-k">Tier {tier}</span>
+                    <span className="tnic-grade-n">{n}</span>
+                    <span className="tnic-grade-l">{label}</span>
+                  </Link>
+                </li>
               ))}
-            </div>
+            </ul>
             <p className="tnic-intel-note">
               12 ticks = 12 hallmarks, equally mapped. Cardinals are pathways this library covers — not a personal score.
             </p>
