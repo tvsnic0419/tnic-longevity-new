@@ -100,10 +100,19 @@ export function HomeInstrumentStrip() {
                   All eight, by published dimension weights — educational ranking
                 </p>
               </div>
-              {/* `.action-link` is the documented standalone-link control floor
-                  (STYLE_GUIDE §13). Without it this rendered 87×20 and was the
-                  single control failing `audit:ui`'s 24px tap-target gate,
-                  whose budget is 0. */}
+              {/* Rendered, this link measured 87x20 — the only actionable
+                  sub-24px control left on the audited set, and the one thing
+                  keeping `npm run audit:ui` red against its budget of 0. Real
+                  height, not an expanded hit area: it sits alone at the end of
+                  its row, so there is no neighbour for a grown target to steal
+                  taps from.
+
+                  #212 fixed this as `inline-flex min-h-6 items-center`, which
+                  is correct and measured the same. `.action-link` is those
+                  three declarations under the name STYLE_GUIDE §13 gives them,
+                  so the floor stays defined in one place and a future change to
+                  it reaches every standalone control at once rather than the
+                  ones that happened to spell it out. */}
               <Link
                 href="/elite-8"
                 className="action-link focus-ring gap-1 text-xs font-semibold text-accent-cyan shrink-0"

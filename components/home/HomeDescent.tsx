@@ -460,8 +460,26 @@ const CSS = `
   width: min(100%, 300px);
   margin: 0 auto;
   aspect-ratio: 1;
+  /* Room for the HTML cardinal ring outside the graphic. The dial itself is
+     inset by this much, so the labels never sit over the outer ring or ticks. */
+  padding: 30px;
 }
 .tnic-intel-radar svg { width: 100%; height: 100%; display: block; }
+.tnic-intel-cardinals { position: absolute; inset: 0; pointer-events: none; }
+.tnic-intel-cardinals .c {
+  position: absolute;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: var(--type-11);
+  font-weight: 600;
+  letter-spacing: .14em;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--faint);
+}
+.tnic-intel-cardinals .n { top: 0; left: 50%; transform: translateX(-50%); }
+.tnic-intel-cardinals .s { bottom: 0; left: 50%; transform: translateX(-50%); }
+.tnic-intel-cardinals .e { top: 50%; right: 0; transform: translateY(-50%); }
+.tnic-intel-cardinals .w { top: 50%; left: 0; transform: translateY(-50%); }
 .tnic-intel-center {
   position: absolute; inset: 0;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -508,7 +526,8 @@ const CSS = `
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px; margin: 0; padding: 0; list-style: none;
 }
-.tnic-intel-grades > li { display: flex; margin: 0; }
+.tnic-intel-grade-cell { display: flex; min-width: 0; margin: 0; }
+.tnic-intel-grade-cell > .tnic-grade { flex: 1 1 auto; min-width: 0; }
 .tnic-grade {
   flex: 1 1 auto;
   display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
@@ -571,6 +590,13 @@ const CSS = `
     gap: 10px;
   }
   .tnic-intel-kicker { grid-area: kicker; margin: 0; }
+  /* #212 hid the cardinals here because a 132px dial in a two-column compact
+     layout has no room for a label ring. Stacking instead gives the dial 240px,
+     which leaves the full 30px ring padding intact — and since #212 also moved
+     the cardinals from SVG <text> to HTML, they hold --type-11 at that size
+     rather than scaling down with a viewBox. So the labels stay: hiding real
+     information from the majority of traffic was a cost of the compact layout,
+     not a goal. Nothing dangles either, so the note keeps its cardinals clause. */
   .tnic-intel-radar { grid-area: radar; width: min(100%, 240px); margin: 2px auto 0; }
   .tnic-intel-center .n { font-size: clamp(2.2rem, 11vw, 2.75rem); }
   .tnic-intel-metrics { grid-area: metrics; margin-top: 0; }
@@ -1381,7 +1407,7 @@ export function HomeDescent({ libraryTiers }: { libraryTiers: LibraryTierSplit }
           <aside className="tnic-intel" aria-label="Library instrument — live counts from the published library">
             <p className="tnic-intel-kicker">Library instrument</p>
             <div className="tnic-intel-radar">
-              <svg viewBox="-18 -18 276 276" role="img" aria-hidden="true">
+              <svg viewBox="0 0 240 240" role="img" aria-hidden="true">
                 <defs>
                   <radialGradient id="tnic-intel-glow" cx="50%" cy="50%" r="50%">
                     <stop offset="0%" stopColor="rgba(95,227,224,0.18)" />
@@ -1398,19 +1424,25 @@ export function HomeDescent({ libraryTiers }: { libraryTiers: LibraryTierSplit }
                   <line key={i} x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2} stroke={i % 3 === 0 ? '#5fe3e0' : 'rgba(150,170,220,0.45)'} strokeWidth={i % 3 === 0 ? 2 : 1} />
                 ))}
                 <circle cx="120" cy="120" r="36" fill="none" stroke="rgba(95,227,224,0.35)" strokeWidth="1.5" />
-                {/* Cardinals sit OUTSIDE the tick band, not in it. The four
-                    emphasised ticks span r=92..102 and these labels were
-                    placed at r=98 — dead centre of that band — so at 1440px
-                    each of NAD+, mTOR, AMPK and NRF2 had its own tick drawn
-                    straight through the glyphs. The viewBox is padded by 18
-                    user units on every side (geometry still centred on
-                    120,120, untouched) so the labels can move out past r=110
-                    and clear the ticks with room for their ascenders. */}
-                <text x="120" y="8" textAnchor="middle" fill="#5fe3e0" fontSize="11" letterSpacing="1.6" fontFamily="ui-monospace, monospace">NAD+</text>
-                <text x="240" y="124" textAnchor="middle" fill="#96a0bc" fontSize="11" letterSpacing="1.4" fontFamily="ui-monospace, monospace">mTOR</text>
-                <text x="120" y="240" textAnchor="middle" fill="#34d399" fontSize="11" letterSpacing="1.6" fontFamily="ui-monospace, monospace">AMPK</text>
-                <text x="0" y="124" textAnchor="middle" fill="#96a0bc" fontSize="11" letterSpacing="1.4" fontFamily="ui-monospace, monospace">NRF2</text>
               </svg>
+              {/* Cardinals as HTML, not SVG <text>.
+                  They were four <text> nodes at x=22 / x=218 inside a 240 viewBox
+                  whose outer ring runs r=102 — i.e. from x=18 to x=222. The ring
+                  stroke and the 12 hallmark ticks therefore ran straight THROUGH
+                  "NRF2" and "mTOR", which rendered as struck-out text on the
+                  site's signature first-viewport instrument. And because SVG text
+                  scales with the viewBox, the same labels were set at 11px in a
+                  240-unit box displayed 132px wide on a phone — about 6px, half
+                  the style guide's stated floor, on the device with the least
+                  reading comfort.
+                  As HTML they sit in the ring's own padding (outside the graphic,
+                  so nothing can cross them) and hold --type-11 at every size. */}
+              <div className="tnic-intel-cardinals" aria-hidden="true">
+                <span className="c n" style={{ color: 'var(--cyan)' }}>NAD+</span>
+                <span className="c e">mTOR</span>
+                <span className="c s" style={{ color: 'var(--emerald)' }}>AMPK</span>
+                <span className="c w">NRF2</span>
+              </div>
               <div className="tnic-intel-center">
                 <span className="n">{COMPOUND_COUNT}</span>
                 <span className="l">graded compounds</span>
@@ -1430,18 +1462,30 @@ export function HomeDescent({ libraryTiers }: { libraryTiers: LibraryTierSplit }
                 <span className="l">Hallmarks</span>
               </div>
             </div>
-            {/* The population is named ON the block, not only in an aria-label.
-                This row used to print the Elite Eight's tier mix (A 4 · B 4 ·
-                C 0) directly beneath a dial reading "100 graded compounds",
-                with "elite" said only to screen readers. A sighted reader had
-                exactly one available reading — 4 of the 100 are Tier A — and
-                it contradicted /library and /library/evidence, which both
-                publish 10 · 71 · 19 from `evidenceIndexStats()`. Two numbers
-                under one label on one site is the credibility failure this
-                library exists to avoid, so the row now shows the library-wide
-                split (the population the dial actually headlines, same source
-                as both other surfaces) and says so on the caption. The elite
-                set keeps its own count in the metrics row above. */}
+            {/* Two fixes to the same block, from two branches.
+
+                #212's is the markup: this was a <div role="list"> whose children
+                were <a role="listitem">, which axe flags (aria-allowed-role) —
+                `listitem` is not an allowed role for an anchor, so assistive
+                tech got a list whose items were not items. A <ul>/<li> carrying
+                the links says the same thing with markup that is valid.
+
+                This branch's is the data, and it decides the labels below. The
+                row used to print the Elite Eight's tier mix (A 4 · B 4 · C 0)
+                directly beneath a dial reading "100 graded compounds", with
+                "elite" said only to screen readers — so a sighted reader had
+                exactly one available reading, 4 of the 100 are Tier A, and it
+                contradicted /library and /library/evidence, which both publish
+                10 · 71 · 19 from `evidenceIndexStats()`. The row now shows the
+                library-wide split and names that population visibly.
+
+                Which is why #212's accessible names could not survive the merge
+                unchanged: "Elite-set evidence mix" and "N elite interventions"
+                described the old numbers. Left as they were, the values would
+                say 10 · 71 · 19 while the accessible name said "elite" — the
+                same contradiction as before, just moved into the layer only
+                screen-reader users hear. Both now name the same population, and
+                the link points at the table that publishes it. */}
             <p className="tnic-intel-split-cap">
               Evidence mix · all {libraryTiers.total} graded
             </p>
@@ -1451,7 +1495,7 @@ export function HomeDescent({ libraryTiers }: { libraryTiers: LibraryTierSplit }
                 ['B', 'Emerging', libraryTiers.B, 2],
                 ['C', 'Preclinical', libraryTiers.C, 1],
               ] as const).map(([tier, label, n, filled]) => (
-                <li key={tier}>
+                <li key={tier} className="tnic-intel-grade-cell">
                   <Link
                     href="/library/evidence"
                     className={`tnic-grade tnic-grade-${tier} focus-ring`}
@@ -1470,7 +1514,12 @@ export function HomeDescent({ libraryTiers }: { libraryTiers: LibraryTierSplit }
               ))}
             </ul>
             <p className="tnic-intel-note">
-              12 ticks = 12 hallmarks, equally mapped. Cardinals are pathways this library covers — not a personal score.
+              12 ticks = 12 hallmarks, equally mapped.{' '}
+              {/* The cardinal ring is hidden in the compact layout (no room for
+                  it beside a 132px dial), so the sentence explaining it goes
+                  with it rather than describing something not on screen. */}
+              <span className="tnic-intel-note-cardinals">Cardinals are pathways this library covers — </span>
+              not a personal score.
             </p>
           </aside>
 

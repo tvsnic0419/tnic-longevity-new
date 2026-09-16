@@ -25,8 +25,10 @@
 > product.  
 > v1.10 adds §20 — walk cards and the continue trail, so related destinations
 > look like neighbors instead of leftover text lists.  
-> v1.11 adds §21 — homepage arrival composition, metric type, and geometry tokens.
-> v1.12 adds §22 — the population label rule, data-vs-atmosphere at mobile
+> v1.11 adds §21 — homepage arrival composition, metric type, and geometry tokens.  
+> v1.12 adds §22 — the lit ground, the elevated plane, the editorial measure,
+> and the accent-aware heading rule.  
+> v1.13 adds §23 — the population label rule, data-vs-atmosphere at mobile
 > widths, and the opacity floor that scroll-scrubbed reveals must hold.
 
 ---
@@ -878,11 +880,109 @@ The desktop rail fades in after the first scroll.
 
 ---
 
-## 22. Instruments: population, viewport, and the reveal floor
+---
+
+## 22. The lit ground, the elevated plane, and the editorial measure
+
+*Added v1.12, from a visual pass done by screenshotting the rendered site at
+1440px and 390px in both themes rather than by reading the stylesheet.*
+
+### 22.1 The ground is lit, not flat
+
+`body` paints a four-part composition, pinned with
+`background-attachment: fixed` so the light stays overhead on a long page
+instead of scrolling away after one screen:
+
+| Token | Role |
+|---|---|
+| `--ground-key` | Key light above the fold, centred |
+| `--ground-fill` | Cool fill from the upper left |
+| `--ground-counter` | Warm counter-light in the opposite corner, so the field is never mono-cyan |
+| `--ground-falloff` | Vertical tone falloff toward a deeper floor |
+
+All four are sub-8% mixes in dark and sub-5% in light. This is depth, not
+colour. Both themes define all four, so the composition is identical and only
+the alphas differ.
+
+**Why on `body` and not on a wrapper:** `body` already sits behind the fixed
+`.ambient-layer` (z-0) and `.page-canvas` (z-1), both transparent by design, so
+one declaration reaches every route — including the ~40 that use
+`.canvas-scrim`. Do **not** repaint an opaque background on a page wrapper; that
+is the same rule `.canvas-scrim` already exists to enforce, and it now hides the
+ground as well as the molecular field.
+
+### 22.2 The elevated plane is a real step
+
+`--color-bg-elevated` is `#0b1424` in dark. It was `#080f1c` — roughly a 3%
+luminance step over the base, below the threshold at which an unlit dark surface
+reads as *raised* rather than as the same slab with a border drawn on it. Every
+card, panel, table header and popover resolves here, directly or through
+`--card-ground` / `--glass-fill-*` / `--glass-bg`, so the whole surface ladder
+was compressed into nearly one tone. `lib/design-system.ts`'s `palette` mirrors
+this value — keep the two in sync.
+
+### 22.3 Two page measures
+
+| Class | Max width | Use |
+|---|---|---|
+| `.container-page` | `80rem` | Hubs: grids, tables, instrument panels |
+| `.container-page--reading` | `66rem` | Long-form: trust, methodology, legal, policy |
+
+Reach for `reading` through `PageShell`'s `measure` prop, not by hand. The
+long-form pages already cap their own content at `max-w-4xl`; the problem was
+never the line length, it was a 56rem column hugging the left edge of an 80rem
+frame with 24rem of empty page beside it.
+
+### 22.4 The field keeps the margins — now enforced for prose too
+
+§13 states the rule ("the field keeps the margins"; "if you can read a chemical
+structure crossing a sentence, the budget is broken"). `.premium-card` enforced
+it for cards via `--card-ground`; nothing enforced it for running text, and on
+`/trust/methodology` a benzene ring sat behind the page description.
+
+`.molecule-cascade` is now masked out of the centre column above 1024px. This is
+composition, not dimming — depth opacities are untouched, so where the field
+shows it is exactly as present as before. Below 1024px the reading column *is*
+the viewport, so no mask is applied; the existing 9–20% depth opacities carry it
+there.
+
+### 22.5 The heading rule follows the section accent
+
+`.heading-accent-rule` reads `--rule-accent` (default `--accent-cyan`). Set it
+from `themes[theme].cssVar` wherever the surrounding header is themed —
+`PageHeader` and `SectionShell` already do. Before this the gradient and glow
+were hardcoded cyan→emerald, so a rose hallmark page, a violet `/stacks` and an
+amber warning band all printed the same cyan dash under headers whose every
+other element (eyebrow dot, icon, badge, hero field) obeyed the accent system.
+Call sites that are genuinely cyan — `ContinueTrail`, whose eyebrow is cyan
+too — pass nothing and keep the default.
+
+### 22.6 An eyebrow hugs its content
+
+`.page-header__eyebrow` is `inline-flex`. It previously had no base definition
+at all (only the `--handoff` modifier did), so the `<div>` rendered as a block
+and the pill stretched to the full width of its `max-w-4xl` header on every
+page using PageHeader's default variant. Inline-level also means a centred
+header centres it with no auto-margin special case.
+
+### 22.7 A ring label is HTML, not SVG `<text>`
+
+The homepage compass cardinals are HTML spans in `.tnic-intel-cardinals`, placed
+in the dial's own padding. As SVG `<text>` inside a 240-unit viewBox they were
+(a) positioned *on* the r=102 ring, so the ring stroke and the hallmark ticks ran
+through the words, and (b) scaled with the viewBox, rendering near 6px in the
+132px compact layout — half the §3 floor, on the narrowest device.
+
+**The general rule:** §3's "SVG data-visualisation labels are a separate system"
+exemption covers annotations whose size is set by the geometry — atom labels,
+chart axes. A label that names a UI element is not one of those. If it must stay
+legible at every container size, it is HTML and it holds `--type-11`.
+
+## 23. Instruments: population, viewport, and the reveal floor
 
 Three rules that each came from a measured defect, not a preference.
 
-### 22.1 Every count names its population, visibly
+### 23.1 Every count names its population, visibly
 
 `lib/derived-stats.ts` already states the doctrine — the codebase has more
 than one compound population on purpose — but it only binds the surfaces that
@@ -904,7 +1004,7 @@ for the hubs. If two populations must appear in one panel, each is captioned.
 An `aria-label` is not a substitute for a visible label. It gives screen-reader
 users the truth and leaves everyone else with the contradiction.
 
-### 22.2 Atmosphere is desktop-optional; data is not
+### 23.2 Atmosphere is desktop-optional; data is not
 
 `.research-hero__figure` is `display: none` below 1024px, which is right for
 what it originally held — the decorative molecular field, correctly dropped on
@@ -930,7 +1030,7 @@ column ran 501px against a 333px centred panel. The decorative field is
 excluded and keeps `center` — it is a fixed 4/3 canvas and stretching distorts
 the artwork.
 
-### 22.3 Scroll-scrubbed reveals hold an opacity floor of 0.78
+### 23.3 Scroll-scrubbed reveals hold an opacity floor of 0.78
 
 `animation-timeline: view()` does not *play* an animation, it *scrubs* one. A
 section the reader stops on mid-range holds whatever opacity that scroll
