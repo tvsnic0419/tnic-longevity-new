@@ -1,12 +1,20 @@
 import { Suspense } from 'react';
+import { BookOpen } from 'lucide-react';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
+import { PageShell } from '@/components/ui/PageShell';
+import { PageHeader } from '@/components/ui/PageHeader';
+import { getHubContext } from '@/lib/hub-context';
 import { LearnPageClient } from '@/components/learn/LearnPageClient';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
+import { HubSplitInstrument, HUB_ACCENT_VAR } from '@/components/viz/HubSplitInstrument';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildBreadcrumbSchema, buildHowToSchema } from '@/lib/seo';
 import { seoRoutes } from '@/lib/seo-routes';
 import { gettingStartedSteps, consumerFAQ, glossary } from '@/lib/data';
 import { SITE } from '@/lib/site';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
+import { ContinueTrail } from '@/components/ui/WalkCard';
 
 export const metadata = seoRoutes.learn();
 
@@ -56,12 +64,77 @@ export default function LearnPage() {
           { value: String(glossary.length), label: 'Glossary terms' },
           { value: String(gettingStartedSteps.length), label: 'Getting-started steps' },
         ]}
-        primary={{ href: '/nico', label: 'Find your personalized stack' }}
-        secondary={{ href: '/library', label: 'Browse the library' }}
+        primary={{ href: '/nico', label: 'Start with NICO' }}
+        secondary={{ href: '/library', label: 'Explore library' }}
+        figure={
+          <HubSplitInstrument
+            kicker="Learn inventory"
+            total={consumerFAQ.length + glossary.length + gettingStartedSteps.length}
+            totalLabel="entries"
+            rows={[
+              {
+                key: 'faq',
+                label: 'Answered questions',
+                count: consumerFAQ.length,
+                color: HUB_ACCENT_VAR.amber,
+              },
+              {
+                key: 'glossary',
+                label: 'Glossary terms',
+                count: glossary.length,
+                color: HUB_ACCENT_VAR.cyan,
+              },
+              {
+                key: 'steps',
+                label: 'Getting-started steps',
+                count: gettingStartedSteps.length,
+                color: HUB_ACCENT_VAR.emerald,
+              },
+            ]}
+            href="/trust/methodology"
+            hrefLabel="How evidence is graded →"
+          />
+        }
+        figureCaption="Content split · derived from the learn registries"
       />
-      <Suspense fallback={<div className="container-page py-20 text-muted-foreground">Loading…</div>}>
-        <LearnPageClient />
-      </Suspense>
+      {/* Identity on the server, ahead of the client island — see the note in
+          app/stacks/page.tsx and STYLE_GUIDE §14. LearnPageClient reads the
+          ?tab= param, so nothing below it reached the initial HTML.
+          LearnCenter also rendered a SECOND CinematicHubHero of its own under
+          this page's, with different copy — visible as two stacked hero bands
+          once the island hydrated. The page's hero is the canonical one; the
+          duplicate is gone. */}
+      <PageShell className="bg-background">
+        <PageHeader
+          icon={BookOpen}
+          eyebrow="Learn"
+          title="Learn Before You Stack"
+          description="Intelligent consumers ask hard questions. TNiC answers them openly — from first-time basics to supplement industry red flags."
+          theme="cyan"
+          context={getHubContext('learn')}
+          contextVariant="compact"
+          variant="handoff"
+        />
+        <Suspense fallback={<div className="py-20 text-muted-foreground">Loading…</div>}>
+          <LearnPageClient />
+        </Suspense>
+      {/* This page's body is a client island behind Suspense, so it
+          server-rendered almost no in-body links — a reader arriving from
+          search, and every crawler, saw a shell that connected to nothing. */}
+      <div className="container-page pb-16">
+        <ContinueTrail
+          title="From Learn into the product."
+          items={[
+            { href: '/nico', kicker: 'Start', title: 'Start with NICO', detail: 'Questionnaire → personalized stack handoff.', accent: 'emerald' },
+            { href: '/library', kicker: 'Explore', title: 'Explore the library', detail: 'Graded compounds and hallmark deep-dives.', accent: 'cyan' },
+            { href: '/stacks', kicker: 'Decide', title: 'Open Stack Architect', detail: 'Build once you understand the rails.', accent: 'violet' },
+            { href: '/trust', kicker: 'Trust', title: 'How we grade', detail: 'Tier criteria and commercial boundaries.', accent: 'amber' },
+          ]}
+        />
+        <PageConnections cluster={clusterFrom('start', '/learn')} accent="emerald" id="learn-start-connections" />
+        <PageConnections cluster={clusterFrom('explore', '/learn')} accent="cyan" id="learn-explore-connections" className="mt-6" />
+      </div>
+      </PageShell>
     </SubPageLayout>
   );
 }

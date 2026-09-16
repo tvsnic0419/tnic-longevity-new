@@ -1,9 +1,15 @@
+import { Suspense } from 'react';
+import { Network } from 'lucide-react';
 import { PathwayArchitect } from '@/components/tools/PathwayArchitect';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildBreadcrumbSchema, buildArticleSchema } from '@/lib/seo';
 import { seoRoutes } from '@/lib/seo-routes';
 import { COMPOUND_DB, PATHWAY_LABELS } from '@/lib/compound-engine-data';
 import { SITE } from '@/lib/site';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
+import { ContinueTrail } from '@/components/ui/WalkCard';
 
 export const metadata = seoRoutes.pathwayArchitect();
 
@@ -55,7 +61,44 @@ export default function PathwayArchitectPage() {
   return (
     <>
       <StructuredData schemas={buildPathwayArchitectSchemas()} />
-      <PathwayArchitect />
+      {/* Identity on the server. <PathwayArchitect/> reads its protocol from
+          ?c= via useSearchParams(), so its whole subtree bailed to client-side
+          rendering at prerender: this route shipped a BAILOUT marker, no <h1>,
+          and not even a <main> element in the initial HTML. See
+          STYLE_GUIDE §14. */}
+      <div className="container-page pt-10 md:pt-14">
+        <PageHeader
+          icon={Network}
+          eyebrow="Interactive Tool"
+          title="Pathway Architect"
+          description={`${COMPOUND_DB.length} evidence-graded compounds mapped to ${Object.keys(PATHWAY_LABELS).length} molecular pathways. Toggle cards to build a protocol — synergy, redundancy, and interaction cautions surface live from the same engine that powers the Compound Intelligence Engine.`}
+          theme="violet"
+          as="h1"
+        />
+      </div>
+      {/* The island needs a Suspense boundary of its own. Without one, the
+          useSearchParams() bailout has nothing nearer to bail than the root, so
+          it took app/tools/layout.tsx's <main> with it — this route rendered no
+          <main> element at all. Bounded here, the bailout stops at the tool. */}
+      <Suspense fallback={<div className="container-page py-20 text-muted-foreground" aria-busy="true">Loading the architect…</div>}>
+        <PathwayArchitect />
+      </Suspense>
+      {/* This page's body is a client island behind Suspense, so it
+          server-rendered almost no in-body links — a reader arriving from
+          search, and every crawler, saw a shell that connected to nothing. */}
+      <div className="container-page pb-16">
+        <ContinueTrail
+          title="From Pathway Architect."
+          items={[
+            { href: '/pathways', kicker: 'Explore', title: 'Pathway library', detail: 'Mechanism pages for every actor you mapped.', accent: 'cyan' },
+            { href: '/tools', kicker: 'Tools', title: 'All longevity tools', detail: 'Simulator, protocol engine, and forecasts.', accent: 'violet' },
+            { href: '/stacks', kicker: 'Decide', title: 'Open Stack Architect', detail: 'Turn pathway coverage into a stack.', accent: 'emerald' },
+            { href: '/shop', kicker: 'Verify', title: 'Verify stack', detail: 'COA checklists once compounds are chosen.', accent: 'amber' },
+          ]}
+        />
+        <PageConnections cluster={clusterFrom('decide', '/tools/pathway-architect')} accent="emerald" id="pathway-architect-decide-connections" />
+        <PageConnections cluster={clusterFrom('explore', '/tools/pathway-architect')} accent="cyan" id="pathway-architect-explore-connections" className="mt-6" />
+      </div>
     </>
   );
 }

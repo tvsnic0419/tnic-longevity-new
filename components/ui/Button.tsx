@@ -30,7 +30,7 @@ const variantStyles: Record<ButtonVariant, string> = {
   secondary:
     'glass text-muted-foreground hover:text-foreground hover:border-accent-cyan/30',
   outline:
-    'border border-border bg-transparent text-foreground hover:bg-muted/50 hover:border-accent-cyan/30',
+    'glass border border-border text-foreground hover:border-accent-cyan/30',
   ghost: 'text-muted-foreground hover:text-accent-cyan bg-transparent',
   danger: 'text-muted-foreground hover:text-accent-rose bg-transparent',
 };

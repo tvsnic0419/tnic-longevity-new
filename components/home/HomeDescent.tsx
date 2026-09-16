@@ -46,6 +46,7 @@ const CSS = `
   --panel2: #131a30;
   --line: rgba(150,170,220,0.14);
   --cyan: #5fe3e0;
+  --emerald: #34d399;
   --indigo: #8c8cf5;
   --violet: #b98cf0;
   --gold: #f0c46a;
@@ -59,7 +60,7 @@ const CSS = `
   background:
     radial-gradient(140% 60% at 50% 0%, var(--void2) 0%, var(--void) 45%, var(--void3) 100%);
   color: var(--ink);
-  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  font-family: var(--font-sans, 'Hanken Grotesk', system-ui, sans-serif);
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
   isolation: isolate;
@@ -137,17 +138,25 @@ const CSS = `
   50%      { transform: translate3d(2.5%, 0, 0) scale(1.06); opacity: 1; }
 }
 
+/* The descent's content column, aligned to the page's canonical container.
+   main already capped this at 80rem, but the uniform padding clamp still put
+   its content edge at 160px on a 1440px viewport while every section below it
+   started at 104px — the column jumped 56px sideways halfway down the page.
+   Horizontal padding now matches .container-page exactly; the generous
+   VERTICAL padding is kept, because the full-height cinematic acts need the
+   breathing room and it costs no alignment.
+   NOTE: this is a JS template literal - no backticks in these comments. */
 .tnic-act {
   position: relative; z-index: 3;
   min-height: 100svh;
   display: flex; flex-direction: column; justify-content: center;
-  padding: clamp(24px, 6vw, 80px);
-  max-width: 1240px; margin: 0 auto; width: 100%;
+  padding: clamp(24px, 6vw, 80px) clamp(1rem, 4vw, 1.5rem);
+  max-width: 80rem; margin: 0 auto; width: 100%;
 }
 
 .tnic-kicker {
   font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase;
+  font-size: var(--type-12); letter-spacing: 0.28em; text-transform: uppercase;
   color: var(--cyan); margin: 0 0 20px;
   display: inline-flex; align-items: center; gap: 12px;
   opacity: 0; transform: translateY(14px);
@@ -157,7 +166,7 @@ const CSS = `
 
 .tnic-h1 {
   font-family: var(--font-display, 'Fraunces', Georgia, serif); font-weight: 400;
-  font-size: clamp(44px, 9vw, 108px); line-height: 0.96;
+  font-size: clamp(40px, 6.4vw, 76px); line-height: 1.02;
   letter-spacing: -0.025em; margin: 0; color: var(--ink);
   opacity: 0; transform: translateY(22px);
   transition: opacity .58s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .04s, transform .58s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .04s;
@@ -176,24 +185,51 @@ const CSS = `
 .tnic-h2 .warm { color: var(--gold); font-style: italic; }
 
 .tnic-lead {
-  font-size: clamp(15px, 2.1vw, 19px); line-height: 1.6;
+  font-size: var(--type-16); line-height: 1.65;
   color: var(--muted); max-width: 52ch; margin: 22px 0 0;
   opacity: 0; transform: translateY(16px);
   transition: opacity .54s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .1s, transform .54s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .1s;
 }
+/* Four claims that carry the site's entire promise, previously set as 11px
+   faint mono with a bullet in front of each — at hero scale that reads as a
+   line of grey noise under the lead, not as proof. They are now discrete
+   chips: same type size and mono voice, but each claim sits on its own
+   grounded surface with a hairline, so the eye counts four things instead of
+   skimming one grey run. Brighter text, and the accent is a tick mark rather
+   than a bullet, because these are assertions the site keeps, not list items. */
 .tnic-trustline {
-  display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 18px;
-  max-width: 720px; color: var(--faint);
-  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+  display: flex; flex-wrap: wrap; gap: 7px; margin-top: 22px;
+  /* The 720px cap was inherited from the old one-line-of-text treatment and
+     broke the four chips 3+1 at 1440, which reads as an accident. They total
+     ~747px tightened, so the cap comes off and the copy column decides. Below
+     that they wrap, which is fine — an even wrap looks deliberate, a lone
+     orphan does not. */
+  max-width: 100%;
   opacity: 0; transform: translateY(12px);
   transition: opacity .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .16s, transform .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .16s;
 }
-.tnic-trustline span { display: inline-flex; align-items: center; gap: 7px; }
-.tnic-trustline span::before { content: '•'; color: var(--cyan); font-size: 14px; line-height: 0; }
+.tnic-trustline span {
+  display: inline-flex; align-items: center; gap: 7px;
+  min-height: 26px;
+  padding: 4px 10px 4px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel2) 62%, transparent);
+  color: var(--muted);
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: var(--type-11); letter-spacing: .06em; text-transform: uppercase;
+  white-space: nowrap;
+}
+.tnic-trustline span::before {
+  content: '';
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 7px color-mix(in srgb, var(--cyan) 70%, transparent);
+  flex: none;
+}
 .tnic-note {
   font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: 11.5px; letter-spacing: .04em; color: var(--faint);
+  font-size: var(--type-11); letter-spacing: .04em; color: var(--faint);
   margin-top: 14px;
   opacity: 0; transition: opacity 1s ease .5s;
 }
@@ -208,13 +244,28 @@ const CSS = `
 .is-in .tnic-molcard,
 .is-in .tnic-hero-badges,
 .is-in .tnic-paths,
+.is-in .tnic-intel,
 .is-in .tnic-final { opacity: 1; transform: none; }
 
 .tnic-hero {
-  align-items: flex-start;
+  align-items: center;
   text-align: left;
   isolation: isolate;
 }
+.tnic-hero-grid {
+  display: grid;
+  /* The instrument column is capped at the instrument's own width instead of a
+     free 0.85fr. At 1440 that track measured 499px while .tnic-intel is
+     min(100%, 420px) pinned to its end — so 79px of the column was dead air
+     on the INNER side, and the gap the reader saw between the headline and the
+     panel was 143px, not the 64px the gap declares. Capping the track makes the
+     declared gap the real one and lets the copy take the width back. */
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 420px);
+  gap: clamp(18px, 2.4vw, 36px) clamp(24px, 4vw, 64px);
+  align-items: center;
+  width: 100%;
+}
+.tnic-hero-copy { min-width: 0; }
 /* The first screen should feel atmospheric but never empty. These low-contrast
    orbital planes focus the arrival moment without suggesting an actual molecular
    structure or competing with the real render in Act 1. */
@@ -235,9 +286,9 @@ const CSS = `
   border-radius: 50%;
   box-shadow:
     0 0 0 52px color-mix(in srgb, var(--cyan) 5%, transparent),
-    0 0 0 132px color-mix(in srgb, var(--indigo) 3%, transparent),
+    0 0 0 132px color-mix(in srgb, var(--cyan) 3%, transparent),
     0 0 150px 36px color-mix(in srgb, var(--cyan) 8%, transparent);
-  opacity: .9;
+  opacity: .42;
 }
 .tnic-hero::after {
   inset: 16% 4% 14% 46%;
@@ -247,6 +298,24 @@ const CSS = `
   mask-image: radial-gradient(75% 80% at 70% 50%, #000 0%, transparent 72%);
   -webkit-mask-image: radial-gradient(75% 80% at 70% 50%, #000 0%, transparent 72%);
   opacity: .42;
+}
+@media (max-width: 900px) {
+  .tnic-hero { min-height: unset; }
+  .tnic-hero-grid { grid-template-columns: 1fr; gap: 18px; }
+  .tnic-paths { grid-column: auto; }
+
+  /* Action before proof, on phones only.
+
+     Stacked in DOM order the arrival read: headline, lead, badges, then a
+     600px instrument panel, and only then something to click. Measured at
+     390x844 the first call to action sat at y=1142 — one and a third screens
+     down. The instrument is the proof that the claim is real, and proof can
+     live below the fold; the three paths are the whole point of the screen and
+     cannot. Desktop is untouched: there the panel is the second column, so the
+     paths already land inside the first viewport beside it. */
+  .tnic-hero-copy { order: 1; }
+  .tnic-paths { order: 2; }
+  .tnic-intel { order: 3; }
 }
 @media (max-width: 720px) {
   /* The global nav is fixed; reserve a deliberate arrival margin so the
@@ -266,10 +335,10 @@ const CSS = `
 }
 .tnic-hero-badges .pill {
   display: inline-flex; align-items: center; gap: 8px;
-  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 11px;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-11);
   letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
   padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px;
-  background: rgba(14,20,38,0.55); backdrop-filter: blur(6px);
+  background: color-mix(in srgb, var(--panel) 72%, transparent);
 }
 .tnic-hero-badges .pill b { color: var(--cyan); font-weight: 500; }
 .tnic-hero-badges .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
@@ -282,7 +351,7 @@ const CSS = `
    architecture that stays inside the first viewport. */
 .tnic-paths {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;
-  width: min(100%, 780px); margin-top: 28px;
+  width: 100%; margin-top: 4px; grid-column: 1 / -1;
   opacity: 0; transform: translateY(14px);
   transition: opacity .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .26s, transform .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .26s;
 }
@@ -317,17 +386,17 @@ const CSS = `
   .tnic-path:active { transform: translateY(0) scale(.988); transition-duration: .09s; }
   .tnic-hero-badges a.pill:active { transform: scale(.96); }
 }
-.tnic-path.primary { color: #030712; border-color: transparent; background: linear-gradient(135deg, #5fe3e0 0%, #68e5c7 52%, #b8f3d8 100%); box-shadow: 0 10px 30px -16px rgba(95,227,224,.85); }
-.tnic-path.primary:hover { border-color: transparent; background: linear-gradient(135deg, #75ebe7 0%, #77ebcf 52%, #c8f7e2 100%); box-shadow: 0 14px 36px -16px rgba(95,227,224,.95); }
-.tnic-path-index { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10px; letter-spacing: .12em; color: var(--faint); }
+.tnic-path.primary { color: #030712; border-color: transparent; background: linear-gradient(135deg, #00e0ff 0%, #34d399 50%, #6ee7b7 100%); box-shadow: 0 10px 30px -16px rgba(0,224,255,.75); }
+.tnic-path.primary:hover { border-color: transparent; background: linear-gradient(135deg, #4aebff 0%, #4adeb0 50%, #86efc5 100%); box-shadow: 0 14px 36px -16px rgba(0,224,255,.9); }
+.tnic-path-index { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-11); letter-spacing: .12em; color: var(--faint); }
 .tnic-path.primary .tnic-path-index { color: rgba(3,7,18,.58); }
 .tnic-path-copy { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-.tnic-path-label { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 9px; line-height: 1.2; letter-spacing: .11em; text-transform: uppercase; color: var(--faint); }
+.tnic-path-label { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-11); line-height: 1.2; letter-spacing: .11em; text-transform: uppercase; color: var(--faint); }
 .tnic-path.primary .tnic-path-label { color: rgba(3,7,18,.62); }
-.tnic-path-name { font-size: 14px; line-height: 1.2; font-weight: 650; }
-.tnic-path-detail { font-size: 11px; line-height: 1.35; color: var(--muted); }
+.tnic-path-name { font-size: var(--type-16); line-height: 1.2; font-weight: 650; }
+.tnic-path-detail { font-size: var(--type-11); line-height: 1.35; color: var(--muted); }
 .tnic-path.primary .tnic-path-detail { color: rgba(3,7,18,.66); }
-.tnic-path-arr { font-size: 18px; line-height: 1; color: var(--cyan); transition: transform .2s ease; }
+.tnic-path-arr { font-size: var(--type-18); line-height: 1; color: var(--cyan); transition: transform .2s ease; }
 .tnic-path.primary .tnic-path-arr { color: #030712; }
 .tnic-path:hover .tnic-path-arr { transform: translateX(3px); }
 @media (max-width: 720px) {
@@ -344,7 +413,7 @@ const CSS = `
     min-width: 0;
     gap: 5px;
     padding: 7px 8px;
-    font-size: 8px;
+    font-size: var(--type-11);
     letter-spacing: .09em;
     white-space: nowrap;
   }
@@ -353,18 +422,192 @@ const CSS = `
   /* One primary path earns the full row. The two supporting paths become an
      adjacent comparison, preserving every destination without a three-card
      vertical stack competing with the hero. */
-  .tnic-paths { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; max-width: 440px; margin-top: 18px; }
+  .tnic-paths { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; max-width: 440px; margin-top: 6px; }
   .tnic-path.primary { grid-column: 1 / -1; }
   .tnic-path { min-height: 78px; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; padding: 11px; }
   .tnic-path-index { display: none; }
-  .tnic-path-label { font-size: 8px; letter-spacing: .09em; }
-  .tnic-path-name { font-size: 13px; }
-  .tnic-path-detail { font-size: 10px; line-height: 1.3; }
+  .tnic-path-label { font-size: var(--type-11); letter-spacing: .09em; }
+  .tnic-path-name { font-size: var(--type-15); }
+  .tnic-path-detail { font-size: var(--type-11); line-height: 1.3; }
+}
+
+/* Signature first-viewport instrument — real library counts, not a personal
+   score. A 12-tick hallmark compass with mapped-pathway cardinals. Grounded
+   (no backdrop-filter) so the page keeps its chrome-only frost budget. */
+.tnic-intel {
+  position: relative;
+  justify-self: stretch;
+  width: 100%;
+  padding: 20px 20px 16px;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--cyan) 14%, transparent), transparent 58%),
+    var(--panel);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 24px 60px -28px rgba(0,0,0,.55);
+  opacity: 0; transform: translateY(18px);
+  transition: opacity .58s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .18s, transform .58s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .18s;
+}
+.tnic-intel-kicker {
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: var(--type-11); letter-spacing: .18em; text-transform: uppercase;
+  color: var(--cyan); margin: 0 0 8px;
+}
+.tnic-intel-radar {
+  position: relative;
+  width: min(100%, 300px);
+  margin: 0 auto;
+  aspect-ratio: 1;
+  /* Room for the HTML cardinal ring outside the graphic. The dial itself is
+     inset by this much, so the labels never sit over the outer ring or ticks. */
+  padding: 30px;
+}
+.tnic-intel-radar svg { width: 100%; height: 100%; display: block; }
+.tnic-intel-cardinals { position: absolute; inset: 0; pointer-events: none; }
+.tnic-intel-cardinals .c {
+  position: absolute;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: var(--type-11);
+  font-weight: 600;
+  letter-spacing: .14em;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--faint);
+}
+.tnic-intel-cardinals .n { top: 0; left: 50%; transform: translateX(-50%); }
+.tnic-intel-cardinals .s { bottom: 0; left: 50%; transform: translateX(-50%); }
+.tnic-intel-cardinals .e { top: 50%; right: 0; transform: translateY(-50%); }
+.tnic-intel-cardinals .w { top: 50%; left: 0; transform: translateY(-50%); }
+.tnic-intel-center {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  pointer-events: none; text-align: center;
+}
+.tnic-intel-center .n {
+  font-family: var(--font-display, 'Fraunces', Georgia, serif);
+  font-size: clamp(2.4rem, 5vw, 3.15rem); font-weight: 500;
+  letter-spacing: -0.04em; line-height: 0.92; color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.tnic-intel-center .l {
+  margin-top: 6px;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: var(--type-11); letter-spacing: .16em; text-transform: uppercase; color: var(--faint);
+}
+.tnic-intel-metrics {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px; margin-top: 12px;
+}
+.tnic-intel-metric {
+  padding: 10px 8px 9px; border-radius: 14px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel2) 78%, transparent);
+  text-align: center;
+}
+.tnic-intel-metric .n {
+  font-family: var(--font-display, 'Fraunces', Georgia, serif);
+  font-size: var(--type-22); font-weight: 500; letter-spacing: -0.03em;
+  color: var(--cyan); font-variant-numeric: tabular-nums; line-height: 1;
+}
+.tnic-intel-metric .l {
+  display: block; margin-top: 4px;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: var(--type-11); letter-spacing: .12em; text-transform: uppercase; color: var(--faint);
+}
+.tnic-intel-split-cap {
+  margin: 12px 0 6px;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: var(--type-11); letter-spacing: .12em; text-transform: uppercase;
+  color: var(--faint);
+}
+.tnic-intel-grades {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px; margin: 0; padding: 0; list-style: none;
+}
+.tnic-intel-grade-cell { display: flex; min-width: 0; margin: 0; }
+.tnic-intel-grade-cell > .tnic-grade { flex: 1 1 auto; min-width: 0; }
+.tnic-grade {
+  flex: 1 1 auto;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
+  padding: 9px 10px 8px; border-radius: 12px;
+  border: 1px solid var(--line); text-decoration: none;
+  background: color-mix(in srgb, var(--panel2) 70%, transparent);
+  transition: border-color .2s ease, background .2s ease;
+}
+.tnic-grade:hover { border-color: color-mix(in srgb, currentColor 45%, var(--line)); background: color-mix(in srgb, var(--panel2) 92%, transparent); }
+.tnic-grade-A { color: var(--emerald); }
+.tnic-grade-B { color: var(--cyan); }
+.tnic-grade-C { color: var(--amber); }
+.tnic-grade-meter { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
+.tnic-grade-meter i {
+  display: block; width: 3px; border-radius: 1px; background: currentColor; opacity: .18;
+}
+.tnic-grade-meter i:nth-child(1) { height: 6px; }
+.tnic-grade-meter i:nth-child(2) { height: 9px; }
+.tnic-grade-meter i:nth-child(3) { height: 12px; }
+.tnic-grade-meter i.on { opacity: 1; }
+.tnic-grade-k {
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: var(--type-11); letter-spacing: .12em; text-transform: uppercase; color: var(--faint);
+}
+.tnic-grade-n {
+  font-family: var(--font-display, 'Fraunces', Georgia, serif);
+  font-size: var(--type-18); font-weight: 500; letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums; line-height: 1; color: inherit;
+}
+.tnic-grade-l {
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: var(--type-11); letter-spacing: .04em; color: var(--faint);
+}
+.tnic-intel-note {
+  margin: 12px 0 0;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: var(--type-11); letter-spacing: .04em; color: var(--faint); line-height: 1.45;
+}
+/* Below 900px the panel stacks. It used to put a 132px radar beside the metric
+   tiles, and that width is the reason the dial was unreadable on a phone: the
+   SVG is a 240-unit viewBox, so its 11px cardinal labels rendered at
+   11 × 132/240 ≈ 6px — under the type scale's 11px floor by nearly half, and
+   visibly garbled in a 390px screenshot. (The audit:ui micro-type probe
+   excludes SVG by design, so nothing caught it.) Stacking gives the radar a
+   240px column — 1:1 with its own viewBox, so the labels render at the 11px
+   they are specified at — and hands the three metric tiles the full width,
+   which also stops the Trials-cited and Hallmarks tiles from cramping. */
+@media (max-width: 900px) {
+  .tnic-intel {
+    justify-self: stretch; width: 100%; padding: 16px 14px; border-radius: 20px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "kicker"
+      "radar"
+      "metrics"
+      "splitcap"
+      "grades"
+      "note";
+    gap: 10px;
+  }
+  .tnic-intel-kicker { grid-area: kicker; margin: 0; }
+  /* #212 hid the cardinals here because a 132px dial in a two-column compact
+     layout has no room for a label ring. Stacking instead gives the dial 240px,
+     which leaves the full 30px ring padding intact — and since #212 also moved
+     the cardinals from SVG <text> to HTML, they hold --type-11 at that size
+     rather than scaling down with a viewBox. So the labels stay: hiding real
+     information from the majority of traffic was a cost of the compact layout,
+     not a goal. Nothing dangles either, so the note keeps its cardinals clause. */
+  .tnic-intel-radar { grid-area: radar; width: min(100%, 240px); margin: 2px auto 0; }
+  .tnic-intel-center .n { font-size: clamp(2.2rem, 11vw, 2.75rem); }
+  .tnic-intel-metrics { grid-area: metrics; margin-top: 0; }
+  .tnic-intel-split-cap { grid-area: splitcap; margin: 2px 0 0; }
+  .tnic-intel-grades { grid-area: grades; margin-top: 0; }
+  .tnic-intel-note { grid-area: note; margin-top: 2px; }
 }
 
 .tnic-cue {
   position: absolute; left: 50%; bottom: 34px; transform: translateX(-50%);
-  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 11px;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-11);
   letter-spacing: .22em; text-transform: uppercase; color: var(--faint);
   display: flex; flex-direction: column; align-items: center; gap: 10px;
 }
@@ -416,14 +659,14 @@ const CSS = `
 .tnic-stage-fallback__node--two { margin: 20% 0 0 -25%; background: var(--gold); box-shadow: 0 0 0 .25rem rgba(240,196,106,.08), 0 0 1.2rem rgba(240,196,106,.56); }
 .tnic-stage-fallback__node--three { margin: -18% 0 0 -33%; background: var(--violet); box-shadow: 0 0 0 .25rem rgba(185,140,240,.08), 0 0 1.2rem rgba(185,140,240,.56); }
 .tnic-stage-fallback__core { width: 7%; aspect-ratio: 1; border: 1px solid rgba(255,255,255,.72); border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, var(--cyan) 42%, rgba(95,227,224,.12) 100%); box-shadow: 0 0 0 12px rgba(95,227,224,.06), 0 0 2.2rem rgba(95,227,224,.6); }
-.tnic-stage-fallback__label { position: absolute; left: 22px; top: 20px; display: flex; flex-direction: column; gap: 5px; color: var(--faint); font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 9px; letter-spacing: .16em; line-height: 1.2; text-transform: uppercase; }
-.tnic-stage-fallback__label strong { color: var(--ink); font-size: 11px; font-weight: 500; letter-spacing: .1em; }
+.tnic-stage-fallback__label { position: absolute; left: 22px; top: 20px; display: flex; flex-direction: column; gap: 5px; color: var(--faint); font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-11); letter-spacing: .16em; line-height: 1.2; text-transform: uppercase; }
+.tnic-stage-fallback__label strong { color: var(--ink); font-size: var(--type-11); font-weight: 500; letter-spacing: .1em; }
 .tnic-stage-placeholder { display: none; }
 @media (max-width: 720px) { .tnic-stage-fallback__label { left: 16px; top: 16px; } }
 
 .tnic-molhint {
   position: absolute; bottom: 12px; right: 14px;
-  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 11px;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-11);
   color: var(--faint); letter-spacing: .06em; pointer-events: none;
   display: flex; align-items: center; gap: 7px;
 }
@@ -436,12 +679,12 @@ const CSS = `
   opacity: 0; transform: translateY(16px);
   transition: opacity 1s ease .3s, transform 1s ease .3s;
 }
-.tnic-molcard h3 { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: 30px; font-weight: 400; margin: 0; letter-spacing: -.01em; }
-.tnic-molcard .formula { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 14px; color: var(--cyan); letter-spacing: .08em; }
+.tnic-molcard h3 { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: var(--type-30); font-weight: 400; margin: 0; letter-spacing: -.01em; }
+.tnic-molcard .formula { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-14); color: var(--cyan); letter-spacing: .08em; }
 .tnic-molcard .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; margin-top: 4px; }
 .tnic-molcard .fact { display: flex; flex-direction: column; gap: 3px; }
-.tnic-molcard .fact .k { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--faint); }
-.tnic-molcard .fact .v { font-size: 15px; color: var(--ink); }
+.tnic-molcard .fact .k { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-11); letter-spacing: .18em; text-transform: uppercase; color: var(--faint); }
+.tnic-molcard .fact .v { font-size: var(--type-15); color: var(--ink); }
 /* The shared science panel, sized inside the Descent's two-column wraps. It
    wraps the deferred stage rather than replacing it, so the lazy-mount seam
    (DeferredCinematicStage) still governs when the canvas loads. Stage ratios
@@ -453,8 +696,10 @@ const CSS = `
 .tnic-sci .tnic-stage-mount { width: 100%; height: 100%; }
 .tnic-sci canvas { width: 100%; height: 100%; display: block; }
 
-.tnic-molcard .why { font-size: 13.5px; color: var(--muted); line-height: 1.55; max-width: 52ch; margin-top: 4px; border-top: 1px solid var(--line); padding-top: 14px; }
-.tnic-molcard .cite { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; color: var(--faint); letter-spacing: .1em; }
+.tnic-molcard .why { font-size: var(--type-13); color: var(--muted); line-height: 1.55; max-width: 52ch; margin-top: 4px; border-top: 1px solid var(--line); padding-top: 14px; }
+.tnic-molcard .cite { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-11); color: var(--faint); letter-spacing: .1em; }
+/* Standalone actions clear the 24px control floor (STYLE_GUIDE §4). */
+.tnic-molcard .cite a { display: inline-flex; align-items: center; min-height: 24px; }
 
 .tnic-netwrap { display: grid; grid-template-columns: 1.5fr 1fr; gap: 28px; align-items: start; margin-top: 10px; }
 @media (max-width: 900px){ .tnic-netwrap { grid-template-columns: 1fr; } }
@@ -472,7 +717,7 @@ const CSS = `
 .tnic-descent .node-hit { fill: transparent; }
 .tnic-descent .node-core { transition: opacity .35s ease; }
 .tnic-descent .node-label {
-  font-family: var(--font-sans, 'Inter', system-ui, sans-serif); font-size: 14px; font-weight: 500;
+  font-family: var(--font-sans, 'Hanken Grotesk', system-ui, sans-serif); font-size: var(--type-14); font-weight: 500;
   fill: var(--ink); pointer-events: none; transition: opacity .35s ease, fill .35s ease;
   paint-order: stroke; stroke: rgba(5,7,16,0.9); stroke-width: 4;
 }
@@ -493,7 +738,7 @@ const CSS = `
 .tnic-search {
   flex: 1; min-width: 180px;
   background: rgba(14,20,38,0.6); border: 1px solid var(--line); color: var(--ink);
-  padding: 10px 14px; border-radius: 10px; font-family: var(--font-sans, 'Inter', system-ui, sans-serif); font-size: 14px;
+  padding: 10px 14px; border-radius: 10px; font-family: var(--font-sans, 'Hanken Grotesk', system-ui, sans-serif); font-size: var(--type-14);
   outline: none;
 }
 .tnic-search:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(95,227,224,0.15); }
@@ -501,7 +746,7 @@ const CSS = `
 .tnic-chip {
   display: inline-flex; align-items: center; gap: 7px; padding: 8px 12px;
   background: rgba(14,20,38,0.6); border: 1px solid var(--line); color: var(--muted);
-  border-radius: 999px; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px;
+  border-radius: 999px; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-11);
   letter-spacing: .14em; text-transform: uppercase; cursor: pointer; transition: all .2s ease;
 }
 .tnic-chip.on { color: var(--ink); border-color: currentColor; background: rgba(255,255,255,0.03); }
@@ -513,41 +758,49 @@ const CSS = `
   border: 1px solid var(--line); border-radius: 18px; padding: 22px 22px 24px;
   min-height: 260px;
 }
-.tnic-readout .r-eyebrow { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--faint); display: flex; align-items: center; gap: 8px; }
+.tnic-readout .r-eyebrow { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-11); letter-spacing: .2em; text-transform: uppercase; color: var(--faint); display: flex; align-items: center; gap: 8px; }
 .tnic-readout .r-elite {
   display: inline-flex; align-items: center; gap: 5px; margin-left: 4px;
   color: var(--gold); font-weight: 500;
 }
 .tnic-readout .r-elite svg { width: 11px; height: 11px; }
-.tnic-readout .r-name { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: 30px; margin: 6px 0 2px; letter-spacing: -.01em; }
-.tnic-readout .r-role { font-size: 13.5px; color: var(--muted); margin-bottom: 12px; }
-.tnic-readout .r-meta { display: flex; gap: 12px; margin-bottom: 12px; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; letter-spacing: .1em; color: var(--faint); text-transform: uppercase; }
+.tnic-readout .r-name { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: var(--type-30); margin: 6px 0 2px; letter-spacing: -.01em; }
+.tnic-readout .r-role { font-size: var(--type-13); color: var(--muted); margin-bottom: 12px; }
+.tnic-readout .r-meta { display: flex; gap: 12px; margin-bottom: 12px; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-11); letter-spacing: .1em; color: var(--faint); text-transform: uppercase; }
 .tnic-readout .r-meta b { color: var(--ink); font-weight: 500; letter-spacing: .04em; }
 .tnic-readout .r-link { display: flex; gap: 11px; padding: 12px 0; border-top: 1px solid var(--line); }
 .tnic-readout .r-link .r-dot { width: 9px; height: 9px; border-radius: 50%; margin-top: 5px; flex: none; box-shadow: 0 0 8px currentColor; }
-.tnic-readout .r-link .r-to { font-size: 14px; font-weight: 600; color: var(--ink); }
-.tnic-readout .r-link .r-tag { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; margin-left: 8px; }
-.tnic-readout .r-link .r-why { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin-top: 3px; }
+.tnic-readout .r-link .r-to { font-size: var(--type-14); font-weight: 600; color: var(--ink); }
+.tnic-readout .r-link .r-tag { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-11); letter-spacing: .12em; text-transform: uppercase; margin-left: 8px; }
+.tnic-readout .r-link .r-why { font-size: var(--type-12); color: var(--muted); line-height: 1.5; margin-top: 3px; }
 .tnic-readout .r-cta {
   display: inline-flex; align-items: center; gap: 8px; margin-top: 16px;
   color: var(--cyan); text-decoration: none; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+  font-size: var(--type-11); letter-spacing: .18em; text-transform: uppercase;
   border-top: 1px solid var(--line); padding-top: 14px; width: 100%;
 }
 .tnic-readout .r-cta:hover { color: var(--gold); }
-.tnic-readout .r-empty { color: var(--faint); font-size: 14px; line-height: 1.6; padding-top: 8px; }
+.tnic-readout .r-empty { color: var(--faint); font-size: var(--type-14); line-height: 1.6; padding-top: 8px; }
 
 .tnic-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 16px; }
-.tnic-legend .lg { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
+.tnic-legend .lg { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-11); letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
 .tnic-legend .lg .sw { width: 10px; height: 10px; border-radius: 50%; }
 
 .tnic-tl { margin-top: 8px; }
 .tnic-tl-head { display: flex; align-items: baseline; gap: 20px; flex-wrap: wrap; margin-bottom: 6px; }
 .tnic-age { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: clamp(48px,8vw,80px); line-height: 1; color: var(--gold); letter-spacing: -.02em; }
 .tnic-age small { font-size: .32em; color: var(--muted); font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); letter-spacing: .12em; margin-left: 8px; }
-.tnic-stage-cap { font-size: 16px; color: var(--ink); max-width: 36ch; line-height: 1.4; }
-.tnic-range { -webkit-appearance: none; appearance: none; width: 100%; height: 3px; border-radius: 3px; background: var(--line); margin: 18px 0 4px; cursor: pointer; }
-.tnic-range::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: var(--gold); border: 3px solid var(--void); box-shadow: 0 0 0 1px var(--gold), 0 0 22px rgba(240,196,106,.6); cursor: grab; }
+.tnic-stage-cap { font-size: var(--type-16); color: var(--ink); max-width: 36ch; line-height: 1.4; }
+/* The age scrubber under the morbidity curve. Its box is the drag target, and
+   it was 3px tall — on a phone the reader had to land a press inside a 3px band
+   to move the homepage's flagship interactive. Box is now 32px (over the 24px
+   floor in STYLE_GUIDE §4 / WCAG 2.2 AA 2.5.8); the hairline track is painted
+   by the track pseudo-element so the visual is unchanged, and the top margin
+   absorbs most of the growth so the panel's rhythm holds. */
+.tnic-range { -webkit-appearance: none; appearance: none; width: 100%; height: 32px; background: transparent; margin: 4px 0 0; cursor: pointer; }
+.tnic-range::-webkit-slider-runnable-track { height: 3px; border-radius: 3px; background: var(--line); }
+.tnic-range::-moz-range-track { height: 3px; border-radius: 3px; background: var(--line); }
+.tnic-range::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; margin-top: -10.5px; border-radius: 50%; background: var(--gold); border: 3px solid var(--void); box-shadow: 0 0 0 1px var(--gold), 0 0 22px rgba(240,196,106,.6); cursor: grab; }
 .tnic-range::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: var(--gold); border: 3px solid var(--void); box-shadow: 0 0 0 1px var(--gold), 0 0 22px rgba(240,196,106,.6); cursor: grab; }
 .tnic-range:focus-visible { outline: 2px solid var(--cyan); outline-offset: 6px; }
 .tnic-tl-stats {
@@ -559,10 +812,10 @@ const CSS = `
   border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px;
   display: flex; flex-direction: column; gap: 4px;
 }
-.tnic-tl-stat b { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: 26px; color: var(--gold); letter-spacing: -.01em; }
-.tnic-tl-stat .k { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); }
-.tnic-tl-stat .n { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
-.tnic-honest { font-size: 13px; color: var(--faint); font-style: italic; margin-top: 14px; max-width: 60ch; line-height: 1.55; }
+.tnic-tl-stat b { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: var(--type-26); color: var(--gold); letter-spacing: -.01em; }
+.tnic-tl-stat .k { font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-11); letter-spacing: .16em; text-transform: uppercase; color: var(--faint); }
+.tnic-tl-stat .n { font-size: var(--type-12); color: var(--muted); line-height: 1.4; }
+.tnic-honest { font-size: var(--type-13); color: var(--faint); font-style: italic; margin-top: 14px; max-width: 60ch; line-height: 1.55; }
 .tnic-tl-toggle { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
 
 .tnic-final {
@@ -577,17 +830,17 @@ const CSS = `
   background: linear-gradient(180deg, rgba(19,26,48,0.7), rgba(14,20,38,0.7));
   border: 1px solid var(--line); border-radius: 14px;
 }
-.tnic-final-row .n { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: 28px; color: var(--cyan); width: 36px; text-align: center; flex: none; }
+.tnic-final-row .n { font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: var(--type-28); color: var(--cyan); width: 36px; text-align: center; flex: none; }
 .tnic-final-row .body { flex: 1; }
-.tnic-final-row .body .t { font-size: 15px; color: var(--ink); font-weight: 500; }
-.tnic-final-row .body .s { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin-top: 2px; }
+.tnic-final-row .body .t { font-size: var(--type-15); color: var(--ink); font-weight: 500; }
+.tnic-final-row .body .s { font-size: var(--type-12); color: var(--muted); line-height: 1.5; margin-top: 2px; }
 
 .tnic-final-elites { display: flex; flex-direction: column; gap: 12px; }
 .tnic-final-elites .head {
-  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 11px; letter-spacing: .2em;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-11); letter-spacing: .2em;
   text-transform: uppercase; color: var(--faint); display: flex; justify-content: space-between; align-items: baseline;
 }
-.tnic-final-elites .head a { color: var(--cyan); text-decoration: none; letter-spacing: .18em; }
+.tnic-final-elites .head a { color: var(--cyan); text-decoration: none; letter-spacing: .18em; display: inline-flex; align-items: center; min-height: 24px; }
 .tnic-final-elites .head a:hover { color: var(--gold); }
 .tnic-elite-card {
   display: flex; align-items: center; gap: 14px; padding: 14px 16px;
@@ -597,14 +850,14 @@ const CSS = `
 }
 .tnic-elite-card:hover { border-color: var(--cyan); transform: translateY(-1px); }
 .tnic-elite-card .rank {
-  font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: 22px; color: var(--gold);
+  font-family: var(--font-display, 'Fraunces', Georgia, serif); font-size: var(--type-22); color: var(--gold);
   width: 32px; text-align: center; flex: none;
 }
 .tnic-elite-card .body { flex: 1; min-width: 0; }
-.tnic-elite-card .body .name { font-size: 15px; font-weight: 600; color: var(--ink); }
-.tnic-elite-card .body .path { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.tnic-elite-card .body .name { font-size: var(--type-15); font-weight: 600; color: var(--ink); }
+.tnic-elite-card .body .path { font-size: var(--type-12); color: var(--muted); margin-top: 2px; }
 .tnic-elite-card .tier {
-  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: 10px; letter-spacing: .18em;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace); font-size: var(--type-11); letter-spacing: .18em;
   text-transform: uppercase; padding: 4px 8px; border-radius: 999px;
   border: 1px solid currentColor;
 }
@@ -615,7 +868,7 @@ const CSS = `
   /* Site signature gradient (matches .btn-gradient) so the descent's actions
      read as the same primary CTA as the rest of the site. */
   background: linear-gradient(135deg, #00e0ff 0%, #34d399 50%, #6ee7b7 100%);
-  color: #030712; font-weight: 600; font-size: 15px; text-decoration: none;
+  color: #030712; font-weight: 600; font-size: var(--type-15); text-decoration: none;
   box-shadow: 0 0 32px rgba(0,224,255,0.32);
   transition: transform .2s ease, box-shadow .2s ease;
 }
@@ -653,11 +906,13 @@ const CSS = `
   .tnic-descent .tnic-h1,
   .tnic-descent .tnic-h2,
   .tnic-descent .tnic-lead,
+  .tnic-descent .tnic-trustline,
   .tnic-descent .tnic-note,
   .tnic-descent .tnic-stage,
   .tnic-descent .tnic-molcard,
   .tnic-descent .tnic-hero-badges,
   .tnic-descent .tnic-paths,
+  .tnic-descent .tnic-intel,
   .tnic-descent .tnic-final {
     opacity: 1 !important;
     transform: none !important;
@@ -671,10 +926,10 @@ const CSS = `
 
 type TierKey = "established" | "mechanistic" | "exploratory" | "caution";
 const TIER: Record<TierKey, { color: string; label: string }> = {
-  established: { color: "#5fe3e0", label: "Established" },
-  mechanistic: { color: "#8c8cf5", label: "Mechanistic" },
-  exploratory: { color: "#b98cf0", label: "Exploratory" },
-  caution:     { color: "#eaa24a", label: "Caution" },
+  established: { color: "#34d399", label: "Established" },
+  mechanistic: { color: "#5fe3e0", label: "Mechanistic" },
+  exploratory: { color: "#eaa24a", label: "Exploratory" },
+  caution:     { color: "#f08a7a", label: "Caution" },
 };
 
 // Real TNiC library compounds — the marquee nodes of the synergy graph. Every
@@ -820,7 +1075,20 @@ function interp(pts: Array<[number, number]>, x: number): number {
 const STAR_D = "M0 -6 L1.7 -1.9 L6 -1.9 L2.6 0.7 L3.9 5 L0 2.5 L-3.9 5 L-2.6 0.7 L-6 -1.9 L-1.7 -1.9 Z";
 
 
-export function HomeDescent() {
+/**
+ * The library-wide A/B/C split, computed on the server and handed in as a
+ * prop.
+ *
+ * It is a prop rather than an import because `lib/evidence-index` pulls
+ * `compoundModules`, `hallmarks-library`, `tnic-score` and `entity-graph`
+ * behind it — fine on the server, a large addition to a homepage client
+ * bundle that is already the heaviest on the site. `lib/derived-stats` says
+ * the same thing in its own header: prefer computing on the server and
+ * passing values as props.
+ */
+export type LibraryTierSplit = { total: number; A: number; B: number; C: number };
+
+export function HomeDescent({ libraryTiers }: { libraryTiers: LibraryTierSplit }) {
   // `active` was React state purely to drive the old scene rail's highlight.
   // The rail moved to SectionProgress and nothing rendered here reads it now —
   // only `activeRef`, inside the canvas loop, to lerp the ambient palette.
@@ -844,6 +1112,22 @@ export function HomeDescent() {
   const s3 = useRef<HTMLElement | null>(null);
   const s4 = useRef<HTMLElement | null>(null);
   const sectionRefs = useMemo(() => [s0, s1, s2, s3, s4], []);
+  const intel = useMemo(() => {
+    const studies = eliteInterventions.reduce((n, e) => n + e.studyCount, 0);
+    const ticks = Array.from({ length: 12 }, (_, i) => {
+      const a = (i / 12) * Math.PI * 2 - Math.PI / 2;
+      return {
+        x1: 120 + Math.cos(a) * 92,
+        y1: 120 + Math.sin(a) * 92,
+        x2: 120 + Math.cos(a) * 102,
+        y2: 120 + Math.sin(a) * 102,
+        px: 120 + Math.cos(a) * 68,
+        py: 120 + Math.sin(a) * 68,
+      };
+    });
+    const poly = ticks.map((t) => `${t.px.toFixed(1)},${t.py.toFixed(1)}`).join(' ');
+    return { studies, ticks, poly };
+  }, []);
 
   useEffect(() => {
     reducedRef.current = reduced;
@@ -855,11 +1139,37 @@ export function HomeDescent() {
     const ctx = cv.getContext("2d"); if (!ctx) return;
     let w = 0, h = 0;
     const dpr = cappedDpr();
+    // Particle COUNT was fixed while the canvas is fluid, so density scaled
+    // inversely with the viewport: the 130/60/22 calibrated against a 1440x900
+    // desktop became roughly 3.9x denser on a 390x844 phone, and the bokeh
+    // stopped being atmosphere behind the hero and started sitting on top of
+    // the lead paragraph. Scaling by area keeps the look the same at every
+    // width, and costs a phone far fewer glow blits plus a much cheaper O(n^2)
+    // link pass on the mid layer.
+    const REFERENCE_AREA = 1440 * 900;
+    const density = Math.max(
+      0.35,
+      Math.min(1, (window.innerWidth * window.innerHeight) / REFERENCE_AREA),
+    );
+    // Dust, not bokeh.
+    //
+    // Screenshotting the hero with this canvas disabled settled an argument:
+    // it was the single thing making the arrival look cheap. The near layer
+    // ran 22 particles at up to r=3.6, blitted through a x8 multiplier — 29px
+    // glow discs at 0.85 alpha — with a mid layer of 60 more at up to 11px.
+    // Out-of-focus blobs that size read as a stock space background, and they
+    // are the LEAST subject-grounded thing on a page whose real artwork is the
+    // molecular geometry and the synergy network. The style guide's protection
+    // of the cinematic shell is explicitly not a licence for that.
+    //
+    // So the far layer keeps its count and its crisp sparkle core — a fine
+    // starfield is depth — while the two bloom layers lose most of their
+    // radius and alpha. Same parallax, same life, without the soup.
     const layers = [
-      { n: 130, sp: 0.00012, dxr: 0.00008, rMin: 0.3, rMax: 1.2, alpha: 0.55 },
-      { n: 60,  sp: 0.00020, dxr: 0.00014, rMin: 0.8, rMax: 2.2, alpha: 0.75 },
-      { n: 22,  sp: 0.00028, dxr: 0.00020, rMin: 1.8, rMax: 3.6, alpha: 0.85 },
-    ];
+      { n: 130, sp: 0.00012, dxr: 0.00008, rMin: 0.3, rMax: 1.2, alpha: 0.5,  mul: 3 },
+      { n: 44,  sp: 0.00020, dxr: 0.00014, rMin: 0.6, rMax: 1.5, alpha: 0.3,  mul: 3.4 },
+      { n: 10,  sp: 0.00028, dxr: 0.00020, rMin: 1.0, rMax: 2.0, alpha: 0.22, mul: 4.5 },
+    ].map(l => ({ ...l, n: Math.max(6, Math.round(l.n * density)) }));
     const P = layers.map(l => Array.from({ length: l.n }, () => ({
       x: Math.random(), y: Math.random(),
       r: Math.random() * (l.rMax - l.rMin) + l.rMin,
@@ -906,7 +1216,10 @@ export function HomeDescent() {
           const bx = b.x * w, by = b.y * h;
           const d2 = (ax - bx) ** 2 + (ay - by) ** 2;
           if (d2 < 14000) {
-            const o = (1 - d2 / 14000) * 0.08 * alphaMul;
+            // Halved with the bloom: at 0.08 these links added a constant
+            // teal haze across the whole first viewport, which is most of what
+            // made the hero read as fogged rather than deep.
+            const o = (1 - d2 / 14000) * 0.04 * alphaMul;
             ctx.strokeStyle = `rgba(${cr},${cg},${cb},${o})`;
             ctx.lineWidth = 0.6;
             ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
@@ -925,7 +1238,7 @@ export function HomeDescent() {
           }
           const tw = 0.55 + Math.sin(p.ph) * 0.45;
           const px = p.x * w, py = p.y * h;
-          const rad = p.r * (li === 2 ? 8 : li === 1 ? 5 : 3);
+          const rad = p.r * l.mul;
           blitGlow(ctx, glow([cr, cg, cb]), px, py, rad, l.alpha * tw * alphaMul);
           if (li < 2) {
             // Sparkle core: near-white reads as a bright twinkle against the
@@ -1069,53 +1382,176 @@ export function HomeDescent() {
 
       {/* ACT 0 — ARRIVE */}
       <section ref={s0} data-idx="0" id="arrive" className="tnic-act tnic-hero is-in">
-        <p className="tnic-kicker">Evidence-Graded Longevity Library</p>
-        <h1 className="tnic-h1">Evidence-based <em>longevity</em>,<br />without the hype.</h1>
-        <p className="tnic-lead">
-          A free, PubMed-backed library for understanding longevity supplements,
-          the 12 Hallmarks of Aging, and the evidence behind each compound —
-          before you buy or build a stack.
-        </p>
-        <div className="tnic-trustline" aria-label="TNiC trust signals">
-          <span>Human evidence graded</span>
-          <span>PubMed citations</span>
-          <span>No pay-for-placement</span>
-          <span>Free and privacy-first</span>
-        </div>
-        <div className="tnic-hero-badges">
-          <Link href="/elite-8" className="pill focus-ring"><span className="dot" /><b>{eliteInterventions.length}</b>&nbsp;elite interventions</Link>
-          <Link href="/library/compounds" className="pill focus-ring"><span className="dot" /><b>{COMPOUND_COUNT}</b>&nbsp;graded compounds</Link>
-          <Link href="/hallmarks" className="pill focus-ring"><span className="dot" /><b>12</b>&nbsp;hallmarks of aging</Link>
-          <Link href="/trust/methodology" className="pill focus-ring"><span className="dot" /><b>A–C</b>&nbsp;evidence tiers</Link>
-        </div>
-        <div className="tnic-paths" aria-label="Choose where to begin">
-          <Link href="/elite-8" className="tnic-path primary focus-ring">
-            <span className="tnic-path-index">01</span>
-            <span className="tnic-path-copy">
-              <span className="tnic-path-label">Start with confidence</span>
-              <span className="tnic-path-name">Elite Eight</span>
-              <span className="tnic-path-detail">8 dose-matched picks · cited human trials</span>
-            </span>
-            <span className="tnic-path-arr" aria-hidden="true">→</span>
-          </Link>
-          <Link href="/library" className="tnic-path focus-ring">
-            <span className="tnic-path-index">02</span>
-            <span className="tnic-path-copy">
-              <span className="tnic-path-label">Explore the science</span>
-              <span className="tnic-path-name">The Library</span>
-              <span className="tnic-path-detail">100 graded compounds · 12 hallmarks</span>
-            </span>
-            <span className="tnic-path-arr" aria-hidden="true">→</span>
-          </Link>
-          <Link href="/nico" className="tnic-path focus-ring">
-            <span className="tnic-path-index">03</span>
-            <span className="tnic-path-copy">
-              <span className="tnic-path-label">Get your starting point</span>
-              <span className="tnic-path-name">NICO Starter</span>
-              <span className="tnic-path-detail">Nine questions · adjustable stack plan</span>
-            </span>
-            <span className="tnic-path-arr" aria-hidden="true">→</span>
-          </Link>
+        <div className="tnic-hero-grid">
+          <div className="tnic-hero-copy">
+            <p className="tnic-kicker">The Longevity OS</p>
+            <h1 className="tnic-h1">Evidence-based <em>longevity</em>,<br />without the hype.</h1>
+            {/* Names the system directly. With the kicker now reading "The
+                Longevity OS", the lead has to land OS as a method you learn —
+                grading, hallmarks, the trial under each claim — or a reader
+                arrives expecting an app to sign into. Same length, same voice,
+                same keywords as the line it replaces. */}
+            <p className="tnic-lead">
+              A free, PubMed-backed system for longevity decisions: how the evidence
+              is graded, what the 12 Hallmarks of Aging are, and which trial sits
+              under each compound — before you buy or build a stack.
+            </p>
+            <div className="tnic-trustline" aria-label="TNiC trust signals">
+              <span>Human evidence graded</span>
+              <span>PubMed citations</span>
+              <span>No pay-for-placement</span>
+              <span>Free and privacy-first</span>
+            </div>
+          </div>
+
+          <aside className="tnic-intel" aria-label="Library instrument — live counts from the published library">
+            <p className="tnic-intel-kicker">Library instrument</p>
+            <div className="tnic-intel-radar">
+              <svg viewBox="0 0 240 240" role="img" aria-hidden="true">
+                <defs>
+                  <radialGradient id="tnic-intel-glow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="rgba(95,227,224,0.18)" />
+                    <stop offset="70%" stopColor="rgba(95,227,224,0.03)" />
+                    <stop offset="100%" stopColor="rgba(95,227,224,0)" />
+                  </radialGradient>
+                </defs>
+                <circle cx="120" cy="120" r="110" fill="url(#tnic-intel-glow)" />
+                <circle cx="120" cy="120" r="102" fill="none" stroke="rgba(150,170,220,0.16)" strokeWidth="1" />
+                <circle cx="120" cy="120" r="78" fill="none" stroke="rgba(95,227,224,0.18)" strokeWidth="1" />
+                <circle cx="120" cy="120" r="54" fill="none" stroke="rgba(150,170,220,0.12)" strokeWidth="1" />
+                <polygon points={intel.poly} fill="rgba(95,227,224,0.10)" stroke="rgba(95,227,224,0.45)" strokeWidth="1.25" />
+                {intel.ticks.map((t, i) => (
+                  <line key={i} x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2} stroke={i % 3 === 0 ? '#5fe3e0' : 'rgba(150,170,220,0.45)'} strokeWidth={i % 3 === 0 ? 2 : 1} />
+                ))}
+                <circle cx="120" cy="120" r="36" fill="none" stroke="rgba(95,227,224,0.35)" strokeWidth="1.5" />
+              </svg>
+              {/* Cardinals as HTML, not SVG <text>.
+                  They were four <text> nodes at x=22 / x=218 inside a 240 viewBox
+                  whose outer ring runs r=102 — i.e. from x=18 to x=222. The ring
+                  stroke and the 12 hallmark ticks therefore ran straight THROUGH
+                  "NRF2" and "mTOR", which rendered as struck-out text on the
+                  site's signature first-viewport instrument. And because SVG text
+                  scales with the viewBox, the same labels were set at 11px in a
+                  240-unit box displayed 132px wide on a phone — about 6px, half
+                  the style guide's stated floor, on the device with the least
+                  reading comfort.
+                  As HTML they sit in the ring's own padding (outside the graphic,
+                  so nothing can cross them) and hold --type-11 at every size. */}
+              <div className="tnic-intel-cardinals" aria-hidden="true">
+                <span className="c n" style={{ color: 'var(--cyan)' }}>NAD+</span>
+                <span className="c e">mTOR</span>
+                <span className="c s" style={{ color: 'var(--emerald)' }}>AMPK</span>
+                <span className="c w">NRF2</span>
+              </div>
+              <div className="tnic-intel-center">
+                <span className="n">{COMPOUND_COUNT}</span>
+                <span className="l">graded compounds</span>
+              </div>
+            </div>
+            <div className="tnic-intel-metrics">
+              <div className="tnic-intel-metric">
+                <span className="n">{eliteInterventions.length}</span>
+                <span className="l">Elite</span>
+              </div>
+              <div className="tnic-intel-metric">
+                <span className="n">{intel.studies}</span>
+                <span className="l">Trials cited</span>
+              </div>
+              <div className="tnic-intel-metric">
+                <span className="n">12</span>
+                <span className="l">Hallmarks</span>
+              </div>
+            </div>
+            {/* Two fixes to the same block, from two branches.
+
+                #212's is the markup: this was a <div role="list"> whose children
+                were <a role="listitem">, which axe flags (aria-allowed-role) —
+                `listitem` is not an allowed role for an anchor, so assistive
+                tech got a list whose items were not items. A <ul>/<li> carrying
+                the links says the same thing with markup that is valid.
+
+                This branch's is the data, and it decides the labels below. The
+                row used to print the Elite Eight's tier mix (A 4 · B 4 · C 0)
+                directly beneath a dial reading "100 graded compounds", with
+                "elite" said only to screen readers — so a sighted reader had
+                exactly one available reading, 4 of the 100 are Tier A, and it
+                contradicted /library and /library/evidence, which both publish
+                10 · 71 · 19 from `evidenceIndexStats()`. The row now shows the
+                library-wide split and names that population visibly.
+
+                Which is why #212's accessible names could not survive the merge
+                unchanged: "Elite-set evidence mix" and "N elite interventions"
+                described the old numbers. Left as they were, the values would
+                say 10 · 71 · 19 while the accessible name said "elite" — the
+                same contradiction as before, just moved into the layer only
+                screen-reader users hear. Both now name the same population, and
+                the link points at the table that publishes it. */}
+            <p className="tnic-intel-split-cap">
+              Evidence mix · all {libraryTiers.total} graded
+            </p>
+            <ul className="tnic-intel-grades" aria-label={`Evidence mix across all ${libraryTiers.total} graded compounds — A clinical, B emerging, C preclinical`}>
+              {([
+                ['A', 'Clinical', libraryTiers.A, 3],
+                ['B', 'Emerging', libraryTiers.B, 2],
+                ['C', 'Preclinical', libraryTiers.C, 1],
+              ] as const).map(([tier, label, n, filled]) => (
+                <li key={tier} className="tnic-intel-grade-cell">
+                  <Link
+                    href="/library/evidence"
+                    className={`tnic-grade tnic-grade-${tier} focus-ring`}
+                    aria-label={`Tier ${tier} ${label}: ${n} of ${libraryTiers.total} graded compounds. Open the evidence table.`}
+                  >
+                    <span className="tnic-grade-meter" aria-hidden="true">
+                      <i className={filled >= 1 ? 'on' : undefined} />
+                      <i className={filled >= 2 ? 'on' : undefined} />
+                      <i className={filled >= 3 ? 'on' : undefined} />
+                    </span>
+                    <span className="tnic-grade-k">Tier {tier}</span>
+                    <span className="tnic-grade-n">{n}</span>
+                    <span className="tnic-grade-l">{label}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <p className="tnic-intel-note">
+              12 ticks = 12 hallmarks, equally mapped.{' '}
+              {/* The cardinal ring is hidden in the compact layout (no room for
+                  it beside a 132px dial), so the sentence explaining it goes
+                  with it rather than describing something not on screen. */}
+              <span className="tnic-intel-note-cardinals">Cardinals are pathways this library covers — </span>
+              not a personal score.
+            </p>
+          </aside>
+
+          <div className="tnic-paths" aria-label="Choose where to begin">
+            <Link href="/elite-8" className="tnic-path primary focus-ring">
+              <span className="tnic-path-index">01</span>
+              <span className="tnic-path-copy">
+                <span className="tnic-path-label">Start with confidence</span>
+                <span className="tnic-path-name">Elite Eight</span>
+                <span className="tnic-path-detail">8 dose-matched picks · cited human trials</span>
+              </span>
+              <span className="tnic-path-arr" aria-hidden="true">→</span>
+            </Link>
+            <Link href="/library" className="tnic-path focus-ring">
+              <span className="tnic-path-index">02</span>
+              <span className="tnic-path-copy">
+                <span className="tnic-path-label">Explore the science</span>
+                <span className="tnic-path-name">The Library</span>
+                <span className="tnic-path-detail">100 graded compounds · 12 hallmarks</span>
+              </span>
+              <span className="tnic-path-arr" aria-hidden="true">→</span>
+            </Link>
+            <Link href="/nico" className="tnic-path focus-ring">
+              <span className="tnic-path-index">03</span>
+              <span className="tnic-path-copy">
+                <span className="tnic-path-label">Get your starting point</span>
+                <span className="tnic-path-name">NICO Starter</span>
+                <span className="tnic-path-detail">Nine questions · adjustable stack plan</span>
+              </span>
+              <span className="tnic-path-arr" aria-hidden="true">→</span>
+            </Link>
+          </div>
         </div>
         <div className="tnic-cue"><span className="bar" />descend</div>
       </section>

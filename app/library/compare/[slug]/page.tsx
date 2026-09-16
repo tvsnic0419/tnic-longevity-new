@@ -106,7 +106,7 @@ export default async function CompareDetailPage({
       <div className="container-page max-w-5xl">
         <Link
           href="/library/compare"
-          className="focus-ring interactive inline-flex items-center gap-2 text-body-sm text-muted-foreground hover:text-accent-cyan mb-6 rounded-md"
+          className="action-link focus-ring interactive gap-2 text-body-sm text-muted-foreground hover:text-accent-cyan mb-6 rounded-md"
         >
           <ArrowLeft className="w-4 h-4" aria-hidden="true" />
           All comparisons

@@ -36,7 +36,7 @@ export function HomeHallmarks() {
     <section
       id="mechanisms"
       aria-labelledby="home-hallmarks-heading"
-      className="relative border-t border-border/50 py-20 md:py-28"
+      className="relative border-t border-border/50 py-[var(--section-y)]"
     >
       <CellularDivider hue="var(--accent-emerald)" index="04" label="Mechanisms" />
       <div className="container-page">
@@ -81,7 +81,7 @@ export function HomeHallmarks() {
             return (
               <RevealItem key={h.id} index={i}>
                 <Link
-                  href={`/hallmarks/${h.slug}`}
+                  href={`/library/${h.slug}`}
                   className="hm-card focus-ring group"
                   style={{ '--card-accent': ACCENT_VAR[theme] ?? 'var(--accent-cyan)' } as CSSProperties}
                 >

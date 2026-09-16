@@ -1,0 +1,8 @@
+/* Hide Acts 1–3 until Explore the system opens (data-overture-open on <html>). */
+:global(html:not([data-overture-open]) #molecule),
+:global(html:not([data-overture-open]) #system),
+:global(html:not([data-overture-open]) #goal) {
+  display: none !important;
+}
+
+.root { /* CSS module anchor so the global hide rules load with this island */ }

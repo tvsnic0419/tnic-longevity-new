@@ -1,18 +1,20 @@
 import { Suspense } from 'react';
 import { BookmarkPlus, Compass, Layers3 } from 'lucide-react';
-import Link from 'next/link';
-import { buildPageMetadata } from '@/lib/seo';
+import { buildPageMetadata, buildBreadcrumbSchema } from '@/lib/seo';
+import { SITE } from '@/lib/site';
 import { AntiAgingLibrary } from '@/components/library/AntiAgingLibrary';
 import { LibraryModulesHub } from '@/components/library/LibraryModulesHub';
 import { LifestylePillarsHub } from '@/components/library/LifestylePillarsHub';
 import { LibrarySearch } from '@/components/library/LibrarySearch';
 import { ToolsPromoStrip } from '@/components/tools/ToolsPromoStrip';
 import { LibraryFacetFilters } from '@/components/library/LibraryFacetFilters';
-import { CompoundExplorer } from '@/components/library/CompoundExplorer';
-import { RecommendedNextSteps } from '@/components/ui/RecommendedNextSteps';
+import { CompoundExplorer, parseExplorerParams } from '@/components/library/CompoundExplorer';
+import { ContinueTrail } from '@/components/ui/WalkCard';
 import { ResearchQueueShelf } from '@/components/library/ResearchQueueShelf';
 import { EvidenceTierSpectrum } from '@/components/library/EvidenceTierSpectrum';
+import { LibraryHeroInstrument } from '@/components/library/LibraryHeroInstrument';
 import { DecisionSteps } from '@/components/ui/DecisionSteps';
+import { StructuredData } from '@/components/seo/StructuredData';
 import {
   DeferredHallmarkVisualGallery,
   type HallmarkVisualCard,
@@ -20,15 +22,49 @@ import {
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { COMPOUND_COUNT } from '@/lib/library-modules';
-import { eliteInterventions } from '@/lib/elite-interventions';
+import { evidenceIndexStats } from '@/lib/evidence-index';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
+
+const indexStats = evidenceIndexStats();
+
+const LIBRARY_DESCRIPTION = `${COMPOUND_COUNT} longevity compounds graded A–C with PMID-cited evidence, plus the ${hallmarkLibrary.length} hallmarks of aging each one acts on. Sort the whole set in the Evidence Table, or browse by molecule.`;
 
 export const metadata = buildPageMetadata({
-  title: 'Anti-Aging Library — The 12 Hallmarks of Aging, Evidence-Graded',
-  description:
-    'Explore the 12 hallmarks of aging with evidence-graded interventions, PMID-cited studies, and mechanistic visuals for each pathway — from genomic instability to disabled macroautophagy.',
+  title: `Anti-Aging Library — ${COMPOUND_COUNT} Evidence-Graded Compounds`,
+  description: LIBRARY_DESCRIPTION,
   path: '/library',
-  keywords: ['12 hallmarks of aging', 'anti-aging library', 'longevity interventions', 'hallmarks of aging explained'],
+  keywords: [
+    'longevity supplement library',
+    'evidence-graded compounds',
+    'anti-aging library',
+    'hallmarks of aging explained',
+  ],
 });
+
+/**
+ * CollectionPage, not Article. This hub is an index over the graded library —
+ * the compounds, then the hallmarks they act on — and describing it as one
+ * tells an answer engine what it is looking at. Counts are derived so the
+ * schema cannot overstate the grid beneath it.
+ */
+function buildLibraryCollectionSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: `TNiC Compound Library — ${COMPOUND_COUNT} evidence-graded compounds`,
+    description: LIBRARY_DESCRIPTION,
+    url: `${SITE.url}/library`,
+    isAccessibleForFree: true,
+    mainEntity: {
+      '@type': 'ItemList',
+      name: 'Graded longevity compounds',
+      numberOfItems: COMPOUND_COUNT,
+      itemListOrder: 'https://schema.org/ItemListUnordered',
+    },
+    relatedLink: [`${SITE.url}/library/evidence`, `${SITE.url}/hallmarks`],
+  };
+}
 
 // Titles and canonical destinations stay tied to the hallmark registry; the
 // visual gallery defers only the below-fold decorative SVG components.
@@ -38,28 +74,70 @@ const visualCards: HallmarkVisualCard[] = hallmarkLibrary.map(({ id, title, slug
   href: `/library/${slug}`,
 }));
 
-export default function LibraryPage() {
+function paramString(value: string | string[] | undefined): string {
+  if (Array.isArray(value)) return value[0] ?? '';
+  return value ?? '';
+}
+
+export default async function LibraryPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tiers?: string | string[]; hallmarks?: string | string[] }>;
+}) {
+  const sp = await searchParams;
+  const { activeTiers, activeHallmarkIds } = parseExplorerParams({
+    tiers: paramString(sp.tiers),
+    hallmarks: paramString(sp.hallmarks),
+  });
+
   return (
     <>
+      <StructuredData
+        schemas={[
+          buildLibraryCollectionSchema(),
+          buildBreadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Library', path: '/library' },
+          ]),
+        ]}
+      />
       <CinematicHubHero
         hue="cyan"
         kicker="The Library"
+        titleAsHeading
         title={<>Every intervention, <em>graded</em>.</>}
-        lead="The 12 hallmarks of aging, each paired with PMID-cited interventions and mechanistic visuals — the free, evidence-first reference the whole site is built on."
+        lead={`${COMPOUND_COUNT} compounds, each graded A–C with PMID-cited evidence and the hallmarks of aging it acts on. Browse the molecules, open the table, or start from the biology.`}
         stats={[
-          { value: String(COMPOUND_COUNT), label: 'Graded compounds', href: '/library/compounds' },
-          { value: '12', label: 'Hallmarks of aging', href: '/hallmarks' },
+          { value: String(COMPOUND_COUNT), label: 'Graded compounds', href: '/library/evidence' },
+          { value: String(hallmarkLibrary.length), label: 'Hallmarks of aging', href: '/hallmarks' },
+          { value: String(indexStats.scored), label: 'With a TNiC Score', href: '/library/evidence' },
           { value: 'A–C', label: 'Evidence tiers', href: '/trust/methodology' },
-          { value: String(eliteInterventions.length), label: 'Elite interventions', href: '/elite-8' },
         ]}
-        primary={{ href: '/nico', label: 'Find your personalized stack' }}
-        secondary={{ href: '/stacks', label: 'Open the Stack Architect' }}
+        primary={{ href: '/nico', label: 'Start with NICO' }}
+        secondary={{ href: '/library/evidence', label: 'Open the Evidence Table' }}
+        figure={<LibraryHeroInstrument />}
+        figureCaption="Evidence split · derived from the graded library"
       />
       {/* Search is the highest-intent action on a research hub, so it appears
-          immediately after the overview instead of after the hallmark atlas. */}
+          immediately after the overview. The compound grid follows — the job
+          most visitors came to do — instead of sitting under the hallmark atlas. */}
       <Suspense fallback={<div className="h-36 animate-pulse bg-white/5" />}>
         <LibrarySearch />
       </Suspense>
+
+      <div className="container-page pb-2 pt-8">
+        <Suspense fallback={<div className="h-20 animate-pulse bg-white/5 rounded-xl" />}>
+          <LibraryFacetFilters />
+        </Suspense>
+      </div>
+
+      <div className="container-page pb-12">
+        <CompoundExplorer activeTiers={activeTiers} activeHallmarkIds={activeHallmarkIds} />
+      </div>
+
+      <div className="container-page">
+        <EvidenceTierSpectrum />
+      </div>
 
       <div className="container-page pt-8">
         <DecisionSteps
@@ -76,62 +154,101 @@ export default function LibraryPage() {
           ]}
         />
       </div>
-      <div className="container-page pb-2">
-        <EvidenceTierSpectrum />
-      </div>
+
       <ResearchQueueShelf />
-      {/* Lead with the page title and context, then the tools to act on it */}
-      <div id="hallmark-atlas"><AntiAgingLibrary asPageTitle /></div>
-
-      <div className="container-page pb-6">
-        <Suspense fallback={<div className="h-20 animate-pulse bg-white/5 rounded-xl" />}>
-          <LibraryFacetFilters />
-        </Suspense>
-      </div>
-
-      {/* The result surface those facet filters drive — and the clickable
-          tier-count pills. Same `?tiers=`/`?hallmarks=` params, now rendered. */}
-      <div className="container-page pb-12">
-        <Suspense fallback={<div className="h-40 animate-pulse bg-white/5 rounded-xl" />}>
-          <CompoundExplorer />
-        </Suspense>
-      </div>
+      {/* Hallmark atlas is the second chapter, not the page identity. Search is
+          already on the hub, so the atlas does not repeat it. */}
+      <div id="hallmark-atlas"><AntiAgingLibrary hideLocalSearch /></div>
 
       <div className="container-page pb-12">
-        <RecommendedNextSteps context="library" />
+        <ContinueTrail
+          title="Keep going from the library."
+          items={[
+            {
+              href: '/library/evidence',
+              kicker: 'Evidence table',
+              title: 'Sort the whole set',
+              detail: 'Every graded compound, one table — tier, hallmarks, and citations.',
+              accent: 'cyan',
+            },
+            {
+              href: '/elite-8',
+              kicker: 'Shortlist',
+              title: 'Elite 8 rankings',
+              detail: 'Dose-matched picks ranked by Longevity Quotient.',
+              accent: 'amber',
+            },
+            {
+              href: '/stacks',
+              kicker: 'Decide',
+              title: 'Open Stack Architect',
+              detail: 'Inspect coverage and interactions before you configure anything.',
+              accent: 'violet',
+            },
+            {
+              href: '/shop',
+              kicker: 'Verify',
+              title: 'Verify stack',
+              detail: 'COA checklists once you know which compounds you want.',
+              accent: 'emerald',
+            },
+            {
+              href: '/protocols',
+              kicker: 'Protocols',
+              title: 'Read a choreographed plan',
+              detail: 'Each compound has a job and a time. Not a pile of pills.',
+              accent: 'violet',
+            },
+            {
+              href: '/labs',
+              kicker: 'Labs',
+              title: 'Log a baseline',
+              detail: 'Supplements without labs is guessing. Start with a panel.',
+              accent: 'rose',
+            },
+          ]}
+        />
+        <PageConnections cluster={clusterFrom('explore', '/library')} accent="cyan" id="library-explore-connections" />
+        <PageConnections cluster={clusterFrom('decide', '/library')} accent="violet" id="library-decide-connections" className="mt-6" />
+        <PageConnections cluster={clusterFrom('start', '/library')} accent="emerald" id="library-start-connections" className="mt-6" />
       </div>
 
-      {/* Polished All 12 Hallmarks Visual Grid */}
-      <section className="container-page py-12 md:py-16 border-t border-[var(--color-border-subtle)]">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+      {/* Density: one browse surface above the fold. Synergies / lifestyle /
+          visual atlas / module index live behind a single disclosure so the
+          compound grid stays the primary research path. */}
+      <section id="browse-modules" className="container-page py-10 md:py-14 border-t border-[var(--color-border-subtle)]">
+        <details className="premium-card rounded-2xl border border-border/60 p-5 md:p-7 group">
+          <summary className="focus-ring cursor-pointer list-none marker:content-none">
+            <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="text-label text-accent-cyan mb-1">Browse modules</p>
+                <h2 className="heading-section text-xl md:text-2xl">Hallmark atlas, lifestyle, synergies & tools</h2>
+                <p className="mt-1 max-w-2xl text-body-sm text-muted-foreground">
+                  Keep the compound grid as the primary surface. Open this panel when you want the
+                  mechanistic atlas, lifestyle pillars, or module index.
+                </p>
+              </div>
+              <span className="text-sm font-semibold text-accent-cyan group-open:hidden">Expand →</span>
+              <span className="text-sm font-semibold text-accent-cyan hidden group-open:inline">Collapse ↑</span>
+            </div>
+          </summary>
+          <div className="mt-8 space-y-12">
             <div>
-              <div className="text-label text-[var(--accent-cyan)] mb-1.5">COMPLETE VISUAL SYSTEM</div>
-              <h2 className="heading-section">All 12 Hallmarks of Aging</h2>
-              <p className="text-body text-[var(--color-text-secondary)] max-w-2xl mt-2">
-                High-detail mechanistic visualizations. Hover to explore.
+              <p className="text-label text-accent-cyan mb-1.5">The mechanistic atlas</p>
+              <h3 className="text-lg font-bold mb-4">All {hallmarkLibrary.length} hallmarks, drawn from their biology</h3>
+              <DeferredHallmarkVisualGallery cards={visualCards} />
+              <p className="mt-6 text-caption text-[var(--color-text-muted)]">
+                Every illustration is drawn from the mechanism it depicts — no stock art.
               </p>
             </div>
-            <Link href="#content-modules" className="text-sm text-[var(--accent-cyan)] hover:underline">
-              Explore module index →
-            </Link>
+            <LifestylePillarsHub />
+            <div>
+              <ToolsPromoStrip headline="Simulate stacks, build protocols, and project healthspan from library modules" />
+            </div>
+            <LibraryModulesHub />
           </div>
-
-          <DeferredHallmarkVisualGallery cards={visualCards} />
-
-          <div className="mt-8 text-center">
-            <p className="text-sm text-[var(--color-text-muted)]">
-              All visuals are part of TNiC’s evidence-based illustration system.
-            </p>
-          </div>
-        </div>
+        </details>
       </section>
-
-      <LifestylePillarsHub />
-      <div className="container-page py-8">
-        <ToolsPromoStrip headline="Simulate stacks, build protocols, and project healthspan from library modules" />
-      </div>
-      <LibraryModulesHub />
     </>
   );
 }

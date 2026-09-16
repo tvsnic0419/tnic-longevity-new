@@ -140,7 +140,7 @@ export function ReadingToc({
                   href={`#${h.id}`}
                   onClick={(e) => jump(e, h.id)}
                   aria-current={isActive ? 'location' : undefined}
-                  className={`focus-ring rounded text-sm transition-colors hover:text-accent-cyan ${
+                  className={`focus-ring inline-flex min-h-6 items-center rounded text-sm transition-colors hover:text-accent-cyan ${
                     isActive ? 'font-medium text-accent-cyan' : 'text-muted-foreground'
                   }`}
                 >

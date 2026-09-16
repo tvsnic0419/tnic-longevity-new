@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Scale } from 'lucide-react';
 import type { Metadata } from 'next';
@@ -6,6 +7,8 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { HeadToHeadCompare } from '@/components/library/HeadToHeadCompare';
 import { HeadToHeadPicker } from '@/components/library/HeadToHeadPicker';
 import { buildBreadcrumbSchema, buildPageMetadata } from '@/lib/seo';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
 import {
   DEFAULT_PAIR,
   buildHeadToHead,
@@ -50,10 +53,60 @@ export async function generateMetadata({
   });
 }
 
-export default async function HeadToHeadPage({ searchParams }: { searchParams: SearchParams }) {
+function HeadToHeadBody({
+  a,
+  b,
+  options,
+}: {
+  a: string;
+  b: string;
+  options: ReturnType<typeof comparableCompounds>;
+}) {
+  const result = buildHeadToHead(a, b);
+
+  return (
+    <>
+      <div className="mt-6">
+        <HeadToHeadPicker options={options} a={a} b={b} />
+      </div>
+
+      {result ? (
+        <HeadToHeadCompare result={result} />
+      ) : (
+        <p className="premium-card p-6 mt-8 text-body-sm text-muted-foreground">
+          Those two compounds cannot be compared. Pick a different pair above.
+        </p>
+      )}
+    </>
+  );
+}
+
+/**
+ * The half of the page that depends on ?a=&b=, isolated behind its own Suspense
+ * boundary so awaiting the params cannot hold up the page's identity.
+ *
+ * The canonical URL has no query string and resolves to DEFAULT_PAIR. That
+ * comparison used to live only inside this async island, so the prerendered
+ * HTML of the indexable address was a skeleton — identity in <main>, the
+ * actual comparison absent until JS. The Suspense fallback is now the default
+ * pair itself: crawlers and anyone without JS get the real comparison, and
+ * when the island resolves to that same pair (the canonical case) nothing
+ * flashes. Parameterized URLs still swap after the params resolve; they all
+ * canonicalise back here and are not in the sitemap.
+ */
+async function HeadToHeadResult({
+  searchParams,
+  options,
+}: {
+  searchParams: SearchParams;
+  options: ReturnType<typeof comparableCompounds>;
+}) {
   const params = await searchParams;
   const { a, b } = resolvePair(params.a, params.b);
-  const result = buildHeadToHead(a, b);
+  return <HeadToHeadBody a={a} b={b} options={options} />;
+}
+
+export default function HeadToHeadPage({ searchParams }: { searchParams: SearchParams }) {
   const options = comparableCompounds();
 
   const schemas = [
@@ -85,17 +138,19 @@ export default async function HeadToHeadPage({ searchParams }: { searchParams: S
           align="left"
         />
 
-        <div className="mt-6">
-          <HeadToHeadPicker options={options} a={a} b={b} />
-        </div>
-
-        {result ? (
-          <HeadToHeadCompare result={result} />
-        ) : (
-          <p className="premium-card p-6 mt-8 text-body-sm text-muted-foreground">
-            Those two compounds can&apos;t be compared. Pick a different pair above.
-          </p>
-        )}
+        <Suspense
+          fallback={
+            <HeadToHeadBody a={DEFAULT_PAIR.a} b={DEFAULT_PAIR.b} options={options} />
+          }
+        >
+          <HeadToHeadResult searchParams={searchParams} options={options} />
+        </Suspense>
+      {/* This page's body is a client island behind Suspense, so it
+          server-rendered almost no in-body links — a reader arriving from
+          search, and every crawler, saw a shell that connected to nothing. */}
+      <div className="container-page">
+        <PageConnections cluster={clusterFrom('explore', '/library/compare/head-to-head')} accent="cyan" id="explore-connections" />
+      </div>
       </div>
     </div>
   );

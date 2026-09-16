@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import type { ThemeAccent } from '@/lib/design-system';
 import { themes } from '@/lib/design-system';
 import { ContextRail } from '@/components/ui/ContextRail';
@@ -76,7 +76,11 @@ export function SectionShell({
                 </span>
               </div>
               <HeadingTag id={`${id}-heading`} className="heading-section mb-3">{title}</HeadingTag>
-              <div className="heading-accent-rule mb-4" aria-hidden="true" />
+              <div
+                className="heading-accent-rule mb-4"
+                style={{ '--rule-accent': t.cssVar } as CSSProperties}
+                aria-hidden="true"
+              />
               <p className="text-body">{subtitle}</p>
             </div>
           </div>

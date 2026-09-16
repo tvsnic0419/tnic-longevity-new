@@ -5,6 +5,7 @@ import { compounds } from './data';
 import { libraryModules } from './library-modules';
 import { hallmarkLibrary } from './hallmarks-library';
 import { peptideLibrary } from './peptides-library';
+import { protocols } from './protocols';
 import {
   getCompoundsForHallmark,
   getPeptidesForHallmark,
@@ -13,6 +14,7 @@ import {
   getGuidesForHallmark,
   getHallmarksForGuide,
   getMappedGuideHrefs,
+  getProtocolsForCompound,
 } from './library-graph';
 
 const hallmarkIds = new Set(hallmarkLibrary.map((h) => h.id));
@@ -140,5 +142,22 @@ describe('library-graph: hallmark → guides (inverse of guide → hallmarks)', 
     expect(nmn).toBeDefined();
     const targetHallmark = nmn!.relatedHallmarkIds[0];
     expect(getGuidesForHallmark(targetHallmark).map((g) => g.href)).toContain('/nad-supplement-guide');
+  });
+});
+
+describe('library-graph: compound → protocols', () => {
+  it('returns protocols that actually include the compound as a step', () => {
+    const links = getProtocolsForCompound('glynac');
+    expect(links.length).toBeGreaterThan(0);
+    expect(links.map((p) => p.slug)).toContain('nrf2-defense-triad');
+  });
+
+  it('every returned protocol hash target is a real protocol slug', () => {
+    const slugs = new Set(protocols.map((p) => p.slug));
+    for (const m of libraryModules.filter((mod) => mod.category === 'compounds')) {
+      for (const link of getProtocolsForCompound(m.slug)) {
+        expect(slugs.has(link.slug), `unknown protocol ${link.slug} for ${m.slug}`).toBe(true);
+      }
+    }
   });
 });

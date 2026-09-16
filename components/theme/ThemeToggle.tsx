@@ -27,7 +27,7 @@ export function ThemeToggle({ compact = false }: { compact?: boolean }) {
 
   return (
     <div
-      className="inline-flex rounded-xl border border-border bg-surface/60 p-1 gap-0.5"
+      className="surface-track"
       role="group"
       aria-label="Color theme"
     >
@@ -37,7 +37,7 @@ export function ThemeToggle({ compact = false }: { compact?: boolean }) {
           type="button"
           onClick={() => setTheme(id)}
           aria-pressed={theme === id}
-          className={`focus-ring interactive flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-colors ${
+          className={`focus-ring interactive flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold ${
             theme === id
               ? 'bg-accent-cyan/15 text-accent-cyan border border-accent-cyan/25'
               : 'text-muted-foreground hover:text-foreground'

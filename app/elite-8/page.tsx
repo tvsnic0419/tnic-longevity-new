@@ -5,6 +5,9 @@ import { buildBreadcrumbSchema, buildArticleSchema } from '@/lib/seo';
 import { seoRoutes } from '@/lib/seo-routes';
 import { getScoredCompounds } from '@/lib/elite-8-data';
 import { SITE } from '@/lib/site';
+import { PageConnections } from '@/components/ui/PageConnections';
+import { clusterFrom } from '@/lib/page-connections';
+import { ContinueTrail } from '@/components/ui/WalkCard';
 
 export const metadata = seoRoutes.elite8();
 
@@ -48,6 +51,20 @@ export default function Elite8Page() {
     <SubPageLayout hideContextBar>
       <StructuredData schemas={schemas} />
       <Elite8Hub />
+      <div className="container-page pb-16">
+        <ContinueTrail
+          title="After the Elite shortlist."
+          items={[
+            { href: '/library', kicker: 'Explore', title: 'Explore the library', detail: 'Full evidence modules for every ranked compound.', accent: 'cyan' },
+            { href: '/stacks', kicker: 'Decide', title: 'Build in Stack Architect', detail: 'Load Elite picks and check interactions.', accent: 'violet' },
+            { href: '/shop', kicker: 'Verify', title: 'Verify stack', detail: 'Dose-matched buyer checklists.', accent: 'amber' },
+            { href: '/nico', kicker: 'Start', title: 'Start with NICO', detail: 'Personalize beyond the global shortlist.', accent: 'emerald' },
+          ]}
+        />
+        <PageConnections cluster={clusterFrom('explore', '/elite-8')} accent="amber" id="elite8-explore-connections" />
+        <PageConnections cluster={clusterFrom('decide', '/elite-8')} accent="violet" id="elite8-decide-connections" className="mt-6" />
+        <PageConnections cluster={clusterFrom('verify', '/elite-8')} accent="emerald" id="elite8-verify-connections" className="mt-6" />
+      </div>
     </SubPageLayout>
   );
 }

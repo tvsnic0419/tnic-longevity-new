@@ -4,6 +4,1022 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-16 — Ten UI upgrades, chosen by measuring rather than reading
+
+**The question asked:** identify and ship the ten highest-value UI upgrades.
+
+**How they were chosen.** Baseline first, on a real production build served
+locally: `audit:ui` (axe + layout + tap targets, 11 routes × 2 viewports),
+`audit:routes` (229 routes), `audit:perf`, the 784-test suite, then screenshots
+of the homepage, `/library`, `/library/evidence` and `/library/compounds/nmn` at
+1440×900 and 390×844. Everything below is a defect that measurement produced.
+Nothing here is a preference.
+
+Baseline: 784 tests green, routes 0 fail / 0 warn, perf within budget — and
+`audit:ui` **exiting non-zero**, with 2 axe violations.
+
+### The credibility one
+
+**1 · The homepage instrument contradicted the library, and said so only to
+screen readers.** `.tnic-intel` rendered a dial reading *100 graded compounds*
+with *Tier A 4 · B 4 · C 0* directly beneath it. Those counts were
+`eliteTierCounts` — the Elite Eight — and "elite" appeared nowhere in rendered
+text, only in an `aria-label`. `/library` and `/library/evidence` both publish
+**10 · 71 · 19** from `evidenceIndexStats()`. Two numbers under one label, on
+the site whose entire proposition is that its numbers trace.
+
+Fixed at the root rather than by relabelling: the row now shows the
+library-wide split — the population the dial actually headlines, from the same
+`evidenceIndexStats()` both other surfaces read — under a visible
+`EVIDENCE MIX · ALL 100 GRADED` caption, and links to `/library/evidence`
+instead of the methodology page. The elite set keeps its own count in the
+metrics row above. The split is computed in `app/page.tsx` (server) and passed
+as `libraryTiers`, not imported into the client bundle: `lib/evidence-index`
+pulls `compoundModules`, `hallmarks-library`, `tnic-score` and `entity-graph`
+behind it, and `lib/derived-stats` already says to prefer props here. Cost
+measured at +3KB JS on the homepage.
+
+Written up as STYLE_GUIDE §22.1, because the rule generalises: an `aria-label`
+is not a substitute for a visible population label — it hands screen-reader
+users the truth and leaves everyone else with the contradiction.
+
+### The mobile ones
+
+**2 · Sixteen hubs hid their data figure from every phone.**
+`.research-hero__figure { display: none }` below 1024px is correct for what the
+column originally held — the decorative molecular field. Since #189 a hub can
+pass a real derived figure, and sixteen now do (`/library`, `/library/evidence`,
+`/library/trials`, `/trust`, `/stacks`, `/hallmarks`, `/pathways`, `/peptides`,
+`/protocols`, `/products`, `/tools`, `/learn`, `/insights`, `/compound-engine`,
+`/supplement-guides`, `/stacks/lab`). The same rule was withholding the most
+credibility-bearing number on each of them from every mobile reader. A
+`--data` modifier now splits atmosphere from data: data renders at every width,
+ordered between the copy and the stat rail. Verified on `/library` (Evidence
+split, 100 graded) and `/library/trials` (363 study rows, 264 human).
+
+**3 · The homepage dial was illegible on a phone.** At ≤900px the radar was
+given a 132px column against a 240-unit viewBox, so its 11px cardinal labels
+rendered at ~6px — under the type scale's own floor by nearly half, and
+visibly garbled in a 390px screenshot. `audit:ui`'s micro-type probe excludes
+SVG by design, so nothing caught it. The panel now stacks: the radar gets a
+240px column and the three metric tiles get the full width, which also
+uncramps them.
+
+**After the #212 merge** the labels are HTML rather than SVG `<text>`, so they
+hold 11px at any dial size and the stacking is no longer what rescues them.
+It still earns its place: #212's own compact layout hid the cardinals below
+900px because a 132px dial has no room for a label ring, and stacking gives
+the dial 240px with the full ring padding intact — so the labels stay visible
+on a phone instead of being dropped. Hiding real information from the majority
+of traffic was a cost of the compact layout, not a goal.
+
+**4 · Hero stat labels truncated instead of wrapping.** `white-space: nowrap` +
+ellipsis on `.research-hero__stat-label`: at 390px "Hallmarks of aging" needed
+135px in a 130px cell and rendered as `HALLMARKS OF AGI…`. A rail whose job is
+to name what a number counts cannot cut the name off.
+
+### The accessibility ones
+
+**5 · The tap-target gate was failing.** `audit:ui` exits non-zero on any
+actionable control under 24px, budget 0. "Full ranking" in
+`HomeInstrumentStrip` rendered 87×20. Given `.action-link`, the documented
+control floor. Gate now exits 0.
+
+**6 · `role="listitem"` on `<a>` elements** (axe, both viewports). The homepage
+instrument's grade tiles were links carrying a role they cannot take, inside a
+`div role="list"` — the list semantics the author intended did not exist. Now a
+real `<ul>`/`<li>` with the link inside.
+
+**7 · The scroll reveal fades text through sub-AA contrast — and parks there.**
+This is the one worth reading twice. `animation-timeline: view()` does not play
+an animation, it **scrubs** one: a section the reader stops on mid-range holds
+that opacity indefinitely. Fading from 0 is therefore not a 400ms transient, it
+is text at arbitrary partial opacity while being read. Measured on
+`/library/mitochondrial-dysfunction`: walk-card kickers composited to `#73529d`
+(3.23:1) and `#208163` (4.13:1), from tokens that are 7.4:1 and 10.2:1 at full
+strength. The audit's header warns that below-the-fold contrast hits can be
+mid-fade false positives; this one is not, because the fade does not finish on
+its own. Scrubbed reveals now use `section-reveal-scrubbed`, floored at
+`opacity: 0.78` (worst case worked back from the violet accent, which holds
+4.5:1 to ~0.75). The 40px rise — the half of the gesture that actually reads —
+is untouched. Time-based reveals keep fading from 0: they self-complete.
+
+### The craft and symmetry ones
+
+**8 · The radar's cardinal labels had ticks drawn through them.** The four
+emphasised ticks span r=92..102; NAD+, mTOR, AMPK and NRF2 sat at r=98, dead
+centre of that band. This pass first fixed it by padding the viewBox 18 units
+per side so the labels could move out past the band.
+
+**Superseded on merge.** PR #212, developed in parallel, fixed the same defect
+by lifting the cardinals out of the SVG entirely — HTML spans absolutely
+positioned in a 30px ring padding on `.tnic-intel-radar`. That is the better
+primitive and #212 merged first, so it won: HTML text holds `--type-11` at
+every container size, where SVG `<text>` scales with the viewBox and was the
+reason the same labels rendered at ~6px on a phone (see item 3). The viewBox
+padding was reverted to `0 0 240 240` on merge, because it existed only to
+make room for `<text>` nodes that no longer exist and would otherwise shrink
+the dial inside the ring #212 built for it.
+
+**9 · `HubSplitInstrument` had its hierarchy inverted.** The count is the
+figure's whole payload and was its smallest, faintest element: 11px muted mono
+against a 14px semibold coloured label. Promoted to value type at full
+contrast, with each row's share of the whole beside it so the bar length has a
+number. Applies across all sixteen hubs.
+
+**10 · Symmetry, on both hero compositions.**
+- *Homepage.* The instrument column was a free `0.85fr` measuring 499px while
+  `.tnic-intel` is 420px pinned to its end — 79px of dead air on the **inner**
+  side, so the gap the reader saw was 143px, not the 64px the gap declares.
+  Track capped at the panel width; the declared gap is now the real one and the
+  copy takes the width back. The H1 still breaks in three lines; the badge row
+  gained a line back.
+- *Hub heroes.* Measured on `/library` at 1440×900: copy column 501px, panel
+  333px, centred — 168px of visible imbalance, the panel reading as a small
+  card floating beside a tall column. Data panels now stretch, with the flex
+  chain carried through to the instrument, which was always written as
+  `h-full` + `justify-between` and had simply never been given a height to
+  fill. The decorative field is excluded and keeps `center`: it is a fixed 4/3
+  canvas and stretching it distorts the artwork.
+
+**Verified (after):** 784 tests green · lint 0 · typecheck clean · build ok ·
+`audit:ui` **exit 0, axe violations 0 on all 22 page/viewport combinations**
+(was 2), actionable sub-24px controls 0 (was 2), HTML text under 11px 0 ·
+`audit:routes` 229 routes, 0 fail 0 warn · `audit:perf` all pages within
+budget (homepage JS 874→877KB, CLS 0.049→0.052, gate 0.1).
+
+**Not done, deliberately.** `/library/evidence` reports 215 sub-24px targets at
+desktop and 140 at phone — all non-actionable (table cell text, tier meter
+bars), so the gate ignores them and so did this pass; worth a look only if the
+table gets interactive cells. The `ambient-orb-2` overflow that every route
+reports is contained by `.ambient-layer`'s `overflow: hidden` + `contain:
+layout paint` and causes no page scroll; it is audit noise, not a defect.
+
+**Rollback:** revert the commits on `claude/top-10-ui-upgrades-ti1p8x`, or
+redeploy the Vercel deployment for `4713870`.
+
+## 2026-09-15 — "The Longevity OS" as slogan: a method, not an app
+
+**Refined same day, after the first pass shipped as "The Longevity Intelligence
+OS".** The owner cut it to **"The Longevity OS"** and — more importantly — said
+what it means:
+
+> ready to market it, but not because of the lab push. Because they can come to
+> the website and learn the operating system — the system of using the
+> interventions, the system of knowing what the hallmarks are.
+
+So **OS = method, not software.** Not an app a reader signs into; the system they
+learn: tiers A–C on human evidence, the twelve hallmarks and which compounds act
+on each, how a stack is assembled, which trial sits under a claim. That reframe
+resolves the tension the earlier pass had to write around — the site is not
+promising an unbuilt product, it is naming the one it already has.
+
+Copy now carries the method reading rather than leaving it to inference. The hero
+lead was rewritten (same length, same voice, same keywords) from "a free,
+PubMed-backed library for understanding…" to "a free, PubMed-backed **system for
+longevity decisions**: how the evidence is graded, what the 12 Hallmarks of Aging
+are, and which trial sits under each compound." With the kicker reading "The
+Longevity OS", a lead that says *library* leaves "OS" to be read as an app.
+
+**Unresolved and deliberately not decided here — a name collision.**
+`HomeOSComingSoon.tsx` uses "Longevity OS" for a personal cell-health WORKSPACE:
+dashboard, stack simulation, private lab logs. That is a different product from
+the method the slogan names, wearing the same name. Mounting that band as-is
+would tell a reader the OS is something to log into — the exact reading the
+slogan is written to avoid — and would market an unbuilt app. The workspace needs
+its own name; it is a feature *inside* the Longevity OS, not the Longevity OS.
+Recorded in that file, owner's call, still unmounted.
+
+**Owner decision, verbatim in intent:** TNiC is and always was *Transformative
+Nutrition in Cell-Health*. "Longevity Intelligence OS" has a ring to it, so it
+becomes a **slogan** alongside the name — not a replacement for it.
+
+This settles PR #200, which proposed retitling the homepage to "TNiC — Longevity
+Intelligence OS" and rewriting the meta description. That PR was **not merged**:
+it swapped the keyword-bearing `<title>` on a revenue-generating page for a
+brand-only one, and by its own description it was a partial slice with follow-ups
+still pending in the same branch. The good half of it — the credibility strip's
+census framing — is carried here instead.
+
+**Where the slogan lives now.** `SITE.slogan` is the single source; `SITE.tagline`
+keeps the brand's actual meaning, and the two are documented as distinct so
+neither gets used for the other.
+
+- Hero kicker, above the H1 (which is untouched — it works, per §8)
+- Footer brand paragraph
+- Homepage meta description, leading, with every compound keyword kept
+- Organization JSON-LD `slogan` — schema.org carries the property natively, so
+  the positioning is machine-readable rather than rendered-copy-only
+
+**What was deliberately NOT changed.** `HOME_TITLE` — the homepage `<title>` is
+the highest-value SEO surface on the site and already carries the terms that earn
+the traffic. The nav descriptor stays "Cell-Health Library": that is what TNiC
+stands for, and the owner decision was explicit that the name's meaning is not
+up for replacement.
+
+**The 2026-07 reservation was narrowed, not lifted.** `HomeOSComingSoon.tsx`
+records an owner direction that the Longevity OS name "should NOT be marketed
+yet" — attached to an unmounted teaser for a personal workspace that does not
+exist. The slogan names the evidence system that DOES exist (library, hallmark
+and pathway graph, trial index); the product teaser stays unmounted. That
+component's note now states both halves so a future session cannot read the old
+directive as either stale or as permission to mount the band.
+
+**Verified:** 766 tests · lint 0 errors · typecheck clean · build ok · homepage
+`<title>` unchanged, H1 unchanged, slogan present in hero/footer/description/
+JSON-LD, OS teaser absent from the rendered homepage.
+
+## 2026-09-14 (ninth pass) — the Trial Index: the cited literature, as data
+
+**The question asked:** identify and ship the highest-value content upgrade.
+
+**What was actually there, counted rather than assumed.**
+
+The top item under *Explicitly deferred* was the evidence-module field audit.
+Running it structurally across all 100 deep-dives (H2 frequency, then table
+shape) found the real gap, and it was not a missing section:
+
+- **87 of 100 deep-dives carry an authored evidence table** — `Study | Design |
+  N | Duration | Key outcomes | Tier`, in 17 header variants — totalling **363
+  study rows, 301 of them PMID-cited**. Sample sizes, durations, populations and
+  reported outcomes, all authored, all real.
+- **None of it existed as data.** `/library/evidence` (#191) indexes the
+  *compounds*; the literature behind them was reachable only by opening 87 pages
+  one at a time. `lib/data.ts` is not a substitute: its 276 `StudyRef`s are
+  title/journal/year/PMID only — no design, no N, no duration, no outcome.
+- So the library could not answer the question it is best equipped to answer:
+  which human trials, in whom, for how long, finding what.
+
+**Shipped — `/library/trials`, the Trial Index.**
+
+- **`lib/trial-index.ts`** — types, parser and classifiers, all pure. Maps the 17
+  header shapes onto one schema; an unrecognised header is ignored rather than
+  guessed into a field, so a new shape degrades to missing data, not wrong data.
+  A column the source never had stays `null` and renders as an em-dash.
+- **`lib/trial-index.server.ts`** — the `fs` half. Split out because the client
+  table imports the types module, and a `fs` import anywhere in that graph fails
+  the Turbopack client build (it did, once, exactly that way).
+- **Nothing is authored.** Every cell is verbatim from the compound's own table.
+  `lib/trial-index.test.ts` proves it rather than asserting it: for all 363 rows
+  it re-reads the source `.mdx` and fails if any published string is not present
+  in the file the row names. 17 tests total.
+- **Two derived fields, both conservative.** `designClass` and `evidenceBase` sit
+  *beside* the verbatim design text, never replacing it, and fall back to
+  `unclassified`/`unclear` rather than guessing. A design naming both people and
+  animals classifies as `mixed` — "multi-species + human association" is a real
+  authored design and calling it human evidence would be the exact overclaim this
+  library exists to avoid. Result: 264 human, 34 preclinical, 6 mixed, 59 not
+  stated. The 59 are labelled, not quietly counted as human.
+- **The gap is on the page.** The 11 compounds with no evidence table are named,
+  linked and explained, not omitted — a gap you can see is a review queue.
+- **`TrialHeroInstrument`**, not `LibraryHeroInstrument`: that one is bound to
+  `evidenceIndexStats()` and would have put 100 graded *compounds* beside a
+  headline counting 363 study *rows*, under a caption claiming it came from the
+  cited literature. Same primitive, honest numbers. Human takes violet rather
+  than the emerald that means Tier A — a human trial is not automatically strong
+  evidence, and borrowing the tier palette would have said it was.
+
+**Caught by the repo's own gates, not by eye.**
+
+- `audit:ui` failed the tap-target budget: short compound links ("Zinc") measured
+  23×24px against a budget of 0. Fixed by making the control genuinely 24px —
+  not `.tap-expand-y`, whose own note warns against expanding a control whose
+  neighbours sit within 44px, and these share a line with the PMID link.
+- Turbopack failed the first build on `Can't resolve 'fs'`, which is what forced
+  the pure/server split above. The split is better structure, so it stayed.
+
+**Verified:** 766 tests (63 files) · lint 0 errors · typecheck clean · build ok ·
+`audit:ui` 0 sub-24px controls, 0 text under 11px, no horizontal scroll at 390px ·
+`audit:routes` 229 routes, 0 fail 0 warn · 363 `<tr>` present in the
+server-rendered HTML (the rows are crawlable, not client-only).
+
+**Still deferred:** the *field-by-field* half of the evidence-module audit — this
+pass did the structural audit and shipped the extraction. Filling a genuinely
+missing field on a specific compound still requires extraction from that
+compound's own authored content, per `NOTES-COMPOUND-LIBRARY.md`, and is not
+something to batch.
+
+## 2026-09-13 (eighth pass) — geometry, the type ladder, and the entity graph
+
+**The question asked:** evaluate and upgrade the UI; then, separately, finish
+the typography and apply a platform-upgrade patch.
+
+**What was actually wrong, measured rather than assumed.**
+
+- `SectionProgress` appeared from `md` (768px), but the gutter it needs is
+  `(100vw - 80rem)/2`, which is ZERO there. It overlapped page content at 16
+  of 19 scroll positions at 1280px and 15 of 19 at 1366px — the two most
+  common laptop widths — clipping Tier A badges by up to 178px. The seventh
+  pass added a fade-at-top to this rail but left the breakpoint alone.
+- The descent ran on its own column. The seventh pass had already capped
+  `.tnic-act` at 80rem, but its uniform padding clamp still put content at
+  160px on a 1440px viewport while every other section started at 104px.
+- **138 font-size declarations bypassed the type scale, in 40 distinct
+  spellings** — six ways to write ~11px, five for 13–14px, four for 15px.
+  The scale was not missing; it was being routed around, because the t-shirt
+  names had gaps at 13px and 15px and nobody wanted to round to the wrong one.
+  Below the floor, 59 of those rendered HTML text between 4px and 10.5px, and
+  on a PHONE they were smaller still (hub hero stat labels at 8.64px) — the
+  device with the least reading comfort got the least legible type.
+- **Six fluid sizes were each defined twice**, in `globals.css` AND
+  `FlagshipFoundation.module.css`, for the same selectors, with both
+  stylesheets loaded. Which won depended on CSS order, and the copies had
+  already drifted in spelling (`.7rem` vs `0.7rem`).
+- **21 routes carried under three in-body links** (counting inside `<main>`
+  only — nav and footer link everywhere by construction and mask this).
+  `/sirtuin-atlas` server-rendered 12,183 characters about SIRT1–SIRT7
+  activators, naming eight compounds that each have a deep-dive, and linked
+  to ZERO. `/pathways` printed "6 compounds · 3 hallmarks" on every card
+  while `pathway.compoundSlugs` sat right there in the data.
+
+**Shipped.**
+
+- **One content column and a measured rail rule.** Rail: labelled ≥1700px,
+  ticks-only ≥1500px, bottom strip below (the strip had stopped at `md`,
+  leaving 768–1500px with an overlapping rail and no fallback). The seventh
+  pass's fade-at-top is kept, with its breakpoint moved to match so the two
+  cannot disagree. After: 0/19 overlaps at every width.
+- **The type ladder, named by pixel size.** `--type-11` through `--type-48`,
+  with the t-shirt names kept as aliases resolving to numeric rungs so no
+  call site changes meaning. There is no judgement left in picking a rung.
+  The six duplicated clamps are now single tokens — deliberately left as
+  clamps rather than snapped onto the fixed ladder, because a hero title is
+  tuned to its own line-breaks and forcing distinct heroes onto shared rungs
+  would flatten them for tidiness rather than for a reason.
+- **Analytic numeric typography.** 72 ad-hoc `tabular-nums` declarations were
+  each setting their own size, weight and tracking. `.text-metric`,
+  `.text-metric-lg`, `.text-data`, `.text-citation`. The comment records the
+  distinction that matters: `.stat-value`/`.stat-value-hero` gradient-fill
+  their glyphs, right for a figure meant to be looked at and wrong for one
+  meant to be compared against the figure below it, because a gradient makes
+  two numbers in a column different colours.
+- **`lib/entity-graph.ts`** — one derived place to ask what an entity connects
+  to across types. It invents nothing: an unresolvable id is dropped rather
+  than turned into a link to a route that may not exist, and name matching is
+  exact-slug-or-exact-title only (fuzzy matching is how "Quercetin /
+  isoquercetin" ends up pointed at a page that is not about that thing).
+- **`EntityChips`** — each chip carries its kind as a glyph AND an accent
+  (never colour alone), and a compound chip carries its evidence tier,
+  because a link to a Tier C compound and a link to a Tier A compound are not
+  the same invitation.
+- **`lib/page-connections.ts`** for pages no registry can reach. Clusters are
+  DECLARED — a generated "related pages" block is exactly the
+  random-links-everywhere failure it would be trying to fix — but siblings
+  within a cluster are derived, so a page added to a cluster links itself
+  from every other member.
+- **Search routed through the knowledge graph.** The header box handed its
+  query to `/library?q=`, which only searches compounds; it now opens the
+  command palette pre-populated, which searches everything and labels each
+  result with the kind of thing it is. All 19 pathways indexed, keyed on the
+  pathway registry's own `aliases` field. `/library?q=` still works and still
+  backs the WebSite SearchAction.
+
+**Three new gates, so none of this drifts back.**
+
+- `audit-ui.mjs` micro-type gate (budget 0). Replaces the old `minFont`
+  probe, which its own docstring admitted was dominated by SVG.
+- `audit-routes.mjs` dead-end gate, exempting routes with almost no body text
+  (a redirect stub has nothing to link FROM, and failing it would just invite
+  padding). The floor is deliberately low: it catches pages linking to
+  NOTHING, not pages that could link to more.
+- `lib/type-scale.test.ts` gates the ladder at the SOURCE, so a bypass fails
+  the moment it is written, including in a component no audited page renders.
+
+**Deliberately not done, and why.**
+
+- Snapping the fluid display clamps onto the fixed ladder. See above.
+- Raising SVG `<text>` to the 11px floor. Inside a scaled viewBox its computed
+  size is in user units, not screen pixels, and these are molecular-diagram
+  annotations whose size is set by the bond geometry. Their accessibility
+  answer is the text fallback every visualization owes (CLAUDE.md §12).
+- Repainting the site purple. The brief asked to preserve the existing
+  palette; TNiC's is cyan/emerald/violet, and repainting would have
+  contradicted the same instruction it came with.
+
+**Measured.**
+
+```
+route audit        228 routes, fail 0, warn 0      (was 21 dead-end failures)
+in-body links      /pathways 22 -> 64, /sirtuin-atlas 0 -> 23,
+                   /stacks 3 -> 18, /labs 5 -> 18
+rendered sizes     34 -> 27 distinct at 1440px, 33 -> 26 at 390px
+raw font-sizes     138 -> 1 (the SVG exemption), gated by test
+micro-type         0 HTML text nodes under 11px   (was 198 at phone width)
+tap targets        0 actionable sub-24px
+axe                0 violations
+```
+
+**A measurement mistake worth recording.** An intermediate reading of "22
+distinct sizes" was wrong: it came from a browser pointed at a `next start`
+process running since several builds earlier, serving a stale route manifest
+against new CSS chunk names. Always start the server AFTER the build you mean
+to measure, and cross-check one number against a direct computed-style probe.
+
+## 2026-09-13 (seventh pass) — instrument material, sitewide
+
+**The question asked:** mechanical upgraded visual experience, significantly
+improve UI sitewide. Token-driven, cascading, not page-by-page restyles.
+
+**What was actually missing.** The sixth pass gave `/library` a real
+instrument and an honest identity. Everything else still arrived looking like
+a SaaS template wearing a science coat:
+
+- Inter was the body face. Same stack as Linear, Vercel, every default
+  Next.js app. The display face (Fraunces) and the data face (JetBrains)
+  were chosen; the text plane was not.
+- Eleven cinematic hubs still filled the right-hand column with the
+  decorative molecular field, even when they had a countable, derived set
+  (stacks, protocols, trust, tools, insights, products, peptides, pathways,
+  hallmarks, learn, combination lab).
+- Labs / trust / protocols still printed a literal `'12'` on the hallmark
+  rail. Peptides still said "Eight" in the PageHeader.
+- Chrome — nav, tables, inputs, selection — did not yet read as the same
+  instrument the library had become.
+
+**Deliberately not done, and why.**
+
+- Absorbing stale PR #178's full Hanken branch (library gallery restructure).
+  This pass takes the font intent only.
+- Scoring the 20 unscored compounds, or converting 100 inline molecule SVGs
+  to `<img>`. Same reasons as the sixth pass; neither is a visual-system job.
+- Restyling `/club` or `/shop` — CLAUDE.md: those keep bespoke treatments.
+- Rewriting the homepage descent. Already-good work; Hanken inherits through
+  `--font-sans` without touching the scrollytelling.
+- Putting a data figure on hubs with nothing honest to split (`/best` is nine
+  goals, `/labs` biomarkers have no category axis, `/shop` is a checklist).
+  Decorative field + caption remains the honest fallback.
+
+**Shipped.**
+
+- **Hanken Grotesk** as `--font-sans` (`--font-hanken`). Inter retired from
+  layout, globals, viz tokens, NetworkStage, HomeDescent, and the engine
+  comment. Optical sizing + kern/liga/calt on body.
+- **`HubSplitInstrument`** — shared server primitive. Counts and colours are
+  the caller's problem; the component never invents either. Compact layout
+  when a split has more than four rows; non-zero bars keep a 4px minimum so
+  small slices stay visible.
+- **Derived figures** on hallmarks (intervention A/B/C), peptides (legal
+  status), pathways (families), evidence (library wrap), stacks (elite-stack
+  grades), stacks/lab (synergy / caution / contraindication), tools (New /
+  Advanced / Core), trust (scored-set A/B/C), protocols (protocol grades),
+  insights (library mix), products (COA published vs not stated), compound
+  engine (A–D including D), supplement-guides (guides / profiles /
+  comparisons), learn (FAQ / glossary / steps).
+- **Hardcoded counts removed:** labs / trust / protocols hallmark rail now
+  `hallmarkLibrary.length`; peptides PageHeader uses `peptideLibrary.length`.
+- **Cascading chrome:** `::selection`, light-theme grain whisper, nav HUD
+  tick, sticky table headers, input inner highlight, data-figure bezel.
+- **STYLE_GUIDE v1.7 / §17.** §3 names the three faces. §7 records
+  `titleAsHeading` and the data-figure rule.
+
+**Checks.** Lint, typecheck, the test suite including the new instrument /
+Hanken / derived-count guards, and a production HTML spot-check of
+`/library`, `/hallmarks`, `/peptides`, `/pathways`, `/stacks`, `/trust`.
+
+**Rollback:** `git revert` the merge of this branch.
+
+## 2026-09-13 (sixth pass) — the library tells the truth about itself
+
+
+**The question asked:** independently determine and ship the most significant
+upgrades, rather than wait on an external patch.
+
+**What was actually missing.** Five passes today already gave the library an
+evidence table, a molecule-first grid, a two-column hero shell, and a route
+audit. The remaining hole was identity, not features. Measured against live
+HTML of `/library`:
+
+- The `<h1>` was still "The 12 Hallmarks of Aging", rendered *below* the
+  100-card compound grid, because `AntiAgingLibrary asPageTitle` owned the
+  heading and `CinematicHubHero` left `titleAsHeading` off.
+- The `<title>` and hero lead named the hallmarks as the product. The page
+  the visitor was looking at is the compound library.
+- The hero's right-hand instrument panel — built this morning so eleven hubs
+  would stop shipping 45% empty viewport — still showed the decorative
+  molecular field on the one hub that has a real, derived evidence split.
+- `/library/compare/head-to-head` (canonical, no query) shipped identity and
+  a skeleton. The default comparison (resveratrol vs pterostilbene) lived
+  behind the `searchParams` island, so the indexable address had ~675
+  characters of `<main>` text.
+- Sitemap `lastmod` was frozen at 2026-08-27, seventeen days and five
+  production merges behind.
+
+**Deliberately not done, and why.**
+
+- Scoring the 20 compounds the Evidence Table marks *Not scored*. They have
+  no `compoundId` in the structured set. Promoting them would mean inventing
+  mechanism/dose/PMID fields, which `NOTES-COMPOUND-LIBRARY.md` forbids.
+- Turning 100 inline molecule SVGs into `<img>` thumbs. It would cut `/library`
+  HTML roughly in half, and it would also stop the thumbs inheriting
+  `currentColor` across themes. Visuals were the stated priority of the
+  surrounding work; that regression is still not worth the bytes today.
+- Authoring new synergy-pair prose. Coverage is already 51/51 pair-specific
+  (`synergy-coverage` floor). The upgrade plan's 19.6% figure is stale.
+
+**Shipped.**
+
+- **Library identity.** Hero is the `<h1>` ("Every intervention, graded").
+  Title, description and lead name the `${COMPOUND_COUNT}`-compound library.
+  Hallmark atlas is the second chapter (`h2`), with its local search hidden
+  because the hub already has one. Hallmark count derived from
+  `hallmarkLibrary.length`, never a literal `12`.
+- **A real instrument in the hero.** `LibraryHeroInstrument` draws the A/B/C
+  split and the scored/unscored counts from `evidenceIndexStats()`, colours
+  from `TIER_COLOR_VAR`, and links to the Evidence Table. The hero's
+  atmospheric radial mask is skipped when a data figure is passed
+  (`.research-hero__figure-stage--data`) so labels stay readable.
+- **CollectionPage JSON-LD** on `/library`, with `numberOfItems` derived.
+- **Head-to-head canonical URL.** The Suspense fallback is now the default
+  pair's full comparison, not a skeleton. Crawlers get the duel. When the
+  island resolves to that same pair, nothing flashes. Parameterized URLs
+  still swap; they canonicalise here and are not in the sitemap.
+- **Sitemap `lastmod`** aligned to 2026-09-13.
+- **Atlas copy.** The visual-gallery chapter dropped "COMPLETE VISUAL SYSTEM"
+  / "Hover to explore" for derived hallmark count and a sentence that states
+  the honesty point (first-party mechanism drawings, no stock art).
+
+**Checks.** Run on this branch before the PR: lint, typecheck, the test
+suite including the new identity / fallback / lastmod guards, and a
+production HTML spot-check of `/library` (one `<h1>`, compounds in the
+title) and `/library/compare/head-to-head` (default pair in `<main>`).
+
+**Rollback:** `git revert` the merge of this branch.
+
+## 2026-09-13 (fifth pass) — the Evidence Table
+
+
+**The question asked:** continue UI and coherence work, add state-of-the-art
+visual and content assets, with the goal of increasing what the site is worth.
+
+**What was actually missing.** The route survey says the content architecture
+is dense — 100 compound deep-dives, 19 pathways, 18 comparisons, 9 goal pages,
+8 peptides. The gap was not more pages. It was that **the library had no index
+of itself**: 100 compounds browsable as cards, and no single view where every
+grade sits beside every other one. A reader who wants to compare the whole set
+had nowhere to go, and a crawler had no single hub linking to all 100 deep-dives.
+
+Two things were deliberately NOT built, and the reasoning matters:
+
+- **More comparison pages.** The head-to-head engine can compare any pair of
+  the 81 comparable compounds — thousands of permutations. Generating them
+  would be a doorway-page pattern that Google penalises and that would dilute
+  the 17 genuinely authored comparisons. Page count is not value.
+- **Anything authored.** Per `NOTES-COMPOUND-LIBRARY.md`, no mechanism text,
+  dose or PMID may be invented. Every field in the new page is read from a
+  registry that already publishes it on the compound's own page.
+
+**Shipped — `/library/evidence`, "The Evidence Table".**
+
+Every graded compound as one sortable, filterable row: tier, composite TNiC
+Score, score confidence, hallmark coverage, linked to its deep-dive.
+
+- **`lib/evidence-index.ts`** — a derived view, not a data file.
+  `compoundModules` for identity and tier, `computeTnicScore` for the composite
+  and its provenance, `hallmarkLibrary` for mechanism labels. Headline counts
+  are computed from the rows themselves, so a figure on the page cannot drift
+  from the table under it.
+- **It ships the gaps.** 20 of the 100 have no computable score. They stay in
+  the table marked *Not scored* rather than being dropped or given a filler
+  number — a table of 80 calling itself the library would be a quieter lie than
+  a missing row. An honesty panel in front of the table states that 57 of the
+  80 composites rest on a canonical record at **limited** confidence, and that
+  the tier — not the score — is the claim the site stands behind.
+- **Server-rendered.** A plain `useState` client component, deliberately not a
+  `useSearchParams()` one, so all 100 rows are in the initial HTML (§14).
+  Verified: 100 compound links, 101 `<tr>`, no bailout over the table.
+- Described to answer engines as a **`Dataset`**, with `variableMeasured`
+  naming each column, rather than as an Article.
+- Linked from the footer, from the compound explorer on `/library` at the point
+  a reader stops browsing and starts comparing, and added to the sitemap at
+  priority 0.9 — it is the index a crawler should reach earliest to find the
+  other hundred.
+- **8 guardrail tests** asserting the table says what the deep-dives say: same
+  tier, same score or null, no invented confidence, every row links to a real
+  module, only real hallmark names, counts derived from rows.
+
+**A design-system bug the build surfaced.** `.table-base th` styled *every*
+`th` as a column header — mono, uppercase, faint — so row headers, the
+accessible way to label a data row, rendered as uppercase mono labels.
+Three existing tables (`HeadToHeadCompare`, `SirtuinAtlas`, `ConnectionMatrix`)
+had each worked around it locally with their own overrides. Now scoped: `thead
+th` keeps the column treatment, `tbody th` gets a real row-header treatment.
+Fixed once, for every table.
+
+**A guardrail caught me.** The first version declared its own tier→colour map.
+`site-integrity.test.ts` failed it — that map is canonical in `lib/trust.ts`
+and must not be re-declared. It was right; the component now imports
+`TIER_COLOR_VAR`.
+
+**Measured.** `/library/evidence`: LCP 708 ms, CLS 0.008, doc 55 KB, total
+1,113 KB encoded — lighter than `/library` despite 100 rows, because rows are
+text rather than inline SVG. axe violations 0, actionable sub-24px controls 0,
+at desktop and 390px. Route audit 228 routes, 0 fail, 0 warn.
+
+**Why this should matter commercially, stated as a hypothesis rather than a
+promise.** One page now links to all 100 deep-dives, which strengthens the
+crawl graph over the library's most valuable pages; a sortable evidence table
+is the kind of reference people cite and link to; and it routes comparison
+intent toward deep-dives that carry verified product picks. Whether that moves
+traffic or revenue is measurable in Search Console and analytics over weeks —
+it is not something this session can claim to have achieved.
+
+**Checks:** `npm run lint` 0 errors (3 pre-existing warnings) · `npm run
+typecheck` clean · `npm test` 58 files → **722 tests** (8 new) · `npm run
+build` green · `npm run audit:routes` 228 routes, 0 fail / 0 warn ·
+`npm run audit:ui` 0 actionable / 0 axe · `npm run audit:perf` within budget.
+
+**Rollback:** `git revert` the merge of this branch.
+
+## 2026-09-13 (fourth pass) — performance, measured properly
+
+**The question asked:** start making the site state of the art.
+
+**What that turned out to mean.** "State of the art" is not a look — the visual
+system is in good shape after the last three passes. It is whether the site's
+quality is *measured and enforced* rather than asserted. There were two
+instruments (`audit:ui` for layout/contrast/tap targets, `audit:routes` for
+structure over every route) and neither could answer "how long does this take
+to become useful, and how many bytes does it spend getting there". So this pass
+built the third one and calibrated it honestly.
+
+**The baseline, median of three runs, encoded bytes.**
+
+| route | LCP | CLS | doc | js | css | fonts | total |
+|---|---|---|---|---|---|---|---|
+| `/` | 404 ms | 0 | 69 | 714 | 50 | 186 | 1,141 KB |
+| `/library` | 640 ms | 0 | 261 | 783 | 50 | 186 | 1,402 KB |
+| `/library/compounds/nmn` | 460 ms | 0.008 | 75 | 788 | 50 | 187 | 1,207 KB |
+| `/trust` | 660 ms | 0.008 | 37 | 718 | 50 | 167 | 1,095 KB |
+| `/stacks` | 572 ms | 0.008 | 36 | 741 | 50 | 167 | 1,081 KB |
+| `/hallmarks` | 668 ms | 0.008 | 47 | 716 | 50 | 186 | 1,091 KB |
+
+LCP and CLS are comfortably inside Core Web Vitals "good". Code splitting
+works — `three`, `recharts` and `framer-motion` are all absent from a content
+page's bundle, verified by grepping the actual shipped chunks. **The site was
+in better shape than the first measurement suggested.**
+
+**Two corrections to my own numbers, both worth recording.**
+
+1. **I reported 3.5–4.8 MB transferred per page in the last session. That was
+   wrong.** Playwright's `response.body()` returns the *decoded* buffer, so I
+   was measuring uncompressed bytes against a local server. Real encoded
+   transfer is ~1.0–1.4 MB. `audit:perf` now reads
+   `request.sizes().responseBodySize` and prints the decoded total beside it so
+   the gap is visible rather than assumed.
+2. **A single run is not a measurement.** The same page on the same build
+   measured LCP 700 ms, 1356 ms and 588 ms on three consecutive loads. An
+   earlier reading of "LCP 768 → 1536 after the change" was noise, not a
+   regression, and I nearly acted on it. Every metric is now the median of
+   three runs.
+
+**What is gated and what is not.** CLS (stable to three decimals) and total
+encoded KB (< 10% run-to-run) gate. LCP is reported with its min–max range and
+only warns: it swings over 2× on a shared runner, and a CI check that fails at
+random gets switched off, which is worse than not having one.
+
+**Shipped — the one real win.** `.card-deferred` — `content-visibility: auto`
+with `contain-intrinsic-size` — on the 100-card `/library` grid, the heaviest
+page on the site. A/B'd on a single build, five runs each side, three
+independent rounds:
+
+| | longest task | total blocking |
+|---|---|---|
+| off | 329 / 359 / 310 ms | 1,026 / 1,034 / 979 ms |
+| on | **257 / 259 / 243 ms** | **792 / 867 / 783 ms** |
+
+Consistently **−22% to −28% on the longest main-thread task** and **−16% to
+−23% on total blocking time**. `domComplete` moved both ways and showed no
+signal; reported as no effect rather than dressed up.
+
+**Named and not done.** ~700–790 KB of compressed JS per page is the honest
+remaining cost, spread across ~48 chunks — many small client islands, not one
+library to delete. Reducing it means converting client components to server
+components and deferring below-fold islands: a large refactor across 54+ files
+with real regression risk, and not something to start at the end of a pass.
+That is the next genuine performance project.
+
+`audit:perf` needs a browser, so like `audit:ui` it runs locally rather than in
+CI; `audit:routes` is fetch-only, which is why that one gates the build.
+Enforcing perf in CI would mean provisioning Chromium there — a deliberate
+cost, not an oversight.
+
+**Checks:** `npm run lint` 0 errors (3 pre-existing warnings) · `npm run
+typecheck` clean · `npm test` 58 files / 714 tests · `npm run build` green ·
+`npm run audit:routes` 0 fail / 0 warn over 227 routes · `npm run audit:ui`
+0 actionable sub-24px controls, 0 axe violations · `npm run audit:perf` all
+pages within budget.
+
+**Rollback:** `git revert` the merge of this branch.
+
+## 2026-09-13 (third pass) — the hub hero stops being a void
+
+**The question asked:** upgrade the site on multiple levels, ~30% better UI and
+functionality, visuals weighted highest.
+
+**What the screenshots showed.** Eleven hub pages, measured at 1440×900: every
+one opens with `CinematicHubHero` as a single left-aligned column, and
+**roughly 45% of the first viewport is empty**. The `MoleculeStage` field meant
+to fill it sits at 0.34 opacity behind a veil, masked toward 48%/34% — i.e.
+behind the copy, not in the gap — and reads as nothing. The component is named
+cinematic and renders dark air on the site's eleven most important arrival
+surfaces.
+
+The answer was already in the codebase. Hallmark pages pair copy with a real
+figure on the right (coverage ring, ranked interventions, biomarker chips) and
+are the best-looking thing on the site. Per CLAUDE.md §6 — does something like
+this already exist, and does it clear the bar — the hero now does the same.
+
+**Shipped — visual.**
+
+- **Two-column hero at ≥1024px.** Copy left; a framed **instrument panel**
+  right carrying the hub's molecular field at full strength, masked to fade
+  into the panel, with a mono caption naming what the visual is
+  (`Molecular field · decorative` by default — a site that grades evidence has
+  to say whether a picture is data or atmosphere). Stat rail spans both
+  columns as the composition's base. Phone and tablet unchanged; the figure is
+  `display:none` below 1024px, where the copy already fills the width.
+- **A `figure` prop** so a hub with a real data figure can pass one and caption
+  it honestly.
+- **Background field re-tuned** at ≥1024px: 0.34 → 0.26, mask moved to 26%/38%,
+  so it textures the copy column's ground instead of competing with the panel.
+- **Compound card chips pinned to the bottom** (`mt-auto`) across the 100-card
+  browse grid, so chip rows sit on one baseline per row instead of floating
+  wherever the tagline ended.
+
+Documented as STYLE_GUIDE §15, including the two traps that cost a build each:
+the stat rail spans `1 / -1`, so auto-flow drops the figure onto a third row
+unless rows are pinned; and the rail's `width: min(100%, 50rem)` base rule is
+defined later in the file, so the media-query override needs parent scoping to
+beat it (a media query adds no specificity).
+
+**Shipped — functional.**
+
+- **`/library` HTML: 3,021 KB → 2,651 KB (−12.3%).** The molecule thumbs
+  emitted IEEE-double coordinates — `x1="43.78637600033787"`, 18 characters to
+  place a point on a 0–100 viewBox that renders at 72 CSS pixels, where 2dp is
+  already ~700× finer than a device pixel. Paid for twice, because the RSC
+  Flight payload re-encodes the same element tree the HTML already carries.
+  Rounded to 2dp at the projection choke point plus the derived bond offsets
+  and atom radii. Verified pixel-identical against a before screenshot.
+
+**Measured but not fixed, stated plainly.** `/library` is still 2,651 KB —
+708 KB of inline `<svg>` and 1,344 KB of Flight payload re-encoding it. The
+only way to remove that duplication is to stop inlining 100 SVG element trees,
+i.e. serve each thumb as an `<img>` from a static route with `loading="lazy"`.
+That would likely take the page under 1 MB and lazy-load all but the visible
+thumbs — but an `<img>` cannot inherit `currentColor`, so the thumbs would stop
+adapting to light/dark theme. Given visuals were the stated priority, the
+theming regression was not worth the bytes on this pass. It is the right next
+functional move if page weight becomes the priority.
+
+**Checks:** `npm run lint` 0 errors (3 pre-existing warnings) · `npm run
+typecheck` clean · `npm test` 58 files / 714 tests · `npm run build` green ·
+`npm run audit:routes` 0 fail / 0 warn across 227 routes · `npm run audit:ui`
+0 actionable sub-24px controls, 0 axe violations. Light theme, dark theme and
+390px phone all verified by screenshot on the new hero.
+
+**One transient worth recording:** an `audit:ui` run reported a single axe
+colour-contrast violation on phone `/library`; a second run reported zero. That
+is the false positive the script's own header documents — axe measures what is
+painted at that instant, and a scroll reveal caught mid-fade composites toward
+the background.
+
+**Rollback:** `git revert` the merge of this branch.
+
+## 2026-09-13 (second pass) — what the pages say before JavaScript runs
+
+**The question asked:** find the highest functional and coherence upgrade,
+implement it, ship it.
+
+**How it was found.** `audit:ui` measures nine pages in a browser. It cannot
+see a property of the whole route set — two pages claiming the same title, a
+canonical pointing elsewhere, a page with no heading. So this pass started by
+building a second instrument, `scripts/audit-routes.mjs` (`npm run
+audit:routes`), which fetches **every route in the sitemap** and reads its
+server-rendered HTML: status, title, description, canonical, `<h1>` count,
+whether `<main>` holds real text, whether every internal link resolves, and
+whether every route is linked from anywhere.
+
+First run: **25 hard failures, 8 warnings, across 234 routes.** Lint, types,
+714 tests and the build were all green at the same moment.
+
+**What it found — one root cause under almost all of it.**
+
+`useSearchParams()` in a client component makes React bail the enclosing
+Suspense boundary to client-side rendering during prerender. Everything inside
+that boundary is absent from the initial HTML. Seven routes had their page
+identity inside such a boundary:
+
+1. **Five top-level nav hubs shipped no `<h1>` at all** — `/stacks`, `/labs`,
+   `/learn`, `/shop`, `/tools`. The `PageHeader` that carries the `<h1>` lived
+   inside the client island. STYLE_GUIDE §7 documents the opposite ("the real
+   `<h1>` lives in the PageHeader") — the pattern was written down and not
+   delivered.
+2. **Two routes shipped an empty `<main>`** — `/library/systems` and
+   `/tools/pathway-architect`, both carrying the literal
+   `BAILOUT_TO_CLIENT_SIDE_RENDERING` marker CLAUDE.md §3 names as the symptom.
+   Pathway Architect had **no `<main>` element at all**: with no Suspense
+   boundary of its own the bailout climbed to the root and took the layout's
+   `<main>` with it.
+3. **`/library/compare/head-to-head` streamed its content after the footer** —
+   `</main>` closed at byte 51,087, `<footer>` opened at 51,100, and all 318 KB
+   of the comparison arrived afterwards. Cause: a segment `loading.tsx`, the
+   exact pattern PR #180 removed from 142 routes. Its own doc comment explains
+   why that is wrong and then argues the cost is acceptable here because it is
+   one route; measured, the failure is identical in kind.
+4. **`/learn` rendered two hero bands** — `LearnCenter` carried a second
+   `CinematicHubHero` under the page's own, with different copy. Invisible in
+   the HTML, two stacked heroes once the island hydrated.
+5. **Eight sitemap URLs shared one title** — `/tools` plus seven
+   `/tools?tab=…` variants, every one of them canonicalising back to `/tools`.
+   A sitemap entry the page canonicalises away is a contradiction.
+
+**Shipped.**
+
+- **Identity moved to the server page on all seven routes** — hero and
+  `PageHeader` above the `<Suspense>`, interactivity below it. Documented as
+  STYLE_GUIDE §14.
+- **`/tools/pathway-architect` got a Suspense boundary of its own**, so the
+  bailout stops at the tool instead of the root.
+- **`/library/compare/head-to-head`**: `loading.tsx` deleted, the awaiting half
+  split into `HeadToHeadResult` behind a scoped boundary. Loading state kept,
+  content back inside `<main>`.
+- **`/learn`**: duplicate hero and nested `PageShell` removed.
+- **Sitemap**: the seven `?tab=` entries dropped.
+- **`npm run audit:routes` runs in CI after the build and fails it.** This
+  class of defect is invisible to lint, types, tests and the build — all four
+  were green while five hubs published no heading.
+
+**Measured result.**
+
+| | before | after |
+|---|---|---|
+| hard failures | **25** | **0** |
+| warnings | 8 | 0 |
+| routes with no `<h1>` | 7 (14 incl. `?tab=`) | 0 |
+| routes with empty `<main>` | 3 | 0 |
+| routes with a wrong canonical | 7 | 0 |
+| duplicate-title groups | 1 (8 URLs) | 0 |
+
+Per-route, `<main>` text in the initial HTML: `/stacks` 0→3,190 chars,
+`/labs` 0→1,998, `/learn` 0→6,242, `/shop` 0→1,834, `/tools` 0→1,354,
+`/library/systems` 0→678, `/tools/pathway-architect` 0→2,085,
+`/library/compare/head-to-head` 0→679. Each now ships exactly one `<h1>`.
+
+**One guardrail was repointed, not weakened.** `site-integrity.test.ts`
+asserted `variant="handoff"` appeared in `LabHub.tsx` and `StacksLibrary.tsx`.
+That markup moved up into `app/labs/page.tsx` and `app/stacks/page.tsx`. The
+assertion is unchanged — those two hubs must still use the handoff variant —
+only the file it reads.
+
+**Not touched:** compound data, PMIDs, doses, the homepage, the atmosphere
+work from the first pass.
+
+**Checks:** `npm run lint` (0 errors, 3 pre-existing warnings) · `npm run
+typecheck` clean · `npm test` 58 files / 714 tests passed · `npm run build`
+green · `npm run audit:routes` exit 0 (0 fail, 0 warn) · `npm run audit:ui`
+exit 0 (actionable sub-24px controls: 0, axe violations: 0).
+
+**Rollback:** `git revert` the merge of this branch.
+
+## 2026-09-13 — UI aesthetic verdict + the atmosphere budget and control floor
+
+**The question asked:** evaluate the site and decide the most scalable,
+plausible, functional UI aesthetic, then implement it.
+
+**The verdict, stated plainly: the aesthetic is already right — do not
+redirect it.** Dark instrument base, cyan-explores / emerald-chooses /
+gold-ranks signal roles, Fraunces + Inter + JetBrains Mono, real PubChem
+geometry and real graded networks as the imagery. It is distinctive,
+subject-grounded, and carries none of the generic tells. Anything proposing a
+new palette or a new hero idiom here would be replacing working, considered
+work with something less specific. What was missing was not a direction — it
+was the **second half of the direction**: the system had an excellent
+*cinematic* tier and no codified *instrument* tier. Named and documented as
+**"cinematic shell, instrument core"** in the new STYLE_GUIDE §13.
+
+**What that gap actually cost, measured on the rendered site**
+(`npm run audit:ui` at 1440px and 390px, nine representative routes — not read
+off the code):
+
+1. **The ambient field was reaching the content.** `AmbientLayer` is fixed
+   behind every page and page wrappers are transparent by design
+   (`.canvas-scrim`), but `.premium-card`'s dark-theme fill was white-alpha
+   only — no ground. So the drifting skeletal linework painted *through* card
+   bodies on `/library`, through the buyer-guide band's body copy on all 100
+   compound pages, and, on a phone, straight under the 12-hallmark filter
+   column. Light theme had already solved this (it fills with
+   `--color-bg-elevated`); dark theme was the inconsistent one.
+2. **The control layer had not kept pace with the atmosphere layer.** 1,187
+   sub-24px tap targets across the nine routes. The worst were not marginal:
+   the homepage age scrubber under the morbidity curve — the flagship
+   interactive — had a **3px-tall** drag box, and `.age-slider` (the canonical
+   `Slider` primitive, plus the bio-age wizard and hallmark notes panel) had
+   **6px**. The footer shipped 28 links at 23px on every one of 431 routes.
+3. **The `smallTap` number itself was not actionable.** On `/library` it read
+   135, of which ~120 were PMID and glossary links sitting inside sentences —
+   targets WCAG 2.2 AA 2.5.8 explicitly exempts. The real number was buried.
+
+**Shipped.**
+
+- **`--card-ground`** — one token, both themes. Third background layer of
+  `.premium-card` (92% elevated in dark, opaque in light), and under the
+  compound buyer-guide band's amber→cyan wash. The field still reads faintly
+  through a card; it no longer competes with the text inside one.
+- **Phone density correction** — `.molecule-node` depth opacities step down
+  ~45% under 768px, where a structure spans most of the screen instead of a
+  fraction of it and there are no margins for it to live in. Desktop tuning
+  untouched; the field keeps full strength in gutters, between cards and
+  behind hero bands.
+- **Sliders rebuilt on track pseudo-elements** — `.age-slider` 6px → **28px**
+  box, `.tnic-range` 3px → **32px**, visual tracks unchanged. Deliberately not
+  44px: both sit in stacked rows whose neighbours are closer than that, and §4
+  records two incidents of an over-grown hit area stealing its neighbour's tap.
+- **`.action-link`** — the new system class for a link that is an *action*
+  rather than a word in a sentence. Applied across the library's panel footers,
+  related-link lists, citation rows and reference lists. Grows the hit area,
+  never the type.
+- **Point fixes** to the footer hub/resource columns, the route rail, the
+  breadcrumb bar, the reading ToC, the linked `EvidenceTag` (fixed in the
+  canonical component, so every surface that renders a linked tier inherits it),
+  `EvidenceTrace`, `ContentByline` and the buyer-guide compare link.
+- **`npm run audit:ui` is now a gate.** It separates exempt (inline-in-a-
+  sentence, hit through a ≥24px `<label>`, stretched-link card titles,
+  `sr-only`) from actionable (standalone controls under 24px) and **exits
+  non-zero** on the second. Budget 0. Its one known blind spot — a standalone
+  action left as a bare inline `<a>` — is documented in the script rather than
+  papered over.
+
+**Measured result.**
+
+| Route (phone / desktop) | sub-24px before | after |
+|---|---|---|
+| `/` | 54 / 50 | **5 / 5** |
+| `/library` | 120 / 135 | 84 / 93 |
+| `/library/compounds/nmn` | 102 / 118 | 34 / 41 |
+| `/library/compare/nmn-vs-nr` | 37 / 45 | 4 / 4 |
+| `/smoker-defense-stack` | 42 / 49 | 4 / 5 |
+| `/supplement-guides` | 36 / 44 | 7 / 9 |
+| `/trust` | 33 / 39 | 4 / 4 |
+| `/stacks` | 36 / 42 | 4 / 4 |
+| `/library/mitochondrial-dysfunction` | 83 / 102 | 24 / 35 |
+| **total** | **1,187** | **373** |
+
+Actionable sub-24px controls: **0** (gate passes). axe-core violations: **0**
+across all 18 page×viewport combinations, unchanged. The residual `smallTap`
+count is inline prose citations, which is where it should be.
+
+**Not touched:** the homepage descent, hub hero idiom, `.glass-deep` glass
+moments, desktop field tuning, compound data, PMIDs, doses.
+
+**Checks:** `npm run lint` (0 errors, 3 pre-existing warnings) · `npm run
+typecheck` clean · `npm test` 58 files / 714 tests passed · `npm run build`
+green, 431 routes · `npm run audit:ui` exit 0.
+
+**Rollback:** `git revert` the merge of this branch.
+
+## 2026-09-12 — Surface identity: molecule-first library + one overture per deep-dive
+
+**The finding, measured on the live site.** The homepage cinematic descent is
+already the brand. The two surfaces that do the work — `/library` browse and
+the 100 compound deep-dives — were still generic next to it.
+
+1. **Library cards had no visual identity.** PR #182 put real PubChem geometry
+   on compound *pages*. The browse grid that leads to those pages was still a
+   text card: tier chip, title, tagline, hallmark chips. 100 cards, one
+   picture. On a phone that is a CMS dump, not a library of molecules.
+2. **Compound pages said the name four times before the evidence.** Order on
+   `/library/compounds/glynac`: CompoundHero → Full-Spectrum data package →
+   Intelligence Matrix → LibraryModuleDetail (icon + h1 + tagline + summary +
+   glance panel, repeating dose/tier/hallmarks the hero already printed). The
+   MDX — the reason the page exists — started ~a viewport later. Chip soup
+   was the first impression.
+3. **`/library` buried the compound grid** under DecisionSteps, the evidence
+   spectrum, the research-queue shelf, and the 12-hallmark atlas. Search is
+   high-intent; the grid it is meant to drive was the fifth block.
+
+**Shipped.**
+
+- `MoleculeThumb` — server SVG of the same geometry MoleculeStage draws.
+  Honesty contract identical: no geometry → orbital field, never a fabricated
+  molecule. Ships in the initial HTML; the 115 KB geometry file stays off the
+  client explorer bundle.
+- Compound cards: 72px unique thumb + title + two hallmark chips. Grid is a
+  **server** component; tier pills remain a client island (`CompoundExplorerFilters`).
+- `/library` order: hero → search → facets → **compound grid** → spectrum →
+  decision path → hallmark atlas. `#hallmark-atlas` kept (palette + brief
+  deep-links).
+- Deep-dive order: hero → sticky bar → **evidence module** → full-spectrum
+  appendix → intelligence matrix. `heroPresent` suppresses the second identity
+  stack (icon, tagline, summary, glance, evidence-trace) so the semantic `<h1>`
+  is the only name restatement, and it is a section heading, not a second hero.
+  Hero gains a "Read the evidence" skip to `#evidence-module`.
+
+**Not touched:** homepage descent (CLAUDE.md §2 — already-good work), compound
+data, PMIDs, doses.
+
+**Rollback:** `git revert` the merge of this branch.
+
 ## 2026-09-04 (third pass) — NICO starter: the safety screen it claimed but never ran
 
 **The finding.** The homepage NICO starter (section 06) collected age, activity
@@ -1186,6 +2202,96 @@ texts).
   the tooling installed. If a future session wants this automated, add
   `@axe-core/playwright` as a devDependency (repo already has `playwright-core`
   for the Chromium binary).
+
+---
+
+## Visual pass — v14 "lit ground" (branch `claude/ui-design-visual-pass-sa6c4p`)
+
+*Method: built the site, served it, and screenshotted `/`, `/library`,
+`/hallmarks`, `/hallmarks/cellular-senescence`, `/stacks`,
+`/library/compounds/spermidine` and `/trust/methodology` at 1440×900 and
+390×844 in both themes — before and after. Everything below was found by
+looking at a render, not by reading the stylesheet.*
+
+### What was found
+
+1. **The page ground was a flat slab.** `--color-bg-base` edge to edge on every
+   route that is not the homepage or a hero band, with the only relief being the
+   fixed `.ambient-layer`, which is corner-masked and effectively invisible on
+   the dense hubs. `/library` and `/hallmarks` rendered as content floating on
+   unlit black.
+2. **The elevated plane was not a plane.** `--color-bg-elevated` `#080f1c` is a
+   ~3% luminance step over `#020811` — under the threshold at which a dark
+   surface reads as raised. Every card, panel, table header and popover resolves
+   to it (directly or via `--card-ground` / `--glass-fill-*` / `--glass-bg`), so
+   the whole surface ladder was compressed into nearly one tone.
+3. **`.page-header__eyebrow` had no base definition** — only the `--handoff`
+   modifier did. The element is a `<div>`, so on every page using PageHeader's
+   default variant the eyebrow rendered as a *block*: a `.card-ultra` pill
+   stretched to the full width of its `max-w-4xl` header. On
+   `/trust/methodology` that is a 900px capsule around the words "TRUST ·
+   METHODOLOGY". Affected the whole trust/legal/utility set.
+4. **Long-form pages were composed hard-left.** `TrustPageTemplate` caps its
+   content at `max-w-4xl` (56rem) but sat inside the 80rem hub container, so at
+   1440px the column hugged the left edge with 24rem of empty page beside it.
+5. **The molecular field crossed running text.** §13 already states the rule
+   ("the field keeps the margins"), and `--card-ground` enforces it for cards —
+   but nothing enforced it for prose. A benzene ring sat behind the second line
+   of `/trust/methodology`'s page description.
+6. **The homepage compass cardinals were struck through by their own dial.**
+   The four `<text>` nodes sat at x=22 / x=218 inside a 240 viewBox whose outer
+   ring runs r=102 (x=18…222), so the ring stroke and the 12 hallmark ticks ran
+   *through* "NRF2" and "mTOR" — on the site's signature first-viewport
+   instrument. And as SVG text they scaled with the viewBox: 11px in a 240-unit
+   box displayed at 132px on a phone is ~6px, half the §3 floor.
+7. **`.heading-accent-rule` ignored the accent system.** Gradient and glow both
+   hardcoded cyan→emerald, so a rose hallmark page, a violet `/stacks` and an
+   amber warning band printed the same cyan dash under headers whose every other
+   element obeyed the per-hub accent.
+8. **`npm run audit:ui` was red.** One `aria-allowed-role` violation
+   (`<a role="listitem">` in the homepage tier-mix list — `listitem` is not an
+   allowed role for an anchor, so AT got a list whose items were not items) and
+   one actionable sub-24px control ("Full ranking", 87×20).
+
+### What changed
+
+| # | Change | Where |
+|---|---|---|
+| 1 | Four ground tokens (`--ground-key` / `-fill` / `-counter` / `-falloff`) composing a lit field, painted on `body` with `background-attachment: fixed`. Both themes define all four | `app/globals.css` |
+| 2 | `--color-bg-elevated` `#080f1c` → `#0b1424`; `--glass-bg` / `--color-bg-surface` tracked. JS mirror updated | `app/globals.css`, `lib/design-system.ts` |
+| 3 | `.page-header__eyebrow` base definition — `inline-flex` | `app/globals.css` |
+| 4 | `PageShell` gains `measure="reading"` → `.container-page--reading` (66rem); TrustPageTemplate uses it | `components/ui/PageShell.tsx`, `components/trust/TrustPageTemplate.tsx`, `app/globals.css` |
+| 5 | `.molecule-cascade` masked out of the centre column ≥1024px. Composition, not dimming — depth opacities untouched | `app/globals.css` |
+| 6 | Compass cardinals become HTML spans in the dial's padding, holding `--type-11` at every size; hidden with their explanatory clause in the compact layout | `components/home/HomeDescent.tsx` |
+| 7 | `.heading-accent-rule` reads `--rule-accent`; PageHeader and SectionShell pass `themes[theme].cssVar` | `app/globals.css`, `components/ui/PageHeader.tsx`, `components/SectionShell.tsx` |
+| 8 | Tier-mix list becomes real `<ul>`/`<li>` markup; "Full ranking" gets `min-h-6` | `components/home/HomeDescent.tsx`, `components/home/HomeInstrumentStrip.tsx` |
+
+Documented as STYLE_GUIDE §22 (guide bumped to v1.12).
+
+### Verified
+
+- `npm run typecheck` — clean.
+- `npm run lint` — 0 errors, 0 warnings.
+- `npm test` — 71 files, 784 tests, all passing. No guardrail test was touched
+  or weakened.
+- `npm run build` — clean.
+- `npm run audit:ui` against a production build, 11 routes × {1440×900,
+  390×844}: **0 axe violations on all 22 combinations** (was 1 rule across 2
+  pages), **0 actionable sub-24px controls** (was 2, budget 0 — the gate was
+  red before this pass), **0 HTML text below the 11px floor**.
+- Light theme screenshotted alongside dark on every sampled page; the ground
+  composition, the reading measure and the eyebrow fix all read correctly there.
+
+### Deliberately not done
+
+- **Elite-card CTA stack.** `HomeEliteInterventions` cards carry five actions
+  ("Read evidence", "Add to protocol", "Open in stacks", "Verify stack",
+  "Verify on <brand>"). That is the CTA redundancy the operating rules' §8.3
+  asks about, but resolving it removes or merges working destinations — an IA
+  decision, not a visual one. Flagged, not executed.
+- **Hub-hero top band.** ~140px of padding above the eyebrow on every
+  `CinematicHubHero`. It read as void on a flat ground; with the lit ground it
+  reads as atmosphere, so it was left alone rather than tuned on a hunch.
 
 ## Open questions for Thomas
 

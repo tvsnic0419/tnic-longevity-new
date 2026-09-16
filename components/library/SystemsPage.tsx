@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Network, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -13,7 +13,6 @@ import { impactPropagations } from '@/lib/relations';
 import { SystemsSynthesisView } from './SystemsSynthesisView';
 import { EmergentEffectsView } from './EmergentEffectsView';
 import { PathwaySynthesis } from './PathwaySynthesis';
-import { PageHeader } from '@/components/ui/PageHeader';
 
 const hallmarkAccent: Record<string, 'cyan' | 'amber' | 'violet' | 'emerald' | 'rose'> = {
   genomic:      'cyan',
@@ -80,25 +79,8 @@ export function SystemsPage() {
   const leverage = leverageByHallmark.get(selected);
 
   return (
-    <div className="min-h-screen canvas-scrim pt-6 md:pt-8 pb-24">
+    <div className="pb-24">
       <div className="max-w-7xl mx-auto px-6">
-        {/* Standardized system header (was a hand-rolled icon-badge + raw
-            text-3xl h1 + separate ContextRail) — PageHeader carries the eyebrow
-            badge, heading-page h1, signature accent rule, and the context rail. */}
-        <PageHeader
-          icon={Network}
-          eyebrow="Systems Synthesis"
-          title="Hallmark Systems Map"
-          description="How do the 12 Hallmarks of Aging interact? Select a hallmark to explore its cross-system effects, molecular leverage score, shared pathways, and emergent synergies."
-          theme="violet"
-          align="left"
-          context={{
-            what: 'Cross-hallmark relationships, cascade propagation, and emergent synergy effects for all 12 Hallmarks of Aging.',
-            why: 'Targeting one hallmark always ripples. Understanding leverage points and feedback loops lets you design interventions that address multiple hallmarks simultaneously.',
-            next: 'Select any hallmark to explore its downstream cascade. High leverage-score hallmarks (mito, senescence, inflammation) affect the most downstream systems.',
-          }}
-        />
-
         <div className="grid lg:grid-cols-12 gap-8">
           {/* Left — hallmark selector */}
           <div className="lg:col-span-4 space-y-2">

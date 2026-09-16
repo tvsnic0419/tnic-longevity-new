@@ -14,8 +14,6 @@ import { exportLabsPartnerJsonString } from '@/lib/lab-partner-export';
 import { analyzeLabs } from '@/lib/lab-analysis';
 import { exportLabsCsv } from '@/lib/labs';
 import { usePlatform } from '@/context/PlatformContext';
-import { PageShell } from '@/components/ui/PageShell';
-import { PageHeader } from '@/components/ui/PageHeader';
 import { TabBar } from '@/components/ui/TabBar';
 import { StatStrip } from '@/components/ui/StatStrip';
 import { Button } from '@/components/ui/Button';
@@ -25,7 +23,6 @@ import { BiomarkerInput } from './BiomarkerInput';
 import { ToolsPromoStrip } from '@/components/tools/ToolsPromoStrip';
 import { LabPartnerPanel } from './LabPartnerPanel';
 import { LabReviewContext } from './LabReviewContext';
-import { getHubContext } from '@/lib/hub-context';
 
 // 'input' is the default tab and stays a regular import. The other four are
 // only ever rendered behind a tab click, so they're lazy — same pattern as
@@ -95,16 +92,7 @@ export function LabHub() {
   };
 
   return (
-    <PageShell>
-      <PageHeader
-        icon={FlaskConical}
-        eyebrow="Lab Analysis & Tracking Hub"
-        title="Your Biomarkers. Your Data. Your Insights."
-        description="Log lab results, visualize trends, map risks to the 12 Hallmarks of Aging, and get stack-aware recommendations — all processed locally in your browser."
-        theme="rose"
-        variant="handoff"
-        context={getHubContext('labs')}
-      />
+    <>
 
       {analysis.markersTracked > 0 && (
         <StatStrip
@@ -205,7 +193,7 @@ export function LabHub() {
       </motion.div>
 
       <LabPartnerPanel />
-    </PageShell>
+    </>
   );
 }
 

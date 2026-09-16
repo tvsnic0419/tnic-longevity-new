@@ -27,6 +27,13 @@ const ELEMENT_COLOR: Record<string, { core: RGB; hi: RGB; glow: string; glowRgb:
   N: { core: [140, 160, 245], hi: [220, 228, 255], glow: "rgba(140,140,245,", glowRgb: [140, 140, 245] },
   S: { core: [240, 210, 120], hi: [255, 244, 210], glow: "rgba(240,196,106,", glowRgb: [240, 196, 106] },
   P: { core: [248, 170, 96], hi: [255, 226, 190], glow: "rgba(245,165,90,", glowRgb: [245, 165, 90] },
+  // Se (selenomethionine) and Co (methylcobalamin) appear in the PubChem-sourced
+  // structures. Without entries here they would silently draw as carbon.
+  Se: { core: [214, 152, 96], hi: [250, 222, 190], glow: "rgba(206,146,92,", glowRgb: [206, 146, 92] },
+  Co: { core: [166, 140, 232], hi: [228, 216, 255], glow: "rgba(158,132,228,", glowRgb: [158, 132, 228] },
+  // Halogens — canagliflozin carries an F, dasatinib a Cl.
+  F: { core: [150, 230, 190], hi: [222, 255, 240], glow: "rgba(142,224,184,", glowRgb: [142, 224, 184] },
+  Cl: { core: [140, 220, 150], hi: [216, 252, 220], glow: "rgba(132,214,142,", glowRgb: [132, 214, 142] },
 };
 
 /**

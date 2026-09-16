@@ -14,7 +14,6 @@ import {
   Wand2,
   FlaskConical,
   TrendingUp,
-  Calculator,
   Cpu,
   Network,
   BarChart3,
@@ -23,7 +22,6 @@ import {
   ArrowRight,
   type LucideIcon,
 } from 'lucide-react';
-import { PageHeader } from '@/components/ui/PageHeader';
 import { TabBar } from '@/components/ui/TabBar';
 import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
 import { GlassPanel } from '@/components/ui/GlassPanel';
@@ -33,6 +31,7 @@ import { toolsRegistry, type ToolId } from '@/lib/registry';
 import { ToolDisclaimer } from './ToolDisclaimer';
 import { ContextRail } from '@/components/ui/ContextRail';
 import { getToolContext } from '@/lib/hub-context';
+import { ToolInstrumentPreview } from './ToolInstrumentPreview';
 
 const StackSimulatorTool = dynamic(
   () => import('./StackSimulatorTool').then((m) => ({ default: m.StackSimulatorTool })),
@@ -162,17 +161,8 @@ export function ToolsHub() {
   const activeTool = toolsRegistry.find((t) => t.id === active)!;
 
   return (
-    <section className="canvas-scrim min-h-screen pt-6 md:pt-8 pb-20">
+    <section className="canvas-scrim min-h-screen pb-20">
       <div className="container-page">
-        <PageHeader
-          icon={Calculator}
-          eyebrow="Interactive Tools"
-          title="Longevity Tools"
-          description={`${toolsRegistry.length} evidence-graded calculators that turn library knowledge into practical models. Rule-based, transparent reasoning — not generative AI.`}
-          theme="violet"
-          cinematic
-          as="h1"
-        />
 
         <ContextRail
           {...getToolContext(active)}
@@ -305,7 +295,7 @@ export function ToolsHub() {
                 <button
                   type="button"
                   onClick={() => onTabChange(t.id)}
-                  className={`focus-ring group h-full w-full text-left rounded-xl p-4 border transition-all duration-200 ${
+                  className={`focus-ring group h-full w-full text-left rounded-xl p-4 premium-card border transition-all duration-200 ${
                     isActive
                       ? 'border-opacity-60 shadow-lg'
                       : 'border-border/40'
@@ -338,6 +328,9 @@ export function ToolsHub() {
                   <p className="text-micro text-muted-foreground mt-0.5 leading-snug line-clamp-2">
                     {t.shortLabel}
                   </p>
+                  <div className="mt-3 pointer-events-none">
+                    <ToolInstrumentPreview toolId={t.id} />
+                  </div>
                 </button>
               </RevealCard>
             );

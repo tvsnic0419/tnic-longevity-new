@@ -20,6 +20,7 @@ import { PmidLink } from '@/components/trust/SourceCitation';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { RevealCard } from '@/components/ui/RevealCard';
 import { goalLabels, costLabels, simplicityLabels } from '@/lib/stacks-library';
+import Link from 'next/link';
 
 interface EliteStackCardProps {
   stack: EliteStack;
@@ -122,7 +123,14 @@ export function EliteStackCard({ stack, expanded: defaultExpanded = false }: Eli
                       return (
                         <RevealCard key={b.compoundId} index={i} depth="mid" className="rounded-xl p-4">
                           <div className="flex justify-between items-start mb-1">
-                            <h4 className="font-semibold text-sm">{compound?.name ?? b.compoundId}</h4>
+                            <h4 className="font-semibold text-sm">
+                              <Link
+                                href={`/library/compounds/${b.compoundId}`}
+                                className="action-link hover:text-accent-violet"
+                              >
+                                {compound?.name ?? b.compoundId}
+                              </Link>
+                            </h4>
                             <span className="text-micro font-mono text-muted-foreground">{compound?.dose}</span>
                           </div>
                           <p className="text-xs text-accent-violet mb-1">{b.role}</p>

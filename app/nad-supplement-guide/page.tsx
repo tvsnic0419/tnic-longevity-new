@@ -38,7 +38,7 @@ const NAD_PRECURSORS = [
     dose: '250–500 mg/day',
     timing: 'Morning, fasted or with light protein',
     mechanism: 'Direct NAD+ precursor in salvage pathway — bypasses NAMPT rate-limiting step',
-    keyStudy: 'Igarashi et al. 2022: 250 mg/day raised whole-blood NAD+ 38%, improved muscle function in 65+ adults',
+    keyStudy: 'Yi et al. 2022: dose-ranging RCT in 80 healthy middle-aged adults — 300/600/900 mg/day for 60 days raised blood NAD+ dose-dependently, peak effect at 600 mg',
     pmid: '36482258',
     pros: ['Strongest RCT footprint', 'NAMPT bypass advantage', 'TNiC stack native integration', 'AM/PM synergy with resveratrol'],
     cons: ['Higher cost vs NR', 'Bioavailability varies by form (sublingual > capsule)', 'Not FDA-regulated supplement'],
@@ -82,11 +82,11 @@ const GUIDE_FAQS = [
   },
   {
     question: 'Which NAD+ supplement raises blood NAD+ the most — NMN or NR?',
-    answer: 'Head-to-head human comparisons show both raise blood NAD+ metabolites. NMN at 250 mg/day raised whole-blood NAD+ 38% in the Igarashi 2022 RCT. NR studies generally show similar magnitudes but at higher dose ranges (300–1000 mg). Mechanistically, NMN bypasses the rate-limiting NAMPT step that NR still requires — which may give NMN an efficiency advantage in older adults with depleted NAMPT. See our NMN vs NR comparison for a full breakdown.',
+    answer: 'Head-to-head human comparisons show both raise blood NAD+ metabolites. The Yi 2022 dose-ranging RCT (PMID 36482258) raised blood NAD+ dose-dependently at 300, 600 and 900 mg/day of NMN, with the largest effect at 600 mg. NR studies generally show similar magnitudes at comparable dose ranges (300–1000 mg). Mechanistically, NMN bypasses the rate-limiting NAMPT step that NR still requires — which may give NMN an efficiency advantage in older adults with depleted NAMPT. See our NMN vs NR comparison for a full breakdown.',
   },
   {
     question: 'What is the best dose of NMN for longevity?',
-    answer: 'The most-studied dose is 250–500 mg/day. The Liao 2021 double-blind RCT confirmed muscle/physical performance benefits at 300 mg/day. TNiC stacks use 250–500 mg in the morning, typically fasted or with a light protein source. Higher doses (600–1000 mg) exist in some commercial products but lack proportional RCT evidence for greater benefit — and cost significantly more.',
+    answer: 'Cited human trials span 250–1200 mg/day. Yoshino 2021 (PMID 33888596) tested 250 mg/day for 10 weeks; Liao 2021 (PMID 34238308) tested 300, 600 and 1200 mg/day for 6 weeks in 48 amateur runners; Yi 2022 (PMID 36482258) tested 300, 600 and 900 mg/day for 60 days and found the largest NAD+ effect at 600 mg — not at its highest dose. TNiC stacks use 250–500 mg in the morning, typically fasted or with a light protein source.',
   },
   {
     question: 'Should I take NMN with resveratrol?',
@@ -222,7 +222,7 @@ export default function NadSupplementGuidePage() {
                 glowColor="var(--accent-cyan)"
                 headline={{ score: 50, label: 'NAD+ DECLINE', sublabel: 'by age 60', color: 'var(--accent-cyan)' }}
                 stats={[
-                  { value: '38%', label: 'NAD+ boost — NMN 250 mg/day (Igarashi 2022)', colorClass: 'text-accent-cyan' },
+                  { value: '600 mg', label: 'NMN dose with peak NAD+ effect (Yi 2022 dose-ranging RCT)', colorClass: 'text-accent-cyan' },
                   { value: 'Tier A', label: 'Evidence grade for NMN + NR', colorClass: 'text-accent-cyan' },
                   { value: '3', label: 'Human-studied NAD+ precursors reviewed', colorClass: 'text-accent-cyan' },
                 ]}

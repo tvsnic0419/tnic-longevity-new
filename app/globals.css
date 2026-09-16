@@ -37,8 +37,19 @@
 
   /* TNiC semantic tokens */
   --color-bg-base: #020811;
-  --color-bg-elevated: #080f1c;
-  --color-bg-surface: rgba(12, 20, 40, 0.65);
+  /* ── The elevated plane (v14 visual pass) ──
+     Was #080f1c — a 3% luminance step over the base, which is below the
+     threshold at which an unlit dark surface reads as *raised* rather than as
+     the same slab with a border drawn on it. Every card, panel, table header
+     and popover on the site resolves here (directly, or via --card-ground /
+     --glass-fill-*), so the whole surface ladder was compressed into almost
+     one tone. Lifted to a real step while staying firmly in the brand's blue
+     ink: the cards now sit on the page instead of being outlined onto it, and
+     the three-plane ladder (base → elevated → float) is actually visible.
+     Contrast only improves — every text token is light-on-dark and the plane
+     moved *away* from the text, not toward it. */
+  --color-bg-elevated: #0b1424;
+  --color-bg-surface: rgba(16, 26, 48, 0.66);
   --color-bg-muted: rgba(255, 255, 255, 0.03);
   --color-border-subtle: rgba(255, 255, 255, 0.07);
   --color-border-strong: rgba(255, 255, 255, 0.14);
@@ -90,9 +101,36 @@
   --glow-rose: 0 0 24px rgba(244, 114, 182, 0.18), 0 0 48px rgba(244, 114, 182, 0.07);
   --glow-amber: 0 0 24px rgba(251, 191, 36, 0.18), 0 0 48px rgba(251, 191, 36, 0.07);
 
+  /* ── Atmosphere budget (STYLE_GUIDE §13) ──
+     The ground a content card paints over the site-wide ambient field. The
+     field is a brand device for hero bands and page margins; behind a card
+     full of evidence it is noise. 92% lets the field stay faintly perceptible
+     through the surface without its linework reaching the text. */
+  --card-ground: color-mix(in srgb, var(--color-bg-elevated) 92%, transparent);
+
   /* Effects */
-  --glass-bg: rgba(12, 20, 40, 0.62);
+  --glass-bg: rgba(16, 26, 48, 0.62);
   --glass-border: rgba(255, 255, 255, 0.07);
+
+  /* ── The ground field (v14 visual pass) ──
+     Until now the page ground was a single flat fill: every route that isn't
+     the homepage or a hero band painted #020811 edge to edge, and the only
+     thing on it was the fixed ambient orb layer, which is masked to the
+     corners and effectively invisible on the dense hubs. Rendered, /library
+     and /hallmarks read as content floating on an unlit black slab.
+
+     These four tokens compose a *lit* ground instead — one key light above
+     the fold, a cool fill from the upper left, a warm counter-light in the
+     opposite corner so the field is not mono-cyan, and a vertical tone
+     falloff toward a deeper floor. Kept as tokens (not inlined into `body`)
+     so the light theme redefines the same four and the composition is
+     identical in both. All four are sub-8% mixes: this is a gradient you
+     read as depth, not as color. */
+  --ground-key:     radial-gradient(128% 74% at 50% -12%, color-mix(in srgb, var(--accent-cyan) 7%, transparent), transparent 62%);
+  --ground-fill:    radial-gradient(84% 58% at 8% 4%, color-mix(in srgb, var(--accent-violet) 5%, transparent), transparent 58%);
+  --ground-counter: radial-gradient(74% 54% at 94% 92%, color-mix(in srgb, var(--signal-elite) 4%, transparent), transparent 62%);
+  --ground-falloff: linear-gradient(180deg, color-mix(in srgb, var(--color-bg-elevated) 58%, var(--color-bg-base)) 0%, var(--color-bg-base) 44%, #01040a 100%);
+
   --hero-mesh-1: rgba(0, 224, 255, 0.22);
   --hero-mesh-2: rgba(52, 211, 153, 0.12);
   --grid-line: rgba(0, 224, 255, 0.04);
@@ -152,8 +190,22 @@
   --status-watch: #d97706;
   --status-critical: #e11d48;
 
+  /* Light theme already grounded its cards opaquely (see the .premium-card
+     parity block); this names that value so both themes read from one token. */
+  --card-ground: var(--color-bg-elevated);
+
   --glass-bg: rgba(255, 255, 255, 0.75);
   --glass-border: rgba(15, 23, 42, 0.08);
+
+  /* Light-theme ground field — the same four-part composition as dark, at the
+     alphas a light base can carry. On white, a 7% wash is a stain; these run
+     3–5% and the falloff descends into a cool paper tone rather than a floor,
+     so the page still has a top light source and a settled bottom. */
+  --ground-key:     radial-gradient(128% 74% at 50% -12%, color-mix(in srgb, var(--accent-cyan) 5%, transparent), transparent 62%);
+  --ground-fill:    radial-gradient(84% 58% at 8% 4%, color-mix(in srgb, var(--accent-violet) 3%, transparent), transparent 58%);
+  --ground-counter: radial-gradient(74% 54% at 94% 92%, color-mix(in srgb, var(--signal-elite) 4%, transparent), transparent 62%);
+  --ground-falloff: linear-gradient(180deg, #ffffff 0%, var(--color-bg-base) 38%, #eef2f8 100%);
+
   --hero-mesh-1: rgba(8, 145, 178, 0.12);
   --hero-mesh-2: rgba(5, 150, 105, 0.08);
   --grid-line: rgba(8, 145, 178, 0.06);
@@ -161,7 +213,7 @@
 }
 
 @theme {
-  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-sans: var(--font-hanken), system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
   --font-display: var(--font-fraunces), Georgia, 'Times New Roman', serif;
 
@@ -263,10 +315,82 @@
   /* ── Typography scale (modular, minor third ~1.25) ──
      Three roles only: DISPLAY (3xl–6xl), BODY (sm–lg), LABEL (xs mono).
      Hand-picked clamp curves are fluid from mobile → 1440px. */
-  --type-xs:   0.75rem;                                  /* 12px — captions, eyebrows */
-  --type-sm:   0.875rem;                                 /* 14px — body small */
-  --type-base: 1rem;                                     /* 16px — body */
-  --type-lg:   1.125rem;                                 /* 18px — body emphasis */
+  /* The floor of the scale. Nothing that is HTML text may render below this.
+     An audit of eight rendered pages found 59 separate declarations between
+     4px and 10.5px — eyebrows, stat labels, chips, numerals — and on a PHONE
+     they were smaller still (hero stat labels bottomed out at 8.64px), so the
+     device with the least reading comfort was being given the least legible
+     type. Every one of them now resolves here. 11px, not 10px, for the reason
+     already recorded on `.text-micro` below: it is the size most of the dense
+     pages are actually read at, and it matches `.text-label`, so the two
+     smallest steps in the scale agree instead of sitting 1px apart.
+     `scripts/audit-ui.mjs` gates this; see the micro-type check there.
+     SVG <text> inside a scaled viewBox is deliberately exempt — those are
+     molecular-diagram annotations whose size is set by the geometry, and
+     their accessibility answer is the text fallback required by every
+     visualization, not a font-size floor. */
+  /* ── The fixed rungs, named by their pixel size ─────────────────────────
+     An audit of every font-size in the codebase found 138 declarations that
+     bypassed this scale entirely, in FORTY distinct spellings: six different
+     ways to write ~11px (11px, 0.6875rem, .6875rem, …), five for 13–14px
+     (13px, 13.5px, 14px, 0.8125rem, 0.875rem), four for 15px (15px,
+     0.9375rem, .9375rem, 0.95rem), three for 16px (1rem, 1.02rem, 1.05rem),
+     and one-offs at 1.9rem, 1.55rem, 0.76rem and 12.5px. The scale was not
+     missing — it was being routed around, one component at a time, because
+     the t-shirt names had gaps at 13px and 15px and nobody wanted to round.
+
+     So the fixed part of the ladder is now named by what it IS. There is no
+     judgement call left in picking `--type-13` over `--type-14`, and no way
+     to write a size that looks like it might be on the scale but is not.
+     The t-shirt names below are kept as aliases so no existing call site
+     changes meaning; the fluid steps keep their t-shirt names, because a
+     `clamp()` genuinely has no single pixel size to be named after. */
+  --type-11: 0.6875rem;  /* absolute floor — see the note above */
+  --type-12: 0.75rem;
+  --type-13: 0.8125rem;
+  --type-14: 0.875rem;
+  --type-15: 0.9375rem;
+  --type-16: 1rem;
+  --type-17: 1.0625rem;
+  --type-18: 1.125rem;
+  --type-20: 1.25rem;
+  --type-22: 1.375rem;
+  --type-24: 1.5rem;
+  --type-26: 1.625rem;
+  --type-28: 1.75rem;
+  --type-30: 1.875rem;
+  --type-32: 2rem;
+  --type-36: 2.25rem;
+  --type-48: 3rem;
+
+  /* Aliases. Every one of these resolves to a rung above, so the two naming
+     schemes can never disagree. */
+  --type-micro: var(--type-11);                          /* 11px — absolute floor */
+  --type-xs:   var(--type-12);                           /* 12px — captions, eyebrows */
+  --type-sm:   var(--type-14);                           /* 14px — body small */
+  --type-base: var(--type-16);                           /* 16px — body */
+  --type-lg:   var(--type-18);                           /* 18px — body emphasis */
+  /* ── Fluid display sizes, named ──────────────────────────────────────────
+     These six clamps were each written TWICE — once here and once in
+     `components/ui/FlagshipFoundation.module.css` — for the same selectors,
+     and both stylesheets are loaded (the module is imported by CinematicHubHero,
+     PageHeader, DecisionSteps and ContextBar). Which definition won depended on
+     CSS order, and the two copies had already drifted in spelling (`.7rem` here,
+     `0.7rem` there). Edit one and the hero silently changes size only on the
+     pages where the other loses.
+
+     They are tokens now, referenced from both files, so there is one value and
+     it has a name. Left as clamps rather than snapped onto the fixed ladder
+     above on purpose: a hero title is tuned to its own line-breaks, and forcing
+     several distinct heroes onto shared rungs would flatten them into one
+     size for tidiness rather than for a reason. */
+  --type-hero-title:      clamp(2.7rem, 6vw, 5.6rem);
+  --type-hero-title-sm:   clamp(2.4rem, 12vw, 3.4rem);   /* phone override */
+  --type-hero-lead:       clamp(1rem, 1vw + 0.7rem, 1.1875rem);
+  --type-hero-stat:       clamp(1.55rem, 2.8vw, 2.25rem);
+  --type-handoff-title:   clamp(1.75rem, 3vw, 2.5rem);
+  --type-switchboard:     clamp(1.55rem, 2.4vw, 2.15rem);
+
   --type-xl:   clamp(1.25rem, 0.5vw + 1.125rem, 1.5rem); /* lede */
   --type-2xl:  clamp(1.5rem,  1vw + 1.25rem,  2rem);    /* card titles */
   --type-3xl:  clamp(1.875rem, 2vw + 1.25rem, 2.5rem);  /* section heads */
@@ -294,6 +418,11 @@
   --text-xs--line-height: 1.5;
   --text-sm: 0.9375rem;             /* 15px, was --type-sm 14px / Tailwind 14px */
   --text-sm--line-height: 1.6;
+
+  /* ── Geometry (v13) ── */
+  --page-max: 80rem;
+  --section-y: clamp(4.5rem, 7vw, 7rem);
+  --metric-tracking: -0.04em;
 }
 
 html {
@@ -337,16 +466,38 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background: var(--color-bg-base);
+  /* The lit ground (v14 visual pass). `background-attachment: fixed` pins the
+     composition to the viewport rather than to the document, so the key light
+     stays overhead on a 12,000px compound page instead of scrolling off after
+     one screen — the field is lighting, and lighting does not scroll.
+
+     Painted on <body> deliberately, not on a pseudo-element or a page wrapper:
+     body already sits *behind* the fixed .ambient-layer (z-0) and .page-canvas
+     (z-1), both of which are transparent, so one declaration here reaches every
+     route — including the ~40 that use .canvas-scrim and would otherwise each
+     need their own. No new element, no new stacking context, nothing to get
+     out of sync. */
+  background-color: var(--color-bg-base);
+  background-image:
+    var(--ground-key),
+    var(--ground-fill),
+    var(--ground-counter),
+    var(--ground-falloff);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
   color: var(--color-text-primary);
-  font-size: 1rem;
+  font-size: var(--type-16);
   line-height: var(--leading-body);
   /* Crisp text rendering site-wide: grayscale AA on WebKit + Firefox so
      light-on-dark type stays sharp rather than muddy, plus optimizeLegibility
-     for proper kerning/ligatures. */
+     for proper kerning/ligatures. Optical sizing + Hanken's default ligatures
+     keep the body face reading as a chosen grotesque, not a system default. */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  font-optical-sizing: auto;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
@@ -365,6 +516,16 @@ body::after {
 
 @media (prefers-reduced-motion: reduce) {
   body::after { opacity: 0; }
+}
+
+[data-theme="light"] body::after {
+  /* Grain on a light field reads as dirt, not film. Keep a whisper. */
+  opacity: 0.016;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent-cyan) 28%, transparent);
+  color: var(--color-text-primary);
 }
 
 /* ── Typography scale ──
@@ -422,19 +583,33 @@ p,
 }
 
 .heading-card {
-  font-size: 1rem;
+  font-size: var(--type-16);
   font-weight: 600;
   line-height: 1.35;
 }
 
 /* Signature accent rule — a short branded gradient bar under section and page
-   headings, giving every header one consistent, deliberate flourish. */
+   headings, giving every header one consistent, deliberate flourish.
+
+   v14: it now follows the section's own accent. The gradient and the glow were
+   both hardcoded cyan→emerald, so a rose hallmark page, a violet /stacks and an
+   amber warning band all printed the same cyan dash under their heading — the
+   one element in the header that ignored the per-hub accent system every other
+   element in the same header obeys (eyebrow dot, icon, badge, hero field). Set
+   `--rule-accent` on (or above) the rule and it tracks; unset, it is exactly
+   the cyan→emerald bar it has always been, so the 15 call sites that don't pass
+   one are unchanged. */
 .heading-accent-rule {
+  --rule-accent: var(--accent-cyan);
   height: 3px;
   width: 2.75rem;
   border-radius: 9999px;
-  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-emerald));
-  box-shadow: 0 0 12px color-mix(in srgb, var(--accent-cyan) 45%, transparent);
+  background: linear-gradient(
+    90deg,
+    var(--rule-accent),
+    color-mix(in srgb, var(--rule-accent) 35%, var(--accent-emerald))
+  );
+  box-shadow: 0 0 12px color-mix(in srgb, var(--rule-accent) 45%, transparent);
 }
 .heading-accent-rule.is-center {
   margin-left: auto;
@@ -442,34 +617,112 @@ p,
 }
 
 .text-body {
-  font-size: 1rem;
+  font-size: var(--type-16);
   line-height: var(--leading-body);
 }
 
 .text-body-sm {
-  font-size: 0.875rem;
+  font-size: var(--type-14);
   line-height: 1.6;
 }
 
 .text-caption {
-  font-size: 0.75rem;
+  font-size: var(--type-12);
   line-height: 1.5;
 }
 
 .text-label {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--type-11);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
+/* ── Numeric and scientific typography ───────────────────────────────────────
+   Numbers are most of what this site asks a reader to compare, and until now
+   there was no style for one. An audit found 72 ad-hoc `tabular-nums`
+   declarations across components, each pairing it with its own size, weight
+   and tracking — the numbers were being set 72 times rather than once.
+
+   Two families, and the distinction matters:
+
+     .stat-value / .stat-value-hero  are DECORATIVE. They gradient-fill the
+       glyphs, which is right for a hero figure that exists to be looked at,
+       and wrong for a figure that exists to be compared against the one below
+       it — a gradient makes two numbers in a column different colours.
+
+     .text-metric / .text-metric-lg / .text-data are ANALYTIC. Flat colour,
+       tabular figures so digits align in a column, and slightly tightened
+       tracking so a long number does not sprawl. Reach for these by default;
+       reach for the gradient pair only when the number is the visual subject.
+
+   `font-variant-numeric: tabular-nums` is the whole point of the analytic
+   family: proportional digits make a 1 narrower than a 7, so a column of
+   figures fails to line up and a number that updates in place jitters. */
+.text-metric {
+  font-size: var(--type-20);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-primary);
+}
+
+.text-metric-lg {
+  font-family: var(--font-display);
+  font-size: var(--type-32);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-primary);
+}
+
+/* Scientific data in running text or a table cell: doses, sample sizes, ranges,
+   p-values. Inherits its size so it can sit inside a table row or a paragraph
+   without breaking the line, and only fixes the things that make figures
+   readable — tabular alignment and the mono face. */
+.text-data {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1, 'zero' 1;
+  letter-spacing: -0.01em;
+}
+
+/* A reference. Kept quiet on purpose: a citation earns trust by being present
+   and checkable, not by competing with the claim it supports. */
+.text-citation {
+  font-size: var(--type-12);
+  line-height: 1.5;
+  color: var(--color-text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
 /* Size-only micro text — the semantic home for small SANS micro-copy (badge
    text, chips, fine print) that isn't a mono uppercase label. Fills the gap
-   below .text-caption (12px) so components stop reaching for arbitrary px. */
+   below .text-caption (12px) so components stop reaching for arbitrary px.
+
+   11px, not 10px. An audit of the rendered pages found this class on several
+   hundred elements per page — tier chips, table headers, stat suffixes, badge
+   text — making it, by volume, the size most of the site is actually read at.
+   At 10px it sat below every legibility floor worth citing and made dense
+   pages look degraded rather than precise. 11px matches .text-label, so the
+   two smallest steps in the scale now agree instead of sitting 1px apart for
+   no reason. This is the single highest-leverage line in this file. */
 .text-micro {
-  font-size: 0.625rem;
-  line-height: 1.4;
+  font-size: var(--type-11);
+  line-height: 1.45;
+}
+
+/* Longevity metrics — display face, tight tracking, tabular figures.
+   Use for counts that should read as instruments, not body copy. */
+.metric-display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: var(--metric-tracking, -0.04em);
+  font-variant-numeric: tabular-nums lining-nums;
+  line-height: 0.95;
 }
 
 /* Default colors for the typography scale above, deliberately placed in
@@ -506,9 +759,17 @@ p,
 /* ── Layout ── */
 .container-page {
   width: 100%;
-  max-width: 80rem;
+  max-width: var(--page-max, 80rem);
   margin-inline: auto;
   padding-inline: clamp(1rem, 4vw, 1.5rem);
+}
+
+/* The editorial measure — see PageShell's `measure` prop. 66rem, not the hub's
+   80rem: the long-form pages cap their own content at 56rem (`max-w-4xl`), so
+   this leaves the column a normal page margin rather than a 24rem void it was
+   never going to fill. */
+.container-page--reading {
+  max-width: var(--page-max-reading, 66rem);
 }
 
 .focus-ring { outline: none; }
@@ -559,6 +820,30 @@ p,
 /* A wrapping row of compact chips. The 16px row gap is load-bearing, not
    taste: 28px chip + 16px = a 44px pitch, exactly the expanded hit height, so
    neighbouring rows can never steal each other's taps. */
+/* Stretched link — the card idiom. A card whose title is the link, with the
+   link's ::before stretched over the whole card so the entire surface
+   navigates, while other links inside the card stay separately clickable by
+   sitting on a higher stacking layer.
+
+   Defined once here because the site had grown two ad-hoc spellings of it
+   (`after:absolute after:inset-0 after:content-['']` in BestLeaderboard,
+   `before:absolute before:inset-0 before:rounded-xl` in CompoundExplorer).
+   ::before rather than ::after, because that is the pseudo
+   `scripts/audit-ui.mjs` inspects to exempt a stretched card title from the
+   24px tap-target floor — the title is hit through the card, so its own text
+   box is not the real target.
+
+   Requires `position: relative` on the card (`.premium-card` sets it) and
+   `position: relative; z-index: 1` on anything inside the card that must stay
+   independently clickable. */
+.stretched-link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+}
+
 .chip-row {
   display: flex;
   flex-wrap: wrap;
@@ -693,10 +978,11 @@ p,
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-lg);
   padding: 0.75rem 1rem;
-  font-size: 0.875rem;
+  font-size: var(--type-14);
   color: var(--color-text-primary);
   min-height: var(--space-touch);
   outline: none;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #ffffff 6%, transparent);
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -710,26 +996,57 @@ p,
 /* ── Tables ── */
 .table-base {
   width: 100%;
-  font-size: 0.875rem;
+  font-size: var(--type-14);
   border-collapse: collapse;
 }
 
-.table-base th {
+/* Column headers. Scoped to `thead` on purpose: the mono/uppercase/faint
+   treatment is what a COLUMN label should look like, and applying it to every
+   `th` made row headers — the accessible way to label a data row — render as
+   uppercase mono labels too. Three tables in this repo had each worked around
+   that locally with their own overrides before it was fixed here. */
+.table-base thead th {
   text-align: left;
   padding: 0.75rem 1rem;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--type-11);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--color-text-faint);
   background: var(--color-bg-muted);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+/* Row headers. Same box as a cell, but carrying the row's identity, so it
+   reads as content rather than chrome. */
+.table-base tbody th {
+  text-align: left;
+  padding: 0.875rem 1rem;
+  border-top: 1px solid var(--color-border-subtle);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+/* Row headers. Same box as a cell, but carrying the row's identity, so it
+   reads as content rather than chrome. */
+.table-base tbody th {
+  text-align: left;
+  padding: 0.875rem 1rem;
+  border-top: 1px solid var(--color-border-subtle);
+  font-weight: 600;
+  color: var(--color-text-primary);
 }
 
 .table-base td {
   padding: 0.875rem 1rem;
   border-top: 1px solid var(--color-border-subtle);
   color: var(--color-text-secondary);
+}
+
+.table-base tbody tr {
+  transition: background-color 0.15s ease;
 }
 
 .table-base tbody tr:hover {
@@ -811,35 +1128,35 @@ p,
       0 0 0 1px color-mix(in srgb, var(--accent-cyan) 35%, transparent),
       0 8px 48px -4px color-mix(in srgb, var(--accent-cyan) 45%, transparent),
       0 0 80px -16px color-mix(in srgb, var(--accent-cyan) 25%, transparent);
-    transform: translateY(-3px);
+    transform: translateY(-2px);
   }
   .glow-hover-emerald:hover {
     box-shadow:
       0 0 0 1px color-mix(in srgb, var(--accent-emerald) 35%, transparent),
       0 8px 48px -4px color-mix(in srgb, var(--accent-emerald) 45%, transparent),
       0 0 80px -16px color-mix(in srgb, var(--accent-emerald) 25%, transparent);
-    transform: translateY(-3px);
+    transform: translateY(-2px);
   }
   .glow-hover-violet:hover {
     box-shadow:
       0 0 0 1px color-mix(in srgb, var(--accent-violet) 35%, transparent),
       0 8px 48px -4px color-mix(in srgb, var(--accent-violet) 45%, transparent),
       0 0 80px -16px color-mix(in srgb, var(--accent-violet) 25%, transparent);
-    transform: translateY(-3px);
+    transform: translateY(-2px);
   }
   .glow-hover-amber:hover {
     box-shadow:
       0 0 0 1px color-mix(in srgb, var(--accent-amber) 35%, transparent),
       0 8px 48px -4px color-mix(in srgb, var(--accent-amber) 45%, transparent),
       0 0 80px -16px color-mix(in srgb, var(--accent-amber) 25%, transparent);
-    transform: translateY(-3px);
+    transform: translateY(-2px);
   }
   .glow-hover-rose:hover {
     box-shadow:
       0 0 0 1px color-mix(in srgb, var(--accent-rose) 35%, transparent),
       0 8px 48px -4px color-mix(in srgb, var(--accent-rose) 45%, transparent),
       0 0 80px -16px color-mix(in srgb, var(--accent-rose) 25%, transparent);
-    transform: translateY(-3px);
+    transform: translateY(-2px);
   }
 }
 
@@ -972,20 +1289,45 @@ p,
 ::-webkit-scrollbar-track { background: var(--color-bg-base); }
 ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
 
-/* ── Slider ── */
+/* ── Slider ──
+   The input's border box IS the drag target: a press has to land inside it to
+   grab the thumb. This control was a 6px-tall box, so on a phone the user had
+   to hit a 6px band to move it — measured at 310×6px on /library, and it is the
+   canonical `Slider` primitive plus the bio-age wizard and the hallmark notes
+   panel, not a one-off. The visual track stays 6px; the *box* is now 28px (past
+   the 24px hard floor of STYLE_GUIDE §4 / WCAG 2.2 AA 2.5.8) with the track
+   painted by the track pseudo-element and the thumb re-centred on it.
+
+   28px rather than the preferred 44px deliberately: these sliders sit in
+   stacked rows whose neighbours are closer than 44px apart, and §4 records two
+   incidents where an over-grown hit area stole its neighbour's taps. A target
+   that is comfortably over the floor beats one that overlaps. */
 .age-slider {
   -webkit-appearance: none;
   appearance: none;
-  height: 6px;
-  background: var(--color-bg-muted);
-  border-radius: 3px;
+  height: 28px;
+  background: transparent;
   outline: none;
   cursor: pointer;
+}
+
+.age-slider::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-bg-muted);
+}
+
+.age-slider::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-bg-muted);
 }
 
 .age-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 20px; height: 20px;
+  /* centre the 20px thumb on the 6px track */
+  margin-top: -7px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--accent-cyan), var(--accent-emerald));
   cursor: pointer;
@@ -997,6 +1339,8 @@ p,
   border: none;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--accent-cyan), var(--accent-emerald));
+  box-shadow: 0 0 16px color-mix(in srgb, var(--accent-cyan) 40%, transparent);
+  cursor: pointer;
 }
 
 /* ── Premium surfaces (Sprint 18) ── */
@@ -1164,7 +1508,7 @@ p,
 
 .context-rail-label {
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -1244,7 +1588,7 @@ p,
 
 .os-card-number {
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 700;
   letter-spacing: 0.08em;
   color: var(--color-text-faint);
@@ -1378,7 +1722,7 @@ p,
   gap: 9px;
   white-space: nowrap;
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: var(--type-micro);
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-text-faint);
@@ -1420,6 +1764,30 @@ p,
   pointer-events: none;
   /* soft glow ties the linework into the aurora field */
   filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent-cyan) 22%, transparent));
+}
+
+/* ── Keep the field in the margins (v14 visual pass) ─────────────────────────
+   STYLE_GUIDE §13 already states the rule: the molecular field is a brand
+   device for hero bands and page margins, and behind a body of evidence it is
+   noise. `.premium-card` enforces it for cards (that is what --card-ground is
+   for), but nothing enforced it for *prose* — so on the long-form trust and
+   policy pages, skeletal hexagons drifted directly through the running text.
+   Rendered at 1440px on /trust/methodology, a benzene ring sat behind the
+   second line of the page description.
+
+   The fix is composition, not dimming: mask the field out of the centre
+   column so it frames the page instead of crossing it. Opacity is untouched —
+   where the field shows it is exactly as present as before, and the linework
+   stays the distinctive, subject-grounded device it was built to be.
+
+   Desktop only. Below 1024px the reading column IS the viewport, so a centre
+   clearing would erase the field rather than reposition it; there the existing
+   9–20% depth opacities are already faint enough to read as texture. */
+@media (min-width: 1024px) {
+  .molecule-cascade {
+    -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 13%, transparent 33%, transparent 67%, #000 87%, #000 100%);
+    mask-image: linear-gradient(90deg, #000 0%, #000 13%, transparent 33%, transparent 67%, #000 87%, #000 100%);
+  }
 }
 
 .molecule-node {
@@ -1480,6 +1848,21 @@ p,
      the 10px glow is imperceptible, so drop just the halo and keep the
      linework. */
   .molecule-cascade { filter: none; }
+
+  /* Phone density correction (atmosphere budget, STYLE_GUIDE §13). The depth
+     opacities above are tuned for a 1440px viewport, where a structure spans a
+     small fraction of the screen and the content column leaves real margins for
+     the field to live in. At 390px the same structure spans most of the width
+     and there are no margins — the field lands directly under chips, headings
+     and body copy, and reads as noise rather than atmosphere (measured on
+     /library, where the 12-hallmark filter column sits entirely on linework).
+     Same field, same motion, stepped down ~45% so it stays a texture. */
+  .molecule-node.depth-1 { opacity: 0.11; }
+  .molecule-node.depth-2 { opacity: 0.075; }
+  .molecule-node.depth-3 { opacity: 0.05; }
+  :root[data-theme='light'] .molecule-node.depth-1 { opacity: 0.08; }
+  :root[data-theme='light'] .molecule-node.depth-2 { opacity: 0.055; }
+  :root[data-theme='light'] .molecule-node.depth-3 { opacity: 0.035; }
 }
 
 @keyframes molecule-drift {
@@ -1632,7 +2015,7 @@ p,
   padding: 1rem 1.75rem;
   min-height: var(--space-touch);
   border-radius: 1rem;
-  font-size: 0.9375rem;
+  font-size: var(--type-15);
   overflow: hidden;
 }
 
@@ -1670,7 +2053,7 @@ p,
   min-height: var(--space-touch);
   border-radius: 1rem;
   font-weight: 500;
-  font-size: 0.9375rem;
+  font-size: var(--type-15);
   background: color-mix(in srgb, var(--glass-bg) 90%, transparent);
   backdrop-filter: blur(20px);
   border: 1px solid color-mix(in srgb, var(--accent-cyan) 20%, var(--color-border-subtle));
@@ -1699,6 +2082,23 @@ p,
   backdrop-filter: blur(20px) saturate(1.3);
   border-bottom: 1px solid color-mix(in srgb, var(--accent-cyan) 8%, var(--color-border-subtle));
   transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nav-glass::before {
+  /* Always-on HUD tick — a 1px cyan scan along the bottom edge so the bar
+     reads as an instrument chrome even before scroll. The scrolled state
+     keeps its own top specular (below). */
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--accent-cyan) 55%, transparent) 50%,
+    transparent
+  );
+  pointer-events: none;
 }
 
 .nav-glass-scrolled {
@@ -1736,11 +2136,71 @@ p,
   pointer-events: none;
 }
 
-.logo-glow {
+/* ── Brand mark ──
+   The TNiC lockup is rendered artwork built for a dark field: brushed-silver
+   letterforms whose lightest faces run to near-white, and a strand that reads
+   by its own bloom. On the dark theme it sits directly on the chrome, which is
+   the surface it was lit for.
+
+   On the light theme those same silver faces land near-white on near-white and
+   the mark all but disappears. Recoloring is not an option — the metal gradient
+   IS the mark — so the light theme instead gives it back the field it needs: a
+   small dark plate, the same base tone as the dark theme's chrome. The plate is
+   scoped to the light theme only; the dark theme keeps the mark free-floating. */
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  /* Requested: a luminous cyan ring enclosing the whole lockup, emblem and
+     wordmark together. Built in CSS rather than burned into the PNG so it stays
+     a crisp 1.5px at every size and every pixel ratio — baked into the raster it
+     would soften as the mark scales down, which is the opposite of the sharp
+     edge asked for.
+
+     Pill radius, not a rounded rectangle: the lockup is roughly 2:1, so a full
+     radius gives the oval the brief describes and reads as deliberate chrome
+     rather than as a focus rectangle.
+
+     The glow is three static layers — a hairline border, an outer bloom, and a
+     faint inner wash. Static, not pulsing: an animated mark in fixed chrome is
+     motion the reader cannot dismiss, and it would need a reduced-motion
+     escape hatch for something that adds nothing. */
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  border: 1.5px solid color-mix(in srgb, var(--accent-cyan) 85%, transparent);
   box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--accent-cyan) 40%, transparent),
-    0 0 28px color-mix(in srgb, var(--accent-cyan) 50%, transparent),
-    0 0 56px color-mix(in srgb, var(--accent-cyan) 18%, transparent);
+    0 0 14px -2px color-mix(in srgb, var(--accent-cyan) 55%, transparent),
+    0 0 30px -6px color-mix(in srgb, var(--accent-cyan) 30%, transparent),
+    inset 0 0 12px -4px color-mix(in srgb, var(--accent-cyan) 35%, transparent);
+}
+
+[data-theme='light'] .brand-mark {
+  /* The wordmark's silver faces run to near-white, so on the light base the
+     mark is near-white on near-white. Recoloring is not available to us — the
+     metal gradient IS the mark — so the light theme gives it back the dark
+     ground it was lit for. Literal, not var(--color-bg-base): that token is
+     light here, and re-creating the dark field is the whole point.
+     The cyan ring above carries over unchanged; only the fill is added. */
+  background: #020811;
+  /* A cyan bloom spreads convincingly into a dark field and barely registers
+     against a light one, so the light theme trades glow for definition: the
+     border goes to full strength and the outer layers tighten into a discrete
+     halo rather than a soft falloff. Same ring, carried at equal prominence. */
+  border-color: var(--accent-cyan);
+  box-shadow:
+    0 0 0 2.5px color-mix(in srgb, var(--accent-cyan) 26%, transparent),
+    0 0 16px -1px color-mix(in srgb, var(--accent-cyan) 60%, transparent),
+    0 6px 20px -12px rgb(2 8 17 / 0.55),
+    inset 0 0 12px -4px color-mix(in srgb, var(--accent-cyan) 30%, transparent);
+}
+
+/* The mark now wears a cyan ring at rest, so the default cyan focus ring would
+   land as "slightly more cyan" — not a state change a keyboard user can see.
+   The logo link therefore takes a distinct focus treatment: a white outline,
+   pushed further out so it reads as a separate ring around the brand ring. */
+.brand-link:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 5px;
+  box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent-cyan) 22%, transparent);
 }
 
 /* ── Scroll progress glow ── */
@@ -1868,7 +2328,7 @@ p,
   gap: 0.625rem;
   padding: 0 1.75rem;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--type-11);
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -1956,7 +2416,7 @@ p,
 
 .constellation-node-num {
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 800;
 }
 
@@ -1996,7 +2456,7 @@ p,
   backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow-float);
-  font-size: 0.75rem;
+  font-size: var(--type-12);
   line-height: 1.4;
   font-weight: 400;
   font-style: normal;
@@ -2019,7 +2479,11 @@ p,
 }
 
 .glossary-tooltip-link {
-  display: block;
+  /* A standalone action inside the tooltip, so it clears the 24px control
+     floor (see .action-link). flex rather than block for the centred row. */
+  display: flex;
+  align-items: center;
+  min-height: 1.5rem;
   margin-top: 0.375rem;
   color: var(--accent-cyan);
   font-weight: 600;
@@ -2124,7 +2588,7 @@ p,
   background: color-mix(in srgb, var(--accent-emerald) 12%, transparent);
   border: 1px solid color-mix(in srgb, var(--accent-emerald) 30%, transparent);
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -2209,7 +2673,7 @@ p,
 
 .platform-hud-value {
   font-family: var(--font-mono);
-  font-size: 1.25rem;
+  font-size: var(--type-20);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   background: linear-gradient(135deg, var(--color-text-primary) 0%, var(--accent-cyan) 100%);
@@ -2223,7 +2687,7 @@ p,
 
 .platform-hud-label {
   font-family: var(--font-mono);
-  font-size: 0.5625rem;
+  font-size: var(--type-micro);
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -2234,7 +2698,7 @@ p,
 /* ── Data readout (terminal/HUD style) ── */
 .data-readout {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--type-11);
   letter-spacing: 0.05em;
   color: var(--accent-cyan);
   opacity: 0.75;
@@ -2305,7 +2769,7 @@ p,
   border-left: 2px solid var(--accent-cyan);
   background: color-mix(in srgb, var(--accent-cyan) 6%, transparent);
   border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
-  font-size: 1rem;
+  font-size: var(--type-16);
   line-height: 1.6;
 }
 
@@ -2350,7 +2814,7 @@ p,
   padding: 0.25rem 0.75rem;
   border-radius: 0.5rem;
   font-family: var(--font-mono);
-  font-size: 0.5625rem;
+  font-size: var(--type-micro);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -2359,7 +2823,7 @@ p,
 /* ── Eyebrow section label ── */
 .text-eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--type-11);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -2429,7 +2893,7 @@ p,
 
 .research-strip-value {
   font-family: var(--font-mono);
-  font-size: 1.125rem;
+  font-size: var(--type-18);
   font-weight: 800;
   color: var(--accent-cyan);
   font-variant-numeric: tabular-nums;
@@ -2437,7 +2901,7 @@ p,
 
 .research-strip-label {
   font-family: var(--font-mono);
-  font-size: 0.5625rem;
+  font-size: var(--type-micro);
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -2452,7 +2916,7 @@ p,
   padding: 0.25rem 0.625rem;
   border-radius: 0.375rem;
   font-family: var(--font-mono);
-  font-size: 0.5rem;
+  font-size: var(--type-micro);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -2490,17 +2954,124 @@ p,
 /* Scroll reveal: sections rise and fade as they enter the viewport. Pure CSS,
    no JavaScript. `.reveal-on-scroll` is opt-in; top-level page sections get it
    automatically. */
+/* The scroll-driven reveal is SCRUBBED, not played: its progress is the scroll
+   position, so a section the reader stops on mid-range holds whatever opacity
+   that maps to for as long as they sit there. Fading from 0 therefore is not a
+   400ms transient — it is text rendered at arbitrary partial opacity while it
+   is being read. `audit:ui` measured the consequence on /library/mitochondrial-
+   dysfunction: walk-card kickers composited to #73529d (3.23:1) and #208163
+   (4.13:1) against the canvas, both under WCAG AA, when their own tokens are
+   7.4:1 and 10.2:1 at full opacity.
+
+   So the scrubbed variant gets its own keyframe with an opacity FLOOR. 0.78 is
+   the worst case worked back from the tokens: violet accent text on
+   --color-bg-base holds 4.5:1 down to ~0.75. The 40px rise is untouched and is
+   what actually reads as the reveal — the fade was always the quieter half of
+   the gesture. The time-based `.section-fade-in-up` keeps fading from 0: it
+   self-completes in 0.7s and never parks. */
+@keyframes section-reveal-scrubbed {
+  from { opacity: 0.78; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     /* Every top-level page section (at any div-nesting depth), but never a
        section nested inside another section, so nothing double-animates. */
     .reveal-on-scroll,
     .page-canvas section:not(section section) {
-      animation: section-reveal linear both;
+      animation: section-reveal-scrubbed linear both;
       animation-timeline: view();
       animation-range: entry 4% cover 20%;
     }
   }
+}
+
+/* ── .lq-rank — the homepage Elite 8 modeled-LQ readout ──────────────────────
+   Same family as HubSplitInstrument: a label row, a value in metric type, and
+   a thin meter under it. The value leads because the eight scores cluster in a
+   7-point band and the meter alone cannot separate them; the meter stays
+   anchored at 0 so the band is not exaggerated into a story the data does not
+   support. One accent — rank is carried by order and by the leading numeral,
+   never by hue. */
+.lq-rank {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.lq-rank__row {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  align-items: start;
+  gap: 0 0.75rem;
+  padding: 0.6rem 0;
+  border-top: 1px solid var(--color-border-subtle);
+}
+.lq-rank__row:first-child { border-top: 0; }
+.lq-rank__pos {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  padding-top: 0.15rem;
+  color: var(--color-text-faint);
+  font-variant-numeric: tabular-nums;
+}
+.lq-rank__body { min-width: 0; display: block; }
+.lq-rank__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.lq-rank__name {
+  font-size: var(--type-15);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--color-text-primary);
+  overflow-wrap: anywhere;
+}
+.lq-rank__score {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--type-15);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--accent-cyan);
+  font-variant-numeric: tabular-nums;
+}
+.lq-rank__of {
+  margin-left: 0.15rem;
+  font-size: var(--type-11);
+  font-weight: 500;
+  color: var(--color-text-faint);
+}
+.lq-rank__meter {
+  display: block;
+  height: 3px;
+  margin-top: 0.4rem;
+  border-radius: 999px;
+  background: var(--color-bg-muted);
+  overflow: hidden;
+}
+.lq-rank__fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent-cyan) 55%, transparent), var(--accent-cyan));
+}
+.lq-rank__cat {
+  display: block;
+  margin-top: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: var(--type-11);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  overflow-wrap: anywhere;
 }
 
 /* ── Footer manifesto ── */
@@ -2538,7 +3109,7 @@ p,
   padding: 0.25rem 0.625rem;
   border-radius: 9999px;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--type-11);
   font-weight: 600;
   background: color-mix(in srgb, var(--glass-bg) 90%, transparent);
   border: 1px solid var(--color-border-subtle);
@@ -2587,7 +3158,7 @@ p,
   height: 1.75rem;
   border-radius: 50%;
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 800;
   background: color-mix(in srgb, var(--accent-cyan) 12%, transparent);
   border: 1px solid color-mix(in srgb, var(--accent-cyan) 25%, transparent);
@@ -2741,7 +3312,7 @@ p,
   padding: 0.375rem 0.875rem;
   border-radius: 9999px;
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -3418,10 +3989,21 @@ p,
   border: 1px solid var(--color-border-subtle);
   /* Fill + the accent top light-catch hairline as a 1px background layer. The
      hairline moved off the ::before pseudo (now the elite-card shine sweep)
-     into the background so one card keeps both signature tells. */
+     into the background so one card keeps both signature tells.
+
+     The third layer is the card's *ground* (atmosphere budget, §13). Until it
+     existed the dark-theme fill was white-alpha only, so the fixed ambient
+     molecule field painted straight through every content card — measurably so
+     on /library, where skeletal linework crossed card bodies and the text
+     inside them. Light theme had already solved this the same way (it fills
+     with --color-bg-elevated, see the parity block below); dark theme was the
+     inconsistent one. Kept at 92% rather than opaque so the field still reads
+     faintly through the surface and cards keep their sense of sitting *in* the
+     atmosphere — it just stops competing with the content. */
   background:
     linear-gradient(90deg, transparent, color-mix(in srgb, var(--card-accent) 55%, transparent), transparent) 0 0 / 100% 1px no-repeat,
-    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.006));
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.006)),
+    var(--card-ground);
   /* Resting depth — the lightest elevation plane so cards read as engineered
      surfaces sitting on the page rather than flat outlines, plus an inset
      top-highlight for a crisp lit edge. The hover state lifts to a full accent
@@ -3517,7 +4099,7 @@ p,
 [data-theme="light"] .premium-card {
   background:
     linear-gradient(90deg, transparent, color-mix(in srgb, var(--card-accent) 42%, transparent), transparent) 0 0 / 100% 1px no-repeat,
-    var(--color-bg-elevated);
+    var(--card-ground);
   box-shadow: var(--glass-shadow-mid);
 }
 /* A white sheen is invisible on the light base — the shine uses a faint accent
@@ -3576,6 +4158,43 @@ p,
 .link-underline:hover,
 .link-underline:focus-visible {
   background-size: 100% 1px;
+}
+
+/* ── .card-deferred — off-screen render deferral ──
+   For long, uniform grids. `content-visibility: auto` lets the browser skip
+   layout, style and paint for items outside the viewport until they approach
+   it, and `contain-intrinsic-size` supplies the height to reserve meanwhile so
+   the scrollbar stays honest and nothing shifts when an item is realised.
+
+   Applied to the /library browse grid, which renders 100 compound cards in one
+   list — each with an inline SVG molecule — and is the single heaviest page on
+   the site (260 KB transferred, 4.7 MB decoded). Only the ~9 cards near the
+   viewport cost anything to render on arrival.
+
+   The intrinsic height is the measured card height at the 3-up desktop
+   breakpoint. Getting it wrong costs scroll-position accuracy, not layout
+   stability, because the value is only used while the item is skipped. */
+.card-deferred {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 7.5rem;
+}
+
+/* ── .action-link — the standalone-link control floor ──
+   WCAG 2.2 AA 2.5.8 exempts a link sitting inside a sentence, because its size
+   is constrained by the line-height of the prose around it. It does NOT exempt
+   a link standing on its own: a "View NMN →" at the foot of a panel, an entry
+   in a related-links list, a citation chip in a chip row. Those are controls,
+   and STYLE_GUIDE §4 already puts the hard minimum at 24px.
+
+   Measured on the rendered site (`npm run audit:ui`), the site had ~150 of
+   them rendering at 16–20px, concentrated in the library's panel footers,
+   related-link lists and citation rows — the densest, most-tapped surfaces it
+   has. This is the one class to reach for on any link that is an action rather
+   than a word in a sentence; it only ever grows the hit area, never the type. */
+.action-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
 }
 
 /* Long-form editorial wrapper. Enhances links, list markers and emphasis
@@ -3868,7 +4487,7 @@ p,
   gap: 0.45rem;
   flex: none;
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 600;
   letter-spacing: 0.12em;
   line-height: 1;
@@ -4000,7 +4619,7 @@ p,
   background:
     linear-gradient(135deg, color-mix(in srgb, var(--accent-cyan) 5%, transparent), transparent 42%),
     linear-gradient(315deg, color-mix(in srgb, var(--accent-emerald) 6%, transparent), transparent 48%),
-    color-mix(in srgb, var(--color-bg-elevated) 65%, transparent);
+    color-mix(in srgb, var(--card-ground) 100%, transparent);
   box-shadow: inset 0 1px 0 color-mix(in srgb, white 7%, transparent);
 }
 
@@ -4032,7 +4651,7 @@ p,
   display: block;
   margin-bottom: 0.45rem;
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 600;
   letter-spacing: 0.14em;
   line-height: 1.25;
@@ -4053,7 +4672,7 @@ p,
 .elite-briefing-grid p {
   margin: 0.45rem 0 0;
   max-width: 29ch;
-  font-size: 0.8125rem;
+  font-size: var(--type-13);
   line-height: 1.5;
   color: var(--color-text-muted);
 }
@@ -4138,7 +4757,7 @@ p,
 }
 @media (hover: hover) {
   .hm-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
     border-color: color-mix(in srgb, var(--card-accent, var(--accent-cyan)) 45%, var(--color-border-subtle));
     box-shadow: var(--glass-shadow-float), 0 0 42px -22px color-mix(in srgb, var(--card-accent, var(--accent-cyan)) 62%, transparent);
   }
@@ -4154,7 +4773,7 @@ p,
 }
 .hm-card__num {
   font-family: var(--font-display);
-  font-size: 1.9rem;
+  font-size: var(--type-30);
   line-height: 0.9;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
@@ -4162,7 +4781,7 @@ p,
 }
 .hm-card__title {
   font-family: var(--font-display);
-  font-size: 1.02rem;
+  font-size: var(--type-16);
   font-weight: 500;
   line-height: 1.15;
   letter-spacing: -0.01em;
@@ -4185,7 +4804,7 @@ p,
   border-top: 1px solid color-mix(in srgb, var(--color-border-subtle) 70%, transparent);
 }
 .hm-row__name {
-  font-size: 0.8125rem;
+  font-size: var(--type-13);
   line-height: 1.25;
   color: var(--color-text-secondary);
   overflow: hidden;
@@ -4198,11 +4817,15 @@ p,
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.2rem;
-  height: 1.2rem;
-  border-radius: 0.34rem;
+  /* Was 1.2rem/0.6rem — a 9.6px glyph in a 19px box. The tier letter is one of
+     the most-scanned marks on the site, so it is sized to be read: 11px glyph
+     in a 22px box, which also brings the badge within one step of the 24px
+     minimum target size rather than half of it. */
+  width: 1.375rem;
+  height: 1.375rem;
+  border-radius: 0.375rem;
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: var(--type-11);
   font-weight: 700;
   line-height: 1;
 }
@@ -4215,7 +4838,7 @@ p,
   align-items: center;
   gap: 0.35rem;
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: var(--type-micro);
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -4278,7 +4901,7 @@ p,
 }
 @media (hover: hover) {
   .step-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
     border-color: color-mix(in srgb, var(--accent-emerald) 42%, var(--color-border-subtle));
     box-shadow: var(--glass-shadow-float), 0 0 44px -22px color-mix(in srgb, var(--accent-emerald) 58%, transparent);
   }
@@ -4301,7 +4924,7 @@ p,
 }
 .step-card__num {
   font-family: var(--font-display);
-  font-size: 3rem;
+  font-size: var(--type-48);
   line-height: 0.8;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
@@ -4309,7 +4932,7 @@ p,
 }
 .step-card__eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: var(--type-micro);
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -4318,7 +4941,7 @@ p,
 }
 .step-card__title {
   font-family: var(--font-display);
-  font-size: 1.2rem;
+  font-size: var(--type-20);
   font-weight: 500;
   line-height: 1.12;
   letter-spacing: -0.01em;
@@ -4326,7 +4949,7 @@ p,
   margin-bottom: 0.55rem;
 }
 .step-card__desc {
-  font-size: 0.875rem;
+  font-size: var(--type-14);
   line-height: 1.55;
   color: var(--color-text-secondary);
   margin-bottom: 1.15rem;
@@ -4336,7 +4959,7 @@ p,
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.875rem;
+  font-size: var(--type-14);
   font-weight: 600;
   color: var(--accent-emerald);
 }
@@ -4378,7 +5001,7 @@ p,
   padding: 1.1rem 1.5rem;
   border-bottom: 1px solid color-mix(in srgb, var(--accent-violet) 14%, var(--color-border-subtle));
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -4407,7 +5030,7 @@ p,
   border: 1px solid var(--color-border-subtle);
   background: color-mix(in srgb, var(--color-bg-base) 45%, transparent);
   color: var(--color-text-secondary);
-  font-size: 0.875rem;
+  font-size: var(--type-14);
   font-weight: 600;
   text-align: center;
   transition: border-color 0.25s var(--ease-standard), background-color 0.25s var(--ease-standard), color 0.25s var(--ease-standard), box-shadow 0.25s var(--ease-standard);
@@ -4464,7 +5087,7 @@ p,
 .compound-bar__id { display: flex; align-items: center; gap: 0.65rem; min-width: 0; }
 .compound-bar__name {
   font-family: var(--font-display);
-  font-size: 1.05rem;
+  font-size: var(--type-17);
   font-weight: 500;
   letter-spacing: -0.01em;
   color: var(--color-text-primary);
@@ -4475,7 +5098,7 @@ p,
 .compound-bar__path {
   flex: none;
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: var(--type-micro);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-text-faint);
@@ -4483,7 +5106,7 @@ p,
 }
 .compound-bar__cta { display: flex; align-items: center; gap: 0.65rem; flex: none; }
 .compound-bar__secondary {
-  font-size: 0.8125rem;
+  font-size: var(--type-13);
   font-weight: 600;
   color: var(--color-text-secondary);
   white-space: nowrap;
@@ -4497,7 +5120,7 @@ p,
   gap: 0.45rem;
   padding: 0.55rem 0.95rem;
   border-radius: 0.7rem;
-  font-size: 0.8125rem;
+  font-size: var(--type-13);
   font-weight: 650;
   white-space: nowrap;
   color: #03100c;
@@ -4513,7 +5136,7 @@ p,
 }
 @media (max-width: 640px) {
   .compound-bar__path { display: none; }
-  .compound-bar__name { font-size: 0.95rem; max-width: 44vw; }
+  .compound-bar__name { font-size: var(--type-15); max-width: 44vw; }
   .compound-bar__secondary { display: none; }
   .compound-bar__primary { padding: 0.5rem 0.8rem; }
 }
@@ -4551,6 +5174,17 @@ p,
   mask-image: radial-gradient(74% 82% at 48% 34%, #000 0%, transparent 76%);
 }
 
+/* Once the instrument panel carries the right column, the background field's
+   job changes from "fill the void" to "texture the ground". Pulled left and
+   down so it sits behind the copy instead of competing with the panel. */
+@media (min-width: 1024px) {
+  .research-hero__field {
+    opacity: 0.26;
+    -webkit-mask-image: radial-gradient(58% 78% at 26% 38%, #000 0%, transparent 78%);
+    mask-image: radial-gradient(58% 78% at 26% 38%, #000 0%, transparent 78%);
+  }
+}
+
 .research-hero__veil {
   position: absolute;
   inset: 0;
@@ -4567,6 +5201,159 @@ p,
   padding-block: clamp(5.25rem, 10vw, 8.75rem) clamp(3.5rem, 7vw, 6.5rem);
 }
 
+/* ── Hub hero composition (STYLE_GUIDE §15) ──
+   Single column on phone and tablet, where the copy already fills the width.
+   From 1024px the hero becomes two columns — copy left, instrument panel right
+   — with the stat rail spanning beneath both. Before this the hero was one left
+   column and roughly 45% of the first viewport was empty on every hub. */
+@media (min-width: 1024px) {
+  .research-hero__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
+    column-gap: clamp(2.5rem, 4vw, 4.5rem);
+    align-items: center;
+  }
+  /* Rows are pinned explicitly. The stat rail spans both columns, so leaving
+     placement to the auto-flow algorithm pushed the figure onto a third row
+     under the rail instead of beside the copy. */
+  .research-hero__copy { grid-column: 1; grid-row: 1; }
+  .research-hero__figure { grid-column: 2; grid-row: 1; }
+  /* The data panel's stretch/fill rules live with the panel itself, further
+     down — a later same-specificity `display: block` there would otherwise
+     undo a `display: flex` declared here. */
+  /* The rail is a base to the whole hero, not a footnote to the copy. */
+  /* Scoped through the parent so the width override beats the base rule's
+     `width: min(100%, 50rem)`, which is defined later in this file — a media
+     query adds no specificity, so source order would otherwise win. The 50rem
+     cap is right for a single-column hero; spanning both columns the rail is
+     the composition's base and should run its full width. */
+  .research-hero__inner .research-hero__stats {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin-top: clamp(2.5rem, 4vw, 3.75rem);
+    width: 100%;
+  }
+}
+
+/* ── The instrument panel ──
+   Same framing language as the homepage's live-visual panels: a bordered plane
+   with an accent light-catch hairline along the top edge, real elevation, and a
+   mono caption that names what the visual is. The caption is load-bearing, not
+   decoration — a picture on a page that grades evidence has to say whether it
+   is data or atmosphere. */
+.research-hero__figure {
+  display: none;
+  position: relative;
+  border-radius: var(--radius-2xl);
+  border: 1px solid color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 22%, var(--color-border-subtle));
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 55%, transparent), transparent) 0 0 / 100% 1px no-repeat,
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.006)),
+    color-mix(in srgb, var(--color-bg-elevated) 82%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 30px 70px -40px color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 55%, transparent),
+    var(--glass-shadow-field);
+  overflow: hidden;
+}
+
+/* A data figure is content, so it renders at every width. Below the two-column
+   breakpoint it sits under the copy and above the stat rail — the reading order
+   the composition already implies — via the flex ordering in the block below. */
+.research-hero__figure--data {
+  display: block;
+  margin-top: clamp(1.75rem, 5vw, 2.5rem);
+}
+
+@media (min-width: 1024px) {
+  .research-hero__figure { display: block; margin-top: 0; }
+
+  /* Symmetry: a DATA panel is one of the composition's two halves, so it runs
+     the height of the half it is paired with. Measured at 1440×900 on /library
+     the copy column ran 501px and the panel 333px, centred — 168px of visible
+     imbalance on a two-column hero, and the panel read as a small card floating
+     beside a tall column rather than its counterpart.
+
+     The chain has to reach all the way in: the panel stretches, the stage grows
+     into it, and HubSplitInstrument — already written as `h-full` +
+     `justify-between`, i.e. built to fill — finally has the height to
+     distribute its header, rows and footer over, instead of bunching at the top
+     above dead space.
+
+     The decorative molecular field is deliberately excluded and keeps `center`:
+     it is a fixed 4/3 canvas and stretching it would distort the artwork. */
+  .research-hero__figure--data {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+  }
+  .research-hero__figure--data .research-hero__figure-stage--data {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+  .research-hero__figure--data .research-hero__figure-stage--data > * {
+    flex: 1 1 auto;
+  }
+}
+
+/* Single-column widths: flex the hero so the data figure can be ordered between
+   the copy and the stat rail. Column flex with stretch alignment reproduces the
+   block layout these three full-width children already had — only `order`
+   changes, and only when a data figure is present. */
+@media (max-width: 1023.98px) {
+  .research-hero__inner {
+    display: flex;
+    flex-direction: column;
+  }
+  .research-hero__copy { order: 1; }
+  .research-hero__figure--data { order: 2; }
+  .research-hero__stats { order: 3; }
+}
+
+.research-hero__figure-stage {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  /* Fades the canvas into the panel rather than ending on a hard edge. */
+  -webkit-mask-image: radial-gradient(78% 82% at 50% 46%, #000 32%, transparent 88%);
+  mask-image: radial-gradient(78% 82% at 50% 46%, #000 32%, transparent 88%);
+}
+
+/* Data figures have to be fully readable — the radial mask is for atmosphere
+   (the molecular field), not for numbers and labels. Drop it, drop the forced
+   4/3, and pad so the instrument sits inside the frame instead of bleeding
+   into the caption hairline. */
+.research-hero__figure-stage--data {
+  aspect-ratio: auto;
+  min-height: 17rem;
+  -webkit-mask-image: none;
+  mask-image: none;
+  padding: 1.25rem 1.35rem 0.5rem;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #ffffff 6%, transparent);
+}
+
+.research-hero__figure-cap {
+  margin: 0;
+  padding: 0.75rem 1.125rem 0.9rem;
+  border-top: 1px solid var(--color-border-subtle);
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+[data-theme="light"] .research-hero__figure {
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 42%, transparent), transparent) 0 0 / 100% 1px no-repeat,
+    var(--color-bg-elevated);
+  box-shadow: var(--glass-shadow-mid);
+}
+
 .research-hero__eyebrow {
   display: inline-flex;
   align-items: center;
@@ -4574,7 +5361,7 @@ p,
   margin: 0 0 1.125rem;
   color: var(--research-hero-accent, var(--accent-cyan));
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--type-11);
   font-weight: 600;
   letter-spacing: 0.2em;
   line-height: 1.4;
@@ -4594,7 +5381,7 @@ p,
   margin: 0;
   color: var(--color-text-primary);
   font-family: var(--font-display);
-  font-size: clamp(2.7rem, 6vw, 5.6rem);
+  font-size: var(--type-hero-title);
   font-weight: 450;
   letter-spacing: -0.042em;
   line-height: 0.98;
@@ -4610,7 +5397,7 @@ p,
   max-width: 58ch;
   margin: 1.35rem 0 0;
   color: var(--color-text-secondary);
-  font-size: clamp(1rem, 1vw + 0.7rem, 1.1875rem);
+  font-size: var(--type-hero-lead);
   line-height: 1.65;
   text-wrap: pretty;
 }
@@ -4661,7 +5448,7 @@ p,
   grid-row: 1 / span 2;
   color: color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 72%, var(--color-text-faint));
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 600;
   letter-spacing: 0.08em;
 }
@@ -4670,7 +5457,7 @@ p,
   min-width: 0;
   color: var(--research-hero-accent, var(--accent-cyan));
   font-family: var(--font-display);
-  font-size: clamp(1.55rem, 2.8vw, 2.25rem);
+  font-size: var(--type-hero-stat);
   font-weight: 520;
   letter-spacing: -0.04em;
   line-height: 1;
@@ -4680,22 +5467,25 @@ p,
 .research-hero__stat-label {
   grid-column: 2 / span 2;
   margin-top: 0.35rem;
-  overflow: hidden;
   color: var(--color-text-muted);
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: var(--type-micro);
   font-weight: 600;
   letter-spacing: 0.115em;
   line-height: 1.35;
-  text-overflow: ellipsis;
   text-transform: uppercase;
-  white-space: nowrap;
+  /* Was `nowrap` + ellipsis, which truncated real labels rather than wrapping
+     them: at 390px "Hallmarks of aging" needed 135px in a 130px cell and
+     rendered as "HALLMARKS OF AGI…". A stat rail whose job is to name what a
+     number counts cannot cut the name off. Two lines is the right answer; the
+     tiles are a grid row and equalise anyway. */
+  overflow-wrap: anywhere;
 }
 
 .research-hero__stat-arrow {
   align-self: center;
   color: var(--research-hero-accent, var(--accent-cyan));
-  font-size: 1rem;
+  font-size: var(--type-16);
   opacity: 0;
   transform: translateX(-0.25rem);
   transition: transform var(--dur-fast) var(--ease-standard), opacity var(--dur-fast) var(--ease-standard);
@@ -4734,7 +5524,7 @@ p,
   min-height: 3rem;
   padding: 0.8rem 1.2rem;
   border-radius: 0.875rem;
-  font-size: 0.9375rem;
+  font-size: var(--type-15);
   font-weight: 650;
   text-decoration: none;
   transition: transform var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard), background-color var(--dur-fast) var(--ease-standard);
@@ -4782,13 +5572,13 @@ p,
 
 @media (max-width: 40rem) {
   .research-hero__inner { padding-block: 4.25rem 3.25rem; }
-  .research-hero__title { font-size: clamp(2.4rem, 12vw, 3.4rem); }
-  .research-hero__lead { margin-top: 1.1rem; font-size: 1rem; }
+  .research-hero__title { font-size: var(--type-hero-title-sm); }
+  .research-hero__lead { margin-top: 1.1rem; font-size: var(--type-16); }
   .research-hero__stats { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 1.5rem; }
   .research-hero__stat { padding: 0.85rem 0.8rem; column-gap: 0.45rem; }
   .research-hero__stat::before { right: 0.75rem; left: 0.75rem; }
-  .research-hero__stat-value { font-size: 1.55rem; }
-  .research-hero__stat-label { font-size: 0.54rem; letter-spacing: 0.08em; }
+  .research-hero__stat-value { font-size: var(--type-24); }
+  .research-hero__stat-label { font-size: var(--type-micro); letter-spacing: 0.08em; }
   .research-hero__actions { display: grid; grid-template-columns: 1fr; gap: 0.625rem; margin-top: 1.5rem; }
   .research-hero__action { width: 100%; min-height: 2.875rem; }
 }
@@ -4840,7 +5630,7 @@ p,
 .context-bar__current {
   overflow: hidden;
   border-radius: 0.25rem;
-  font-size: 0.75rem;
+  font-size: var(--type-12);
   line-height: 1.25;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -4869,7 +5659,7 @@ p,
 .context-bar__status {
   color: var(--color-text-faint);
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: var(--type-micro);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -4886,7 +5676,7 @@ p,
   border-radius: 999px;
   background: color-mix(in srgb, currentColor 8%, transparent);
   color: var(--accent-cyan);
-  font-size: 0.75rem;
+  font-size: var(--type-12);
   font-weight: 650;
   line-height: 1;
   text-decoration: none;
@@ -4967,7 +5757,7 @@ p,
   margin: 0;
   color: var(--decision-accent, var(--accent-cyan));
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 650;
   letter-spacing: 0.14em;
   line-height: 1.4;
@@ -4979,7 +5769,7 @@ p,
   margin: 0.45rem 0 0;
   color: var(--color-text-primary);
   font-family: var(--font-display);
-  font-size: clamp(1.55rem, 2.4vw, 2.15rem);
+  font-size: var(--type-switchboard);
   font-weight: 500;
   letter-spacing: -0.03em;
   line-height: 1.06;
@@ -4990,7 +5780,7 @@ p,
   max-width: 64ch;
   margin: 0.65rem 0 0;
   color: var(--color-text-secondary);
-  font-size: 0.9375rem;
+  font-size: var(--type-15);
   line-height: 1.6;
   text-wrap: pretty;
 }
@@ -5045,7 +5835,7 @@ p,
 .decision-switchboard__number {
   color: color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 72%, var(--color-text-faint));
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: var(--type-micro);
   font-weight: 650;
   letter-spacing: 0.08em;
 }
@@ -5070,15 +5860,15 @@ p,
   color: var(--decision-accent, var(--accent-cyan));
   background: color-mix(in srgb, var(--decision-accent, var(--accent-cyan)) 9%, transparent);
   font-family: var(--font-mono);
-  font-size: 0.53rem;
+  font-size: var(--type-micro);
   font-weight: 700;
   letter-spacing: 0.08em;
   line-height: 1;
   text-transform: uppercase;
 }
 .decision-switchboard__copy { display: block; min-width: 0; margin-top: 0.95rem; }
-.decision-switchboard__step-title { display: block; color: var(--color-text-primary); font-size: 0.9rem; font-weight: 675; line-height: 1.3; }
-.decision-switchboard__step-detail { display: block; margin-top: 0.32rem; color: var(--color-text-muted); font-size: 0.76rem; line-height: 1.55; }
+.decision-switchboard__step-title { display: block; color: var(--color-text-primary); font-size: var(--type-14); font-weight: 675; line-height: 1.3; }
+.decision-switchboard__step-detail { display: block; margin-top: 0.32rem; color: var(--color-text-muted); font-size: var(--type-12); line-height: 1.55; }
 .decision-switchboard__action {
   display: inline-flex;
   align-items: center;
@@ -5087,7 +5877,7 @@ p,
   padding-top: 1rem;
   color: var(--decision-accent, var(--accent-cyan));
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: var(--type-micro);
   font-weight: 700;
   letter-spacing: 0.09em;
   line-height: 1.2;
@@ -5199,7 +5989,7 @@ p,
 .action-card__featured-label,
 .action-card__footer {
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   font-weight: 650;
   letter-spacing: 0.11em;
   line-height: 1.2;
@@ -5241,7 +6031,7 @@ p,
   display: block;
   margin-top: 0.58rem;
   color: var(--color-text-muted);
-  font-size: 0.78rem;
+  font-size: var(--type-12);
   line-height: 1.55;
 }
 .action-card__footer {
@@ -5333,6 +6123,28 @@ p,
   opacity: 0.78;
 }
 
+/* ── PageHeader eyebrow (v14 visual pass) ────────────────────────────────────
+   This class had no base definition — only the `--handoff` modifier did. The
+   element is a <div>, so on every page using the default variant the eyebrow
+   rendered as a BLOCK: a pill-shaped `.card-ultra` stretched to the full width
+   of its `max-w-4xl` header. On /trust/methodology that is a 900px-wide capsule
+   containing the words "TRUST · METHODOLOGY", which is what a chip looks like
+   when nobody told it to hug its content. It affected every page built on
+   PageHeader's default variant — the whole trust/legal/utility set (/about,
+   /contact, /partnerships, /trust/*, /editorial-policy, /corrections,
+   /health-data, /privacy, /terms, /faq, /site-map) plus the hub headers.
+
+   inline-flex, not inline-block: the eyebrow's children are a dot, an icon and
+   a label that need baseline-free vertical centering. Being inline-level also
+   means the existing `text-center` on centered headers centers it for free,
+   with no auto-margin special case. */
+.page-header__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  max-width: 100%;
+}
+
 .page-header__eyebrow--handoff {
   display: inline-flex;
   align-items: center;
@@ -5346,7 +6158,7 @@ p,
   margin: 0.6rem 0 0;
   color: var(--color-text-primary);
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-size: var(--type-handoff-title);
   font-weight: 520;
   letter-spacing: -0.035em;
   line-height: 1.04;
@@ -5357,7 +6169,7 @@ p,
   max-width: 62ch;
   margin: 0.7rem 0 0;
   color: var(--color-text-secondary);
-  font-size: 0.9375rem;
+  font-size: var(--type-15);
   line-height: 1.62;
   text-wrap: pretty;
 }
@@ -5411,7 +6223,7 @@ p,
   backdrop-filter: blur(18px) saturate(1.2);
   box-shadow: 0 14px 34px -20px rgba(0, 0, 0, 0.6);
   color: var(--color-foreground);
-  font-size: 0.8125rem;
+  font-size: var(--type-13);
   line-height: 1.2;
   /* Colour-only hover, and deliberately NO transform: this is a fixed control
      the reader must be able to hit first time. A hover lift (or .interactive's
@@ -5484,7 +6296,7 @@ p,
   padding: 0.4rem 0.5rem 0.55rem;
   border-bottom: 2px solid var(--color-border-subtle);
   color: var(--color-text-secondary);
-  font-size: 0.75rem;
+  font-size: var(--type-12);
   font-weight: 600;
   letter-spacing: 0.02em;
   transition: color 0.25s var(--ease-standard), border-color 0.25s var(--ease-standard);
@@ -5498,7 +6310,7 @@ p,
   border-radius: 999px;
   border: 1px solid currentColor;
   font-family: var(--font-mono, ui-monospace), monospace;
-  font-size: 0.625rem;
+  font-size: var(--type-micro);
   line-height: 1;
 }
 .nico-step.is-done {
@@ -5515,4 +6327,469 @@ p,
 
 @media (prefers-reduced-motion: reduce) {
   .nico-step { transition: none; }
+}
+
+/* ============================================================================
+   Design System v10 — Sitewide Glass Material
+   ----------------------------------------------------------------------------
+   v8 Deep Glass remains the heavy layered-plane recipe (budget 1–2 true
+   backdrop-filter moments per page). v10 gives every surface the *optical
+   language* of glass so chrome, cards, inputs, overlays and the footer read
+   as one material rather than a mix of flat fills and one-off frost.
+
+   Performance: .premium-card does NOT gain backdrop-filter. The /library
+   grid is 100 cards; blur there is the thing §16 measured. Cards get the
+   glass LOOK via refractive rim + inner specular + frost wash over
+   --card-ground, so molecule linework still cannot cross a sentence (§13).
+   Chrome and overlays get the real blur.
+   ========================================================================== */
+
+:root {
+  --glass-inner-highlight: inset 0 1px 0 color-mix(in srgb, var(--glass-edge-specular) 70%, transparent);
+  --glass-inner-shade: inset 0 -1px 0 color-mix(in srgb, var(--glass-edge-shadow) 45%, transparent);
+  --glass-rim: 0 0 0 1px color-mix(in srgb, var(--glass-edge-cool) 42%, transparent);
+  --glass-chrome-blur: 22px;
+  --glass-chrome-fill: color-mix(in srgb, var(--color-bg-base) 74%, transparent);
+}
+
+[data-theme="light"] {
+  --glass-inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  --glass-inner-shade: inset 0 -1px 0 rgba(15, 23, 42, 0.06);
+  --glass-rim: 0 0 0 1px color-mix(in srgb, var(--accent-cyan) 16%, var(--color-border-subtle));
+  --glass-chrome-fill: color-mix(in srgb, var(--color-bg-elevated) 68%, transparent);
+}
+
+/* Overlay / float chrome — command palette, modal, menus, toasts. */
+.glass-chrome {
+  background: var(--glass-chrome-fill);
+  backdrop-filter: blur(var(--glass-chrome-blur)) saturate(1.45);
+  -webkit-backdrop-filter: blur(var(--glass-chrome-blur)) saturate(1.45);
+  border: 1px solid color-mix(in srgb, var(--glass-edge-cool) 38%, var(--glass-border));
+  box-shadow:
+    var(--glass-inner-highlight),
+    var(--glass-shadow-float);
+}
+
+/* Lightweight glass (.glass) — inputs, small panels, secondary buttons. */
+.glass {
+  background: color-mix(in srgb, var(--glass-bg) 88%, transparent);
+  backdrop-filter: blur(var(--glass-blur-mid)) saturate(1.28);
+  -webkit-backdrop-filter: blur(var(--glass-blur-mid)) saturate(1.28);
+  border: 1px solid color-mix(in srgb, var(--glass-edge-cool) 28%, var(--glass-border));
+  box-shadow: var(--glass-inner-highlight), var(--glass-inner-shade);
+}
+
+/* Deep Glass planes — richer refraction, same budget. Plane shadows stay
+   on .glass-plane-* so field/mid/float elevation is not flattened. */
+.glass-deep {
+  backdrop-filter: blur(var(--glass-blur, 24px)) saturate(1.42);
+  -webkit-backdrop-filter: blur(var(--glass-blur, 24px)) saturate(1.42);
+}
+.glass-plane-field {
+  box-shadow: var(--glass-inner-highlight), var(--glass-shadow-field);
+}
+.glass-plane-mid {
+  box-shadow: var(--glass-inner-highlight), var(--glass-shadow-mid);
+}
+.glass-plane-content {
+  box-shadow: var(--glass-inner-highlight), var(--glass-shadow-content);
+}
+.glass-plane-float {
+  box-shadow: var(--glass-inner-highlight), var(--glass-shadow-float);
+}
+
+/* Content cards — glass look, grounded fill. No extra blur. */
+.premium-card {
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--card-accent) 58%, transparent), transparent) 0 0 / 100% 1px no-repeat,
+    linear-gradient(180deg, color-mix(in srgb, #ffffff 7.5%, transparent), color-mix(in srgb, #ffffff 1.2%, transparent) 38%, transparent 70%),
+    var(--card-ground);
+  border-color: color-mix(in srgb, var(--glass-edge-cool) 22%, var(--color-border-subtle));
+  box-shadow:
+    var(--glass-inner-highlight),
+    var(--glass-inner-shade),
+    var(--glass-rim),
+    var(--glass-shadow-field);
+}
+.premium-card:hover {
+  border-color: color-mix(in srgb, var(--card-accent) 48%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 14%, transparent),
+    var(--glass-inner-shade),
+    0 0 0 1px color-mix(in srgb, var(--card-accent) 28%, transparent),
+    0 24px 60px -28px color-mix(in srgb, var(--card-accent) 55%, transparent),
+    var(--glass-shadow-content);
+}
+.premium-card:active {
+  transform: translateY(-2px) scale(0.992);
+}
+
+[data-theme="light"] .premium-card {
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--card-accent) 42%, transparent), transparent) 0 0 / 100% 1px no-repeat,
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.18) 46%, transparent),
+    var(--card-ground);
+  box-shadow:
+    var(--glass-inner-highlight),
+    var(--glass-rim),
+    var(--glass-shadow-mid);
+}
+
+.card-elevated {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, #ffffff 5%, transparent), transparent 42%),
+    var(--color-bg-elevated);
+  box-shadow:
+    var(--glass-inner-highlight),
+    var(--glass-shadow-mid);
+}
+
+.tnic-glass {
+  box-shadow:
+    var(--glass-inner-highlight),
+    var(--glass-shadow-mid);
+}
+
+/* Navigation — frost wash + inner catch, still opaque enough that section
+   numerals cannot collide with links if blur is defeated by a stacking context. */
+.nav-glass {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--glass-edge-specular) 14%, transparent), transparent 52%),
+    color-mix(in srgb, var(--color-bg-base) 84%, transparent);
+  backdrop-filter: blur(24px) saturate(1.55);
+  -webkit-backdrop-filter: blur(24px) saturate(1.55);
+  box-shadow: var(--glass-inner-highlight);
+}
+.nav-glass-scrolled {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--glass-edge-specular) 10%, transparent), transparent 40%),
+    color-mix(in srgb, var(--color-bg-base) 94%, transparent);
+  backdrop-filter: blur(22px) saturate(1.5);
+  -webkit-backdrop-filter: blur(22px) saturate(1.5);
+}
+
+[data-theme="light"] .nav-glass {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.55), transparent 50%),
+    color-mix(in srgb, var(--color-bg-elevated) 82%, transparent);
+}
+[data-theme="light"] .nav-glass-scrolled {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.7), transparent 46%),
+    color-mix(in srgb, var(--color-bg-elevated) 90%, transparent);
+}
+
+/* Recessed glass wells. */
+.input-base {
+  background: color-mix(in srgb, var(--glass-bg) 72%, transparent);
+  backdrop-filter: blur(12px) saturate(1.12);
+  -webkit-backdrop-filter: blur(12px) saturate(1.12);
+  border-color: color-mix(in srgb, var(--glass-edge-cool) 22%, var(--color-border-strong));
+  box-shadow:
+    var(--glass-inner-highlight),
+    inset 0 2px 8px color-mix(in srgb, var(--glass-edge-shadow) 28%, transparent);
+}
+.input-base:focus-visible {
+  border-color: color-mix(in srgb, var(--accent-cyan) 55%, transparent);
+  box-shadow:
+    var(--glass-inner-highlight),
+    0 0 0 3px color-mix(in srgb, var(--accent-cyan) 14%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--accent-cyan) 18%, transparent);
+}
+
+/* Sticky table chrome. */
+.table-base thead th {
+  background: color-mix(in srgb, var(--color-bg-elevated) 78%, transparent);
+  backdrop-filter: blur(12px) saturate(1.12);
+  -webkit-backdrop-filter: blur(12px) saturate(1.12);
+  box-shadow: var(--glass-inner-highlight);
+}
+
+/* Footer — raised glass plane, not a flat slab. */
+.footer-aurora {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 100%, color-mix(in srgb, var(--accent-cyan) 10%, transparent), transparent),
+    radial-gradient(ellipse 60% 40% at 20% 80%, color-mix(in srgb, var(--accent-violet) 6%, transparent), transparent),
+    color-mix(in srgb, var(--color-bg-elevated) 58%, transparent);
+  backdrop-filter: blur(20px) saturate(1.22);
+  -webkit-backdrop-filter: blur(20px) saturate(1.22);
+  box-shadow:
+    var(--glass-inner-highlight),
+    var(--footer-lift-shadow);
+}
+
+/* Persistent workspace cue. */
+.context-bar {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--glass-edge-specular) 8%, transparent), transparent 70%),
+    color-mix(in srgb, var(--color-bg-base) 78%, transparent);
+  backdrop-filter: blur(18px) saturate(1.35);
+  -webkit-backdrop-filter: blur(18px) saturate(1.35);
+  box-shadow: var(--glass-inner-highlight), 0 12px 30px -26px color-mix(in srgb, #000 72%, transparent);
+}
+
+/* Ghost / outline / chip — same material as the rest of the chrome. */
+.btn-ghost-premium,
+.tnic-button-outline {
+  background: color-mix(in srgb, var(--glass-bg) 70%, transparent);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  box-shadow: var(--glass-inner-highlight);
+}
+.tnic-chip {
+  backdrop-filter: blur(8px) saturate(1.1);
+  -webkit-backdrop-filter: blur(8px) saturate(1.1);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #ffffff 10%, transparent);
+}
+.tnic-button-secondary {
+  background: color-mix(in srgb, #ffffff 8%, transparent);
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  box-shadow: var(--glass-inner-highlight);
+}
+
+.stat-card-hero {
+  backdrop-filter: blur(22px) saturate(1.35);
+  -webkit-backdrop-filter: blur(22px) saturate(1.35);
+}
+
+/* Overlay dim — more of the world shows through so the glass panel reads. */
+.glass-overlay {
+  background: color-mix(in srgb, var(--color-bg-base) 52%, transparent);
+  backdrop-filter: blur(10px) saturate(1.15);
+  -webkit-backdrop-filter: blur(10px) saturate(1.15);
+}
+
+@media (max-width: 767px) {
+  .glass,
+  .glass-chrome,
+  .input-base,
+  .footer-aurora,
+  .context-bar,
+  .btn-ghost-premium,
+  .tnic-button-outline {
+    backdrop-filter: blur(10px) saturate(1.12);
+    -webkit-backdrop-filter: blur(10px) saturate(1.12);
+  }
+  .nav-glass,
+  .nav-glass-scrolled {
+    backdrop-filter: blur(14px) saturate(1.25);
+    -webkit-backdrop-filter: blur(14px) saturate(1.25);
+  }
+  .table-base thead th {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .premium-card:active { transform: none; }
+}
+
+/* ============================================================================
+   Design System v11 — Coherence
+   ----------------------------------------------------------------------------
+   Same theme. One surface ladder, one motion recipe, one well. The leftover
+   fills (bg-card/40, bg-background/25, bg-muted/10, mixed border opacities)
+   made the site feel like several products. v11 names the nested well and
+   quiets card motion so glass reads as material, not as an effect.
+   ========================================================================== */
+
+.surface-well {
+  background: color-mix(in srgb, var(--glass-bg) 48%, transparent);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--glass-inner-highlight);
+}
+[data-theme="light"] .surface-well {
+  background: color-mix(in srgb, var(--color-bg-elevated) 78%, var(--color-bg-muted));
+}
+
+/* Segmented tracks (TabBar, theme toggle) — one well, inner pills. */
+.surface-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  max-width: 100%;
+  border-radius: var(--radius-2xl);
+  background: color-mix(in srgb, var(--glass-bg) 48%, transparent);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--glass-inner-highlight);
+}
+.surface-well .surface-well {
+  background: color-mix(in srgb, var(--glass-bg) 28%, transparent);
+}
+
+/* Quieter, professional card motion. 4px lift + diagonal shine on every
+   content card was a tell; 2px lift and the static inner highlight is enough. */
+.premium-card {
+  transition:
+    transform var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    box-shadow var(--dur-fast) var(--ease-standard);
+}
+.premium-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 12%, transparent),
+    var(--glass-inner-shade),
+    0 0 0 1px color-mix(in srgb, var(--card-accent) 22%, transparent),
+    0 16px 36px -24px color-mix(in srgb, var(--card-accent) 32%, transparent),
+    var(--glass-shadow-mid);
+}
+.premium-card:active {
+  transform: translateY(-1px) scale(0.995);
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .premium-card:hover::before {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+.glass-hover { transition: transform var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard), background-color var(--dur-fast) var(--ease-standard); }
+@media (hover: hover) {
+  .glass-hover:not(.glass-deep):hover {
+    transform: translateY(-2px);
+    background: color-mix(in srgb, var(--glass-bg) 92%, var(--accent-cyan) 3%);
+    border-color: color-mix(in srgb, var(--accent-cyan) 22%, var(--glass-border));
+    box-shadow:
+      var(--glass-inner-highlight),
+      0 10px 28px -14px rgba(0, 0, 0, 0.18);
+  }
+}
+
+.interactive {
+  transition-property: color, background-color, border-color, transform, box-shadow;
+  transition-duration: var(--dur-fast);
+  transition-timing-function: var(--ease-standard);
+}
+.interactive:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.stat-instrument {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, #ffffff 5.5%, transparent), transparent 55%),
+    color-mix(in srgb, var(--glass-bg) 42%, transparent);
+  border-color: var(--color-border-subtle);
+  box-shadow: var(--glass-inner-highlight);
+  transition: background var(--dur-base) var(--ease-standard), box-shadow var(--dur-base) var(--ease-standard);
+}
+
+.heading-accent-rule {
+  box-shadow: 0 0 10px color-mix(in srgb, var(--rule-accent, var(--accent-cyan)) 28%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .premium-card:hover,
+  .premium-card:active,
+  .glass-hover:hover,
+  .interactive:active { transform: none; }
+}
+
+/* ============================================================================
+   Design System v12 — Walk cards
+   ----------------------------------------------------------------------------
+   Related destinations share one card, not a leftover text list. Used by
+   ContinueTrail and in-page related rails. No extra blur; nested-well fill
+   plus an accent hairline. Hover is the v11 2px lift.
+   ========================================================================== */
+
+.walk-card {
+  --walk-accent: var(--accent-cyan);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-height: 100%;
+  padding: 1.15rem 1.2rem 1.25rem;
+  border-radius: var(--radius-2xl);
+  background: color-mix(in srgb, var(--glass-bg) 48%, transparent);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--glass-inner-highlight);
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  transition:
+    transform var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    box-shadow var(--dur-fast) var(--ease-standard);
+}
+.walk-card::before {
+  content: "";
+  position: absolute;
+  inset-inline: 1.15rem;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--walk-accent), transparent);
+  opacity: 0.7;
+  pointer-events: none;
+}
+.walk-card__kicker {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--walk-accent);
+}
+.walk-card__title {
+  /* Was 1.02rem (16.32px) — a third spelling of 16px alongside `1rem` and
+     `1.05rem`. On the ladder now; `lib/type-scale.test.ts` caught it. */
+  font-size: var(--type-16);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--color-text-primary);
+}
+.walk-card__detail {
+  font-size: var(--type-14);
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.walk-card__go {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: var(--color-text-muted);
+  transition: color var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard);
+}
+@media (hover: hover) {
+  .walk-card:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--walk-accent) 38%, transparent);
+    box-shadow:
+      var(--glass-inner-highlight),
+      0 14px 32px -20px color-mix(in srgb, var(--walk-accent) 28%, transparent);
+  }
+  .walk-card:hover .walk-card__title { color: var(--walk-accent); }
+  .walk-card:hover .walk-card__go {
+    color: var(--walk-accent);
+    transform: translate(1px, -1px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .walk-card:hover { transform: none; }
+}
+
+.continue-trail {
+  margin-top: 2.5rem;
+  padding-top: 2.25rem;
+  border-top: 1px solid var(--color-border-subtle);
+}
+.continue-trail__intro { margin-bottom: 1.25rem; }
+.continue-trail__grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) {
+  .continue-trail__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .continue-trail__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }

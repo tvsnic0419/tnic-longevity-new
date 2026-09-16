@@ -53,7 +53,7 @@ describe('site data integrity', () => {
   it('keeps crawl equity focused on fresh public search-intent routes', () => {
     const entries = buildSitemapEntries();
     const paths = entries.map((entry) => new URL(entry.url).pathname);
-    expect(DEFAULT_SITEMAP_LAST_MODIFIED.toISOString()).toBe('2026-08-27T00:00:00.000Z');
+    expect(DEFAULT_SITEMAP_LAST_MODIFIED.toISOString()).toBe('2026-09-13T00:00:00.000Z');
     expect(paths).not.toContain('/dashboard');
     expect(paths).not.toContain('/brief/feed.xml');
     expect(paths).not.toContain('/brief/feed.json');
@@ -70,7 +70,10 @@ describe('site data integrity', () => {
     expect(home).toContain('No pay-for-placement');
     expect(cards).toContain('Read evidence');
     expect(cards).toContain('after evidence review');
-    expect(footer).toContain('Start with the question you actually have.');
+    // Footer manifesto after Phase 1 uplift — keep CTAs + independence claim pinned.
+    expect(footer).toContain('Independent longevity intelligence');
+    expect(footer).toContain('Start the NICO Questionnaire');
+    expect(footer).toContain('Explore the evidence library');
     expect(guideHub).toContain("title: 'Longevity Supplement Guides 2026 — Evidence-Based Deep Dives'");
   });
 
@@ -81,8 +84,13 @@ describe('site data integrity', () => {
     const contextBar = readFileSync(resolve(process.cwd(), 'components/os/ContextBar.tsx'), 'utf8');
     const decisionSteps = readFileSync(resolve(process.cwd(), 'components/ui/DecisionSteps.tsx'), 'utf8');
     const home = readFileSync(resolve(process.cwd(), 'components/home/HomeDescent.tsx'), 'utf8');
-    const labs = readFileSync(resolve(process.cwd(), 'components/labs/LabHub.tsx'), 'utf8');
-    const stacks = readFileSync(resolve(process.cwd(), 'components/stacks/StacksLibrary.tsx'), 'utf8');
+    // The labs/stacks PageHeaders moved from these client islands up into their
+    // server pages, so the <h1> ships in the initial HTML instead of being
+    // stranded behind a useSearchParams() bailout (STYLE_GUIDE §14). The
+    // assertion is unchanged — the handoff variant must still be what those two
+    // hubs use — only the file it reads it from.
+    const labs = readFileSync(resolve(process.cwd(), 'app/labs/page.tsx'), 'utf8');
+    const stacks = readFileSync(resolve(process.cwd(), 'app/stacks/page.tsx'), 'utf8');
     const pageHeader = readFileSync(resolve(process.cwd(), 'components/ui/PageHeader.tsx'), 'utf8');
     const css = readFileSync(resolve(process.cwd(), 'app/globals.css'), 'utf8');
     const foundationCss = readFileSync(resolve(process.cwd(), 'components/ui/FlagshipFoundation.module.css'), 'utf8');
@@ -112,6 +120,12 @@ describe('site data integrity', () => {
     expect(home).toContain('grid-template-columns: repeat(2, minmax(0, 1fr));');
     expect(home).toContain('tnic-path primary focus-ring');
     expect(home).toContain('.tnic-descent .tnic-paths');
+    expect(home).toContain('tnic-hero-grid');
+    expect(home).toContain('tnic-intel');
+    expect(home).toContain('tnic-intel-grades');
+    expect(css).toContain('.metric-display');
+    expect(css).toContain('--page-max');
+    expect(css).toContain('--section-y');
   });
 
   it('every statically-routable app page is present in the sitemap', () => {
@@ -537,5 +551,166 @@ describe('site data integrity', () => {
     expect(hsts?.value).toContain('preload');
     expect(hsts?.value).toContain('includeSubDomains');
     expect(vercel.redirects.some((r) => r.destination.startsWith('https://tnic.help'))).toBe(true);
+  });
+
+  it('gives the library a molecule-first compound grid and a single identity band on deep-dives', () => {
+    // The 400% visual lever: unique geometry on every browse card (server SVG,
+    // never 100 canvases), and compound pages that stop restating the hero.
+    const thumb = readFileSync(resolve(process.cwd(), 'components/viz/MoleculeThumb.tsx'), 'utf8');
+    const explorer = readFileSync(resolve(process.cwd(), 'components/library/CompoundExplorer.tsx'), 'utf8');
+    const libraryPage = readFileSync(resolve(process.cwd(), 'app/library/page.tsx'), 'utf8');
+    const modulePage = readFileSync(resolve(process.cwd(), 'app/library/[slug]/[moduleSlug]/page.tsx'), 'utf8');
+    const detail = readFileSync(resolve(process.cwd(), 'components/library/LibraryModuleDetail.tsx'), 'utf8');
+    const hero = readFileSync(resolve(process.cwd(), 'components/viz/CompoundHero.tsx'), 'utf8');
+
+    expect(thumb).not.toContain("'use client'");
+    expect(thumb).toContain('hasGeometry');
+    expect(thumb).toContain('OrbitalThumb');
+    expect(explorer).toContain('<MoleculeThumb');
+    expect(explorer).not.toContain("'use client'");
+    expect(libraryPage).toContain('<CompoundExplorer');
+    // Compound grid is the first research surface after search, not buried
+    // under the hallmark atlas.
+    expect(libraryPage.indexOf('<CompoundExplorer')).toBeLessThan(libraryPage.indexOf('id="hallmark-atlas"'));
+    expect(libraryPage).toContain('id="hallmark-atlas"');
+    expect(detail).toContain('heroPresent');
+    expect(detail).toContain('id="evidence-module"');
+    expect(hero).toContain('#evidence-module');
+    // Evidence MDX precedes the full-spectrum appendix so the page is a
+    // narrative, not four identity bands stacked on the fold.
+    const detailIdx = modulePage.indexOf('<LibraryModuleDetail');
+    const spectrumIdx = modulePage.indexOf('<CompoundFullSpectrum');
+    expect(detailIdx).toBeGreaterThan(0);
+    expect(spectrumIdx).toBeGreaterThan(detailIdx);
+  });
+
+  it('the library hub identifies as the compound library, not the hallmark atlas', () => {
+    // The compound grid already led the page (PR #186) but the <h1>, title and
+    // hero lead still named the 12 hallmarks. Crawlers and the first viewport
+    // therefore described a different product than the one the page is.
+    const libraryPage = readFileSync(resolve(process.cwd(), 'app/library/page.tsx'), 'utf8');
+    const atlas = readFileSync(resolve(process.cwd(), 'components/library/AntiAgingLibrary.tsx'), 'utf8');
+    const instrument = readFileSync(
+      resolve(process.cwd(), 'components/library/LibraryHeroInstrument.tsx'),
+      'utf8',
+    );
+    const hero = readFileSync(resolve(process.cwd(), 'components/viz/CinematicHubHero.tsx'), 'utf8');
+    const css = readFileSync(resolve(process.cwd(), 'app/globals.css'), 'utf8');
+
+    expect(libraryPage).toContain('titleAsHeading');
+    expect(libraryPage).toContain('<LibraryHeroInstrument');
+    expect(libraryPage).toContain('CollectionPage');
+    expect(libraryPage).toContain('hallmarkLibrary.length');
+    expect(libraryPage).toContain('COMPOUND_COUNT');
+    expect(libraryPage).not.toContain('asPageTitle');
+    expect(libraryPage).toContain('hideLocalSearch');
+    expect(libraryPage).not.toMatch(/value: '12'/);
+    expect(libraryPage).toContain("secondary={{ href: '/library/evidence'");
+    expect(libraryPage).not.toContain('COMPLETE VISUAL SYSTEM');
+    expect(libraryPage).not.toContain('Hover to explore');
+    expect(libraryPage).toContain('The mechanistic atlas');
+    expect(atlas).toContain('hideLocalSearch');
+    expect(atlas).toContain('hallmarkLibrary.length');
+    expect(instrument).not.toContain("'use client'");
+    expect(instrument).toContain('evidenceIndexStats');
+    expect(instrument).toContain('TIER_COLOR_VAR');
+    expect(hero).toContain('research-hero__figure-stage--data');
+    expect(css).toContain('.research-hero__figure-stage--data');
+  });
+
+  it('the canonical head-to-head URL ships the default comparison as its Suspense fallback', () => {
+    // Awaiting ?a=&b= inside the island used to leave the indexable address
+    // with identity and a skeleton. The default pair is the canonical
+    // comparison; it has to be in the fallback so the first HTML contains it.
+    const page = readFileSync(
+      resolve(process.cwd(), 'app/library/compare/head-to-head/page.tsx'),
+      'utf8',
+    );
+    expect(page).toContain('DEFAULT_PAIR.a');
+    expect(page).toContain('DEFAULT_PAIR.b');
+    expect(page).toContain('fallback=');
+    expect(page).toContain('<HeadToHeadBody');
+    expect(page).toContain('<HeadToHeadCompare');
+    expect(page).not.toContain('SectionSkeleton');
+  });
+
+  it('the hub instrument is a shared derived split, and the body face is Hanken', () => {
+    // v1.7: Inter was the last generic-SaaS tell; the remaining cinematic hubs
+    // still filled the right column with atmosphere even when they had a
+    // countable set. The library instrument became HubSplitInstrument so every
+    // hub with something to count passes a derived figure, not a one-off.
+    const instrument = readFileSync(
+      resolve(process.cwd(), 'components/viz/HubSplitInstrument.tsx'),
+      'utf8',
+    );
+    const libraryInstrument = readFileSync(
+      resolve(process.cwd(), 'components/library/LibraryHeroInstrument.tsx'),
+      'utf8',
+    );
+    const layout = readFileSync(resolve(process.cwd(), 'app/layout.tsx'), 'utf8');
+    const css = readFileSync(resolve(process.cwd(), 'app/globals.css'), 'utf8');
+    const tokens = readFileSync(resolve(process.cwd(), 'components/viz/tokens.ts'), 'utf8');
+
+    expect(instrument).not.toContain("'use client'");
+    expect(instrument).toContain('HubSplitRow');
+    expect(instrument).toContain('HUB_ACCENT_VAR');
+    expect(libraryInstrument).toContain('HubSplitInstrument');
+    expect(libraryInstrument).toContain('evidenceIndexStats');
+    expect(libraryInstrument).not.toContain("'use client'");
+
+    expect(layout).toContain('Hanken_Grotesk');
+    expect(layout).toContain('--font-hanken');
+    expect(layout).not.toContain('--font-inter');
+    expect(layout).not.toContain('Inter(');
+    expect(css).toContain('--font-hanken');
+    expect(css).toContain('::selection');
+    expect(css).toContain('.nav-glass::before');
+    expect(css).toContain('font-optical-sizing: auto');
+    expect(css).toContain('Design System v10');
+    expect(css).toContain('.glass-chrome');
+    expect(css).toContain('--glass-inner-highlight');
+    expect(css).toContain('--glass-chrome-fill');
+    expect(css).toContain('Design System v11');
+    expect(css).toContain('.surface-well');
+    expect(css).toContain('Design System v12');
+    expect(css).toContain('.walk-card');
+    expect(css).toContain('.continue-trail');
+    expect(tokens).toContain('Hanken Grotesk');
+    expect(tokens).not.toContain("'Inter'");
+
+    const hubsWithFigure = [
+      'app/hallmarks/page.tsx',
+      'app/peptides/page.tsx',
+      'app/pathways/page.tsx',
+      'app/library/evidence/page.tsx',
+      'app/stacks/page.tsx',
+      'app/stacks/lab/page.tsx',
+      'app/tools/page.tsx',
+      'app/trust/page.tsx',
+      'app/protocols/page.tsx',
+      'app/insights/page.tsx',
+      'app/products/page.tsx',
+      'app/compound-engine/page.tsx',
+      'app/supplement-guides/page.tsx',
+      'app/learn/page.tsx',
+    ];
+    for (const rel of hubsWithFigure) {
+      const src = readFileSync(resolve(process.cwd(), rel), 'utf8');
+      expect(src, `${rel} must pass a derived figure`).toContain('figure=');
+      expect(src, `${rel} must use HubSplitInstrument or LibraryHeroInstrument`).toMatch(
+        /HubSplitInstrument|LibraryHeroInstrument/,
+      );
+    }
+
+    // Hallmark-count rails that used to be a literal "12".
+    for (const rel of ['app/labs/page.tsx', 'app/trust/page.tsx', 'app/protocols/page.tsx']) {
+      const src = readFileSync(resolve(process.cwd(), rel), 'utf8');
+      expect(src, `${rel} must derive hallmark count`).toContain('hallmarkLibrary.length');
+      expect(src, `${rel} must not hardcode a hallmark rail of 12`).not.toMatch(/value: '12'/);
+    }
+
+    const peptides = readFileSync(resolve(process.cwd(), 'app/peptides/page.tsx'), 'utf8');
+    expect(peptides).toContain('peptideLibrary.length');
+    expect(peptides).not.toMatch(/Eight of the most-discussed/);
   });
 });

@@ -12,9 +12,7 @@ import {
   Share2,
   Printer,
   Trash2,
-  Network,
 } from 'lucide-react';
-import { PageHeader } from '@/components/ui/PageHeader';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
 import {
   COMPOUND_DB,
@@ -146,16 +144,7 @@ export function PathwayArchitect() {
   const isEmpty = selected.size === 0;
 
   return (
-    <div className="container-page py-10 md:py-14">
-      <PageHeader
-        icon={Network}
-        eyebrow="Interactive Tool"
-        title="Pathway Architect"
-        description={`${COMPOUND_DB.length} evidence-graded compounds mapped to ${Object.keys(PATHWAY_LABELS).length} molecular pathways. Toggle cards to build a protocol — synergy, redundancy, and interaction cautions surface live from the same engine that powers the Compound Intelligence Engine.`}
-        theme="violet"
-        as="h1"
-      />
-
+    <div className="container-page pb-10 md:pb-14">
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_400px] mt-8">
         <div>
           {/* Pathway filter chips */}

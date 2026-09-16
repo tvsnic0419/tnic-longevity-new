@@ -89,15 +89,15 @@ export function ResearchPassport() {
         </div>
 
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-xl border border-border/70 bg-background/25 p-4">
+          <div className="rounded-xl surface-well p-4">
             <p className="text-micro font-mono uppercase tracking-[0.12em] text-muted-foreground">Modules explored</p>
             <p className="mt-1 font-display text-3xl text-foreground">{entries.length}</p>
           </div>
-          <div className="rounded-xl border border-border/70 bg-background/25 p-4">
+          <div className="rounded-xl surface-well p-4">
             <p className="text-micro font-mono uppercase tracking-[0.12em] text-muted-foreground">Research lenses</p>
             <p className="mt-1 font-display text-3xl text-foreground">{categories}</p>
           </div>
-          <div className="rounded-xl border border-border/70 bg-background/25 p-4">
+          <div className="rounded-xl surface-well p-4">
             <p className="text-micro font-mono uppercase tracking-[0.12em] text-muted-foreground">Saved for later</p>
             <p className="mt-1 font-display text-3xl text-foreground">{queue.length}</p>
           </div>
@@ -114,7 +114,7 @@ export function ResearchPassport() {
                 <Link
                   key={entry.slug}
                   href={entry.href}
-                  className="focus-ring group rounded-xl border border-border/70 bg-background/20 p-4 transition-colors hover:border-accent-cyan/35 hover:bg-accent-cyan/[0.04]"
+                  className="focus-ring group rounded-xl surface-well p-4 transition-colors hover:border-accent-cyan/35 hover:bg-accent-cyan/[0.04]"
                 >
                   <p className="text-micro font-mono uppercase tracking-[0.1em] text-accent-cyan">{categoryLabel[entry.category]}</p>
                   <p className="mt-2 text-sm font-semibold leading-snug text-foreground group-hover:text-accent-cyan">{entry.title}</p>

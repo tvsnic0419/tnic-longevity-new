@@ -1,11 +1,40 @@
-# TNiC Help — Anti-Aging Operating System
+# TNiC — Evidence-graded longevity library
 
-Evidence-based longevity education platform at [tnic.help](https://tnic.help).
+Independent education platform at **[tnic.help](https://tnic.help)**.
+
+Every compound is graded A–C from human evidence. Citations are PMID-linked.
+Commercial relationships cannot buy a grade, a stack position, or a product pick.
+
+## For reviewers (eight minutes)
+
+Send this README or, better, the live brief: **[tnic.help/partnerships](https://tnic.help/partnerships)**.
+
+1. [Home](https://tnic.help/) — the thesis
+2. [Library](https://tnic.help/library) — every intervention, graded
+3. [Evidence table](https://tnic.help/library/evidence) — the index
+4. [GlyNAC deep-dive](https://tnic.help/library/compounds/glynac) — a Tier A module
+5. [Methodology](https://tnic.help/trust/methodology) — how a grade is assigned
+6. [Sponsorship principles](https://tnic.help/trust/sponsorship) — what money cannot buy
+
+Partnership inquiries: [protocol@tnic.help](mailto:protocol@tnic.help)
+
+## What this repository is
+
+The production Next.js app behind tnic.help. Product contracts live at the root:
+
+| File | Why it is here |
+|------|----------------|
+| `STYLE_GUIDE.md` | Design system |
+| `NOTES-COMPOUND-LIBRARY.md` | Content integrity — no invented mechanism, dose, or PMID |
+| `LICENSE` | All rights reserved |
+| `docs/` | Public docs index; session logs live under `docs/internal/` |
+
+Internal commercial outreach (target lists, commission tables, email scripts) is **not** in this tree.
 
 ## Stack
 
 - **Next.js 16** (App Router) · **React 19** · **Tailwind CSS 4**
-- **Vercel** — production hosting, domain, cron
+- **Vercel** — production hosting, domain, cron (`tnic-projects/tnic-help`)
 - **Vitest** — unit tests · **ESLint** — linting
 
 ## Local development
@@ -31,37 +60,15 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Deployment
 
-**Production URL:** `https://tnic.help`  
-**Vercel project:** `tnic-projects/tnic-help`  
+**Production URL:** `https://tnic.help`
+**Vercel project:** `tnic-projects/tnic-help`
 **Infra reference:** `infra/vercel-project.json`
-
-### How deploys work
 
 1. Push to `main` on GitHub → Vercel auto-deploys production
 2. PR branches get preview URLs (use their `*.vercel.app` hostname)
 3. GitHub Actions runs lint + test + build on every push/PR
 
-### Required Vercel env vars (Production)
-
-| Variable | Required | Purpose |
-|----------|----------|---------|
-| `NEXT_PUBLIC_SITE_URL` | Yes | Canonical URL (`https://tnic.help`) |
-| `CRON_SECRET` | Yes | Protects `/api/cron/brief` |
-| `RESEND_API_KEY` | For email | Protocol Brief delivery |
-| `RESEND_FROM_EMAIL` | For email | Sender address |
-| `LAB_WEBHOOK_SECRET` | Yes | Partner webhook auth |
-
-See `.env.example` for the full list.
-
-### Domain
-
-- **Registrar:** Vercel (nameservers already configured)
-- **Canonical:** `tnic.help` (apex)
-- **Redirect:** `www.tnic.help` → `tnic.help` (308, in `vercel.json` + `proxy.ts`)
-
-### Weekly cron
-
-Vercel calls `GET /api/cron/brief` every Monday 09:00 UTC with `Authorization: Bearer $CRON_SECRET`.
+Required production env vars are listed in `.env.example`. Canonical domain is the apex `tnic.help` (`www` 308-redirects).
 
 ## Project structure
 
@@ -69,5 +76,7 @@ Vercel calls `GET /api/cron/brief` every Monday 09:00 UTC with `Authorization: B
 app/          # Next.js routes & API
 components/   # UI components
 lib/          # Business logic, SEO, integrations
+content/      # Authored compound / guide MDX
+docs/         # Public docs + internal/ session logs
 infra/        # Committed deployment metadata (not secrets)
 ```

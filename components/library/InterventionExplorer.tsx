@@ -156,7 +156,7 @@ export function InterventionExplorer({
                     {compound && compoundHref && (
                       <a
                         href={`/library/compounds/${compoundHref}`}
-                        className="focus-ring interactive inline-flex items-center gap-1 rounded text-xs font-medium text-accent-violet hover:text-accent-cyan"
+                        className="action-link focus-ring interactive gap-1 rounded text-xs font-medium text-accent-violet hover:text-accent-cyan"
                       >
                         View {compound.name}
                         <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />

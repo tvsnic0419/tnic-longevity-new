@@ -14,9 +14,11 @@ import { platformStats } from '@/lib/derived-stats';
  */
 export function HomeCredibilityStrip() {
   return (
-    <section className="container-page py-10 md:py-14" aria-label="Platform credibility">
+    <section className="container-page py-[var(--section-y)]" aria-label="Platform credibility">
       <PlatformCredibilityStrip stats={platformStats} />
       <p className="mt-4 text-center text-xs text-muted-foreground max-w-2xl mx-auto">
+        A live census of the published model — compounds, hallmarks, pathways and
+        citations, counted from the registries themselves rather than typed in.
         Every grade traces to the strength of human evidence, tiered A–C. One
         verified product per compound — no pay-for-placement.{' '}
         <Link

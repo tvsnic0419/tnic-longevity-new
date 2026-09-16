@@ -9,6 +9,7 @@ export const metadata = seoRoutes.trustDisclaimers();
 export default function DisclaimersPage() {
   return (
     <TrustPageTemplate
+      path="/trust/disclaimers"
       icon={Eye}
       eyebrow="Trust · Disclaimers"
       title="Disclaimers & Notices"

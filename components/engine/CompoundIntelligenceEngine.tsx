@@ -18,7 +18,7 @@
    There are no literal colours in this file, so the engine follows the
    light/dark toggle exactly like the compound deep-dives it links out to.
    Type follows the site's three roles: Fraunces for headings, JetBrains Mono
-   for scores and labels, Inter for body.
+   for scores and labels, Hanken Grotesk for body.
 ============================================================================ */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -127,7 +127,7 @@ const css = `
 .sie-input{
   background:color-mix(in srgb, var(--sie-ink) 55%, transparent);
   border:1px solid var(--sie-line);border-radius:var(--sie-r-control);
-  color:var(--sie-text);padding:11px 13px;font-size:14px;width:100%;outline:none;
+  color:var(--sie-text);padding:11px 13px;font-size: var(--type-14);width:100%;outline:none;
   transition:border-color .15s, box-shadow .15s;font-family:var(--font-sans);
 }
 .sie-input:focus{
@@ -139,7 +139,7 @@ const css = `
   display:inline-flex;align-items:center;gap:7px;border-radius:var(--sie-r-control);
   border:1px solid var(--sie-line);
   background:color-mix(in srgb, var(--sie-panel) 70%, transparent);
-  color:var(--sie-text);padding:10px 14px;font-size:13px;font-weight:600;cursor:pointer;
+  color:var(--sie-text);padding:10px 14px;font-size: var(--type-13);font-weight:600;cursor:pointer;
   transition:transform .12s, border-color .15s, background .15s;
   font-family:var(--font-sans);text-decoration:none;
 }
@@ -149,7 +149,7 @@ const css = `
 .sie-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 .sie-tab{
   display:inline-flex;align-items:center;gap:8px;padding:10px 14px;
-  border-radius:var(--sie-r-control);font-size:13px;font-weight:600;cursor:pointer;
+  border-radius:var(--sie-r-control);font-size: var(--type-13);font-weight:600;cursor:pointer;
   color:var(--sie-muted);border:1px solid transparent;background:transparent;
   transition:color .15s, background .15s, border-color .15s;white-space:nowrap;
   font-family:var(--font-sans);
@@ -165,7 +165,7 @@ const css = `
   display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;
   border:1px solid var(--sie-line);
   background:color-mix(in srgb, var(--sie-ink) 45%, transparent);
-  font-size:12px;color:var(--sie-body);
+  font-size: var(--type-12);color:var(--sie-body);
 }
 .sie-tag{
   display:inline-block;padding:3px 8px;border-radius:var(--radius-sm);

@@ -5,19 +5,15 @@ import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { Cpu, Layers, Wrench, Table2, BookOpen, ShoppingBag, Sparkles } from 'lucide-react';
+import { Cpu, Wrench, Table2, BookOpen, ShoppingBag, Sparkles } from 'lucide-react';
 import { eliteStacks } from '@/lib/stacks-library';
-import { compounds } from '@/lib/data';
 import { usePlatform } from '@/context/PlatformContext';
 import { buildEngineStackUrl, buildShopStackUrl, parseStackParam } from '@/lib/stack-url';
-import { PageShell } from '@/components/ui/PageShell';
-import { PageHeader } from '@/components/ui/PageHeader';
 import { TabBar } from '@/components/ui/TabBar';
 import { SectionSkeleton } from '@/components/ui/SectionSkeleton';
 import { DynamicStackBuilder } from './DynamicStackBuilder';
 import { EliteStackCard } from './EliteStackCard';
 import { ToolsPromoStrip } from '@/components/tools/ToolsPromoStrip';
-import { getHubContext } from '@/lib/hub-context';
 import { StackStartCompass } from './StackStartCompass';
 
 // Only ever rendered behind the "Compare" tab — lazy so its compound-data
@@ -74,17 +70,7 @@ export function StacksLibrary() {
   }, [hasIncomingStack]);
 
   return (
-    <PageShell>
-      <PageHeader
-        icon={Layers}
-        eyebrow="Stacks & Protocols"
-        title="Stack Architect"
-        description="Pre-built evidence-graded protocols with dosing, monitoring, and cost breakdowns. Build custom stacks with real-time synergy and contraindication analysis."
-        meta={`${eliteStacks.length} elite stacks · ${compounds.length} stack-buildable compounds · Educational only`}
-        theme="violet"
-        variant="handoff"
-        context={getHubContext('stacks')}
-      />
+    <>
 
       {sourceLabel && (
         <div className="mb-6 flex flex-wrap items-center gap-3 rounded-xl border border-accent-violet/25 bg-accent-violet/5 px-4 py-3">
@@ -163,19 +149,35 @@ export function StacksLibrary() {
         )}
       </div>
 
-      <TabBar
-        tabs={tabs}
-        active={tab}
-        onChange={(id) => {
-          setSelectedTab(id);
-          if (id === 'builder') {
-            setTimeout(() => document.getElementById('stack-builder')?.scrollIntoView({ behavior: 'smooth' }), 100);
-          }
-        }}
-        theme="violet"
-        ariaLabel="Stacks library sections"
-        className="mb-8 justify-center sm:justify-start"
-      />
+      <div className="sticky top-[calc(var(--nav-h,3.5rem)+0.5rem)] z-30 mb-8 -mx-1 rounded-2xl border border-border/50 bg-background/85 px-2 py-2 backdrop-blur-md supports-[backdrop-filter]:bg-background/70">
+        <div className="mb-2 flex justify-end sm:hidden">
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedTab('builder');
+              setTimeout(() => document.getElementById('stack-builder')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+            }}
+            className="focus-ring inline-flex min-h-[var(--space-touch)] items-center gap-1.5 rounded-full bg-accent-violet px-3 text-caption font-bold text-black"
+          >
+            <Wrench className="h-3.5 w-3.5" aria-hidden="true" />
+            Clone & Customize
+          </button>
+        </div>
+        <TabBar
+          tabs={tabs}
+          active={tab}
+          onChange={(id) => {
+            setSelectedTab(id);
+            if (id === 'builder') {
+              setTimeout(() => document.getElementById('stack-builder')?.scrollIntoView({ behavior: 'smooth' }), 100);
+            }
+          }}
+          theme="violet"
+          ariaLabel="Stacks library sections"
+          equalWidth
+          className="justify-stretch"
+        />
+      </div>
 
       <motion.div
         key={tab}
@@ -228,6 +230,6 @@ export function StacksLibrary() {
           </button>
         </section>
       )}
-    </PageShell>
+    </>
   );
 }

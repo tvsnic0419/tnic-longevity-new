@@ -2,7 +2,11 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { COMMAND_PALETTE_EVENT, EXPORT_KIT_EVENT } from './os-events';
+import {
+  COMMAND_PALETTE_EVENT,
+  EXPORT_KIT_EVENT,
+  type CommandPaletteOpenDetail,
+} from './os-events';
 
 // Both overlays pull in the full compound / hallmark / comparison data layer
 // (~250 kB of source) through the command-palette index and export kit. They
@@ -26,13 +30,17 @@ const ExportKitModal = dynamic(
 export function OsOverlays() {
   const [paletteLoaded, setPaletteLoaded] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  // Seeded by the launcher event, so the header search box can hand its query
+  // straight into the palette instead of making the reader retype it.
+  const [paletteQuery, setPaletteQuery] = useState('');
   const [exportLoaded, setExportLoaded] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const returnFocusRef = useRef<HTMLElement | null>(null);
 
-  const openPalette = useCallback(() => {
+  const openPalette = useCallback((query = '') => {
     returnFocusRef.current =
       document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    setPaletteQuery(query);
     setPaletteLoaded(true);
     setPaletteOpen(true);
   }, []);
@@ -50,7 +58,10 @@ export function OsOverlays() {
   const closeExport = useCallback(() => setExportOpen(false), []);
 
   useEffect(() => {
-    const onPaletteEvent = () => openPalette();
+    const onPaletteEvent = (event: Event) => {
+      const detail = (event as CustomEvent<CommandPaletteOpenDetail>).detail;
+      openPalette(detail?.query ?? '');
+    };
     const onExportEvent = () => openExport();
     window.addEventListener(COMMAND_PALETTE_EVENT, onPaletteEvent);
     window.addEventListener(EXPORT_KIT_EVENT, onExportEvent);
@@ -88,7 +99,9 @@ export function OsOverlays() {
 
   return (
     <>
-      {paletteLoaded && <CommandPalette open={paletteOpen} onClose={closePalette} />}
+      {paletteLoaded && (
+        <CommandPalette open={paletteOpen} onClose={closePalette} initialQuery={paletteQuery} />
+      )}
       {exportLoaded && <ExportKitModal open={exportOpen} onClose={closeExport} />}
     </>
   );

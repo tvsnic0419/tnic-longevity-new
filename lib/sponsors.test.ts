@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   SPONSORS,
+  SPONSOR_SLOT_CATALOG,
   getActiveSponsor,
   isSponsorActive,
   type Sponsor,
@@ -63,6 +64,22 @@ describe('SPONSORS inventory integrity', () => {
       }
       expect(ids.has(s.id), `duplicate sponsor id ${s.id}`).toBe(false);
       ids.add(s.id);
+    }
+  });
+});
+
+describe('SPONSOR_SLOT_CATALOG', () => {
+  it('covers every slot id and no extras', () => {
+    expect(Object.keys(SPONSOR_SLOT_CATALOG).sort()).toEqual([...VALID_SLOTS].sort());
+  });
+
+  it('every catalog entry has a live internal href and non-empty copy', () => {
+    for (const id of VALID_SLOTS) {
+      const entry = SPONSOR_SLOT_CATALOG[id];
+      expect(entry.href.startsWith('/'), `${id} href must be an internal path`).toBe(true);
+      expect(entry.label.trim().length).toBeGreaterThan(0);
+      expect(entry.surface.trim().length).toBeGreaterThan(0);
+      expect(entry.intent.trim().length).toBeGreaterThan(0);
     }
   });
 });

@@ -5,13 +5,12 @@ import { peptideLibrary } from '@/lib/peptides-library';
 import { getAllPathwaySlugs } from '@/lib/pathways';
 import { getAllComparisonSlugs } from '@/lib/comparisons';
 import { getAllBestForSlugs } from '@/lib/best-for';
-import { toolsRegistry } from '@/lib/registry';
 import { SITE } from '@/lib/site';
 
 // Keep the sitemap's default freshness aligned with the current editorial release.
 // Authenticated or utility-only surfaces are excluded below so crawl equity stays
 // concentrated on public, search-intent pages.
-export const DEFAULT_SITEMAP_LAST_MODIFIED = new Date('2026-08-27T00:00:00.000Z');
+export const DEFAULT_SITEMAP_LAST_MODIFIED = new Date('2026-09-13T00:00:00.000Z');
 
 export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED): MetadataRoute.Sitemap {
   const base = SITE.url;
@@ -30,6 +29,14 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     // addresses that all canonicalize back here, so they are deliberately not
     // enumerated — listing them would be doorway-page spam, not coverage.
     { url: `${base}/library/compare/head-to-head`, lastModified, changeFrequency: 'monthly', priority: 0.84 },
+    // The whole graded library as one table. High priority: it is the index
+    // over every compound deep-dive, so it is the page a crawler should reach
+    // earliest to find the other hundred.
+    { url: `${base}/library/evidence`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
+    // Every study the library cites, as one dataset. Sits just under the
+    // evidence table: same index role, one level deeper — that table indexes the
+    // compounds, this one indexes the literature behind them.
+    { url: `${base}/library/trials`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/insights`, lastModified, changeFrequency: 'weekly', priority: 0.86 },
     { url: `${base}/learn`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/faq`, lastModified, changeFrequency: 'monthly', priority: 0.85 },
@@ -38,6 +45,13 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     { url: `${base}/protocols`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/biohack-100`, lastModified, changeFrequency: 'monthly', priority: 0.86 },
     { url: `${base}/labs`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
+    // /tools only. The seven `/tools?tab=…` variants used to be listed here as
+    // separate entries; they are the same page with a client-side tab
+    // preselected, they all carry /tools' <title> and description, and they all
+    // declare rel=canonical → /tools. A sitemap entry that the page itself
+    // canonicalises away is a contradiction — the sitemap asks for indexing and
+    // the page declines it — and eight URLs sharing one title is how a site
+    // teaches a crawler that its titles mean nothing.
     { url: `${base}/tools`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/elite-8`, lastModified, changeFrequency: 'monthly', priority: 0.88 },
     { url: `${base}/compound-engine`, lastModified, changeFrequency: 'monthly', priority: 0.82 },
@@ -54,6 +68,11 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     { url: `${base}/taurine-supplement-guide`, lastModified, changeFrequency: 'weekly', priority: 0.86 },
     { url: `${base}/sulforaphane-supplement-guide`, lastModified, changeFrequency: 'weekly', priority: 0.86 },
     { url: `${base}/spermidine-supplement-guide`, lastModified, changeFrequency: 'weekly', priority: 0.86 },
+    // Harm-reduction protocols. High priority because the search intent they
+    // serve is currently answered mostly by uncited forum threads, and the
+    // smoker page carries a beta-carotene warning worth surfacing.
+    { url: `${base}/smoker-defense-stack`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${base}/stimulant-defense-stack`, lastModified, changeFrequency: 'weekly', priority: 0.88 },
     { url: `${base}/brief`, lastModified, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/contact`, lastModified, changeFrequency: 'monthly', priority: 0.75 },
     { url: `${base}/partnerships`, lastModified, changeFrequency: 'monthly', priority: 0.74 },
@@ -116,13 +135,6 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
     priority: 0.85,
   }));
 
-  const toolTabRoutes = toolsRegistry.map((t) => ({
-    url: `${base}${t.href}`,
-    lastModified,
-    changeFrequency: 'weekly' as const,
-    priority: 0.82,
-  }));
-
   const bestForRoutes = getAllBestForSlugs().map((slug) => ({
     url: `${base}/best/${slug}`,
     lastModified,
@@ -133,7 +145,6 @@ export function buildSitemapEntries(lastModified = DEFAULT_SITEMAP_LAST_MODIFIED
   return [
     ...coreRoutes,
     ...bestForRoutes,
-    ...toolTabRoutes,
     ...hallmarkRoutes,
     ...compareRoutes,
     ...moduleRoutes,

@@ -8,6 +8,8 @@ export const metadata = seoRoutes.healthData();
 export default function HealthDataPage() {
   return (
     <TrustPageTemplate
+      path="/health-data"
+      cluster="policy"
       standalone
       icon={Activity}
       eyebrow="Trust · Health Data"

@@ -2,9 +2,10 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import { hasGeometry, getGeometry } from "./molecule";
+import { hasGeometry, describeGeometry } from "./molecule";
 import { VIZ, FONT, tierColor, signatureHue } from "./tokens";
 import { AddToProtocol } from "@/components/ui/AddToProtocol";
+import Link from "next/link";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CompoundHero — a "mini-Descent" overture band for every compound page.
@@ -25,7 +26,7 @@ export type CompoundHeroData = {
   bioavailability?: number;
   studyCount: number;
   synergyCount: number;
-  hallmarks: string[];
+  hallmarks: { title: string; slug: string }[];
 };
 
 const LazyMoleculeStage = dynamic(
@@ -78,7 +79,6 @@ export function CompoundHero(data: CompoundHeroData) {
   const hue = signatureHue(data.id);
   const hueCss = `rgb(${hue[0]},${hue[1]},${hue[2]})`;
   const structured = hasGeometry(data.id);
-  const geom = structured ? getGeometry(data.id) : null;
   const tint = tierColor(data.evidence);
   // Canonical evidence signal-strength encoding, shared with EvidenceTag:
   // A = 3 bars (strongest human evidence) · B = 2 · C = 1. A faithful visual
@@ -115,11 +115,7 @@ export function CompoundHero(data: CompoundHeroData) {
               {structured ? "drag · scroll to zoom" : "orbital field · illustrative"}
             </div>
           </div>
-          <p className="chero-cap">
-            {structured
-              ? `Rendered structure${geom?.label ? ` · ${geom.label}` : ""} · stylized for legibility, not a crystallographic reproduction`
-              : "Illustrative orbital motif — not the literal molecular structure. See the deep-dive below for the mechanism."}
-          </p>
+          <p className="chero-cap">{describeGeometry(data.id, data.name)}</p>
         </div>
 
         <div className="chero-body">
@@ -153,7 +149,9 @@ export function CompoundHero(data: CompoundHeroData) {
             <div className="chero-hallmarks">
               <span className="lbl">Targets</span>
               {data.hallmarks.map((h) => (
-                <span className="chip" key={h}>{h}</span>
+                <Link className="chip" href={`/library/${h.slug}`} key={h.slug}>
+                  {h.title}
+                </Link>
               ))}
             </div>
           )}
@@ -162,6 +160,9 @@ export function CompoundHero(data: CompoundHeroData) {
               persistent StackDock. Renders only for stackable compounds. */}
           <div className="chero-actions">
             <AddToProtocol compoundId={data.id} name={data.name} />
+            <a href="#evidence-module" className="chero-skip focus-ring">
+              Read the evidence
+            </a>
           </div>
         </div>
       </div>
@@ -218,15 +219,15 @@ const CHERO_CSS = `
 }
 .chero-hint {
   position: absolute; bottom: 12px; right: 14px;
-  font-family: ${FONT.mono}; font-size: 11px; color: ${VIZ.faint}; letter-spacing: .06em;
+  font-family: ${FONT.mono}; font-size: var(--type-11); color: ${VIZ.faint}; letter-spacing: .06em;
   display: flex; align-items: center; gap: 7px; pointer-events: none;
 }
 .chero-hint .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--hue); box-shadow: 0 0 10px var(--hue); }
-.chero-cap { font-family: ${FONT.mono}; font-size: 11px; color: ${VIZ.faint}; letter-spacing: .03em; line-height: 1.5; margin: 0; }
+.chero-cap { font-family: ${FONT.mono}; font-size: var(--type-11); color: ${VIZ.faint}; letter-spacing: .03em; line-height: 1.5; margin: 0; }
 
 .chero-body { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
 .chero-kicker {
-  font-family: ${FONT.mono}; font-size: 12px; letter-spacing: .26em; text-transform: uppercase;
+  font-family: ${FONT.mono}; font-size: var(--type-12); letter-spacing: .26em; text-transform: uppercase;
   color: var(--hue); margin: 0; display: inline-flex; align-items: center; gap: 12px;
 }
 .chero-kicker::before { content: ''; width: 26px; height: 1px; background: var(--hue); opacity: .6; }
@@ -237,7 +238,7 @@ const CHERO_CSS = `
 }
 .chero-medallion {
   display: inline-flex; align-items: center; gap: 10px; align-self: flex-start;
-  font-family: ${FONT.mono}; font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+  font-family: ${FONT.mono}; font-size: var(--type-11); letter-spacing: .18em; text-transform: uppercase;
   padding: 7px 14px; border: 1px solid; border-radius: 999px;
   background: color-mix(in srgb, currentColor 8%, transparent);
 }
@@ -277,8 +278,8 @@ const CHERO_CSS = `
 @media (hover: hover) {
   .chero-fact:hover { border-color: color-mix(in srgb, var(--hue) 32%, ${VIZ.line}); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 12px 26px -16px color-mix(in srgb, var(--hue) 50%, transparent); }
 }
-.chero-fact .k { font-family: ${FONT.mono}; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: ${VIZ.faint}; }
-.chero-fact .v { font-size: 14px; color: ${VIZ.ink}; font-weight: 500; font-variant-numeric: tabular-nums; }
+.chero-fact .k { font-family: ${FONT.mono}; font-size: var(--type-micro); letter-spacing: .16em; text-transform: uppercase; color: ${VIZ.faint}; }
+.chero-fact .v { font-size: var(--type-14); color: ${VIZ.ink}; font-weight: 500; font-variant-numeric: tabular-nums; }
 .chero-fact .chero-meter {
   position: relative; height: 3px; margin-top: 3px; border-radius: 999px;
   background: rgba(255,255,255,0.08); overflow: hidden;
@@ -289,13 +290,21 @@ const CHERO_CSS = `
 }
 
 .chero-hallmarks { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 6px; }
-.chero-hallmarks .lbl { font-family: ${FONT.mono}; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: ${VIZ.faint}; margin-right: 4px; }
+.chero-hallmarks .lbl { font-family: ${FONT.mono}; font-size: var(--type-micro); letter-spacing: .16em; text-transform: uppercase; color: ${VIZ.faint}; margin-right: 4px; }
 .chero-hallmarks .chip {
-  font-size: 12px; color: ${VIZ.muted}; padding: 5px 11px; border-radius: 999px;
+  font-size: var(--type-12); color: ${VIZ.muted}; padding: 5px 11px; border-radius: 999px;
   border: 1px solid ${VIZ.line}; background: rgba(14,20,38,0.5);
+  text-decoration: none;
 }
+.chero-hallmarks a.chip:hover { color: var(--hue); border-color: color-mix(in srgb, var(--hue) 45%, ${VIZ.line}); }
 
-.chero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+.chero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; align-items: center; }
+.chero-skip {
+  font-family: ${FONT.mono}; font-size: var(--type-11); letter-spacing: .14em; text-transform: uppercase;
+  color: ${VIZ.muted}; text-decoration: none; padding: 8px 4px; min-height: 44px;
+  display: inline-flex; align-items: center;
+}
+.chero-skip:hover { color: var(--hue); }
 
 @media (prefers-reduced-motion: reduce) {
   .chero-hint .dot { box-shadow: none; }

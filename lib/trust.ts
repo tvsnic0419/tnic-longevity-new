@@ -219,13 +219,13 @@ const curatedCitations: SourceCitation[] = [
   },
   {
     id: 'c-nmn-2022',
-    title: 'NMN supplementation elevates NAD+ levels in healthy adults',
-    authors: 'Fukamizu Y et al.',
+    title: 'The efficacy and safety of β-nicotinamide mononucleotide (NMN) supplementation in healthy middle-aged adults: a randomized, multicenter, double-blind, placebo-controlled, parallel-group, dose-dependent clinical trial',
+    authors: 'Yi L et al.',
     journal: 'GeroScience',
     year: 2022,
     pmid: '36482258',
     type: 'clinical',
-    summary: 'Placebo-controlled NMN trial confirming safe NAD+ elevation in humans.',
+    summary: 'Dose-ranging placebo-controlled trial in 80 healthy middle-aged adults over 60 days: NMN at 300/600/900 mg/day raised blood NAD+ dose-dependently, with the largest effect at 600 mg.',
   },
   {
     id: 'c-akg-2020',

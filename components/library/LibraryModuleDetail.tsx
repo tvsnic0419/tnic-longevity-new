@@ -6,7 +6,7 @@ import { ArrowLeft, BookOpen, Layers, FlaskConical, HeartPulse, AlertTriangle, S
 import Link from 'next/link';
 import type { LibraryModule, LibraryModuleCategory } from '@/lib/library-modules';
 import type { ComparisonLink } from '@/lib/comparison-relations';
-import type { GuideLink, RelatedCompoundLink } from '@/lib/library-graph';
+import type { GuideLink, RelatedCompoundLink, ProtocolLink } from '@/lib/library-graph';
 import { getModulePath, libraryCategoryMeta } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
 import { compounds } from '@/lib/data';
@@ -30,6 +30,7 @@ import { EvidenceTrace } from '@/components/trust/EvidenceTrace';
 import { AffiliateDisclosure } from '@/components/trust/AffiliateDisclosure';
 import { ResearchQueueButton } from './ResearchQueueButton';
 import { libraryModuleTitles } from '@/lib/breadcrumb-titles';
+import { ContinueTrail, type WalkItem } from '@/components/ui/WalkCard';
 
 /**
  * Category -> icon + full static Tailwind class strings. Deliberately not
@@ -53,17 +54,20 @@ export function LibraryModuleDetail({
   comparisons = [],
   guide,
   relatedCompounds = [],
+  protocols = [],
   engineHref,
   pathways = [],
   lastUpdated,
   author,
   reviewer,
+  heroPresent = false,
 }: {
   module: LibraryModule;
   mdxBody: string | null;
   comparisons?: ComparisonLink[];
   guide?: GuideLink;
   relatedCompounds?: RelatedCompoundLink[];
+  protocols?: ProtocolLink[];
   /** Molecular pathways this compound engages (server-resolved). */
   pathways?: { slug: string; name: string }[];
   /**
@@ -76,6 +80,13 @@ export function LibraryModuleDetail({
   lastUpdated?: string;
   author?: string;
   reviewer?: string;
+  /**
+   * When a cinematic CompoundHero / ModuleHero already named the compound,
+   * skip the second identity stack (icon + tagline + summary + glance panel)
+   * so the page reads as overture → evidence instead of overture → overture.
+   * The semantic <h1> still renders — the hero title is aria-hidden.
+   */
+  heroPresent?: boolean;
 }) {
   const categoryMeta = libraryCategoryMeta[module.category];
   const relatedHallmarks = hallmarkLibrary.filter((h) => module.relatedHallmarkIds.includes(h.id));
@@ -83,6 +94,67 @@ export function LibraryModuleDetail({
   const synergyCompounds = module.synergyCompoundIds
     ?.map((id) => compounds.find((c) => c.id === id))
     .filter(Boolean) ?? [];
+  const continueItems: WalkItem[] = [];
+  if (relatedCompounds[0]) {
+    continueItems.push({
+      href: `/library/compounds/${relatedCompounds[0].slug}`,
+      kicker: 'Related compound',
+      title: relatedCompounds[0].name,
+      detail: `Shares ${relatedCompounds[0].shared} hallmark${relatedCompounds[0].shared === 1 ? '' : 's'} with ${module.title}.`,
+      accent: 'emerald',
+    });
+  }
+  if (relatedHallmarks[0]) {
+    continueItems.push({
+      href: `/library/${relatedHallmarks[0].slug}`,
+      kicker: 'Hallmark',
+      title: relatedHallmarks[0].title,
+      detail: 'The aging mechanism this module is studied against.',
+      accent: 'violet',
+    });
+  }
+  if (protocols[0]) {
+    continueItems.push({
+      href: `/protocols#${protocols[0].slug}`,
+      kicker: 'Protocol',
+      title: protocols[0].name,
+      detail: protocols[0].goal,
+      accent: 'cyan',
+    });
+  } else if (module.category === 'compounds') {
+    continueItems.push({
+      href: '/stacks',
+      kicker: 'Stacks',
+      title: 'Open Stack Architect',
+      detail: 'Inspect coverage and interactions before you configure anything.',
+      accent: 'cyan',
+    });
+  }
+  if (guide) {
+    continueItems.push({
+      href: guide.href,
+      kicker: 'Guide',
+      title: guide.label,
+      detail: 'Dosing, forms, and the evidence in one sitting.',
+      accent: 'emerald',
+    });
+  } else if (pathways[0]) {
+    continueItems.push({
+      href: `/pathways/${pathways[0].slug}`,
+      kicker: 'Pathway',
+      title: pathways[0].name,
+      detail: 'The mechanistic layer between this compound and the hallmark.',
+      accent: 'violet',
+    });
+  } else {
+    continueItems.push({
+      href: '/labs',
+      kicker: 'Labs',
+      title: 'Track a baseline',
+      detail: 'Log the markers this module is actually studied against.',
+      accent: 'rose',
+    });
+  }
   const buyerGuide =
     module.category === 'compounds' ? getBuyerGuideByModuleSlug(module.slug) : undefined;
   // A compound can have a verified pick without a full authored buyer guide
@@ -111,10 +183,14 @@ export function LibraryModuleDetail({
   }, [module]);
 
   return (
-    <div className="min-h-screen canvas-scrim text-foreground pt-6 md:pt-8 pb-20">
+    <div
+      id="evidence-module"
+      data-hero-present={heroPresent ? 'true' : 'false'}
+      className="min-h-screen canvas-scrim text-foreground pt-6 md:pt-8 pb-20"
+    >
       <div className="max-w-7xl mx-auto px-6">
         <Link
-          href="/library#content-modules"
+          href="/library#compound-explorer"
           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-accent-cyan transition mb-4"
         >
           <ArrowLeft className="w-4 h-4" /> Back to Library
@@ -126,279 +202,57 @@ export function LibraryModuleDetail({
           citationCount={citationCount}
           className="mb-4"
         />
-        <EvidenceTrace
-          tier={module.evidenceTier}
-          sourceCount={citationCount}
-          reviewedLabel={lastUpdated ? `Updated ${lastUpdated}` : 'Methodology published'}
-          className="max-w-2xl"
-        />
-        <div className="mb-8 mt-3 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border/60 bg-background/20 p-3.5 max-w-2xl">
+        {!heroPresent && (
+          <EvidenceTrace
+            tier={module.evidenceTier}
+            sourceCount={citationCount}
+            reviewedLabel={lastUpdated ? `Updated ${lastUpdated}` : 'Methodology published'}
+            className="max-w-2xl"
+          />
+        )}
+        <div className="mb-8 mt-3 flex flex-wrap items-center justify-between gap-3 rounded-xl surface-well p-3.5 max-w-2xl">
           <p className="text-caption text-muted-foreground">Keep this evidence module in your private research queue.</p>
           <ResearchQueueButton module={module} href={getModulePath(module)} />
         </div>
 
         <div className="grid lg:grid-cols-12 gap-10">
-          <aside className="order-2 lg:order-1 lg:col-span-4 space-y-6">
-            {/* TNiC Score — the derived 0–100 composite, surfaced at the top of
-                the evidence rail. Renders nothing when no source can score the
-                compound (honesty invariant), so library-only entries stay clean. */}
-            {module.category === 'compounds' && module.compoundId && (
-              <TnicScorePanel compoundId={module.compoundId} />
-            )}
-
-            {module.category === 'lifestyle' && (
-              <LifestylePillarPanel slug={module.slug as LifestyleSlug} />
-            )}
-
-            <div className="card-elevated p-6">
-              <p className="text-micro font-mono text-accent-cyan tracking-widest mb-2 uppercase">
-                {categoryMeta.label}
-              </p>
-              <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1.5">
-                <EvidenceTag tier={module.evidenceTier} size="lg" href="/trust/methodology" />
-                {module.category === 'compounds' && (
-                  <Link
-                    href={`/library/compounds?tiers=${module.evidenceTier}`}
-                    className="focus-ring rounded text-xs text-muted-foreground hover:text-accent-cyan transition-colors"
-                  >
-                    See all Tier {module.evidenceTier} compounds →
-                  </Link>
-                )}
-              </div>
-              <h2 className="text-lg font-bold mb-4">Module outline</h2>
-              <ol className="space-y-2">
-                {module.outline.map((item, i) => (
-                  <li key={i} className="flex gap-3 text-sm text-muted-foreground">
-                    <span className="text-accent-cyan font-mono text-xs shrink-0">{String(i + 1).padStart(2, '0')}</span>
-                    {item}
-                  </li>
-                ))}
-              </ol>
-            </div>
-
-            {relatedHallmarks.length > 0 && (
-              <GlassPanel depth="mid" className="rounded-xl p-5">
-                <p className="text-micro font-mono text-accent-violet uppercase mb-3">Related hallmarks</p>
-                <ul className="space-y-2">
-                  {relatedHallmarks.map((h) => (
-                    <li key={h.id}>
-                      <Link
-                        href={`/library/${h.slug}`}
-                        className="text-sm text-muted-foreground hover:text-accent-cyan transition"
-                      >
-                        #{h.number} {h.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </GlassPanel>
-            )}
-
-            {pathways.length > 0 && (
-              <GlassPanel depth="mid" className="rounded-xl p-5">
-                <p className="text-micro font-mono text-accent-cyan uppercase mb-3">Pathways engaged</p>
-                <ul className="space-y-2">
-                  {pathways.map((p) => (
-                    <li key={p.slug}>
-                      <Link
-                        href={`/pathways/${p.slug}`}
-                        className="text-sm text-muted-foreground hover:text-accent-cyan transition"
-                      >
-                        {p.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </GlassPanel>
-            )}
-
-            {relatedCompound && (
-              <GlassPanel depth="mid" className="rounded-xl p-5">
-                <p className="text-micro font-mono text-accent-emerald uppercase mb-3">TNiC compound</p>
-                <p className="text-sm font-semibold text-foreground">{relatedCompound.name}</p>
-                <p className="text-xs text-muted-foreground mt-1">{relatedCompound.dose} · {relatedCompound.timing}</p>
-                <Link href="/stacks" className="text-xs text-accent-cyan hover:text-accent-emerald mt-3 inline-block">
-                  Add to stack →
-                </Link>
-              </GlassPanel>
-            )}
-
-            {/* Compound pages: each synergy partner with its real pair-specific
-                mechanism (lib/synergy-mechanisms.ts) — the "why they pair" on
-                the page, not just a list of names. */}
-            {relatedCompound && relatedCompound.synergies.length > 0 && (
-              <GlassPanel depth="mid" className="rounded-xl p-5">
-                <p className="text-micro font-mono text-accent-emerald uppercase mb-3">Synergizes with</p>
-                <ul className="space-y-3">
-                  {relatedCompound.synergies.map((partnerId) => {
-                    const partner = compounds.find((c) => c.id === partnerId);
-                    if (!partner) return null;
-                    const why = getEdgeExplanation(relatedCompound.id, partner.id).text;
-                    return (
-                      <li key={partnerId}>
-                        <Link
-                          href={`/library/compounds/${partner.id}`}
-                          className="text-sm font-semibold text-foreground hover:text-accent-cyan transition"
-                        >
-                          {partner.name}
-                        </Link>
-                        <p className="mt-0.5 text-xs leading-snug text-muted-foreground">{why}</p>
-                      </li>
-                    );
-                  })}
-                </ul>
-                <Link href="/stacks" className="text-xs text-accent-cyan hover:text-accent-emerald mt-4 inline-block">
-                  Open Stack Architect →
-                </Link>
-              </GlassPanel>
-            )}
-
-            {synergyCompounds.length > 0 && (
-              <GlassPanel depth="mid" className="rounded-xl p-5">
-                <p className="text-micro font-mono text-accent-emerald uppercase mb-3">Stack compounds</p>
-                <ul className="space-y-2">
-                  {synergyCompounds.map((c) => (
-                    <li key={c!.id} className="text-sm text-muted-foreground">
-                      {c!.name}
-                    </li>
-                  ))}
-                </ul>
-                <Link href="/stacks" className="text-xs text-accent-cyan hover:text-accent-emerald mt-3 inline-block">
-                  Open Stack Architect →
-                </Link>
-              </GlassPanel>
-            )}
-
-            {module.relatedSynergySlugs && module.relatedSynergySlugs.length > 0 && (
-              <GlassPanel depth="mid" className="rounded-xl p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <Layers className="w-4 h-4 text-accent-cyan" />
-                  <p className="text-micro font-mono text-accent-cyan uppercase">Related synergies</p>
-                </div>
-                <ul className="space-y-2">
-                  {module.relatedSynergySlugs.map((slug) => (
-                    <li key={slug}>
-                      <Link
-                        href={`/library/synergies/${slug}`}
-                        className="text-sm text-muted-foreground hover:text-accent-cyan transition"
-                      >
-                        {libraryModuleTitles[`synergies/${slug}`] ?? slug.replace(/-/g, ' ')}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </GlassPanel>
-            )}
-
-            {comparisons.length > 0 && (
-              <GlassPanel depth="mid" className="rounded-xl p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <Scale className="w-4 h-4 text-accent-cyan" />
-                  <p className="text-micro font-mono text-accent-cyan uppercase">Compare {module.title}</p>
-                </div>
-                <ul className="space-y-2.5">
-                  {comparisons.map((comparison) => (
-                    <li key={comparison.slug}>
-                      <Link
-                        href={`/library/compare/${comparison.slug}`}
-                        className="focus-ring interactive group flex items-center justify-between gap-2 rounded-md"
-                      >
-                        <span className="text-sm text-muted-foreground group-hover:text-accent-cyan transition truncate">
-                          {comparison.labelA} vs {comparison.labelB}
-                        </span>
-                        <EvidenceTag tier={comparison.evidenceTier} className="shrink-0" />
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </GlassPanel>
-            )}
-
-            {relatedCompounds.length > 0 && (
-              <GlassPanel depth="mid" className="rounded-xl p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <Pill className="w-4 h-4 text-accent-emerald" />
-                  <p className="text-micro font-mono text-accent-emerald uppercase">Related compounds</p>
-                </div>
-                <ul className="space-y-2.5">
-                  {relatedCompounds.map((rc) => (
-                    <li key={rc.slug}>
-                      <Link
-                        href={`/library/compounds/${rc.slug}`}
-                        className="focus-ring interactive group flex items-center justify-between gap-2 rounded-md"
-                      >
-                        <span className="text-sm text-muted-foreground group-hover:text-accent-cyan transition truncate">
-                          {rc.name}
-                        </span>
-                        <EvidenceTag tier={rc.evidence} size="sm" className="shrink-0" />
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/library/compounds"
-                  className="text-xs text-accent-cyan hover:text-accent-emerald mt-3 inline-block"
-                >
-                  All compounds →
-                </Link>
-              </GlassPanel>
-            )}
-
-            {guide && (
-              <GlassPanel depth="mid" className="glass-hover rounded-xl">
-                <Link
-                  href={guide.href}
-                  className="focus-ring interactive flex items-center gap-3 p-4"
-                >
-                  <BookOpen className="w-5 h-5 text-accent-emerald shrink-0" />
-                  <div>
-                    <p className="text-sm font-semibold">{guide.label}</p>
-                    <p className="text-xs text-muted-foreground">Full buyer&rsquo;s guide — dosing, forms, evidence</p>
-                  </div>
-                </Link>
-              </GlassPanel>
-            )}
-
-            <GlassPanel depth="mid" className="glass-hover rounded-xl">
-              <Link
-                href="/labs"
-                className="focus-ring interactive flex items-center gap-3 p-4"
-              >
-                <FlaskConical className="w-5 h-5 text-accent-cyan shrink-0" />
-                <div>
-                  <p className="text-sm font-semibold">Labs hub</p>
-                  <p className="text-xs text-muted-foreground">Track biomarkers for this module</p>
-                </div>
-              </Link>
-            </GlassPanel>
-          </aside>
-
+          {/* DOM order is content-then-rail on purpose: the page <h1> lives in
+              this column, so emitting it before the rail keeps the deep-dive's
+              first heading its own title rather than the rail's "Module outline".
+              Visual placement is unchanged — the `order-*` utilities still put the
+              rail left on desktop and below the article on mobile. */}
           <div className="order-1 lg:order-2 min-w-0 lg:col-span-8 space-y-8">
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-              <ModuleContextStrip module={module} />
-              <div className="flex items-start gap-4 mb-2">
-                <span
-                  className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${categoryVisual[module.category].badgeClass} ${categoryVisual[module.category].glowClass}`}
-                  aria-hidden="true"
-                >
-                  {(() => {
-                    const CategoryIcon = categoryVisual[module.category].icon;
-                    return <CategoryIcon className={`h-7 w-7 ${categoryVisual[module.category].textClass}`} />;
-                  })()}
-                </span>
-                <h1 className="heading-page pt-1">{module.title}</h1>
-              </div>
-              <p className="text-lg text-muted-foreground mb-4">{module.tagline}</p>
-              <p className="text-sm text-muted-foreground leading-relaxed">{module.summary}</p>
+              {!heroPresent && <ModuleContextStrip module={module} />}
+              {heroPresent ? (
+                <h1 className="heading-section">{module.title}</h1>
+              ) : (
+                <>
+                  <div className="flex items-start gap-4 mb-2">
+                    <span
+                      className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${categoryVisual[module.category].badgeClass} ${categoryVisual[module.category].glowClass}`}
+                      aria-hidden="true"
+                    >
+                      {(() => {
+                        const CategoryIcon = categoryVisual[module.category].icon;
+                        return <CategoryIcon className={`h-7 w-7 ${categoryVisual[module.category].textClass}`} />;
+                      })()}
+                    </span>
+                    <h1 className="heading-page pt-1">{module.title}</h1>
+                  </div>
+                  <p className="text-lg text-muted-foreground mb-4">{module.tagline}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{module.summary}</p>
+                </>
+              )}
             </motion.div>
 
-            {relatedCompound ? (
+            {!heroPresent && (relatedCompound ? (
               <CompoundGlancePanel compound={relatedCompound} />
             ) : (
               module.category === 'compounds' && (
                 <ModuleGlancePanel module={module} studyCount={mdxStudyCount} />
               )
-            )}
+            ))}
 
             {module.requiresDisclaimer && (
               <div className="rounded-xl p-5 border border-accent-amber/30 bg-accent-amber/5 flex gap-3">
@@ -514,7 +368,278 @@ export function LibraryModuleDetail({
               </GlassPanel>
             </div>
           </div>
+
+          <aside className="order-2 lg:order-1 lg:col-span-4 space-y-6">
+            {/* TNiC Score — the derived 0–100 composite, surfaced at the top of
+                the evidence rail. Renders nothing when no source can score the
+                compound (honesty invariant), so library-only entries stay clean. */}
+            {module.category === 'compounds' && module.compoundId && (
+              <TnicScorePanel compoundId={module.compoundId} />
+            )}
+
+            {module.category === 'lifestyle' && (
+              <LifestylePillarPanel slug={module.slug as LifestyleSlug} />
+            )}
+
+            <div className="card-elevated p-6">
+              <p className="text-micro font-mono text-accent-cyan tracking-widest mb-2 uppercase">
+                {categoryMeta.label}
+              </p>
+              <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                <EvidenceTag tier={module.evidenceTier} size="lg" href="/trust/methodology" />
+                {module.category === 'compounds' && (
+                  <Link
+                    href={`/library/compounds?tiers=${module.evidenceTier}`}
+                    className="action-link focus-ring rounded text-xs text-muted-foreground hover:text-accent-cyan transition-colors"
+                  >
+                    See all Tier {module.evidenceTier} compounds →
+                  </Link>
+                )}
+              </div>
+              <h2 className="text-lg font-bold mb-4">Module outline</h2>
+              <ol className="space-y-2">
+                {module.outline.map((item, i) => (
+                  <li key={i} className="flex gap-3 text-sm text-muted-foreground">
+                    <span className="text-accent-cyan font-mono text-xs shrink-0">{String(i + 1).padStart(2, '0')}</span>
+                    {item}
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            {relatedHallmarks.length > 0 && (
+              <GlassPanel depth="mid" className="rounded-xl p-5">
+                <p className="text-micro font-mono text-accent-violet uppercase mb-3">Related hallmarks</p>
+                <ul className="space-y-2">
+                  {relatedHallmarks.map((h) => (
+                    <li key={h.id}>
+                      <Link
+                        href={`/library/${h.slug}`}
+                        className="action-link text-sm text-muted-foreground hover:text-accent-cyan transition"
+                      >
+                        #{h.number} {h.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </GlassPanel>
+            )}
+
+            {pathways.length > 0 && (
+              <GlassPanel depth="mid" className="rounded-xl p-5">
+                <p className="text-micro font-mono text-accent-cyan uppercase mb-3">Pathways engaged</p>
+                <ul className="space-y-2">
+                  {pathways.map((p) => (
+                    <li key={p.slug}>
+                      <Link
+                        href={`/pathways/${p.slug}`}
+                        className="action-link text-sm text-muted-foreground hover:text-accent-cyan transition"
+                      >
+                        {p.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </GlassPanel>
+            )}
+
+            {relatedCompound && (
+              <GlassPanel depth="mid" className="rounded-xl p-5">
+                <p className="text-micro font-mono text-accent-emerald uppercase mb-3">TNiC compound</p>
+                <p className="text-sm font-semibold text-foreground">{relatedCompound.name}</p>
+                <p className="text-xs text-muted-foreground mt-1">{relatedCompound.dose} · {relatedCompound.timing}</p>
+                <Link href="/stacks" className="action-link text-xs text-accent-cyan hover:text-accent-emerald mt-3">
+                  Add to stack →
+                </Link>
+              </GlassPanel>
+            )}
+
+            {/* Compound pages: each synergy partner with its real pair-specific
+                mechanism (lib/synergy-mechanisms.ts) — the "why they pair" on
+                the page, not just a list of names. */}
+            {relatedCompound && relatedCompound.synergies.length > 0 && (
+              <GlassPanel depth="mid" className="rounded-xl p-5">
+                <p className="text-micro font-mono text-accent-emerald uppercase mb-3">Synergizes with</p>
+                <ul className="space-y-3">
+                  {relatedCompound.synergies.map((partnerId) => {
+                    const partner = compounds.find((c) => c.id === partnerId);
+                    if (!partner) return null;
+                    const why = getEdgeExplanation(relatedCompound.id, partner.id).text;
+                    return (
+                      <li key={partnerId}>
+                        <Link
+                          href={`/library/compounds/${partner.id}`}
+                          className="text-sm font-semibold text-foreground hover:text-accent-cyan transition"
+                        >
+                          {partner.name}
+                        </Link>
+                        <p className="mt-0.5 text-xs leading-snug text-muted-foreground">{why}</p>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <Link href="/stacks" className="action-link text-xs text-accent-cyan hover:text-accent-emerald mt-4">
+                  Open Stack Architect →
+                </Link>
+              </GlassPanel>
+            )}
+
+            {synergyCompounds.length > 0 && (
+              <GlassPanel depth="mid" className="rounded-xl p-5">
+                <p className="text-micro font-mono text-accent-emerald uppercase mb-3">Stack compounds</p>
+                <ul className="space-y-2">
+                  {synergyCompounds.map((c) => (
+                    <li key={c!.id}>
+                      <Link
+                        href={`/library/compounds/${c!.id}`}
+                        className="action-link text-sm text-muted-foreground hover:text-accent-cyan transition"
+                      >
+                        {c!.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                <Link href="/stacks" className="action-link text-xs text-accent-cyan hover:text-accent-emerald mt-3">
+                  Open Stack Architect →
+                </Link>
+              </GlassPanel>
+            )}
+
+            {module.relatedSynergySlugs && module.relatedSynergySlugs.length > 0 && (
+              <GlassPanel depth="mid" className="rounded-xl p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <Layers className="w-4 h-4 text-accent-cyan" />
+                  <p className="text-micro font-mono text-accent-cyan uppercase">Related synergies</p>
+                </div>
+                <ul className="space-y-2">
+                  {module.relatedSynergySlugs.map((slug) => (
+                    <li key={slug}>
+                      <Link
+                        href={`/library/synergies/${slug}`}
+                        className="action-link text-sm text-muted-foreground hover:text-accent-cyan transition"
+                      >
+                        {libraryModuleTitles[`synergies/${slug}`] ?? slug.replace(/-/g, ' ')}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </GlassPanel>
+            )}
+
+            {comparisons.length > 0 && (
+              <GlassPanel depth="mid" className="rounded-xl p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <Scale className="w-4 h-4 text-accent-cyan" />
+                  <p className="text-micro font-mono text-accent-cyan uppercase">Compare {module.title}</p>
+                </div>
+                <ul className="space-y-2.5">
+                  {comparisons.map((comparison) => (
+                    <li key={comparison.slug}>
+                      <Link
+                        href={`/library/compare/${comparison.slug}`}
+                        className="focus-ring interactive group flex items-center justify-between gap-2 rounded-md"
+                      >
+                        <span className="text-sm text-muted-foreground group-hover:text-accent-cyan transition truncate">
+                          {comparison.labelA} vs {comparison.labelB}
+                        </span>
+                        <EvidenceTag tier={comparison.evidenceTier} className="shrink-0" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </GlassPanel>
+            )}
+
+            {protocols.length > 0 && (
+              <GlassPanel depth="mid" className="rounded-xl p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <Layers className="w-4 h-4 text-accent-violet" />
+                  <p className="text-micro font-mono text-accent-violet uppercase">Used in these protocols</p>
+                </div>
+                <ul className="space-y-2.5">
+                  {protocols.map((protocol) => (
+                    <li key={protocol.slug}>
+                      <Link
+                        href={`/protocols#${protocol.slug}`}
+                        className="focus-ring interactive group flex items-center justify-between gap-2 rounded-md"
+                      >
+                        <span className="text-sm text-muted-foreground group-hover:text-accent-violet transition truncate">
+                          {protocol.name}
+                        </span>
+                        <EvidenceTag tier={protocol.evidence} size="sm" className="shrink-0" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href="/protocols"
+                  className="action-link text-xs text-accent-violet hover:text-accent-cyan mt-3"
+                >
+                  All protocols →
+                </Link>
+              </GlassPanel>
+            )}
+
+            {relatedCompounds.length > 0 && (
+              <GlassPanel depth="mid" className="rounded-xl p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <Pill className="w-4 h-4 text-accent-emerald" />
+                  <p className="text-micro font-mono text-accent-emerald uppercase">Related compounds</p>
+                </div>
+                <ul className="space-y-2.5">
+                  {relatedCompounds.map((rc) => (
+                    <li key={rc.slug}>
+                      <Link
+                        href={`/library/compounds/${rc.slug}`}
+                        className="focus-ring interactive group flex items-center justify-between gap-2 rounded-md"
+                      >
+                        <span className="text-sm text-muted-foreground group-hover:text-accent-cyan transition truncate">
+                          {rc.name}
+                        </span>
+                        <EvidenceTag tier={rc.evidence} size="sm" className="shrink-0" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href="/library/compounds"
+                  className="action-link text-xs text-accent-cyan hover:text-accent-emerald mt-3"
+                >
+                  All compounds →
+                </Link>
+              </GlassPanel>
+            )}
+
+            {guide && (
+              <GlassPanel depth="mid" className="glass-hover rounded-xl">
+                <Link
+                  href={guide.href}
+                  className="focus-ring interactive flex items-center gap-3 p-4"
+                >
+                  <BookOpen className="w-5 h-5 text-accent-emerald shrink-0" />
+                  <div>
+                    <p className="text-sm font-semibold">{guide.label}</p>
+                    <p className="text-xs text-muted-foreground">Full buyer&rsquo;s guide — dosing, forms, evidence</p>
+                  </div>
+                </Link>
+              </GlassPanel>
+            )}
+
+            <GlassPanel depth="mid" className="glass-hover rounded-xl">
+              <Link
+                href="/labs"
+                className="focus-ring interactive flex items-center gap-3 p-4"
+              >
+                <FlaskConical className="w-5 h-5 text-accent-cyan shrink-0" />
+                <div>
+                  <p className="text-sm font-semibold">Labs hub</p>
+                  <p className="text-xs text-muted-foreground">Track biomarkers for this module</p>
+                </div>
+              </Link>
+            </GlassPanel>
+          </aside>
         </div>
+        <ContinueTrail items={continueItems.slice(0, 4)} />
       </div>
     </div>
   );

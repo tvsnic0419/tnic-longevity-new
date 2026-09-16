@@ -92,7 +92,10 @@ export function CompoundIntelligenceMatrix({ compound }: { compound: Compound })
         <div className="cim-head">
           <div className="cim-id">
             <p className="cim-eyebrow">Compound Intelligence Matrix</p>
-            <h2 className="cim-name">{c.full}</h2>
+            {/* Full chemical name — a restatement of the page <h1>, not a new
+                section topic. Kept out of the heading outline for the same reason
+                as CompoundFullSpectrum's; the <section> aria-label labels it. */}
+            <p className="cim-name">{c.full}</p>
             <div className="cim-meta">
               <span className="cim-chip">{c.cls}</span>
               <span className="cim-chip cim-tier" style={{ color: tInk, borderColor: `color-mix(in srgb, ${tColor} 45%, transparent)` }}>
@@ -173,7 +176,7 @@ export function CompoundIntelligenceMatrix({ compound }: { compound: Compound })
 
         <div className="cim-foot">
           <span>Scores are TNiC’s deterministic synthesis of the cited human evidence — a comparison tool, not a medical claim.</span>
-          <Link href={pubmedUrl(c.name)} target="_blank" rel="noopener noreferrer" className="cim-pubmed focus-ring">
+          <Link href={pubmedUrl(c.name)} target="_blank" rel="noopener noreferrer" className="cim-pubmed action-link focus-ring">
             PubMed <ExternalLink className="cim-chip-ic" aria-hidden="true" />
           </Link>
         </div>
@@ -186,18 +189,20 @@ const CIM_CSS = `
 .cim { gap: 0; padding: clamp(20px, 3vw, 30px); }
 .cim-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 20px; }
 .cim-eyebrow {
-  font-family: var(--font-mono, ui-monospace, monospace); font-size: 11px; letter-spacing: 0.22em;
+  font-family: var(--font-mono, ui-monospace, monospace); font-size: var(--type-11); letter-spacing: 0.22em;
   text-transform: uppercase; color: var(--color-text-muted); margin: 0 0 8px;
 }
 .cim-name {
   font-family: var(--font-display, Fraunces, serif); font-weight: 500;
   font-size: clamp(22px, 3vw, 30px); line-height: 1.05; letter-spacing: -0.02em;
   color: var(--color-text-primary); margin: 0 0 12px;
+  /* Carried over from the global h1–h4 rule this element no longer matches. */
+  text-wrap: balance;
 }
 .cim-meta { display: flex; flex-wrap: wrap; gap: 8px; }
 .cim-chip {
   display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--font-mono, ui-monospace, monospace); font-size: 11px; letter-spacing: 0.02em;
+  font-family: var(--font-mono, ui-monospace, monospace); font-size: var(--type-11); letter-spacing: 0.02em;
   color: var(--color-text-secondary); padding: 4px 10px; border-radius: 999px;
   border: 1px solid var(--color-border-subtle); background: var(--color-bg-muted);
 }
@@ -213,21 +218,21 @@ const CIM_CSS = `
 @media (max-width: 640px) { .cim-grid { grid-template-columns: 1fr; } }
 .cim-row { display: flex; flex-direction: column; gap: 6px; }
 .cim-row-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-.cim-row-label { font-size: 13px; color: var(--color-text-secondary); }
-.cim-row-value { font-family: var(--font-mono, ui-monospace, monospace); font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.cim-row-label { font-size: var(--type-13); color: var(--color-text-secondary); }
+.cim-row-value { font-family: var(--font-mono, ui-monospace, monospace); font-size: var(--type-14); font-weight: 600; font-variant-numeric: tabular-nums; }
 .cim-track { height: 8px; border-radius: 999px; background: color-mix(in srgb, var(--color-text-primary) 8%, transparent); overflow: hidden; }
 .cim-fill { height: 100%; border-radius: 999px; min-width: 3px; }
 
 .cim-cover { display: grid; grid-template-columns: 1fr; gap: 18px; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--color-border-subtle); }
 .cim-cover-label {
   display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--font-mono, ui-monospace, monospace); font-size: 10.5px; letter-spacing: 0.14em;
+  font-family: var(--font-mono, ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: 0.14em;
   text-transform: uppercase; color: var(--color-text-faint); margin: 0 0 10px;
 }
 .cim-tags { display: flex; flex-wrap: wrap; gap: 7px; }
 .cim-tag {
   display: inline-flex; align-items: center; gap: 6px;
-  font-size: 12px; color: var(--color-text-secondary);
+  font-size: var(--type-12); color: var(--color-text-secondary);
   padding: 5px 11px; border-radius: 999px;
   border: 1px solid var(--color-border-subtle); background: var(--color-bg-muted);
 }
@@ -237,14 +242,14 @@ const CIM_CSS = `
 .cim-hallmark-tags { flex: 1 1 200px; align-content: flex-start; }
 @media (max-width: 560px) { .cim-radial { margin-inline: auto; } .cim-hallmarks { justify-content: center; } }
 .cim-tag-short {
-  font-family: var(--font-mono, ui-monospace, monospace); font-size: 9px; letter-spacing: 0.08em;
+  font-family: var(--font-mono, ui-monospace, monospace); font-size: var(--type-micro); letter-spacing: 0.08em;
   color: var(--color-text-faint); background: var(--color-bg-base); padding: 2px 5px; border-radius: 5px;
 }
 
 .cim-flags { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--color-border-subtle); }
 .cim-flag-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
 .cim-flag-list li {
-  position: relative; padding-left: 18px; font-size: 13px; line-height: 1.5; color: var(--color-text-secondary);
+  position: relative; padding-left: 18px; font-size: var(--type-13); line-height: 1.5; color: var(--color-text-secondary);
 }
 .cim-flag-list li::before {
   content: ''; position: absolute; left: 4px; top: 8px; width: 5px; height: 5px; border-radius: 50%;
@@ -254,7 +259,7 @@ const CIM_CSS = `
 .cim-foot {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
   margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--color-border-subtle);
-  font-size: 11.5px; line-height: 1.5; color: var(--color-text-faint);
+  font-size: var(--type-11); line-height: 1.5; color: var(--color-text-faint);
 }
 .cim-pubmed { display: inline-flex; align-items: center; gap: 5px; color: var(--accent-cyan); text-decoration: none; white-space: nowrap; }
 .cim-pubmed:hover { text-decoration: underline; }

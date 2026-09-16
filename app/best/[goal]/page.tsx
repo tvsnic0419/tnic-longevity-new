@@ -158,7 +158,7 @@ export default async function BestForGoalPage({
                   <Link
                     key={h.id}
                     href={`/library/${h.slug}`}
-                    className="focus-ring interactive text-xs px-3 py-1.5 rounded-lg border border-border/60 bg-card/40 text-muted-foreground hover:text-foreground hover:border-accent-violet/40 transition-colors"
+                    className="focus-ring interactive text-xs px-3 py-1.5 rounded-lg surface-well text-muted-foreground hover:text-foreground hover:border-accent-violet/40 transition-colors"
                   >
                     {h.title}
                   </Link>
@@ -206,7 +206,7 @@ export default async function BestForGoalPage({
                 <Link
                   key={o.slug}
                   href={`/best/${o.slug}`}
-                  className="focus-ring interactive text-xs px-3 py-1.5 rounded-lg border border-border/60 bg-card/40 text-muted-foreground hover:text-foreground hover:border-accent-emerald/40 transition-colors"
+                  className="focus-ring interactive text-xs px-3 py-1.5 rounded-lg surface-well text-muted-foreground hover:text-foreground hover:border-accent-emerald/40 transition-colors"
                 >
                   {o.title.replace(/^Best (Supplements for |Longevity.*|Supplements to )/, '').trim() || o.title}
                 </Link>

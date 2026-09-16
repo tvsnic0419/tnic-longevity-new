@@ -4,11 +4,13 @@ import { libraryModules, getModulePath } from './library-modules';
 import { evidenceComparisons } from './comparisons';
 import { toolsRegistry } from './registry';
 import { peptideLibrary } from './peptides-library';
+import { pathways, pathwayCategoryMeta } from './pathways';
 
 export type PaletteItemKind =
   | 'page'
   | 'tool'
   | 'hallmark'
+  | 'pathway'
   | 'module'
   | 'compound'
   | 'peptide'
@@ -59,6 +61,30 @@ const hubPages: PaletteItem[] = [
     subtitle: '12 hallmarks and deep guides',
     href: '/library',
     keywords: ['library', 'hallmarks', 'learn', 'science'],
+  },
+  {
+    id: 'page-evidence',
+    kind: 'page',
+    title: 'Evidence Table',
+    subtitle: 'Every graded compound, with its tier',
+    href: '/library/evidence',
+    keywords: ['evidence', 'table', 'grades', 'tier', 'research', 'compare', 'confidence', 'score'],
+  },
+  {
+    id: 'page-pathways',
+    kind: 'page',
+    title: 'Molecular Pathways',
+    subtitle: 'The mechanisms connecting compounds to hallmarks',
+    href: '/pathways',
+    keywords: ['pathways', 'mechanisms', 'biology', 'nrf2', 'ampk', 'mtor', 'sirtuins', 'mitophagy'],
+  },
+  {
+    id: 'page-products',
+    kind: 'page',
+    title: 'Products',
+    subtitle: 'Verified picks, with the evidence behind them',
+    href: '/products',
+    keywords: ['products', 'verification', 'coa', 'ingredients', 'formulation', 'buy'],
   },
   {
     id: 'page-compare',
@@ -144,7 +170,7 @@ const hubPages: PaletteItem[] = [
     id: 'page-partnerships',
     kind: 'page',
     title: 'Partner With TNiC',
-    subtitle: 'Selective collaboration path',
+    subtitle: 'Sponsor review path — eight minutes',
     href: '/partnerships',
     keywords: ['partner', 'partnership', 'sponsor', 'brand', 'collaboration', 'advertising'],
   },
@@ -256,6 +282,27 @@ const hallmarkItems: PaletteItem[] = hallmarkLibrary.map((h) => ({
   keywords: [h.title.toLowerCase(), h.tagline.toLowerCase(), h.id, h.slug],
 }));
 
+// Pathways were the one published entity type the palette could not find.
+// Someone typing "NRF2" or "mTOR" into site-wide search is naming a mechanism,
+// and the mechanism has a page; the aliases come from the pathway registry's
+// own `aliases` field (the same list the prose cross-linker matches on), so
+// nothing here is a new claim about what a pathway is called.
+const pathwayItems: PaletteItem[] = pathways.map((p) => ({
+  id: `pathway-${p.slug}`,
+  kind: 'pathway' as const,
+  title: p.name,
+  subtitle: pathwayCategoryMeta[p.category].label,
+  href: `/pathways/${p.slug}`,
+  keywords: [
+    p.name.toLowerCase(),
+    p.slug,
+    p.category,
+    pathwayCategoryMeta[p.category].label.toLowerCase(),
+    p.summary.toLowerCase(),
+    ...p.aliases.map((alias) => alias.toLowerCase()),
+  ],
+}));
+
 const moduleItems: PaletteItem[] = libraryModules.map((m) => ({
   id: `module-${m.slug}`,
   kind: 'module' as const,
@@ -358,6 +405,7 @@ export const paletteIndex: PaletteItem[] = [
   ...toolItems,
   ...compareItems,
   ...hallmarkItems,
+  ...pathwayItems,
   ...moduleItems,
   ...compoundItems,
   ...peptideItems,
@@ -396,6 +444,7 @@ export const paletteKindLabels: Record<PaletteItemKind, string> = {
   page: 'Page',
   tool: 'Tool',
   hallmark: 'Hallmark',
+  pathway: 'Pathway',
   module: 'Guide',
   compound: 'Compound',
   peptide: 'Peptide',

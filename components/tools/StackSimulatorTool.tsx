@@ -2,14 +2,7 @@
 
 import { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Radar,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  ResponsiveContainer,
-} from 'recharts';
-import { Sun, Moon, AlertTriangle, Sparkles, ShieldAlert } from 'lucide-react';
+import { Sun, Moon, AlertTriangle, Sparkles, ShieldAlert, Layers } from 'lucide-react';
 import { simulateStack } from '@/lib/tools/stack-simulator';
 import { usePlatform, useStack } from '@/context/PlatformContext';
 import { EvidenceTag } from '@/components/trust/EvidenceTag';
@@ -19,12 +12,14 @@ import { StackInteractionsPanel } from '@/components/stacks/StackInteractionsPan
 import { StackPresetsBar } from '@/components/stacks/StackPresetsBar';
 import { StackExport } from '@/components/stacks/StackExport';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
-import { GlassPanel } from '@/components/ui/GlassPanel';
 import { RevealCard } from '@/components/ui/RevealCard';
 import { Slider } from '@/components/ui/Slider';
 import { Badge } from '@/components/ui/Badge';
 import { Progress } from '@/components/ui/Progress';
 import { ToolDisclaimer } from './ToolDisclaimer';
+import { DepthBarChart } from '@/components/ui/DepthBarChart';
+import { ToolEmptyState } from '@/components/ui/ToolEmptyState';
+import { hallmarkDisplayNames } from '@/lib/stack-analysis';
 
 const riskVariant = (l: string): 'success' | 'warning' | 'danger' | 'info' => {
   if (l === 'low') return 'success';
@@ -151,11 +146,14 @@ export function StackSimulatorTool() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
               >
-                <GlassPanel depth="mid" className="rounded-2xl p-8 text-center">
-                  <p className="text-muted-foreground text-sm">
-                    Select compounds or apply a preset to simulate synergy, dosing, and risk profile.
-                  </p>
-                </GlassPanel>
+                <ToolEmptyState
+                  icon={Layers}
+                  theme="violet"
+                  title="Select compounds to light the instruments"
+                  detail="Apply a preset or toggle compounds to simulate synergy, age-adjusted dosing, and risk — with depth charts for hallmark coverage."
+                  ctaLabel="Browse Elite Stacks"
+                  ctaHref="/stacks"
+                />
               </motion.div>
             )}
           </AnimatePresence>
@@ -179,22 +177,19 @@ export function StackSimulatorTool() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={240}>
-                  <RadarChart data={radarData}>
-                    <PolarGrid stroke="var(--color-border-subtle)" strokeOpacity={0.5} />
-                    <PolarAngleAxis
-                      dataKey="hallmark"
-                      tick={{ fill: 'var(--color-text-muted)', fontSize: 9, fontFamily: 'var(--font-mono)' }}
-                    />
-                    <Radar
-                      dataKey="coverage"
-                      stroke="var(--accent-violet)"
-                      strokeWidth={2}
-                      fill="var(--accent-violet)"
-                      fillOpacity={0.28}
-                    />
-                  </RadarChart>
-                </ResponsiveContainer>
+                <DepthBarChart
+                  layout="vertical"
+                  data={radarData.map((d) => ({
+                    name: (hallmarkDisplayNames[d.hallmark] ?? d.hallmark).slice(0, 14),
+                    fullName: hallmarkDisplayNames[d.hallmark] ?? d.hallmark,
+                    value: d.coverage,
+                    color: 'var(--accent-violet)',
+                  }))}
+                  height={Math.max(180, radarData.length * 28)}
+                  valueLabel="Coverage"
+                  max={100}
+                  color="var(--accent-violet)"
+                />
               </CardContent>
             </Card>
           )}

@@ -19,6 +19,8 @@ interface TabBarProps<T extends string> {
   theme?: ThemeAccent;
   ariaLabel: string;
   className?: string;
+  /** Equal-width tabs — no horizontal scroll at ~390px (stacks mobile). */
+  equalWidth?: boolean;
 }
 
 export function TabBar<T extends string>({
@@ -28,6 +30,7 @@ export function TabBar<T extends string>({
   theme = 'cyan',
   ariaLabel,
   className = '',
+  equalWidth = false,
 }: TabBarProps<T>) {
   const t = themes[theme];
 
@@ -35,7 +38,12 @@ export function TabBar<T extends string>({
     <div
       role="tablist"
       aria-label={ariaLabel}
-      className={cn('flex gap-2 overflow-x-auto scroll-region pb-1 -mx-1 px-1', className)}
+      className={cn(
+        equalWidth
+          ? 'surface-track grid w-full grid-cols-3 gap-1.5'
+          : 'surface-track overflow-x-auto scroll-region',
+        className,
+      )}
     >
       {tabs.map((tab) => {
         const isActive = active === tab.id;
@@ -49,10 +57,11 @@ export function TabBar<T extends string>({
             aria-controls={`panel-${tab.id}`}
             onClick={() => onChange(tab.id)}
             className={cn(
-              'focus-ring interactive shrink-0 flex items-center gap-2 px-4 py-3 min-h-[var(--space-touch)] rounded-xl text-sm font-semibold',
+              'focus-ring interactive flex items-center justify-center gap-2 px-3 py-3 min-h-[var(--space-touch)] rounded-xl text-sm font-semibold',
+              equalWidth ? 'min-w-0 w-full' : 'shrink-0 px-4',
               isActive
                 ? `${t.bgSolid} text-primary-foreground`
-                : 'glass text-muted-foreground hover:text-foreground',
+                : 'text-muted-foreground hover:text-foreground hover:bg-white/[0.04]',
             )}
           >
             {Icon && <Icon className="w-4 h-4" aria-hidden="true" />}

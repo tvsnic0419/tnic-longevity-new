@@ -9,7 +9,6 @@ import { Suspense, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import {
-  ShoppingBag,
   Shield,
   ArrowRight,
   ClipboardCheck,
@@ -21,8 +20,6 @@ import {
 } from 'lucide-react';
 import { usePlatform } from '@/context/PlatformContext';
 import { stackPresets, type PresetKey } from '@/lib/presets';
-import { COMPOUND_COUNT } from '@/lib/library-modules';
-import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import {
   getNrAlternativeShopItem,
   getNrShopItems,
@@ -31,11 +28,9 @@ import {
   shopDisclosure,
 } from '@/lib/protocol-shop';
 import { buildShopStackUrl, isPresetKey, parseStackParam } from '@/lib/stack-url';
-import { PageHeader } from '@/components/ui/PageHeader';
 import { cn } from '@/lib/utils';
 import { SITE } from '@/lib/site';
 import { ProductPickCard } from '@/components/shop/ProductPickCard';
-import { getHubContext } from '@/lib/hub-context';
 import { trackEvent } from '@/lib/analytics';
 import { ANALYTICS_EVENTS } from '@/lib/analytics-events';
 
@@ -186,29 +181,7 @@ function ProtocolShopPanelInner() {
 
   return (
     <>
-      <CinematicHubHero
-        hue="amber"
-        kicker="Protocol Shop"
-        title={<>Buy smart, <em>not branded</em>.</>}
-        lead="Stack-filtered verification checklists from the buyer guides — what to look for on a label before you spend, never who paid to be listed."
-        stats={[
-          { value: String(Object.keys(stackPresets).length), label: 'Stack presets' },
-          { value: String(COMPOUND_COUNT), label: 'Compounds covered' },
-          { value: 'COA-first', label: 'Verification standard' },
-        ]}
-        primary={{ href: '/stacks', label: 'Build a stack to filter' }}
-        secondary={{ href: '/products', label: 'See product picks' }}
-      />
       <div>
-      <PageHeader
-        icon={ShoppingBag}
-        eyebrow="Protocol Shop"
-        title="Buy Smart — Not Branded"
-        description="Stack-filtered verification checklists from buyer guides. Share /shop?stack= links to pre-load any preset or custom stack."
-        theme="amber"
-        context={getHubContext('shop')}
-        contextVariant="compact"
-      />
 
       {deepLinked && items.length > 0 && (
         <div className="flex items-center gap-2 text-xs px-3 py-2 rounded-lg mb-6 bg-accent-emerald/10 text-accent-emerald">

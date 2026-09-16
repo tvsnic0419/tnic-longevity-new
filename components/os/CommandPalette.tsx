@@ -20,7 +20,16 @@ import { EXPORT_KIT_EVENT } from './os-events';
  * parent launcher (OsOverlays); this component only renders and handles
  * in-palette interaction while `open` is true.
  */
-export function CommandPalette({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function CommandPalette({
+  open,
+  onClose,
+  initialQuery = '',
+}: {
+  open: boolean;
+  onClose: () => void;
+  /** Seeded by the launcher so a query typed in the header carries in. */
+  initialQuery?: string;
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const { exportAll, selected } = usePlatform();
@@ -75,6 +84,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
 
   useEffect(() => {
     if (open) {
+      setQuery(initialQuery);
       setActiveIndex(0);
       setRecentModules(readRecentModules());
       requestAnimationFrame(() => inputRef.current?.focus());
@@ -82,7 +92,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
       setQuery('');
       setActiveIndex(0);
     }
-  }, [open]);
+  }, [open, initialQuery]);
 
   useEffect(() => {
     setActiveIndex(0);
@@ -134,13 +144,13 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
       role="presentation"
       onClick={close}
     >
-      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" aria-hidden="true" />
+      <div className="absolute inset-0 glass-overlay" aria-hidden="true" />
 
       <div
         role="dialog"
         aria-modal="true"
         aria-label="Command palette"
-        className="relative w-full max-w-xl glass rounded-2xl border border-border shadow-2xl overflow-hidden"
+        className="relative w-full max-w-xl glass-deep glass-plane-float glass-chrome rounded-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-3 border-b border-border px-4 py-3">
@@ -153,7 +163,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
             aria-controls="command-palette-list"
             aria-activedescendant={results[activeIndex] ? `command-palette-option-${results[activeIndex].id}` : undefined}
             aria-autocomplete="list"
-            placeholder="Search or pick a contextual shortcut…"
+            placeholder="Search compounds, pathways, hallmarks, evidence, tools…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="flex-1 bg-transparent text-sm outline-none placeholder:text-caption"
@@ -181,7 +191,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
         >
           {results.length === 0 ? (
             <li className="px-4 py-6 text-sm text-muted-foreground text-center">
-              No results. Try &quot;NRF2&quot;, &quot;GlyNAC&quot;, or &quot;protocol&quot;.
+              No results. Try &quot;NRF2&quot;, &quot;GlyNAC&quot;, &quot;evidence&quot;, or &quot;protocol&quot;.
             </li>
           ) : hasQuery ? (
             results.map((item, i) => (

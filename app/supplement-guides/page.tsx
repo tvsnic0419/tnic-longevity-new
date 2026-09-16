@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { ArrowRight, BookOpen, FlaskConical, Microscope, Shield, Zap, Leaf, Recycle } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
@@ -12,6 +13,7 @@ import { RevealItem } from '@/components/ui/RevealItem';
 import { SubPageLayout } from '@/components/layouts/SubPageLayout';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
+import { HubSplitInstrument, HUB_ACCENT_VAR } from '@/components/viz/HubSplitInstrument';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Longevity Supplement Guides 2026 — Evidence-Based Deep Dives',
@@ -71,6 +73,23 @@ const GUIDE_SELECTION_FAQS = [
       'Discuss any supplement you are considering with a qualified health professional if you take medicines, are pregnant or breastfeeding, or are preparing for surgery. Bring the complete list of medicines and supplements you use.',
   },
 ] as const;
+
+const DEFENSE_STACK_CARDS = [
+  {
+    href: '/smoker-defense-stack',
+    eyebrow: 'Cigarette smokers',
+    label: 'Smoker Defense Stack',
+    desc: 'NAC at the dose that cut COPD exacerbations in a 1,006-patient trial, sulforaphane for NRF2, and vitamin C for a measurable depletion.',
+    lead: 'Leads with: the beta-carotene trials that found MORE lung cancer in smokers, not less.',
+  },
+  {
+    href: '/stimulant-defense-stack',
+    eyebrow: 'Stimulant & methamphetamine',
+    label: 'Stimulant Defense Stack',
+    desc: 'Oxidative, cardiac and dental mitigation for people still using, with every item graded on what the trials found rather than what the mechanism suggests.',
+    lead: 'Leads with: the serotonergic combinations that can be fatal, and the largest NAC trial — which was negative.',
+  },
+];
 
 const comparisons = [
   { href: '/library/compare/nmn-vs-nr', label: 'NMN vs NR', desc: 'The definitive NAD+ precursor showdown' },
@@ -155,6 +174,36 @@ export default function SupplementGuidesPage() {
           ]}
           primary={{ href: '/longevity-supplements-guide', label: 'Start with the Master Guide' }}
           secondary={{ href: '/library', label: 'Compound library' }}
+          figure={
+            <HubSplitInstrument
+              kicker="Reading surfaces"
+              total={SUPPLEMENT_GUIDES.length + compoundDeepDives.length + comparisons.length}
+              totalLabel="linked entries"
+              rows={[
+                {
+                  key: 'guides',
+                  label: 'In-depth guides',
+                  count: SUPPLEMENT_GUIDES.length,
+                  color: HUB_ACCENT_VAR.cyan,
+                },
+                {
+                  key: 'dives',
+                  label: 'Compound profiles',
+                  count: compoundDeepDives.length,
+                  color: HUB_ACCENT_VAR.emerald,
+                },
+                {
+                  key: 'compare',
+                  label: 'Head-to-head',
+                  count: comparisons.length,
+                  color: HUB_ACCENT_VAR.violet,
+                },
+              ]}
+              href="/longevity-supplements-guide"
+              hrefLabel="Start with the Master Guide →"
+            />
+          }
+          figureCaption="Reading split · derived from the guides listed on this page"
         />
 
         {/* Semantic page title */}
@@ -166,6 +215,7 @@ export default function SupplementGuidesPage() {
               title="Longevity Supplement Guides"
               description="Mechanism, key human-trial data, dosing protocol, and honest cautions for each major longevity compound — structured around the 12 Hallmarks of Aging."
               theme="cyan"
+              variant="handoff"
             />
           </div>
         </section>
@@ -324,6 +374,41 @@ export default function SupplementGuidesPage() {
                   </RevealItem>
                 );
               })}
+            </div>
+          </div>
+        </section>
+
+        {/* Harm-reduction protocols — a different job from the compound guides:
+            these serve people with an ongoing exposure they are not removing,
+            and they lead with what to avoid rather than what to buy. */}
+        <section aria-labelledby="harm-reduction-heading" className="py-16 md:py-20 border-b border-border">
+          <div className="container-page">
+            <div className="mb-8">
+              <p className="text-label mb-2">Harm reduction</p>
+              <h2 id="harm-reduction-heading" className="heading-section mb-3">Defense stacks for an ongoing exposure</h2>
+              <p className="max-w-2xl text-muted-foreground">
+                For people who are not removing the exposure right now. Both pages state what
+                continuing costs, grade every item on what the trials actually found, and lead with
+                the supplements to avoid — including two that large randomised trials showed make
+                things worse.
+              </p>
+            </div>
+            <div className="grid gap-5 md:grid-cols-2">
+              {DEFENSE_STACK_CARDS.map((card) => (
+                <Link
+                  key={card.href}
+                  href={card.href}
+                  className="premium-card focus-ring group block p-6"
+                  style={{ '--card-accent': 'var(--accent-amber)' } as CSSProperties}
+                >
+                  <p className="text-label mb-2 text-accent-amber">{card.eyebrow}</p>
+                  <h3 className="text-lg font-bold group-hover:text-accent-cyan transition-colors">
+                    {card.label}
+                  </h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{card.desc}</p>
+                  <p className="mt-3 text-caption text-muted-foreground">{card.lead}</p>
+                </Link>
+              ))}
             </div>
           </div>
         </section>

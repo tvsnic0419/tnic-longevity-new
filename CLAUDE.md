@@ -6,7 +6,7 @@
 
 *Installed 2026-08-18 from the master prompt that launched this initiative.
 State (current phase, decisions, open questions) lives in
-`REDESIGN-PROGRESS.md`, not here — read that file first each session. This
+`docs/internal/REDESIGN-PROGRESS.md`, not here — read that file first each session. This
 file is the static operating contract.*
 
 ## 1 — Role and operating rules
@@ -70,7 +70,7 @@ you don't accidentally undo work that was already deliberate.
   on-brand, already-good work. Refine and extend it; don't simplify, demote,
   or genericize it without a specific, demonstrated reason.
 - On-page stats are meant to be **derived from real data, never hardcoded**
-  — see `REDESIGN-PROGRESS.md` for a live list of exceptions found and fixed.
+  — see `docs/internal/REDESIGN-PROGRESS.md` for a live list of exceptions found and fixed.
 - Guardrail tests must stay green: `interlink-coverage.test.ts`,
   `compound-coverage.test.ts`, `content-integrity.test.ts`,
   `citation-freshness.test.ts`, `synergy-coverage.test.ts`, and others. Run
@@ -97,7 +97,7 @@ mature, actively-multi-session-developed codebase, not a rescue of a rough one.
 ## 3 — SSR/CSR rendering bug — STATUS: verified & fixed in Phase 0
 
 *(Original text below described a hypothesis to verify. It has now been
-investigated end-to-end; see `REDESIGN-PROGRESS.md` for the confirmed root
+investigated end-to-end; see `docs/internal/REDESIGN-PROGRESS.md` for the confirmed root
 cause, the fix that landed, and how it was verified. Kept here for the
 verification method, in case a future refactor needs the same check re-run.)*
 
@@ -115,7 +115,7 @@ inspecting `.next/server/app/**/*.html` for the absence of React's
 Re-run Lighthouse/Core Web Vitals after any fix — this class of bug usually
 also hurts LCP.
 
-## 4 — Also verify (status per pass, see REDESIGN-PROGRESS.md for current findings)
+## 4 — Also verify (status per pass, see docs/internal/REDESIGN-PROGRESS.md for current findings)
 
 - Hub-page metadata inheritance (pages returning the homepage's canonical/title).
 - Sitewide-duplicated JSON-LD schema (needs page-scoping).

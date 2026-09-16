@@ -42,6 +42,46 @@ export interface Sponsor {
 }
 
 /**
+ * Public catalog of sellable surfaces. This is inventory metadata — labels,
+ * destinations, and intent — not a sold placement. `/partnerships` renders
+ * it so a reviewer can see exactly where a labeled placement can appear,
+ * and whether that slot is currently filled.
+ */
+export interface SponsorSlotCatalogEntry {
+  label: string;
+  surface: string;
+  href: string;
+  intent: string;
+}
+
+export const SPONSOR_SLOT_CATALOG: Record<SponsorSlotId, SponsorSlotCatalogEntry> = {
+  brief: {
+    label: 'Protocol Brief',
+    surface: 'Weekly research digest',
+    href: '/brief',
+    intent: 'Readers already in a research loop — highest intent for a labeled educational placement.',
+  },
+  tools: {
+    label: 'Tools',
+    surface: 'Stack and pathway workbench',
+    href: '/tools',
+    intent: 'People actively assembling a protocol, not browsing a blog.',
+  },
+  library: {
+    label: 'Library hub',
+    surface: 'Compound index',
+    href: '/library',
+    intent: 'First stop before a purchase: evidence, dose, and form — then a disclosed link.',
+  },
+  partnerships: {
+    label: 'Partnerships',
+    surface: 'This review page',
+    href: '/partnerships',
+    intent: 'Brand and research teams evaluating a collaboration.',
+  },
+};
+
+/**
  * Active sponsorships. EMPTY until a signed placement exists.
  *
  * Example (leave commented until a real, paid, disclosed placement is live):

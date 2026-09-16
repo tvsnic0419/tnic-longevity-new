@@ -3,6 +3,8 @@ import { Footer } from '@/components/Footer';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { SectionProgress } from '@/components/ui/SectionProgress';
 import { HomeDescent } from '@/components/home/HomeDescent';
+import { HomeInstrumentStrip } from '@/components/home/HomeInstrumentStrip';
+import { HomeSystemOvertureGate } from '@/components/home/HomeSystemOvertureGate';
 import { HomeCredibilityStrip } from '@/components/home/HomeCredibilityStrip';
 import { HomeEliteInterventions } from '@/components/home/HomeEliteInterventions';
 import { HomeHallmarks } from '@/components/home/HomeHallmarks';
@@ -16,6 +18,7 @@ import {
   buildPageMetadata,
 } from '@/lib/seo';
 import { eliteInterventions } from '@/lib/elite-interventions';
+import { evidenceIndexStats } from '@/lib/evidence-index';
 
 /**
  * Homepage — a server component so the full page renders to HTML on the server
@@ -36,7 +39,7 @@ export const metadata = {
   ...buildPageMetadata({
     title: HOME_TITLE,
     description:
-      'Elite anti-aging interventions — GlyNAC, NAD⁺, Ca-AKG, NRF2 and more — graded by the strength of human evidence, each paired with one verified product to buy well. Plus a free, PubMed-backed library of the 12 hallmarks of aging. No pay-for-placement.',
+      'The Longevity OS — learn the system, not just the supplement list: how interventions are graded on human evidence, what the 12 hallmarks of aging are and which compounds act on each, and how to read the trial behind any claim. GlyNAC, NAD⁺, Ca-AKG, NRF2 and 96 more, each paired with one verified product. Free, PubMed-backed, no pay-for-placement.',
     path: '',
   }),
   // Absolute title so the `%s | TNiC` template doesn't double the brand name.
@@ -71,6 +74,20 @@ const HOME_SECTIONS = [
   { targetId: 'personalize', label: 'Personalize', numeral: '06' },
 ];
 
+/**
+ * The library-wide tier split, resolved here on the server so the homepage's
+ * first-viewport instrument reads the same source as /library and
+ * /library/evidence rather than a second population. Computed outside the
+ * component: `evidenceIndexStats()` walks every module and the page is static.
+ */
+const evidenceStats = evidenceIndexStats();
+const libraryTiers = {
+  total: evidenceStats.total,
+  A: evidenceStats.byTier.A,
+  B: evidenceStats.byTier.B,
+  C: evidenceStats.byTier.C,
+};
+
 export default function HomePage() {
   return (
     <div className="min-h-screen overflow-x-hidden canvas-scrim text-foreground">
@@ -90,7 +107,9 @@ export default function HomePage() {
       <SectionProgress ariaLabel="Homepage sections" steps={HOME_SECTIONS} />
       <Nav />
       <main id="main-content" tabIndex={-1}>
-        <HomeDescent />
+        <HomeDescent libraryTiers={libraryTiers} />
+        <HomeSystemOvertureGate />
+        <HomeInstrumentStrip />
         <HomeCredibilityStrip />
         <HomeEliteInterventions />
         <HomeHallmarks />

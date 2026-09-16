@@ -14,6 +14,11 @@
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "synergy:coverage": "vitest run --reporter=verbose lib/synergy-coverage.test.ts",
+    "verify:pmids": "node scripts/verify-pmids.mjs",
+    "molecules:fetch": "node scripts/fetch-molecule-geometry.mjs",
+    "audit:ui": "node scripts/audit-ui.mjs",
+    "audit:routes": "node scripts/audit-routes.mjs",
+    "audit:perf": "node scripts/audit-perf.mjs",
     "ci": "npm run test && npm run build"
   },
   "dependencies": {

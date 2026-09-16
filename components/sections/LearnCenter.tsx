@@ -38,9 +38,6 @@ import {
   Check,
   type LucideIcon,
 } from 'lucide-react';
-import { PageShell } from '@/components/ui/PageShell';
-import { PageHeader } from '@/components/ui/PageHeader';
-import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import {
   gettingStartedSteps,
   glossary,
@@ -49,7 +46,6 @@ import {
   supplementRedFlags,
 } from '@/lib/data';
 import { usePlatform } from '@/context/PlatformContext';
-import { getHubContext } from '@/lib/hub-context';
 
 /**
  * Icon + theme per glossary term — a static lookup (not a dynamic
@@ -133,29 +129,6 @@ export function LearnCenter({ defaultTab }: { defaultTab?: TabId }) {
 
   return (
     <>
-      <CinematicHubHero
-        hue="cyan"
-        kicker="Learn Center"
-        title={<>Learn before you <em>stack</em>.</>}
-        lead="Intelligent consumers ask hard questions. TNiC answers them openly — from first-time basics to the supplement industry's red flags."
-        stats={[
-          { value: String(consumerFAQ.length), label: 'FAQ answers' },
-          { value: String(glossary.length), label: 'Glossary terms' },
-          { value: String(tabs.length), label: 'Learning tracks' },
-        ]}
-        primary={{ href: '/library', label: 'Open the library' }}
-        secondary={{ href: '/nico', label: 'Find your stack' }}
-      />
-      <PageShell className="bg-background">
-      <PageHeader
-        icon={BookOpen}
-        eyebrow="Learn"
-        title="Learn Before You Stack"
-        description="Intelligent consumers ask hard questions. TNiC answers them openly — from first-time basics to supplement industry red flags."
-        theme="cyan"
-        context={getHubContext('learn')}
-        contextVariant="compact"
-      />
       <div className="flex flex-wrap justify-center gap-2 mb-10">
         {tabs.map((t) => (
           <button
@@ -420,7 +393,6 @@ export function LearnCenter({ defaultTab }: { defaultTab?: TabId }) {
           </motion.div>
         )}
       </AnimatePresence>
-    </PageShell>
     </>
   );
 }

@@ -41,6 +41,8 @@ export function CinematicHubHero({
   primary,
   secondary,
   titleAsHeading = false,
+  figure,
+  figureCaption = 'Molecular field · decorative',
 }: {
   hue?: keyof typeof HUES;
   kicker: string;
@@ -58,6 +60,13 @@ export function CinematicHubHero({
   stats: HubStat[];
   primary?: { href: string; label: string };
   secondary?: { href: string; label: string };
+  /**
+   * Optional right-column figure. Defaults to the hub's molecular field framed
+   * as an instrument panel — see the note on `.research-hero__figure` below.
+   */
+  figure?: React.ReactNode;
+  /** Mono caption under the figure. Say what the visual *is*, not what it evokes. */
+  figureCaption?: string;
 }) {
   const rgb: RGB = HUES[hue] ?? HUES.violet;
   const hueCss = HUE_CSS[hue] ?? 'var(--accent-violet)';
@@ -74,6 +83,7 @@ export function CinematicHubHero({
       <div className="research-hero__veil" aria-hidden="true" />
 
       <div className="container-page research-hero__inner">
+        <div className="research-hero__copy">
         <p className="research-hero__eyebrow">{kicker}</p>
         {titleAsHeading ? (
           <h1 className="research-hero__title">{title}</h1>
@@ -81,6 +91,23 @@ export function CinematicHubHero({
           <p className="research-hero__title">{title}</p>
         )}
         <p className="research-hero__lead">{lead}</p>
+
+        {(primary || secondary) && (
+          <div className="research-hero__actions">
+            {primary && (
+              <Link href={primary.href} className="research-hero__action research-hero__action--primary focus-ring">
+                <span>{primary.label}</span>
+                <span className="research-hero__action-arrow" aria-hidden="true">→</span>
+              </Link>
+            )}
+            {secondary && (
+              <Link href={secondary.href} className="research-hero__action research-hero__action--secondary focus-ring">
+                {secondary.label}
+              </Link>
+            )}
+          </div>
+        )}
+        </div>
 
         {stats.length > 0 && (
           <div className="research-hero__stats" aria-label={`${kicker} evidence summary`}>
@@ -114,21 +141,32 @@ export function CinematicHubHero({
           </div>
         )}
 
-        {(primary || secondary) && (
-          <div className="research-hero__actions">
-            {primary && (
-              <Link href={primary.href} className="research-hero__action research-hero__action--primary focus-ring">
-                <span>{primary.label}</span>
-                <span className="research-hero__action-arrow" aria-hidden="true">→</span>
-              </Link>
-            )}
-            {secondary && (
-              <Link href={secondary.href} className="research-hero__action research-hero__action--secondary focus-ring">
-                {secondary.label}
-              </Link>
-            )}
+        {/* Right column. Every hub hero was a left-aligned column of copy with
+            roughly 45% of the first viewport left empty — measured at 1440×900
+            on all eleven of them — while the molecular field that was meant to
+            fill it sat at 0.34 opacity behind a veil and read as nothing. The
+            field is promoted into a framed instrument panel here, the same
+            idiom the homepage synergy graph already uses, so the space carries
+            the brand's own artwork instead of dark air. A hub can pass a real
+            data figure via `figure` when it has one. */}
+        {/* `--data` is not just a style hook for the stage — it is what lets the
+            panel render on a phone at all. The `display:none` below 1024px was
+            written when this column could only ever hold the decorative
+            molecular field, which a phone is right to drop. Sixteen hubs now
+            pass a real derived figure through `figure` (the library's A/B/C
+            split, the trial index's design mix, the hallmark coverage), and the
+            same rule was silently withholding the most credibility-bearing
+            number on each of those hubs from every mobile reader. Atmosphere
+            stays desktop-only; data does not. */}
+        <div
+          className={`research-hero__figure${figure ? ' research-hero__figure--data' : ''}`}
+          aria-hidden={figure ? undefined : true}
+        >
+          <div className={`research-hero__figure-stage${figure ? ' research-hero__figure-stage--data' : ''}`}>
+            {figure ?? <MoleculeStage hue={rgb} interactive={false} />}
           </div>
-        )}
+          <p className="research-hero__figure-cap">{figureCaption}</p>
+        </div>
       </div>
     </section>
   );

@@ -2,6 +2,7 @@ import { compounds } from './data';
 import { libraryModules } from './library-modules';
 import { hallmarkLibrary } from './hallmarks-library';
 import { peptideLibrary } from './peptides-library';
+import { protocols } from './protocols';
 import type { EvidenceTier, PeptideLegalStatus } from './types';
 
 /**
@@ -98,6 +99,30 @@ export function getRelatedCompounds(moduleSlug: string, limit = 6): RelatedCompo
         a.name.localeCompare(b.name),
     )
     .slice(0, limit);
+}
+
+export interface ProtocolLink {
+  /** Hash target on /protocols — protocol cards are not yet their own routes. */
+  slug: string;
+  name: string;
+  goal: string;
+  evidence: EvidenceTier;
+}
+
+/**
+ * Protocols that include this compound as a step. Inverse of ProtocolCard's
+ * compound links, so a GlyNAC page can walk to the NRF2 Defense Triad instead
+ * of dumping the visitor on /stacks.
+ */
+export function getProtocolsForCompound(moduleSlug: string): ProtocolLink[] {
+  return protocols
+    .filter((p) => p.steps.some((step) => step.slug === moduleSlug))
+    .map((p) => ({
+      slug: p.slug,
+      name: p.name,
+      goal: p.goal,
+      evidence: p.evidence,
+    }));
 }
 
 /**
