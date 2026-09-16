@@ -190,16 +190,43 @@ const CSS = `
   opacity: 0; transform: translateY(16px);
   transition: opacity .54s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .1s, transform .54s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .1s;
 }
+/* Four claims that carry the site's entire promise, previously set as 11px
+   faint mono with a bullet in front of each — at hero scale that reads as a
+   line of grey noise under the lead, not as proof. They are now discrete
+   chips: same type size and mono voice, but each claim sits on its own
+   grounded surface with a hairline, so the eye counts four things instead of
+   skimming one grey run. Brighter text, and the accent is a tick mark rather
+   than a bullet, because these are assertions the site keeps, not list items. */
 .tnic-trustline {
-  display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 18px;
-  max-width: 720px; color: var(--faint);
-  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: var(--type-11); letter-spacing: .08em; text-transform: uppercase;
+  display: flex; flex-wrap: wrap; gap: 7px; margin-top: 22px;
+  /* The 720px cap was inherited from the old one-line-of-text treatment and
+     broke the four chips 3+1 at 1440, which reads as an accident. They total
+     ~747px tightened, so the cap comes off and the copy column decides. Below
+     that they wrap, which is fine — an even wrap looks deliberate, a lone
+     orphan does not. */
+  max-width: 100%;
   opacity: 0; transform: translateY(12px);
   transition: opacity .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .16s, transform .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .16s;
 }
-.tnic-trustline span { display: inline-flex; align-items: center; gap: 7px; }
-.tnic-trustline span::before { content: '•'; color: var(--cyan); font-size: var(--type-14); line-height: 0; }
+.tnic-trustline span {
+  display: inline-flex; align-items: center; gap: 7px;
+  min-height: 26px;
+  padding: 4px 10px 4px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel2) 62%, transparent);
+  color: var(--muted);
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: var(--type-11); letter-spacing: .06em; text-transform: uppercase;
+  white-space: nowrap;
+}
+.tnic-trustline span::before {
+  content: '';
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 7px color-mix(in srgb, var(--cyan) 70%, transparent);
+  flex: none;
+}
 .tnic-note {
   font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
   font-size: var(--type-11); letter-spacing: .04em; color: var(--faint);
@@ -1098,10 +1125,24 @@ export function HomeDescent({ libraryTiers }: { libraryTiers: LibraryTierSplit }
       0.35,
       Math.min(1, (window.innerWidth * window.innerHeight) / REFERENCE_AREA),
     );
+    // Dust, not bokeh.
+    //
+    // Screenshotting the hero with this canvas disabled settled an argument:
+    // it was the single thing making the arrival look cheap. The near layer
+    // ran 22 particles at up to r=3.6, blitted through a x8 multiplier — 29px
+    // glow discs at 0.85 alpha — with a mid layer of 60 more at up to 11px.
+    // Out-of-focus blobs that size read as a stock space background, and they
+    // are the LEAST subject-grounded thing on a page whose real artwork is the
+    // molecular geometry and the synergy network. The style guide's protection
+    // of the cinematic shell is explicitly not a licence for that.
+    //
+    // So the far layer keeps its count and its crisp sparkle core — a fine
+    // starfield is depth — while the two bloom layers lose most of their
+    // radius and alpha. Same parallax, same life, without the soup.
     const layers = [
-      { n: 130, sp: 0.00012, dxr: 0.00008, rMin: 0.3, rMax: 1.2, alpha: 0.55 },
-      { n: 60,  sp: 0.00020, dxr: 0.00014, rMin: 0.8, rMax: 2.2, alpha: 0.75 },
-      { n: 22,  sp: 0.00028, dxr: 0.00020, rMin: 1.8, rMax: 3.6, alpha: 0.85 },
+      { n: 130, sp: 0.00012, dxr: 0.00008, rMin: 0.3, rMax: 1.2, alpha: 0.5,  mul: 3 },
+      { n: 44,  sp: 0.00020, dxr: 0.00014, rMin: 0.6, rMax: 1.5, alpha: 0.3,  mul: 3.4 },
+      { n: 10,  sp: 0.00028, dxr: 0.00020, rMin: 1.0, rMax: 2.0, alpha: 0.22, mul: 4.5 },
     ].map(l => ({ ...l, n: Math.max(6, Math.round(l.n * density)) }));
     const P = layers.map(l => Array.from({ length: l.n }, () => ({
       x: Math.random(), y: Math.random(),
@@ -1149,7 +1190,10 @@ export function HomeDescent({ libraryTiers }: { libraryTiers: LibraryTierSplit }
           const bx = b.x * w, by = b.y * h;
           const d2 = (ax - bx) ** 2 + (ay - by) ** 2;
           if (d2 < 14000) {
-            const o = (1 - d2 / 14000) * 0.08 * alphaMul;
+            // Halved with the bloom: at 0.08 these links added a constant
+            // teal haze across the whole first viewport, which is most of what
+            // made the hero read as fogged rather than deep.
+            const o = (1 - d2 / 14000) * 0.04 * alphaMul;
             ctx.strokeStyle = `rgba(${cr},${cg},${cb},${o})`;
             ctx.lineWidth = 0.6;
             ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
@@ -1168,7 +1212,7 @@ export function HomeDescent({ libraryTiers }: { libraryTiers: LibraryTierSplit }
           }
           const tw = 0.55 + Math.sin(p.ph) * 0.45;
           const px = p.x * w, py = p.y * h;
-          const rad = p.r * (li === 2 ? 8 : li === 1 ? 5 : 3);
+          const rad = p.r * l.mul;
           blitGlow(ctx, glow([cr, cg, cb]), px, py, rad, l.alpha * tw * alphaMul);
           if (li < 2) {
             // Sparkle core: near-white reads as a bright twinkle against the
