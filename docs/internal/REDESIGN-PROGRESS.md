@@ -4,6 +4,91 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-16 — PR queue cleared: two merged, three closed, two measured empty
+
+The owner asked for the open work to be identified, merged if good, and old
+bad work archived. Six PRs were open. Outcome, with the reasoning, so none of
+this gets re-litigated from scratch:
+
+**Merged.**
+- **#212** — lit ground, elevated plane, editorial measure. Independently
+  re-verified before merge (typecheck, lint, 784 tests, build, `audit:ui`
+  exit 0), not merged on its own say-so.
+- **#215** — the ten measured defects, the landing page, the hero. Reconciled
+  onto #212 rather than merged past it; four collisions, resolved to the
+  better fix each time. See the merge commit for which side won and why.
+- **#213** — Bio Bible folio + Stripe gate. Brought up from a much older base,
+  then the money paths were exercised directly rather than taken on trust:
+  folio renders inert (zero Stripe links) with the env unset; the delivery
+  gate refuses on no session, on `../../etc/passwd`, and on a plausible-but-
+  fake `cs_test_…`; the gate is `noindex, nofollow`. It sells nothing until
+  `NEXT_PUBLIC_BIO_BIBLE_PRICE` and `NEXT_PUBLIC_BIO_BIBLE_PAYMENT_URL` are
+  set, and the monograph file still does not exist. Both remain owner
+  decisions; merging did not make them.
+
+**Closed.**
+- **#179** (Whop Bio Bible) — Vercel red since 2026-09-08, four files missing
+  including the product. Superseded by #213, which solves the content problem
+  by extraction-with-provenance rather than by authoring 40 cards.
+- **#214** (workbench prototype) — see below.
+- **#209** (site-wide 5× depth) — see below.
+
+### The two that were closed on measurement, not taste
+
+Both were closed with a reason, then the reason was checked against the
+rendered site rather than asserted. Recording the numbers because "we already
+have that" is exactly the claim a future session should be able to re-test.
+
+**#214 duplicated the library into `public/`.** `app.js` inlined tiers, doses,
+study counts and mechanism summaries as literals. The GlyNAC dose matched
+`glynac.mdx` *on the day it was written* — which is the failure mode, not the
+defence, since nothing linked them. It also graded **hallmarks** "Tier A" /
+"Tier B"; `lib/hallmarks-library.ts` has no tier field and should not, because
+A–C grades human evidence for a compound, not an aging mechanism. And `public/`
+is outside every guard here: not in the 229 routes `audit:routes` walks, not
+measured by `audit:ui`, no typecheck, no tests, no interlink coverage.
+
+Its five ideas were then checked against the app, and all five already exist
+registry-backed:
+
+| Prototype idea | Real route | Coverage |
+|---|---|---|
+| Compound search + filters | `/library` | **100** compound links (prototype: 6) |
+| Systems map | `/hallmarks` | **12** hallmarks (prototype: 6) |
+| Comparison matrix | `/library/compare/head-to-head` | whole graded set |
+| Protocol builder | `/stacks` | whole graded set |
+| Full evidence table | `/library/evidence` | **100** rows |
+
+So there was nothing to rebuild. The only unique contribution was its layouts,
+and those arrive attached to the data duplication.
+
+**#209's remaining goal was already met.** Its three open items were the
+HomeDescent CTA hierarchy (landed in #215 — first phone CTA moved y=1142 →
+y=524), and two sets of class hooks for CSS that only exists on its own branch.
+Its substantive claim was equal-height cards, so that was measured on current
+`main` at 1440×900, grouping every card by row and reporting any row whose
+heights differ by more than 2px:
+
+```
+HOME elite cards    []
+HOME hallmark cards []
+TOOLS cards         []
+```
+
+Zero mismatches. The grids plus #212 and #215 got there independently. What
+remained was 948 lines of unverified CSS (`instrument-depth.css`,
+`instrument-symmetry.css`, `elite-library-hallmarks-depth.css`) plus edits to
+six components that #212 and #215 had just rewritten — porting it would have
+undone verified work to solve a problem that no longer reproduces.
+
+**If either is revisited:** both branches still exist
+(`feat/tnic-intelligence-workbench`, `ui/first-screen-tools-premium`). Nothing
+was deleted.
+
+**Rollback for this pass:** `main` went `4713870` → `2ffda04` (#212) →
+`92b2658` (#215) → `294c363` (#213). Revert any one independently, or redeploy
+the Vercel deployment for the SHA below the one you want gone.
+
 ## 2026-09-16 — Ten UI upgrades, chosen by measuring rather than reading
 
 **The question asked:** identify and ship the ten highest-value UI upgrades.
