@@ -18,6 +18,7 @@ import {
   buildPageMetadata,
 } from '@/lib/seo';
 import { eliteInterventions } from '@/lib/elite-interventions';
+import { evidenceIndexStats } from '@/lib/evidence-index';
 
 /**
  * Homepage — a server component so the full page renders to HTML on the server
@@ -73,6 +74,20 @@ const HOME_SECTIONS = [
   { targetId: 'personalize', label: 'Personalize', numeral: '06' },
 ];
 
+/**
+ * The library-wide tier split, resolved here on the server so the homepage's
+ * first-viewport instrument reads the same source as /library and
+ * /library/evidence rather than a second population. Computed outside the
+ * component: `evidenceIndexStats()` walks every module and the page is static.
+ */
+const evidenceStats = evidenceIndexStats();
+const libraryTiers = {
+  total: evidenceStats.total,
+  A: evidenceStats.byTier.A,
+  B: evidenceStats.byTier.B,
+  C: evidenceStats.byTier.C,
+};
+
 export default function HomePage() {
   return (
     <div className="min-h-screen overflow-x-hidden canvas-scrim text-foreground">
@@ -92,7 +107,7 @@ export default function HomePage() {
       <SectionProgress ariaLabel="Homepage sections" steps={HOME_SECTIONS} />
       <Nav />
       <main id="main-content" tabIndex={-1}>
-        <HomeDescent />
+        <HomeDescent libraryTiers={libraryTiers} />
         <HomeSystemOvertureGate />
         <HomeInstrumentStrip />
         <HomeCredibilityStrip />

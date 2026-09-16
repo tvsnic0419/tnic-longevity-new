@@ -4,6 +4,160 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-16 — Ten UI upgrades, chosen by measuring rather than reading
+
+**The question asked:** identify and ship the ten highest-value UI upgrades.
+
+**How they were chosen.** Baseline first, on a real production build served
+locally: `audit:ui` (axe + layout + tap targets, 11 routes × 2 viewports),
+`audit:routes` (229 routes), `audit:perf`, the 784-test suite, then screenshots
+of the homepage, `/library`, `/library/evidence` and `/library/compounds/nmn` at
+1440×900 and 390×844. Everything below is a defect that measurement produced.
+Nothing here is a preference.
+
+Baseline: 784 tests green, routes 0 fail / 0 warn, perf within budget — and
+`audit:ui` **exiting non-zero**, with 2 axe violations.
+
+### The credibility one
+
+**1 · The homepage instrument contradicted the library, and said so only to
+screen readers.** `.tnic-intel` rendered a dial reading *100 graded compounds*
+with *Tier A 4 · B 4 · C 0* directly beneath it. Those counts were
+`eliteTierCounts` — the Elite Eight — and "elite" appeared nowhere in rendered
+text, only in an `aria-label`. `/library` and `/library/evidence` both publish
+**10 · 71 · 19** from `evidenceIndexStats()`. Two numbers under one label, on
+the site whose entire proposition is that its numbers trace.
+
+Fixed at the root rather than by relabelling: the row now shows the
+library-wide split — the population the dial actually headlines, from the same
+`evidenceIndexStats()` both other surfaces read — under a visible
+`EVIDENCE MIX · ALL 100 GRADED` caption, and links to `/library/evidence`
+instead of the methodology page. The elite set keeps its own count in the
+metrics row above. The split is computed in `app/page.tsx` (server) and passed
+as `libraryTiers`, not imported into the client bundle: `lib/evidence-index`
+pulls `compoundModules`, `hallmarks-library`, `tnic-score` and `entity-graph`
+behind it, and `lib/derived-stats` already says to prefer props here. Cost
+measured at +3KB JS on the homepage.
+
+Written up as STYLE_GUIDE §22.1, because the rule generalises: an `aria-label`
+is not a substitute for a visible population label — it hands screen-reader
+users the truth and leaves everyone else with the contradiction.
+
+### The mobile ones
+
+**2 · Sixteen hubs hid their data figure from every phone.**
+`.research-hero__figure { display: none }` below 1024px is correct for what the
+column originally held — the decorative molecular field. Since #189 a hub can
+pass a real derived figure, and sixteen now do (`/library`, `/library/evidence`,
+`/library/trials`, `/trust`, `/stacks`, `/hallmarks`, `/pathways`, `/peptides`,
+`/protocols`, `/products`, `/tools`, `/learn`, `/insights`, `/compound-engine`,
+`/supplement-guides`, `/stacks/lab`). The same rule was withholding the most
+credibility-bearing number on each of them from every mobile reader. A
+`--data` modifier now splits atmosphere from data: data renders at every width,
+ordered between the copy and the stat rail. Verified on `/library` (Evidence
+split, 100 graded) and `/library/trials` (363 study rows, 264 human).
+
+**3 · The homepage dial was illegible on a phone.** At ≤900px the radar was
+given a 132px column against a 240-unit viewBox, so its 11px cardinal labels
+rendered at ~6px — under the type scale's own floor by nearly half, and
+visibly garbled in a 390px screenshot. `audit:ui`'s micro-type probe excludes
+SVG by design, so nothing caught it. The panel now stacks: the radar gets a
+240px column and the three metric tiles get the full width, which also
+uncramps them.
+
+**After the #212 merge** the labels are HTML rather than SVG `<text>`, so they
+hold 11px at any dial size and the stacking is no longer what rescues them.
+It still earns its place: #212's own compact layout hid the cardinals below
+900px because a 132px dial has no room for a label ring, and stacking gives
+the dial 240px with the full ring padding intact — so the labels stay visible
+on a phone instead of being dropped. Hiding real information from the majority
+of traffic was a cost of the compact layout, not a goal.
+
+**4 · Hero stat labels truncated instead of wrapping.** `white-space: nowrap` +
+ellipsis on `.research-hero__stat-label`: at 390px "Hallmarks of aging" needed
+135px in a 130px cell and rendered as `HALLMARKS OF AGI…`. A rail whose job is
+to name what a number counts cannot cut the name off.
+
+### The accessibility ones
+
+**5 · The tap-target gate was failing.** `audit:ui` exits non-zero on any
+actionable control under 24px, budget 0. "Full ranking" in
+`HomeInstrumentStrip` rendered 87×20. Given `.action-link`, the documented
+control floor. Gate now exits 0.
+
+**6 · `role="listitem"` on `<a>` elements** (axe, both viewports). The homepage
+instrument's grade tiles were links carrying a role they cannot take, inside a
+`div role="list"` — the list semantics the author intended did not exist. Now a
+real `<ul>`/`<li>` with the link inside.
+
+**7 · The scroll reveal fades text through sub-AA contrast — and parks there.**
+This is the one worth reading twice. `animation-timeline: view()` does not play
+an animation, it **scrubs** one: a section the reader stops on mid-range holds
+that opacity indefinitely. Fading from 0 is therefore not a 400ms transient, it
+is text at arbitrary partial opacity while being read. Measured on
+`/library/mitochondrial-dysfunction`: walk-card kickers composited to `#73529d`
+(3.23:1) and `#208163` (4.13:1), from tokens that are 7.4:1 and 10.2:1 at full
+strength. The audit's header warns that below-the-fold contrast hits can be
+mid-fade false positives; this one is not, because the fade does not finish on
+its own. Scrubbed reveals now use `section-reveal-scrubbed`, floored at
+`opacity: 0.78` (worst case worked back from the violet accent, which holds
+4.5:1 to ~0.75). The 40px rise — the half of the gesture that actually reads —
+is untouched. Time-based reveals keep fading from 0: they self-complete.
+
+### The craft and symmetry ones
+
+**8 · The radar's cardinal labels had ticks drawn through them.** The four
+emphasised ticks span r=92..102; NAD+, mTOR, AMPK and NRF2 sat at r=98, dead
+centre of that band. This pass first fixed it by padding the viewBox 18 units
+per side so the labels could move out past the band.
+
+**Superseded on merge.** PR #212, developed in parallel, fixed the same defect
+by lifting the cardinals out of the SVG entirely — HTML spans absolutely
+positioned in a 30px ring padding on `.tnic-intel-radar`. That is the better
+primitive and #212 merged first, so it won: HTML text holds `--type-11` at
+every container size, where SVG `<text>` scales with the viewBox and was the
+reason the same labels rendered at ~6px on a phone (see item 3). The viewBox
+padding was reverted to `0 0 240 240` on merge, because it existed only to
+make room for `<text>` nodes that no longer exist and would otherwise shrink
+the dial inside the ring #212 built for it.
+
+**9 · `HubSplitInstrument` had its hierarchy inverted.** The count is the
+figure's whole payload and was its smallest, faintest element: 11px muted mono
+against a 14px semibold coloured label. Promoted to value type at full
+contrast, with each row's share of the whole beside it so the bar length has a
+number. Applies across all sixteen hubs.
+
+**10 · Symmetry, on both hero compositions.**
+- *Homepage.* The instrument column was a free `0.85fr` measuring 499px while
+  `.tnic-intel` is 420px pinned to its end — 79px of dead air on the **inner**
+  side, so the gap the reader saw was 143px, not the 64px the gap declares.
+  Track capped at the panel width; the declared gap is now the real one and the
+  copy takes the width back. The H1 still breaks in three lines; the badge row
+  gained a line back.
+- *Hub heroes.* Measured on `/library` at 1440×900: copy column 501px, panel
+  333px, centred — 168px of visible imbalance, the panel reading as a small
+  card floating beside a tall column. Data panels now stretch, with the flex
+  chain carried through to the instrument, which was always written as
+  `h-full` + `justify-between` and had simply never been given a height to
+  fill. The decorative field is excluded and keeps `center`: it is a fixed 4/3
+  canvas and stretching it distorts the artwork.
+
+**Verified (after):** 784 tests green · lint 0 · typecheck clean · build ok ·
+`audit:ui` **exit 0, axe violations 0 on all 22 page/viewport combinations**
+(was 2), actionable sub-24px controls 0 (was 2), HTML text under 11px 0 ·
+`audit:routes` 229 routes, 0 fail 0 warn · `audit:perf` all pages within
+budget (homepage JS 874→877KB, CLS 0.049→0.052, gate 0.1).
+
+**Not done, deliberately.** `/library/evidence` reports 215 sub-24px targets at
+desktop and 140 at phone — all non-actionable (table cell text, tier meter
+bars), so the gate ignores them and so did this pass; worth a look only if the
+table gets interactive cells. The `ambient-orb-2` overflow that every route
+reports is contained by `.ambient-layer`'s `overflow: hidden` + `contain:
+layout paint` and causes no page scroll; it is audit noise, not a defect.
+
+**Rollback:** revert the commits on `claude/top-10-ui-upgrades-ti1p8x`, or
+redeploy the Vercel deployment for `4713870`.
+
 ## 2026-09-15 — "The Longevity OS" as slogan: a method, not an app
 
 **Refined same day, after the first pass shipped as "The Longevity Intelligence

@@ -72,8 +72,19 @@ export function HubSplitInstrument({
                 <span className="text-body-sm font-semibold" style={{ color: row.color }}>
                   {row.label}
                 </span>
-                <span className="font-mono text-micro tabular-nums text-[var(--color-text-faint)]">
+                {/* The count is the figure's whole payload, and it used to be
+                    the smallest, faintest thing in the panel — 11px muted mono
+                    against a 14px semibold coloured label. On a hub that grades
+                    evidence, the reader's eye should land on "71", not on the
+                    word next to it. Value type, full-contrast, with the share
+                    of the whole beside it so the bar's length has a number. */}
+                <span className="shrink-0 font-mono text-sm font-semibold tabular-nums text-foreground">
                   {row.count}
+                  {total > 0 && (
+                    <span className="ml-1.5 text-micro font-medium text-[var(--color-text-faint)]">
+                      {Math.round(pct)}%
+                    </span>
+                  )}
                 </span>
               </div>
               <div className="h-1.5 overflow-hidden rounded-full bg-[var(--color-bg-muted)]">

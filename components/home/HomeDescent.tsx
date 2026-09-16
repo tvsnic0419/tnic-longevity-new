@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useRef, useEffect, useMemo } from "react";
-import { eliteInterventions, eliteTierCounts } from "@/lib/elite-interventions";
+import { eliteInterventions } from "@/lib/elite-interventions";
 import { COMPOUND_COUNT } from "@/lib/library-modules";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { DeferredMoleculeStage, DeferredNetworkStage } from "@/components/home/DeferredCinematicStage";
@@ -190,16 +190,43 @@ const CSS = `
   opacity: 0; transform: translateY(16px);
   transition: opacity .54s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .1s, transform .54s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .1s;
 }
+/* Four claims that carry the site's entire promise, previously set as 11px
+   faint mono with a bullet in front of each — at hero scale that reads as a
+   line of grey noise under the lead, not as proof. They are now discrete
+   chips: same type size and mono voice, but each claim sits on its own
+   grounded surface with a hairline, so the eye counts four things instead of
+   skimming one grey run. Brighter text, and the accent is a tick mark rather
+   than a bullet, because these are assertions the site keeps, not list items. */
 .tnic-trustline {
-  display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 18px;
-  max-width: 720px; color: var(--faint);
-  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: var(--type-11); letter-spacing: .08em; text-transform: uppercase;
+  display: flex; flex-wrap: wrap; gap: 7px; margin-top: 22px;
+  /* The 720px cap was inherited from the old one-line-of-text treatment and
+     broke the four chips 3+1 at 1440, which reads as an accident. They total
+     ~747px tightened, so the cap comes off and the copy column decides. Below
+     that they wrap, which is fine — an even wrap looks deliberate, a lone
+     orphan does not. */
+  max-width: 100%;
   opacity: 0; transform: translateY(12px);
   transition: opacity .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .16s, transform .5s var(--ease-entrance, cubic-bezier(.16,1,.3,1)) .16s;
 }
-.tnic-trustline span { display: inline-flex; align-items: center; gap: 7px; }
-.tnic-trustline span::before { content: '•'; color: var(--cyan); font-size: var(--type-14); line-height: 0; }
+.tnic-trustline span {
+  display: inline-flex; align-items: center; gap: 7px;
+  min-height: 26px;
+  padding: 4px 10px 4px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel2) 62%, transparent);
+  color: var(--muted);
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: var(--type-11); letter-spacing: .06em; text-transform: uppercase;
+  white-space: nowrap;
+}
+.tnic-trustline span::before {
+  content: '';
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 7px color-mix(in srgb, var(--cyan) 70%, transparent);
+  flex: none;
+}
 .tnic-note {
   font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
   font-size: var(--type-11); letter-spacing: .04em; color: var(--faint);
@@ -227,7 +254,13 @@ const CSS = `
 }
 .tnic-hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+  /* The instrument column is capped at the instrument's own width instead of a
+     free 0.85fr. At 1440 that track measured 499px while .tnic-intel is
+     min(100%, 420px) pinned to its end — so 79px of the column was dead air
+     on the INNER side, and the gap the reader saw between the headline and the
+     panel was 143px, not the 64px the gap declares. Capping the track makes the
+     declared gap the real one and lets the copy take the width back. */
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 420px);
   gap: clamp(18px, 2.4vw, 36px) clamp(24px, 4vw, 64px);
   align-items: center;
   width: 100%;
@@ -270,6 +303,19 @@ const CSS = `
   .tnic-hero { min-height: unset; }
   .tnic-hero-grid { grid-template-columns: 1fr; gap: 18px; }
   .tnic-paths { grid-column: auto; }
+
+  /* Action before proof, on phones only.
+
+     Stacked in DOM order the arrival read: headline, lead, badges, then a
+     600px instrument panel, and only then something to click. Measured at
+     390x844 the first call to action sat at y=1142 — one and a third screens
+     down. The instrument is the proof that the claim is real, and proof can
+     live below the fold; the three paths are the whole point of the screen and
+     cannot. Desktop is untouched: there the panel is the second column, so the
+     paths already land inside the first viewport beside it. */
+  .tnic-hero-copy { order: 1; }
+  .tnic-paths { order: 2; }
+  .tnic-intel { order: 3; }
 }
 @media (max-width: 720px) {
   /* The global nav is fixed; reserve a deliberate arrival margin so the
@@ -390,8 +436,8 @@ const CSS = `
    (no backdrop-filter) so the page keeps its chrome-only frost budget. */
 .tnic-intel {
   position: relative;
-  justify-self: end;
-  width: min(100%, 420px);
+  justify-self: stretch;
+  width: 100%;
   padding: 20px 20px 16px;
   border-radius: 24px;
   border: 1px solid var(--line);
@@ -470,14 +516,20 @@ const CSS = `
   font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
   font-size: var(--type-11); letter-spacing: .12em; text-transform: uppercase; color: var(--faint);
 }
+.tnic-intel-split-cap {
+  margin: 12px 0 6px;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: var(--type-11); letter-spacing: .12em; text-transform: uppercase;
+  color: var(--faint);
+}
 .tnic-intel-grades {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px; margin-top: 10px;
-  padding: 0; list-style: none;
+  gap: 8px; margin: 0; padding: 0; list-style: none;
 }
-.tnic-intel-grade-cell { display: flex; min-width: 0; }
+.tnic-intel-grade-cell { display: flex; min-width: 0; margin: 0; }
 .tnic-intel-grade-cell > .tnic-grade { flex: 1 1 auto; min-width: 0; }
 .tnic-grade {
+  flex: 1 1 auto;
   display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
   padding: 9px 10px 8px; border-radius: 12px;
   border: 1px solid var(--line); text-decoration: none;
@@ -514,28 +566,41 @@ const CSS = `
   font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
   font-size: var(--type-11); letter-spacing: .04em; color: var(--faint); line-height: 1.45;
 }
+/* Below 900px the panel stacks. It used to put a 132px radar beside the metric
+   tiles, and that width is the reason the dial was unreadable on a phone: the
+   SVG is a 240-unit viewBox, so its 11px cardinal labels rendered at
+   11 × 132/240 ≈ 6px — under the type scale's 11px floor by nearly half, and
+   visibly garbled in a 390px screenshot. (The audit:ui micro-type probe
+   excludes SVG by design, so nothing caught it.) Stacking gives the radar a
+   240px column — 1:1 with its own viewBox, so the labels render at the 11px
+   they are specified at — and hands the three metric tiles the full width,
+   which also stops the Trials-cited and Hallmarks tiles from cramping. */
 @media (max-width: 900px) {
   .tnic-intel {
-    justify-self: stretch; width: 100%; padding: 14px; border-radius: 20px;
+    justify-self: stretch; width: 100%; padding: 16px 14px; border-radius: 20px;
     display: grid;
-    grid-template-columns: 132px minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
-      "kicker kicker"
-      "radar metrics"
-      "grades grades"
-      "note note";
-    gap: 8px 14px;
-    align-items: center;
+      "kicker"
+      "radar"
+      "metrics"
+      "splitcap"
+      "grades"
+      "note";
+    gap: 10px;
   }
   .tnic-intel-kicker { grid-area: kicker; margin: 0; }
-  /* Compact layout: 132px leaves no room for a label ring, and the note
-     below the dial already names what the cardinals are. Drop the padding,
-     hide the labels, keep the dial. */
-  .tnic-intel-radar { grid-area: radar; width: 132px; margin: 0; padding: 0; }
-  .tnic-intel-cardinals { display: none; }
-  .tnic-intel-note-cardinals { display: none; }
-  .tnic-intel-center .n { font-size: var(--type-28); }
+  /* #212 hid the cardinals here because a 132px dial in a two-column compact
+     layout has no room for a label ring. Stacking instead gives the dial 240px,
+     which leaves the full 30px ring padding intact — and since #212 also moved
+     the cardinals from SVG <text> to HTML, they hold --type-11 at that size
+     rather than scaling down with a viewBox. So the labels stay: hiding real
+     information from the majority of traffic was a cost of the compact layout,
+     not a goal. Nothing dangles either, so the note keeps its cardinals clause. */
+  .tnic-intel-radar { grid-area: radar; width: min(100%, 240px); margin: 2px auto 0; }
+  .tnic-intel-center .n { font-size: clamp(2.2rem, 11vw, 2.75rem); }
   .tnic-intel-metrics { grid-area: metrics; margin-top: 0; }
+  .tnic-intel-split-cap { grid-area: splitcap; margin: 2px 0 0; }
   .tnic-intel-grades { grid-area: grades; margin-top: 0; }
   .tnic-intel-note { grid-area: note; margin-top: 2px; }
 }
@@ -1010,7 +1075,20 @@ function interp(pts: Array<[number, number]>, x: number): number {
 const STAR_D = "M0 -6 L1.7 -1.9 L6 -1.9 L2.6 0.7 L3.9 5 L0 2.5 L-3.9 5 L-2.6 0.7 L-6 -1.9 L-1.7 -1.9 Z";
 
 
-export function HomeDescent() {
+/**
+ * The library-wide A/B/C split, computed on the server and handed in as a
+ * prop.
+ *
+ * It is a prop rather than an import because `lib/evidence-index` pulls
+ * `compoundModules`, `hallmarks-library`, `tnic-score` and `entity-graph`
+ * behind it — fine on the server, a large addition to a homepage client
+ * bundle that is already the heaviest on the site. `lib/derived-stats` says
+ * the same thing in its own header: prefer computing on the server and
+ * passing values as props.
+ */
+export type LibraryTierSplit = { total: number; A: number; B: number; C: number };
+
+export function HomeDescent({ libraryTiers }: { libraryTiers: LibraryTierSplit }) {
   // `active` was React state purely to drive the old scene rail's highlight.
   // The rail moved to SectionProgress and nothing rendered here reads it now —
   // only `activeRef`, inside the canvas loop, to lerp the ambient palette.
@@ -1036,9 +1114,6 @@ export function HomeDescent() {
   const sectionRefs = useMemo(() => [s0, s1, s2, s3, s4], []);
   const intel = useMemo(() => {
     const studies = eliteInterventions.reduce((n, e) => n + e.studyCount, 0);
-    const tierA = eliteTierCounts.A ?? 0;
-    const tierB = eliteTierCounts.B ?? 0;
-    const tierC = eliteTierCounts.C ?? 0;
     const ticks = Array.from({ length: 12 }, (_, i) => {
       const a = (i / 12) * Math.PI * 2 - Math.PI / 2;
       return {
@@ -1051,7 +1126,7 @@ export function HomeDescent() {
       };
     });
     const poly = ticks.map((t) => `${t.px.toFixed(1)},${t.py.toFixed(1)}`).join(' ');
-    return { studies, tierA, tierB, tierC, ticks, poly };
+    return { studies, ticks, poly };
   }, []);
 
   useEffect(() => {
@@ -1064,11 +1139,37 @@ export function HomeDescent() {
     const ctx = cv.getContext("2d"); if (!ctx) return;
     let w = 0, h = 0;
     const dpr = cappedDpr();
+    // Particle COUNT was fixed while the canvas is fluid, so density scaled
+    // inversely with the viewport: the 130/60/22 calibrated against a 1440x900
+    // desktop became roughly 3.9x denser on a 390x844 phone, and the bokeh
+    // stopped being atmosphere behind the hero and started sitting on top of
+    // the lead paragraph. Scaling by area keeps the look the same at every
+    // width, and costs a phone far fewer glow blits plus a much cheaper O(n^2)
+    // link pass on the mid layer.
+    const REFERENCE_AREA = 1440 * 900;
+    const density = Math.max(
+      0.35,
+      Math.min(1, (window.innerWidth * window.innerHeight) / REFERENCE_AREA),
+    );
+    // Dust, not bokeh.
+    //
+    // Screenshotting the hero with this canvas disabled settled an argument:
+    // it was the single thing making the arrival look cheap. The near layer
+    // ran 22 particles at up to r=3.6, blitted through a x8 multiplier — 29px
+    // glow discs at 0.85 alpha — with a mid layer of 60 more at up to 11px.
+    // Out-of-focus blobs that size read as a stock space background, and they
+    // are the LEAST subject-grounded thing on a page whose real artwork is the
+    // molecular geometry and the synergy network. The style guide's protection
+    // of the cinematic shell is explicitly not a licence for that.
+    //
+    // So the far layer keeps its count and its crisp sparkle core — a fine
+    // starfield is depth — while the two bloom layers lose most of their
+    // radius and alpha. Same parallax, same life, without the soup.
     const layers = [
-      { n: 130, sp: 0.00012, dxr: 0.00008, rMin: 0.3, rMax: 1.2, alpha: 0.55 },
-      { n: 60,  sp: 0.00020, dxr: 0.00014, rMin: 0.8, rMax: 2.2, alpha: 0.75 },
-      { n: 22,  sp: 0.00028, dxr: 0.00020, rMin: 1.8, rMax: 3.6, alpha: 0.85 },
-    ];
+      { n: 130, sp: 0.00012, dxr: 0.00008, rMin: 0.3, rMax: 1.2, alpha: 0.5,  mul: 3 },
+      { n: 44,  sp: 0.00020, dxr: 0.00014, rMin: 0.6, rMax: 1.5, alpha: 0.3,  mul: 3.4 },
+      { n: 10,  sp: 0.00028, dxr: 0.00020, rMin: 1.0, rMax: 2.0, alpha: 0.22, mul: 4.5 },
+    ].map(l => ({ ...l, n: Math.max(6, Math.round(l.n * density)) }));
     const P = layers.map(l => Array.from({ length: l.n }, () => ({
       x: Math.random(), y: Math.random(),
       r: Math.random() * (l.rMax - l.rMin) + l.rMin,
@@ -1115,7 +1216,10 @@ export function HomeDescent() {
           const bx = b.x * w, by = b.y * h;
           const d2 = (ax - bx) ** 2 + (ay - by) ** 2;
           if (d2 < 14000) {
-            const o = (1 - d2 / 14000) * 0.08 * alphaMul;
+            // Halved with the bloom: at 0.08 these links added a constant
+            // teal haze across the whole first viewport, which is most of what
+            // made the hero read as fogged rather than deep.
+            const o = (1 - d2 / 14000) * 0.04 * alphaMul;
             ctx.strokeStyle = `rgba(${cr},${cg},${cb},${o})`;
             ctx.lineWidth = 0.6;
             ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
@@ -1134,7 +1238,7 @@ export function HomeDescent() {
           }
           const tw = 0.55 + Math.sin(p.ph) * 0.45;
           const px = p.x * w, py = p.y * h;
-          const rad = p.r * (li === 2 ? 8 : li === 1 ? 5 : 3);
+          const rad = p.r * l.mul;
           blitGlow(ctx, glow([cr, cg, cb]), px, py, rad, l.alpha * tw * alphaMul);
           if (li < 2) {
             // Sparkle core: near-white reads as a bright twinkle against the
@@ -1358,24 +1462,44 @@ export function HomeDescent() {
                 <span className="l">Hallmarks</span>
               </div>
             </div>
-            {/* Real list semantics, not ARIA over the wrong element. This was a
-                <div role="list"> whose children were <a role="listitem">, which
-                axe flags (aria-allowed-role): `listitem` is not an allowed role
-                for an anchor, so assistive tech got a list whose items were not
-                items. A <ul>/<li> carrying the links says the same thing with
-                markup that is actually valid. The <li> takes the grid cell so
-                the three-column layout is unchanged. */}
-            <ul className="tnic-intel-grades" aria-label="Elite-set evidence mix — A clinical, B emerging, C preclinical">
+            {/* Two fixes to the same block, from two branches.
+
+                #212's is the markup: this was a <div role="list"> whose children
+                were <a role="listitem">, which axe flags (aria-allowed-role) —
+                `listitem` is not an allowed role for an anchor, so assistive
+                tech got a list whose items were not items. A <ul>/<li> carrying
+                the links says the same thing with markup that is valid.
+
+                This branch's is the data, and it decides the labels below. The
+                row used to print the Elite Eight's tier mix (A 4 · B 4 · C 0)
+                directly beneath a dial reading "100 graded compounds", with
+                "elite" said only to screen readers — so a sighted reader had
+                exactly one available reading, 4 of the 100 are Tier A, and it
+                contradicted /library and /library/evidence, which both publish
+                10 · 71 · 19 from `evidenceIndexStats()`. The row now shows the
+                library-wide split and names that population visibly.
+
+                Which is why #212's accessible names could not survive the merge
+                unchanged: "Elite-set evidence mix" and "N elite interventions"
+                described the old numbers. Left as they were, the values would
+                say 10 · 71 · 19 while the accessible name said "elite" — the
+                same contradiction as before, just moved into the layer only
+                screen-reader users hear. Both now name the same population, and
+                the link points at the table that publishes it. */}
+            <p className="tnic-intel-split-cap">
+              Evidence mix · all {libraryTiers.total} graded
+            </p>
+            <ul className="tnic-intel-grades" aria-label={`Evidence mix across all ${libraryTiers.total} graded compounds — A clinical, B emerging, C preclinical`}>
               {([
-                ['A', 'Clinical', intel.tierA, 3],
-                ['B', 'Emerging', intel.tierB, 2],
-                ['C', 'Preclinical', intel.tierC, 1],
+                ['A', 'Clinical', libraryTiers.A, 3],
+                ['B', 'Emerging', libraryTiers.B, 2],
+                ['C', 'Preclinical', libraryTiers.C, 1],
               ] as const).map(([tier, label, n, filled]) => (
                 <li key={tier} className="tnic-intel-grade-cell">
                   <Link
-                    href="/trust/methodology"
+                    href="/library/evidence"
                     className={`tnic-grade tnic-grade-${tier} focus-ring`}
-                    aria-label={`Tier ${tier} ${label}: ${n} elite interventions. See grading methodology.`}
+                    aria-label={`Tier ${tier} ${label}: ${n} of ${libraryTiers.total} graded compounds. Open the evidence table.`}
                   >
                     <span className="tnic-grade-meter" aria-hidden="true">
                       <i className={filled >= 1 ? 'on' : undefined} />

@@ -149,7 +149,19 @@ export function CinematicHubHero({
             idiom the homepage synergy graph already uses, so the space carries
             the brand's own artwork instead of dark air. A hub can pass a real
             data figure via `figure` when it has one. */}
-        <div className="research-hero__figure" aria-hidden={figure ? undefined : true}>
+        {/* `--data` is not just a style hook for the stage — it is what lets the
+            panel render on a phone at all. The `display:none` below 1024px was
+            written when this column could only ever hold the decorative
+            molecular field, which a phone is right to drop. Sixteen hubs now
+            pass a real derived figure through `figure` (the library's A/B/C
+            split, the trial index's design mix, the hallmark coverage), and the
+            same rule was silently withholding the most credibility-bearing
+            number on each of those hubs from every mobile reader. Atmosphere
+            stays desktop-only; data does not. */}
+        <div
+          className={`research-hero__figure${figure ? ' research-hero__figure--data' : ''}`}
+          aria-hidden={figure ? undefined : true}
+        >
           <div className={`research-hero__figure-stage${figure ? ' research-hero__figure-stage--data' : ''}`}>
             {figure ?? <MoleculeStage hue={rgb} interactive={false} />}
           </div>
