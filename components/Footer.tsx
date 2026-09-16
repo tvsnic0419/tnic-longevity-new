@@ -18,25 +18,38 @@ import {
 import { citationRegistry } from '@/lib/trust';
 import { compoundTierCount } from '@/lib/compound-core';
 import { FooterBriefSubscribe } from '@/components/brief/FooterBriefSubscribe';
+import { navGroups } from '@/lib/nav-data';
 
 const tierACount = compoundTierCount('A');
 const tierBCount = compoundTierCount('B');
 
-const startLinks = [
-  { href: '/nico', label: 'NICO Starter', icon: ClipboardList },
-  { href: '/library', label: 'Evidence library', icon: Library },
-  { href: '/elite-8', label: 'Elite 8', icon: Rocket },
-  { href: '/stacks', label: 'Stack Architect', icon: Layers },
-  { href: '/labs', label: 'Lab Analysis', icon: FlaskConical },
-];
+const FOOTER_ICONS: Record<string, typeof Shield> = {
+  '/library': Library,
+  '/hallmarks': Orbit,
+  '/peptides': BookOpen,
+  '/sirtuin-atlas': Sparkles,
+  '/insights': BookOpen,
+  '/learn': HelpCircle,
+  '/stacks': Layers,
+  '/protocols': Layers,
+  '/tools': Rocket,
+  '/compound-engine': Sparkles,
+  '/biohack-100': BookOpen,
+  '/labs': FlaskConical,
+  '/dashboard': LayoutDashboard,
+  '/products': ShoppingBag,
+  '/shop': ShoppingBag,
+  '/nico': ClipboardList,
+};
 
-const hubLinks = [
-  { href: '/dashboard', label: 'My Dashboard', icon: LayoutDashboard },
-  { href: '/hallmarks', label: '12 Hallmarks', icon: Orbit },
-  { href: '/products', label: 'Verified products', icon: ShoppingBag },
-  { href: '/shop', label: 'Verify before you buy', icon: ShoppingBag },
-  { href: '/protocols', label: 'Protocols', icon: Layers },
-];
+const footerColumns = navGroups.map((group) => ({
+  title: group.label,
+  links: group.links.map((link) => ({
+    href: link.href,
+    label: link.label,
+    icon: FOOTER_ICONS[link.href] ?? BookOpen,
+  })),
+}));
 
 const trustLinks = [
   { href: '/trust', label: 'Trust & Transparency', icon: Shield },
@@ -123,7 +136,7 @@ export function Footer() {
 
         <FooterBriefSubscribe />
 
-        <div className="mb-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mb-10 grid gap-8 lg:grid-cols-[minmax(0,16rem)_1fr]">
           <div>
             <Link
               href="/"
@@ -144,10 +157,25 @@ export function Footer() {
             </Link>
           </div>
 
-          <FooterColumn title="Start" links={startLinks} />
-          <FooterColumn title="Hubs" links={hubLinks} />
-          <FooterColumn title="Trust" links={trustLinks} />
+          <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
+            {footerColumns.map((column) => (
+              <FooterColumn key={column.title} title={column.title} links={column.links} />
+            ))}
+          </div>
         </div>
+
+        <nav aria-label="Trust" className="mb-8 flex flex-wrap gap-x-5 gap-y-2">
+          {trustLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="focus-ring interactive link-underline inline-flex min-h-6 items-center gap-1.5 text-caption hover:text-accent-cyan rounded"
+            >
+              <link.icon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+              {link.label}
+            </Link>
+          ))}
+        </nav>
 
         <section
           className="mb-8 rounded-2xl border border-border/60 bg-white/[0.02] p-4 md:p-5"
@@ -180,7 +208,6 @@ export function Footer() {
           ))}
         </nav>
 
-        {/* Quiet harm-reduction aside — readable contrast, not a promoted feature. */}
         <Link
           href="/sheepeople"
           className="focus-ring link-underline mb-4 inline-flex min-h-6 items-center rounded text-caption text-muted-foreground transition-colors hover:text-accent-cyan"
