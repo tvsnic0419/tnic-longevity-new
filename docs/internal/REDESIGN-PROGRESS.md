@@ -4,6 +4,79 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-17 (second pass) — the tap-target backlog, and what the molecule was claiming
+
+Owner asked to keep advancing the UI's ambience and aesthetic. Two things were
+already measured and waiting, and both turned out to be single root causes
+rather than long lists.
+
+**102 sub-24px controls, one cause.** The previous pass widened `audit:ui` from
+11 routes to 29 and surfaced 102 actionable controls under the 24px floor,
+reported but not gated: `/protocols` 48, `/insights` 24, `/products` 20,
+`/dashboard` 8, `/trust/methodology` 2. Every one of them was a standalone
+action link or chip with no control floor — the exact case `.action-link`
+(STYLE_GUIDE §13) exists for. Eight components, one class each; no new CSS.
+
+The `/insights` twelve were worse than short: the connection matrix's column
+headers measured 16x20 — under the floor in *both* axes — and their only
+accessible name was the visible text "01". `title` is a tooltip, not a name a
+screen reader or a voice-control user can act on. They are now square targets
+carrying the hallmark's real name in sr-only text.
+
+Re-measured after: **102 → 0**, with 0 axe violations and 0 sub-11px text
+across all 29 routes at both widths. All five routes folded into `GATED`, so
+the gate now covers every route the sweep visits.
+
+**The molecular artwork was making a chemical claim it could not support.**
+`MoleculeStage` printed the literal string `OH` inside every oxygen, in every
+structure, unconditionally. Measured against the shipped geometry: **242 of the
+oxygens so captioned are not hydroxyls** — carbonyls, ethers, esters, phosphate
+oxygens — across 79 of the 81 oxygen-bearing structures. CoQ10 and berberine
+have no hydroxyl at all and every one of their oxygens said `OH`.
+
+These structures are heavy-atom only, so nothing in the data separates a
+hydroxyl from a deprotonated oxygen without asserting a protonation state the
+geometry does not record. The label now stops at the element symbol, which is
+what the data says — and says more than `OH` did, since N, S, P, Se and Co were
+previously distinguishable only by sphere colour. Symbols are placed in their
+own pass, nearest atom first, and one that would overlap a placed symbol is
+dropped rather than smudged over it (the collision that made phone renders
+unreadable). `heteroatomSummary()` carries the tally as text.
+
+**And the camera was one camera for 87 different molecules.** Origin-centred,
+`min(w,h)/7.2` units-to-pixels, eye a fixed 6 units back. Measured over a
+sampled sphere of orientations against a 419px stage, **all 87 project past the
+half-extent they have to fit in** at some point in their own rotation —
+resveratrol to 384px against 210px, pterostilbene to 428px. The long molecules
+were being cut off, and had been for as long as they shipped.
+
+`cameraFit()` derives the centroid (a structure averaging 0.94 units off-origin
+was orbiting a point outside itself), an eye distance proportional to the
+structure's radius (near-side magnification ranged 2.2×–5.5× across the set; it
+now holds within 0.6), and the worst-case projected radius sampled across
+orientations. Sphere radii, bond widths and the double-bond offset are now per
+geometry unit rather than per pixel, so a phone renders a smaller drawing
+instead of a cruder one. The atom pass was also painting back-to-front
+inverted — the bond pass in the same function always sorted the other way.
+
+`components/viz/molecule-camera.test.ts` sweeps every structure at a finer
+resolution than the fit itself. The guard was checked against the old camera
+before being trusted: it fails for 87 of 87 there, passes for 87 of 87 now.
+
+**Smaller, same pass.** The stage affordance line said "drag · scroll to zoom"
+on every device; the touch handlers cover a one-finger drag only, so half that
+sentence named a gesture a phone does not have. Both phrasings ship and CSS
+picks by `(pointer: coarse)` — no JS, no hydration mismatch. The hint also sat
+4px from the instrument frame's bottom-right registration bracket and read as
+clipped; it now sits inside the frame.
+
+**Checks.** `tsc --noEmit` clean · `eslint` clean · `vitest run` 73 files /
+797 tests pass (790 + 7 new) · `next build` clean · `audit:ui` 0 axe / 0
+actionable / 0 micro-type across 29 routes × 2 viewports.
+
+**Rollback.** Revert the PR's merge commit, or `git revert <sha>` on the single
+commit. Nothing in this pass touches data, routing or content.
+
 ## 2026-09-17 — A duplicate stylesheet was silently reverting shipped fixes
 
 Owner asked for the next 10 most significant UI upgrades against a much

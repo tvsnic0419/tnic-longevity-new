@@ -55,7 +55,18 @@ export function ModuleHero(data: ModuleHeroData) {
             <MoleculeStage geometryId={structured ? data.id : undefined} hue={hue} />
             <div className="mhero-hint">
               <span className="dot" />
-              {structured ? "drag · scroll to zoom" : "orbital field · illustrative"}
+              {/* The hint used to read "drag · scroll to zoom" on every device.
+                  A phone has no wheel, and MoleculeStage's touch handlers cover
+                  a one-finger drag only — there is no pinch path — so half of
+                  that sentence named a gesture that does nothing here. Both
+                  phrasings ship and CSS picks by input type; no JS, so no
+                  hydration mismatch. */}
+              <span className="mhero-hint__fine">
+                {structured ? "drag · scroll to zoom" : "orbital field · illustrative"}
+              </span>
+              <span className="mhero-hint__coarse">
+                {structured ? "drag to rotate" : "orbital field · illustrative"}
+              </span>
             </div>
           </div>
           <p className="mhero-cap">{describeGeometry(data.id, data.title)}</p>
@@ -118,12 +129,21 @@ const MHERO_CSS = `
     radial-gradient(100% 100% at 80% 90%, rgba(140,140,245,0.06), transparent 60%),
     linear-gradient(180deg, rgba(14,20,38,0.6), rgba(10,14,30,0.9));
 }
+/* Inside the registration frame, not against it. The brackets sit at
+   inset:10px and run 14px along each edge; a hint at bottom:12/right:14
+   came within 4px of the bottom-right arm, which reads as the frame
+   clipping the text. */
 .mhero-hint {
-  position: absolute; bottom: 12px; right: 14px;
+  position: absolute; bottom: 22px; right: 26px;
   font-family: ${FONT.mono}; font-size: var(--type-11); color: ${VIZ.faint}; letter-spacing: .06em;
   display: flex; align-items: center; gap: 7px; pointer-events: none;
 }
 .mhero-hint .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--hue); box-shadow: 0 0 10px var(--hue); }
+.mhero-hint__coarse { display: none; }
+@media (hover: none), (pointer: coarse) {
+  .mhero-hint__fine { display: none; }
+  .mhero-hint__coarse { display: inline; }
+}
 .mhero-cap { font-family: ${FONT.mono}; font-size: var(--type-11); color: ${VIZ.faint}; letter-spacing: .03em; line-height: 1.5; margin: 0; }
 
 .mhero-body { display: flex; flex-direction: column; gap: 14px; min-width: 0; }

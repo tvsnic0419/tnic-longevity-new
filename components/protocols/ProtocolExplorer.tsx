@@ -109,7 +109,7 @@ export function ProtocolExplorer() {
                 <p className="text-caption text-muted-foreground">{compared.length === 1 ? 'Choose one more protocol to compare their authored attributes.' : 'Compare structure and evidence context—not personal suitability.'}</p>
               </div>
             </div>
-            <button type="button" onClick={() => setCompareSlugs([])} className="focus-ring text-xs font-semibold text-muted-foreground hover:text-foreground">Clear comparison</button>
+            <button type="button" onClick={() => setCompareSlugs([])} className="action-link focus-ring text-xs font-semibold text-muted-foreground hover:text-foreground">Clear comparison</button>
           </div>
           <div className={`grid divide-y divide-accent-violet/15 ${compared.length === 2 ? 'md:grid-cols-2 md:divide-x md:divide-y-0' : ''}`}>
             {compared.map((protocol) => (
@@ -128,8 +128,8 @@ export function ProtocolExplorer() {
                   <div className="rounded-lg surface-well p-2.5"><dt className="text-micro font-mono uppercase tracking-[0.08em] text-muted-foreground">Targets</dt><dd className="mt-1 text-sm font-semibold">{protocol.hallmarkIds.length} hallmarks</dd></div>
                 </dl>
                 <div className="mt-4 flex flex-wrap gap-3">
-                  {protocol.moduleHref && <Link href={protocol.moduleHref} className="focus-ring text-xs font-semibold text-accent-violet hover:underline">Read evidence →</Link>}
-                  <Link href="/stacks" className="focus-ring text-xs font-semibold text-accent-cyan hover:underline">Open Stack Architect →</Link>
+                  {protocol.moduleHref && <Link href={protocol.moduleHref} className="action-link focus-ring text-xs font-semibold text-accent-violet hover:underline">Read evidence →</Link>}
+                  <Link href="/stacks" className="action-link focus-ring text-xs font-semibold text-accent-cyan hover:underline">Open Stack Architect →</Link>
                 </div>
               </article>
             ))}
@@ -165,7 +165,7 @@ export function ProtocolExplorer() {
         <div className="mt-6 rounded-2xl border border-dashed border-accent-violet/30 bg-accent-violet/[0.035] p-6 text-center">
           <Sparkles className="mx-auto h-5 w-5 text-accent-violet" aria-hidden="true" />
           <p className="mt-3 text-sm font-semibold">No protocol matches this focus yet.</p>
-          <button type="button" onClick={() => setFocus('all')} className="focus-ring mt-2 text-xs font-semibold text-accent-violet hover:underline">View all protocols</button>
+          <button type="button" onClick={() => setFocus('all')} className="action-link focus-ring mt-2 text-xs font-semibold text-accent-violet hover:underline">View all protocols</button>
         </div>
       )}
 

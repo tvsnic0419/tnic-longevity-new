@@ -59,7 +59,7 @@ export function DashboardInstrumentPanel() {
           </div>
           <Link
             href="/tools?tab=healthspan"
-            className="focus-ring inline-flex items-center gap-1 text-xs font-semibold text-accent-emerald"
+            className="action-link focus-ring gap-1 text-xs font-semibold text-accent-emerald"
           >
             Healthspan tool <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
           </Link>

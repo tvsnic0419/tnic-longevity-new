@@ -4,7 +4,7 @@ import {
   useRef, useEffect, useImperativeHandle, useMemo, forwardRef,
   type MouseEvent, type TouchEvent, type WheelEvent,
 } from "react";
-import { getGeometry, type Geometry } from "./molecule";
+import { cameraFit, getGeometry, labelForAtom, type Geometry } from "./molecule";
 import type { StageHandle } from "./stage-handle";
 import type { RGB } from "./tokens";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
@@ -170,18 +170,37 @@ export const MoleculeStage = forwardRef<StageHandle, {
         d.rx += d.vx; d.ry += d.vy;
         d.vx *= 0.94; d.vy *= 0.94;
       }
-      const scale = (Math.min(w, h) / 7.2) * d.zoom;
+      // Camera derived from this structure, not from three constants shared by
+      // all 87 of them — see `cameraFit` in molecule.ts for what each number
+      // replaces and why. 0.88 leaves the frame a margin for the atom spheres,
+      // whose radius is added around the projected point.
+      const fit = cameraFit(geom);
+      const unit = ((Math.min(w, h) / 2) * 0.94) / fit.radius;
+      const scale = unit * d.zoom;
+      const eye = fit.eye;
       const cx = w / 2, cy = h / 2;
       const cosY = Math.cos(d.ry), sinY = Math.sin(d.ry);
       const cosX = Math.cos(d.rx), sinX = Math.sin(d.rx);
       const proj = geom.atoms.map((a) => {
-        const x = a.x * cosY - a.z * sinY;
-        let z = a.x * sinY + a.z * cosY;
-        const y = a.y * cosX - z * sinX;
-        z = a.y * sinX + z * cosX;
-        const persp = 6 / (6 + z);
+        const ax = a.x - fit.cx, ay = a.y - fit.cy, az = a.z - fit.cz;
+        const x = ax * cosY - az * sinY;
+        let z = ax * sinY + az * cosY;
+        const y = ay * cosX - z * sinX;
+        z = ay * sinX + z * cosX;
+        const persp = eye / (eye + z);
         return { sx: cx + x * scale * persp, sy: cy + y * scale * persp, z, persp, el: a.el };
       });
+      // Depth is a fraction of this molecule's own radius, so a compact and a
+      // long structure shade across the same range instead of the long one
+      // pinning to the extremes of a hardcoded -3..3.
+      const depthOf = (z: number) => Math.min(1, Math.max(0, (z + fit.radius) / (fit.radius * 2)));
+      // Every stroke width and sphere radius below used to be a pixel constant
+      // tuned against one stage size, which is why the same molecule on a phone
+      // was not a smaller drawing but a cruder one — spheres nearly touching,
+      // bonds lost between them. Expressed per geometry unit they hold their
+      // proportions at any stage size. The values are the old pixel numbers
+      // divided by the scale they were tuned at (58.2 px/unit).
+      const px = (units: number) => units * scale;
       ctx.clearRect(0, 0, w, h);
       const back = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(w, h) * 0.7);
       back.addColorStop(0, "rgba(20,30,60,0.35)");
@@ -193,15 +212,15 @@ export const MoleculeStage = forwardRef<StageHandle, {
         .sort((p, q) => q.z - p.z);
       for (const bd of bonds) {
         const p = proj[bd.i], q = proj[bd.j];
-        const depth = (bd.z + 3) / 6;
+        const depth = depthOf(bd.z);
         const alpha = 0.35 + (1 - depth) * 0.55;
-        const lw = (1.9 + (1 - depth) * 3) * ((p.persp + q.persp) / 2);
+        const lw = Math.max(1, px(0.0326 + (1 - depth) * 0.0515) * ((p.persp + q.persp) / 2));
         const grad = ctx.createLinearGradient(p.sx, p.sy, q.sx, q.sy);
         grad.addColorStop(0, `rgba(190,215,255,${alpha})`);
         grad.addColorStop(1, `rgba(140,170,220,${alpha * 0.85})`);
         if (bd.order === 2) {
           const dx = q.sy - p.sy, dy = -(q.sx - p.sx);
-          const len = Math.hypot(dx, dy) || 1; const off = 2.6;
+          const len = Math.hypot(dx, dy) || 1; const off = Math.max(1.6, px(0.0447));
           for (const s of [-1, 1]) {
             ctx.strokeStyle = grad; ctx.lineWidth = lw * 0.7;
             ctx.beginPath();
@@ -214,11 +233,20 @@ export const MoleculeStage = forwardRef<StageHandle, {
           ctx.beginPath(); ctx.moveTo(p.sx, p.sy); ctx.lineTo(q.sx, q.sy); ctx.stroke();
         }
       }
+      // Nearest first. The bonds above sort the other way, farthest first,
+      // which is the painter's order that makes a nearer thing cover a farther
+      // one; the atoms have always used the opposite comparator in the same
+      // function, so a small dim back atom was painted over the large bright
+      // front one it passes behind. The spheres are drawn from the back of this
+      // list forward to put that right, and the symbol pass below walks it
+      // front-to-back so that when two symbols collide it is the nearer atom
+      // that keeps its letter.
       const order = proj.map((p, idx) => ({ ...p, idx })).sort((a, b) => a.z - b.z);
-      for (const p of order) {
-        const depth = (p.z + 3) / 6;
+      for (let oi = order.length - 1; oi >= 0; oi -= 1) {
+        const p = order[oi];
+        const depth = depthOf(p.z);
         const isHetero = p.el !== "C";
-        const rad = (isHetero ? 11 : 9) * p.persp * (1.2 - depth * 0.3);
+        const rad = px(isHetero ? 0.189 : 0.155) * p.persp * (1.2 - depth * 0.3);
         const el = ELEMENT_COLOR[p.el] ? p.el : "C";
         const a = 0.94 - depth * 0.35;
         // Bloom halo, then the lit sphere — both cached bitmaps blitted at this
@@ -226,14 +254,57 @@ export const MoleculeStage = forwardRef<StageHandle, {
         // radial gradients allocated per atom, per frame).
         blitGlow(ctx, bloomSprites.get(el)!, p.sx, p.sy, rad * 3, 0.55 * a);
         blitGlow(ctx, sphereSprites.get(el)!, p.sx, p.sy, rad, a);
-        ctx.strokeStyle = `rgba(180,220,255,${0.4 * a})`; ctx.lineWidth = 0.9;
+        ctx.strokeStyle = `rgba(180,220,255,${0.4 * a})`; ctx.lineWidth = Math.max(0.5, px(0.0155));
         ctx.beginPath(); ctx.arc(p.sx, p.sy, rad, Math.PI * 0.15, Math.PI * 0.85); ctx.stroke();
-        if (p.el === "O") {
-          ctx.fillStyle = `rgba(255,240,235,${0.9 * a})`;
-          ctx.font = `600 ${Math.round(11 * p.persp)}px 'JetBrains Mono', monospace`;
-          ctx.textAlign = "center"; ctx.textBaseline = "middle";
-          ctx.fillText("OH", p.sx, p.sy);
-        }
+      }
+
+      // ── Heteroatom symbols ──
+      //
+      // Three things were wrong with printing "OH" inside the atom loop.
+      //
+      // It was false. Every oxygen got the caption regardless of what it was
+      // bonded to; across the shipped structures that mislabelled 242 oxygens
+      // as hydroxyls, including every oxygen in CoQ10 and berberine, which have
+      // no hydroxyl at all. `labelForAtom` now prints the element symbol, which
+      // is what the geometry actually records — see the note in molecule.ts.
+      //
+      // It collided. On a 390px phone the stage is small enough that adjacent
+      // oxygens overlapped into an unreadable smudge, so the labels are placed
+      // here in their own pass, nearest atom first, and any symbol whose box
+      // would overlap one already placed is dropped rather than drawn on top.
+      // A dropped symbol costs nothing: the sphere colour still identifies the
+      // element, and `heteroatomSummary` carries the full tally in text.
+      //
+      // And it was fixed at 11px scaled only by perspective, so on a small
+      // stage the type was larger than the sphere it sat on. The size now
+      // follows the atom's own projected radius.
+      const placed: { x: number; y: number; w: number; h: number }[] = [];
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      for (const p of order) {
+        const sym = labelForAtom(p.el);
+        if (!sym) continue;
+        const depth = depthOf(p.z);
+        // Back-half atoms are dimmed toward the background, where dark ink
+        // stops resolving. Colour carries those; only the front half is
+        // lettered.
+        if (depth > 0.62) continue;
+        const rad = px(0.189) * p.persp * (1.2 - depth * 0.3);
+        const fs = Math.round(rad * (sym.length > 1 ? 0.92 : 1.12));
+        if (fs < 8) continue;
+        ctx.font = `600 ${fs}px 'JetBrains Mono', monospace`;
+        const w = ctx.measureText(sym).width;
+        const box = { x: p.sx - w / 2 - 1.5, y: p.sy - fs / 2 - 1.5, w: w + 3, h: fs + 3 };
+        if (placed.some((q) =>
+          box.x < q.x + q.w && q.x < box.x + box.w && box.y < q.y + q.h && q.y < box.y + box.h,
+        )) continue;
+        placed.push(box);
+        // Every element core in the palette is a light tint, so dark ink is the
+        // contrast-safe choice on all of them and stays so if a colour is
+        // retuned. Same reasoning as a ball-and-stick viewer: the label belongs
+        // to the sphere, not to the background.
+        ctx.fillStyle = `rgba(14,18,30,${Math.min(1, 1.06 - depth * 0.45)})`;
+        ctx.fillText(sym, p.sx, p.sy);
       }
     }
 

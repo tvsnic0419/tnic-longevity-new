@@ -57,9 +57,12 @@ const BASE = process.env.BASE ?? 'http://127.0.0.1:3000';
  * `audit:perf` already uses for CLS versus LCP.
  *
  * The newly covered routes surfaced 102 actionable sub-24px controls on the
- * first run. Those are pre-existing debt that nothing was looking at, not
- * regressions; they are listed in full under NEWLY COVERED below so they can
- * be worked down and folded into the gate.
+ * first run: pre-existing debt that nothing was looking at, not regressions.
+ * All 102 turned out to be one root cause — standalone action links and chips
+ * with no control floor, the case `.action-link` exists for — and all 102 are
+ * now fixed, so every route the sweep covers is gated. The split stays because
+ * the next route added to PAGES will surface its own, and reporting them is
+ * how they get fixed rather than how the bar gets lowered.
  */
 const GATED = new Set([
   '/',
@@ -73,6 +76,12 @@ const GATED = new Set([
   '/library/mitochondrial-dysfunction',
   '/library/evidence',
   '/library/trials',
+  // Cleared 2026-09-17: 102 -> 0, verified by a full `npm run audit:ui` pass.
+  '/protocols',
+  '/insights',
+  '/products',
+  '/dashboard',
+  '/trust/methodology',
 ]);
 
 const PAGES = [

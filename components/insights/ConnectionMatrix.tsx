@@ -51,14 +51,22 @@ export function ConnectionMatrix() {
               </th>
               {MATRIX_HALLMARKS.map((h) => (
                 <th key={h.id} scope="col" className="px-1 py-3 text-center align-bottom">
+                  {/* Twelve column headers, each measured 16x20 — under the 24px
+                      floor in BOTH axes, and the narrowest controls on the site.
+                      They also had no usable accessible name: the link text is
+                      "01", and `title` is a tooltip, not a name a screen reader
+                      or a voice-control user can act on. A square target with
+                      the hallmark's real name in sr-only text fixes both, and
+                      `title` stays for the pointer tooltip. */}
                   <Link
                     href={`/hallmarks/${h.slug}`}
-                    className="focus-ring group inline-flex flex-col items-center gap-1"
+                    className="action-link focus-ring group mx-auto min-w-6 justify-center rounded"
                     title={h.title}
                   >
                     <span className="font-mono text-xs font-bold tabular-nums text-muted-foreground group-hover:text-accent-cyan">
                       {String(h.number).padStart(2, '0')}
                     </span>
+                    <span className="sr-only">{` — ${h.title}`}</span>
                   </Link>
                 </th>
               ))}
