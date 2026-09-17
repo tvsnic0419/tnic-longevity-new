@@ -32,6 +32,25 @@ const HUE_CSS: Record<string, string> = {
   emerald: 'var(--accent-emerald)',
 };
 
+/**
+ * The same hue as ink. `--research-hero-accent` drives roughly twenty
+ * declarations in this hero — washes, borders, rules, glows — and five of them
+ * are `color`. One value cannot serve both in the light theme: an amber hub's
+ * 36px stat value measured 2.94:1 against its own wash there, under even the
+ * large-text threshold of 3:1. The fill keeps the accent; the text takes the
+ * ink token. See the accent-ink note in globals.css.
+ */
+const HUE_INK_CSS: Record<string, string> = {
+  cyan: 'var(--accent-cyan-ink)',
+  indigo: 'var(--accent-violet-ink)',
+  violet: 'var(--accent-violet-ink)',
+  gold: 'var(--accent-amber-ink)',
+  amber: 'var(--accent-amber-ink)',
+  rose: 'var(--accent-rose-ink)',
+  teal: 'var(--accent-emerald-ink)',
+  emerald: 'var(--accent-emerald-ink)',
+};
+
 export function CinematicHubHero({
   hue = 'violet',
   kicker,
@@ -70,11 +89,15 @@ export function CinematicHubHero({
 }) {
   const rgb: RGB = HUES[hue] ?? HUES.violet;
   const hueCss = HUE_CSS[hue] ?? 'var(--accent-violet)';
+  const hueInk = HUE_INK_CSS[hue] ?? 'var(--accent-violet-ink)';
 
   return (
     <section
       className={`${styles.foundation} research-hero`}
-      style={{ '--research-hero-accent': hueCss } as React.CSSProperties}
+      style={{
+        '--research-hero-accent': hueCss,
+        '--research-hero-ink': hueInk,
+      } as React.CSSProperties}
     >
       {/* Decorative molecular field; all content remains readable without it. */}
       <div className="research-hero__field" aria-hidden="true">

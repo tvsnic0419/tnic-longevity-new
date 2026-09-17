@@ -272,3 +272,160 @@ export function describeGeometry(id: string, displayName: string): string {
   }
   return `Rendered structure · ${geom.label}${formula}${tail}`;
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Heteroatom labelling
+//
+// The renderer used to print the literal string "OH" over EVERY oxygen in every
+// structure, unconditionally. That is a chemical claim, and across the shipped
+// set it was wrong 242 times: 79 of the 81 oxygen-bearing structures carry at
+// least one oxygen that is not a hydroxyl. CoQ10 and berberine have no hydroxyl
+// at all, and every one of their oxygens was captioned "OH".
+//
+// These structures are heavy-atom only — hydrogens are not in the data — so
+// nothing here can tell a hydroxyl from a deprotonated phosphate oxygen without
+// asserting a protonation state the geometry does not record. The platform's
+// rule is that a visualization may never imply a number, or here a functional
+// group, the underlying data does not support.
+//
+// So the label is the element symbol, which is exactly what the data says and
+// nothing more. It is also the convention PubChem's own 3D viewer uses, and it
+// says more than "OH" did: nitrogen, sulfur, phosphorus, selenium and cobalt
+// were previously identifiable only by sphere colour.
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Which atoms carry a drawn symbol. Carbon is deliberately unlabelled — it is
+ * the implicit backbone in every skeletal convention, and labelling it would
+ * bury the heteroatoms that actually distinguish one structure from another.
+ */
+export function labelForAtom(el: Element): string | null {
+  return el === "C" ? null : el;
+}
+
+/**
+ * Heteroatom tally for one structure, for the text fallback every visualization
+ * on this site owes. Ordered by count, then alphabetically, so the same
+ * structure always reads the same way.
+ */
+export function heteroatomSummary(geom: Geometry): string {
+  const counts = new Map<string, number>();
+  for (const a of geom.atoms) {
+    if (a.el === "C") continue;
+    counts.set(a.el, (counts.get(a.el) ?? 0) + 1);
+  }
+  if (counts.size === 0) return "";
+  return [...counts.entries()]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .map(([el, n]) => `${n} ${el}`)
+    .join(" · ");
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Camera fit
+//
+// The renderer used one camera for all 87 structures: the molecule was drawn
+// about the origin at a fixed `min(w, h) / 7.2` units-to-pixels scale, through a
+// perspective divide with the eye a fixed 6 units back.
+//
+// None of those three constants survive contact with the shipped set. Measured
+// over a sampled sphere of orientations against a 419px-tall stage, EVERY
+// structure projects past the half-height it has to fit in at some point in its
+// own rotation — resveratrol reaches 384px against 210px, pterostilbene 428px.
+// The long ones are not "framed tight"; they are cut off, and they have been
+// for as long as they have shipped. Two more consequences follow from the same
+// constants: the centroid is ignored, so a molecule whose atoms average 0.94
+// units off the origin orbits around a point outside itself rather than
+// spinning in place; and a fixed 6-unit eye distance means a compact molecule
+// is drawn in mild perspective while a long one is drawn through a fisheye, so
+// the set has no consistent depth language.
+//
+// `cameraFit` replaces the constants with three numbers derived from the
+// structure itself, computed once per geometry:
+//
+//   cx/cy/cz   its centroid, so it turns about its own middle;
+//   eye        an eye distance proportional to its radius, so near-side
+//              magnification lands near 1.5x for every molecule in the set
+//              instead of ranging from 2.2x to 5.5x;
+//   radius     the largest distance from centre the structure ever projects
+//              to, sampled across orientations, so the caller can scale it to
+//              the stage and have it stay inside the frame all the way round.
+//
+// Sampling rather than solving: the projected extent is a max over rotations of
+// a perspective-divided norm, and a 24x12 sweep costs ~18k operations once per
+// geometry. The exact envelope is not worth solving for a number that only sets
+// a margin.
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type CameraFit = {
+  /** Centroid of the heavy atoms — subtract before rotating. */
+  cx: number;
+  cy: number;
+  cz: number;
+  /** Eye distance for the perspective divide: `eye / (eye + z)`. */
+  eye: number;
+  /** Worst-case projected radius, in geometry units, over all orientations. */
+  radius: number;
+};
+
+const FIT_CACHE = new WeakMap<Geometry, CameraFit>();
+
+export function cameraFit(geom: Geometry): CameraFit {
+  const cached = FIT_CACHE.get(geom);
+  if (cached) return cached;
+
+  const n = geom.atoms.length || 1;
+  let cx = 0, cy = 0, cz = 0;
+  for (const a of geom.atoms) { cx += a.x; cy += a.y; cz += a.z; }
+  cx /= n; cy /= n; cz /= n;
+
+  const pts = geom.atoms.map((a) => ({ x: a.x - cx, y: a.y - cy, z: a.z - cz }));
+  let maxR = 0;
+  for (const p of pts) maxR = Math.max(maxR, Math.hypot(p.x, p.y, p.z));
+
+  // Keep the eye clear of the structure by a comfortable multiple of its own
+  // radius. The floor preserves the original framing for the compact molecules,
+  // which were the ones the fixed 6 was tuned against.
+  const eye = Math.max(6, maxR * 2.6 + 2);
+
+  let radius = 0;
+  for (let i = 0; i < 24; i += 1) {
+    const ry = (i / 24) * Math.PI * 2;
+    const cosY = Math.cos(ry), sinY = Math.sin(ry);
+    for (let j = 0; j < 12; j += 1) {
+      const rx = (j / 12) * Math.PI * 2;
+      const cosX = Math.cos(rx), sinX = Math.sin(rx);
+      for (const p of pts) {
+        const x = p.x * cosY - p.z * sinY;
+        let z = p.x * sinY + p.z * cosY;
+        const y = p.y * cosX - z * sinX;
+        z = p.y * sinX + z * cosX;
+        const r = Math.hypot(x, y) * (eye / (eye + z));
+        if (r > radius) radius = r;
+      }
+    }
+  }
+
+  const fit: CameraFit = { cx, cy, cz, eye, radius: Math.max(0.5, radius) };
+  FIT_CACHE.set(geom, fit);
+  return fit;
+}
+
+/**
+ * The accessible description for a molecular stage. The canvas letters its
+ * heteroatoms; a screen reader gets the same information here, in the same
+ * terms, rather than a bare "molecular structure visualization" that says
+ * nothing about the structure. Falls back to the plain phrasing when there is
+ * no geometry to describe, so the orbital-field stages are not described as
+ * something they are not.
+ */
+export function stageAriaLabel(id: string, displayName: string): string {
+  const geom = getGeometry(id);
+  if (!geom) return `${displayName} orbital field visualization`;
+  const parts = [`${displayName} molecular structure`];
+  if (geom.formula) parts.push(geom.formula);
+  parts.push(`${geom.atoms.length} heavy atoms`);
+  const hetero = heteroatomSummary(geom);
+  if (hetero) parts.push(`heteroatoms ${hetero}`);
+  return `${parts.join(' — ')}. Hydrogens are not shown.`;
+}

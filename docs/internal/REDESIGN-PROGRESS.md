@@ -4,6 +4,154 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-17 (third pass) — the audit had only ever looked at half the product
+
+**What was found.** `audit:ui` swept the dark theme only. The site ships a
+light theme behind the chrome's toggle, with its own `[data-theme="light"]`
+token block, and nothing automated had ever looked at it — so every contrast
+result this gate has produced described half the product.
+
+Running it there first found two nodes: cyan text on a cyan chip at 3.06:1.
+Working back from those to the tokens themselves found the real scope:
+
+| light token | as text on the page ground | on its own 15% tint |
+|---|---|---|
+| `--accent-cyan` #0891b2 | 3.52:1 | 2.95:1 |
+| `--accent-emerald` #059669 | 3.60:1 | 3.02:1 |
+| `--accent-amber` #d97706 | **3.04:1** | **2.60:1** |
+| `--accent-rose` #e11d48 | 4.49:1 | 3.56:1 |
+
+Emerald, cyan and amber are Tier A, Tier B and Tier C. All three
+evidence-tier colours failed AA as body text in the light theme, on a site
+whose proposition is that the grade is legible. Plus `--color-text-faint`
+#7c8ba1 at 3.46:1 on a white card, rendering `.text-label` at 11px.
+
+**What was changed.** The accents stay as they are — they are fill values, and
+darkening them would have traded one failure for another (dark ink on a solid
+light-theme cyan reads 4.85:1 today and 3.01:1 after). Text gets
+`--accent-*-ink`: the shallowest darkening of the same hue that clears 4.5:1
+both on the page ground and on the accent's own 15% tint. In dark, ink *is* the
+accent, so nothing there moves.
+
+Routing: the `text-accent-*`, `hover:` and `group-hover:` utilities are
+re-pointed inside `@layer utilities` (unlayered would have outranked the hover
+variants and frozen them — verified by hovering a probe in both themes); 39 raw
+`color:` declarations across globals.css and two component stylesheets;
+`TIER_INK_VAR` beside `TIER_COLOR_VAR`; an `ink` field on `HubSplitRow`; and a
+`--research-hero-ink` beside `--research-hero-accent`, which alone drove
+roughly twenty declarations of which five were `color` — that is how an amber
+hub's 36px stat value ended up at 2.94:1 against its own wash. `background`,
+`border-color` and every `color-mix` tint are untouched throughout.
+
+**A second gate, from the same idea.** `truncate` appears 39 times, mostly on
+compound and hallmark names in fixed-width rails. When the name fits, the class
+is invisible; when it does not, the reader loses the end of a proper noun with
+no way back. Which of the 39 bite is viewport-dependent, so it can only be
+measured. The new clipped-text probe found 8, including a hallmark name losing
+106px on a phone and a head-to-head label clipping *on the desktop at 1440px*.
+Fixed by letting content wrap; the context bar's current crumb keeps its clip
+(it is one-line chrome repeating the h1 below) and gained a `title`, which the
+probe treats as recoverable.
+
+**Composition, same pass.** `HubSplitInstrument` left ~160px of dead space
+above its first bar and ~90px below its last, measured on /insights — the
+count, the bars and the footnote read as three fragments in a box. The rows now
+take the leftover height and centre in it, at any row count, across the sixteen
+hubs that share the primitive.
+
+**One more tool fix.** `/library/compounds/nmn` timed out on roughly one pass
+in three under `waitUntil: 'networkidle'`. That does not fail the run — it
+silently drops a route from the sweep, and a route nobody measured looks
+exactly like a route with nothing wrong. Changed to `load`; the settle step
+already scrolls the whole document and waits for the reveals, so what axe sees
+is unchanged, and all 90 page-passes now complete.
+
+**Checks.** `tsc --noEmit` clean · `eslint` clean · `vitest run` 74 files /
+808 tests pass · `next build` clean · `audit:ui` across 30 routes x 3 passes
+(desktop dark, phone dark, desktop light) = 90 measured page loads, 0 skipped:
+0 axe violations, 0 actionable sub-24px controls, 0 HTML text under 11px,
+0 clipped text.
+
+Both new guards were checked against the values they replace before being
+trusted: `lib/accent-ink.test.ts` fails at exactly 3.04:1 with the old amber
+and at 3.31:1 with the old faint token, and passes when restored.
+
+**Rollback.** `git revert <sha>` on this pass's commit. Nothing touches data,
+routing or content.
+
+## 2026-09-17 (second pass) — the tap-target backlog, and what the molecule was claiming
+
+Owner asked to keep advancing the UI's ambience and aesthetic. Two things were
+already measured and waiting, and both turned out to be single root causes
+rather than long lists.
+
+**102 sub-24px controls, one cause.** The previous pass widened `audit:ui` from
+11 routes to 29 and surfaced 102 actionable controls under the 24px floor,
+reported but not gated: `/protocols` 48, `/insights` 24, `/products` 20,
+`/dashboard` 8, `/trust/methodology` 2. Every one of them was a standalone
+action link or chip with no control floor — the exact case `.action-link`
+(STYLE_GUIDE §13) exists for. Eight components, one class each; no new CSS.
+
+The `/insights` twelve were worse than short: the connection matrix's column
+headers measured 16x20 — under the floor in *both* axes — and their only
+accessible name was the visible text "01". `title` is a tooltip, not a name a
+screen reader or a voice-control user can act on. They are now square targets
+carrying the hallmark's real name in sr-only text.
+
+Re-measured after: **102 → 0**, with 0 axe violations and 0 sub-11px text
+across all 29 routes at both widths. All five routes folded into `GATED`, so
+the gate now covers every route the sweep visits.
+
+**The molecular artwork was making a chemical claim it could not support.**
+`MoleculeStage` printed the literal string `OH` inside every oxygen, in every
+structure, unconditionally. Measured against the shipped geometry: **242 of the
+oxygens so captioned are not hydroxyls** — carbonyls, ethers, esters, phosphate
+oxygens — across 79 of the 81 oxygen-bearing structures. CoQ10 and berberine
+have no hydroxyl at all and every one of their oxygens said `OH`.
+
+These structures are heavy-atom only, so nothing in the data separates a
+hydroxyl from a deprotonated oxygen without asserting a protonation state the
+geometry does not record. The label now stops at the element symbol, which is
+what the data says — and says more than `OH` did, since N, S, P, Se and Co were
+previously distinguishable only by sphere colour. Symbols are placed in their
+own pass, nearest atom first, and one that would overlap a placed symbol is
+dropped rather than smudged over it (the collision that made phone renders
+unreadable). `heteroatomSummary()` carries the tally as text.
+
+**And the camera was one camera for 87 different molecules.** Origin-centred,
+`min(w,h)/7.2` units-to-pixels, eye a fixed 6 units back. Measured over a
+sampled sphere of orientations against a 419px stage, **all 87 project past the
+half-extent they have to fit in** at some point in their own rotation —
+resveratrol to 384px against 210px, pterostilbene to 428px. The long molecules
+were being cut off, and had been for as long as they shipped.
+
+`cameraFit()` derives the centroid (a structure averaging 0.94 units off-origin
+was orbiting a point outside itself), an eye distance proportional to the
+structure's radius (near-side magnification ranged 2.2×–5.5× across the set; it
+now holds within 0.6), and the worst-case projected radius sampled across
+orientations. Sphere radii, bond widths and the double-bond offset are now per
+geometry unit rather than per pixel, so a phone renders a smaller drawing
+instead of a cruder one. The atom pass was also painting back-to-front
+inverted — the bond pass in the same function always sorted the other way.
+
+`components/viz/molecule-camera.test.ts` sweeps every structure at a finer
+resolution than the fit itself. The guard was checked against the old camera
+before being trusted: it fails for 87 of 87 there, passes for 87 of 87 now.
+
+**Smaller, same pass.** The stage affordance line said "drag · scroll to zoom"
+on every device; the touch handlers cover a one-finger drag only, so half that
+sentence named a gesture a phone does not have. Both phrasings ship and CSS
+picks by `(pointer: coarse)` — no JS, no hydration mismatch. The hint also sat
+4px from the instrument frame's bottom-right registration bracket and read as
+clipped; it now sits inside the frame.
+
+**Checks.** `tsc --noEmit` clean · `eslint` clean · `vitest run` 73 files /
+797 tests pass (790 + 7 new) · `next build` clean · `audit:ui` 0 axe / 0
+actionable / 0 micro-type across 29 routes × 2 viewports.
+
+**Rollback.** Revert the PR's merge commit, or `git revert <sha>` on the single
+commit. Nothing in this pass touches data, routing or content.
+
 ## 2026-09-17 — A duplicate stylesheet was silently reverting shipped fixes
 
 Owner asked for the next 10 most significant UI upgrades against a much

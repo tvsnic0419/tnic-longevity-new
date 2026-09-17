@@ -163,7 +163,7 @@ function ProductCard({ pick }: { pick: ProductPick }) {
         )}
         <Link
           href={`/library/compounds/${pick.compoundId}`}
-          className="relative z-10 pointer-events-auto mt-3 inline-block text-micro font-semibold text-accent-violet hover:underline"
+          className="action-link focus-ring relative z-10 pointer-events-auto mt-3 text-micro font-semibold text-accent-violet hover:underline"
         >
           Read {pick.compoundName} evidence module →
         </Link>

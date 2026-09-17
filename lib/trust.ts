@@ -70,11 +70,31 @@ export const TIER_ACCENT_NAME: Record<EvidenceTier, 'emerald' | 'cyan' | 'amber'
   C: 'amber',
 };
 
-/** CSS custom property per tier — for canvas, SVG and inline styles. */
+/**
+ * CSS custom property per tier — for canvas, SVG and inline styles.
+ *
+ * This is the FILL value: bars, meters, chip tints, canvas strokes. For a tier
+ * rendered as *text* use `TIER_INK_VAR` — in the light theme the two differ,
+ * because all three tier accents fail AA as body text there (amber, Tier C,
+ * measured 3.04:1 on the page ground). See the accent-ink note in globals.css.
+ */
 export const TIER_COLOR_VAR: Record<EvidenceTier, string> = {
   A: 'var(--accent-emerald)',
   B: 'var(--accent-cyan)',
   C: 'var(--accent-amber)',
+};
+
+/**
+ * CSS custom property per tier, for a tier rendered as text via an inline
+ * style. Identical to `TIER_COLOR_VAR` in the dark theme; darker in light.
+ * `TIER_TEXT_CLASS` already resolves to these via the `.text-accent-*` rules
+ * in globals.css, so reach for the class first and this only where the colour
+ * has to be an inline style.
+ */
+export const TIER_INK_VAR: Record<EvidenceTier, string> = {
+  A: 'var(--accent-emerald-ink)',
+  B: 'var(--accent-cyan-ink)',
+  C: 'var(--accent-amber-ink)',
 };
 
 /** Tailwind text class per tier. */

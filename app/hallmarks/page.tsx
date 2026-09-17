@@ -5,7 +5,7 @@ import { citationRegistry } from '@/lib/trust';
 import { ArrowRight, Dna, FlaskConical } from 'lucide-react';
 import { CinematicHubHero } from '@/components/viz/CinematicHubHero';
 import { HubSplitInstrument } from '@/components/viz/HubSplitInstrument';
-import { TIER_COLOR_VAR } from '@/lib/trust';
+import { TIER_COLOR_VAR, TIER_INK_VAR } from '@/lib/trust';
 import type { EvidenceTier } from '@/lib/types';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { RevealItem } from '@/components/ui/RevealItem';
@@ -94,6 +94,7 @@ export default function HallmarksIndexPage() {
               label: `Tier ${tier}`,
               count: interventionByTier[tier],
               color: TIER_COLOR_VAR[tier],
+              ink: TIER_INK_VAR[tier],
             }))}
             footer={
               <>

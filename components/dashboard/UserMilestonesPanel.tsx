@@ -41,7 +41,7 @@ export function UserMilestonesPanel() {
           </p>
           <Link
             href="/stacks"
-            className="focus-ring interactive inline-flex items-center gap-1 text-xs font-semibold text-accent-emerald mt-3"
+            className="action-link focus-ring interactive gap-1 text-xs font-semibold text-accent-emerald mt-3"
           >
             Build stack
             <ArrowRight className="w-3 h-3" aria-hidden="true" />

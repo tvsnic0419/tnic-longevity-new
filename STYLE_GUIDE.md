@@ -1,6 +1,6 @@
 # TNiC Design System & Style Guide
 
-> Version 1.12 · September 2026  
+> Version 1.15 · September 2026  
 > Governs typography, spacing, components, accessibility, and page patterns across tnic.help.  
 > v1.1 documents the cinematic viz family (§7, §12) that the premium hubs are built on.  
 > v1.2 corrects the drifted §2 color values, documents the signal roles, the
@@ -30,6 +30,12 @@
 > and the accent-aware heading rule.  
 > v1.13 adds §23 — the population label rule, data-vs-atmosphere at mobile
 > widths, and the opacity floor that scroll-scrubbed reveals must hold.
+> v1.14 adds §24 — what the molecular artwork is allowed to claim: element
+> symbols in place of the fabricated `OH` caption, placed rather than sprayed,
+> and a camera fitted per structure instead of one shared by all 87.
+> v1.15 adds §25 — accent ink: the light theme's accents are fill values and
+> get a separate, AA-passing value when they are text; plus the light-theme
+> audit pass and the clipped-text gate that found it.
 
 ---
 
@@ -1051,6 +1057,172 @@ Time-based reveals (`.section-fade-in-up`, `section-reveal`) keep fading from
 
 **The rule:** if an animation's timeline is scroll, every frame it can hold must
 independently pass contrast. Treat scrubbed keyframes as static states.
+
+---
+
+## 24. Molecular artwork: what the drawing is allowed to claim
+
+The compound heroes draw real heavy-atom geometry — four hand-laid skeletons
+and 83 PubChem conformers. Because the drawing is presented as the molecule, it
+is held to the same standard as any other claim on the site: it may state what
+the data records and nothing beyond it.
+
+### 24.1 An atom is captioned with its element, never with a functional group
+
+The renderer used to print the literal string `OH` inside every oxygen, in every
+structure, unconditionally. Across the shipped set that captioned **242 oxygens
+that are not hydroxyls** — carbonyls, ethers, esters, phosphate oxygens —
+including every oxygen in CoQ10 and in berberine, neither of which has a
+hydroxyl at all.
+
+These structures carry no hydrogens. Nothing in the data distinguishes a
+hydroxyl from a deprotonated phosphate oxygen without asserting a protonation
+state the geometry does not record, so the label stops at the element symbol.
+That is also what PubChem's own 3D viewer prints, and it says *more* than `OH`
+did: nitrogen, sulfur, phosphorus, selenium and cobalt were previously
+distinguishable only by sphere colour.
+
+Carbon stays unlabelled — it is the implicit backbone in every skeletal
+convention, and lettering it would bury the heteroatoms that distinguish one
+structure from another.
+
+**The rule:** §12's "never let a visualization imply a number the underlying
+data doesn't support" covers functional groups, bond types and stereochemistry
+too. If the geometry does not record it, the drawing does not say it.
+
+### 24.2 Symbols are placed, not sprayed
+
+Labels are drawn in their own pass after the spheres, nearest atom first, and a
+symbol whose box would overlap one already placed is dropped rather than drawn
+on top. A dropped symbol costs nothing — the sphere colour still identifies the
+element, and `heteroatomSummary()` carries the full tally as text, which is the
+fallback §12 requires of every visualization. Back-half atoms are not lettered:
+they composite toward the background, where the ink stops resolving.
+
+Symbol size follows the atom's own projected radius, so it is legible on a 340px
+phone stage and on a 606px desktop one. It was previously a fixed 11px scaled
+only by perspective, which on a small stage set type larger than the sphere it
+sat inside.
+
+### 24.3 The camera is fitted to the structure, not shared across the set
+
+One camera served all 87 structures: origin-centred, `min(w,h)/7.2` units to
+pixels, eye 6 units back. Measured over a sampled sphere of orientations against
+a 419px stage, **every one of the 87 projects past the half-extent it has to fit
+in** at some point in its own rotation — resveratrol to 384px against 210px,
+pterostilbene to 428px. The long molecules were not framed tight; they were cut
+off.
+
+`cameraFit()` derives three numbers per geometry instead:
+
+| | replaces | why |
+|---|---|---|
+| centroid | the origin | a structure averaging 0.94 units off-origin orbited a point outside itself |
+| eye distance ∝ radius | a fixed 6 | near-side magnification ranged 2.2×–5.5× across the set; it now holds within 0.6 |
+| sampled projected radius | `min(w,h)/7.2` | the molecule fills the frame at its widest orientation and never leaves it |
+
+Sphere radii, bond widths and the double-bond offset are expressed per geometry
+unit rather than in pixels, so a phone renders a *smaller* drawing rather than a
+cruder one.
+
+`components/viz/molecule-camera.test.ts` sweeps every shipped structure at a
+finer resolution than the fit itself and fails if any of them clips. Under the
+old camera that guard fails for 87 of 87.
+
+### 24.4 Depth order
+
+Spheres are painted back-to-front. The bond pass always sorted that way; the
+atom pass used the opposite comparator in the same function, so a small dim back
+atom painted over the large bright front atom it passes behind. Symbols are
+placed front-to-back, so the nearer atom keeps its letter when two collide.
+
+**The rule:** the affordance line under a stage names gestures the stage
+actually supports on that input — the touch handlers cover a one-finger drag
+only, so "scroll to zoom" is pointer-only copy and is swapped out under
+`(pointer: coarse)`.
+
+---
+
+## 25. Accent ink, and measuring the theme nobody was measuring
+
+### 25.1 An accent is a fill value. Text gets its own.
+
+`text-accent-cyan` and `bg-accent-cyan` are generated from one theme token.
+That works in dark, where a bright hue on a near-black ground is the
+high-contrast case for both. It does not work in light, and it had not been
+working for as long as the light theme has shipped:
+
+| light token | as text on the page ground | on its own 15% tint |
+|---|---|---|
+| `--accent-cyan` #0891b2 | 3.52:1 | 2.95:1 |
+| `--accent-emerald` #059669 | 3.60:1 | 3.02:1 |
+| `--accent-amber` #d97706 | **3.04:1** | **2.60:1** |
+| `--accent-rose` #e11d48 | 4.49:1 | 3.56:1 |
+| `--accent-violet` #7c3aed | 5.45:1 | 4.36:1 |
+
+Emerald, cyan and amber are Tier A, Tier B and Tier C. **All three
+evidence-tier colours failed AA as body text in the light theme** — on a site
+whose whole proposition is that the grade is legible.
+
+Darkening the accent itself would have traded one failure for another: dark ink
+on a solid light-theme cyan reads 4.85:1 today and 3.01:1 after. So the fill
+keeps its value and the text gets `--accent-*-ink` — the shallowest darkening
+of the same hue that clears 4.5:1 both on the page ground and on the accent's
+own 15% tint, which is the pairing `audit:ui` caught failing on four routes.
+
+**In dark, `--accent-*-ink` is `var(--accent-*)`.** The split exists only where
+it has to.
+
+**How to reach it:**
+- `text-accent-*`, `hover:text-accent-*`, `group-hover:text-accent-*` — already
+  routed. Nothing to do.
+- A CSS `color:` declaration — use `var(--accent-*-ink)`. `background`,
+  `border-color`, `fill`, `box-shadow` and every `color-mix` tint keep the
+  accent.
+- An inline style — `TIER_INK_VAR` beside `TIER_COLOR_VAR`; the hub instrument
+  takes `ink` beside `color` for exactly this.
+- A component-scoped accent variable that drives both, like
+  `--research-hero-accent` — set a second `--*-ink` variable and point the
+  `color:` declarations at it. One value across twenty declarations is how an
+  amber hub's 36px stat value ended up at 2.94:1 against its own wash.
+
+The overrides live inside `@layer utilities`, not unlayered. Unlayered rules
+beat layered ones outright, which would also beat `hover:text-accent-*` and
+freeze an element's hover colour. Inside the layer, source order wins the base
+utility and the higher-specificity variants still win over it.
+
+`lib/accent-ink.test.ts` reads the real token values out of `globals.css` and
+holds every ink to both pairings.
+
+### 25.2 The audit runs the light theme
+
+`audit:ui` swept dark only, so every contrast result it had ever produced
+described half the product. It now runs a third pass — light, at desktop —
+keyed so a finding names the theme it was seen in. Light is desktop-only on
+purpose: contrast is a function of the token pair, and the layout probes are
+theme-independent, so a fourth pass would double the wall clock to re-measure
+what the dark phone pass already covers. If a light-only *layout* bug turns up,
+add the row.
+
+Theme is set through `localStorage` in an init script, because `ThemeScript`
+reads it there before first paint and does not consult `prefers-color-scheme`
+once a preference is stored.
+
+### 25.3 Clipped text is a gate
+
+`truncate` is used 39 times, mostly on compound, hallmark and protocol names in
+fixed-width rails. When the name fits, the class is invisible; when it does not,
+the reader loses the end of a proper noun with no way to recover it. Which of
+the 39 actually bite is viewport-dependent by construction, so it can only be
+measured. `audit:ui` now reports every element whose `scrollWidth` exceeds its
+box under `text-overflow: ellipsis`, at a budget of 0.
+
+The first run found 8, including a hallmark name losing 106px on a phone and a
+head-to-head label clipping **on the desktop**. Elements carrying their own
+`title` or an `sr-only` twin are excluded — there the full string is still
+reachable, which is the right answer for chrome that must stay on one line
+(the context bar's current crumb) and the wrong one for content (a name in a
+list, which should wrap).
 
 ---
 

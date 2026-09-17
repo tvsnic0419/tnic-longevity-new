@@ -16,7 +16,17 @@ export type HubSplitRow = {
   key: string;
   label: string;
   count: number;
+  /** Bar fill. */
   color: string;
+  /**
+   * Label colour, when it has to differ from the bar. An accent that is right
+   * as a 6px bar on a light ground is not necessarily legible as 14px text on
+   * it — all three evidence-tier accents fail AA as light-theme body text, so
+   * callers pass `TIER_INK_VAR` here beside `TIER_COLOR_VAR` above. Defaults
+   * to `color`, which is correct wherever the two agree (every dark-theme
+   * render, and any caller whose accent is already ink-safe).
+   */
+  ink?: string;
 };
 
 /** Hub theme name → CSS accent token. Used when a registry already names a theme. */
@@ -63,13 +73,31 @@ export function HubSplitInstrument({
         </p>
       </div>
 
-      <ul className={`flex flex-col ${compact ? 'gap-2' : 'gap-3'}`} aria-label={labelled}>
+      {/* `flex-1` + centred, not a plain block between two `justify-between`
+          joints. A hub with three tiers in a panel stretched to the copy
+          column's height left roughly 160px of dead space above the first bar
+          and 90px below the last — measured on /insights at 1440x900 — so the
+          count, the bars and the footnote read as three unrelated fragments
+          floating in a box rather than one instrument. Taking the leftover
+          height and centring in it puts the rows on the panel's optical middle
+          at any row count, which is what the sixteen hubs that share this
+          primitive all needed. */}
+      <ul
+        className={
+          compact
+            // Five or more rows already fill the panel; centring a list that
+            // can outgrow its box would clip it at both ends instead of one.
+            ? 'flex flex-col gap-2'
+            : 'flex flex-1 flex-col justify-center gap-4'
+        }
+        aria-label={labelled}
+      >
         {rows.map((row) => {
           const pct = total ? (row.count / total) * 100 : 0;
           return (
             <li key={row.key}>
               <div className="mb-1 flex items-baseline justify-between gap-3">
-                <span className="text-body-sm font-semibold" style={{ color: row.color }}>
+                <span className="text-body-sm font-semibold" style={{ color: row.ink ?? row.color }}>
                   {row.label}
                 </span>
                 {/* The count is the figure's whole payload, and it used to be

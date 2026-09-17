@@ -81,7 +81,13 @@ function RelationRow({ relation, perspective }: { relation: HallmarkRelation; pe
           ) : (
             <ArrowRight className="w-3.5 h-3.5 shrink-0 text-muted-foreground rotate-180" aria-label="affected by" />
           )}
-          <span className={cn('text-sm font-semibold truncate', accentText[accent])}>
+          {/* Not `truncate`. Measured on a 390px phone, this clipped
+              "Deregulated Nutrient Sensing" by 106px — the reader is left with
+              a hallmark name that does not name a hallmark, and there is no
+              tooltip or expansion to recover it. The row's other elements are
+              `shrink-0`, so letting this one wrap costs a second line and
+              nothing else. */}
+          <span className={cn('text-sm font-semibold', accentText[accent])}>
             {hallmarkNames[other] ?? other}
           </span>
         </div>

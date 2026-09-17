@@ -1,6 +1,6 @@
 import { HubSplitInstrument } from '@/components/viz/HubSplitInstrument';
 import { evidenceIndexStats } from '@/lib/evidence-index';
-import { evidenceTagDefinitions, TIER_COLOR_VAR } from '@/lib/trust';
+import { evidenceTagDefinitions, TIER_COLOR_VAR, TIER_INK_VAR } from '@/lib/trust';
 import type { EvidenceTier } from '@/lib/types';
 
 /**
@@ -23,6 +23,7 @@ export function LibraryHeroInstrument() {
         label: `${tier} · ${evidenceTagDefinitions[tier].short}`,
         count: stats.byTier[tier],
         color: TIER_COLOR_VAR[tier],
+        ink: TIER_INK_VAR[tier],
       }))}
       footer={
         <>

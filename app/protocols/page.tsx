@@ -7,7 +7,7 @@ import { DecisionSteps } from '@/components/ui/DecisionSteps';
 import { buildPageMetadata } from '@/lib/seo';
 import { protocols } from '@/lib/protocols';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
-import { TIER_COLOR_VAR } from '@/lib/trust';
+import { TIER_COLOR_VAR, TIER_INK_VAR } from '@/lib/trust';
 import type { EvidenceTier } from '@/lib/types';
 import { PageConnections } from '@/components/ui/PageConnections';
 import { clusterFrom } from '@/lib/page-connections';
@@ -59,6 +59,7 @@ export default function ProtocolsPage() {
               label: `Tier ${tier}`,
               count: protocolByTier[tier],
               color: TIER_COLOR_VAR[tier],
+              ink: TIER_INK_VAR[tier],
             }))}
             href="/stacks"
             hrefLabel="Build your own →"

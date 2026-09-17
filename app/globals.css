@@ -89,6 +89,31 @@
      warning, and it can never be mistaken for a tier. */
   --signal-elite: #d8b25f;
 
+  /* ── Accent INK ──
+     The colour an accent takes when it is *text*, as opposed to a fill, a
+     border or a tint. In dark these are the accents themselves: a bright hue
+     on a near-black ground is already the high-contrast case, and splitting
+     them here would only invite the two to drift apart.
+
+     They exist because the light theme cannot use one value for both. Measured
+     on the rendered site, light-theme `--accent-cyan` (#0891b2) is 3.52:1 on
+     the page ground and 2.95:1 on its own 15% tint; emerald and amber are the
+     same story, and amber — Tier C — bottoms out at 3.04:1. All three
+     evidence-tier colours failed AA as body text in light mode, which is the
+     one place this site cannot afford to be hard to read. Darkening the accent
+     itself would have fixed the text and broken the fills: dark ink on a solid
+     light-theme cyan reads 4.85:1 today and 3.01:1 after. So the fill keeps
+     its value and the text gets its own.
+
+     See `[data-theme="light"]` for the light values and the `.text-accent-*`
+     overrides that route the utilities here. */
+  --accent-cyan-ink: var(--accent-cyan);
+  --accent-emerald-ink: var(--accent-emerald);
+  --accent-violet-ink: var(--accent-violet);
+  --accent-rose-ink: var(--accent-rose);
+  --accent-amber-ink: var(--accent-amber);
+  --signal-elite-ink: var(--signal-elite);
+
   /* Status */
   --status-optimal: #34d399;
   --status-watch: #fbbf24;
@@ -176,7 +201,14 @@
      94a3b8→7c8ba1). */
   --color-text-secondary: #3d4a5c;
   --color-text-muted: #556174;
-  --color-text-faint: #7c8ba1;
+  /* #7c8ba1 measured 3.46:1 on a white card and 3.31:1 on the page ground.
+     `.text-label` renders at 11px normal weight — the scale's floor — so this
+     is body text by WCAG's reckoning and owes 4.5:1, which it was not paying:
+     `audit:ui` caught it on /supplement-guides the first time the sweep was
+     allowed to look at the light theme at all. #64748b clears it at 4.76:1 on
+     a card and 4.55:1 on the ground while staying distinctly lighter than
+     --color-text-muted, so the three-step text hierarchy is intact. */
+  --color-text-faint: #64748b;
 
   --accent-cyan: #0891b2;
   --accent-emerald: #059669;
@@ -185,6 +217,26 @@
   --accent-amber: #d97706;
   /* Deepened for AA on the light base — the dark-theme gold is far too pale. */
   --signal-elite: #8a6a12;
+
+  /* Accent ink — the accents above are fill values and stay as they are; these
+     are what the same accents become when they are text. Each is the shallowest
+     darkening of its own hue that clears 4.5:1 both on the page ground
+     (#f8fafc) and on the accent's own 15% tint, which is the pairing that was
+     failing: cyan text on a cyan chip measured 3.06:1 on four routes. Hue and
+     saturation are held; only lightness moves.
+
+       cyan     #0891b2 -> #066d86   3.52 -> 5.67 on ground, 2.95 -> 4.58 on tint
+       emerald  #059669 -> #047351   3.60 -> 5.61 on ground, 3.02 -> 4.53 on tint
+       violet   #7c3aed -> #7733ec   5.45 -> 5.79 on ground, 4.36 -> 4.60 on tint
+       rose     #e11d48 -> #bf193d   4.49 -> 5.87 on ground, 3.56 -> 4.55 on tint
+       amber    #d97706 -> #985404   3.04 -> 5.57 on ground, 2.60 -> 4.51 on tint
+       elite    #8a6a12 -> #7f6111   4.84 -> 5.54 on ground, 3.97 -> 4.52 on tint */
+  --accent-cyan-ink: #066d86;
+  --accent-emerald-ink: #047351;
+  --accent-violet-ink: #7733ec;
+  --accent-rose-ink: #bf193d;
+  --accent-amber-ink: #985404;
+  --signal-elite-ink: #7f6111;
 
   --status-optimal: #059669;
   --status-watch: #d97706;
@@ -1813,9 +1865,9 @@ p,
 }
 
 /* Hue tiers map to the site accent tokens. */
-.molecule-node.hue-cyan { color: var(--accent-cyan); }
-.molecule-node.hue-emerald { color: var(--accent-emerald); }
-.molecule-node.hue-violet { color: var(--accent-violet); }
+.molecule-node.hue-cyan { color: var(--accent-cyan-ink); }
+.molecule-node.hue-emerald { color: var(--accent-emerald-ink); }
+.molecule-node.hue-violet { color: var(--accent-violet-ink); }
 
 /* Depth tiers: farther structures are fainter and drift more slowly, giving
    the field a layered, parallax-like sense of space. Tuned to read as a
@@ -2420,11 +2472,11 @@ p,
   font-weight: 800;
 }
 
-.constellation-theme-cyan    { color: var(--accent-cyan); }
-.constellation-theme-emerald { color: var(--accent-emerald); }
-.constellation-theme-violet  { color: var(--accent-violet); }
-.constellation-theme-rose    { color: var(--accent-rose); }
-.constellation-theme-amber   { color: var(--accent-amber); }
+.constellation-theme-cyan    { color: var(--accent-cyan-ink); }
+.constellation-theme-emerald { color: var(--accent-emerald-ink); }
+.constellation-theme-violet  { color: var(--accent-violet-ink); }
+.constellation-theme-rose    { color: var(--accent-rose-ink); }
+.constellation-theme-amber   { color: var(--accent-amber-ink); }
 
 .constellation-tooltip {
   position: absolute;
@@ -2485,13 +2537,13 @@ p,
   align-items: center;
   min-height: 1.5rem;
   margin-top: 0.375rem;
-  color: var(--accent-cyan);
+  color: var(--accent-cyan-ink);
   font-weight: 600;
   white-space: nowrap;
 }
 
 .glossary-tooltip-link:hover {
-  color: var(--accent-emerald);
+  color: var(--accent-emerald-ink);
 }
 
 @media (max-width: 640px) {
@@ -2592,7 +2644,7 @@ p,
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--accent-emerald);
+  color: var(--accent-emerald-ink);
   box-shadow: 0 0 20px color-mix(in srgb, var(--accent-emerald) 15%, transparent);
 }
 
@@ -2700,7 +2752,7 @@ p,
   font-family: var(--font-mono);
   font-size: var(--type-11);
   letter-spacing: 0.05em;
-  color: var(--accent-cyan);
+  color: var(--accent-cyan-ink);
   opacity: 0.75;
 }
 
@@ -2895,7 +2947,7 @@ p,
   font-family: var(--font-mono);
   font-size: var(--type-18);
   font-weight: 800;
-  color: var(--accent-cyan);
+  color: var(--accent-cyan-ink);
   font-variant-numeric: tabular-nums;
 }
 
@@ -3040,7 +3092,7 @@ p,
   font-size: var(--type-15);
   font-weight: 600;
   line-height: 1.3;
-  color: var(--accent-cyan);
+  color: var(--accent-cyan-ink);
   font-variant-numeric: tabular-nums;
 }
 .lq-rank__of {
@@ -3162,7 +3214,7 @@ p,
   font-weight: 800;
   background: color-mix(in srgb, var(--accent-cyan) 12%, transparent);
   border: 1px solid color-mix(in srgb, var(--accent-cyan) 25%, transparent);
-  color: var(--accent-cyan);
+  color: var(--accent-cyan-ink);
   flex-shrink: 0;
 }
 
@@ -3319,7 +3371,7 @@ p,
 }
 
 .section-badge-cyan {
-  color: var(--accent-cyan);
+  color: var(--accent-cyan-ink);
   background: color-mix(in srgb, var(--accent-cyan) 10%, transparent);
   border: 1px solid color-mix(in srgb, var(--accent-cyan) 28%, transparent);
   box-shadow:
@@ -3327,7 +3379,7 @@ p,
     0 0 18px color-mix(in srgb, var(--accent-cyan) 14%, transparent);
 }
 .section-badge-emerald {
-  color: var(--accent-emerald);
+  color: var(--accent-emerald-ink);
   background: color-mix(in srgb, var(--accent-emerald) 10%, transparent);
   border: 1px solid color-mix(in srgb, var(--accent-emerald) 28%, transparent);
   box-shadow:
@@ -3335,7 +3387,7 @@ p,
     0 0 18px color-mix(in srgb, var(--accent-emerald) 14%, transparent);
 }
 .section-badge-amber {
-  color: var(--accent-amber);
+  color: var(--accent-amber-ink);
   background: color-mix(in srgb, var(--accent-amber) 10%, transparent);
   border: 1px solid color-mix(in srgb, var(--accent-amber) 28%, transparent);
   box-shadow:
@@ -3343,7 +3395,7 @@ p,
     0 0 18px color-mix(in srgb, var(--accent-amber) 14%, transparent);
 }
 .section-badge-violet {
-  color: var(--accent-violet);
+  color: var(--accent-violet-ink);
   background: color-mix(in srgb, var(--accent-violet) 10%, transparent);
   border: 1px solid color-mix(in srgb, var(--accent-violet) 28%, transparent);
   box-shadow:
@@ -3351,7 +3403,7 @@ p,
     0 0 18px color-mix(in srgb, var(--accent-violet) 14%, transparent);
 }
 .section-badge-rose {
-  color: var(--accent-rose);
+  color: var(--accent-rose-ink);
   background: color-mix(in srgb, var(--accent-rose) 10%, transparent);
   border: 1px solid color-mix(in srgb, var(--accent-rose) 28%, transparent);
   box-shadow:
@@ -3560,7 +3612,7 @@ p,
   display: inline;
   animation: cursor-blink 1.2s step-end infinite;
   margin-left: 1px;
-  color: var(--accent-cyan);
+  color: var(--accent-cyan-ink);
 }
 
 @keyframes cursor-blink {
@@ -4204,7 +4256,7 @@ p,
   line-height: var(--leading-body, 1.65);
 }
 .prose-tnic a {
-  color: var(--accent-cyan);
+  color: var(--accent-cyan-ink);
   /* Unlayered, so it overrides any inline `hover:underline` utility on these
      links — we render the underline ourselves via background-size below. */
   text-decoration: none;
@@ -4492,7 +4544,7 @@ p,
   letter-spacing: 0.12em;
   line-height: 1;
   text-transform: uppercase;
-  color: var(--accent-emerald);
+  color: var(--accent-emerald-ink);
 }
 
 .elite-filter-signal::before {
@@ -4564,14 +4616,14 @@ p,
 
 @media (hover: hover) {
   .elite-card-action-secondary:hover {
-    color: var(--accent-cyan);
+    color: var(--accent-cyan-ink);
     border-color: color-mix(in srgb, var(--accent-cyan) 44%, transparent);
     background: color-mix(in srgb, var(--accent-cyan) 8%, transparent);
     transform: translateY(-1px);
   }
 
   .elite-card-action-verify:hover {
-    color: var(--accent-emerald);
+    color: var(--accent-emerald-ink);
     border-color: color-mix(in srgb, var(--accent-emerald) 44%, transparent);
     background: color-mix(in srgb, var(--accent-emerald) 8%, transparent);
     transform: translateY(-1px);
@@ -4656,7 +4708,7 @@ p,
   letter-spacing: 0.14em;
   line-height: 1.25;
   text-transform: uppercase;
-  color: var(--accent-emerald);
+  color: var(--accent-emerald-ink);
 }
 
 .elite-briefing-grid strong {
@@ -4692,7 +4744,7 @@ p,
 
 @media (hover: hover) {
   .elite-section-secondary-action:hover {
-    color: var(--accent-amber);
+    color: var(--accent-amber-ink);
     border-color: color-mix(in srgb, var(--accent-amber) 50%, transparent);
     background: color-mix(in srgb, var(--accent-amber) 8%, transparent);
     transform: translateY(-1px);
@@ -4829,9 +4881,9 @@ p,
   font-weight: 700;
   line-height: 1;
 }
-.hm-tier--A { color: var(--accent-emerald); background: color-mix(in srgb, var(--accent-emerald) 15%, transparent); border: 1px solid color-mix(in srgb, var(--accent-emerald) 36%, transparent); }
-.hm-tier--B { color: var(--accent-cyan);    background: color-mix(in srgb, var(--accent-cyan) 15%, transparent);    border: 1px solid color-mix(in srgb, var(--accent-cyan) 36%, transparent); }
-.hm-tier--C { color: var(--accent-amber);   background: color-mix(in srgb, var(--accent-amber) 15%, transparent);   border: 1px solid color-mix(in srgb, var(--accent-amber) 36%, transparent); }
+.hm-tier--A { color: var(--accent-emerald-ink); background: color-mix(in srgb, var(--accent-emerald) 15%, transparent); border: 1px solid color-mix(in srgb, var(--accent-emerald) 36%, transparent); }
+.hm-tier--B { color: var(--accent-cyan-ink);    background: color-mix(in srgb, var(--accent-cyan) 15%, transparent);    border: 1px solid color-mix(in srgb, var(--accent-cyan) 36%, transparent); }
+.hm-tier--C { color: var(--accent-amber-ink);   background: color-mix(in srgb, var(--accent-amber) 15%, transparent);   border: 1px solid color-mix(in srgb, var(--accent-amber) 36%, transparent); }
 .hm-card__go {
   margin-top: 0.85rem;
   display: flex;
@@ -4961,7 +5013,7 @@ p,
   gap: 0.4rem;
   font-size: var(--type-14);
   font-weight: 600;
-  color: var(--accent-emerald);
+  color: var(--accent-emerald-ink);
 }
 .step-card__cta svg { transition: transform 0.3s var(--ease-standard); }
 @media (prefers-reduced-motion: reduce) {
@@ -5359,7 +5411,7 @@ p,
   align-items: center;
   gap: 0.75rem;
   margin: 0 0 1.125rem;
-  color: var(--research-hero-accent, var(--accent-cyan));
+  color: var(--research-hero-ink, var(--accent-cyan-ink));
   font-family: var(--font-mono);
   font-size: var(--type-11);
   font-weight: 600;
@@ -5389,7 +5441,7 @@ p,
 }
 
 .research-hero__title em {
-  color: var(--research-hero-accent, var(--accent-cyan));
+  color: var(--research-hero-ink, var(--accent-cyan-ink));
   font-style: italic;
 }
 
@@ -5446,7 +5498,7 @@ p,
 
 .research-hero__stat-index {
   grid-row: 1 / span 2;
-  color: color-mix(in srgb, var(--research-hero-accent, var(--accent-cyan)) 72%, var(--color-text-faint));
+  color: color-mix(in srgb, var(--research-hero-ink, var(--accent-cyan-ink)) 72%, var(--color-text-faint));
   font-family: var(--font-mono);
   font-size: var(--type-micro);
   font-weight: 600;
@@ -5455,7 +5507,7 @@ p,
 
 .research-hero__stat-value {
   min-width: 0;
-  color: var(--research-hero-accent, var(--accent-cyan));
+  color: var(--research-hero-ink, var(--accent-cyan-ink));
   font-family: var(--font-display);
   font-size: var(--type-hero-stat);
   font-weight: 520;
@@ -5484,7 +5536,7 @@ p,
 
 .research-hero__stat-arrow {
   align-self: center;
-  color: var(--research-hero-accent, var(--accent-cyan));
+  color: var(--research-hero-ink, var(--accent-cyan-ink));
   font-size: var(--type-16);
   opacity: 0;
   transform: translateX(-0.25rem);
@@ -5687,7 +5739,7 @@ p,
   border: 1px solid currentColor;
   border-radius: 999px;
   background: color-mix(in srgb, currentColor 8%, transparent);
-  color: var(--accent-cyan);
+  color: var(--accent-cyan-ink);
   font-size: var(--type-12);
   font-weight: 650;
   line-height: 1;
@@ -6849,4 +6901,63 @@ p,
   }
   .context-bar { position: sticky; }
   .context-bar__inner { position: relative; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Accent ink — routing the text utilities to the ink tokens
+   ═══════════════════════════════════════════════════════════════════════════
+
+   `text-accent-cyan` and `bg-accent-cyan` are generated from one theme value,
+   so a token that has to be legible as text and correct as a fill cannot serve
+   both in the light theme. These rules send the *text* utilities to the ink
+   tokens; `bg-*`, `border-*`, `fill-*` and every color-mix tint are untouched.
+
+   In dark the ink tokens ARE the accents, so this block is a no-op there.
+
+   Declared inside `@layer utilities` on purpose. Unlayered rules beat layered
+   ones outright in the cascade, which would also beat `hover:text-accent-*`
+   (specificity 0,2,0) and freeze an element's hover colour. Inside the same
+   layer the normal rules apply: this block is later in source order so it wins
+   the base utility, and the higher-specificity variants still win over it.
+   ═══════════════════════════════════════════════════════════════════════════ */
+@layer utilities {
+  .text-accent-cyan { color: var(--accent-cyan-ink); }
+  .text-accent-emerald { color: var(--accent-emerald-ink); }
+  .text-accent-violet { color: var(--accent-violet-ink); }
+  .text-accent-rose { color: var(--accent-rose-ink); }
+  .text-accent-amber { color: var(--accent-amber-ink); }
+
+  /* The partial-opacity variants in use. A 70–90% accent over a light ground
+     lands further from AA than the solid one, not nearer, so they need the ink
+     token at least as much. */
+  .text-accent-cyan\/90 { color: color-mix(in srgb, var(--accent-cyan-ink) 90%, transparent); }
+  .text-accent-cyan\/80 { color: color-mix(in srgb, var(--accent-cyan-ink) 80%, transparent); }
+  .text-accent-cyan\/70 { color: color-mix(in srgb, var(--accent-cyan-ink) 70%, transparent); }
+  .text-accent-emerald\/90 { color: color-mix(in srgb, var(--accent-emerald-ink) 90%, transparent); }
+  .text-accent-emerald\/80 { color: color-mix(in srgb, var(--accent-emerald-ink) 80%, transparent); }
+  .text-accent-violet\/90 { color: color-mix(in srgb, var(--accent-violet-ink) 90%, transparent); }
+  .text-accent-violet\/80 { color: color-mix(in srgb, var(--accent-violet-ink) 80%, transparent); }
+  .text-accent-rose\/80 { color: color-mix(in srgb, var(--accent-rose-ink) 80%, transparent); }
+  .text-accent-rose\/70 { color: color-mix(in srgb, var(--accent-rose-ink) 70%, transparent); }
+  .text-accent-amber\/90 { color: color-mix(in srgb, var(--accent-amber-ink) 90%, transparent); }
+  .text-accent-amber\/80 { color: color-mix(in srgb, var(--accent-amber-ink) 80%, transparent); }
+  /* The hover and group-hover variants, for the same reason. A hover state is
+     not exempt from AA, and there is no point fixing 192 resting colours and
+     leaving the colour a reader sees while their pointer is on the link at
+     3.60:1. Selectors match what Tailwind emits exactly — including the
+     `:is(:where(.group):hover *)` shape for group-hover — so each pairs with
+     its own rule at equal specificity and wins on source order alone. */
+  .hover\:text-accent-cyan:hover { color: var(--accent-cyan-ink); }
+  .hover\:text-accent-emerald:hover { color: var(--accent-emerald-ink); }
+  .hover\:text-accent-violet:hover { color: var(--accent-violet-ink); }
+  .hover\:text-accent-rose:hover { color: var(--accent-rose-ink); }
+  .hover\:text-accent-amber:hover { color: var(--accent-amber-ink); }
+  .group-hover\:text-accent-cyan:is(:where(.group):hover *) { color: var(--accent-cyan-ink); }
+  .group-hover\:text-accent-emerald:is(:where(.group):hover *) { color: var(--accent-emerald-ink); }
+  .group-hover\:text-accent-violet:is(:where(.group):hover *) { color: var(--accent-violet-ink); }
+  .group-hover\:text-accent-rose:is(:where(.group):hover *) { color: var(--accent-rose-ink); }
+  .group-hover\:text-accent-amber:is(:where(.group):hover *) { color: var(--accent-amber-ink); }
+  .hover\:text-accent-cyan\/80:hover { color: color-mix(in srgb, var(--accent-cyan-ink) 80%, transparent); }
+  .hover\:text-accent-violet\/80:hover { color: color-mix(in srgb, var(--accent-violet-ink) 80%, transparent); }
+  .hover\:text-accent-amber\/80:hover { color: color-mix(in srgb, var(--accent-amber-ink) 80%, transparent); }
 }

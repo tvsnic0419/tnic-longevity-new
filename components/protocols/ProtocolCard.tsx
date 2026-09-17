@@ -88,7 +88,7 @@ export function ProtocolCard({ protocol }: { protocol: Protocol }) {
             <Link
               key={id}
               href={`/library/${h.slug}`}
-              className="focus-ring rounded surface-well px-1.5 py-0.5 text-micro font-medium text-muted-foreground transition-colors hover:border-accent-violet/40 hover:text-accent-violet"
+              className="action-link focus-ring rounded surface-well px-1.5 py-0.5 text-micro font-medium text-muted-foreground transition-colors hover:border-accent-violet/40 hover:text-accent-violet"
             >
               {h.title}
             </Link>
@@ -99,7 +99,7 @@ export function ProtocolCard({ protocol }: { protocol: Protocol }) {
       {protocol.moduleHref && (
         <Link
           href={protocol.moduleHref}
-          className="focus-ring group mt-5 inline-flex items-center gap-1.5 text-sm font-semibold"
+          className="action-link focus-ring group mt-5 gap-1.5 text-sm font-semibold"
           style={{ color: accent }}
         >
           Read the full protocol

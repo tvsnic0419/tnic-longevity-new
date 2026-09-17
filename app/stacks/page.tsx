@@ -17,7 +17,7 @@ import { eliteInterventions } from '@/lib/elite-interventions';
 import { stackPresets } from '@/lib/presets';
 import { EntityChips } from '@/components/ui/EntityChips';
 import { resolveCompounds, resolveHallmarks } from '@/lib/entity-graph';
-import { TIER_COLOR_VAR } from '@/lib/trust';
+import { TIER_COLOR_VAR, TIER_INK_VAR } from '@/lib/trust';
 import type { EvidenceTier } from '@/lib/types';
 import { PageConnections } from '@/components/ui/PageConnections';
 import { clusterFrom } from '@/lib/page-connections';
@@ -90,6 +90,7 @@ export default function StacksPage() {
               label: `Tier ${tier}`,
               count: stackByTier[tier],
               color: TIER_COLOR_VAR[tier],
+              ink: TIER_INK_VAR[tier],
             }))}
             href="/protocols"
             hrefLabel="Open the protocol library →"
