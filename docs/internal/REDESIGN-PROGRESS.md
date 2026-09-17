@@ -4,6 +4,75 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-17 — A duplicate stylesheet was silently reverting shipped fixes
+
+Owner asked for the next 10 most significant UI upgrades against a much
+larger, aspirational brief (a full "quality up-convert" spanning IA,
+evidence UX, interlinking, homepage restructuring). Scope was too large to
+deliver in full in the time available; what follows is the honest partial
+delivery, tracked as PR #218, plus a base-branch CI fix (#219, merged).
+
+**The structural finding.** `components/ui/FlagshipFoundation.module.css`
+held a second copy of the hub-hero, context-bar and decision-switchboard
+systems — 51 of its 53 `:global()` selectors were also defined in
+`app/globals.css`, with different values. A CSS Module's output loads after
+`globals.css`, so the module copy silently won every conflict. This had
+already reverted PR #215's `.research-hero__stat-label` wrap fix in
+production (verified, merged, never took effect — stat labels kept
+truncating on nine hub routes) and was rendering the decision-switchboard
+CTA clipped. Removed the duplication; `globals.css` is now the single
+definition. Verified by diffing computed styles across 12 page/viewport
+combinations.
+
+**A mistake, and the gate that caught it.** The dedup compared which
+selectors the two files shared, not which declarations. `.context-bar__crumb-link`
+existed in both, but the module alone carried `min-height: 1.5rem` — the
+24px control floor. Removing it dropped 17 controls under the floor;
+`audit:ui` caught it against budget 0. Fixed by restoring the three
+missing declarations to `globals.css`. Selector overlap is not declaration
+overlap.
+
+**Guardrail strengthened, not weakened.** `lib/site-integrity.test.ts` had
+asserted the module *contained* the duplicates — pinning a location, not
+the contract its own header states ("shared, token-driven, not
+component-local"). Rewritten to enforce single-definition: no selector may
+exist in both files. Verified the new guard fails when a duplicate is
+reintroduced and names the offending selector.
+
+**The audit was measuring 11 of 230 routes.** `audit:ui`'s `PAGES` list
+covered only library/trust routes — every other template was unaudited,
+which is why the duplicate-stylesheet fallout went unreported. Widened to
+29 routes, one per template. This surfaced 102 pre-existing sub-24px tap
+targets (concentrated in `/protocols`, `/insights`, `/products`,
+`/dashboard`, `/trust/methodology`) and two `heading-order` violations
+(`/trust/methodology`, `/about` — both `h1` straight to `h3`, fixed).
+The 102 are reported, not gated — the existing 11 routes stay gated at
+budget 0 so widening coverage could not quietly loosen the bar. Also fixed
+a flaky-gate cause: `axe` ran with no settle time and was catching
+scroll-reveal elements mid-fade (two nodes measured at ~50% opacity,
+0 once settled); the sweep now lets reveals land before measuring.
+
+**Unrelated base-branch breakage, found and fixed in passing.** `main`
+moved 4 commits during this work (Amplitude analytics wiring, nav
+unification). One of those commits added `@amplitude/unified` to
+`package.json` without regenerating `package-lock.json`, breaking `npm ci`
+— and therefore CI — for every PR against `main`, not just this one. Filed
+as standalone PR #219, verified, merged. Ported into this branch too so
+its own CI didn't have to wait; the second `main` merge afterward produced
+a byte-identical no-op lockfile diff, confirming both regenerations agreed.
+
+**Verified, final state:** `npm ci` succeeds from clean, typecheck clean,
+lint 0, 790/790 tests, build ok, `audit:ui` exit 0 with 0 axe violations
+(0 gated / 102 reported on tap targets), `audit:routes` 230 routes 0 fail
+0 warn.
+
+**Not done, stated plainly:** the 102 reported tap-target controls, a
+molecule atom-label collision at 390px on compound pages, and
+`HallmarkCoverageAtlas`'s `truncate` class rendering correctly only by
+accident (computed `white-space` is `normal` despite the class — a latent
+trap, not touched). None of the larger brief's IA/homepage/evidence-UX
+scope was attempted this pass.
+
 ## 2026-09-16 — PR queue cleared: two merged, three closed, two measured empty
 
 The owner asked for the open work to be identified, merged if good, and old
