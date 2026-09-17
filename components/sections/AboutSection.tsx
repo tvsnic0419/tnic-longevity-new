@@ -107,7 +107,13 @@ export function AboutSection() {
             className="glass-deep glass-plane-mid rounded-2xl p-6"
           >
             <p.icon className="w-6 h-6 text-accent-cyan mb-4" />
-            <h3 className="font-bold mb-2">{p.title}</h3>
+            {/* h2, not h3. The page's only h1 is SectionShell's "An
+               Educational Longevity Platform" title above; these four
+               pillar cards were the next heading axe saw and were h3, a
+               skipped level (heading-order, moderate). They sit at the same
+               depth as the h2 sections further down this page
+               ("about-connections-heading" etc.), so h2 matches. */}
+            <h2 className="font-bold mb-2">{p.title}</h2>
             <p className="text-sm text-muted-foreground leading-relaxed">{p.desc}</p>
           </motion.div>
         ))}
