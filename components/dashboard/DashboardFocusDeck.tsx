@@ -116,7 +116,11 @@ export function DashboardFocusDeck() {
               One clear action at a time; all status remains private to this browser.
             </p>
           </div>
-          <div className="flex gap-1.5" aria-label={`${completed} of ${steps.length} setup signals complete`}>
+          {/* aria-label is prohibited on a generic <div>: with no role there is
+              nothing for the name to attach to, so axe flags it and screen
+              readers may drop it entirely. These dots are one picture of
+              progress, so role="img" gives the name something to name. */}
+          <div role="img" className="flex gap-1.5" aria-label={`${completed} of ${steps.length} setup signals complete`}>
             {steps.map((step) => (
               <span
                 key={step.id}

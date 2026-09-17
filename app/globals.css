@@ -5637,6 +5637,18 @@ p,
 }
 
 .context-bar__crumb-link {
+  /* The 24px control floor (STYLE_GUIDE §13). This lived ONLY in
+     FlagshipFoundation.module.css, which is why removing that file's
+     duplicates dropped the crumb links to 15px and put 17 actionable controls
+     under the floor — `audit:ui` caught it, budget 0.
+
+     Worth recording why the dedup missed it: that analysis compared which
+     SELECTORS the two files shared, and this selector was in both. The module
+     simply set three declarations on it that globals.css never had. Selector
+     overlap is not declaration overlap. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
   max-width: 9.25rem;
   color: var(--color-text-muted);
   text-decoration: none;
@@ -5997,10 +6009,12 @@ p,
 }
 .action-card__eyebrow {
   min-width: 0;
-  overflow: hidden;
   color: var(--color-text-faint);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  /* Was nowrap + ellipsis. At 390px "Start with a goal" lost 14px on /stacks
+     and rendered cut off. An eyebrow names what the card is; truncating it
+     costs the reader the one word that tells them, to save a line break. Same
+     call as `.research-hero__stat-label` and for the same reason. */
+  overflow-wrap: anywhere;
 }
 .action-card__featured-label {
   display: inline-flex;
@@ -6792,4 +6806,47 @@ p,
 }
 @media (min-width: 1024px) {
   .continue-trail__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* ── Mobile ContextBar workspace disclosure ──
+   Moved out of FlagshipFoundation.module.css, which held a duplicate copy of
+   the whole context-bar system. These two selectors were the only ones that
+   existed there and not here. */
+.context-bar__mobile-toggle { display: none; }
+.context-bar__workspace-body {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+@media (max-width: 48rem) {
+  .context-bar__mobile-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 2rem;
+    padding: 0.3rem 0.65rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--color-text-primary) 12%, transparent);
+    background: color-mix(in srgb, var(--color-bg-elevated) 70%, transparent);
+    color: var(--color-text-secondary);
+    font-size: var(--type-12);
+    font-weight: 650;
+  }
+  .context-bar__workspace-body { display: none; }
+  .context-bar__workspace-body.is-open {
+    display: flex;
+    position: absolute;
+    right: var(--page-pad, 1rem);
+    top: calc(100% + 0.35rem);
+    z-index: 50;
+    padding: 0.55rem 0.65rem;
+    border-radius: 0.9rem;
+    border: 1px solid color-mix(in srgb, var(--color-text-primary) 10%, transparent);
+    background: color-mix(in srgb, var(--color-bg-elevated) 94%, transparent);
+    box-shadow: 0 18px 40px -24px rgba(0,0,0,0.7);
+    backdrop-filter: blur(14px);
+  }
+  .context-bar { position: sticky; }
+  .context-bar__inner { position: relative; }
 }

@@ -113,15 +113,21 @@ export function EngineReference() {
           const meta = AXIS_META[axis];
           const pct = Math.round(DEFAULT_WEIGHTS[axis] * 100);
           return (
+            // A <dl> may group a <dt>/<dd> pair inside a <div>, but only one
+            // level deep. The label used to sit in a second nested <div> (the
+            // flex row), which put <dt> two <div>s below the <dl> — axe flags
+            // that as definition-list + dlitem, both serious, because the pair
+            // is no longer associated. The <dt> IS the flex row now, so the
+            // grouping is valid and the layout is unchanged.
             <div key={axis} className="premium-card p-5">
-              <div className="flex items-baseline justify-between gap-3">
-                <dt className="font-display text-lg font-medium text-foreground">
+              <dt className="flex items-baseline justify-between gap-3">
+                <span className="font-display text-lg font-medium text-foreground">
                   {meta.label}
-                </dt>
+                </span>
                 <span className="text-sm font-mono tabular-nums text-muted-foreground">
                   {pct}% <span className="text-micro uppercase tracking-wider">weight</span>
                 </span>
-              </div>
+              </dt>
               <dd className="mt-2 text-sm text-muted-foreground">{meta.description}</dd>
             </div>
           );
