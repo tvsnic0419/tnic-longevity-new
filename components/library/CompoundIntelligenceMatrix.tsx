@@ -207,7 +207,7 @@ const CIM_CSS = `
   border: 1px solid var(--color-border-subtle); background: var(--color-bg-muted);
 }
 .cim-chip-ic { width: 13px; height: 13px; }
-.cim-rct { color: var(--accent-emerald); border-color: color-mix(in srgb, var(--accent-emerald) 40%, transparent); }
+.cim-rct { color: var(--accent-emerald-ink); border-color: color-mix(in srgb, var(--accent-emerald) 40%, transparent); }
 .cim-lq { display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
 .cim-grid {
@@ -236,7 +236,7 @@ const CIM_CSS = `
   padding: 5px 11px; border-radius: 999px;
   border: 1px solid var(--color-border-subtle); background: var(--color-bg-muted);
 }
-.cim-tag-path { color: var(--accent-cyan); border-color: color-mix(in srgb, var(--accent-cyan) 28%, transparent); }
+.cim-tag-path { color: var(--accent-cyan-ink); border-color: color-mix(in srgb, var(--accent-cyan) 28%, transparent); }
 .cim-hallmarks { display: flex; flex-wrap: wrap; align-items: center; gap: 20px 28px; }
 .cim-radial { flex: 0 0 auto; width: min(240px, 62vw); }
 .cim-hallmark-tags { flex: 1 1 200px; align-content: flex-start; }
@@ -261,7 +261,7 @@ const CIM_CSS = `
   margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--color-border-subtle);
   font-size: var(--type-11); line-height: 1.5; color: var(--color-text-faint);
 }
-.cim-pubmed { display: inline-flex; align-items: center; gap: 5px; color: var(--accent-cyan); text-decoration: none; white-space: nowrap; }
+.cim-pubmed { display: inline-flex; align-items: center; gap: 5px; color: var(--accent-cyan-ink); text-decoration: none; white-space: nowrap; }
 .cim-pubmed:hover { text-decoration: underline; }
 
 @media (prefers-reduced-motion: reduce) { .cim-fill { transition: none; } }

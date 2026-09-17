@@ -125,6 +125,33 @@ const VIEWPORTS = [
   { name: 'phone', width: 390, height: 844 },
 ];
 
+/**
+ * Passes: a viewport crossed with a colour scheme.
+ *
+ * The sweep only ever ran in dark. The site ships a light theme behind the
+ * chrome's moon toggle, its tokens are a separate `[data-theme="light"]` block
+ * in globals.css, and nothing automated had ever looked at it — so every
+ * contrast result this gate has produced describes half the product. A theme
+ * is exactly the kind of thing that drifts unseen: a component authored
+ * against the dark palette reads fine to whoever wrote it and fails for
+ * whoever has the toggle set the other way.
+ *
+ * Light runs at desktop only. Contrast is a function of the token pair, not of
+ * the viewport, and the layout probes (overflow, tap targets, micro-type) are
+ * theme-independent, so a second light pass at phone width would roughly
+ * double the wall clock to re-measure numbers the dark phone pass already
+ * covers. If a light-only *layout* bug ever turns up, add the row here.
+ *
+ * Theme is read from localStorage by `ThemeScript` before first paint, so it
+ * is set in an init script rather than by `colorScheme`, which this site does
+ * not consult once a preference is stored.
+ */
+const PASSES = [
+  { vp: VIEWPORTS[0], theme: 'dark' },
+  { vp: VIEWPORTS[1], theme: 'dark' },
+  { vp: VIEWPORTS[0], theme: 'light' },
+];
+
 const axeSrc = await fs.readFile('node_modules/axe-core/axe.min.js', 'utf8');
 
 const browser = await chromium.launch({
@@ -134,12 +161,28 @@ const browser = await chromium.launch({
 const violations = new Map(); // ruleId -> {impact, help, nodes:[], pages:Set}
 const layout = [];
 
-for (const vp of VIEWPORTS) {
-  const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height } });
+for (const pass of PASSES) {
+  const { vp, theme } = pass;
+  // `label` is what every report line is keyed by, so a finding always names
+  // the theme it was seen in, not just the width.
+  const label = theme === 'dark' ? vp.name : `${vp.name}:${theme}`;
+  const ctx = await browser.newContext({
+    viewport: { width: vp.width, height: vp.height },
+    colorScheme: theme,
+  });
+  await ctx.addInitScript((t) => {
+    try { localStorage.setItem('tnic-theme', t); } catch { /* private mode */ }
+  }, theme);
   for (const path of PAGES) {
     const page = await ctx.newPage();
     try {
-      await page.goto(BASE + path, { waitUntil: 'networkidle', timeout: 45000 });
+      // `load`, not `networkidle`. The compound deep-dives never reliably go
+      // idle — /library/compounds/nmn timed out at 45s on roughly one pass in
+      // three, which does not fail the run, it just silently drops a route
+      // from the sweep, and a route nobody measured looks exactly like a route
+      // with nothing wrong. The settle step below already scrolls the whole
+      // document and waits for the reveals, so what axe sees is unchanged.
+      await page.goto(BASE + path, { waitUntil: 'load', timeout: 45000 });
 
       // Settle the scroll-driven reveals before measuring.
       //
@@ -180,9 +223,9 @@ for (const vp of VIEWPORTS) {
           violations.set(v.id, { impact: v.impact, help: v.help, nodes: [], pages: new Set() });
         }
         const e = violations.get(v.id);
-        e.pages.add(`${vp.name}${path}`);
+        e.pages.add(`${label}${path}`);
         for (const n of v.nodes.slice(0, 3)) {
-          e.nodes.push({ page: path, vp: vp.name, target: n.target.join(' '), summary: (n.failureSummary ?? '').slice(0, 220) });
+          e.nodes.push({ page: path, vp: label, target: n.target.join(' '), summary: (n.failureSummary ?? '').slice(0, 220) });
         }
       }
 
@@ -259,6 +302,40 @@ for (const vp of VIEWPORTS) {
             cls: (el.className || '').toString().slice(0, 60),
           });
         });
+        // ── Clipped-text probe ──
+        //
+        // `truncate` (overflow:hidden + ellipsis + nowrap) is used 39 times in
+        // this codebase, mostly on compound, hallmark and protocol names inside
+        // fixed-width rails. When the name fits, the class is invisible. When it
+        // does not, the reader loses the end of a proper noun with no way to
+        // recover it: these are not links with a tooltip, and a name clipped to
+        // "Altered Intercellular Commun…" is a worse failure on a library than a
+        // wrapped line would have been.
+        //
+        // Nothing was measuring which of the 39 actually bite, and the answer is
+        // viewport-dependent by construction, so it can only be measured.
+        // Reported with the visible text and the full text so a fix can be
+        // judged rather than guessed at; an element that carries its own
+        // `title` or an sr-only twin is excluded, because there the full string
+        // is still reachable.
+        const clipped = [];
+        document.querySelectorAll('body *').forEach((el) => {
+          if (el instanceof SVGElement) return;
+          const cs = getComputedStyle(el);
+          if (cs.textOverflow !== 'ellipsis') return;
+          if (cs.display === 'none' || cs.visibility === 'hidden') return;
+          if (el.scrollWidth <= el.clientWidth + 1) return;
+          if (el.title) return;
+          if (el.querySelector('.sr-only')) return;
+          const full = (el.textContent ?? '').trim();
+          if (full.length < 2) return;
+          clipped.push({
+            full: full.slice(0, 48),
+            lost: Math.round(el.scrollWidth - el.clientWidth),
+            cls: (el.className?.toString?.() || `<${el.tagName.toLowerCase()}>`).slice(0, 64),
+          });
+        });
+
         // ── Micro-type probe ──
         // Every HTML text node rendering below the scale's floor
         // (--type-micro, 11px). SVG <text> is deliberately excluded: inside a
@@ -298,12 +375,13 @@ for (const vp of VIEWPORTS) {
           actionableTargets: actionable,
           minFont,
           microType,
+          clipped,
         };
       });
-      layout.push({ vp: vp.name, path, ...m });
-      process.stderr.write(`  ${vp.name.padEnd(8)} ${path.padEnd(40)} axe:${res.violations.length} overflow:${m.overflow.length} smallTap:${m.smallTargets} (actionable:${m.actionableTargets.length}) minFont:${m.minFont}px micro:${m.microType.length}\n`);
+      layout.push({ vp: label, theme, path, ...m });
+      process.stderr.write(`  ${label.padEnd(14)} ${path.padEnd(40)} axe:${res.violations.length} overflow:${m.overflow.length} smallTap:${m.smallTargets} (actionable:${m.actionableTargets.length}) minFont:${m.minFont}px micro:${m.microType.length}\n`);
     } catch (err) {
-      process.stderr.write(`  ✗ ${vp.name} ${path} — ${err.message.slice(0, 100)}\n`);
+      process.stderr.write(`  ✗ ${label} ${path} — ${err.message.slice(0, 100)}\n`);
     }
     await page.close();
   }
@@ -421,5 +499,34 @@ const microBudget = Number(process.env.MAX_MICRO_TYPE ?? 0);
 console.log(`\nHTML text below 11px: ${totalMicro} (budget ${microBudget})`);
 if (totalMicro > microBudget) {
   console.error(`\n✗ micro-type gate: ${totalMicro} HTML text nodes under 11px, budget is ${microBudget}.`);
+  process.exitCode = 1;
+}
+
+console.log('\n=== TEXT CLIPPED BY AN ELLIPSIS ===');
+const clip = new Map(); // signature -> {n, lost, full, cls, pages:Set}
+for (const l of layout) {
+  for (const c of l.clipped ?? []) {
+    const key = `${c.full}|${c.cls}`;
+    if (!clip.has(key)) clip.set(key, { n: 0, lost: c.lost, full: c.full, cls: c.cls, pages: new Set() });
+    const e = clip.get(key);
+    e.n += 1;
+    e.lost = Math.max(e.lost, c.lost);
+    e.pages.add(`${l.vp}${l.path}`);
+  }
+}
+if (clip.size === 0) {
+  console.log('  none');
+} else {
+  for (const [, v] of [...clip.entries()].sort((a, b) => b[1].lost - a[1].lost)) {
+    console.log(`  ${String(v.n).padStart(4)}×  -${String(v.lost).padStart(3)}px  "${v.full}"`);
+    console.log(`        ${v.cls}`);
+    console.log(`        ${[...v.pages].slice(0, 4).join(', ')}${v.pages.size > 4 ? ` +${v.pages.size - 4} more` : ''}`);
+  }
+}
+const totalClipped = layout.reduce((n, l) => n + (l.clipped?.length ?? 0), 0);
+const clipBudget = Number(process.env.MAX_CLIPPED_TEXT ?? 0);
+console.log(`\ntext clipped by an ellipsis: ${totalClipped} (budget ${clipBudget})`);
+if (totalClipped > clipBudget) {
+  console.error(`\n✗ clipped-text gate: ${totalClipped} elements losing text to an ellipsis, budget is ${clipBudget}.`);
   process.exitCode = 1;
 }

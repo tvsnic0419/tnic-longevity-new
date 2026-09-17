@@ -14,7 +14,7 @@ import {
   LIBRARY_HALLMARK_COVERAGE,
   LIBRARY_TIER_SPLIT,
 } from '@/lib/insights-library';
-import { TIER_COLOR_VAR } from '@/lib/trust';
+import { TIER_COLOR_VAR, TIER_INK_VAR } from '@/lib/trust';
 
 export const metadata = buildPageMetadata({
   title: 'Longevity by the Numbers — The Library as Data',
@@ -77,6 +77,7 @@ export default function InsightsPage() {
               label: `Tier ${slice.tier}`,
               count: slice.count,
               color: TIER_COLOR_VAR[slice.tier],
+              ink: TIER_INK_VAR[slice.tier],
             }))}
             href="/library/evidence"
             hrefLabel="Open the evidence table →"

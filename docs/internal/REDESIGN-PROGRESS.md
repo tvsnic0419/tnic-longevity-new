@@ -4,6 +4,81 @@
 master prompt — its durable operating rules are already merged into
 `CLAUDE.md`. This file is the state.*
 
+## 2026-09-17 (third pass) — the audit had only ever looked at half the product
+
+**What was found.** `audit:ui` swept the dark theme only. The site ships a
+light theme behind the chrome's toggle, with its own `[data-theme="light"]`
+token block, and nothing automated had ever looked at it — so every contrast
+result this gate has produced described half the product.
+
+Running it there first found two nodes: cyan text on a cyan chip at 3.06:1.
+Working back from those to the tokens themselves found the real scope:
+
+| light token | as text on the page ground | on its own 15% tint |
+|---|---|---|
+| `--accent-cyan` #0891b2 | 3.52:1 | 2.95:1 |
+| `--accent-emerald` #059669 | 3.60:1 | 3.02:1 |
+| `--accent-amber` #d97706 | **3.04:1** | **2.60:1** |
+| `--accent-rose` #e11d48 | 4.49:1 | 3.56:1 |
+
+Emerald, cyan and amber are Tier A, Tier B and Tier C. All three
+evidence-tier colours failed AA as body text in the light theme, on a site
+whose proposition is that the grade is legible. Plus `--color-text-faint`
+#7c8ba1 at 3.46:1 on a white card, rendering `.text-label` at 11px.
+
+**What was changed.** The accents stay as they are — they are fill values, and
+darkening them would have traded one failure for another (dark ink on a solid
+light-theme cyan reads 4.85:1 today and 3.01:1 after). Text gets
+`--accent-*-ink`: the shallowest darkening of the same hue that clears 4.5:1
+both on the page ground and on the accent's own 15% tint. In dark, ink *is* the
+accent, so nothing there moves.
+
+Routing: the `text-accent-*`, `hover:` and `group-hover:` utilities are
+re-pointed inside `@layer utilities` (unlayered would have outranked the hover
+variants and frozen them — verified by hovering a probe in both themes); 39 raw
+`color:` declarations across globals.css and two component stylesheets;
+`TIER_INK_VAR` beside `TIER_COLOR_VAR`; an `ink` field on `HubSplitRow`; and a
+`--research-hero-ink` beside `--research-hero-accent`, which alone drove
+roughly twenty declarations of which five were `color` — that is how an amber
+hub's 36px stat value ended up at 2.94:1 against its own wash. `background`,
+`border-color` and every `color-mix` tint are untouched throughout.
+
+**A second gate, from the same idea.** `truncate` appears 39 times, mostly on
+compound and hallmark names in fixed-width rails. When the name fits, the class
+is invisible; when it does not, the reader loses the end of a proper noun with
+no way back. Which of the 39 bite is viewport-dependent, so it can only be
+measured. The new clipped-text probe found 8, including a hallmark name losing
+106px on a phone and a head-to-head label clipping *on the desktop at 1440px*.
+Fixed by letting content wrap; the context bar's current crumb keeps its clip
+(it is one-line chrome repeating the h1 below) and gained a `title`, which the
+probe treats as recoverable.
+
+**Composition, same pass.** `HubSplitInstrument` left ~160px of dead space
+above its first bar and ~90px below its last, measured on /insights — the
+count, the bars and the footnote read as three fragments in a box. The rows now
+take the leftover height and centre in it, at any row count, across the sixteen
+hubs that share the primitive.
+
+**One more tool fix.** `/library/compounds/nmn` timed out on roughly one pass
+in three under `waitUntil: 'networkidle'`. That does not fail the run — it
+silently drops a route from the sweep, and a route nobody measured looks
+exactly like a route with nothing wrong. Changed to `load`; the settle step
+already scrolls the whole document and waits for the reveals, so what axe sees
+is unchanged, and all 90 page-passes now complete.
+
+**Checks.** `tsc --noEmit` clean · `eslint` clean · `vitest run` 74 files /
+808 tests pass · `next build` clean · `audit:ui` across 30 routes x 3 passes
+(desktop dark, phone dark, desktop light) = 90 measured page loads, 0 skipped:
+0 axe violations, 0 actionable sub-24px controls, 0 HTML text under 11px,
+0 clipped text.
+
+Both new guards were checked against the values they replace before being
+trusted: `lib/accent-ink.test.ts` fails at exactly 3.04:1 with the old amber
+and at 3.31:1 with the old faint token, and passes when restored.
+
+**Rollback.** `git revert <sha>` on this pass's commit. Nothing touches data,
+routing or content.
+
 ## 2026-09-17 (second pass) — the tap-target backlog, and what the molecule was claiming
 
 Owner asked to keep advancing the UI's ambience and aesthetic. Two things were

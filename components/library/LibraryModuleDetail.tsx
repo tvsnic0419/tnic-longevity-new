@@ -539,7 +539,11 @@ export function LibraryModuleDetail({
                         href={`/library/compare/${comparison.slug}`}
                         className="focus-ring interactive group flex items-center justify-between gap-2 rounded-md"
                       >
-                        <span className="text-sm text-muted-foreground group-hover:text-accent-cyan transition truncate">
+                        {/* A head-to-head label is two compound names and it
+                            was clipping on the DESKTOP too — "NMN vs NR
+                            (Nicotinamide Riboside)" lost 66px at 1440px wide.
+                            The tag beside it is `shrink-0`; this wraps. */}
+                        <span className="text-sm text-muted-foreground group-hover:text-accent-cyan transition">
                           {comparison.labelA} vs {comparison.labelB}
                         </span>
                         <EvidenceTag tier={comparison.evidenceTier} className="shrink-0" />
@@ -563,7 +567,7 @@ export function LibraryModuleDetail({
                         href={`/protocols#${protocol.slug}`}
                         className="focus-ring interactive group flex items-center justify-between gap-2 rounded-md"
                       >
-                        <span className="text-sm text-muted-foreground group-hover:text-accent-violet transition truncate">
+                        <span className="text-sm text-muted-foreground group-hover:text-accent-violet transition">
                           {protocol.name}
                         </span>
                         <EvidenceTag tier={protocol.evidence} size="sm" className="shrink-0" />
@@ -593,7 +597,7 @@ export function LibraryModuleDetail({
                         href={`/library/compounds/${rc.slug}`}
                         className="focus-ring interactive group flex items-center justify-between gap-2 rounded-md"
                       >
-                        <span className="text-sm text-muted-foreground group-hover:text-accent-cyan transition truncate">
+                        <span className="text-sm text-muted-foreground group-hover:text-accent-cyan transition">
                           {rc.name}
                         </span>
                         <EvidenceTag tier={rc.evidence} size="sm" className="shrink-0" />

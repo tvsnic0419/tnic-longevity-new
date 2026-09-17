@@ -7,7 +7,7 @@ import { buildBreadcrumbSchema, buildOrganizationSchema } from '@/lib/seo';
 import { compounds } from '@/lib/data';
 import { COMPOUND_COUNT } from '@/lib/library-modules';
 import { hallmarkLibrary } from '@/lib/hallmarks-library';
-import { TIER_COLOR_VAR } from '@/lib/trust';
+import { TIER_COLOR_VAR, TIER_INK_VAR } from '@/lib/trust';
 import type { EvidenceTier } from '@/lib/types';
 
 // Real citation depth — unique PMIDs cited across every graded compound.
@@ -57,6 +57,7 @@ export default function TrustPage() {
               label: `Tier ${tier}`,
               count: trustByTier[tier],
               color: TIER_COLOR_VAR[tier],
+              ink: TIER_INK_VAR[tier],
             }))}
             href="/trust/methodology"
             hrefLabel="How we grade →"

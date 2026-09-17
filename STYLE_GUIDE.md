@@ -1,6 +1,6 @@
 # TNiC Design System & Style Guide
 
-> Version 1.14 · September 2026  
+> Version 1.15 · September 2026  
 > Governs typography, spacing, components, accessibility, and page patterns across tnic.help.  
 > v1.1 documents the cinematic viz family (§7, §12) that the premium hubs are built on.  
 > v1.2 corrects the drifted §2 color values, documents the signal roles, the
@@ -33,6 +33,9 @@
 > v1.14 adds §24 — what the molecular artwork is allowed to claim: element
 > symbols in place of the fabricated `OH` caption, placed rather than sprayed,
 > and a camera fitted per structure instead of one shared by all 87.
+> v1.15 adds §25 — accent ink: the light theme's accents are fill values and
+> get a separate, AA-passing value when they are text; plus the light-theme
+> audit pass and the clipped-text gate that found it.
 
 ---
 
@@ -1137,6 +1140,89 @@ placed front-to-back, so the nearer atom keeps its letter when two collide.
 actually supports on that input — the touch handlers cover a one-finger drag
 only, so "scroll to zoom" is pointer-only copy and is swapped out under
 `(pointer: coarse)`.
+
+---
+
+## 25. Accent ink, and measuring the theme nobody was measuring
+
+### 25.1 An accent is a fill value. Text gets its own.
+
+`text-accent-cyan` and `bg-accent-cyan` are generated from one theme token.
+That works in dark, where a bright hue on a near-black ground is the
+high-contrast case for both. It does not work in light, and it had not been
+working for as long as the light theme has shipped:
+
+| light token | as text on the page ground | on its own 15% tint |
+|---|---|---|
+| `--accent-cyan` #0891b2 | 3.52:1 | 2.95:1 |
+| `--accent-emerald` #059669 | 3.60:1 | 3.02:1 |
+| `--accent-amber` #d97706 | **3.04:1** | **2.60:1** |
+| `--accent-rose` #e11d48 | 4.49:1 | 3.56:1 |
+| `--accent-violet` #7c3aed | 5.45:1 | 4.36:1 |
+
+Emerald, cyan and amber are Tier A, Tier B and Tier C. **All three
+evidence-tier colours failed AA as body text in the light theme** — on a site
+whose whole proposition is that the grade is legible.
+
+Darkening the accent itself would have traded one failure for another: dark ink
+on a solid light-theme cyan reads 4.85:1 today and 3.01:1 after. So the fill
+keeps its value and the text gets `--accent-*-ink` — the shallowest darkening
+of the same hue that clears 4.5:1 both on the page ground and on the accent's
+own 15% tint, which is the pairing `audit:ui` caught failing on four routes.
+
+**In dark, `--accent-*-ink` is `var(--accent-*)`.** The split exists only where
+it has to.
+
+**How to reach it:**
+- `text-accent-*`, `hover:text-accent-*`, `group-hover:text-accent-*` — already
+  routed. Nothing to do.
+- A CSS `color:` declaration — use `var(--accent-*-ink)`. `background`,
+  `border-color`, `fill`, `box-shadow` and every `color-mix` tint keep the
+  accent.
+- An inline style — `TIER_INK_VAR` beside `TIER_COLOR_VAR`; the hub instrument
+  takes `ink` beside `color` for exactly this.
+- A component-scoped accent variable that drives both, like
+  `--research-hero-accent` — set a second `--*-ink` variable and point the
+  `color:` declarations at it. One value across twenty declarations is how an
+  amber hub's 36px stat value ended up at 2.94:1 against its own wash.
+
+The overrides live inside `@layer utilities`, not unlayered. Unlayered rules
+beat layered ones outright, which would also beat `hover:text-accent-*` and
+freeze an element's hover colour. Inside the layer, source order wins the base
+utility and the higher-specificity variants still win over it.
+
+`lib/accent-ink.test.ts` reads the real token values out of `globals.css` and
+holds every ink to both pairings.
+
+### 25.2 The audit runs the light theme
+
+`audit:ui` swept dark only, so every contrast result it had ever produced
+described half the product. It now runs a third pass — light, at desktop —
+keyed so a finding names the theme it was seen in. Light is desktop-only on
+purpose: contrast is a function of the token pair, and the layout probes are
+theme-independent, so a fourth pass would double the wall clock to re-measure
+what the dark phone pass already covers. If a light-only *layout* bug turns up,
+add the row.
+
+Theme is set through `localStorage` in an init script, because `ThemeScript`
+reads it there before first paint and does not consult `prefers-color-scheme`
+once a preference is stored.
+
+### 25.3 Clipped text is a gate
+
+`truncate` is used 39 times, mostly on compound, hallmark and protocol names in
+fixed-width rails. When the name fits, the class is invisible; when it does not,
+the reader loses the end of a proper noun with no way to recover it. Which of
+the 39 actually bite is viewport-dependent by construction, so it can only be
+measured. `audit:ui` now reports every element whose `scrollWidth` exceeds its
+box under `text-overflow: ellipsis`, at a budget of 0.
+
+The first run found 8, including a hallmark name losing 106px on a phone and a
+head-to-head label clipping **on the desktop**. Elements carrying their own
+`title` or an `sr-only` twin are excluded — there the full string is still
+reachable, which is the right answer for chrome that must stay on one line
+(the context bar's current crumb) and the wrong one for content (a name in a
+list, which should wrap).
 
 ---
 

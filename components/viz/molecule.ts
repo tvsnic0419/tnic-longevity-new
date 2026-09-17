@@ -410,3 +410,22 @@ export function cameraFit(geom: Geometry): CameraFit {
   FIT_CACHE.set(geom, fit);
   return fit;
 }
+
+/**
+ * The accessible description for a molecular stage. The canvas letters its
+ * heteroatoms; a screen reader gets the same information here, in the same
+ * terms, rather than a bare "molecular structure visualization" that says
+ * nothing about the structure. Falls back to the plain phrasing when there is
+ * no geometry to describe, so the orbital-field stages are not described as
+ * something they are not.
+ */
+export function stageAriaLabel(id: string, displayName: string): string {
+  const geom = getGeometry(id);
+  if (!geom) return `${displayName} orbital field visualization`;
+  const parts = [`${displayName} molecular structure`];
+  if (geom.formula) parts.push(geom.formula);
+  parts.push(`${geom.atoms.length} heavy atoms`);
+  const hetero = heteroatomSummary(geom);
+  if (hetero) parts.push(`heteroatoms ${hetero}`);
+  return `${parts.join(' — ')}. Hydrogens are not shown.`;
+}

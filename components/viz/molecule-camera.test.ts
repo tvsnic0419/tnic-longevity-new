@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { GENERATED_GEOMETRY } from './molecule-geometry.generated';
-import { REGISTRY, cameraFit, labelForAtom, heteroatomSummary, type Geometry } from './molecule';
+import {
+  REGISTRY, cameraFit, labelForAtom, heteroatomSummary, stageAriaLabel, type Geometry,
+} from './molecule';
 
 /**
  * Guards on the two things that were silently wrong in the molecular artwork
@@ -123,6 +125,30 @@ describe('heteroatom labelling', () => {
         const counted = [...summary.matchAll(/(\d+) /g)].reduce((n, m) => n + Number(m[1]), 0);
         expect(counted, id).toBe(hetero);
       }
+    }
+  });
+});
+
+describe('stage accessible description', () => {
+  it('describes the structure a sighted reader sees lettered', () => {
+    const label = stageAriaLabel('nmn', 'NMN');
+    expect(label).toContain('NMN molecular structure');
+    expect(label).toContain('heteroatoms');
+    // Hydrogens are absent from the data, and a description that does not say
+    // so implies a completeness the drawing does not have.
+    expect(label).toContain('Hydrogens are not shown');
+  });
+
+  it('never describes an orbital field as a structure', () => {
+    const label = stageAriaLabel('not-a-real-compound', 'Something');
+    expect(label).toBe('Something orbital field visualization');
+    expect(label).not.toContain('molecular structure');
+  });
+
+  it('names a real tally for every shipped structure', () => {
+    for (const [id, geom] of ALL) {
+      const label = stageAriaLabel(id, id);
+      expect(label, id).toContain(`${geom.atoms.length} heavy atoms`);
     }
   });
 });

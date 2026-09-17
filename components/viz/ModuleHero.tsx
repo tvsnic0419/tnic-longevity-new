@@ -1,7 +1,7 @@
 "use client";
 
 import { MoleculeStage } from "./MoleculeStage";
-import { hasGeometry, describeGeometry } from "./molecule";
+import { hasGeometry, describeGeometry, stageAriaLabel } from "./molecule";
 import { VIZ, FONT, tierColor, signatureHue } from "./tokens";
 import Link from "next/link";
 
@@ -52,7 +52,11 @@ export function ModuleHero(data: ModuleHeroData) {
       <div className="mhero-grid">
         <div className="mhero-stage-wrap">
           <div className="mhero-stage">
-            <MoleculeStage geometryId={structured ? data.id : undefined} hue={hue} />
+            <MoleculeStage
+              geometryId={structured ? data.id : undefined}
+              hue={hue}
+              ariaLabel={stageAriaLabel(data.id, data.title)}
+            />
             <div className="mhero-hint">
               <span className="dot" />
               {/* The hint used to read "drag · scroll to zoom" on every device.

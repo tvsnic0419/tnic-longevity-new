@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import { hasGeometry, describeGeometry } from "./molecule";
+import { hasGeometry, describeGeometry, stageAriaLabel } from "./molecule";
 import { VIZ, FONT, tierColor, signatureHue } from "./tokens";
 import { AddToProtocol } from "@/components/ui/AddToProtocol";
 import Link from "next/link";
@@ -108,7 +108,7 @@ export function CompoundHero(data: CompoundHeroData) {
             <DeferredCompoundMoleculeStage
               geometryId={structured ? data.id : undefined}
               hue={hue}
-              ariaLabel={structured ? `${data.name} molecular structure visualization` : `${data.name} orbital field visualization`}
+              ariaLabel={stageAriaLabel(data.id, data.name)}
             />
             <div className="chero-hint">
               <span className="dot" />

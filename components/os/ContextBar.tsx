@@ -109,8 +109,13 @@ export function ContextBar({ hideStackReadout = false }: ContextBarProps = {}) {
                 return (
                   <li key={crumb.href} className="context-bar__crumb">
                     {index > 0 && <ChevronRight className="context-bar__separator" aria-hidden="true" />}
+                    {/* The current crumb clips on purpose: a breadcrumb bar is
+                        one line by definition, and the label repeats the <h1>
+                        directly below it. `title` gives a pointer user the full
+                        string back; a screen reader already reads it, because
+                        the text is clipped visually, not removed. */}
                     {isLast ? (
-                      <span className="context-bar__current">{crumb.label}</span>
+                      <span className="context-bar__current" title={crumb.label}>{crumb.label}</span>
                     ) : (
                       <Link href={crumb.href} className="context-bar__crumb-link focus-ring">
                         {crumb.label}
