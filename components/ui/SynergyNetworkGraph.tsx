@@ -443,7 +443,18 @@ export function SynergyNetworkGraph() {
           The graph above only surfaces edge data on hover — this table gives
           the same data to anyone who doesn't want the interaction (or can't
           use it), matching ConnectionMatrix.tsx's established idiom. */}
-      <div className="mt-6 scroll-region rounded-2xl surface-well">
+      {/* tabIndex/role/aria-label because this scrolls but contains nothing
+          focusable — the table is plain cells, no links or buttons. Without
+          them a keyboard user can reach the region's content only by tabbing
+          past it entirely, which is the `scrollable-region-focusable` failure
+          axe reports here. The other `.scroll-region` users escape it because
+          their rows carry links. */}
+      <div
+        className="mt-6 scroll-region rounded-2xl surface-well focus-ring"
+        tabIndex={0}
+        role="region"
+        aria-label={`All ${EDGES.length} synergy connections, scrollable table`}
+      >
         <table className="w-full border-collapse text-left">
           <caption className="sr-only">
             All {EDGES.length} synergy connections in this network, with strength and mechanism.

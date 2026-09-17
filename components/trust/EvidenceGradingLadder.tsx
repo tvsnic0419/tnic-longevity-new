@@ -29,7 +29,12 @@ export function EvidenceGradingLadder({ className = '' }: { className?: string }
   return (
     <section className={cn('space-y-3', className)} aria-label="Evidence grading ladder">
       <div className="flex items-baseline justify-between gap-3">
-        <p className="text-label text-[var(--color-text-faint)]">The grading ladder</p>
+        {/* h2, not a <p>. This is the only heading on the page between the
+           page <h1> and the three tier rungs below, which are h3 — so without
+           a real heading here the outline skips a level. axe flags it as
+           heading-order on /trust/methodology, the only page that renders this
+           component. Same "text-label" styling, just a heading element. */}
+        <h2 className="text-label text-[var(--color-text-faint)]">The grading ladder</h2>
         <p className="font-mono text-micro text-[var(--color-text-faint)]">
           {total} graded compounds · re-evaluated quarterly
         </p>

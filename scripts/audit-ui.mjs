@@ -32,7 +32,36 @@ import { chromium } from 'playwright-core';
 import fs from 'node:fs/promises';
 
 const BASE = process.env.BASE ?? 'http://127.0.0.1:3000';
-const PAGES = [
+/**
+ * One route per PAGE TEMPLATE, not a sample of the ones we happened to think
+ * of. The eleven routes this list used to hold all came from the library and
+ * trust areas, so entire templates were never measured — and everything that
+ * broke in them went unreported for as long as it took someone to look by
+ * hand. A sweep of the unaudited templates found, in one pass: a serious
+ * `definition-list`/`dlitem` failure on /compound-engine, a prohibited
+ * `aria-label` on /dashboard, a scrollable table no keyboard could reach on
+ * /pathways, nine elements below the 11px floor on /nico, and hub stat labels
+ * truncating on nine routes. None of it was exotic. It was simply not looked
+ * at.
+ *
+ * So the rule for this list is coverage of templates: a hub, a deep-dive, a
+ * comparison, a tool, a guide, a legal page, an interactive questionnaire, a
+ * dashboard. Adding a route is cheap (a few seconds); missing a template costs
+ * whatever ships inside it.
+ */
+/**
+ * Routes that were already gated before coverage was extended. The gate stays
+ * at budget 0 for exactly these, so widening the sweep can never quietly
+ * lower the bar that was already being met. Everything else is MEASURED AND
+ * REPORTED — the same "gate what is settled, report what is new" split
+ * `audit:perf` already uses for CLS versus LCP.
+ *
+ * The newly covered routes surfaced 102 actionable sub-24px controls on the
+ * first run. Those are pre-existing debt that nothing was looking at, not
+ * regressions; they are listed in full under NEWLY COVERED below so they can
+ * be worked down and folded into the gate.
+ */
+const GATED = new Set([
   '/',
   '/library',
   '/library/compounds/nmn',
@@ -44,6 +73,43 @@ const PAGES = [
   '/library/mitochondrial-dysfunction',
   '/library/evidence',
   '/library/trials',
+]);
+
+const PAGES = [
+  // Arrival + library core
+  '/',
+  '/library',
+  '/library/compounds/nmn',
+  '/library/compare/nmn-vs-nr',
+  '/library/evidence',
+  '/library/trials',
+  '/library/mitochondrial-dysfunction',
+  // Hubs (CinematicHubHero + stat rail — the template that was truncating)
+  '/stacks',
+  '/labs',
+  '/tools',
+  '/protocols',
+  '/peptides',
+  '/products',
+  '/learn',
+  '/insights',
+  '/pathways',
+  '/hallmarks',
+  '/best',
+  // Interactive templates
+  '/nico',
+  '/compound-engine',
+  '/dashboard',
+  '/bio-age',
+  // Guides, commerce, trust, legal
+  '/smoker-defense-stack',
+  '/supplement-guides',
+  '/shop',
+  '/elite-8',
+  '/trust',
+  '/trust/methodology',
+  '/about',
+  '/faq',
 ];
 const VIEWPORTS = [
   { name: 'desktop', width: 1440, height: 900 },
@@ -65,6 +131,34 @@ for (const vp of VIEWPORTS) {
     const page = await ctx.newPage();
     try {
       await page.goto(BASE + path, { waitUntil: 'networkidle', timeout: 45000 });
+
+      // Settle the scroll-driven reveals before measuring.
+      //
+      // The reveals use `animation-timeline: view()`, so their opacity is a
+      // function of scroll position. Running axe straight after `networkidle`
+      // caught elements mid-fade and reported contrast failures that do not
+      // exist: on /library/mitochondrial-dysfunction it flagged two nodes at
+      // 3.73:1 and 3.94:1 whose foregrounds computed to roughly 50% opacity —
+      // i.e. a colour no reader ever sees settled. The same page measures 0
+      // contrast nodes, in both motion preferences, once it is allowed to come
+      // to rest.
+      //
+      // The file header already warns that below-the-fold contrast hits can be
+      // false positives and says to confirm by hand. That warning is the bug:
+      // a gate nobody can trust is a gate people learn to wave through. So the
+      // sweep is done here instead — scroll the page, return to the top, let
+      // the animations land — and what axe reports is what a reader would see.
+      await page.evaluate(async () => {
+        const step = Math.max(400, window.innerHeight * 0.75);
+        for (let y = 0; y < document.body.scrollHeight; y += step) {
+          window.scrollTo(0, y);
+          await new Promise((r) => setTimeout(r, 60));
+        }
+        window.scrollTo(0, 0);
+        await new Promise((r) => setTimeout(r, 400));
+      });
+      await page.waitForTimeout(500);
+
       await page.addScriptTag({ content: axeSrc });
       // Colour-contrast needs real rendering, so run the full default ruleset.
       // `axe` is attached to window by the injected script above; bracket access
@@ -256,11 +350,32 @@ if (offenders.size === 0) {
     console.log(`        ${[...v.pages].slice(0, 4).join(', ')}${v.pages.size > 4 ? ` +${v.pages.size - 4} more` : ''}`);
   }
 }
-const totalActionable = layout.reduce((n, l) => n + l.actionableTargets.length, 0);
+const gatedActionable = layout
+  .filter((l) => GATED.has(l.path))
+  .reduce((n, l) => n + l.actionableTargets.length, 0);
+const newActionable = layout
+  .filter((l) => !GATED.has(l.path))
+  .reduce((n, l) => n + l.actionableTargets.length, 0);
+const totalActionable = gatedActionable + newActionable;
 const budget = Number(process.env.MAX_SMALL_TAPS ?? 0);
-console.log(`\nactionable sub-24px controls: ${totalActionable} (budget ${budget})`);
-if (totalActionable > budget) {
-  console.error(`\n✗ tap-target gate: ${totalActionable} actionable controls under 24px, budget is ${budget}.`);
+
+if (newActionable > 0) {
+  const byRoute = new Map();
+  for (const l of layout) {
+    if (GATED.has(l.path) || l.actionableTargets.length === 0) continue;
+    byRoute.set(l.path, (byRoute.get(l.path) ?? 0) + l.actionableTargets.length);
+  }
+  console.log(`\n=== NEWLY COVERED ROUTES — ${newActionable} actionable sub-24px controls (reported, not yet gated) ===`);
+  for (const [route, n] of [...byRoute.entries()].sort((a, b) => b[1] - a[1])) {
+    console.log(`  ${String(n).padStart(4)}  ${route}`);
+  }
+  console.log('  These are pre-existing, newly visible. Fix them, then move the');
+  console.log('  route into GATED at the top of this file.');
+}
+
+console.log(`\nactionable sub-24px controls: ${totalActionable} total · ${gatedActionable} on gated routes (budget ${budget})`);
+if (gatedActionable > budget) {
+  console.error(`\n✗ tap-target gate: ${gatedActionable} actionable controls under 24px on gated routes, budget is ${budget}.`);
   process.exitCode = 1;
 }
 

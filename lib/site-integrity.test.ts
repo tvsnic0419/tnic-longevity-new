@@ -102,8 +102,32 @@ describe('site data integrity', () => {
     expect(css).toContain('.research-hero {');
     expect(css).toContain('var(--color-text-primary)');
     expect(foundationCss).toContain('.foundation');
-    expect(foundationCss).toContain(':global(.research-hero)');
-    expect(foundationCss).toContain(':global(.decision-switchboard)');
+
+    // These two used to assert that FlagshipFoundation.module.css CONTAINED
+    // `:global(.research-hero)` and `:global(.decision-switchboard)`. That
+    // pinned the location, not the contract this test exists to protect —
+    // which its own header states as "shared, token-driven, not
+    // component-local". The module held a SECOND copy of 51 selectors that
+    // app/globals.css also defines, and because a CSS Module's output loads
+    // later it silently won every conflict: it reverted PR #215's shipped
+    // `.research-hero__stat-label` wrap fix (labels went on truncating on nine
+    // hub routes) and rendered the decision-switchboard CTA clipped.
+    //
+    // So the assertion is inverted and made stronger. The contract is now
+    // enforced as single-definition: no selector may be defined in both files.
+    // That is the guard the old one should have been — it would have caught
+    // the duplication that cost a verified fix.
+    const duplicated = [...foundationCss.matchAll(/:global\((\.[a-zA-Z0-9_-]+)\)/g)]
+      .map((m) => m[1])
+      .filter((sel, i, arr) => arr.indexOf(sel) === i)
+      .filter((sel) => new RegExp(`^\\${sel}\\s*[,{]`, 'm').test(css));
+    expect(duplicated).toEqual([]);
+    // ...and globals.css is where the hub systems actually live.
+    expect(css).toContain('.decision-switchboard {');
+    expect(css).toContain('.research-hero__stat-label {');
+    // The two selectors that were unique to the module moved here with it.
+    expect(css).toContain('.context-bar__mobile-toggle');
+    expect(css).toContain('.context-bar__workspace-body');
     expect(hero).toContain('FlagshipFoundation.module.css');
     expect(contextBar).toContain('FlagshipFoundation.module.css');
     expect(decisionSteps).toContain('FlagshipFoundation.module.css');

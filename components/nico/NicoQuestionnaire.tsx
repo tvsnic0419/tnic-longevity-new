@@ -219,15 +219,15 @@ export function NicoQuestionnaire() {
         {step === 0 && (
           <div className="mb-6 grid grid-cols-3 overflow-hidden rounded-2xl surface-well">
             <div className="border-r border-border/60 px-3 py-3 text-center">
-              <p className="text-[0.5625rem] font-mono font-semibold uppercase tracking-[0.1em] text-accent-emerald">Goal-led</p>
+              <p className="text-micro font-mono font-semibold uppercase tracking-[0.1em] text-accent-emerald">Goal-led</p>
               <p className="mt-1 text-xs font-medium text-foreground">Starts with you</p>
             </div>
             <div className="border-r border-border/60 px-3 py-3 text-center">
-              <p className="text-[0.5625rem] font-mono font-semibold uppercase tracking-[0.1em] text-accent-emerald">No account</p>
+              <p className="text-micro font-mono font-semibold uppercase tracking-[0.1em] text-accent-emerald">No account</p>
               <p className="mt-1 text-xs font-medium text-foreground">Begin freely</p>
             </div>
             <div className="px-3 py-3 text-center">
-              <p className="text-[0.5625rem] font-mono font-semibold uppercase tracking-[0.1em] text-accent-emerald">Build-ready</p>
+              <p className="text-micro font-mono font-semibold uppercase tracking-[0.1em] text-accent-emerald">Build-ready</p>
               <p className="mt-1 text-xs font-medium text-foreground">Open your stack</p>
             </div>
           </div>
@@ -252,7 +252,7 @@ export function NicoQuestionnaire() {
                   <li key={stage.label} aria-current={active ? 'step' : undefined}>
                     <div
                       className={[
-                        'rounded-md border px-1 py-1.5 text-center font-mono text-[0.5rem] font-semibold uppercase leading-tight tracking-[0.05em] transition-colors',
+                        'rounded-md border px-1 py-1.5 text-center font-mono text-micro font-semibold uppercase leading-tight tracking-[0.02em] transition-colors',
                         active
                           ? 'border-accent-emerald/60 bg-accent-emerald/12 text-accent-emerald'
                           : complete
